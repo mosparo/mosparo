@@ -1,0 +1,3 @@
+#index:
+#    path: /
+#    controller: Mosparo\Controller\DefaultController::index
