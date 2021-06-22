@@ -17,3 +17,6 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'Mosparo\Entity'
                 alias: Mosparo
+
+        filters:
+            project_related_filter: Mosparo\Doctrine\ProjectRelatedFilter

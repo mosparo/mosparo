@@ -1,0 +1,157 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% form_theme form 'project_related/rule/_form_theme.html.twig' %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto rule-type-information">
+        <div class="page-pretitle">
+            Rule type
+        </div>
+        <div class="h1 page-title">
+            <div class="rule-type-label">
+                <i class="{{ ruleType.icon }}"></i>
+                {{ ruleType.name }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-12 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Rule</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.description) }}
+                        {{ form_row(form.status) }}
+                        {{ form_row(form.spamRatingFactor) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Items</h3>
+                        <button type="button" class="btn btn-info btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#help-modal">
+                            <i class="ti ti-question-mark"></i>
+                            Help
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        {{ form_widget(form.items) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex mt-3">
+            <div class="col">
+                <a href="{{ path('rule_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    Back to rules
+                </a>
+            </div>
+
+            <div class="col-auto ms-auto">
+                <button type="submit" class="btn btn-primary">
+                    <i class="ti ti-device-floppy"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+
+    <div class="modal modal-blur fade" tabindex="-1" id="help-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="ti ti-question-mark"></i>
+                        Help
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% include ruleType.helpTemplate %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ms-auto" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-blur fade" tabindex="-1" id="add-multiple-items-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="ti ti-square-plus"></i>
+                        Add multiple items
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(addMultipleForm.type) }}
+                    {{ form_row(addMultipleForm.items) }}
+                    {{ form_row(addMultipleForm.rating) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">Close</button>
+                    <button type="button" class="btn btn-primary ms-auto" id="btn-add-multiple-items">
+                        <i class="ti ti-square-plus"></i>
+                        Add items
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btn-add-multiple-items').click(function () {
+                let modal = $('#add-multiple-items-modal');
+                let type = modal.find('select[name="rule_add_multiple_items[type]"]').val();
+                let items = modal.find('textarea[name="rule_add_multiple_items[items]"]').val().split("\n");
+                let rating = modal.find('input[name="rule_add_multiple_items[rating]"]').val();
+
+                let collectionObj = $('.collection-widget');
+                let list = collectionObj.find('.collection-list');
+                let newWidget = list.attr('data-prototype');
+
+                for (let itemIndex in items) {
+                    let item = items[itemIndex];
+                    if (item.trim() === '') {
+                        continue;
+                    }
+
+                    let itemWidget = newWidget.replace(/__name__/g, collectionGetRandomHash());
+
+                    let newElem = $(list.attr('data-widget-tags'));
+                    newElem.find('.input-group').append(itemWidget);
+                    newElem.find('.input-group').append($('<button></button>').attr('type', 'button').addClass('btn btn-danger btn-icon-only remove-item-button').html('<i class="ti ti-circle-minus"></i>'));
+                    newElem.find('.rule-item-type').val(type);
+                    newElem.find('.rule-item-value').val(item);
+                    newElem.find('.rule-item-rating').val(rating);
+                    newElem.appendTo(list);
+                }
+
+                collectionToggleRemoveButton(list);
+                $('#add-multiple-items-modal').modal('hide');
+            });
+        });
+    </script>
+{% endblock %}

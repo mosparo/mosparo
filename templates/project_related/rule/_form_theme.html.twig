@@ -1,0 +1,16 @@
+{% extends 'form/mosparo_form.html.twig' %}
+
+{% block collection_additional_add_button %}
+    <div class="col">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
+            <i class="ti ti-square-plus"></i>
+            Add multiple items
+        </button>
+    </div>
+{% endblock %}
+
+{% block _rule_items_entry_widget %}
+    {% for field in form %}
+        {{ form_widget(field) }}
+    {% endfor %}
+{% endblock %}

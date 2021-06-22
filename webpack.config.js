@@ -21,6 +21,7 @@ Encore
      * and one CSS file (e.g. mosparo.scss) if your JavaScript imports CSS.
      */
     .addEntry('mosparo', './assets/mosparo.js')
+    .addEntry('mosparo-frontend', './assets/mosparo-frontend.js')
 
     .copyFiles({
         from: './assets/images',
@@ -31,11 +32,12 @@ Encore
     //.enableStimulusBridge('./assets/controllers.json')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-    .splitEntryChunks()
+    //.splitEntryChunks()
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
-    .enableSingleRuntimeChunk()
+    //.enableSingleRuntimeChunk()
+    .disableSingleRuntimeChunk()
 
     /*
      * FEATURE CONFIG
@@ -74,7 +76,7 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

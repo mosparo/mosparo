@@ -1,0 +1,152 @@
+<?php
+
+namespace Mosparo\Controller\ProjectRelated;
+
+use Mosparo\Entity\Project;
+use Mosparo\Entity\Rule;
+use Mosparo\Form\RuleAddMultipleItemsType;
+use Mosparo\Form\RuleType;
+use Mosparo\Repository\RuleRepository;
+use Mosparo\Rule\RuleTypeManager;
+use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
+use Omines\DataTablesBundle\Column\BoolColumn;
+use Omines\DataTablesBundle\Column\TextColumn;
+use Omines\DataTablesBundle\Column\TwigColumn;
+use Omines\DataTablesBundle\DataTableFactory;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+/**
+ * @Route("/rules")
+ */
+class RuleController extends AbstractController implements ProjectRelatedInterface
+{
+    use ProjectRelatedTrait;
+
+    /**
+     * @Route("/", name="rule_list")
+     */
+    public function index(Request $request, RuleRepository $ruleRepository, DataTableFactory $dataTableFactory): Response
+    {
+        $table = $dataTableFactory->create(['autoWidth' => true])
+            ->add('name', TextColumn::class, ['label' => 'Name'])
+            ->add('type', TwigColumn::class, [
+                'label' => 'Type',
+                'template' => 'project_related/rule/list/_rule_type.html.twig'
+            ])
+            ->add('status', BoolColumn::class, ['label' => 'Status', 'trueValue' => 'Active', 'falseValue' => 'Inactive'])
+            ->add('actions', TwigColumn::class, [
+                'label' => 'Actions',
+                'className' => 'buttons',
+                'template' => 'project_related/rule/list/_actions.html.twig'
+            ])
+            ->createAdapter(ORMAdapter::class, [
+                'entity' => Rule::class,
+            ])
+            ->handleRequest($request);
+
+        if ($table->isCallback()) {
+            return $table->getResponse();
+        }
+
+        return $this->render('project_related/rule/list.html.twig', [
+            'datatable' => $table
+        ]);
+    }
+
+    /**
+     * @Route("/create/choose-type", name="rule_create_choose_type")
+     */
+    public function createChooseType(Request $request, RuleTypeManager $ruleTypeManager): Response
+    {
+        return $this->render('project_related/rule/create_choose_type.html.twig', [
+            'ruleTypes' => $ruleTypeManager->getRuleTypes()
+        ]);
+    }
+
+    /**
+     * @Route("/create/{type}", name="rule_create_with_type")
+     */
+    public function createWithType(Request $request, RuleTypeManager $ruleTypeManager, $type): Response
+    {
+        $ruleType = $ruleTypeManager->getRuleType($type);
+
+        $rule = new Rule();
+        $rule->setType($type);
+
+        $form = $this->createForm(RuleType::class, $rule, [ 'rule_type' => $ruleType ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($rule);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('rule_list');
+        }
+
+        $addMultipleForm = $this->createForm(RuleAddMultipleItemsType::class, [], ['rule_type' => $ruleType]);
+
+        return $this->render('project_related/rule/create_with_type.html.twig', [
+            'rule' => $rule,
+            'form' => $form->createView(),
+            'addMultipleForm' => $addMultipleForm->createView(),
+            'ruleType' => $ruleType
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="rule_edit")
+     */
+    public function edit(Request $request, RuleTypeManager $ruleTypeManager, Rule $rule): Response
+    {
+        $ruleType = $ruleTypeManager->getRuleType($rule->getType());
+
+        $form = $this->createForm(RuleType::class, $rule, [ 'rule_type' => $ruleType ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('rule_list');
+        }
+
+        $addMultipleForm = $this->createForm(RuleAddMultipleItemsType::class, [], ['rule_type' => $ruleType]);
+
+        return $this->render('project_related/rule/edit.html.twig', [
+            'rule' => $rule,
+            'form' => $form->createView(),
+            'addMultipleForm' => $addMultipleForm->createView(),
+            'ruleType' => $ruleType
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete", name="rule_delete")
+     */
+    public function delete(Request $request, Rule $rule): Response
+    {
+        if ($request->request->has('delete-token')) {
+            $submittedToken = $request->request->get('delete-token');
+
+            if ($this->isCsrfTokenValid('delete-rule', $submittedToken)) {
+                $entityManager = $this->getDoctrine()->getManager();
+
+                $entityManager->remove($rule);
+                $entityManager->flush();
+
+                // Set the flash message
+                $session = $request->getSession();
+                $session->getFlashBag()->add('error', 'The project ' . $rule->getName() . ' was deleted successfully.');
+
+                return $this->redirectToRoute('rule_list');
+            }
+        }
+
+        return $this->render('project_related/rule/delete.html.twig', [
+            'rule' => $rule,
+        ]);
+    }
+}

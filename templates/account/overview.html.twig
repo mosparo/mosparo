@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block documentTitle %}Account - {{ parent() }}{% endblock %}
+{% block pageTitle %}Account{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-lg-4">
+                <div class="card">
+                    <div class="empty">
+                        <div class="empty-img">
+                            <a href="{{ path('account_change_password') }}">
+                                <img src="{{ asset('build/images/icons/password.svg') }}" height="128" />
+                            </a>
+                        </div>
+                        <p class="empty-title">Change password</p>
+                        <p class="empty-subtitle text-muted">
+                            Change the password of your account.
+                        </p>
+                        <div class="empty-action">
+                            <a href="{{ path('account_change_password') }}" class="btn btn-primary">
+                                <i class="ti ti-key"></i>
+                                Change password
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

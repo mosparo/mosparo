@@ -1,0 +1,4 @@
+{% extends 'base.html.twig' %}
+
+{% block documentTitle %}{{ activeProject.name }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ activeProject.name }}  <i class="ti ti-chevron-right"></i>{% endblock %}

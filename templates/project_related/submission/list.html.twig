@@ -1,0 +1,39 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% block documentTitle %}Submissions - {{ parent() }}{% endblock %}
+{% block pageTitle %}Submissions{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div id="submissions">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+    <script>
+        $(function() {
+            $('#submissions').initDataTables({{ datatable_settings(datatable) }}, {
+                searching: false,
+                info: false,
+                columnDefs: [
+                    { width: "1%", targets: 0 },
+                    { width: "20%", targets: 1},
+                    { width: "20%", targets: 2},
+                    { width: "1%", targets: 3 }
+                ]
+            });
+        });
+    </script>
+{% endblock %}

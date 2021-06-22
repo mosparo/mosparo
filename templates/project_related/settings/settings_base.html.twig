@@ -1,0 +1,36 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% block documentTitle %}Settings - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} Settings  <i class="ti ti-chevron-right"></i>{% endblock %}
+
+{% block pageBody %}
+<div class="container-xl">
+    <div class="row gx-lg-4">
+        <div class="d-none d-lg-block col-lg-3">
+            <ul class="nav nav-pills nav-vertical">
+                <li class="nav-item">
+                    <a href="{{ path('settings_general') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_general' %}active{% endif %}">
+                        <i class="ti ti-tool"></i>
+                        General
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('settings_design') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_design' %}active{% endif %}">
+                        <i class="ti ti-color-swatch"></i>
+                        Design
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('settings_users') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_users' %}active{% endif %}">
+                        <i class="ti ti-users"></i>
+                        Users
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-12 col-lg-9">
+            {% block settingsPageBody %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

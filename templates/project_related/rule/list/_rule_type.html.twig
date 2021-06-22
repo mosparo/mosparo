@@ -1,0 +1,7 @@
+{% set ruleType = rule_type(value) %}
+{% if ruleType %}
+    <div class="rule-type-label">
+        <i class="{{ ruleType.icon }}"></i>
+        {{ ruleType.name }}
+    </div>
+{% endif %}

@@ -1,0 +1,47 @@
+.rule-type-button {
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &,
+    * {
+        text-align: left;
+    }
+}
+
+.rule-type-information {
+    &,
+    * {
+        text-align: right;
+    }
+}
+
+.input-group {
+    .form-control {
+        &.rule-item-type {
+            flex: 0 0 15%;
+        }
+
+        &.rule-item-value {
+            flex: 1;
+        }
+
+        &.rule-item-rating {
+            flex: 0 0 10%;
+            text-align: center;
+        }
+    }
+}
+
+.rule-type-label {
+    display: flex;
+    align-items: center;
+
+    i {
+        font-size: 1.25em;
+        margin-right: 0.4em;
+    }
+}

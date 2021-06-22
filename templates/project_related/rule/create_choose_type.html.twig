@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block documentTitle %}Create project - {{ parent() }}{% endblock %}
+{% block pageTitle %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset('build/images/icons/rule.svg') }}" class="w-50 mb-5" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Choose type</h2>
+
+                        {% for ruleType in ruleTypes %}
+                            <a href="{{ path('rule_create_with_type', { type: ruleType.key }) }}" class="btn btn-outline-secondary w-100 flex-column align-items-start rule-type-button">
+                                <div class="h2">
+                                    <i class="{{ ruleType.icon }}"></i>
+                                    {{ ruleType.name }}
+                                </div>
+                                <p>
+                                    {{ ruleType.description }}
+                                </p>
+                                <ul class="align-items-start mb-0">
+                                    {% for subType in ruleType.subtypes %}
+                                        <li>{{ subType.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <a href="{{ path('rule_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    Back to rules
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

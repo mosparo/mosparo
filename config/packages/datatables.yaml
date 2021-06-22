@@ -1,0 +1,15 @@
+# Latest documentation available at https://omines.github.io/datatables-bundle/#configuration
+datatables:
+    # Set options, as documented at https://datatables.net/reference/option/
+    options:
+        lengthMenu : [10, 25, 50, 100, 250, 500]
+        pageLength: 50
+        pagingType: 'simple_numbers'
+        dom: "tr<'card-footer d-flex align-items-center'<'m-0 text-muted d-flex align-items-center'<'col-auto'l><'col-auto ms-4'i>><'pagination m-0 ms-auto'p>>"
+        searching: true
+
+    template_parameters:
+        className: 'table table-vcenter card-table table-striped m-0'
+
+    # You can for example override this to "tables" to keep the translation domains separated nicely
+    translation_domain: 'messages'

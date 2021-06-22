@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="page page-center">
+    <div class="container-tight py-4">
+        <div class="text-center mb-4">
+            <a href="/">
+                <img src="{{ asset('build/images/mosparo-logo.svg') }}" height="36" alt="Mosparo" />
+            </a>
+        </div>
+        <div class="card card-md">
+            <div class="card-body">
+                {% block small_body %}{% endblock %}
+            </div>
+        </div>
+        {% block after_small_body %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

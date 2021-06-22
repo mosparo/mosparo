@@ -1,0 +1,43 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% block documentTitle %}Dashboard - {{ parent() }}{% endblock %}
+{% block pageTitle %}Dashboard{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body p-2 text-center">
+                        <div class="h1 mt-3">0</div>
+                        <div class="text-muted mb-3">Submissions</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body p-2 text-center">
+                        <div class="h1 mt-3">0</div>
+                        <div class="text-muted mb-3">Spam submissions</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body p-2 text-center">
+                        <div class="h1 mt-3">{{ numberOfRules }}</div>
+                        <div class="text-muted mb-3">Rules</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body p-2 text-center">
+                        <div class="h1 mt-3">0</div>
+                        <div class="text-muted mb-3">Rulesets</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

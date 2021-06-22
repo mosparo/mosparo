@@ -1,0 +1,26 @@
+<p>The web rule type allows to filter for domains and URLs.</p>
+
+<ul>
+    <li>
+        <strong>Domain</strong>
+        <p>Enter a domain which is not allowed to submit a submission. If you enter a domain it will also catch all email addresses with this domain.</p>
+        <p>
+            <u>Example:</u> <code>example.com</code>
+        </p>
+    </li>
+    <li>
+        <strong>URL</strong>
+        <p>Enter an URL which is not allowed to submit a submission.</p>
+        <p>
+            <u>Example:</u> <code>//example.com/spam/test-form.html</code>
+        </p>
+        <p>
+            <strong>
+                It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs.
+                If the value does not start with the protocol the rule could match wrong URLs.
+            </strong>
+        </p>
+    </li>
+</ul>
+
+{% include 'project_related/rule/type/help/_rating.html.twig' %}

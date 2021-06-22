@@ -1,0 +1,50 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% block documentTitle %}Rules - {{ parent() }}{% endblock %}
+{% block pageTitle %}Rules{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="{{ path('rule_create_choose_type') }}" class="btn btn-success">
+                <i class="ti ti-plus"></i>
+                Create rule
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div id="rules">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+    <script>
+        $(function() {
+            $('#rules').initDataTables({{ datatable_settings(datatable) }}, {
+                searching: false,
+                info: false,
+                columnDefs: [
+                    { width: "40%", targets: 0 },
+                    { width: "1%", targets: 3 }
+                ]
+            });
+        });
+    </script>
+{% endblock %}

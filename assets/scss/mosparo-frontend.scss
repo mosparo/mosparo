@@ -1,0 +1,132 @@
+.mosparo__container {
+    border: 2px solid #DDDDDD;
+    background: #F8F8F8;
+    padding: 1em;
+    border-radius: 5px;
+
+    .mosparo__row {
+        display: flex;
+        align-items: center;
+    }
+
+    .mosparo__checkbox {
+        flex: 0 0 32px;
+
+        border: 5px solid #DDDDDD;
+        border-radius: 10px;
+
+        position: relative;
+
+        width: 32px;
+        height: 32px;
+
+        transition: all 0.25s;
+
+        input[type="text"] {
+            opacity: 0;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+        }
+
+        &:not(.mosparo__loading):not(.mosparo__checked):not(.mosparo__invalid):hover {
+            border-color: #AAAAAA;
+        }
+
+        &:after {
+            display: block;
+            width: 32px;
+            height: 32px;
+
+            position: absolute;
+            top: -5px;
+            left: -5px;
+
+            border: 5px solid transparent;
+            border-left-color: #0000FF;
+            border-radius: 16px;
+
+            content: '';
+
+            opacity: 0;
+
+            transition: all 0.25s;
+        }
+
+        &.mosparo__loading {
+            border-radius: 16px;
+
+            &:after {
+                opacity: 1;
+
+                animation: mosparo__loading-animation 1s linear infinite;
+            }
+        }
+
+        &.mosparo__checked {
+            border-color: #00AA00;
+
+            &:before {
+                content: '';
+
+                display: block;
+                width: 16px;
+                height: 10px;
+
+                position: absolute;
+                top: 5px;
+                left: 3px;
+
+                border: 5px solid #00AA00;
+                border-width: 0 0 5px 5px;
+
+                transform: rotate(-45deg);
+            }
+        }
+
+        &.mosparo__invalid {
+            border-color: #FF0000;
+
+            &:before {
+                content: '';
+
+                display: block;
+                width: 16px;
+                height: 5px;
+
+                position: absolute;
+                top: 8px;
+                left: 3px;
+
+                border-bottom: 5px solid #FF0000;
+
+                transform: rotate(-45deg);
+            }
+        }
+    }
+
+    .mosparo__label {
+        margin-left: 1em;
+    }
+}
+
+.mosparo__error-message {
+    display: none;
+
+    margin-top: 0.5em;
+
+    color: #FF0000;
+
+    &.mosparo__error-message-visible {
+        display: block;
+    }
+}
+
+@keyframes mosparo__loading-animation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

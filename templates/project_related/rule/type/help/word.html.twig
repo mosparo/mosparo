@@ -1,0 +1,27 @@
+<p>The word rule type allows to filter for words and Regular Expression patterns.</p>
+
+<ul>
+    <li>
+        <strong>Text</strong>
+        <p>
+            Enter a word which should be rated as spam. You can use the star <code>*</code> as wildcard. The matching
+            functionality will search for <code>*value*</code>, so you do not have to add the wildcard character at the
+            beginning or at the end of the value.
+        </p>
+        <p>
+            <u>Example:</u> <code>pills</code> or <code>lo*ery</code>
+        </p>
+    </li>
+    <li>
+        <strong>Regular Expression</strong>
+        <p>
+            Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the
+            PHP Regular Expression requirements.
+        </p>
+        <p>
+            <u>Example:</u> <code>/(seo|s3o)/is</code>
+        </p>
+    </li>
+</ul>
+
+{% include 'project_related/rule/type/help/_rating.html.twig' %}

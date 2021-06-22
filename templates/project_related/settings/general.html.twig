@@ -1,0 +1,60 @@
+{% extends 'project_related/settings/settings_base.html.twig' %}
+
+{% block documentTitle %}General - {{ parent() }}{% endblock %}
+{% block pageTitle %}General{% endblock %}
+
+{% block settingsPageBody %}
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            {{ form_start(form) }}
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">General settings</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.description) }}
+                        {{ form_row(form.sites) }}
+                        {{ form_row(form.status) }}
+                        {{ form_row(form.spamScore) }}
+                    </div>
+                </div>
+                <div class="d-flex mt-3">
+                    <div class="col-auto ms-auto">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="ti ti-device-floppy"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">API Keys</h3>
+                </div>
+                <div class="card-body">
+                    {# @todo: hide this information for non-admin users #}
+                    <div class="form-group">
+                        <label class="form-label" for="projectPublicKey">Public key</label>
+                        <input type="text" class="form-control" id="projectPublicKey" value="{{ activeProject.publicKey }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="projectPrivateKey">Private key</label>
+                        <input type="text" class="form-control" id="projectPrivateKey" value="{{ activeProject.privateKey }}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mt-3">
+                <div class="col-auto ms-auto">
+                    {# @todo: create reissue functionality #}
+                    <a href="" class="btn btn-warning">
+                        <i class="ti ti-refresh"></i>
+                        Reissue API Keys
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

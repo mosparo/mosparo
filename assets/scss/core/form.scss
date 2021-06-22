@@ -1,0 +1,52 @@
+.form-group {
+    margin-bottom: 1rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.btn .ti {
+    font-size: 1.3rem;
+
+    margin-top: -1px;
+
+    &:not(.ti-icon-right) {
+        margin-right: 0.25em;
+    }
+
+    &.ti-icon-right {
+        margin-left: 0.25em;
+    }
+}
+
+.btn.btn-icon-only {
+    &:not(.dropdown-toggle) {
+        .ti {
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+        }
+    }
+
+    &.dropdown-toggle {
+        .ti {
+            margin-left: -0.5rem;
+        }
+    }
+}
+
+.collection-widget {
+    ul {
+        list-style-type: none;
+
+        padding: 0;
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+    }
+}
+
+textarea.form-control {
+    min-height: 150px;
+}
