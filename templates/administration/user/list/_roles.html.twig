@@ -1,0 +1,7 @@
+{% if 'ROLE_ADMIN' in value %}
+    <span class="text-pink">Administrator</span>
+{% elseif 'ROLE_USER' in value %}
+    <span class="text-indigo">User</span>
+{% else %}
+    <span class="text-muted">Inactive</span>
+{% endif %}

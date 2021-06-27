@@ -3,6 +3,7 @@
 namespace Mosparo\Controller;
 
 use Mosparo\Entity\User;
+use Mosparo\Form\PasswordFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,32 +37,29 @@ class AccountController extends AbstractController
      */
     public function changePassword(Request $request): Response
     {
-        $passwordData = new \StdClass();
-        $passwordData->oldPassword = '';
-        $passwordData->newPassword = '';
-        $passwordData->newPasswordConfirmed = '';
-
-        $form = $this->createFormBuilder($passwordData)
+        $form = $this->createFormBuilder([])
             ->add('oldPassword', PasswordType::class, ['constraints' => [new UserPassword()]])
-            ->add('newPassword', PasswordType::class)
-            ->add('newPasswordConfirmed', PasswordType::class)
+            ->add('newPassword', PasswordFormType::class, [
+                'mapped' => false,
+                'is_new_password' => true,
+            ])
             ->getForm();
 
         $form->handleRequest($request);
-        // @todo: switch the new password comparison to form constraint
-        if ($form->isSubmitted() && $form->isValid() && $passwordData->newPassword === $passwordData->newPasswordConfirmed) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $user = $this->getUser();
 
-            // Set the new password and save the user
+            // RuleSet the new password and save the user
+            $passwordField = $form->get('newPassword');
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
-                $passwordData->newPassword
+                $passwordField->get('plainPassword')->getData()
             ));
 
             $entityManager->flush();
 
-            // Set the flash message
+            // RuleSet the flash message
             $session = $request->getSession();
             $session->getFlashBag()->add('success', 'Your password was successfully changed.');
 

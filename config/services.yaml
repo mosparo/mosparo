@@ -14,7 +14,7 @@ services:
     _instanceof:
         Mosparo\Controller\ProjectRelated\ProjectRelatedInterface:
             calls:
-                - [ setActiveProjectHelper ]
+                - [ setProjectHelper ]
 
         Mosparo\Rule\Type\RuleTypeInterface:
             tags: ['mosparo.ruleType']
@@ -66,3 +66,8 @@ services:
     Mosparo\Rule\RuleTypeManager:
         class: Mosparo\Rule\RuleTypeManager
         arguments: [ !tagged mosparo.ruleType ]
+
+    Mosparo\Helper\GeoIp2Helper:
+        class: Mosparo\Helper\GeoIp2Helper
+        arguments:
+            $downloadDirectory: '%kernel.project_dir%/var/data/geoip2'

@@ -2,6 +2,9 @@
 
 namespace Mosparo\Controller;
 
+use Mosparo\Entity\ProjectMember;
+use Mosparo\Form\ProjectFormType;
+use Mosparo\Helper\CleanupHelper;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -20,9 +23,12 @@ class ProjectController extends AbstractController
 {
     protected $session;
 
-    public function __construct(SessionInterface $session)
+    protected $cleanupHelper;
+
+    public function __construct(SessionInterface $session, CleanupHelper $cleanupHelper)
     {
         $this->session = $session;
+        $this->cleanupHelper = $cleanupHelper;
     }
 
     /**
@@ -40,26 +46,9 @@ class ProjectController extends AbstractController
     {
         $project = new Project();
 
-        $form = $this->createFormBuilder($project)
-            ->add('name', TextType::class)
-            ->add('description', TextareaType::class, [
-                'required' => false,
-            ])
-            ->add('sites', CollectionType::class, [
-                'allow_add' => true,
-                'allow_delete' => true,
-                'delete_empty' => true,
-                'help' => 'Please enter all sites which this project will include.',
-                'entry_type' => TextType::class,
-                'entry_options' => [
-                    'attr' => [
-                        'placeholder' => 'example.com'
-                    ]
-                ]
-            ])
-            ->getForm();
-
+        $form = $this->createForm(ProjectFormType::class, $project);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -67,10 +56,16 @@ class ProjectController extends AbstractController
             $project->setPublicKey($tokenGenerator->generateToken());
             $project->setPrivateKey($tokenGenerator->generateToken());
 
+            $projectMember = new ProjectMember();
+            $projectMember->setProject($project);
+            $projectMember->setUser($this->getUser());
+            $projectMember->setRole(ProjectMember::ROLE_OWNER);
+
             $entityManager->persist($project);
+            $entityManager->persist($projectMember);
             $entityManager->flush();
 
-            // Set the flash message
+            // RuleSet the flash message
             $session = $request->getSession();
             $session->getFlashBag()->add('success', 'The new project was successfully created.');
 
@@ -94,10 +89,13 @@ class ProjectController extends AbstractController
             if ($this->isCsrfTokenValid('delete-project', $submittedToken)) {
                 $entityManager = $this->getDoctrine()->getManager();
 
+                // Delete all to the project associated objects
+                $this->cleanupHelper->cleanupProjectEntities($project);
+
                 $entityManager->remove($project);
                 $entityManager->flush();
 
-                // Set the flash message
+                // RuleSet the flash message
                 $session = $request->getSession();
                 $session->getFlashBag()->add('error', 'The project ' . $project->getName() . ' was deleted successfully.');
 
@@ -115,7 +113,10 @@ class ProjectController extends AbstractController
      */
     public function switch(Request $request, Project $project): Response
     {
-        // @todo: check if the user is allowed to access the project
+        // Only admin users or user which are added as project member have access to the project
+        if (!$this->isGranted('ROLE_ADMIN') && !$project->isProjectMember($this->getUser())) {
+            return $this->redirectToRoute('project_list');
+        }
 
         $this->session->set('activeProjectId', $project->getId());
 

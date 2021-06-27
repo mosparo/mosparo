@@ -59,12 +59,14 @@
                 </a>
             </div>
 
-            <div class="col-auto ms-auto">
-                <button type="submit" class="btn btn-primary">
-                    <i class="ti ti-device-floppy"></i>
-                    Save
-                </button>
-            </div>
+            {% if canManage %}
+                <div class="col-auto ms-auto">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-device-floppy"></i>
+                        Save
+                    </button>
+                </div>
+            {% endif %}
         </div>
 
         {{ form_end(form) }}

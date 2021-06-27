@@ -1,0 +1,49 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% block documentTitle %}Delete ruleset {{ ruleset.name }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{% endblock %}
+{% block pageTitle %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset('build/images/icons/ruleset.svg') }}" class="w-50 mb-5" />
+            </div>
+        </div>
+
+        <form method="post">
+            <div class="row">
+                <div class="col">
+                    <div class="card card-md">
+                        <div class="card-body">
+                            <h2 class="card-title text-center mb-4">Delete ruleset {{ ruleset.name }}</h2>
+
+                            <div class="alert alert-important alert-danger">
+                                <p>Do you really want to delete the ruleset <strong>{{ ruleset.name }}</strong>?</p>
+                                <p>You cannot undo this process.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="delete-token" value="{{ csrf_token('delete-ruleset') }}"/>
+
+            <div class="row mt-3">
+                <div class="col">
+                    <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+                        <i class="ti ti-chevron-left"></i>
+                        Back to rulesets
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="ti ti-circle-minus"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

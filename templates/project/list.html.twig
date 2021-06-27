@@ -50,17 +50,19 @@
                                             Go to project
                                         </a>
                                     </div>
-                                    <div class="col-auto dropdown">
-                                        <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
-                                            <i class="ti ti-settings"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="{{ path('project_delete', { project: project.id }) }}" class="dropdown-item text-red">
-                                                <i class="ti ti-circle-minus"></i>
-                                                Delete project
-                                            </a>
+                                    {% if can_user_manage_project(project) %}
+                                        <div class="col-auto dropdown">
+                                            <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="ti ti-settings"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a href="{{ path('project_delete', { project: project.id }) }}" class="dropdown-item text-red">
+                                                    <i class="ti ti-circle-minus"></i>
+                                                    Delete project
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

@@ -1,0 +1,55 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% block documentTitle %}Rulesets - {{ parent() }}{% endblock %}
+{% block pageTitle %}Rulesets{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    {% if canManage %}
+        <div class="col-auto ms-auto">
+            <div class="btn-list">
+                <a href="{{ path('ruleset_add') }}" class="btn btn-success">
+                    <i class="ti ti-plus"></i>
+                    Add ruleset
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div id="rulesets">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+    <script>
+        $(function() {
+            $('#rulesets').initDataTables({{ datatable_settings(datatable) }}, {
+                searching: false,
+                info: false,
+                columnDefs: [
+                    { width: "40%", targets: 0 },
+                    { width: "10%", targets: 1},
+                    { width: "20%", targets: 2},
+                    { width: "20%", targets: 3},
+                    { width: "1%", targets: 4 }
+                ]
+            });
+        });
+    </script>
+{% endblock %}

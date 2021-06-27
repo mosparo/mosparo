@@ -18,7 +18,7 @@ class Submission implements ProjectRelatedEntityInterface
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=SubmitToken::class, mappedBy="submission", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=SubmitToken::class)
      */
     private $submitToken;
 
@@ -33,7 +33,7 @@ class Submission implements ProjectRelatedEntityInterface
     private $data = [];
 
     /**
-     * @ORM\Column(type="string", length=40, nullable=true)
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $signature;
 
@@ -51,6 +51,11 @@ class Submission implements ProjectRelatedEntityInterface
      * @ORM\Column(type="json")
      */
     private $matchedRuleItems = [];
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $ignoredFields = [];
 
     /**
      * @ORM\Column(type="float")
@@ -73,6 +78,11 @@ class Submission implements ProjectRelatedEntityInterface
      */
     private $spamDetectionRating;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $valid;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,7 +96,7 @@ class Submission implements ProjectRelatedEntityInterface
     public function setSubmitToken(?SubmitToken $submitToken): self
     {
         // unset the owning side of the relation if necessary
-        if ($submitToken === null && $this->submitToken !== null) {
+        if ($submitToken === null && $this->submitToken !== null && $this->submitToken->getSubmission() === $this) {
             $this->submitToken->setSubmission(null);
         }
 
@@ -172,6 +182,18 @@ class Submission implements ProjectRelatedEntityInterface
         return $this;
     }
 
+    public function getIgnoredFields(): ?array
+    {
+        return $this->ignoredFields;
+    }
+
+    public function setIgnoredFields(array $ignoredFields): self
+    {
+        $this->ignoredFields = $ignoredFields;
+
+        return $this;
+    }
+
     public function getSpamRating(): ?float
     {
         return $this->spamRating;
@@ -216,6 +238,18 @@ class Submission implements ProjectRelatedEntityInterface
     public function setSpamDetectionRating(float $spamDetectionRating): self
     {
         $this->spamDetectionRating = $spamDetectionRating;
+
+        return $this;
+    }
+
+    public function isValid(): ?bool
+    {
+        return $this->valid;
+    }
+
+    public function setValid(?bool $valid): self
+    {
+        $this->valid = $valid;
 
         return $this;
     }

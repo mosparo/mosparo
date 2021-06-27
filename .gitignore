@@ -6,6 +6,7 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
+!/var/data/geoip2/.gitkeep
 /vendor/
 ###< symfony/framework-bundle ###
 

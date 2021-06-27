@@ -1,0 +1,49 @@
+{% extends 'project_related/settings/settings_base.html.twig' %}
+
+{% block documentTitle %}Members - {{ parent() }}{% endblock %}
+{% block pageTitle %}Members{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="{{ path('settings_member_add') }}" class="btn btn-success">
+                <i class="ti ti-plus"></i>
+                Add member
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block settingsPageBody %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div id="project-members">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+    <script>
+        $(function() {
+            $('#project-members').initDataTables({{ datatable_settings(datatable) }}, {
+                searching: false,
+                info: false,
+                columnDefs: [
+                { width: "60%", targets: 0 },
+                { width: "40%", targets: 1 },
+                { width: "1%", targets: 2 }
+            ]
+            });
+        });
+    </script>
+{% endblock %}

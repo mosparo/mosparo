@@ -3,17 +3,25 @@
 namespace Mosparo\Subscriber;
 
 use http\Env\Response;
+use Mosparo\Helper\ProjectHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class ApiSubscriber implements EventSubscriberInterface
 {
+    protected $projectHelper;
+
+    public function __construct(ProjectHelper $projectHelper)
+    {
+        $this->projectHelper = $projectHelper;
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
-            RequestEvent::class => 'onKernelRequest',
-            ResponseEvent::class => 'onKernelResponse',
+            RequestEvent::class => [['onKernelRequest', -10]],
+            ResponseEvent::class => [['onKernelResponse', -10]],
         ];
     }
 
@@ -26,11 +34,28 @@ class ApiSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // If the route is not a frontend api route, we do nothing
-        if (strpos($request->get('_route'), 'frontend_api_') !== 0) {
+        if (!$request->headers->has('Origin') || strpos($request->get('_route'), 'frontend_api_') !== 0) {
             return;
         }
 
-        // @todo: check if the publicKey is set and if the project exists and if the origin domain does exist as project domain
+        $activeProject = $this->projectHelper->getActiveProject();
+        if ($activeProject === null) {
+            return;
+        }
+
+        $hostAllowed = false;
+        $originHost = $this->removeProtocol($request->headers->get('Origin'));
+        $hosts = $activeProject->getHosts();
+        foreach ($hosts as $host) {
+            if ($host === $originHost) {
+                $hostAllowed = true;
+                break;
+            }
+        }
+
+        if (!$hostAllowed) {
+            return;
+        }
 
         $request = $event->getRequest();
         $method = $request->getRealMethod();
@@ -38,6 +63,19 @@ class ApiSubscriber implements EventSubscriberInterface
             $response = new Response();
             $event->setResponse($response);
         }
+    }
+
+    protected function removeProtocol($origin)
+    {
+        if (strpos($origin, 'http://') === 0) {
+            return substr($origin, 8);
+        }
+
+        if (strpos($origin, 'https://') === 0) {
+            return substr($origin, 9);
+        }
+
+        return $origin;
     }
 
     public function onKernelResponse(ResponseEvent $event)
@@ -54,10 +92,8 @@ class ApiSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // @todo: Replace the star with the origin domain to make it secure
-
         $response = $event->getResponse();
-        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Origin', $request->headers->get('Origin'));
         $response->headers->set('Access-Control-Allow-Methods', 'POST');
     }
 }

@@ -3,7 +3,7 @@
 namespace Mosparo\Controller;
 
 use Mosparo\Entity\User;
-use Mosparo\Form\ChangePasswordFormType;
+use Mosparo\Form\PasswordFormType;
 use Mosparo\Form\ResetPasswordRequestFormType;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -104,7 +104,7 @@ class ResetPasswordController extends AbstractController
         }
 
         // The token is valid; allow the user to change their password.
-        $form = $this->createForm(ChangePasswordFormType::class);
+        $form = $this->createForm(PasswordFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

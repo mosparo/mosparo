@@ -13,20 +13,16 @@ final class ProviderRuleType extends AbstractRuleType
     protected $icon = 'ti ti-wifi';
     protected $subtypes = [
         [
-            'key' => 'ipAddress',
-            'name' => 'IP Address',
+            'key' => 'asNumber',
+            'name' => 'AS number',
         ],
         [
-            'key' => 'subnet',
-            'name' => 'Subnet',
-        ],
-        [
-            'key' => 'asn',
-            'name' => 'ASN',
+            'key' => 'country',
+            'name' => 'Country',
         ],
     ];
     protected $formClass = ProviderFormType::class;
     protected $testerClass = ProviderRuleTester::class;
-    protected $targetFieldKeys = ['client.ipAddress'];
+    protected $targetFieldKeys = ['client.asNumber', 'client.country'];
     protected $helpTemplate = 'project_related/rule/type/help/provider.html.twig';
 }

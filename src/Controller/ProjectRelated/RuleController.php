@@ -5,7 +5,7 @@ namespace Mosparo\Controller\ProjectRelated;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Rule;
 use Mosparo\Form\RuleAddMultipleItemsType;
-use Mosparo\Form\RuleType;
+use Mosparo\Form\RuleFormType;
 use Mosparo\Repository\RuleRepository;
 use Mosparo\Rule\RuleTypeManager;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
@@ -28,7 +28,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     /**
      * @Route("/", name="rule_list")
      */
-    public function index(Request $request, RuleRepository $ruleRepository, DataTableFactory $dataTableFactory): Response
+    public function index(Request $request, DataTableFactory $dataTableFactory): Response
     {
         $table = $dataTableFactory->create(['autoWidth' => true])
             ->add('name', TextColumn::class, ['label' => 'Name'])
@@ -76,7 +76,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         $rule = new Rule();
         $rule->setType($type);
 
-        $form = $this->createForm(RuleType::class, $rule, [ 'rule_type' => $ruleType ]);
+        $form = $this->createForm(RuleFormType::class, $rule, [ 'rule_type' => $ruleType ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -102,12 +102,17 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
      */
     public function edit(Request $request, RuleTypeManager $ruleTypeManager, Rule $rule): Response
     {
+        $readOnly = false;
+        if (!$this->projectHelper->canManage()) {
+            $readOnly = true;
+        }
+
         $ruleType = $ruleTypeManager->getRuleType($rule->getType());
 
-        $form = $this->createForm(RuleType::class, $rule, [ 'rule_type' => $ruleType ]);
+        $form = $this->createForm(RuleFormType::class, $rule, [ 'rule_type' => $ruleType, 'readonly' => $readOnly ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && !$readOnly) {
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('rule_list');
@@ -137,7 +142,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                 $entityManager->remove($rule);
                 $entityManager->flush();
 
-                // Set the flash message
+                // RuleSet the flash message
                 $session = $request->getSession();
                 $session->getFlashBag()->add('error', 'The project ' . $rule->getName() . ' was deleted successfully.');
 

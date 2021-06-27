@@ -2,7 +2,6 @@
 
 namespace Mosparo\Entity;
 
-use DateTime;
 use Mosparo\Repository\SubmitTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +21,16 @@ class SubmitToken implements ProjectRelatedEntityInterface
      * @ORM\Column(type="string", length=255)
      */
     private $ipAddress;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $pageTitle;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $pageUrl;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
@@ -46,7 +55,7 @@ class SubmitToken implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $validatedAt;
+    private $verifiedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -54,7 +63,7 @@ class SubmitToken implements ProjectRelatedEntityInterface
     private $validUntil;
 
     /**
-     * @ORM\OneToOne(targetEntity=Submission::class, inversedBy="submitToken", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Submission::class)
      */
     private $submission;
 
@@ -77,6 +86,30 @@ class SubmitToken implements ProjectRelatedEntityInterface
     public function setIpAddress(string $ipAddress): self
     {
         $this->ipAddress = $ipAddress;
+
+        return $this;
+    }
+
+    public function getPageTitle(): ?string
+    {
+        return $this->pageTitle;
+    }
+
+    public function setPageTitle(string $pageTitle): self
+    {
+        $this->pageTitle = $pageTitle;
+
+        return $this;
+    }
+
+    public function getPageUrl(): ?string
+    {
+        return $this->pageUrl;
+    }
+
+    public function setPageUrl(string $pageUrl): self
+    {
+        $this->pageUrl = $pageUrl;
 
         return $this;
     }
@@ -129,14 +162,14 @@ class SubmitToken implements ProjectRelatedEntityInterface
         return $this;
     }
 
-    public function getValidatedAt(): ?\DateTimeInterface
+    public function getVerifiedAt(): ?\DateTimeInterface
     {
-        return $this->validatedAt;
+        return $this->verifiedAt;
     }
 
-    public function setValidatedAt(?\DateTimeInterface $validatedAt): self
+    public function setVerifiedAt(?\DateTimeInterface $verifiedAt): self
     {
-        $this->validatedAt = $validatedAt;
+        $this->verifiedAt = $verifiedAt;
 
         return $this;
     }
@@ -179,6 +212,10 @@ class SubmitToken implements ProjectRelatedEntityInterface
 
     public function isValid(): bool
     {
+        if ($this->verifiedAt !== null) {
+            return false;
+        }
+
         if ($this->validUntil !== null && $this->validUntil < new DateTime()) {
             return false;
         }

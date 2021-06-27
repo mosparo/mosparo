@@ -2,25 +2,28 @@
 
 namespace Mosparo\Rule\Tester;
 
-use Mosparo\Entity\Rule;
+use Kir\StringUtils\Matching\Wildcards\Pattern;
+use Mosparo\Rule\RuleEntityInterface;
 
 class WordRuleTester extends AbstractRuleTester
 {
-    public function validateData($key, $value, Rule $rule): array
+    public function validateData($key, $value, RuleEntityInterface $rule): array
     {
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
+            $result = false;
             if ($item['type'] === 'text') {
                 $result = $this->validateTextItem($value, $item['value']);
             } else if ($item['type'] === 'regex') {
                 $result = $this->validateRegexItem($value, $item['value']);
             }
 
-            if ($result) {
+            if ($result !== false) {
                 $matchingItems[] = [
                     'type' => $item['type'],
                     'value' => $item['value'],
-                    'rating' => $this->calculateSpamRating($rule, $item, $result)
+                    'rating' => $this->calculateSpamRating($rule, $item),
+                    'uuid' => $rule->getUuid()
                 ];
             }
         }
@@ -30,8 +33,15 @@ class WordRuleTester extends AbstractRuleTester
 
     protected function validateTextItem($value, $itemValue)
     {
-        if (strpos($value, $itemValue) !== false) {
-            return substr_count($value, $itemValue);
+        if (strpos($itemValue, '*') !== false || strpos($itemValue, '?') !== false) {
+            $pattern = '*' . trim($itemValue, '*') . '*';
+            $value = str_replace("\n", ' ', $value);
+
+            if (Pattern::create($pattern)->match($value)) {
+                return true;
+            }
+        } else if (strpos($value, $itemValue) !== false) {
+            return true;
         }
 
         return false;

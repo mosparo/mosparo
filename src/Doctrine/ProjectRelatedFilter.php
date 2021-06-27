@@ -4,15 +4,16 @@ namespace Mosparo\Doctrine;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Filter\SQLFilter;
-use Mosparo\Helper\ActiveProjectHelper;
+use Mosparo\Exception;
+use Mosparo\Helper\ProjectHelper;
 
 class ProjectRelatedFilter extends SQLFilter
 {
-    protected $activeProjectHelper;
+    protected $projectHelper;
 
-    public function setActiveProjectHelper(ActiveProjectHelper $activeProjectHelper)
+    public function setProjectHelper(ProjectHelper $projectHelper)
     {
-        $this->activeProjectHelper = $activeProjectHelper;
+        $this->projectHelper = $projectHelper;
     }
 
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
@@ -22,9 +23,9 @@ class ProjectRelatedFilter extends SQLFilter
             return '';
         }
 
-        $activeProject = $this->activeProjectHelper->getActiveProject();
+        $activeProject = $this->projectHelper->getActiveProject();
         if ($activeProject === null) {
-            return '';
+            throw new Exception('Access to a project related entity is not allowed without active project.');
         }
 
         return sprintf('%s.project_id = ' . $activeProject->getId(), $targetTableAlias);

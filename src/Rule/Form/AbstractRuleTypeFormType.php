@@ -16,14 +16,4 @@ abstract class AbstractRuleTypeFormType extends AbstractType
             'rule_type' => null
         ]);
     }
-
-    protected function buildChoices(array $subtypes): array
-    {
-        $choices = [];
-        foreach ($subtypes as $subtype) {
-            $choices[$subtype['name']] = $subtype['key'];
-        }
-
-        return $choices;
-    }
 }

@@ -3,6 +3,9 @@
 {% block documentTitle %}Settings - {{ parent() }}{% endblock %}
 {% block pagePreTitle %}{{ parent() }} Settings  <i class="ti ti-chevron-right"></i>{% endblock %}
 
+{% block pageFlashes %}
+{% endblock %}
+
 {% block pageBody %}
 <div class="container-xl">
     <div class="row gx-lg-4">
@@ -15,20 +18,45 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ path('settings_member_list') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_member_list' %}active{% endif %}">
+                        <i class="ti ti-users"></i>
+                        Members
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('settings_security') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_security' %}active{% endif %}">
+                        <i class="ti ti-shield-x"></i>
+                        Security
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ path('settings_design') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_design' %}active{% endif %}">
                         <i class="ti ti-color-swatch"></i>
                         Design
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ path('settings_users') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_users' %}active{% endif %}">
-                        <i class="ti ti-users"></i>
-                        Users
-                    </a>
-                </li>
             </ul>
         </div>
         <div class="col-12 col-lg-9">
+            {% set flashes = app.flashes %}
+            {% if flashes|length > 0 %}
+                {% for label, messages in flashes %}
+                    {%- if label == 'notice' -%}
+                        {% set class = 'info' %}
+                    {%- elseif label == 'success' -%}
+                        {% set class = 'success' %}
+                    {%- elseif label == 'warning' -%}
+                        {% set class = 'warning' %}
+                    {%- elseif label == 'error' -%}
+                        {% set class = 'danger' %}
+                    {%- endif -%}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ class }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
             {% block settingsPageBody %}{% endblock %}
         </div>
     </div>

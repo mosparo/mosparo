@@ -4,6 +4,7 @@ namespace Mosparo\Form;
 
 use Doctrine\DBAL\Types\FloatType;
 use Mosparo\Entity\Rule;
+use Mosparo\Util\ChoicesUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -22,7 +23,7 @@ class RuleAddMultipleItemsType extends AbstractType
             return;
         }
 
-        $choices = $this->buildChoices($ruleType->getSubtypes());
+        $choices = ChoicesUtil::buildChoices($ruleType->getSubtypes());
         $builder
             ->add('type', ChoiceType::class, [
                 'label' => 'Type',
@@ -46,16 +47,5 @@ class RuleAddMultipleItemsType extends AbstractType
         $resolver->setDefaults([
             'rule_type' => null
         ]);
-    }
-
-    // @todo: deduplicate this method (see Mosparo\Rule\Form\AbstractRuleTypeFormType)
-    protected function buildChoices(array $subtypes): array
-    {
-        $choices = [];
-        foreach ($subtypes as $subtype) {
-            $choices[$subtype['name']] = $subtype['key'];
-        }
-
-        return $choices;
     }
 }

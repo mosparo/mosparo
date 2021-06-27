@@ -4,11 +4,12 @@ namespace Mosparo\Entity;
 
 use Mosparo\Repository\RuleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Rule\RuleEntityInterface;
 
 /**
  * @ORM\Entity(repositoryClass=RuleRepository::class)
  */
-class Rule implements ProjectRelatedEntityInterface
+class Rule implements ProjectRelatedEntityInterface, RuleEntityInterface
 {
     /**
      * @ORM\Id

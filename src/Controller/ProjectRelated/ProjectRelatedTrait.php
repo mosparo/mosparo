@@ -2,23 +2,23 @@
 
 namespace Mosparo\Controller\ProjectRelated;
 
-use Mosparo\Helper\ActiveProjectHelper;
+use Mosparo\Helper\ProjectHelper;
 use Mosparo\Entity\Project;
 
 trait ProjectRelatedTrait
 {
     /**
-     * @var Mosparo\Helper\ActiveProjectHelper
+     * @var Mosparo\Helper\ProjectHelper
      */
-    protected $activeProjectHelper;
+    protected $projectHelper;
 
-    public function setActiveProjectHelper(ActiveProjectHelper $activeProjectHelper)
+    public function setProjectHelper(ProjectHelper $projectHelper)
     {
-        $this->activeProjectHelper = $activeProjectHelper;
+        $this->projectHelper = $projectHelper;
     }
 
     public function getActiveProject(): Project
     {
-        return $this->activeProjectHelper->getActiveProject();
+        return $this->projectHelper->getActiveProject();
     }
 }

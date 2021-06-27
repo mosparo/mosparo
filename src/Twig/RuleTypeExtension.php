@@ -19,12 +19,24 @@ class RuleTypeExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('rule_type', [$this, 'getRuleType'])
+            new TwigFunction('rule_type', [$this, 'getRuleType']),
+            new TwigFunction('rule_subtype', [$this, 'getRuleSubtype'])
         ];
     }
 
     public function getRuleType($key): ?RuleTypeInterface
     {
         return $this->ruleTypeManager->getRuleType($key);
+    }
+
+    public function getRuleSubtype(RuleTypeInterface $ruleType, $key): string
+    {
+        foreach ($ruleType->getSubtypes() as $subtype) {
+            if ($subtype['key'] === $key) {
+                return $subtype['name'];
+            }
+        }
+
+        return $key;
     }
 }

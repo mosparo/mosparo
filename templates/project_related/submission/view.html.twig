@@ -1,0 +1,231 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% block documentTitle %}Submission {{ submission.id }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} Submissions <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}Submission {{ submission.id }}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-xs-12 col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="ti ti-mailbox"></i>
+                            Spam
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h4 class="mb-0">Is spam</h4>
+                            <div>
+                                {% if submission.spam %}
+                                    <span class="text-danger">Yes</span>
+                                {% else %}
+                                    <span class="text-success">No</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <h4 class="mb-0">Spam rating</h4>
+                            <div>
+                                {% if submission.spam %}
+                                    <span class="text-danger">
+                                {% else %}
+                                    <span class="text-success">
+                                {% endif %}
+                                    {{ submission.spamRating }} / {{ submission.spamDetectionRating }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="">
+                            <h4 class="mb-0">Submitted at</h4>
+                            <div>
+                                {{ submission.submittedAt|format_datetime }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="ti ti-zoom-check"></i>
+                            Verification
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h4 class="mb-0">Is valid</h4>
+                            <div>
+                                {% if not submission.valid is null %}
+                                    {% if submission.valid %}
+                                        <span class="text-success">Yes</span>
+                                    {% else %}
+                                        <span class="text-danger">No</span>
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="">
+                            <h4 class="mb-0">Verified at</h4>
+                            <div>
+                                {% if not submission.valid is null %}
+                                    {{ submission.verifiedAt|format_datetime }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="ti ti-world"></i>
+                            Source
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h4 class="mb-0">Page title</h4>
+                            <div>
+                                {{ submission.submitToken.pageTitle }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h4 class="mb-0">Page URL</h4>
+                            <div>
+                                <a href="{{ submission.submitToken.pageUrl }}" target="_blank">
+                                    {{ submission.submitToken.pageUrl }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <h4 class="mb-0">Requested at</h4>
+                            <div>
+                                {{ submission.submitToken.createdAt|format_datetime }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if submission.ignoredFields|length > 0 %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-filter"></i>
+                                Ignored fields
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">The following fields were not transmitted because of their file type (in example password or file upload fields).</div>
+
+                            <ul>
+                                {% for field in submission.ignoredFields %}
+                                    <li>{{ field }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-xs-12 col-md-8">
+                {% for groupKey, groupData in submission.data %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                {% if groupKey == 'formData' %}
+                                    <i class="ti ti-forms"></i>
+                                    Form data
+                                {% elseif groupKey == 'client' %}
+                                    <i class="ti ti-user"></i>
+                                    Client
+                                {% endif %}
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            {% for field in groupData %}
+                                {% set path = groupKey ~ '.' ~ field.fieldPath %}
+                                <div class="row submission-row">
+                                    <div class="col-sm-12 col-md-8">
+                                        <h4>{{ field.name }}</h4>
+                                        {% if field.value|trim != '' %}
+                                            <code>{{ field.value|nl2br }}</code>
+                                        {% else %}
+                                            <em>Empty</em>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        {% set totalPoints = 0 %}
+                                        {% if path in submission.matchedRuleItems|keys %}
+                                            {% for match in submission.matchedRuleItems[path] %}
+                                                {% set totalPoints = totalPoints + match.rating %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <div class="row">
+                                            <div class="col-12 text-end">
+                                                {% if totalPoints > 0 %}
+                                                    <span class="text-danger submission-spam-value">
+                                                {% else %}
+                                                    <span class="text-muted">
+                                                {% endif %}
+                                                    {{ totalPoints }} points
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                {% if path in submission.matchedRuleItems|keys %}
+                                                    <table class="table table-bordered table-sm mt-2 mb-0">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Value</th>
+                                                            <th width="15%" class="text-center">Rating</th>
+                                                            <th width="1"></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for match in submission.matchedRuleItems[path] %}
+                                                            <tr>
+                                                                <td>{{ match.value }}</td>
+                                                                <td class="text-center">
+                                                                    {% if match.rating > 0 %}
+                                                                        <span class="text-danger">
+                                                                    {% else %}
+                                                                        <span class="text-success">
+                                                                    {% endif %}
+                                                                        {{ match.rating }}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    {% set url = get_rule_detail_url(match.uuid) %}
+                                                                    {% if url != '' %}
+                                                                        <a href="{{ url }}#{{ match.uuid }}" class="btn btn-ghost-info btn-sm btn-icon-only" target="_blank">
+                                                                            <i class="ti ti-info-circle"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

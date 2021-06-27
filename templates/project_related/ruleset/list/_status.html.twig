@@ -1,0 +1,7 @@
+{% if value is null %}
+
+{% elseif value == true %}
+    <span class="text-success"><strong>Active</strong></span>
+{% elseif value == false %}
+    <span class="text-danger"><strong>Inactive</strong></span>
+{% endif %}

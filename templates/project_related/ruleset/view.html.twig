@@ -1,0 +1,188 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% block documentTitle %}View ruleset {{ ruleset.name }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} Rulesets <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}View ruleset {{ ruleset.name }}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Ruleset details</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-12 col-lg-4">
+                                <h4 class="mb-0">URL</h4>
+                                <div>
+                                    <code>{{ ruleset.url }}</code>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <h4 class="mb-0">Status</h4>
+                                <div>
+                                    {% if ruleset.status %}
+                                        <span class="text-success"><strong>Active</strong></span>
+                                    {% else %}
+                                        <span class="text-danger"><strong>Inactive</strong></span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <h4 class="mb-0">Spam rating factor</h4>
+                                <div>
+                                    {% if ruleset.spamRatingFactor %}
+                                        {{ ruleset.spamRatingFactor }}
+                                    {% else %}
+                                        <em>1</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-4">
+                                <h4 class="mb-0">Last refreshed at</h4>
+                                <div>
+                                    {% if ruleset.rulesetCache.refreshedAt %}
+                                        {{ ruleset.rulesetCache.refreshedAt|format_datetime }}
+                                    {% else %}
+                                        <em>Empty</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <h4 class="mb-0">Last updated at</h4>
+                                <div>
+                                    {% if ruleset.rulesetCache.updatedAt %}
+                                        {{ ruleset.rulesetCache.updatedAt|format_datetime }}
+                                    {% else %}
+                                        <em>Empty</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <h4 class="mb-0">Number of included rules</h4>
+                                <div>
+                                    {{ ruleset.rulesetCache.rules|length }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if hasError %}
+            <div class="alert alert-danger">
+                {{ errorMessage }}
+            </div>
+        {% endif %}
+
+        <h2 class="mt-1">Included rules</h2>
+
+        {% for rule in ruleset.rulesetCache.rules %}
+            <div class="row" id="{{ rule.uuid }}">
+                <div class="col-12 col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Rule details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h4 class="mb-0">Name</h4>
+                                <div>
+                                    {{ rule.name }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h4 class="mb-0">Description</h4>
+                                <div>
+                                    {% if rule.description %}
+                                        {{ rule.description }}
+                                    {% else %}
+                                        <em>Empty</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="">
+                                <h4 class="mb-0">Spam rating factor</h4>
+                                <div>
+                                    {% if rule.spamRatingFactor %}
+                                        {{ rule.spamRatingFactor }}
+                                    {% else %}
+                                        <em>1</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Items</h3>
+
+                            {% set ruleType = rule_type(rule.type) %}
+                            <div class="col-auto ms-auto rule-type-information">
+                                <div class="h3 mb-0">
+                                    <div class="rule-type-label">
+                                        <i class="{{ ruleType.icon }}"></i>
+                                        {{ ruleType.name }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table card-table table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="20%">Type</th>
+                                    <th>Value</th>
+                                    <th width="5%">Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in rule.items %}
+                                    <tr>
+                                        <td>{{ rule_subtype(ruleType, item.type) }}</td>
+                                        <td><code>{{ item.value }}</code></td>
+                                        <td>
+                                            {% if item.rating %}
+                                                {{ item.rating }}
+                                            {% else %}
+                                                <em>1</em>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {% if false %}
+                        <div class="card-body">
+                            {% for item in rule.items %}
+                                <div class="row">
+                                    <div class="col-12 col-lg-2">{{ item.type }}</div>
+                                    <div class="col-12 col-lg-9">{{ item.value }}</div>
+                                    <div class="col-12 col-lg-1">{{ item.rating }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex mt-3">
+                <div class="col">
+                    <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+                        <i class="ti ti-chevron-left"></i>
+                        Back to rulesets
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

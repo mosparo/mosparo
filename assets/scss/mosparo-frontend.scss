@@ -4,25 +4,17 @@
     padding: 1em;
     border-radius: 5px;
 
+    user-select: none;
+
     .mosparo__row {
         display: flex;
         align-items: center;
     }
 
-    .mosparo__checkbox {
-        flex: 0 0 32px;
-
-        border: 5px solid #DDDDDD;
-        border-radius: 10px;
-
+    .mosparo__checkbox_column {
         position: relative;
 
-        width: 32px;
-        height: 32px;
-
-        transition: all 0.25s;
-
-        input[type="text"] {
+        input[type="checkbox"] {
             opacity: 0;
 
             position: absolute;
@@ -33,84 +25,122 @@
             height: 100%;
         }
 
-        &:not(.mosparo__loading):not(.mosparo__checked):not(.mosparo__invalid):hover {
-            border-color: #AAAAAA;
-        }
+        .mosparo__checkbox {
+            flex: 0 0 32px;
 
-        &:after {
-            display: block;
+            border: 5px solid #DDDDDD;
+            border-radius: 10px;
+
+            position: relative;
+
             width: 32px;
             height: 32px;
 
-            position: absolute;
-            top: -5px;
-            left: -5px;
-
-            border: 5px solid transparent;
-            border-left-color: #0000FF;
-            border-radius: 16px;
-
-            content: '';
-
-            opacity: 0;
+            cursor: pointer;
 
             transition: all 0.25s;
-        }
 
-        &.mosparo__loading {
-            border-radius: 16px;
+            &:not(.mosparo__loading):not(.mosparo__checked):not(.mosparo__invalid):hover {
+                border-color: #AAAAAA;
+            }
 
             &:after {
-                opacity: 1;
+                display: block;
+                width: 32px;
+                height: 32px;
 
-                animation: mosparo__loading-animation 1s linear infinite;
+                position: absolute;
+                top: -5px;
+                left: -5px;
+
+                border: 5px solid transparent;
+                border-left-color: #0000FF;
+                border-radius: 16px;
+
+                content: '';
+
+                opacity: 0;
+
+                transition: all 0.25s;
+            }
+
+            &.mosparo__loading {
+                border-radius: 16px;
+
+                &:after {
+                    opacity: 1;
+
+                    animation: mosparo__loading-animation 1s linear infinite;
+                }
+            }
+
+            &.mosparo__checked {
+                border-color: #00AA00;
+
+                &:before {
+                    content: '';
+
+                    display: block;
+                    width: 16px;
+                    height: 10px;
+
+                    position: absolute;
+                    top: 5px;
+                    left: 3px;
+
+                    border: 5px solid #00AA00;
+                    border-width: 0 0 5px 5px;
+
+                    transform: rotate(-45deg);
+                }
+            }
+
+            &.mosparo__invalid {
+                border-color: #FF0000;
+
+                &:before {
+                    content: '';
+
+                    display: block;
+                    width: 16px;
+                    height: 5px;
+
+                    position: absolute;
+                    top: 8px;
+                    left: 3px;
+
+                    border-bottom: 5px solid #FF0000;
+
+                    transform: rotate(-45deg);
+                }
             }
         }
 
-        &.mosparo__checked {
-            border-color: #00AA00;
+        input[type="checkbox"]:focus + .mosparo__checkbox {
 
-            &:before {
-                content: '';
-
-                display: block;
-                width: 16px;
-                height: 10px;
-
-                position: absolute;
-                top: 5px;
-                left: 3px;
-
-                border: 5px solid #00AA00;
-                border-width: 0 0 5px 5px;
-
-                transform: rotate(-45deg);
+            &:not(.mosparo__checked):not(.mosparo__invalid):not(.mosparo__loading) {
+                border-color: #86b7fe;
+                box-shadow: 0 0 0 0.25rem rgb(13, 110, 253, 0.25);
             }
-        }
 
-        &.mosparo__invalid {
-            border-color: #FF0000;
+            &.mosparo__checked {
+                box-shadow: 0 0 0 0.25rem rgb(0, 170, 0, 0.25);
+            }
 
-            &:before {
-                content: '';
-
-                display: block;
-                width: 16px;
-                height: 5px;
-
-                position: absolute;
-                top: 8px;
-                left: 3px;
-
-                border-bottom: 5px solid #FF0000;
-
-                transform: rotate(-45deg);
+            &.mosparo__invalid {
+                box-shadow: 0 0 0 0.25rem rgb(255, 0, 0, 0.25);
             }
         }
     }
 
-    .mosparo__label {
+    .mosparo__content_column {
         margin-left: 1em;
+    }
+
+    .mosparo__accessible-message {
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
     }
 }
 

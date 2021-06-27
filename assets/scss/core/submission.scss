@@ -1,0 +1,25 @@
+.submission-table {
+    .border-left {
+        border-left: 1px solid rgba(101, 109, 119, 0.16);
+    }
+
+    .border-right {
+        border-right: 1px solid rgba(101, 109, 119, 0.16);
+    }
+}
+
+.submission-row {
+    margin-bottom: 1rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .submission-spam-value {
+        font-weight: bold;
+    }
+
+    code {
+        display: inline-block;
+    }
+}

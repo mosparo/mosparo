@@ -5,6 +5,28 @@
     {{ parent() }}
 {% endblock %}
 
+{% block form_label_errors %}{% endblock %}
+
+{% block form_row -%}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
+    {{- form_label(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {%- if errors|length > 0 -%}
+        <div id="{{ id }}_errors" class="mb-2">
+            {{- form_errors(form) -}}
+        </div>
+    {%- endif -%}
+    {{- form_help(form) -}}
+    </{{ element|default('div') }}>
+{%- endblock form_row %}
+
 {% block collection_row %}
     {%- if compound is defined and compound -%}
         {%- set element = 'fieldset' -%}
@@ -27,9 +49,11 @@
                     <div class="input-group">
                         {{ form_widget(field) }}
 
-                        <button type="button" class="btn btn-danger btn-icon-only remove-item-button">
-                            <i class="ti ti-circle-minus"></i>
-                        </button>
+                        {% if not form.vars.disabled %}
+                            <button type="button" class="btn btn-danger btn-icon-only remove-item-button">
+                                <i class="ti ti-circle-minus"></i>
+                            </button>
+                        {% endif %}
                     </div>
                     {{ form_errors(field) }}
                 </li>
@@ -43,10 +67,12 @@
                     {{- form_help(form) -}}
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-success ms-auto add-item-button" {% if form.vars.disabled %}disabled{% endif %}>
-                        <i class="ti ti-plus"></i>
-                        Add
-                    </button>
+                    {% if not form.vars.disabled %}
+                        <button type="button" class="btn btn-success ms-auto add-item-button">
+                            <i class="ti ti-plus"></i>
+                            Add
+                        </button>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}

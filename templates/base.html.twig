@@ -27,7 +27,7 @@
                         </h1>
                         <div class="navbar-nav header-navbar flex-row order-md-last">
                             <div class="nav-item dropdown mx-3">
-                                <a href="#" class="btn btn-dark" data-bs-toggle="dropdown" aria-label="Open user menu">
+                                <a href="#" class="btn btn-dark dropdown-toggle project-dropdown-toggle" data-bs-toggle="dropdown" aria-label="Open user menu">
                                     <i class="ti ti-folder"></i>
                                     {% if activeProject %}
                                         {{ activeProject.name }}
@@ -35,7 +35,7 @@
                                         Please choose...
                                     {% endif %}
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <div class="dropdown-menu dropdown-menu-end">
                                     {% if projects %}
                                         {% for project in projects %}
                                             <a href="{{ path('project_switch', { 'project': project.id }) }}" class="dropdown-item">
@@ -104,7 +104,7 @@
                                         </li>
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/">
+                                            <a class="nav-link" href="{{ path('ruleset_list') }}">
                                                 <i class="ti ti-stack"></i>
                                                 <span class="nav-link-title">
                                                     Rulesets
@@ -121,36 +121,42 @@
                                             </a>
                                         </li>
 
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
-                                                <i class="ti ti-settings"></i>
-                                                <span class="nav-link-title">
-                                                    Settings
-                                                </span>
-                                            </a>
-                                            <div class="dropdown-menu" data-bs-popper="none">
-                                                <a class="dropdown-item" href="{{ path('settings_general') }}">
-                                                    <i class="ti ti-tool"></i>
-                                                    General
+                                        {% if canManage %}
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-settings"></i>
+                                                    <span class="nav-link-title">
+                                                        Settings
+                                                    </span>
                                                 </a>
-                                                <a class="dropdown-item" href="{{ path('settings_design') }}">
-                                                    <i class="ti ti-color-swatch"></i>
-                                                    Design
-                                                </a>
-                                                <a class="dropdown-item" href="{{ path('settings_users') }}">
-                                                    <i class="ti ti-users"></i>
-                                                    Users
-                                                </a>
-                                            </div>
-                                        </li>
+                                                <div class="dropdown-menu" data-bs-popper="none">
+                                                    <a class="dropdown-item" href="{{ path('settings_general') }}">
+                                                        <i class="ti ti-tool"></i>
+                                                        General
+                                                    </a>
+                                                    <a class="dropdown-item" href="{{ path('settings_member_list') }}">
+                                                        <i class="ti ti-users"></i>
+                                                        Members
+                                                    </a>
+                                                    <a class="dropdown-item" href="{{ path('settings_security') }}">
+                                                        <i class="ti ti-shield-x"></i>
+                                                        Security
+                                                    </a>
+                                                    <a class="dropdown-item" href="{{ path('settings_design') }}">
+                                                        <i class="ti ti-color-swatch"></i>
+                                                        Design
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        {% endif %}
                                     {% endif %}
                                 </ul>
 
-                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                {% if is_granted('ROLE_ADMIN') %}
                                     <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
                                         <ul class="navbar-nav">
                                             <li class="nav-item">
-                                                <a class="nav-link" href="/">
+                                                <a class="nav-link" href="{{ path('administration_overview') }}">
                                                     <i class="ti ti-adjustments-horizontal"></i>
                                                     <span class="nav-link-title">
                                                         Administration
@@ -187,27 +193,29 @@
                         {% endblock %}
 
                         <div class="page-body">
-                            {% set flashes = app.flashes %}
-                            {% if flashes|length > 0 %}
-                                <div class="container-xl">
-                                    {% for label, messages in flashes %}
-                                        {%- if label == 'notice' -%}
-                                            {% set class = 'info' %}
-                                        {%- elseif label == 'success' -%}
-                                            {% set class = 'success' %}
-                                        {%- elseif label == 'warning' -%}
-                                            {% set class = 'warning' %}
-                                        {%- elseif label == 'error' -%}
-                                            {% set class = 'danger' %}
-                                        {%- endif -%}
-                                        {% for message in messages %}
-                                            <div class="alert alert-{{ class }}">
-                                                {{ message }}
-                                            </div>
+                            {% block pageFlashes %}
+                                {% set flashes = app.flashes %}
+                                {% if flashes|length > 0 %}
+                                    <div class="container-xl">
+                                        {% for label, messages in flashes %}
+                                            {%- if label == 'notice' -%}
+                                                {% set class = 'info' %}
+                                            {%- elseif label == 'success' -%}
+                                                {% set class = 'success' %}
+                                            {%- elseif label == 'warning' -%}
+                                                {% set class = 'warning' %}
+                                            {%- elseif label == 'error' -%}
+                                                {% set class = 'danger' %}
+                                            {%- endif -%}
+                                            {% for message in messages %}
+                                                <div class="alert alert-{{ class }}">
+                                                    {{ message }}
+                                                </div>
+                                            {% endfor %}
                                         {% endfor %}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endblock %}
 
                             {% block pageBody %}{% endblock %}
                         </div>

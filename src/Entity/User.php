@@ -2,6 +2,8 @@
 
 namespace Mosparo\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -33,6 +35,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="user")
+     */
+    private $projectMemberships;
+
+    public function __construct()
+    {
+        $this->projectMemberships = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -66,11 +78,7 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return array_unique($this->roles);
     }
 
     public function setRoles(array $roles): self
@@ -78,6 +86,34 @@ class User implements UserInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    public function hasRole($roleKey): bool
+    {
+        return in_array($roleKey, $this->roles);
+    }
+
+    public function addRole($roleKey): bool
+    {
+        if ($this->hasRole($roleKey)) {
+            return false;
+        }
+
+        $this->roles[] = $roleKey;
+
+        return true;
+    }
+
+    public function removeRole($roleKey): bool
+    {
+        if (!$this->hasRole($roleKey)) {
+            return false;
+        }
+
+        $index = array_search($roleKey, $this->roles);
+        array_splice($this->roles, $index, 1);
+
+        return true;
     }
 
     /**
@@ -113,5 +149,35 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|ProjectMember[]
+     */
+    public function getProjectMemberships(): Collection
+    {
+        return $this->projectMemberships;
+    }
+
+    public function addProjectMembership(ProjectMember $projectMembership): self
+    {
+        if (!$this->projectMemberships->contains($projectMembership)) {
+            $this->projectMemberships[] = $projectMembership;
+            $projectMembership->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProjectMembership(ProjectMember $projectMembership): self
+    {
+        if ($this->projectMemberships->removeElement($projectMembership)) {
+            // set the owning side to null (unless already changed)
+            if ($projectMembership->getUser() === $this) {
+                $projectMembership->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

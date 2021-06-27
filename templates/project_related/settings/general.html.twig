@@ -14,7 +14,7 @@
                     <div class="card-body">
                         {{ form_row(form.name) }}
                         {{ form_row(form.description) }}
-                        {{ form_row(form.sites) }}
+                        {{ form_row(form.hosts) }}
                         {{ form_row(form.status) }}
                         {{ form_row(form.spamScore) }}
                     </div>
@@ -35,7 +35,6 @@
                     <h3 class="card-title">API Keys</h3>
                 </div>
                 <div class="card-body">
-                    {# @todo: hide this information for non-admin users #}
                     <div class="form-group">
                         <label class="form-label" for="projectPublicKey">Public key</label>
                         <input type="text" class="form-control" id="projectPublicKey" value="{{ activeProject.publicKey }}" readonly>
@@ -48,8 +47,7 @@
             </div>
             <div class="d-flex mt-3">
                 <div class="col-auto ms-auto">
-                    {# @todo: create reissue functionality #}
-                    <a href="" class="btn btn-warning">
+                    <a href="{{ path('settings_reissue_keys') }}" class="btn btn-warning">
                         <i class="ti ti-refresh"></i>
                         Reissue API Keys
                     </a>

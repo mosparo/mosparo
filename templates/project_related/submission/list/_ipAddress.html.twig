@@ -1,0 +1,11 @@
+{% for field in row.data.client %}
+    {% if field.name == 'ipAddress' %}
+        <code class="d-inline-block mb-1">{{ field.value }}</code>
+    {% elseif field.name == 'asNumber' and field.value != '' %}
+        <span class="badge bg-purple">{{ field.value }}</span>
+    {% elseif field.name == 'asOrganization' and field.value != '' %}
+        <span class="badge bg-lime">{{ field.value }}</span>
+    {% elseif field.name == 'country' and field.value != '' %}
+        <span class="badge bg-blue">{{ field.value }}</span>
+    {% endif %}
+{% endfor %}

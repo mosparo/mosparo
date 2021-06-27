@@ -1,3 +1,9 @@
 .card-table {
     max-width: 100%;
 }
+
+.project-dropdown-toggle {
+    &:after {
+        margin-left: 0.8em;
+    }
+}

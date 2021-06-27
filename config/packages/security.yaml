@@ -32,4 +32,5 @@ security:
         - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/administration, roles: ROLE_ADMIN }
         - { path: ^/, roles: ROLE_USER }

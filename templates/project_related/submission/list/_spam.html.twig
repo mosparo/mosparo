@@ -1,0 +1,9 @@
+{% if value %}
+    <span class="text-danger"><strong>Yes</strong></span>
+{% else %}
+    {% if not value and row.spamRating > row.spamDetectionRating %}
+        <span class="text-blue"><strong>Ignored</strong></span>
+    {% else %}
+        <span class="text-success"><strong>No</strong></span>
+    {% endif %}
+{% endif %}

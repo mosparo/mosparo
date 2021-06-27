@@ -2,9 +2,9 @@
 
 namespace Mosparo\Rule\Tester;
 
-use Mosparo\Entity\Rule;
+use Mosparo\Rule\RuleEntityInterface;
 
 interface RuleTesterInterface
 {
-    public function validateData($key, $value, Rule $rule): array;
+    public function validateData($key, $value, RuleEntityInterface $rule): array;
 }

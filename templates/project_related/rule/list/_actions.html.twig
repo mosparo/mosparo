@@ -3,8 +3,10 @@
         <i class="ti ti-pencil"></i>
         Edit
     </a>
-    <a href="{{ path('rule_delete', { 'id': row.id}) }}" class="btn btn-danger">
-        <i class="ti ti-circle-minus"></i>
-        Delete
-    </a>
+    {% if canManage %}
+        <a href="{{ path('rule_delete', { 'id': row.id}) }}" class="btn btn-danger">
+            <i class="ti ti-circle-minus"></i>
+            Delete
+        </a>
+    {% endif %}
 </div>

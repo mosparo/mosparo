@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block documentTitle %}No access - {{ parent() }}{% endblock %}
+{% block pageTitle %}{% endblock %}
+
+{% block pageBody %}
+<div class="container-tight pb-4">
+    <div class="row">
+        <div class="col text-center">
+            <img src="{{ asset('build/images/icons/no-access.svg') }}" class="w-50 mb-5" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-important alert-danger text-center">
+                No access.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

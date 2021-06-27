@@ -6,14 +6,16 @@
 {% block pageTitleColumn %}
     {{ parent() }}
 
-    <div class="col-auto ms-auto">
-        <div class="btn-list">
-            <a href="{{ path('rule_create_choose_type') }}" class="btn btn-success">
-                <i class="ti ti-plus"></i>
-                Create rule
-            </a>
+    {% if canManage %}
+        <div class="col-auto ms-auto">
+            <div class="btn-list">
+                <a href="{{ path('rule_create_choose_type') }}" class="btn btn-success">
+                    <i class="ti ti-plus"></i>
+                    Create rule
+                </a>
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
 
 {% block pageBody %}

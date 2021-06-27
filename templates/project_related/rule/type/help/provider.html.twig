@@ -1,30 +1,35 @@
-<p>The provider rule type allows to filter for IP addresses, subnets or ASNs.</p>
+<p>The provider rule type allows to filter for AS numbers and country codes.</p>
+
+<p>
+    <strong>
+        To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
+    </strong>
+</p>
+
+<a href="{{ path('administration_geoip2_settings') }}" class="btn btn-secondary mb-3">
+    <i class="ti ti-map-pin"></i>
+    GeoLite2 Configuration
+</a>
 
 <ul>
     <li>
-        <strong>IP address</strong>
-        <p>Enter an IP address which is not allowed to make any submissions.</p>
+        <strong>AS number</strong>
+        <p>Enter an AS number which is not allowed to make any submissions. All IP addresses which belongs to this AS will be blocked.</p>
         <p>
-            <u>Example:</u> <code>192.168.10.10</code> or <code>abcd:ef01::1</code>
+            <u>Example:</u> <code>123456</code>
         </p>
     </li>
     <li>
-        <strong>Subnet</strong>
-        <p>Enter a subnet with mask which is not allowed to make any submissions.</p>
+        <strong>Country</strong>
+        <p>Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.</p>
         <p>
-            <u>Example:</u> <code>192.168.10.0/24</code> or <code>abcd:ef01::/48</code>
-        </p>
-    </li>
-    <li>
-        <strong>ASN</strong>
-        <p>Enter an ASN which is not allowed to make any submissions. All IP addresses which belongs to this ASN will be blocked.</p>
-        <p>
-            <u>Example:</u> <code>AS123456</code>
+            <u>Example:</u> <code>CH</code>
         </p>
         <p>
             <strong>
-                {# @todo: update this help text and add a link to the config page #}
-                To use the ASN subtype it is required to configure the MindMax database, otherwise, the ASN items will not have any effect.
+                If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side
+                it could mean that this will block a real user from submitting a form. Please be careful with this option.
+                The correct localization of IP addresses is never guaranteed.
             </strong>
         </p>
     </li>

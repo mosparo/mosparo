@@ -2,14 +2,16 @@
 
 {% block collection_additional_add_button %}
     <div class="col">
-        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
-            <i class="ti ti-square-plus"></i>
-            Add multiple items
-        </button>
+        {% if not form.vars.disabled %}
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
+                <i class="ti ti-square-plus"></i>
+                Add multiple items
+            </button>
+        {% endif %}
     </div>
 {% endblock %}
 
-{% block _rule_items_entry_widget %}
+{% block _rule_form_items_entry_widget %}
     {% for field in form %}
         {{ form_widget(field) }}
     {% endfor %}

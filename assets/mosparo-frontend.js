@@ -1,43 +1,8 @@
 import './scss/mosparo-frontend.scss';
 
-/*
-const $ = require('jquery');
-
-let displayMosparoBox = function (el, form, url, publicKey)
-{
-    let obj = $(el);
-    let formObj = $(form);
-
-    obj.addClass('mosparo__container');
-
-    let square = $('<div></div>').addClass('mosparo__checkbox');
-    obj.append(square);
-
-    let input = $('<input />').attr('type', 'text').attr('name', '__mosparo_token').prop('required', true);
-    obj.append(input);
-
-    let resBox = $('<div></div>').css('border', '1px solid blue').css('padding', '10px');
-    obj.append(resBox);
-
-    $('#' + formObj.attr('id') + ' input, #' + formObj.attr('id') + ' textarea, #' + formObj.attr('id') + ' select').change(function (ev) {
-        if ($(this).attr('name') == '__mosparo_token') {
-            return;
-        }
-
-        input.val('');
-    });
-
-    square.click(function () {
-        $.post(url + '/api/frontend/check', { publicKey: publicKey, data: formObj.serializeArray() }, function (response) {
-            resBox.html(JSON.stringify(response));
-        }, 'json');
-    });
-}
-*/
-
 function mosparo(containerId, url, publicKey, options)
 {
-    var _this = this;
+    let _this = this;
     this.containerId = containerId;
     this.url = url;
     this.publicKey = publicKey;
@@ -46,14 +11,38 @@ function mosparo(containerId, url, publicKey, options)
     };
     this.options = {...this.defaultOptions, ...options};
 
+    this.id = '';
     this.formElement = null;
     this.containerElement = null;
     this.checkboxElement = null;
+    this.checkboxFieldElement = null;
     this.submitTokenElement = null;
     this.validationTokenElement = null;
     this.labelElement = null;
+    this.accessibleStatusElement = null;
+
+    this.countdownInterval = null;
+    this.countdownSeconds = 0;
+    this.isLocked = false;
+
+    this.inputFieldSelector = '[name]:not(.mosparo__ignored-field)';
+
+    this.messages = {
+        label: 'I agree that my data will be checked for spam. I accept that my data will be stored for 14 days.',
+
+        accessibilityCheckingData: 'We\'re checking your data. Please wait.',
+        accessibilityDataValid: 'Your data are valid. You can submit the form.',
+
+        errorGotNoToken: 'mosparo returned no submit token.',
+        errorInternalError: 'An error occurred. Please try again.',
+        errorNoSubmitTokenAvailable: 'No submit token available. Validation of this form is not possible.',
+        errorSpamDetected: 'Your data got catched by our spam protection.',
+        errorLockedOut: 'You are locked out. Please try again after %datetime%',
+        errorDelay: 'Your request was delayed. Please wait for %seconds% seconds.',
+    };
 
     this.init = function () {
+        this.id = this.getRandomHash();
         this.containerElement = document.getElementById(this.containerId);
 
         if (!this.containerElement) {
@@ -78,39 +67,58 @@ function mosparo(containerId, url, publicKey, options)
         rowElement.classList.add('mosparo__row');
         this.containerElement.appendChild(rowElement);
 
-        // Create the checkbox
+        // Create the checkbox column
+        let checkboxColumnElement = document.createElement('div');
+        checkboxColumnElement.classList.add('mosparo__checkbox_column');
+        rowElement.appendChild(checkboxColumnElement);
+
+        // Create the real checkbox element
+        this.checkboxFieldElement = document.createElement('input');
+        this.checkboxFieldElement.setAttribute('type', 'checkbox');
+        this.checkboxFieldElement.setAttribute('required', 'required');
+        this.checkboxFieldElement.setAttribute('id', '__mosparo__checkbox_field_' + this.id);
+        checkboxColumnElement.appendChild(this.checkboxFieldElement);
+
+        // Create the visual checkbox element
         this.checkboxElement = document.createElement('div');
         this.checkboxElement.classList.add('mosparo__checkbox');
-        rowElement.appendChild(this.checkboxElement);
+        checkboxColumnElement.appendChild(this.checkboxElement);
 
-        this.labelElement = document.createElement('div');
+        let contentColumnElement = document.createElement('div');
+        contentColumnElement.classList.add('mosparo__content_column');
+        rowElement.appendChild(contentColumnElement);
+
+        this.labelElement = document.createElement('label');
         this.labelElement.classList.add('mosparo__label');
-        this.labelElement.textContent = 'I agree that my data will be checked for spam. I accept that my data will be stored for 14 days.';
-        rowElement.appendChild(this.labelElement);
+        this.labelElement.setAttribute('for', '__mosparo__checkbox_field_' + this.id);
+        contentColumnElement.appendChild(this.labelElement);
 
         // Create the error message
         this.errorMessageElement = document.createElement('div');
         this.errorMessageElement.classList.add('mosparo__error-message');
-        this.containerElement.appendChild(this.errorMessageElement);
+        contentColumnElement.appendChild(this.errorMessageElement);
+
+        // Create the accessible status message
+        this.accessibleStatusElement = document.createElement('div');
+        this.accessibleStatusElement.classList.add('mosparo__accessible-message');
+        contentColumnElement.appendChild(this.accessibleStatusElement);
 
         // Create the submit token field
         this.submitTokenElement = document.createElement('input');
         this.submitTokenElement.setAttribute('name', '_mosparo_submitToken');
-        this.submitTokenElement.setAttribute('type', 'text');
-        this.submitTokenElement.setAttribute('required', true);
+        this.submitTokenElement.setAttribute('type', 'hidden');
         this.submitTokenElement.classList.add('mosparo__submit-token');
         this.checkboxElement.appendChild(this.submitTokenElement);
 
         // Create the validation token field
         this.validationTokenElement = document.createElement('input');
         this.validationTokenElement.setAttribute('name', '_mosparo_validationToken');
-        this.validationTokenElement.setAttribute('type', 'text');
-        this.validationTokenElement.setAttribute('required', true);
+        this.validationTokenElement.setAttribute('type', 'hidden');
         this.validationTokenElement.classList.add('mosparo__validation-token');
         this.checkboxElement.appendChild(this.validationTokenElement);
 
-        // Set up the event listener
-        this.formElement.querySelectorAll('input, textarea, select').forEach(function (el, index) {
+        // RuleSet up the event listener
+        this.formElement.querySelectorAll(this.inputFieldSelector).forEach(function (el, index) {
             if (el === _this.validationTokenElement) {
                 return;
             }
@@ -120,6 +128,10 @@ function mosparo(containerId, url, publicKey, options)
             });
         });
 
+        this.checkboxFieldElement.addEventListener('change', function () {
+            _this.checkForm();
+        })
+
         this.checkboxElement.addEventListener('click', function () {
             _this.checkForm();
         });
@@ -127,27 +139,54 @@ function mosparo(containerId, url, publicKey, options)
         this.requestSubmitToken();
     }
 
+    this.getRandomHash = function () {
+        // Source: https://gist.github.com/6174/6062387
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
     this.requestSubmitToken = function () {
+        this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         this.checkboxElement.classList.add('mosparo__loading');
 
-        this.send('/api/frontend/request-submit-token', {}, function (response) {
-            _this.checkboxElement.classList.remove('mosparo__loading');
-            _this.submitTokenElement.value = response.submitToken;
+        let data = {
+            pageTitle: document.title,
+            pageUrl: document.location.href
+        };
+
+        this.send('/api/frontend/request-submit-token', data, function (response) {
+            if (response.submitToken) {
+                _this.checkboxElement.classList.remove('mosparo__loading');
+                _this.submitTokenElement.value = response.submitToken;
+                _this.updateMessages(response.messages);
+            } else if (response.security) {
+                _this.processSecurityResponse(response);
+
+                if (response.type === 'delay') {
+                    setTimeout(function () { _this.requestSubmitToken() }, (response.forSeconds + 1) * 1000);
+                }
+            } else {
+                _this.checkboxElement.classList.remove('mosparo__loading');
+                _this.checkboxElement.classList.add('mosparo__invalid');
+
+                _this.showError(_this.messages.errorGotNoToken);
+            }
         }, function () {
             _this.checkboxElement.classList.remove('mosparo__loading');
             _this.checkboxElement.classList.add('mosparo__invalid');
 
-            this.errorMessageElement.classList.add('mosparo__error-message-visible');
-            this.errorMessageElement.textContent = 'mosparo returned no submit token.';
+            _this.showError(_this.messages.errorInternalError);
         });
     }
 
     this.checkForm = function () {
-        if (this.submitTokenElement.value == '') {
+        if (this.isLocked) {
+            return;
+        }
+
+        if (this.submitTokenElement.value === '') {
             this.checkboxElement.classList.add('mosparo__invalid');
 
-            this.errorMessageElement.classList.add('mosparo__error-message-visible');
-            this.errorMessageElement.textContent = 'No submit token available. Validation of this form is not possible.';
+            this.showError(this.messages.errorNoSubmitTokenAvailable);
             return;
         }
 
@@ -156,38 +195,47 @@ function mosparo(containerId, url, publicKey, options)
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
 
         this.checkboxElement.classList.add('mosparo__loading');
+        this.updateAccessibleStatus(this.messages.accessibilityCheckingData);
 
         let data = {
             formData: JSON.stringify(this.getFormData()),
-            _mosparo_submitToken: this.submitTokenElement.value
+            submitToken: this.submitTokenElement.value
         };
 
         this.send('/api/frontend/check-form-data', data, function (response) {
             _this.checkboxElement.classList.remove('mosparo__loading');
 
             if (response.valid) {
+                _this.checkboxFieldElement.setAttribute('checked', 'checked');
                 _this.checkboxElement.classList.add('mosparo__checked');
                 _this.validationTokenElement.value = response.validationToken;
+
+                _this.updateAccessibleStatus(_this.messages.accessibilityDataValid);
+            } else if (response.security) {
+                _this.processSecurityResponse(response);
+
+                if (response.type === 'delay') {
+                    setTimeout(function () { _this.requestSubmitToken() }, (response.forSeconds + 1) * 1000);
+                }
             } else {
                 _this.checkboxElement.classList.add('mosparo__invalid');
                 _this.validationTokenElement.value = '';
 
-                _this.errorMessageElement.classList.add('mosparo__error-message-visible');
-                _this.errorMessageElement.textContent = 'Your data got catched by our spam protection.';
+                _this.showError(_this.messages.errorSpamDetected);
             }
 
         }, function () {
             _this.checkboxElement.classList.remove('mosparo__loading');
             _this.checkboxElement.classList.add('mosparo__invalid');
 
-            _this.errorMessageElement.classList.add('mosparo__error-message-visible');
-            _this.errorMessageElement.textContent = 'Your data are not valid.';
+            _this.showError(_this.messages.errorInternalError);
         });
     }
 
     this.getFormData = function () {
-        let formData = [];
-        this.formElement.querySelectorAll('input, textarea, select').forEach(function (el, index) {
+        let fields = [];
+        let ignoredFields = [];
+        this.formElement.querySelectorAll(this.inputFieldSelector).forEach(function (el, index) {
             let name = el.getAttribute('name');
             if (name === '_mosparo_submitToken' || name === '_mosparo_validationToken') {
                 return;
@@ -195,46 +243,108 @@ function mosparo(containerId, url, publicKey, options)
 
             let fieldPath = el.tagName.toLowerCase();
 
-            if (fieldPath === 'input') {
-                fieldPath += '[' + el.getAttribute('type') + ']'
+            if (fieldPath === 'input' || fieldPath === 'button') {
+                let type = el.getAttribute('type');
+
+                if (type === 'submit' || type === 'reset') {
+                    return;
+                }
+
+                if (type === 'password' || type === 'file' || type === 'hidden') {
+                    ignoredFields.push(name);
+                    return;
+                }
+
+                fieldPath += '[' + type + ']'
             }
 
             fieldPath += '.' + name;
 
-            formData.push({
+            fields.push({
                 name: name,
                 value: el.value,
                 fieldPath: fieldPath
             });
         });
 
-        return formData;
+        return { fields: fields, ignoredFields: ignoredFields };
     }
 
     this.resetState = function () {
+        this.checkboxFieldElement.removeAttribute('checked');
         this.checkboxElement.classList.remove('mosparo__checked');
-        this.checkboxElement.classList.remove('mosparo__invalid');
-        this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         this.validationTokenElement.value = '';
+
+        if (!this.isLocked) {
+            this.checkboxElement.classList.remove('mosparo__invalid');
+            this.errorMessageElement.classList.remove('mosparo__error-message-visible');
+        }
     }
 
     this.send = function (endpoint, data, callbackSuccess, callbackError) {
         let url = this.url + endpoint;
-        data._mosparo_publicKey = this.publicKey;
+        data.publicKey = this.publicKey;
 
         let request = new XMLHttpRequest();
         request.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                let response = JSON.parse(this.responseText);
-                callbackSuccess(response);
-            } else if (this.readyState === 4) {
-                callbackError(this.responseText);
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    let response = JSON.parse(this.responseText);
+                    callbackSuccess(response);
+                } else {
+                    callbackError(this.responseText);
+                }
             }
         }
 
         request.open('POST', url, true);
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         request.send(this.stringifyData(data));
+    }
+
+    this.processSecurityResponse = function (response) {
+        this.isLocked = true;
+
+        if ('messages' in response) {
+            this.updateMessages(response.messages);
+        }
+
+        if (response.type === 'lockout') {
+            this.checkboxElement.classList.remove('mosparo__loading');
+            this.checkboxElement.classList.add('mosparo__invalid');
+
+            let date = new Date(response.until);
+            this.showError(this.messages.errorLockedOut.replace('%datetime%', date.toLocaleString()));
+        } else if (response.type === 'delay') {
+            let timeVal = '<span>%val%</span>'.replace('%val%', response.forSeconds);
+            this.showError(this.messages.errorDelay.replace('%seconds%', timeVal), false, true);
+            this.updateAccessibleStatus(this.messages.errorDelay.replace('%seconds%', response.forSeconds));
+
+            this.countdownSeconds = response.forSeconds;
+            this.countdownInterval = setInterval(function () { _this.countDown() }, 1000);
+        }
+    }
+
+    this.countDown = function () {
+        if (this.countdownSeconds === 0) {
+            this.isLocked = false;
+
+            this.checkboxElement.classList.remove('mosparo__loading');
+            this.errorMessageElement.classList.remove('mosparo__error-message-visible');
+
+            clearInterval(this.countdownInterval);
+            return;
+        }
+
+        this.countdownSeconds--;
+
+        this.errorMessageElement.querySelectorAll('span')[0].textContent = this.countdownSeconds;
+    }
+
+    this.updateMessages = function (messages) {
+        this.messages = messages;
+
+        this.labelElement.textContent = this.messages.label;
     }
 
     this.stringifyData = function (data) {
@@ -254,6 +364,26 @@ function mosparo(containerId, url, publicKey, options)
         }
 
         return false;
+    }
+
+    this.showError = function (error, withAccessible, withHtml)
+    {
+        this.errorMessageElement.classList.add('mosparo__error-message-visible');
+
+        if (withHtml) {
+            this.errorMessageElement.innerHTML = error;
+        } else {
+            this.errorMessageElement.textContent = error;
+
+            if (withAccessible === undefined || withAccessible) {
+                this.updateAccessibleStatus(error);
+            }
+        }
+    }
+
+    this.updateAccessibleStatus = function (status) {
+        this.accessibleStatusElement.setAttribute('role', 'alert');
+        this.accessibleStatusElement.textContent = status;
     }
 
     this.debug = function (message) {

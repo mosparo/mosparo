@@ -2,12 +2,12 @@
 
 namespace Mosparo\Controller\ProjectRelated;
 
-use Mosparo\Helper\ActiveProjectHelper;
+use Mosparo\Helper\ProjectHelper;
 use Mosparo\Entity\Project;
 
 interface ProjectRelatedInterface
 {
-    public function setActiveProjectHelper(ActiveProjectHelper $activeProjectHelper);
+    public function setProjectHelper(ProjectHelper $projectHelper);
 
     public function getActiveProject(): Project;
 }

@@ -2,6 +2,7 @@
 
 namespace Mosparo\Rule\Form;
 
+use Mosparo\Util\ChoicesUtil;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -16,7 +17,7 @@ class EmailFormType extends AbstractRuleTypeFormType
             return;
         }
 
-        $choices = $this->buildChoices($ruleType->getSubtypes());
+        $choices = ChoicesUtil::buildChoices($ruleType->getSubtypes());
         $builder
             ->add('type', ChoiceType::class, ['choices' => $choices, 'attr' => ['readonly' => (count($choices) === 1), 'class' => 'form-select rule-item-type']])
             ->add('value', EmailType::class, ['attr' => ['placeholder' => 'Email address', 'class' => 'rule-item-value']])

@@ -3,31 +3,64 @@
 namespace Mosparo\Controller\Api\Frontend;
 
 use DateTime;
+use DateTimeInterface;
+use Mosparo\Entity\Delay;
+use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\SubmitToken;
-use Mosparo\Helper\ActiveProjectHelper;
-use Mosparo\Helper\RuleHelper;
+use Mosparo\Helper\ProjectHelper;
+use Mosparo\Helper\CleanupHelper;
+use Mosparo\Helper\GeoIp2Helper;
+use Mosparo\Helper\HmacSignatureHelper;
+use Mosparo\Helper\RuleTesterHelper;
+use Mosparo\Helper\SecurityHelper;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/api/frontend")
  */
 class FrontendApiController extends AbstractController
 {
-    protected $activeProjectHelper;
+    protected $projectHelper;
 
     protected $tokenGenerator;
 
-    public function __construct(ActiveProjectHelper $activeProjectHelper, TokenGenerator $tokenGenerator, RuleHelper $ruleHelper)
-    {
-        $this->activeProjectHelper = $activeProjectHelper;
+    protected $ruleTesterHelper;
+
+    protected $hmacSignatureHelper;
+
+    protected $securityHelper;
+
+    protected $cleanupHelper;
+
+    protected $geoIp2Helper;
+
+    protected $translatorInterface;
+
+    public function __construct(
+        ProjectHelper $projectHelper,
+        TokenGenerator $tokenGenerator,
+        RuleTesterHelper $ruleTesterHelper,
+        HmacSignatureHelper $hmacSignatureHelper,
+        SecurityHelper $securityHelper,
+        CleanupHelper $cleanupHelper,
+        GeoIp2Helper $geoIp2Helper,
+        TranslatorInterface $translator
+    ) {
+        $this->projectHelper = $projectHelper;
         $this->tokenGenerator = $tokenGenerator;
-        $this->ruleHelper = $ruleHelper;
+        $this->ruleTesterHelper = $ruleTesterHelper;
+        $this->hmacSignatureHelper = $hmacSignatureHelper;
+        $this->securityHelper = $securityHelper;
+        $this->cleanupHelper = $cleanupHelper;
+        $this->geoIp2Helper = $geoIp2Helper;
+        $this->translator = $translator;
     }
 
     /**
@@ -36,8 +69,21 @@ class FrontendApiController extends AbstractController
     public function request(Request $request)
     {
         // If there is no active project, we cannot do anything.
-        if (!$this->activeProjectHelper->hasActiveProject()) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.', 'activeProject' => $this->activeProjectHelper->getActiveProject()]);
+        if (!$this->projectHelper->hasActiveProject()) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);
+        }
+
+        if (!$request->request->has('pageTitle') || !$request->request->has('pageUrl')) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Required parameters missing.']);
+        }
+
+        // Cleanup the database
+        $this->cleanupHelper->cleanup();
+
+        // Check if the request is allowed
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp());
+        if ($securityResult instanceof Lockout || $securityResult instanceof Delay) {
+            return $this->prepareSecurityResponse($request, $securityResult, true);
         }
 
         $submitToken = new SubmitToken();
@@ -45,11 +91,17 @@ class FrontendApiController extends AbstractController
         $submitToken->setCreatedAt(new DateTime());
         $submitToken->setToken($this->tokenGenerator->generateToken());
 
+        $submitToken->setPageTitle($request->request->get('pageTitle'));
+        $submitToken->setPageUrl($request->request->get('pageUrl'));
+
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($submitToken);
         $entityManager->flush();
 
-        return new JsonResponse(['submitToken' => $submitToken->getToken()]);
+        return new JsonResponse([
+            'submitToken' => $submitToken->getToken(),
+            'messages' => $this->getTranslations($request),
+        ]);
     }
 
     /**
@@ -60,21 +112,32 @@ class FrontendApiController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         // If there is no active project, we cannot do anything.
-        if (!$this->activeProjectHelper->hasActiveProject()) {
+        if (!$this->projectHelper->hasActiveProject()) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);
         }
 
-        if (!$request->request->has('_mosparo_submitToken')) {
+        // Cleanup the database
+        $this->cleanupHelper->cleanup();
+
+        // Check if the request is allowed
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp());
+        if ($securityResult instanceof Lockout || $securityResult instanceof Delay) {
+            return $this->prepareSecurityResponse($request, $securityResult);
+        }
+
+        $activeProject = $this->projectHelper->getActiveProject();
+
+        if (!$request->request->has('submitToken')) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not set.']);
         }
 
         $submitTokenRepository = $entityManager->getRepository(SubmitToken::class);
         $submitToken = $submitTokenRepository->findOneBy([
-            'token' => $request->request->get('_mosparo_submitToken'),
+            'token' => $request->request->get('submitToken'),
 
         ]);
 
-        if (!$submitToken->isValid()) {
+        if ($submitToken === null || !$submitToken->isValid()) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not valid.']);
         }
 
@@ -83,29 +146,120 @@ class FrontendApiController extends AbstractController
         }
 
         $formData = json_decode($request->request->get('formData'), true);
-        if ($formData === null) {
+        if ($formData === null || !isset($formData['fields'])) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
         }
 
+        // Add the client data
+        $clientData = [
+            [
+                'name' => 'ipAddress',
+                'value' => $request->getClientIp(),
+                'fieldPath' => 'ipAddress'
+            ]
+        ];
+        $ipLocalization = $this->geoIp2Helper->locateIpAddress($request->getClientIp());
+        if ($ipLocalization !== false) {
+            $clientData[] = [
+                'name' => 'asNumber',
+                'value' => $ipLocalization->getAsNumber(),
+                'fieldPath' => 'asNumber'
+            ];
+            $clientData[] = [
+                'name' => 'asOrganization',
+                'value' => $ipLocalization->getAsOrganization(),
+                'fieldPath' => 'asOrganization'
+            ];
+            $clientData[] = [
+                'name' => 'country',
+                'value' => $ipLocalization->getCountry(),
+                'fieldPath' => 'country'
+            ];
+        }
+
+        // Create the submission
         $submission = new Submission();
         $submission->setSubmitToken($submitToken);
         $submission->setSubmittedAt(new DateTime());
         $submission->setData([
-            'formData' => $formData,
-            'client' => [
-                [
-                    'name' => 'ipAddress',
-                    'value' => $request->getClientIp(),
-                    'fieldPath' => 'ipAddress'
-                ]
-            ]
+            'formData' => $formData['fields'],
+            'client' => $clientData
         ]);
+        $submission->setIgnoredFields($formData['ignoredFields']);
 
-        $this->ruleHelper->checkRequest($submission);
+        // Create signature
+        $submission->setSignature($this->createSignature($submitToken, $formData['fields'], $activeProject));
+
+        // Check the data
+        $this->ruleTesterHelper->checkRequest($submission);
 
         $entityManager->persist($submission);
         $entityManager->flush();
 
         return new JsonResponse(['valid' => (!$submission->isSpam()), 'validationToken' => $submission->getValidationToken()]);
+    }
+
+    protected function createSignature(SubmitToken $submitToken, $formData, Project $activeProject)
+    {
+        $payload = $this->hmacSignatureHelper->prepareData($this->createFormStructure($formData))
+                 . $submitToken->getToken();
+
+        $signature = $this->hmacSignatureHelper->createSignature($payload, $activeProject->getPrivateKey());
+
+        return $signature;
+    }
+
+    protected function createFormStructure(array $data): array
+    {
+        $formData = [];
+        foreach ($data as $field) {
+            $formData[$field['name']] = $field['value'];
+        }
+
+        return $formData;
+    }
+
+    protected function prepareSecurityResponse(Request $request, $result, $withMessages = false)
+    {
+        $data = [];
+        if ($result instanceof Lockout) {
+            $data = [
+                'security' => true,
+                'type' => 'lockout',
+                'until' => $result->getValidUntil()->format(DateTimeInterface::ATOM),
+            ];
+        } else if ($result instanceof Delay) {
+            $data = [
+                'security' => true,
+                'type' => 'delay',
+                'forSeconds' => $result->getDuration(),
+                'now' => (new DateTime())->format(\DateTimeInterface::ATOM)
+            ];
+        }
+
+        if ($withMessages) {
+            $data['messages'] = $this->getTranslations($request);
+        }
+
+        return new JsonResponse($data);
+    }
+
+    protected function getTranslations(Request $request): array
+    {
+        $this->translator->setLocale($request->getPreferredLanguage());
+
+        return [
+            'label' => $this->translator->trans('label', [], 'frontend'),
+
+            'accessibilityCheckingData' => $this->translator->trans('accessibility.checkingData', [], 'frontend'),
+            'accessibilityDataValid' => $this->translator->trans('accessibility.dataValid', [], 'frontend'),
+
+            'errorGotNoToken' => $this->translator->trans('error.gotNoToken', [], 'frontend'),
+            'errorInternalError' => $this->translator->trans('error.internalError', [], 'frontend'),
+            'errorNoSubmitTokenAvailable' => $this->translator->trans('error.noSubmitTokenAvailable', [], 'frontend'),
+            'errorSpamDetected' => $this->translator->trans('error.spamDetected', [], 'frontend'),
+            'errorLockedOut' => $this->translator->trans('error.lockedOut', [], 'frontend'),
+            'errorDelay' => $this->translator->trans('error.delay', [], 'frontend'),
+        ];
     }
 }
