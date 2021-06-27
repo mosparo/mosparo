@@ -9,6 +9,7 @@ use IPLib\Factory;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
+use Mosparo\Util\HashUtil;
 
 class SecurityHelper
 {
@@ -152,7 +153,7 @@ class SecurityHelper
            ->leftJoin('Mosparo\Entity\Submission', 's', 'WITH', 'st.id = s.submitToken')
            ->where('st.ipAddress = :ip')
            ->andWhere('st.createdAt > :startTime')
-           ->setParameter(':ip', $ipAddress)
+           ->setParameter(':ip', HashUtil::hash($ipAddress))
            ->setParameter(':startTime', $startTime);
 
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -168,7 +169,7 @@ class SecurityHelper
            ->where('l.ipAddress = :ip')
            ->andWhere('l.validUntil > :now')
            ->setMaxResults(1)
-           ->setParameter('ip', $ipAddress)
+           ->setParameter('ip', HashUtil::hash($ipAddress))
            ->setParameter('now', new DateTime());
 
         return $qb->getQuery()->getOneOrNullResult();
@@ -182,7 +183,7 @@ class SecurityHelper
            ->where('d.ipAddress = :ip')
            ->andWhere('d.validUntil > :now')
            ->setMaxResults(1)
-           ->setParameter('ip', $ipAddress)
+           ->setParameter('ip', HashUtil::hash($ipAddress))
            ->setParameter('now', new DateTime());
 
         return $qb->getQuery()->getOneOrNullResult();

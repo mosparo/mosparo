@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7de99ae9168a19e25a9f593432187f3d",
+    "content-hash": "64ea6149fb6d1c77c82a38e16be3257d",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1716,6 +1716,61 @@
                 "source": "https://github.com/maxmind/GeoIP2-php/tree/v2.11.0"
             },
             "time": "2020-10-01T18:48:34+00:00"
+        },
+        {
+            "name": "gracious/doctrine-encryption-bundle",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/graciousagency/doctrine-encryption-bundle.git",
+                "reference": "3da82807642a4471afa76a079816e7efa609ae13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/graciousagency/doctrine-encryption-bundle/zipball/3da82807642a4471afa76a079816e7efa609ae13",
+                "reference": "3da82807642a4471afa76a079816e7efa609ae13",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-sodium": "*",
+                "php": "^7.2|^8.0",
+                "symfony/flex": "^1.0",
+                "symfony/framework-bundle": "^4.0|^5.0",
+                "symfony/orm-pack": "^2.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "require": "^4.0|^5.0"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gracious\\DoctrineEncryptionBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Willems",
+                    "email": "michael@gracious.nl"
+                }
+            ],
+            "description": "Simple bundle for adding encryption type to Doctrine",
+            "keywords": [
+                "doctrine",
+                "encryption",
+                "hashing"
+            ],
+            "support": {
+                "issues": "https://github.com/graciousagency/doctrine-encryption-bundle/issues",
+                "source": "https://github.com/graciousagency/doctrine-encryption-bundle/tree/3.0.0"
+            },
+            "time": "2021-01-11T16:06:57+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -5037,6 +5092,53 @@
                 }
             ],
             "time": "2021-05-26T11:20:16+00:00"
+        },
+        {
+            "name": "symfony/orm-pack",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/orm-pack.git",
+                "reference": "357f6362067b1ebb94af321b79f8939fc9118751"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/orm-pack/zipball/357f6362067b1ebb94af321b79f8939fc9118751",
+                "reference": "357f6362067b1ebb94af321b79f8939fc9118751",
+                "shasum": ""
+            },
+            "require": {
+                "composer/package-versions-deprecated": "*",
+                "doctrine/doctrine-bundle": "*",
+                "doctrine/doctrine-migrations-bundle": "*",
+                "doctrine/orm": "*",
+                "symfony/proxy-manager-bridge": "*"
+            },
+            "type": "symfony-pack",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A pack for the Doctrine ORM",
+            "support": {
+                "issues": "https://github.com/symfony/orm-pack/issues",
+                "source": "https://github.com/symfony/orm-pack/tree/v2.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-12-22T16:33:52+00:00"
         },
         {
             "name": "symfony/polyfill-intl-icu",
@@ -8806,7 +8908,8 @@
         "php": ">=7.4.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-intl": "*"
+        "ext-intl": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
 use Mosparo\Entity\IpLocalization;
+use Mosparo\Util\HashUtil;
 
 class GeoIp2Helper
 {
@@ -56,7 +57,7 @@ class GeoIp2Helper
         }
 
         $ipLocalizationRepository = $this->entityManager->getRepository(IpLocalization::class);
-        $ipLocalization = $ipLocalizationRepository->findOneBy(['ipAddress' => $ipAddress]);
+        $ipLocalization = $ipLocalizationRepository->findOneBy(['ipAddress' => HashUtil::hash($ipAddress)]);
         if ($ipLocalization !== null) {
             return $ipLocalization;
         }

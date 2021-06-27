@@ -28,7 +28,7 @@ class Submission implements ProjectRelatedEntityInterface
     private $validationToken;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="encryptedJson")
      */
     private $data = [];
 

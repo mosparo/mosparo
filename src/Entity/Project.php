@@ -40,7 +40,7 @@ class Project
     private $publicKey;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="encrypted")
      */
     private $privateKey;
 

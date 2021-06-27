@@ -3,6 +3,12 @@ doctrine:
         override_url: true
         url: '%env(resolve:DATABASE_URL)%'
 
+        types:
+            encrypted: 'Gracious\DoctrineEncryptionBundle\Type\Encrypted'
+            encryptedJson: 'Mosparo\Doctrine\Type\EncryptedJson'
+            encryptedArrayCollection: 'Gracious\DoctrineEncryptionBundle\Type\EncryptedArrayCollection'
+            hashed: 'Gracious\DoctrineEncryptionBundle\Type\Hashed'
+
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '13'
@@ -20,3 +26,4 @@ doctrine:
 
         filters:
             project_related_filter: Mosparo\Doctrine\ProjectRelatedFilter
+

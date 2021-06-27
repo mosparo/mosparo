@@ -109,6 +109,9 @@
     "geoip2/geoip2": {
         "version": "v2.11.0"
     },
+    "gracious/doctrine-encryption-bundle": {
+        "version": "3.0.0"
+    },
     "laminas/laminas-code": {
         "version": "4.2.1"
     },

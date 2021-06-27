@@ -155,7 +155,23 @@
                                 {% set path = groupKey ~ '.' ~ field.fieldPath %}
                                 <div class="row submission-row">
                                     <div class="col-sm-12 col-md-8">
-                                        <h4>{{ field.name }}</h4>
+                                        <h4>
+                                            {% if groupKey == 'client' %}
+                                                {% if field.name == 'ipAddress' %}
+                                                    IP address
+                                                {% elseif field.name == 'asNumber' %}
+                                                    AS number
+                                                {% elseif field.name == 'asOrganization' %}
+                                                    AS organization
+                                                {% elseif field.name == 'country' %}
+                                                    Country
+                                                {% else %}
+                                                    {{ field.name }}
+                                                {% endif %}
+                                            {% else %}
+                                                {{ field.name }}
+                                            {% endif %}
+                                        </h4>
                                         {% if field.value|trim != '' %}
                                             <code>{{ field.value|nl2br }}</code>
                                         {% else %}
