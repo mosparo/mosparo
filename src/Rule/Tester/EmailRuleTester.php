@@ -10,7 +10,10 @@ class EmailRuleTester extends AbstractRuleTester
     {
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
-            if (strpos($value, $item['value']) !== false) {
+            $value = strtolower($value);
+            $itemValue = strtolower($item['value']);
+
+            if (strpos($value, $itemValue) !== false) {
                 $matchingItems[] = [
                     'type' => $item['type'],
                     'value' => $item['value'],

@@ -15,6 +15,9 @@ class WebsiteRuleTester extends AbstractRuleTester
                 $preparedValue = '//' . $preparedValue;
             }
 
+            $value = strtolower($value);
+            $preparedValue = strtolower($preparedValue);
+
             if (strpos($value, $preparedValue) !== false) {
                 $matchingItems[] = [
                     'type' => $item['type'],

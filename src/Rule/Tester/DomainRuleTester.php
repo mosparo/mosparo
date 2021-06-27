@@ -10,7 +10,10 @@ class DomainRuleTester extends AbstractRuleTester
     {
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
-            $pattern = '/(.|\/\/|@)' . str_replace('.', '\\.', trim($item['value'], './')) . '/is';
+            $value = strtolower($value);
+            $itemValue = strtolower($item['value']);
+
+            $pattern = '/(.|\/\/|@)' . str_replace('.', '\\.', trim($itemValue, './')) . '/is';
             if (preg_match($pattern, $value)) {
                 $matchingItems[] = [
                     'type' => $item['type'],

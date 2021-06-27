@@ -33,6 +33,9 @@ class WordRuleTester extends AbstractRuleTester
 
     protected function validateTextItem($value, $itemValue)
     {
+        $value = strtolower($value);
+        $itemValue = strtolower($itemValue);
+
         if (strpos($itemValue, '*') !== false || strpos($itemValue, '?') !== false) {
             $pattern = '*' . trim($itemValue, '*') . '*';
             $value = str_replace("\n", ' ', $value);
