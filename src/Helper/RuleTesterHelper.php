@@ -73,7 +73,7 @@ class RuleTesterHelper
                 $result = $this->rulesetHelper->downloadRuleset($ruleset);
 
                 if ($result) {
-                    $this->entityManager->flush();
+                    $this->entityManager->flush($ruleset);
                 }
             } catch (Exception $e) {
                 // Do nothing
