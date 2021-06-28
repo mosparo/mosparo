@@ -22,6 +22,11 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
+
+        if ($request->getPreferredLanguage() === '') {
+            return;
+        }
+
         $request->setLocale($request->getPreferredLanguage());
     }
 }
