@@ -1,33 +1,57 @@
 {% extends 'small.html.twig' %}
 
-{% block documentTitle %}Login - {{ parent() }}{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Login'|trans }} - {{ parent() }}{% endblock %}
 
 {% block small_body %}
     <form method="post">
-        <h2 class="card-title text-center mb-4">Login to your account</h2>
+        <h2 class="card-title text-center mb-4">{{ 'Login to your account'|trans }}</h2>
 
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
+        {% block pageFlashes %}
+            {% set flashes = app.flashes %}
+            {% if flashes|length > 0 %}
+                    {% for label, messages in flashes %}
+                        {%- if label == 'notice' -%}
+                            {% set class = 'info' %}
+                        {%- elseif label == 'success' -%}
+                            {% set class = 'success' %}
+                        {%- elseif label == 'warning' -%}
+                            {% set class = 'warning' %}
+                        {%- elseif label == 'error' -%}
+                            {% set class = 'danger' %}
+                        {%- endif -%}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ class }}">
+                                {{ message|trans }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+            {% endif %}
+        {% endblock %}
+
         {% if app.user %}
             <div class="alert alert-info">
-                You are logged in as {{ app.user.username }}. <a href="{{ path('security_logout') }}">Logout</a>
+                {{ 'You are logged in as %username%'|trans({'%username%': app.user.username}, 'mosparo') }}. <a href="{{ path('security_logout') }}">{{ 'Logout'|trans }}</a>
             </div>
         {% endif %}
 
         <div class="mb-3">
-            <label class="form-label" for="field-email">Email address</label>
-            <input type="email" id="field-email" name="email" class="form-control" placeholder="Enter email">
+            <label class="form-label required" for="field-email">{{ 'Email address'|trans }}</label>
+            <input type="email" id="field-email" name="email" class="form-control">
         </div>
         <div class="mb-2">
-            <label class="form-label" for="field-password">
-                Password
+            <label class="form-label required" for="field-password">
+                {{ 'Password'|trans }}
                 <span class="form-label-description">
-                    <a href="{{ path('security_reset') }}">I forgot password</a>
+                    <a href="{{ path('security_reset') }}" tabindex="4">{{ 'I forgot password'|trans }}</a>
                 </span>
             </label>
-            <input type="password" id="field-password" name="password" class="form-control" placeholder="Password" autocomplete="off">
+            <input type="password" id="field-password" name="password" class="form-control" autocomplete="off">
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -35,7 +59,7 @@
         <div class="form-footer">
             <button type="submit" class="btn btn-primary w-100">
                 <i class="ti ti-login"></i>
-                Sign in
+                {{ 'Sign in'|trans }}
             </button>
         </div>
     </form>

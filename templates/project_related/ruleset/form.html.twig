@@ -1,11 +1,13 @@
 {% extends 'project_related/project_related_base.html.twig' %}
 
+{% trans_default_domain 'mosparo' %}
+
 {% form_theme form 'project_related/rule/_form_theme.html.twig' %}
 
 {% if isNew %}
-    {% set title = 'Add ruleset' %}
+    {% set title = 'Add ruleset'|trans %}
 {% else %}
-    {% set title = 'Edit ruleset ' ~ ruleset.name %}
+    {% set title = 'Edit ruleset %rulesetName%'|trans({ '%rulesetName%': ruleset.name }) %}
 {% endif %}
 
 {% block documentTitle %}{{ title }} - {{ parent() }}{% endblock %}
@@ -29,7 +31,7 @@
 
                         {% if hasError %}
                             <div class="alert alert-danger">
-                                {{ errorMessage }}
+                                {{ errorMessage|trans }}
                             </div>
                         {% endif %}
 
@@ -45,13 +47,13 @@
             <div class="col">
                 <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
-                    Back to rulesets
+                    {{ 'Back to rulesets'|trans }}
                 </a>
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">
                     <i class="ti ti-device-floppy"></i>
-                    Save
+                    {{ 'Save'|trans }}
                 </button>
             </div>
         </div>

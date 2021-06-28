@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/rulesets")
@@ -31,9 +32,12 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
 
     protected $rulesetHelper;
 
-    public function __construct(RulesetHelper $rulesetHelper)
+    protected $translator;
+
+    public function __construct(RulesetHelper $rulesetHelper, TranslatorInterface $translator)
     {
         $this->rulesetHelper = $rulesetHelper;
+        $this->translator = $translator;
     }
 
     /**
@@ -109,6 +113,16 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             if (!$hasError) {
                 $this->getDoctrine()->getManager()->flush();
 
+                $session = $request->getSession();
+                $session->getFlashBag()->add(
+                    'success',
+                    $this->translator->trans(
+                        'The ruleset was saved successfully.',
+                        [],
+                        'mosparo'
+                    )
+                );
+
                 return $this->redirectToRoute('ruleset_list');
             }
         }
@@ -137,7 +151,14 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
                 $entityManager->flush();
 
                 $session = $request->getSession();
-                $session->getFlashBag()->add('error', 'The ruleset ' . $ruleset->getName() . ' was deleted successfully.');
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans(
+                        'The ruleset %rulesetName% was deleted successfully.',
+                        ['%rulesetName%' => $ruleset->getName()],
+                        'mosparo'
+                    )
+                );
 
                 return $this->redirectToRoute('ruleset_list');
             }

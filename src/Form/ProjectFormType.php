@@ -40,6 +40,7 @@ class ProjectFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Project::class,
+            'translation_domain' => 'mosparo',
         ]);
     }
 }

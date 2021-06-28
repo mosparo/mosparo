@@ -1,7 +1,9 @@
 {% extends 'project_related/project_related_base.html.twig' %}
 
-{% block documentTitle %}Rulesets - {{ parent() }}{% endblock %}
-{% block pageTitle %}Rulesets{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Rulesets'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'Rulesets'|trans }}{% endblock %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
@@ -11,7 +13,7 @@
             <div class="btn-list">
                 <a href="{{ path('ruleset_add') }}" class="btn btn-success">
                     <i class="ti ti-plus"></i>
-                    Add ruleset
+                    {{ 'Add ruleset'|trans }}
                 </a>
             </div>
         </div>

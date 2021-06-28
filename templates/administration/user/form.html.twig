@@ -1,5 +1,16 @@
 {% extends 'administration/administration_base.html.twig' %}
 
+{% trans_default_domain 'mosparo' %}
+
+{% if isNewUser %}
+    {% set pageTitle = 'Create user'|trans %}
+{% else %}
+    {% set pageTitle = 'Modify user %email%'|trans({ '%email%': user.email }) %}
+{% endif %}
+
+{% block documentTitle %}{{ pageTitle }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'Users'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
+
 {% block pageBody %}
     <div class="container-tight pb-4">
         <div class="row">
@@ -14,11 +25,7 @@
                 <div class="card card-md">
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">
-                            {% if isNewUser %}
-                                Create user
-                            {% else %}
-                                Modify user {{ user.email }}
-                            {% endif %}
+                            {{ pageTitle }}
                         </h2>
 
                         {{ form_row(form.email) }}
@@ -28,7 +35,7 @@
                             {{ form_help(form.password) }}
                         {% endif %}
 
-                        <h4 class="mt-3">Roles</h4>
+                        <h4 class="mt-3">{{ 'Roles'|trans }}</h4>
                         {{ form_widget(form.isActiveUser) }}
                         {{ form_widget(form.isAdminUser) }}
                     </div>
@@ -39,13 +46,13 @@
             <div class="col">
                 <a href="{{ path('administration_user_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
-                    Back to users
+                    {{ 'Back to users'|trans }}
                 </a>
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">
                     <i class="ti ti-device-floppy"></i>
-                    Save
+                    {{ 'Save'|trans }}
                 </button>
             </div>
         </div>

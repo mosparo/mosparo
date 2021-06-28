@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/rules")
@@ -24,6 +25,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class RuleController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
+
+    protected $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      * @Route("/", name="rule_list")
@@ -36,7 +44,10 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                 'label' => 'Type',
                 'template' => 'project_related/rule/list/_rule_type.html.twig'
             ])
-            ->add('status', BoolColumn::class, ['label' => 'Status', 'trueValue' => 'Active', 'falseValue' => 'Inactive'])
+            ->add('status', TwigColumn::class, [
+                'label' => 'Status',
+                'template' => 'project_related/rule/list/_status.html.twig'
+            ])
             ->add('actions', TwigColumn::class, [
                 'label' => 'Actions',
                 'className' => 'buttons',
@@ -84,6 +95,16 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             $entityManager->persist($rule);
             $entityManager->flush();
 
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The new rule was created successfully.',
+                    [],
+                    'mosparo'
+                )
+            );
+
             return $this->redirectToRoute('rule_list');
         }
 
@@ -115,6 +136,16 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         if ($form->isSubmitted() && $form->isValid() && !$readOnly) {
             $this->getDoctrine()->getManager()->flush();
 
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The rule was saved successfully.',
+                    [],
+                    'mosparo'
+                )
+            );
+
             return $this->redirectToRoute('rule_list');
         }
 
@@ -142,9 +173,15 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                 $entityManager->remove($rule);
                 $entityManager->flush();
 
-                // RuleSet the flash message
                 $session = $request->getSession();
-                $session->getFlashBag()->add('error', 'The project ' . $rule->getName() . ' was deleted successfully.');
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans(
+                        'The rule %ruleName% was deleted successfully.',
+                        ['%ruleName%' => $rule->getName()],
+                        'mosparo'
+                    )
+                );
 
                 return $this->redirectToRoute('rule_list');
             }

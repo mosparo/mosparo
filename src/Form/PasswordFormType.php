@@ -57,7 +57,8 @@ class PasswordFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'is_new_password' => false
+            'is_new_password' => false,
+            'translation_domain' => 'mosparo',
         ]);
     }
 }

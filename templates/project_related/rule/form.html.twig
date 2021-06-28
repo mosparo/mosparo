@@ -1,5 +1,7 @@
 {% extends 'project_related/project_related_base.html.twig' %}
 
+{% trans_default_domain 'mosparo' %}
+
 {% form_theme form 'project_related/rule/_form_theme.html.twig' %}
 
 {% block pageTitleColumn %}
@@ -7,12 +9,12 @@
 
     <div class="col-auto ms-auto rule-type-information">
         <div class="page-pretitle">
-            Rule type
+            {{ 'Rule type'|trans }}
         </div>
         <div class="h1 page-title">
             <div class="rule-type-label">
                 <i class="{{ ruleType.icon }}"></i>
-                {{ ruleType.name }}
+                {{ ruleType.name|trans }}
             </div>
         </div>
     </div>
@@ -25,7 +27,7 @@
             <div class="col-12 col-lg-4">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Rule</h3>
+                        <h3 class="card-title">{{ 'Rule'|trans }}</h3>
                     </div>
                     <div class="card-body">
                         {{ form_row(form.name) }}
@@ -38,10 +40,10 @@
             <div class="col-12 col-lg-8">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Items</h3>
+                        <h3 class="card-title">{{ 'Items'|trans }}</h3>
                         <button type="button" class="btn btn-info btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#help-modal">
                             <i class="ti ti-question-mark"></i>
-                            Help
+                            {{ 'Help'|trans }}
                         </button>
                     </div>
                     <div class="card-body">
@@ -55,7 +57,7 @@
             <div class="col">
                 <a href="{{ path('rule_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
-                    Back to rules
+                    {{ 'Back to rules'|trans }}
                 </a>
             </div>
 
@@ -63,7 +65,7 @@
                 <div class="col-auto ms-auto">
                     <button type="submit" class="btn btn-primary">
                         <i class="ti ti-device-floppy"></i>
-                        Save
+                        {{ 'Save'|trans }}
                     </button>
                 </div>
             {% endif %}
@@ -78,15 +80,15 @@
                 <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="ti ti-question-mark"></i>
-                        Help
+                        {{ 'Help'|trans }}
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
                 </div>
                 <div class="modal-body">
                     {% include ruleType.helpTemplate %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn ms-auto" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn ms-auto" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
                 </div>
             </div>
         </div>
@@ -98,9 +100,9 @@
                 <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="ti ti-square-plus"></i>
-                        Add multiple items
+                        {{ 'Add multiple items'|trans }}
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
                 </div>
                 <div class="modal-body">
                     {{ form_row(addMultipleForm.type) }}
@@ -108,10 +110,10 @@
                     {{ form_row(addMultipleForm.rating) }}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">Close</button>
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'Close'|trans }}</button>
                     <button type="button" class="btn btn-primary ms-auto" id="btn-add-multiple-items">
                         <i class="ti ti-square-plus"></i>
-                        Add items
+                        {{ 'Add items'|trans }}
                     </button>
                 </div>
             </div>

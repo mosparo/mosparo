@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/account")
@@ -19,9 +20,12 @@ class AccountController extends AbstractController
 {
     protected $passwordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    protected $translator;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->translator = $translator;
     }
 
     /**
@@ -37,7 +41,7 @@ class AccountController extends AbstractController
      */
     public function changePassword(Request $request): Response
     {
-        $form = $this->createFormBuilder([])
+        $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->add('oldPassword', PasswordType::class, ['constraints' => [new UserPassword()]])
             ->add('newPassword', PasswordFormType::class, [
                 'mapped' => false,
@@ -59,9 +63,15 @@ class AccountController extends AbstractController
 
             $entityManager->flush();
 
-            // RuleSet the flash message
             $session = $request->getSession();
-            $session->getFlashBag()->add('success', 'Your password was successfully changed.');
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'Your password was successfully changed.',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('account_overview');
         }

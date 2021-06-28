@@ -1,7 +1,9 @@
 {% extends 'administration/administration_base.html.twig' %}
 
-{% block documentTitle %}GeoIP2 - {{ parent() }}{% endblock %}
-{% block pageTitle %}GeoIP2{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'GeoIP2'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'GeoIP2'|trans }}{% endblock %}
 
 {% block pageBody %}
     <div class="container-xl">
@@ -10,11 +12,11 @@
                 {{ form_start(form) }}
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Settings</h3>
+                            <h3 class="card-title">{{ 'Settings'|trans }}</h3>
                         </div>
                         <div class="card-body">
                             <p>
-                                To get a license key, you need a MaxMind account. Please visit the following site:
+                                {{ 'To get a license key, you need a MaxMind account. Please visit the following site:'|trans }}
                                 <a href="https://dev.maxmind.com/geoip/geolite2-free-geolocation-data" target="_blank">
                                     https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
                                 </a> <i class="ti ti-external-link"></i>
@@ -27,7 +29,7 @@
                         <div class="col-auto ms-auto">
                             <button type="submit" class="btn btn-primary">
                                 <i class="ti ti-device-floppy"></i>
-                                Save
+                                {{ 'Save'|trans }}
                             </button>
                         </div>
                     </div>
@@ -36,53 +38,52 @@
             <div class="col-12 col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Download & automatic update</h3>
+                        <h3 class="card-title">{{ 'Download & automatic update'|trans }}</h3>
                     </div>
                     <div class="card-body">
                         <p>
-                            After you've saved the license key, mosparo needs to download the database. You can do that here
-                            directly or you can use a shell connection to execute it with the CLI command.
+                            {{ 'After you\'ve saved the license key, mosparo needs to download the database. You can do that here directly or you can use a SSH connection to execute the command.'|trans }}
                         </p>
 
                         <h4>
-                            Web
+                            {{ 'Web'|trans }}
                         </h4>
                         <p>
-                            Use the following button to let mosparo download the database:
+                            {{ 'Use the following button to let mosparo download the database:'|trans }}
                         </p>
 
                         <div class="d-flex mb-3">
                             <a href="{{ path('administration_geoip2_download') }}" class="btn btn-orange mx-auto">
                                 <i class="ti ti-download"></i>
-                                Download the Database
+                                {{ 'Download the Database'|trans }}
                             </a>
                         </div>
 
                         <h4>
-                            Shell
+                            {{ 'CLI'|trans }}
                         </h4>
                         <p>
-                            Use the following command to download the database via shell:
+                            {{ 'Use the following command to download the database via CLI:'|trans }}
                         </p>
                         <code class="d-inline-block mb-3">
                             php bin/console mosparo:geoip2:download-database
                         </code>
 
-                        <h4>Automatic update</h4>
+                        <h4>
+                            {{ 'Automatic update'|trans }}
+                        </h4>
                         <p>
-                            To automatically refresh the database, it is recommend to set up a cronjob which will automatically
-                            download the database. To use the automatic update, please set up a cronjob like the following:
+                            {{ 'To automatically refresh the database, it is recommend to set up a cronjob which will automatically download the database. To use the automatic update, please set up a cronjob like the following:'|trans }}
                         </p>
                         <code class="d-inline-block mb-3">
                             {{ random(0, 59) }} {{ random(0, 23) }} * * {{ random(0, 6) }} php bin/console mosparo:geoip2:download-database
                         </code>
                         <p>
-                            You maybe have to adjust the path of the <code>bin/console</code> file. It could be possible
-                            that you have to fill in the absolute path.
+                            {{ 'You maybe have to adjust the path of the %pathToBinConsole% file. It could be possible that you have to fill in the absolute path.'|trans({ '%pathToBinConsole%': '<code>bin/console</code>'}) }}
                         </p>
 
                         <div class="alert alert-info">
-                            Please remember that the number of downloads a license key can make is limited. Please do not use the download functionality to often.
+                            {{ 'Please remember that the number of downloads a license key can make is limited. Please do not use the download functionality to often.'|trans }}
                         </div>
                     </div>
                 </div>

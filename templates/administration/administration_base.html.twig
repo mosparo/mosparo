@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block documentTitle %}Administration - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} Administration  <i class="ti ti-chevron-right"></i>{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Administration'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'Administration'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}

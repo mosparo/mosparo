@@ -1,6 +1,8 @@
 {% extends 'project_related/rule/form.html.twig' %}
 
-{% block documentTitle %}Create rule - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} Rules  <i class="ti ti-chevron-right"></i>{% endblock %}
-{% block pageTitle %}Create rule{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Create rule'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'Rules'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}{{ 'Create rule'|trans }}{% endblock %}
 

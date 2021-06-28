@@ -1,7 +1,9 @@
 {% extends 'project_related/project_related_base.html.twig' %}
 
-{% block documentTitle %}Settings - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} Settings  <i class="ti ti-chevron-right"></i>{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Settings'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'Settings'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
 
 {% block pageFlashes %}
 {% endblock %}
@@ -14,25 +16,25 @@
                 <li class="nav-item">
                     <a href="{{ path('settings_general') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_general' %}active{% endif %}">
                         <i class="ti ti-tool"></i>
-                        General
+                        {{ 'General'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('settings_member_list') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_member_list' %}active{% endif %}">
                         <i class="ti ti-users"></i>
-                        Members
+                        {{ 'Project members'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('settings_security') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_security' %}active{% endif %}">
                         <i class="ti ti-shield-x"></i>
-                        Security
+                        {{ 'Security'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('settings_design') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_design' %}active{% endif %}">
                         <i class="ti ti-color-swatch"></i>
-                        Design
+                        {{ 'Design'|trans }}
                     </a>
                 </li>
             </ul>
@@ -52,7 +54,7 @@
                     {%- endif -%}
                     {% for message in messages %}
                         <div class="alert alert-{{ class }}">
-                            {{ message }}
+                            {{ message|trans }}
                         </div>
                     {% endfor %}
                 {% endfor %}

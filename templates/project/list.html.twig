@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block documentTitle %}Projects - {{ parent() }}{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Projects'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}
     {% if projects|length > 0 %}
-        Projects
+        {{ 'Projects'|trans }}
     {% endif %}
 {% endblock %}
 
@@ -14,7 +16,7 @@
         <div class="btn-list">
             <a href="{{ path('project_create') }}" class="btn btn-primary">
                 <i class="ti ti-plus"></i>
-                Create project
+                {{ 'Create project'|trans }}
             </a>
         </div>
     </div>
@@ -35,10 +37,6 @@
 
                                 <h2 class="card-title text-center mb-2">{{ project.name }}</h2>
 
-                                {% if false %}
-
-                                {% endif %}
-
                                 <p class="text-center flex-fill">
                                     {{ project.description }}
                                 </p>
@@ -47,7 +45,7 @@
                                     <div class="col">
                                         <a href="{{ path('project_switch', { project: project.id }) }}" class="btn btn-secondary w-100">
                                             <i class="ti ti-folder"></i>
-                                            Go to project
+                                            {{ 'Go to project'|trans }}
                                         </a>
                                     </div>
                                     {% if can_user_manage_project(project) %}
@@ -58,7 +56,7 @@
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <a href="{{ path('project_delete', { project: project.id }) }}" class="dropdown-item text-red">
                                                     <i class="ti ti-circle-minus"></i>
-                                                    Delete project
+                                                    {{ 'Delete project'|trans }}
                                                 </a>
                                             </div>
                                         </div>
@@ -76,12 +74,12 @@
                 <div class="empty-img">
                     <img src="{{ asset('build/images/icons/project.svg') }}" height="128" />
                 </div>
-                <p class="empty-title">No projects available</p>
-                <p class="empty-subtitle text-muted">Create a new project or request access to another project.</p>
+                <p class="empty-title">{{ 'No projects available'|trans }}</p>
+                <p class="empty-subtitle text-muted">{{ 'Create a new project or request access to another project.'|trans }}</p>
                 <div class="empty-action">
                     <a href="{{ path('project_create') }}" class="btn btn-primary">
                         <i class="ti ti-plus"></i>
-                        Create project
+                        {{ 'Create project'|trans }}
                     </a>
                 </div>
             </div>

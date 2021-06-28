@@ -1,48 +1,50 @@
 {% extends 'administration/administration_base.html.twig' %}
 
-{% block documentTitle %}Overview - {{ parent() }}{% endblock %}
-{% block pageTitle %}Overview{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Overview'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'Overview'|trans }}{% endblock %}
 
 {% block pageBody %}
     <div class="container-xl">
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-lg-4">
-                <div class="card">
+                <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_user_list') }}">
                                 <img src="{{ asset('build/images/icons/users.svg') }}" height="128" />
                             </a>
                         </div>
-                        <p class="empty-title">Users</p>
+                        <p class="empty-title">{{ 'Users'|trans }}</p>
                         <p class="empty-subtitle text-muted">
-                            Manage all users of this mosparo instance.
+                            {{ 'Manage all users of this mosparo instance.'|trans }}
                         </p>
                         <div class="empty-action">
                             <a href="{{ path('administration_user_list') }}" class="btn btn-primary">
                                 <i class="ti ti-users"></i>
-                                Manage
+                                {{ 'Manage'|trans }}
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-6 col-lg-4">
-                <div class="card">
+                <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_geoip2_settings') }}">
                                 <img src="{{ asset('build/images/icons/geoip.svg') }}" height="128" />
                             </a>
                         </div>
-                        <p class="empty-title">GeoIP2</p>
+                        <p class="empty-title">{{ 'GeoIP2'|trans }}</p>
                         <p class="empty-subtitle text-muted">
-                            Configure the GeoIP2 integration.
+                            {{ 'Configure the GeoIP2 integration.'|trans }}
                         </p>
                         <div class="empty-action">
                             <a href="{{ path('administration_geoip2_settings') }}" class="btn btn-primary">
                                 <i class="ti ti-map-pin"></i>
-                                Configure
+                                {{ 'Configure'|trans }}
                             </a>
                         </div>
                     </div>

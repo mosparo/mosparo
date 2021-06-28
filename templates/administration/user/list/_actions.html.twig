@@ -1,12 +1,14 @@
+{% trans_default_domain 'mosparo' %}
+
 <div class="d-flex">
     <a href="{{ path('administration_user_edit', { 'id': row.id}) }}" class="btn btn-primary me-2">
         <i class="ti ti-pencil"></i>
-        Edit
+        {{ 'Edit'|trans }}
     </a>
     {% if app.user != row %}
         <a href="{{ path('administration_user_delete', { 'id': row.id}) }}" class="btn btn-danger">
             <i class="ti ti-circle-minus"></i>
-            Delete
+            {{ 'Delete'|trans }}
         </a>
     {% endif %}
 </div>

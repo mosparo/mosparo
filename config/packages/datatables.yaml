@@ -12,4 +12,4 @@ datatables:
         className: 'table table-vcenter card-table table-striped m-0'
 
     # You can for example override this to "tables" to keep the translation domains separated nicely
-    translation_domain: 'messages'
+    translation_domain: 'mosparo'

@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/administration/geoip2")
@@ -38,10 +39,13 @@ class GeoIp2Controller extends AbstractController
 
     protected $geoIp2Helper;
 
-    public function __construct(ConfigHelper $configHelper, GeoIp2Helper $geoIp2Helper)
+    protected $translator;
+
+    public function __construct(ConfigHelper $configHelper, GeoIp2Helper $geoIp2Helper, TranslatorInterface $translator)
     {
         $this->configHelper = $configHelper;
         $this->geoIp2Helper = $geoIp2Helper;
+        $this->translator = $translator;
     }
 
     /**
@@ -53,9 +57,9 @@ class GeoIp2Controller extends AbstractController
             'geoipActive' => (bool) $this->configHelper->getConfigValue('geoipActive', false),
             'geoipLicenseKey' => $this->configHelper->getConfigValue('geoipLicenseKey', '')
         ];
-        $form = $this->createFormBuilder($config)
+        $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
             ->add('geoipActive', CheckboxType::class, ['label' => 'Use the automatic IP address localization', 'required' => false])
-            ->add('geoipLicenseKey', TextType::class, ['label' => 'License Key', 'required' => false])
+            ->add('geoipLicenseKey', TextType::class, ['label' => 'License key', 'required' => false])
             ->getForm();
 
         $form->handleRequest($request);
@@ -69,7 +73,14 @@ class GeoIp2Controller extends AbstractController
             $this->configHelper->setConfigValue('geoipLicenseKey', $form->get('geoipLicenseKey')->getData());
 
             $session = $request->getSession();
-            $session->getFlashBag()->add('success', 'The settings were saved successfully.');
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The settings were saved successfully.',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('administration_geoip2_settings');
         }
@@ -88,9 +99,25 @@ class GeoIp2Controller extends AbstractController
 
         $session = $request->getSession();
         if ($result === true) {
-            $session->getFlashBag()->add('success', 'The database was downloaded successfully.');
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The database was downloaded successfully.',
+                    [],
+                    'mosparo'
+                )
+            );
         } else {
-            $session->getFlashBag()->add('error', 'An error occurred while mosparo tried to download the database.' . implode(' ', $result));
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'error',
+                $this->translator->trans(
+                    'An error occurred while mosparo tried to download the database. %error%',
+                    ['%error%' => implode(' ', $result)],
+                    'mosparo'
+                )
+            );
         }
 
         return $this->redirectToRoute('administration_geoip2_settings');

@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/administration/users")
@@ -34,9 +35,12 @@ class UserController extends AbstractController
 {
     protected $passwordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    protected $translator;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->translator = $translator;
     }
 
     /**
@@ -91,7 +95,7 @@ class UserController extends AbstractController
             $isAdminUserAttributes['checked'] = 'checked';
         }
 
-        $form = $this->createFormBuilder($user)
+        $form = $this->createFormBuilder($user, ['translation_domain' => 'mosparo'])
             ->add('email', EmailType::class)
             ->add('password', PasswordFormType::class, [
                 'mapped' => false,
@@ -145,9 +149,15 @@ class UserController extends AbstractController
 
             $entityManager->flush();
 
-            // RuleSet the flash message
             $session = $request->getSession();
-            $session->getFlashBag()->add('success', 'The user was successfully saved.');
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The user was saved successfully.',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('administration_user_list');
         }
@@ -189,7 +199,14 @@ class UserController extends AbstractController
                 $entityManager->flush();
 
                 $session = $request->getSession();
-                $session->getFlashBag()->add('error', 'The user ' . $user->getEmail() . ' was deleted successfully.');
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans(
+                        'The user %email% was deleted successfully.',
+                        ['%email%' => $user->getEmail()],
+                        'mosparo'
+                    )
+                );
 
                 return $this->redirectToRoute('administration_user_list');
             }

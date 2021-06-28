@@ -1,15 +1,17 @@
 {% extends 'password/password_base.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Reset your password'|trans }} - {{ parent() }}{% endblock %}
 
 {% block small_body %}
-    <h2 class="card-title text-center mb-4">Reset your password</h2>
+    <h2 class="card-title text-center mb-4">{{ 'Reset your password'|trans }}</h2>
 
     {% for flashError in app.flashes('reset_password_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
 
-    <p class="text-muted mb-4">Enter your email address and we we will send you a link to reset your password.</p>
+    <p class="text-muted mb-4">{{ 'Enter your email address and we will send you a link to reset your password.'|trans }}</p>
 
     {{ form_start(requestForm) }}
         {{ form_row(requestForm.email) }}
@@ -17,7 +19,7 @@
         <div class="form-footer">
             <button class="btn btn-primary w-100">
                 <i class="ti ti-mail"></i>
-                Send password reset email
+                {{ 'Send password reset email'|trans }}
             </button>
         </div>
     {{ form_end(requestForm) }}

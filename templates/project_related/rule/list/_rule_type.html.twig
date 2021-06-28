@@ -1,7 +1,9 @@
+{% trans_default_domain 'mosparo' %}
+
 {% set ruleType = rule_type(value) %}
 {% if ruleType %}
     <div class="rule-type-label">
         <i class="{{ ruleType.icon }}"></i>
-        {{ ruleType.name }}
+        {{ ruleType.name|trans }}
     </div>
 {% endif %}

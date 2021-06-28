@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Mosparo\Entity\Project;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/project")
@@ -25,10 +26,13 @@ class ProjectController extends AbstractController
 
     protected $cleanupHelper;
 
-    public function __construct(SessionInterface $session, CleanupHelper $cleanupHelper)
+    protected $translator;
+
+    public function __construct(SessionInterface $session, CleanupHelper $cleanupHelper, TranslatorInterface $translator)
     {
         $this->session = $session;
         $this->cleanupHelper = $cleanupHelper;
+        $this->translator = $translator;
     }
 
     /**
@@ -65,9 +69,15 @@ class ProjectController extends AbstractController
             $entityManager->persist($projectMember);
             $entityManager->flush();
 
-            // RuleSet the flash message
             $session = $request->getSession();
-            $session->getFlashBag()->add('success', 'The new project was successfully created.');
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The new project was successfully created.',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('project_list');
         }
@@ -95,9 +105,15 @@ class ProjectController extends AbstractController
                 $entityManager->remove($project);
                 $entityManager->flush();
 
-                // RuleSet the flash message
                 $session = $request->getSession();
-                $session->getFlashBag()->add('error', 'The project ' . $project->getName() . ' was deleted successfully.');
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans(
+                        'The project %projectName% was deleted successfully.',
+                        ['%projectName%' => $project->getName()],
+                        'mosparo'
+                    )
+                );
 
                 return $this->redirectToRoute('project_list');
             }

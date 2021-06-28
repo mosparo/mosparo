@@ -1,7 +1,9 @@
 {% extends 'project_related/project_related_base.html.twig' %}
 
-{% block documentTitle %}Submissions - {{ parent() }}{% endblock %}
-{% block pageTitle %}Submissions{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Submissions'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'Submissions'|trans }}{% endblock %}
 
 {% block pageBody %}
     <div class="container-xl">

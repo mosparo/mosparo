@@ -1,6 +1,8 @@
 {% extends 'project_related/project_related_base.html.twig' %}
 
-{% block documentTitle %}Reissue API keys - {{ parent() }}{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Reissue API keys'|trans }}- {{ parent() }}{% endblock %}
 {% block pagePreTitle %}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
@@ -17,11 +19,15 @@
                 <div class="col">
                     <div class="card card-md">
                         <div class="card-body">
-                            <h2 class="card-title text-center mb-4">Reissue API keys</h2>
+                            <h2 class="card-title text-center mb-4">{{ 'Reissue API keys'|trans }}</h2>
 
                             <div class="alert alert-important alert-warning">
-                                <p>Do you really want to reissue the API keys for the project <strong>{{ project.name }}</strong>?</p>
-                                <p>You cannot undo this process.</p>
+                                <p>
+                                    {{ 'Do you really want to reissue the API keys for the project %projectName%?'|trans({ '%projectName%': '<strong>' ~ project.name ~ '</strong>' })|raw }}
+                                </p>
+                                <p>
+                                    {{ 'You cannot undo this process.'|trans }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -34,13 +40,13 @@
                 <div class="col">
                     <a href="{{ path('settings_member_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
-                        Back to settings
+                        {{ 'Back to settings'|trans }}
                     </a>
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-warning">
                         <i class="ti ti-refresh"></i>
-                        Reissue
+                        {{ 'Reissue'|trans }}
                     </button>
                 </div>
             </div>

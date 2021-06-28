@@ -1,7 +1,9 @@
 {% extends 'administration/administration_base.html.twig' %}
 
-{% block documentTitle %}Users - {{ parent() }}{% endblock %}
-{% block pageTitle %}Users{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Users'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'Users'|trans }}{% endblock %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
@@ -10,7 +12,7 @@
         <div class="btn-list">
             <a href="{{ path('administration_user_add') }}" class="btn btn-success">
                 <i class="ti ti-plus"></i>
-                Add user
+                {{ 'Create user'|trans }}
             </a>
         </div>
     </div>

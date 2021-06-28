@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block documentTitle %}Create project - {{ parent() }}{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Create project'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
 {% block pageBody %}
@@ -15,20 +17,20 @@
             <div class="col">
                 <div class="card card-md">
                     <div class="card-body">
-                        <h2 class="card-title text-center mb-4">Choose type</h2>
+                        <h2 class="card-title text-center mb-4">{{ 'Choose type'|trans }}</h2>
 
                         {% for ruleType in ruleTypes %}
                             <a href="{{ path('rule_create_with_type', { type: ruleType.key }) }}" class="btn btn-outline-secondary w-100 flex-column align-items-start rule-type-button">
                                 <div class="h2">
                                     <i class="{{ ruleType.icon }}"></i>
-                                    {{ ruleType.name }}
+                                    {{ ruleType.name|trans }}
                                 </div>
                                 <p>
-                                    {{ ruleType.description }}
+                                    {{ ruleType.description|trans }}
                                 </p>
                                 <ul class="align-items-start mb-0">
                                     {% for subType in ruleType.subtypes %}
-                                        <li>{{ subType.name }}</li>
+                                        <li>{{ subType.name|trans }}</li>
                                     {% endfor %}
                                 </ul>
                             </a>
@@ -41,7 +43,7 @@
             <div class="col">
                 <a href="{{ path('rule_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
-                    Back to rules
+                    {{ 'Back to rules'|trans }}
                 </a>
             </div>
         </div>

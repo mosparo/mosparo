@@ -1,7 +1,9 @@
+{% trans_default_domain 'mosparo' %}
+
 {% if value == 'reader' %}
-    <span class="text-muted">Reader</span>
+    <span class="text-muted">{{ 'Reader'|trans }}</span>
 {% elseif value == 'editor' %}
-    <span class="text-indigo">Editor</span>
+    <span class="text-indigo">{{ 'Editor'|trans }}</span>
 {% elseif value == 'owner' %}
-    <span class="text-pink">Owner</span>
+    <span class="text-pink">{{ 'Owner'|trans }}</span>
 {% endif %}

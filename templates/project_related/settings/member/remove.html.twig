@@ -1,6 +1,8 @@
 {% extends 'project_related/project_related_base.html.twig' %}
 
-{% block documentTitle %}Remove project member {{ projectMember.user.email }} - {{ parent() }}{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Remove project member %projectMemberName%'|trans({ '%projectMemberName%': projectMember.user.email }) }} - {{ parent() }}{% endblock %}
 {% block pagePreTitle %}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
@@ -17,11 +19,15 @@
                 <div class="col">
                     <div class="card card-md">
                         <div class="card-body">
-                            <h2 class="card-title text-center mb-4">Remove project member {{ projectMember.user.email }}</h2>
+                            <h2 class="card-title text-center mb-4">{{ 'Remove project member %projectMemberName%'|trans({ '%projectMemberName%': projectMember.user.email }) }}</h2>
 
                             <div class="alert alert-important alert-danger">
-                                <p>Do you really want to remove the project member <strong>{{ projectMember.user.email }}</strong>?</p>
-                                <p>You cannot undo this process.</p>
+                                <p>
+                                    {{ 'Do you really want to remove the project member %projectMemberName?'|trans({ '%projectMemberName%': '<strong>' ~ projectMember.user.email ~ '</strong>' })|raw }}
+                                </p>
+                                <p>
+                                    {{ 'You cannot undo this process.'|trans }}
+                                </p>
                             </div>
                         </div>
                     </div>

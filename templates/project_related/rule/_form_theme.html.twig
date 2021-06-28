@@ -1,11 +1,13 @@
 {% extends 'form/mosparo_form.html.twig' %}
 
+{% trans_default_domain 'mosparo' %}
+
 {% block collection_additional_add_button %}
     <div class="col">
         {% if not form.vars.disabled %}
             <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
                 <i class="ti ti-square-plus"></i>
-                Add multiple items
+                {{ 'Add multiple items'|trans }}
             </button>
         {% endif %}
     </div>

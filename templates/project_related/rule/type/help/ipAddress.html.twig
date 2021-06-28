@@ -1,18 +1,20 @@
-<p>The IP address rule type allows to filter for IP addresses or subnets.</p>
+{% trans_default_domain 'mosparo' %}
+
+<p>{{ 'The IP address rule type allows to filter for IP addresses or subnets.'|trans }}</p>
 
 <ul>
     <li>
-        <strong>IP address</strong>
-        <p>Enter an IP address which is not allowed to make any submissions.</p>
+        <strong>{{ 'IP address'|trans }}</strong>
+        <p>{{ 'Enter an IP address which is not allowed to make any submissions.'|trans }}</p>
         <p>
-            <u>Example:</u> <code>192.168.10.10</code> or <code>abcd:ef01::1</code>
+            <u>{{ 'Example'|trans }}:</u> <code>192.168.10.10</code> or <code>abcd:ef01::1</code>
         </p>
     </li>
     <li>
-        <strong>Subnet</strong>
-        <p>Enter a subnet with mask which is not allowed to make any submissions.</p>
+        <strong>{{ 'Subnet'|trans }}</strong>
+        <p>{{ 'Enter a subnet with mask which is not allowed to make any submissions.'|trans }}</p>
         <p>
-            <u>Example:</u> <code>192.168.10.0/24</code> or <code>abcd:ef01::/48</code>
+            <u>{{ 'Example'|trans }}:</u> <code>192.168.10.0/24</code> or <code>abcd:ef01::/48</code>
         </p>
     </li>
 </ul>

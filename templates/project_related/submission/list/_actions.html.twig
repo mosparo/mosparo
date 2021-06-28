@@ -1,6 +1,8 @@
+{% trans_default_domain 'mosparo' %}
+
 <div class="d-flex">
     <a href="{{ path('submission_view', { 'id': row.id}) }}" class="btn btn-primary">
         <i class="ti ti-id"></i>
-        View
+        {{ 'View'|trans }}
     </a>
 </div>

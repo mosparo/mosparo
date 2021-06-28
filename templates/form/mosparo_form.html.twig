@@ -1,5 +1,7 @@
 {% extends 'bootstrap_4_layout.html.twig' %}
 
+{% trans_default_domain 'mosparo' %}
+
 {% block form_label %}
     {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' form-label')|trim}) -%}
     {{ parent() }}
@@ -50,7 +52,7 @@
                         {{ form_widget(field) }}
 
                         {% if not form.vars.disabled %}
-                            <button type="button" class="btn btn-danger btn-icon-only remove-item-button">
+                            <button type="button" class="btn btn-danger btn-icon-only remove-item-button" alt="{{ 'Remove'|trans }}">
                                 <i class="ti ti-circle-minus"></i>
                             </button>
                         {% endif %}
@@ -70,7 +72,7 @@
                     {% if not form.vars.disabled %}
                         <button type="button" class="btn btn-success ms-auto add-item-button">
                             <i class="ti ti-plus"></i>
-                            Add
+                            {{ 'Add'|trans }}
                         </button>
                     {% endif %}
                 </div>

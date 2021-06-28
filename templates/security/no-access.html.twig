@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block documentTitle %}No access - {{ parent() }}{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'No access'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
 {% block pageBody %}
@@ -14,7 +16,7 @@
     <div class="row">
         <div class="col">
             <div class="alert alert-important alert-danger text-center">
-                No access.
+                {{ 'No access'|trans }}
             </div>
         </div>
     </div>

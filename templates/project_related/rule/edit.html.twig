@@ -1,5 +1,7 @@
 {% extends 'project_related/rule/form.html.twig' %}
 
-{% block documentTitle %}Edit rule {{ rule.name }} - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} Rules <i class="ti ti-chevron-right"></i>{% endblock %}
-{% block pageTitle %}Edit rule {{ rule.name }}{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Edit rule %ruleName%'|trans({ '%ruleName%': rule.name }) }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'Rules'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}{{ 'Edit rule %ruleName%'|trans({ '%ruleName%': rule.name }) }}{% endblock %}

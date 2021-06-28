@@ -41,6 +41,7 @@ class RulesetFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Ruleset::class,
+            'translation_domain' => 'mosparo',
         ]);
     }
 }

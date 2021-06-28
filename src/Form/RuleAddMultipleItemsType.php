@@ -45,7 +45,8 @@ class RuleAddMultipleItemsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'rule_type' => null
+            'rule_type' => null,
+            'translation_domain' => 'mosparo',
         ]);
     }
 }

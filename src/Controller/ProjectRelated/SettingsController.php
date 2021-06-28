@@ -28,6 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/settings")
@@ -35,6 +36,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class SettingsController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
+
+    protected $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      * @Route("/general", name="settings_general")
@@ -50,9 +58,15 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            // RuleSet the flash message
             $session = $request->getSession();
-            $session->getFlashBag()->add('success', 'The settings were saved successfully.');
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The settings were saved successfully.',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('settings_general');
         }
@@ -131,7 +145,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             'Owner' => ProjectMember::ROLE_OWNER
         ];
 
-        $form = $this->createFormBuilder($projectMember)
+        $form = $this->createFormBuilder($projectMember, ['translation_domain' => 'mosparo'])
             ->add('email', EmailType::class, ['label' => 'Email address', 'mapped' => false, 'data' => $emailAddress, 'attr' => $emailFieldAttributes])
             ->add('role', ChoiceType::class, ['label' => 'Role', 'choices' => $projectMemberRoles, 'attr' => ['class' => 'form-select']])
             ->getForm();
@@ -145,7 +159,14 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 $user = $userRepository->findOneBy(['email' => $form->get('email')->getData()]);
                 if ($user === null) {
                     $session = $request->getSession();
-                    $session->getFlashBag()->add('error', 'The user was not found.');
+                    $session->getFlashBag()->add(
+                        'error',
+                        $this->translator->trans(
+                            'The user was not found.',
+                            [],
+                            'mosparo'
+                        )
+                    );
 
                     return $this->redirectToRoute('settings_member_list');
                 }
@@ -162,7 +183,14 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
                 if ($numberOfOwner === 0) {
                     $session = $request->getSession();
-                    $session->getFlashBag()->add('error', 'The project needs at least one owner.');
+                    $session->getFlashBag()->add(
+                        'error',
+                        $this->translator->trans(
+                            'The project needs at least one owner.',
+                            [],
+                            'mosparo'
+                        )
+                    );
 
                     return $this->redirectToRoute('settings_member_list');
                 }
@@ -171,7 +199,14 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $entityManager->flush();
 
             $session = $request->getSession();
-            $session->getFlashBag()->add('success', 'The project member was saved successfully.');
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The project member was saved successfully.',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('settings_member_list');
         }
@@ -198,7 +233,14 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
             if ($numberOfOwner <= 1) {
                 $session = $request->getSession();
-                $session->getFlashBag()->add('error', 'The project needs at least one owner.');
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans(
+                        'The project needs at least one owner.',
+                        [],
+                        'mosparo'
+                    )
+                );
 
                 return $this->redirectToRoute('settings_member_list');
             }
@@ -213,9 +255,15 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 $entityManager->remove($projectMember);
                 $entityManager->flush();
 
-                // RuleSet the flash message
                 $session = $request->getSession();
-                $session->getFlashBag()->add('error', 'The project member ' . $projectMember->getUser()->getEmail() . ' was removed successfully from the project.');
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans(
+                        'The project member %projectMemberName% was removed successfully from the project.',
+                        ['%projectMemberName%' => $projectMember->getUser()->getEmail()],
+                        'mosparo'
+                    )
+                );
 
                 return $this->redirectToRoute('settings_member_list');
             }
@@ -234,7 +282,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         $project = $this->getActiveProject();
         $config = $project->getConfigValues();
 
-        $form = $this->createFormBuilder($config)
+        $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
             // delay
             ->add('delayActive', CheckboxType::class, ['label' => 'Request delay active', 'required' => false])
             ->add('delayNumberOfRequests', NumberType::class, ['label' => 'Number of allowed requests', 'help' => 'The number of allowed requests before the delay come into place.'])
@@ -264,9 +312,15 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
             $entityManager->flush();
 
-            // RuleSet the flash message
             $session = $request->getSession();
-            $session->getFlashBag()->add('success', 'The security settings were saved successfully.');
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'The security settings were saved successfully.',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('settings_security');
         }
@@ -294,7 +348,14 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
         if (!$this->isGranted('ROLE_ADMIN') && !$activeProject->isProjectOwner($this->getUser())) {
             $session = $request->getSession();
-            $session->getFlashBag()->add('error', 'Only an owner of the project can reissue the API keys.');
+            $session->getFlashBag()->add(
+                'warning',
+                $this->translator->trans(
+                    'Only an owner of the project can reissue the API keys.',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('settings_general');
         }
@@ -311,9 +372,15 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
                 $entityManager->flush();
 
-                // RuleSet the flash message
                 $session = $request->getSession();
-                $session->getFlashBag()->add('warning', 'The API keys were reissued successfully.');
+                $session->getFlashBag()->add(
+                    'warning',
+                    $this->translator->trans(
+                        'The API keys were reissued successfully.',
+                        [],
+                        'mosparo'
+                    )
+                );
 
                 return $this->redirectToRoute('settings_general');
             }

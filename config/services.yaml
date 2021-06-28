@@ -48,6 +48,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Mosparo\Subscriber\LocaleSubscriber:
+        class: Mosparo\Subscriber\LocaleSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
     Mosparo\Doctrine\ProjectRelatedSubscriber:
         class: Mosparo\Doctrine\ProjectRelatedSubscriber
         tags:

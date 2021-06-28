@@ -1,7 +1,9 @@
 {% extends 'project_related/settings/settings_base.html.twig' %}
 
-{% block documentTitle %}Security - {{ parent() }}{% endblock %}
-{% block pageTitle %}Security{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Security'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'Security'|trans }}{% endblock %}
 
 {% block settingsPageBody %}
     {{ form_start(form) }}
@@ -9,16 +11,14 @@
             <div class="col-12">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h3 class="card-title">Request delaying</h3>
+                        <h3 class="card-title">{{ 'Request delaying'|trans }}</h3>
                     </div>
                     <div class="card-body">
                         <p>
-                            To make it harder for bots, mosparo can delay the creation of submit tokens. Without a submit token,
-                            a form cannot be submitted. The user will see, how long he has to wait, until the form is submittable.
+                            {{ 'To make it harder for bots, mosparo can delay the creation of submit tokens. Without a submit token, a form cannot be submitted. The user will see, how long he has to wait, until the form is submittable.'|trans }}
                         </p>
                         <p>
-                            In which case the creation of the token needs to be delayed, will be decided because of the number of requests
-                            the IP address has made. With every additional token request, the delay will be extended.
+                            {{ 'In which case the creation of the token needs to be delayed, will be decided because of the number of requests the IP address has made. With every additional token request, the delay will be extended.'|trans }}
                         </p>
 
                         <div class="row mb-3">
@@ -48,13 +48,11 @@
 
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h3 class="card-title">IP Lockout</h3>
+                        <h3 class="card-title">{{ 'IP Lockout'|trans }}</h3>
                     </div>
                     <div class="card-body">
                         <p>
-                            To make it even harder for bots, mosparo can automatically block IP addresses temporary.
-                            If an IP address requests a lot of tokens, mosparo can automatically count the requests
-                            and block the IP address if a specific number is reached.
+                            {{ 'To make it even harder for bots, mosparo can automatically block IP addresses temporary. If an IP address requests a lot of tokens, mosparo can automatically count the requests and block the IP address if a specific number is reached.'|trans }}
                         </p>
 
                         <div class="row mb-3">
@@ -84,7 +82,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Whitelist</h3>
+                        <h3 class="card-title">{{ 'Whitelist'|trans }}</h3>
                     </div>
                     <div class="card-body">
                         {{ form_row(form.ipWhitelist) }}
@@ -96,7 +94,7 @@
             <div class="col-auto ms-auto">
                 <button type="submit" class="btn btn-primary">
                     <i class="ti ti-device-floppy"></i>
-                    Save
+                    {{ 'Save'|trans }}
                 </button>
             </div>
         </div>

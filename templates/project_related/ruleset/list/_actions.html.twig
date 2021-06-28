@@ -1,16 +1,18 @@
+{% trans_default_domain 'mosparo' %}
+
 <div class="d-flex">
     <a href="{{ path('ruleset_view', { 'id': row.id }) }}" class="btn btn-info me-2">
         <i class="ti ti-info-circle"></i>
-        View
+        {{ 'View'|trans }}
     </a>
     {% if canManage %}
         <a href="{{ path('ruleset_edit', { 'id': row.id }) }}" class="btn btn-primary me-2">
             <i class="ti ti-pencil"></i>
-            Edit
+            {{ 'Edit'|trans }}
         </a>
         <a href="{{ path('ruleset_delete', { 'id': row.id }) }}" class="btn btn-danger">
             <i class="ti ti-circle-minus"></i>
-            Delete
+            {{ 'Delete'|trans }}
         </a>
     {% endif %}
 </div>

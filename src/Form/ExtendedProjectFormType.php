@@ -32,6 +32,7 @@ class ExtendedProjectFormType extends ProjectFormType
     {
         $resolver->setDefaults([
             'data_class' => Project::class,
+            'translation_domain' => 'mosparo',
         ]);
     }
 }

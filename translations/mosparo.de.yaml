@@ -1,0 +1,353 @@
+# Header
+Please choose...: Bitte wählen...
+Manage projects: Projekte verwalten
+Create project: Projekt erstellen
+Account: Account
+
+# Menu
+Dashboard: Übersicht
+Rules: Regeln
+Rulesets: Regel-Pakete
+Submissions: Einsendungen
+Settings: Einstellungen
+General: Haupteinstellungen
+Project members: Projekt-Mitglieder
+Security: Sicherheit
+Design: Darstellung
+Administration: Administration
+
+# Form + Crud
+Add: Hinzufügen
+Remove: Entfernen
+Save: Speichern
+View: Anschauen
+Edit: Bearbeiten
+Delete: Löschen
+Actions: Aktionen
+Help: Hilfe
+Close: Schliessen
+
+You cannot undo this process.: Sie können diesen Vorgang nicht rückgängig machen.
+No access: Kein Zugriff
+
+Active: Aktiv
+Inactive: Inaktiv
+Yes: Ja
+No: Nein
+Empty: Leer
+
+# Form fields
+Name: Name
+Type: Typ
+Status: Status
+Spam rating factor: Spam-Bewertungsfaktor
+Rating: Bewertung
+Value: Wert
+Spam score: Spam-Grenzwert
+User: Benutzer
+Role: Rolle
+Roles: Rollen
+
+Owner: Inhaber
+Editor: Bearbeiter
+Reader: Leser
+
+# messages
+Your password was reset successfully.: Ihr Passwort wurde erfolgreich zurückgesetzt.
+
+
+# /login
+Login: Anmelden
+Login to your account: Mit Ihrem Account anmelden
+Logout: Abmelden
+You are logged in as %username%: Sie sind als %username% angemeldet.
+I forgot password: Ich habe das Passwort vergessen
+Email address: E-Mail-Adresse
+Password: Passwort
+Sign in: Anmelden
+
+# password_base
+Back to login: Zurück zum Einloggen
+
+# /password
+Reset your password: Ihr Passwort zurücksetzen
+Enter your email address and we will send you a link to reset your password.: Geben Sie Ihre E-Mail-Adresse ein und wir werden Ihnen einen Link zum Zurücksetzen Ihres Passworts zusenden.
+Send password reset email: Passwort-E-Mail senden
+
+# /password/check-email
+Password reset email sent: Passwort-E-Mail versendet
+If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in %time%.: Wenn ein Account für die von Ihnen eingegebene E-Mail-Adresse existiert, wurde soeben ein E-Mail mit einem Link zum Zurücksetzen des Passworts an diese E-Mail adresse versendet. Der Link wird in %time% ablaufen.
+"If you don't receive an email please check your spam folder or %linkStart%try again%linkEnd%.": Falls Sie kein E-Mail erhalten haben, prüfen Sie bitte Ihren Spam-Ordner oder %linkStart%versuchen Sie es erneut%linkEnd%.
+
+# password-reset-email
+Hi!: Guten Tag
+To reset your password, please visit the following link: Um Ihr Passwort zurückzusetzen, besuchen Sie bitte folgenden Link
+This link will expire in %time%.: Der Link wird in %time% ablaufen.
+Cheers!: Mit freundlichen Grüssen
+Your password reset request: Passwort zurücksetzen
+
+# /password/reset
+Reset password: Passwort zurücksetzen
+
+# /project
+Projects: Projekte
+Go to project: Zum Projekt
+Delete project: Projekt löschen
+No projects available: Keine Projekte vorhanden
+Create a new project or request access to another project.: Erstellen Sie ein neues Projekt oder fordern Sie Zugang zu einem Projekt an.
+
+# /project/create
+Description: Beschreibung
+Hosts: Hosts
+Please enter all hosts which this project will include.: Bitte fügen Sie alle Hosts hinzu, welche dieses Projekt beinhaltet.
+Back to projects: Zurück zu den Projekten
+The new project was successfully created.: Das neue Projekt wurde erfolgreich erstellt.
+
+# /project/{id}/delete
+Delete project %projectName%: Projekt %projectName% löschen
+Do you really want to delete the project %projectName%?: Wollen Sie das Projekt %projectName% wirklich löschen?
+The project %projectName% was deleted successfully.: Das Projekt %projectName% wurde erfolgreich gelöscht.
+
+# /
+Spam submissions: Spam-Einsendungen
+
+# /rules
+Create rule: Regel erstellen
+
+# /rules/create/choose-type
+Choose type: Typ wählen
+Back to rules: Zurück zu den Regeln
+
+# /rules/create/{type}
+Rule type: Regeltyp
+Rule: Regel
+Items: Einträge
+Add items: Einträge hinzufügen
+Add multiple items: Mehrere Einträge hinzufügen
+Add one item per line.: Ein Eintrag pro Zeile.
+If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt wird, werden die Einträge werden nicht als Spam erkannt.
+The new rule was created successfully.: Die neue Regel wurde erfolgreich erstellt.
+
+# /rules/{id}/edit
+Edit rule %ruleName%: Regel %ruleName% bearbeiten
+The rule was saved successfully.: Die Regel wurde erfolgreich gespeichert.
+
+# /rules/{id}/delete
+Delete rule %ruleName%: Regel %ruleName% löschen
+Do you really want to delete the rule %ruleName%?: Wollen Sie die Regel %ruleName% wirklich löschen?
+The rule %ruleName% was deleted successfully.: Die Regel %ruleName% wurde erfolgreich gelöscht.
+
+# /rulesets
+Add ruleset: Regel-Paket hinzufügen
+
+# /rulesets/add
+# /rulesets/{id}/edit
+Edit ruleset %rulesetName%: Regel-Paket %rulesetName% bearbeiten
+Back to rulesets: Zurück zu den Regel-Paketen
+The ruleset was saved successfully.: Das Regel-Paket wurde erfolgreich gespeichert.
+
+# /rulesets/{id}/delete
+Delete ruleset %rulesetName%: Regel-Paket %rulesetName% löschen
+Do you really want to delete the ruleset %rulesetName%?: Wollen Sie das Regel-Paket %rulesetName% wirklich löschen?
+The ruleset %rulesetName% was deleted successfully.: Das Regel-Paket %rulesetName% wurde erfolgreich gelöscht.
+
+# /rulesets/{id}/view
+View ruleset %rulesetName%: Regel-Paket %rulesetName% anschauen
+Ruleset details: Details des Regel-Pakets
+Last refreshed at: Zuletzt abgerufen am
+Last updated at: Zuletzt geändert am
+Number of included rules: Anzahl der beinhaltenden Regeln
+Included rules: Beinhaltende Regeln
+Rule details: Regel-Details
+
+# /submissions
+Spam: Spam
+Verification: Bestätigung
+Page: Seite
+Spam rating: Bewertung
+Submitted at: Abgesendet am
+Valid: Gültig
+Verified at: Überprüft am
+
+# /submissions/{id}/view
+Submission %submissionId: Einsendung %submissionId%
+Is spam: Ist Spam
+Is valid: Ist gültig
+Source: Quelle
+Page title: Seitentitel
+Page URL: Adresse der Seite
+Requested at: Angefordert am
+Ignored fields: Ignorierte Felder
+The following fields were not transmitted because of their field type (in example password or file upload fields).: Die folgenden Felder wurden aufgrund des Feld-Types nicht übermittelt (zum Beispiel Passwort- oder Datei-Upload-Felder).
+Form data: Formulardaten
+Client: Benutzer
+AS organization: AS Firma
+"%totalPoints% points": "%totalPoints% Punkte"
+
+# /settings/general
+Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.: Aktiviert oder deaktiviert die Spam-Erkennung. Wenn deaktiviert, das System wird alle Einsendungen speichern jedoch nicht vom Versand abhalten.
+Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.: Definiert die Grenze, ab welcher eine Einsendung als Spam erkannt wird. Wenn die Bewertung einer Einsendung über diesem Wert liegt, wird die Einsendung als Spam erkannt.
+API Keys: API-Zugangsdaten
+Public key: Öffentlicher Schlüssel
+Private key: Geheimer Schlüssel
+Reissue API keys: API-Zugangsdaten neu ausstellen
+The settings were saved successfully.: Die Einstellungen wurden erfolgreich gespeichert.
+
+# /settings/reissue-keys
+Do you really want to reissue the API keys for the project %projectName%?: Wollen Sie die API-Zugangsdaten für das Projekt %projectName% wirklich neu ausstellen lassen?
+Back to settings: Zurück zu den Einstellungen
+Reissue: Neu ausstellen
+Only an owner of the project can reissue the API keys.: Nur ein Besitzer des Projektes kann die API-Zugangsdaten neu ausstellen lassen.
+The API keys were reissued successfully.: Die API-Zugangsdaten wurden erfolgreich neu ausgestellt.
+
+# /settings/members
+Add project member: Projekt-Mitglied hinzufügen
+
+# /settings/members/add
+# /settings/members/{id}/edit
+Modify project member %projectMemberName%: Projekt-Mitglied %projectMemberName% bearbeiten
+Back to project members: Zurück zu den Projekt-Mitgliedern
+The user was not found.: Der Benutzer wurde nicht gefunden.
+The project needs at least one owner.: Das Projekt braucht mindestens einen Inhaber.
+The project member was saved successfully.: Das Projekt-Mitglied wurde erfolgreich gespeichert.
+
+# /settings/members/{id}/remove
+Remove project member %projectMemberName%: Projekt-Mitglied %projectMemberName% entfernen
+Do you really want to remove the project member %projectMemberName?: Wollen Sie das Projekt-Mitglied %projectMemberName% wirklich vom Projekt entfernen?
+The project member %projectMemberName% was removed successfully from the project.: Das Projekt-Mitglied %projectMemberName% wurde erfolgreich vom Projekt entfernt.
+
+# /settings/security
+Request delaying: Anfrageverzögerung
+To make it harder for bots, mosparo can delay the creation of submit tokens. Without a submit token, a form cannot be submitted. The user will see, how long he has to wait, until the form is submittable.: Um es einem Bot schwieriger zu machen, kann mosparo die Erstellung von Absende-Tokens verzögern. Ohne Absende-Token kann ein Formular nicht abgesendet werden. Der Benutzer wird sehen, wie lange der Benutzer warten muss, bevor das Formular absendbar ist.
+In which case the creation of the token needs to be delayed, will be decided because of the number of requests the IP address has made. With every additional token request, the delay will be extended.: In welchen Fällen die Ausstellung eines Absende-Tokens verzögert werden muss, wird aufgrund der Anzahl Anfragen, welche eine IP-Adresse gemacht hat, entschieden. Mit jeder zusätzlichen Anfrage wird die Verzögerung erhöht.
+Request delay active: Anfrageverzögerung aktiv
+Number of allowed requests: Anzahl erlaubter Anfragen
+Detection time frame: Erkennungszeitrahmen
+Base delay time: Anfangsverzögerungszeit
+Multiplicator: Multiplikator
+The number of allowed requests before the delay come into place.: Die Anzahl der erlaubten Anfragen, bevor die Anfrageverzögerung aktiv wird.
+In seconds: In Sekunden
+The base delay time will be increased with every additional request.: Die Anfangsverzögerungszeit wird mit jeder zusätzlichen Anfrage mit diesem Multiplikator erhöht.
+IP Lockout: IP-Sperre
+To make it even harder for bots, mosparo can automatically block IP addresses temporary. If an IP address requests a lot of tokens, mosparo can automatically count the requests and block the IP address if a specific number is reached.: Um es einem Bot noch schwieriger zu machen, kann mosparo automatisch eine IP-Adresse temporär blockieren. Wenn eine IP-Adresse eine hohe Anzahl von Tokens beantragt, kann mosparo diese automatisch zählen und wenn eine bestimmte Anzahl erreicht ist, die IP-Adresse blockieren.
+Automatic lockout active: Automatische Sperre aktiv
+Base lockout time: Anfangssperrzeit
+The number of allowed requests before the lockout come into place.: Die Anzahl der erlaubten Anfragen, bevor die Sperre aktiv wird.
+The base lockout time will be increased with every additional request.: Die Anfangssperrzeit wird mit jeder zusätzlichen Anfrage mit diesem Multiplikator erhöht.
+Whitelisted IP addresses and subnets: Erlaubte IP-Adressen und Subnetze
+"Specify one ip address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24": "Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24"
+The security settings were saved successfully.: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
+
+
+# /administration
+Overview: Übersicht
+Users: Benutzer
+Manage all users of this mosparo instance.: Verwalten Sie alle Benutzer dieser mosparo-Instanz.
+Manage: Verwalten
+GeoIP2: GeoIP2
+Configure the GeoIP2 integration.: Konfigurieren Sie die GeoIP2-Integration
+Configure: Konfigurieren
+GeoIP2 Configuration: GeoIP2 Konfiguration
+
+# /adminstration/users
+Create user: Benutzer erstellen
+
+# /administration/users/add
+# /administration/users/{id}/edit
+Modify user %email%: Benutzer %email% bearbeiten
+New password: Neues Passwort
+Repeat password: Passwort wiederholen
+Leave these fields empty if no password change is required.: Lassen Sie diese Felder leer falls kein Passwort-Wechsel erforderlich ist.
+Is active user: Ist ein aktiver Benutzer
+Is administrator: Ist ein Administrator
+Back to users: Zurück zu den Benutzern
+The user was saved successfully.: Der Benutzer wurde erfolgreich gespeichert.
+
+# /administration/users/{id}/delete
+Delete user %email%: Benutzer %email% löschen
+Do you really want to delete the user %email%?: Möchten Sie den Benutzer %email% wirklich löschen?
+"You can't delete yourself.": Sie können sich nicht selber löschen.
+The user %email% was deleted successfully.: Der Benutzer %email% wurde erfolgreich gelöscht.
+
+# /administration/geoip2
+"To get a license key, you need a MaxMind account. Please visit the following site:": "Sie brauchen einen MaxMind-Account um einen Lizenz-Schlüssel zu erhalten. Besuchen Sie bitte folgende Website:"
+Use the automatic IP address localization: Die automatische IP-Adressen-Lokalisierung verwenden
+License key: Lizenz-Schlüssel
+Download & automatic update: Herunterladen & automatische Upates
+"After you've saved the license key, mosparo needs to download the database. You can do that here directly or you can use a SSH connection to execute the command.": Nach dem Sie den Lizenz-Schlüssel gespeichert haben, muss mosparo die Datenbank herunterladen. Sie können dies direkt hier tun oder Sie können über eine SSH-Verbindung den notwendigen Befehl ausführen.
+Web: Web
+"Use the following button to let mosparo download the database:": "Benützen Sie den folgenden Button um mosparo die Datenbank herunterladen zu lassen:"
+Download the Database: Datenbank herunterladen
+CLI: CLI
+"Use the following command to download the database via CLI:": "Benützen Sie den folgenden Befehl um die Datenbank via CLI herunterzuladen:"
+Automatic update: Automatische Updates
+"To automatically refresh the database, it is recommend to set up a cronjob which will automatically download the database. To use the automatic update, please set up a cronjob like the following:": "Um automatische Updates zu aktivieren, ist es erforderlich einen Cronjob einzurichten, welcher die Datenbank automatisch herunterlädt. Um das automatische Update zu verwenden, richten Sie bitte einen Cronjob mit folgender Konfiguration ein:"
+You maybe have to adjust the path of the %pathToBinConsole% file. It could be possible that you have to fill in the absolute path.: Sie müssen möglicherweise den Pfad zur Datei %pathToBinConsole% anpassen. Es ist möglich, dass Sie den absoluten Pfad eingeben müssen.
+Please remember that the number of downloads a license key can make is limited. Please do not use the download functionality to often.: Bitte denken Sie dran, dass die Anzahl Downloads, welche ein Lizenz-Schlüssel machen kann, limitiert ist. Bitte benützen Sie die Download-Funktion nicht zu oft.
+
+# /administration/geoip2/download
+The database was downloaded successfully.: Die Datenbank wurde erfolgreich heruntergeladen.
+An error occurred while mosparo tried to download the database. %error%: Während mosparo versucht hat, die Datenbank herunterzuladen, trat ein Fehler auf.
+
+# /account/
+Change password: Passwort ändern
+Change the password of your account.: Ändern Sie das Passwort Ihres Accounts
+
+# /account/change-password
+Old password: Aktuelles Passwort
+Back to overview: Zurück zur Übersicht
+Your password was changed successfully.: Ihr Passwort wurde erfolgreich geändert.
+
+
+#
+# RULE TYPES
+#
+Example: Beispiel
+
+Domain: Domain
+Allows to filter by specific domains: Ermöglicht das Filtern nach bestimmten Domains
+The domain rule type allows to filter for domains.: Der Domain-Regeltyp erlaubt das Filtern nach Domains.
+Enter a domain which is not allowed to submit a submission. If you enter a domain it will also catch all email addresses with this domain.: Geben Sie eine Domain ein, welche in einer Einsendung nicht erlaubt ist. Wenn Sie eine Domain eintragen werden auch alle E-Mail-Adressen mit dieser Domain gefiltert.
+
+Email: E-Mail
+Allows to filter by specific email addresses: Ermöglicht das Filtern nach bestimmten E-Mail-Adressen
+The email rule type allows to filter for email addresses.: Der E-Mail-Adressen-Regeltyp erlaubt das Filtern nach E-Mail-Adressen.
+Enter an email address which is not allowed to submit a submission.: Geben Sie eine E-Mail-Adresse ein, welche in einer Einsendung als Spam erkannt werden soll.
+
+IP Address: IP-Adresse
+Subnet: Subnetz
+Allows to filter by ip addresses and subnets: Ermöglicht das Filtern nach IP-Adressen und Subnetzen
+The IP address rule type allows to filter for IP addresses or subnets.: Der IP-Adressen-Regeltyp erlaubt das Filtern nach IP-Adressen und Subnetzen.
+Enter an IP address which is not allowed to make any submissions.: Geben Sie eine IP-Adresse ein, welche nicht berechtigt ist, eine Einsendung vorzunehmen.
+Enter a subnet with mask which is not allowed to make any submissions.: Geben Sie ein Subnetz ein, welches nicht berechtigt ist, eine Einsendung vorzunehmen.
+
+Provider: Anbieter
+Allows to filter by provider specific informations: Ermöglicht das Filtern nach Anbieter-bezogene Informationen.
+AS number: AS Nummer
+Country: Land
+The provider rule type allows to filter for AS numbers and country codes.: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
+To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
+Enter an AS number which is not allowed to make any submissions. All IP addresses which belongs to this AS number will be blocked.: Geben Sie eine AS Nummer ein, welche nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche zu dieser AS Nummer gehören, werden blockiert.
+Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.: Geben Sie ein ISO-Ländercode ein, welcher nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche diesem Ländercode zugeordnet werden, werden blockiert.
+If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side it could mean that this will block a real user from submitting a form. Please be careful with this option. The correct localization of IP addresses is never guaranteed.: Wenn Sie ein Land zur Regel hinzufügen, bedeutet dass, dass niemand aus diesem Land eine Einsendung machen kann. Auf der einen Seite klingt das gut, auf der anderen Seite könnte diese Regel reale Benutzer davon abhalten, Einsendungen vorzunehmen. Bitte benutzen Sie diese Option vorsichtig. Die genaue Lokalisierung einer IP-Adresse ist nie garantiert.
+
+Website: Website
+Allows to filter by specific websites: Ermöglicht das Filtern nach bestimmten Websites
+The website rule type allows to filter for URLs.: Der Website-Regeltyp erlaubt das Filtern nach URLs.
+Enter an URL which is not allowed to submit a submission.: Geben Sie eine URL ein, welche als Spam erkannt werden soll.
+It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs. If the value does not start with the protocol the rule could match wrong URLs.: Es wird empfohlen, Ihre Eingabe mit dem Protokoll oder zwei Slashes für eine Protokoll-unabhängige URL zu starten. Wenn die Eingabe nicht mit dem Protokoll startet könnte die Regel falsche Domains als Spam erkennen.
+
+Word: Wort
+Allows to filter by specific words or patterns: Ermöglicht das Filtern nach bestimmten Wörtern oder Mustern
+The word rule type allows to filter for words and Regular Expression patterns.: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
+Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
+Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
+
+# Rating
+If an item should get a higher spam rating, you can set an additional spam rating for the item.: Wenn ein Eintrag eine stärkere Bewertung erhalten soll, können Sie die Spambewertung pro Eintrag spezifizieren.
+The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
+The rating is a float number from %zero% to %unlimited%. If no rating is defined, the default rating is %one%.: Die Bewertung ist eine Kommazahl zwischen %zero% bis %unlimited%. Wenn keine Bewertung gesetzt ist, wird die Standard-Bewertung %one% verwendet.
+If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
+unlimited: unendlich
+
+

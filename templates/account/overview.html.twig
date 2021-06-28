@@ -1,27 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block documentTitle %}Account - {{ parent() }}{% endblock %}
-{% block pageTitle %}Account{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Account'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'Account'|trans }}{% endblock %}
 
 {% block pageBody %}
     <div class="container-xl">
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-lg-4">
-                <div class="card">
+                <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('account_change_password') }}">
                                 <img src="{{ asset('build/images/icons/password.svg') }}" height="128" />
                             </a>
                         </div>
-                        <p class="empty-title">Change password</p>
+                        <p class="empty-title">{{ 'Change password'|trans }}</p>
                         <p class="empty-subtitle text-muted">
-                            Change the password of your account.
+                            {{ 'Change the password of your account.'|trans }}
                         </p>
                         <div class="empty-action">
                             <a href="{{ path('account_change_password') }}" class="btn btn-primary">
                                 <i class="ti ti-key"></i>
-                                Change password
+                                {{ 'Change password'|trans }}
                             </a>
                         </div>
                     </div>

@@ -55,6 +55,7 @@ class RuleFormType extends AbstractType
             'data_class' => Rule::class,
             'rule_type' => null,
             'readonly' => false,
+            'translation_domain' => 'mosparo',
         ]);
     }
 }

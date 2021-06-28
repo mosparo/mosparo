@@ -1,7 +1,9 @@
 {% extends 'project_related/project_related_base.html.twig' %}
 
-{% block documentTitle %}Rules - {{ parent() }}{% endblock %}
-{% block pageTitle %}Rules{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'Rules'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'Rules'|trans }}{% endblock %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
@@ -11,7 +13,7 @@
             <div class="btn-list">
                 <a href="{{ path('rule_create_choose_type') }}" class="btn btn-success">
                     <i class="ti ti-plus"></i>
-                    Create rule
+                    {{ 'Create rule'|trans }}
                 </a>
             </div>
         </div>
