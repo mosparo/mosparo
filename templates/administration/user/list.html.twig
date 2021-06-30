@@ -40,6 +40,7 @@
     <script>
         $(function() {
             $('#users').initDataTables({{ datatable_settings(datatable) }}, {
+                autoWidth: false,
                 searching: false,
                 info: false,
                 columnDefs: [

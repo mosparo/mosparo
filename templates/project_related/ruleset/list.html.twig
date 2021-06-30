@@ -42,6 +42,7 @@
     <script>
         $(function() {
             $('#rulesets').initDataTables({{ datatable_settings(datatable) }}, {
+                autoWidth: false,
                 searching: false,
                 info: false,
                 columnDefs: [

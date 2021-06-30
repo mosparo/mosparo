@@ -1,4 +1,7 @@
 /* Tabler Core and Tabler Icons */
+$google-font: false;
+$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+
 @import '~@tabler/core';
 @import 'node_modules/@tabler/icons/iconfont/tabler-icons.scss';
 

@@ -13,3 +13,4 @@ datatables:
 
     # You can for example override this to "tables" to keep the translation domains separated nicely
     translation_domain: 'mosparo'
+    language_from_cdn: false

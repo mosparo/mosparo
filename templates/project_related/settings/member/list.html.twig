@@ -38,6 +38,7 @@
     <script>
         $(function() {
             $('#project-members').initDataTables({{ datatable_settings(datatable) }}, {
+                autoWidth: false,
                 searching: false,
                 info: false,
                 columnDefs: [

@@ -20,6 +20,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@fontsource/inter": "^4.4.5",
         "@tabler/core": "*",
         "@tabler/icons": "^1.41.1",
         "datatables": "^1.10.18"

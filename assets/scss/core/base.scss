@@ -1,5 +1,12 @@
 .card-table {
     max-width: 100%;
+
+    &.dataTable {
+        tr td:last-child,
+        tr th:last-child {
+            padding-right: 0.5rem;
+        }
+    }
 }
 
 .project-dropdown-toggle {

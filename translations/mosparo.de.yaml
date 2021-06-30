@@ -350,4 +350,25 @@ The rating is a float number from %zero% to %unlimited%. If no rating is defined
 If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
 unlimited: unendlich
 
-
+# Datatables
+datatable:
+  datatable:
+    processing: Bitte warten...
+    search: "Suche:"
+    lengthMenu: _MENU_ Zeilen anzeigen
+    info: _START_ bis _END_ von _TOTAL_ Einträgen
+    infoEmpty: Keine Daten vorhanden
+    infoFiltered: (gefiltert von _MAX_ Einträgen)
+    infoPostFix: ""
+    loadingRecords: Wird geladen...
+    zeroRecords: Keine passenden Einträge gefunden
+    emptyTable: Keine Daten in der Tabelle vorhanden
+    searchPlaceholder: Suchbegriff eingeben
+    paginate:
+      first: Erste
+      previous: Zurück
+      next: Nächste
+      last: Letzte
+    aria:
+      sortAscending: ": aktivieren, um Spalte aufsteigend zu sortieren"
+      sortDescending: ": aktivieren, um Spalte absteigend zu sortieren"
