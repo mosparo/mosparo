@@ -2,11 +2,11 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Login'|trans }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'security.login.title'|trans }} - {{ parent() }}{% endblock %}
 
 {% block small_body %}
     <form method="post">
-        <h2 class="card-title text-center mb-4">{{ 'Login to your account'|trans }}</h2>
+        <h2 class="card-title text-center mb-4">{{ 'security.login.title'|trans }}</h2>
 
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -36,19 +36,19 @@
 
         {% if app.user %}
             <div class="alert alert-info">
-                {{ 'You are logged in as %username%'|trans({'%username%': app.user.username}, 'mosparo') }}. <a href="{{ path('security_logout') }}">{{ 'Logout'|trans }}</a>
+                {{ 'security.login.youAreLoggedIn'|trans({'%username%': app.user.username}, 'mosparo') }}. <a href="{{ path('security_logout') }}">{{ 'security.logout.title'|trans }}</a>
             </div>
         {% endif %}
 
         <div class="mb-3">
-            <label class="form-label required" for="field-email">{{ 'Email address'|trans }}</label>
+            <label class="form-label required" for="field-email">{{ 'security.login.emailLabel'|trans }}</label>
             <input type="email" id="field-email" name="email" class="form-control">
         </div>
         <div class="mb-2">
             <label class="form-label required" for="field-password">
-                {{ 'Password'|trans }}
+                {{ 'security.login.passwordLabel'|trans }}
                 <span class="form-label-description">
-                    <a href="{{ path('security_reset') }}" tabindex="4">{{ 'I forgot password'|trans }}</a>
+                    <a href="{{ path('security_reset') }}" tabindex="4">{{ 'security.forgotPassword.title'|trans }}</a>
                 </span>
             </label>
             <input type="password" id="field-password" name="password" class="form-control" autocomplete="off">
@@ -59,7 +59,7 @@
         <div class="form-footer">
             <button type="submit" class="btn btn-primary w-100">
                 <i class="ti ti-login"></i>
-                {{ 'Sign in'|trans }}
+                {{ 'security.login.title'|trans }}
             </button>
         </div>
     </form>

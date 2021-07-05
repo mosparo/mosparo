@@ -2,9 +2,9 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Submission %submissionId%'|trans({ '%submissionId%': submission.id }) }} - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} {{ 'Submissions'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
-{% block pageTitle %}{{ 'Submission %submissionId%'|trans({ '%submissionId%': submission.id }) }}{% endblock %}
+{% block documentTitle %}{{ 'submission.view.title'|trans({ '%submissionId%': submission.id }) }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'submission.title'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}{{ 'submission.view.title'|trans({ '%submissionId%': submission.id }) }}{% endblock %}
 
 {% block pageBody %}
     <div class="container-xl">
@@ -14,22 +14,22 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="ti ti-mailbox"></i>
-                            {{ 'Spam'|trans }}
+                            {{ 'submission.view.spam.title'|trans }}
                         </h3>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <h4 class="mb-0">{{ 'Is spam'|trans }}</h4>
+                            <h4 class="mb-0">{{ 'submission.view.spam.isSpam'|trans }}</h4>
                             <div>
                                 {% if submission.spam %}
-                                    <span class="text-danger">{{ 'Yes'|trans }}</span>
+                                    <span class="text-danger">{{ 'state.yes'|trans }}</span>
                                 {% else %}
-                                    <span class="text-success">{{ 'No'|trans }}</span>
+                                    <span class="text-success">{{ 'state.no'|trans }}</span>
                                 {% endif %}
                             </div>
                         </div>
                         <div class="mb-3">
-                            <h4 class="mb-0">{{ 'Spam rating'|trans }}</h4>
+                            <h4 class="mb-0">{{ 'submission.view.spam.spamRating'|trans }}</h4>
                             <div>
                                 {% if submission.spam %}
                                     <span class="text-danger">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="">
-                            <h4 class="mb-0">{{ 'Submitted at'|trans }}</h4>
+                            <h4 class="mb-0">{{ 'submission.view.spam.submittedAt'|trans }}</h4>
                             <div>
                                 {{ submission.submittedAt|format_datetime }}
                             </div>
@@ -53,18 +53,18 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="ti ti-zoom-check"></i>
-                            {{ 'Verification'|trans }}
+                            {{ 'submission.view.verification.title'|trans }}
                         </h3>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <h4 class="mb-0">{{ 'Is valid'|trans }}</h4>
+                            <h4 class="mb-0">{{ 'submission.view.verification.isValid'|trans }}</h4>
                             <div>
                                 {% if not submission.valid is null %}
                                     {% if submission.valid %}
-                                        <span class="text-success">{{ 'Yes'|trans }}</span>
+                                        <span class="text-success">{{ 'state.yes'|trans }}</span>
                                     {% else %}
-                                        <span class="text-danger">{{ 'No'|trans }}</span>
+                                        <span class="text-danger">{{ 'state.no'|trans }}</span>
                                     {% endif %}
                                 {% else %}
                                     -
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="">
-                            <h4 class="mb-0">{{ 'Verified at'|trans }}</h4>
+                            <h4 class="mb-0">{{ 'submission.view.verification.verifiedAt'|trans }}</h4>
                             <div>
                                 {% if not submission.valid is null %}
                                     {{ submission.verifiedAt|format_datetime }}
@@ -88,19 +88,19 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="ti ti-world"></i>
-                            {{ 'Source'|trans }}
+                            {{ 'submission.view.source.title'|trans }}
                         </h3>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <h4 class="mb-0">{{ 'Page title'|trans }}</h4>
+                            <h4 class="mb-0">{{ 'submission.view.source.pageTitle'|trans }}</h4>
                             <div>
                                 {{ submission.submitToken.pageTitle }}
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <h4 class="mb-0">{{ 'Page URL'|trans }}</h4>
+                            <h4 class="mb-0">{{ 'submission.view.source.pageUrl'|trans }}</h4>
                             <div>
                                 <a href="{{ submission.submitToken.pageUrl }}" target="_blank">
                                     {{ submission.submitToken.pageUrl }}
@@ -109,7 +109,7 @@
                         </div>
 
                         <div class="">
-                            <h4 class="mb-0">{{ 'Requested at'|trans }}</h4>
+                            <h4 class="mb-0">{{ 'submission.view.source.requestedAt'|trans }}</h4>
                             <div>
                                 {{ submission.submitToken.createdAt|format_datetime }}
                             </div>
@@ -122,11 +122,11 @@
                         <div class="card-header">
                             <h3 class="card-title">
                                 <i class="ti ti-filter"></i>
-                                {{ 'Ignored fields'|trans }}
+                                {{ 'submission.view.ignoredFields.title'|trans }}
                             </h3>
                         </div>
                         <div class="card-body">
-                            <div class="alert alert-info">{{ 'The following fields were not transmitted because of their field type (in example password or file upload fields).'|trans }}</div>
+                            <div class="alert alert-info">{{ 'submission.view.ignoredFields.intro'|trans }}</div>
 
                             <ul>
                                 {% for field in submission.ignoredFields %}
@@ -145,10 +145,10 @@
                             <h3 class="card-title">
                                 {% if groupKey == 'formData' %}
                                     <i class="ti ti-forms"></i>
-                                    {{ 'Form data'|trans }}
+                                    {{ 'submission.view.data.formData.title'|trans }}
                                 {% elseif groupKey == 'client' %}
                                     <i class="ti ti-user"></i>
-                                    {{ 'Client'|trans }}
+                                    {{ 'submission.view.data.client.title'|trans }}
                                 {% endif %}
                             </h3>
                         </div>
@@ -160,13 +160,13 @@
                                         <h4>
                                             {% if groupKey == 'client' %}
                                                 {% if field.name == 'ipAddress' %}
-                                                    {{ 'IP address'|trans }}
+                                                    {{ 'submission.view.data.client.ipAddress'|trans }}
                                                 {% elseif field.name == 'asNumber' %}
-                                                    {{ 'AS number'|trans }}
+                                                    {{ 'submission.view.data.client.asNumber'|trans }}
                                                 {% elseif field.name == 'asOrganization' %}
-                                                    {{ 'AS organization'|trans }}
+                                                    {{ 'submission.view.data.client.asOrganization'|trans }}
                                                 {% elseif field.name == 'country' %}
-                                                    {{ 'Country'|trans }}
+                                                    {{ 'submission.view.data.client.country'|trans }}
                                                 {% else %}
                                                     {{ field.name }}
                                                 {% endif %}
@@ -177,7 +177,7 @@
                                         {% if field.value|trim != '' %}
                                             <code>{{ field.value|nl2br }}</code>
                                         {% else %}
-                                            <em>{{ 'Empty'|trans }}</em>
+                                            <em>{{ 'general.empty'|trans }}</em>
                                         {% endif %}
                                     </div>
                                     <div class="col-sm-12 col-md-4">
@@ -204,8 +204,8 @@
                                                     <table class="table table-bordered table-sm table-vcenter mt-2 mb-0">
                                                         <thead>
                                                         <tr>
-                                                            <th>{{ 'Value'|trans }}</th>
-                                                            <th width="15%" class="text-center">{{ 'Rating'|trans }}</th>
+                                                            <th>{{ 'submission.view.data.value'|trans }}</th>
+                                                            <th width="15%" class="text-center">{{ 'submission.view.data.rating'|trans }}</th>
                                                             <th width="1"></th>
                                                         </tr>
                                                         </thead>

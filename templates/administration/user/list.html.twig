@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Users'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'Users'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'administration.user.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.user.title'|trans }}{% endblock %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
@@ -12,7 +12,7 @@
         <div class="btn-list">
             <a href="{{ path('administration_user_add') }}" class="btn btn-success">
                 <i class="ti ti-plus"></i>
-                {{ 'Create user'|trans }}
+                {{ 'administration.user.create.title'|trans }}
             </a>
         </div>
     </div>

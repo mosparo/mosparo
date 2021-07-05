@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'General'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'General'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'settings.general.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'settings.general.title'|trans }}{% endblock %}
 
 {% block settingsPageBody %}
     <div class="row">
@@ -11,7 +11,7 @@
             {{ form_start(form) }}
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">{{ 'General'|trans }}</h3>
+                        <h3 class="card-title">{{ 'settings.general.title'|trans }}</h3>
                     </div>
                     <div class="card-body">
                         {{ form_row(form.name) }}
@@ -25,7 +25,7 @@
                     <div class="col-auto ms-auto">
                         <button type="submit" class="btn btn-primary">
                             <i class="ti ti-device-floppy"></i>
-                            {{ 'Save'|trans }}
+                            {{ 'action.save'|trans }}
                         </button>
                     </div>
                 </div>
@@ -34,15 +34,15 @@
         <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">{{ 'API Keys'|trans }}</h3>
+                    <h3 class="card-title">{{ 'settings.general.apiKeys.title'|trans }}</h3>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label class="form-label" for="projectPublicKey">{{ 'Public key'|trans }}</label>
+                        <label class="form-label" for="projectPublicKey">{{ 'settings.general.apiKeys.publicKey'|trans }}</label>
                         <input type="text" class="form-control" id="projectPublicKey" value="{{ activeProject.publicKey }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="projectPrivateKey">{{ 'Private key'|trans }}</label>
+                        <label class="form-label" for="projectPrivateKey">{{ 'settings.general.apiKeys.privateKey'|trans }}</label>
                         <input type="text" class="form-control" id="projectPrivateKey" value="{{ activeProject.privateKey }}" readonly>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                 <div class="col-auto ms-auto">
                     <a href="{{ path('settings_reissue_keys') }}" class="btn btn-warning">
                         <i class="ti ti-refresh"></i>
-                        {{ 'Reissue API keys'|trans }}
+                        {{ 'settings.general.action.reissueApiKeys'|trans }}
                     </a>
                 </div>
             </div>

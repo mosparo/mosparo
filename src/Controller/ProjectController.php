@@ -73,7 +73,7 @@ class ProjectController extends AbstractController
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The new project was successfully created.',
+                    'project.create.message.successfullyCreated',
                     [],
                     'mosparo'
                 )
@@ -109,7 +109,7 @@ class ProjectController extends AbstractController
                 $session->getFlashBag()->add(
                     'error',
                     $this->translator->trans(
-                        'The project %projectName% was deleted successfully.',
+                        'project.delete.message.successfullyDeleted',
                         ['%projectName%' => $project->getName()],
                         'mosparo'
                     )

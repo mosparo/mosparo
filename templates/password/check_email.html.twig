@@ -2,13 +2,14 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Password reset email sent'|trans }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'password.emailSent.title'|trans }} - {{ parent() }}{% endblock %}
 
 {% block small_body %}
-    <h2 class="card-title text-center mb-4">{{ 'Password reset email sent'|trans }}</h2>
+    <h2 class="card-title text-center mb-4">{{ 'password.emailSent.title'|trans }}</h2>
     <p>
-        {{ 'If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in %time%.'|trans({ '%time%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }) }}
+        {{ 'password.emailSent.infoEmailWithLink'|trans({ '%time%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }) }}
     </p>
     <p>
-        {{ 'If you don\'t receive an email please check your spam folder or %linkStart%try again%linkEnd%.'|trans({ '%linkStart%': '<a href="' ~ path('security_reset') ~ '">', '%linkEnd%': '</a>' })|raw }}</p>
+        {{ 'password.emailSent.infoSpamFolder'|trans({ '%linkStart%': '<a href="' ~ path('security_reset') ~ '">', '%linkEnd%': '</a>' })|raw }}
+    </p>
 {% endblock %}

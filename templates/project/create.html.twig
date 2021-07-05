@@ -2,7 +2,7 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}Create project - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'project.create.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
 {% block pageBody %}
@@ -18,7 +18,7 @@
                 <div class="col">
                     <div class="card card-md">
                         <div class="card-body">
-                            <h2 class="card-title text-center mb-4">{{ 'Create project'|trans }}</h2>
+                            <h2 class="card-title text-center mb-4">{{ 'project.create.title'|trans }}</h2>
 
                             {{ form_row(form.name) }}
                             {{ form_row(form.description) }}
@@ -31,13 +31,13 @@
                 <div class="col">
                     <a href="{{ path('project_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
-                        {{ 'Back to projects'|trans }}
+                        {{ 'project.backToList'|trans }}
                     </a>
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary">
                         <i class="ti ti-device-floppy"></i>
-                        {{ 'Save'|trans }}
+                        {{ 'action.save'|trans }}
                     </button>
                 </div>
             </div>

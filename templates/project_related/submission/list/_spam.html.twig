@@ -1,11 +1,11 @@
 {% trans_default_domain 'mosparo' %}
 
 {% if value %}
-    <span class="text-danger"><strong>{{ 'Yes'|trans }}</strong></span>
+    <span class="text-danger"><strong>{{ 'state.yes'|trans }}</strong></span>
 {% else %}
     {% if not value and row.spamRating > row.spamDetectionRating %}
-        <span class="text-blue"><strong>{{ 'Ignored'|trans }}</strong></span>
+        <span class="text-blue"><strong>{{ 'state.ignored'|trans }}</strong></span>
     {% else %}
-        <span class="text-success"><strong>{{ 'No'|trans }}</strong></span>
+        <span class="text-success"><strong>{{ 'state.no'|trans }}</strong></span>
     {% endif %}
 {% endif %}

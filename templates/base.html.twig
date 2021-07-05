@@ -34,7 +34,7 @@
                                     {% if activeProject %}
                                         {{ activeProject.name }}
                                     {% else %}
-                                        {{ 'Please choose...'|trans }}
+                                        {{ 'header.pleaseChoose'|trans }}
                                     {% endif %}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
@@ -49,11 +49,11 @@
                                     {% endif %}
                                     <a href="{{ path('project_list') }}" class="dropdown-item">
                                         <i class="ti ti-folders"></i>
-                                        {{ 'Manage projects'|trans }}
+                                        {{ 'project.action.manage'|trans }}
                                     </a>
                                     <a href="{{ path('project_create') }}" class="dropdown-item">
                                         <i class="ti ti-plus"></i>
-                                        {{ 'Create project'|trans }}
+                                        {{ 'project.create.title'|trans }}
                                     </a>
                                 </div>
                             </div>
@@ -70,11 +70,11 @@
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <a href="{{ path('account_overview') }}" class="dropdown-item">
                                         <i class="ti ti-adjustments"></i>
-                                        {{ 'Account'|trans }}
+                                        {{ 'account.title'|trans }}
                                     </a>
                                     <a href="{{ path('security_logout') }}" class="dropdown-item">
                                         <i class="ti ti-logout"></i>
-                                        {{ 'Logout'|trans }}
+                                        {{ 'security.logout.title'|trans }}
                                     </a>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                                             <a class="nav-link" href="{{ path('dashboard') }}">
                                                 <i class="ti ti-dashboard"></i>
                                                 <span class="nav-link-title">
-                                                    {{ 'Dashboard'|trans }}
+                                                    {{ 'dashboard.title'|trans }}
                                                 </span>
                                             </a>
                                         </li>
@@ -100,7 +100,7 @@
                                             <a class="nav-link" href="{{ path('rule_list') }}">
                                                 <i class="ti ti-filter"></i>
                                                 <span class="nav-link-title">
-                                                    {{ 'Rules'|trans }}
+                                                    {{ 'rule.title'|trans }}
                                                 </span>
                                             </a>
                                         </li>
@@ -109,7 +109,7 @@
                                             <a class="nav-link" href="{{ path('ruleset_list') }}">
                                                 <i class="ti ti-stack"></i>
                                                 <span class="nav-link-title">
-                                                    {{ 'Rulesets'|trans }}
+                                                    {{ 'ruleset.title'|trans }}
                                                 </span>
                                             </a>
                                         </li>
@@ -118,7 +118,7 @@
                                             <a class="nav-link" href="{{ path('submission_list') }}">
                                                 <i class="ti ti-mail"></i>
                                                 <span class="nav-link-title">
-                                                    {{ 'Submissions'|trans }}
+                                                    {{ 'submission.title'|trans }}
                                                 </span>
                                             </a>
                                         </li>
@@ -128,25 +128,25 @@
                                                 <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
                                                     <i class="ti ti-settings"></i>
                                                     <span class="nav-link-title">
-                                                        {{ 'Settings'|trans }}
+                                                        {{ 'settings.title'|trans }}
                                                     </span>
                                                 </a>
                                                 <div class="dropdown-menu" data-bs-popper="none">
                                                     <a class="dropdown-item" href="{{ path('settings_general') }}">
                                                         <i class="ti ti-tool"></i>
-                                                        {{ 'General'|trans }}
+                                                        {{ 'settings.general.title'|trans }}
                                                     </a>
                                                     <a class="dropdown-item" href="{{ path('settings_member_list') }}">
                                                         <i class="ti ti-users"></i>
-                                                        {{ 'Project members'|trans }}
+                                                        {{ 'settings.projectMember.title'|trans }}
                                                     </a>
                                                     <a class="dropdown-item" href="{{ path('settings_security') }}">
                                                         <i class="ti ti-shield-x"></i>
-                                                        {{ 'Security'|trans }}
+                                                        {{ 'settings.security.title'|trans }}
                                                     </a>
                                                     <a class="dropdown-item" href="{{ path('settings_design') }}">
                                                         <i class="ti ti-color-swatch"></i>
-                                                        {{ 'Design'|trans }}
+                                                        {{ 'settings.design.title'|trans }}
                                                     </a>
                                                 </div>
                                             </li>
@@ -161,7 +161,7 @@
                                                 <a class="nav-link" href="{{ path('administration_overview') }}">
                                                     <i class="ti ti-adjustments-horizontal"></i>
                                                     <span class="nav-link-title">
-                                                        {{ 'Administration'|trans }}
+                                                        {{ 'administration.title'|trans }}
                                                     </span>
                                                 </a>
                                             </li>

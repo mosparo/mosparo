@@ -96,21 +96,22 @@ class UserController extends AbstractController
         }
 
         $form = $this->createFormBuilder($user, ['translation_domain' => 'mosparo'])
-            ->add('email', EmailType::class)
+            ->add('email', EmailType::class, ['label' => 'administration.user.form.email'])
             ->add('password', PasswordFormType::class, [
+                'label' => 'administration.user.form.password',
                 'mapped' => false,
                 'required' => $isNewUser,
                 'is_new_password' => (!$isNewUser),
                 'help' => 'Leave these fields empty if no password change is required.'
             ])
             ->add('isActiveUser', CheckboxType::class, [
-                'label' => 'Is active user',
+                'label' => 'administration.user.form.isActiveUser',
                 'mapped' => false,
                 'required' => false,
                 'attr' => $isActiveUserAttributes
             ])
             ->add('isAdminUser', CheckboxType::class, [
-                'label' => 'Is administrator',
+                'label' => 'administration.user.form.isAdministrator',
                 'mapped' => false,
                 'required' => false,
                 'attr' => $isAdminUserAttributes
@@ -153,7 +154,7 @@ class UserController extends AbstractController
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The user was saved successfully.',
+                    'administration.user.form.message.successfullySaved',
                     [],
                     'mosparo'
                 )
@@ -184,7 +185,7 @@ class UserController extends AbstractController
 
         if ($isOwnerInProject) {
             $session = $request->getSession();
-            $session->getFlashBag()->add('error', 'The user is an owner of at least one project. You cannot delete owner of projects.');
+            $session->getFlashBag()->add('error', 'administration.user.delete.message.errorUserIsOwner');
 
             return $this->redirectToRoute('administration_user_list');
         }
@@ -202,7 +203,7 @@ class UserController extends AbstractController
                 $session->getFlashBag()->add(
                     'error',
                     $this->translator->trans(
-                        'The user %email% was deleted successfully.',
+                        'administration.user.delete.message.successfullyDeleted',
                         ['%email%' => $user->getEmail()],
                         'mosparo'
                     )

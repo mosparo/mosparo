@@ -2,7 +2,7 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Delete ruleset %rulesetName%'|trans({ '%rulesetName%': ruleset.name}) }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'ruleset.delete.title'|trans({ '%rulesetName%': ruleset.name}) }} - {{ parent() }}{% endblock %}
 {% block pagePreTitle %}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
@@ -19,14 +19,14 @@
                 <div class="col">
                     <div class="card card-md">
                         <div class="card-body">
-                            <h2 class="card-title text-center mb-4">{{ 'Delete ruleset %rulesetName%'|trans({ '%rulesetName%': ruleset.name}) }}</h2>
+                            <h2 class="card-title text-center mb-4">{{ 'ruleset.delete.title'|trans({ '%rulesetName%': ruleset.name}) }}</h2>
 
                             <div class="alert alert-important alert-danger">
                                 <p>
-                                    {{ 'Do you really want to delete the ruleset %rulesetName%?'|trans({ '%rulesetName%': '<strong>' ~ ruleset.name ~ '</strong>' })|raw }}
+                                    {{ 'ruleset.delete.confirm'|trans({ '%rulesetName%': '<strong>' ~ ruleset.name ~ '</strong>' })|raw }}
                                 </p>
                                 <p>
-                                    {{ 'You cannot undo this process.'|trans }}
+                                    {{ 'general.infoUndo'|trans }}
                                 </p>
                             </div>
                         </div>
@@ -40,13 +40,13 @@
                 <div class="col">
                     <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
-                        {{ 'Back to rulesets'|trans }}
+                        {{ 'ruleset.backToList'|trans }}
                     </a>
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-danger">
                         <i class="ti ti-circle-minus"></i>
-                        {{ 'Delete'|trans }}
+                        {{ 'action.delete'|trans }}
                     </button>
                 </div>
             </div>

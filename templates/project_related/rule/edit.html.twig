@@ -2,6 +2,6 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Edit rule %ruleName%'|trans({ '%ruleName%': rule.name }) }} - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} {{ 'Rules'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
-{% block pageTitle %}{{ 'Edit rule %ruleName%'|trans({ '%ruleName%': rule.name }) }}{% endblock %}
+{% block documentTitle %}{{ 'rule.edit.title'|trans({ '%ruleName%': rule.name }) }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'rule.title'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}{{ 'rule.edit.title'|trans({ '%ruleName%': rule.name }) }}{% endblock %}

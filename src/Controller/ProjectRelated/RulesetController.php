@@ -117,7 +117,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
                 $session->getFlashBag()->add(
                     'success',
                     $this->translator->trans(
-                        'The ruleset was saved successfully.',
+                        'ruleset.form.message.successfullySaved',
                         [],
                         'mosparo'
                     )
@@ -154,7 +154,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
                 $session->getFlashBag()->add(
                     'error',
                     $this->translator->trans(
-                        'The ruleset %rulesetName% was deleted successfully.',
+                        'ruleset.delete.message.successfullyDeleted',
                         ['%rulesetName%' => $ruleset->getName()],
                         'mosparo'
                     )

@@ -99,7 +99,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The new rule was created successfully.',
+                    'rule.create.message.successfullyCreated',
                     [],
                     'mosparo'
                 )
@@ -140,7 +140,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The rule was saved successfully.',
+                    'rule.edit.message.successfullySaved',
                     [],
                     'mosparo'
                 )
@@ -177,7 +177,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                 $session->getFlashBag()->add(
                     'error',
                     $this->translator->trans(
-                        'The rule %ruleName% was deleted successfully.',
+                        'rule.delete.message.successfullyDeleted',
                         ['%ruleName%' => $rule->getName()],
                         'mosparo'
                     )

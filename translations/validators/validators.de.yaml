@@ -1,1 +1,12 @@
-The password fields must match.: Die Passwort-Felder müssen übereinstimmen.
+password:
+  form:
+    constraint:
+      notBlank: Bitte geben Sie ein Passwort ein.
+      length: Ihr Passwort muss mindestens {{ limit }} Zeichen lang sein.
+      passwordMustMatch: Die Passwort-Felder müssen übereinstimmen.
+
+
+  request:
+    form:
+      constraint:
+        notBlank: Bitte geben Sie Ihre E-Mail-Adresse ein.

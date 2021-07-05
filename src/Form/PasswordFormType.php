@@ -14,16 +14,16 @@ class PasswordFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $firstFieldLabel = 'Password';
+        $firstFieldLabel = 'password.form.password';
         $constraints = [];
         if ($options['required']) {
             $constraints = [
                 new NotBlank([
-                    'message' => 'Please enter a password',
+                    'message' => 'password.form.constraint.notBlank',
                 ]),
                 new Length([
                     'min' => 6,
-                    'minMessage' => 'Your password should be at least {{ limit }} characters',
+                    'minMessage' => 'password.form.constraint.length',
                     // max length allowed by Symfony for security reasons
                     'max' => 4096,
                 ]),
@@ -31,7 +31,7 @@ class PasswordFormType extends AbstractType
         }
 
         if ($options['is_new_password']) {
-            $firstFieldLabel = 'New password';
+            $firstFieldLabel = 'password.form.newPassword';
         }
 
         $builder
@@ -44,11 +44,9 @@ class PasswordFormType extends AbstractType
                 ],
                 'second_options' => [
                     'attr' => ['autocomplete' => 'new-password'],
-                    'label' => 'Repeat password',
+                    'label' => 'password.form.repeatPassword',
                 ],
-                'invalid_message' => 'The password fields must match.',
-                // Instead of being set onto the object directly,
-                // this is read and encoded in the controller
+                'invalid_message' => 'password.form.constraint.passwordMustMatch',
                 'mapped' => false,
             ])
         ;

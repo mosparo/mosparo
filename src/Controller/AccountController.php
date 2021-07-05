@@ -42,7 +42,7 @@ class AccountController extends AbstractController
     public function changePassword(Request $request): Response
     {
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
-            ->add('oldPassword', PasswordType::class, ['constraints' => [new UserPassword()]])
+            ->add('oldPassword', PasswordType::class, ['label' => 'account.changePassword.form.oldPassword', 'constraints' => [new UserPassword()]])
             ->add('newPassword', PasswordFormType::class, [
                 'mapped' => false,
                 'is_new_password' => true,
@@ -67,7 +67,7 @@ class AccountController extends AbstractController
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'Your password was successfully changed.',
+                    'account.changePassword.message.successfullyChanged',
                     [],
                     'mosparo'
                 )

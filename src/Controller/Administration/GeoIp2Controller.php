@@ -58,8 +58,8 @@ class GeoIp2Controller extends AbstractController
             'geoipLicenseKey' => $this->configHelper->getConfigValue('geoipLicenseKey', '')
         ];
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
-            ->add('geoipActive', CheckboxType::class, ['label' => 'Use the automatic IP address localization', 'required' => false])
-            ->add('geoipLicenseKey', TextType::class, ['label' => 'License key', 'required' => false])
+            ->add('geoipActive', CheckboxType::class, ['label' => 'administration.geoip2.settings.useGeoip2Field', 'required' => false])
+            ->add('geoipLicenseKey', TextType::class, ['label' => 'administration.geoip2.settings.licenseKeyField', 'required' => false])
             ->getForm();
 
         $form->handleRequest($request);
@@ -76,7 +76,7 @@ class GeoIp2Controller extends AbstractController
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The settings were saved successfully.',
+                    'administration.geoip2.settings.message.savedSuccessfully',
                     [],
                     'mosparo'
                 )
@@ -103,7 +103,7 @@ class GeoIp2Controller extends AbstractController
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The database was downloaded successfully.',
+                    'administration.geoip2.downloadAndUpdate.web.message.successfullyDownloaded',
                     [],
                     'mosparo'
                 )
@@ -113,7 +113,7 @@ class GeoIp2Controller extends AbstractController
             $session->getFlashBag()->add(
                 'error',
                 $this->translator->trans(
-                    'An error occurred while mosparo tried to download the database. %error%',
+                    'administration.geoip2.downloadAndUpdate.web.message.errorDownload',
                     ['%error%' => implode(' ', $result)],
                     'mosparo'
                 )

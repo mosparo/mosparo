@@ -3,7 +3,7 @@
 {% if value is null %}
 
 {% elseif value == true %}
-    <span class="text-success"><strong>{{ 'Yes'|trans }}</strong></span>
+    <span class="text-success"><strong>{{ 'state.yes'|trans }}</strong></span>
 {% elseif value == false %}
-    <span class="text-danger"><strong>{{ 'No'|trans }}</strong></span>
+    <span class="text-danger"><strong>{{ 'state.no'|trans }}</strong></span>
 {% endif %}

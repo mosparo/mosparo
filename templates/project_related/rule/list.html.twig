@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Rules'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'Rules'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'rule.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'rule.title'|trans }}{% endblock %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
@@ -13,7 +13,7 @@
             <div class="btn-list">
                 <a href="{{ path('rule_create_choose_type') }}" class="btn btn-success">
                     <i class="ti ti-plus"></i>
-                    {{ 'Create rule'|trans }}
+                    {{ 'rule.create.title'|trans }}
                 </a>
             </div>
         </div>

@@ -1,3 +1,542 @@
+# Header
+header:
+  pleaseChoose: Please choose...
+  account: Account
+
+# Projects
+project:
+  title: Projects
+  backToList: Back to projects
+  infoNoProjectAvailable: No projects available
+  infoCreateProjectOrRequestAccess: Create a new project or request access to another project.
+
+  action:
+    manage: Manage project
+    delete: Delete project
+    goto: Go to project
+
+  create:
+    title: Create project
+
+    message:
+      successfullyCreated: The new project was successfully created.
+
+  form:
+    name: Name
+    description: Description
+    hosts: Hosts
+    hostsHelp: Please enter all hosts which this project will include.
+    status: Status
+    statusHelp: Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.
+    spamScore: Spam score
+    spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.
+
+  delete:
+    title: Delete project %projectName%
+    confirm: Do you really want to delete the project %projectName%?
+
+    message:
+      successfullyDeleted: The project %projectName% was deleted successfully.
+
+  roles:
+    reader: Reader
+    editor: Editor
+    owner: Owner
+
+# Dashboard
+dashboard:
+  title: Dashboard
+  spamSubmissions: Spam submissions
+
+# Rules
+rule:
+  title: Rules
+  backToList: Back to rules
+
+  createChooseType:
+    title: Choose type
+
+  create:
+    title: Create rule
+
+    message:
+      successfullyCreated: The new rule was created successfully.
+
+  edit:
+    title: Edit rule %ruleName%
+
+    message:
+      successfullySaved: The rule was saved successfully.
+
+  form:
+    ruleType: Rule type
+
+    rule:
+      title: Rule
+      name: Name
+      description: Description
+      status: Status
+      spamRatingFactor: Spam rating factor
+
+    items:
+      title: Items
+
+    addMultipleItems:
+      label: Label
+      items: Items
+      rating: Rating
+      ratingHelp: If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.
+
+  delete:
+    title: Delete rule %ruleName%
+    confirm: Do you really want to delete the rule %ruleName%?
+
+    message:
+      successfullyDeleted: The rule %ruleName% was deleted successfully.
+
+  type:
+    domain:
+      title: Domain
+      intro: The domain rule type allows to filter for domains.
+
+      domain:
+        title: Domain
+        intro: Enter a domain which is not allowed to submit a submission. If you enter a domain it will also catch all email addresses with this domain.
+
+    email:
+      title: Email
+      intro: The email rule type allows to filter for email addresses.
+
+      email:
+        title: Email address
+        intro: Enter an email address which is not allowed to submit a submission.
+
+    ipAddress:
+      title: IP address
+      intro: The IP address rule type allows to filter for IP addresses or subnets.
+
+      ipAddress:
+        title: IP address
+        intro: Enter an IP address which is not allowed to make any submissions.
+
+      subnet:
+        title: Subnet
+        intro: Enter a subnet with mask which is not allowed to make any submissions.
+
+    provider:
+      title: Provider
+      intro: The provider rule type allows to filter for AS numbers and country codes.
+      infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
+
+      action:
+        configureGeoip2: GeoIP2 Configuration
+
+      asNumber:
+        title: AS number
+        intro: Enter an AS number which is not allowed to make any submissions. All IP addresses which belongs to this AS number will be blocked.
+
+      country:
+        title: Country
+        intro: Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.
+        infoCountryBlock: If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side it could mean that this will block a real user from submitting a form. Please be careful with this option. The correct localization of IP addresses is never guaranteed.
+
+    website:
+      title: Website
+      intro: The website rule type allows to filter for URLs.
+
+      url:
+        title: URL
+        intro: Enter an URL which is not allowed to submit a submission.
+        infoProtocol: It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs. If the value does not start with the protocol the rule could match wrong URLs.
+
+    word:
+      title: Word
+      intro: The word rule type allows to filter for words and Regular Expression patterns.
+
+      text:
+        title: Text
+        intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
+
+      regex:
+        title: Regular Expression
+        intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
+
+    rating:
+      title: Rating
+      intro: If an item should get a higher spam rating, you can set an additional spam rating for the item.
+      infoCalculationMethod: The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.
+      infoDefaultAndDataType: The rating is a float number from %zero% to %unlimited%. If no rating is defined, the default rating is %one%.
+      infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
+
+# Ruleset
+ruleset:
+  title: Rulesets
+  backToList: Back to rulesets
+
+  add:
+    title: Add ruleset
+
+  edit:
+    title: Edit ruleset %rulesetName%
+
+  form:
+    name: Name
+    url: URL
+    status: Status
+    spamRatingFactor: Spam rating factor
+
+    message:
+      successfullySaved: The ruleset was saved successfully.
+
+  view:
+    title: View ruleset %rulesetName%
+
+    details:
+      title: Ruleset details
+      url: URL
+      status: Status
+      spamRatingFactor: Spam rating factor
+      lastRefreshedAt: Last refreshed at
+      lastUpdatedAt: Last updated at
+      numberOfIncludedRules: Number of included rules
+
+    includedRules:
+      title: Included rules
+      ruleDetails: Rule details
+      name: Name
+      description: Description
+      spamRatingFactor: Spam rating factor
+      items: Items
+      type: Type
+      value: Value
+      rating: Rating
+
+  delete:
+    title: Delete ruleset %rulesetName%
+    confirm: Do you really want to delete the ruleset %rulesetName%?
+
+    message:
+      successfullyDeleted: The ruleset %rulesetName% was deleted successfully.
+
+# Submission
+submission:
+  title: Submissions
+
+  table:
+    column:
+      spam: Spam
+      verification: Verfication
+
+  view:
+    title: Submission %submissionId%
+
+    spam:
+      title: Spam
+      isSpam: Is spam
+      spamRating: Spam rating
+      submittedAt: Submitted at
+
+    verification:
+      title: Verification
+      isValid: Is valid
+      verifiedAt: Verified at
+
+    source:
+      title: Source
+      pageTitle: Page title
+      pageUrl: Page URL
+      requestedAt: Requested at
+
+    ignoredFields:
+      title: Ignored fields
+      intro: The following fields were not transmitted because of their field type (in example password or file upload fields).
+
+    data:
+      value: Value
+      rating: Rating
+
+      formData:
+        title: Form data
+
+      client:
+        title: Client
+        ipAddress: IP address
+        asNumber: AS number
+        asOrganization: AS organization
+        country: Country
+
+# Settings
+settings:
+  title: Settings
+  backToSettings: Back to settings
+
+  general:
+    title: General settings
+
+    message:
+      successfullySaved: The settings were saved successfully.
+
+    action:
+      reissueApiKeys: Reissue API keys
+      reissue: Reissue
+
+    apiKeys:
+      title: API Keys
+      publicKey: Public key
+      privateKey: Private key
+
+      reissueApiKeys:
+        title: Reissue API keys
+        confirm: Do you really want to reissue the API keys for the project %projectName%?
+
+        message:
+          successfullyReissued: The API keys were reissued successfully.
+          errorOnlyOwner: Only an owner of the project can reissue the API keys.
+
+  projectMember:
+    title: Project members
+    backToList: Back to project members
+
+    add:
+      title: Add project member
+
+    edit:
+      title: Edit project member %projectMemberName%
+
+    form:
+      email: Email address
+      role: Role
+
+      message:
+        successfullySaved: The project member was saved successfully.
+        errorUserNotFound: The user was not found.
+        errorNeedsOwner: The project needs at least one owner.
+
+    delete:
+      title: Remove project member %projectMemberName%
+      confirm: Do you really want to remove the project member %projectMemberName%?
+
+      message:
+        successfullyRemoved: The project member %projectMemberName% was removed successfully from the project.
+
+  security:
+    title: Security
+
+    requestDelaying:
+      title: Request delaying
+      intro: To make it harder for bots, mosparo can delay the creation of submit tokens. Without a submit token, a form cannot be submitted. The user will see, how long he has to wait, until the form is submittable.
+      infoIpAddress: In which case the creation of the token needs to be delayed, will be decided because of the number of requests the IP address has made. With every additional token request, the delay will be extended.
+
+    ipLockout:
+      title: IP Lockout
+      intro: To make it even harder for bots, mosparo can automatically block IP addresses temporary. If an IP address requests a lot of tokens, mosparo can automatically count the requests and block the IP address if a specific number is reached.
+
+    ipAllowList:
+      title: IP allow list
+
+    form:
+      delayActive: Request delay active
+      delayNumberOfAllowedRequests: Number of allowed requests
+      delayNumberOfAllowedRequestsHelp: The number of allowed requests before the delay come into place.
+      delayDetectionTimeFrame: Detection time frame
+      delayDetectionTimeFrameHelp: In seconds
+      delayTime: Base delay time
+      delayTimeHelp: In seconds
+      delayMultiplicator: Multiplicator
+      delayMultiplicatorHelp: The base delay time will be increased with every additional request.
+      lockoutActive: Automatic lockout active
+      lockoutNumberOfAllowedRequests: Number of allowed requests
+      lockoutNumberOfAllowedRequestsHelp: The number of allowed requests before the lockout come into place.
+      lockoutDetectionTimeFrame: Detection time frame
+      lockoutDetectionTimeFrameHelp: In seconds
+      lockoutTime: Base lockout time
+      lockoutTimeHelp: In seconds
+      lockoutMultiplicator: Multiplicator
+      lockoutMultiplicatorHelp: The base lockout time will be increased with every additional request.
+      ipAllowList: Always allowed IP addresses and subnets
+      ipAllowListHelp: "Specify one ip address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+
+    message:
+      successfullySaved: The security settings were saved successfully.
+
+  design:
+    title: Design
+
+# Administration
+administration:
+  title: Administration
+
+  user:
+    title: Users
+    description: Manage all users of this mosparo instance.
+    backToOverview: Back to users
+    roles: Roles
+
+    create:
+      title: Create user
+
+    modify:
+      title: Modify user %email%
+
+    form:
+      email: Email
+      password: Password
+      isActiveUser: Is active user
+      isAdministrator: Is administrator
+
+      message:
+        successfullySaved: The user was saved successfully.
+
+
+    delete:
+      title: Delete user %email%
+      confirm: Do you really want to delete the user %email%?
+      infoCantSelfDelete: You can\'t delete yourself.
+
+      message:
+        successfullyDeleted: The user %email% was deleted successfully.
+        errorUserIsOwner: The user is an owner of at least one project. You cannot delete owner of projects.
+
+  geoip2:
+    title: GeoIP2
+    description: Configure the GeoIP2 integration.
+
+    settings:
+      title: Settings
+      getLicenseKey: "To get a license key, you need a MaxMind account. Please visit the following site:"
+      useGeoip2Field: Use the automatic IP address localization
+      licenseKeyField: License key
+
+      message:
+        savedSuccessfully: The settings were saved successfully.
+
+    downloadAndUpdate:
+      title: Download & automatic update
+      intro: After you\'ve saved the license key, mosparo needs to download the database. You can do that here directly or you can use a SSH connection to execute the command.
+
+      web:
+        title: Web
+        intro: "Use the following button to let mosparo download the database:"
+        action: Download the database
+
+        message:
+          successfullyDownloaded: The database was downloaded successfully.
+          errorDownload: An error occurred while mosparo tried to download the database. %error%
+
+      cli:
+        title: CLI
+        intro: "Use the following command to download the database via CLI:"
+
+      update:
+        title: Automatic update
+        intro: "To automatically refresh the database, it is recommend to set up a cronjob which will automatically download the database. To use the automatic update, please set up a cronjob like the following:"
+        infoAbsolutePath: You maybe have to adjust the path of the %pathToBinConsole% file. It could be possible that you have to fill in the absolute path.
+        infoRateLimit: Please remember that the number of downloads a license key can make is limited. Please do not use the download functionality to often.
+
+
+# Account
+account:
+  title: Account
+  backToOverview: Back to overview
+
+  changePassword:
+    title: Change password
+    description: Change the password of your account.
+
+    form:
+      oldPassword: Old password
+
+    message:
+      successfullyChanged: Your password was successfully changed.
+
+# Security
+security:
+  login:
+    title: Login
+    youAreLoggedIn: You are logged in as %username%
+    emailLabel: Email address
+    passwordLabel: Password
+
+  logout:
+    title: Logout
+
+  forgotPassword:
+    title: I forgot my password
+
+  noAccess:
+    title: No access
+
+# Password reset
+password:
+  backToLogin: Back to login
+
+  request:
+    title: Reset your password
+    intro: Enter your email address and we will send you a link to reset your password.
+    action: Send password reset email
+
+    form:
+      email: Email
+
+  email:
+    subject: Your password reset request
+    greeting: Hi!
+    infoUseLink: To reset your password, please visit the following link
+    infoLinkExpiration: This link will expire in %time%.
+    goodbye: Cheers!
+
+  emailSent:
+    title: Password reset email sent
+    infoEmailWithLink: If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in %time%.
+    infoSpamFolder: If you don\'t receive an email please check your spam folder or %linkStart%try again%linkEnd%.
+
+  reset:
+    title: Reset your password
+    action: Reset password
+
+  form:
+    password: Password
+    newPassword: New password
+    repeatPassword: Repeat password
+
+# General actions
+action:
+  add: Add
+  remove: Remove
+  save: Save
+  view: View
+  edit: Edit
+  delete: Delete
+  actions: Actions
+  help: Help
+  close: Close
+  manage: Manage
+  configure: Configure
+
+# General values
+general:
+  infoUndo: You cannot undo this process.
+  example: Example
+  empty: Empty
+  unlimited: Unlimited
+
+# State
+state:
+  active: Active
+  inactive: Inactive
+  ignored: Ignored
+  yes: Yes
+  no: No
+
+# Roles
+roles:
+  administrator: Administrator
+  user: User
+  inactive: Inactive
+
+form:
+  addMultipleItems: Add multiple items
+
 # Datatables
 datatable:
   datatable:

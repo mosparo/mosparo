@@ -3,7 +3,7 @@
 {% if value is null %}
 
 {% elseif value == true %}
-    <span class="text-success"><strong>{{ 'Active'|trans }}</strong></span>
+    <span class="text-success"><strong>{{ 'state.active'|trans }}</strong></span>
 {% elseif value == false %}
-    <span class="text-danger"><strong>{{ 'Inactive'|trans }}</strong></span>
+    <span class="text-danger"><strong>{{ 'state.inactive'|trans }}</strong></span>
 {% endif %}

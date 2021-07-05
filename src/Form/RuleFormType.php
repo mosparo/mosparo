@@ -25,17 +25,17 @@ class RuleFormType extends AbstractType
         $readonly = $options['readonly'];
 
         $builder
-            ->add('name', TextType::class, ['label' => 'Name', 'disabled' => $readonly])
-            ->add('description', TextareaType::class, ['label' => 'Description', 'required' => false, 'disabled' => $readonly])
+            ->add('name', TextType::class, ['label' => 'rule.form.rule.name', 'disabled' => $readonly])
+            ->add('description', TextareaType::class, ['label' => 'rule.form.rule.description', 'required' => false, 'disabled' => $readonly])
             ->add('status', ChoiceType::class, [
-                'label' => 'Status',
+                'label' => 'rule.form.rule.status',
                 'choices' => ['Inactive' => 0, 'Active' => 1],
                 'disabled' => $readonly,
                 'attr' => [
                     'class' => 'form-select',
                 ]
             ])
-            ->add('spamRatingFactor', NumberType::class, ['label' => 'Spam rating factor', 'required' => false, 'disabled' => $readonly])
+            ->add('spamRatingFactor', NumberType::class, ['label' => 'rule.form.rule.spamRatingFactor', 'required' => false, 'disabled' => $readonly])
             ->add('items', CollectionType::class, [
                 'allow_add' => true,
                 'allow_delete' => true,

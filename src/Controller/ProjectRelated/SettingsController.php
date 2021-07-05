@@ -62,7 +62,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The settings were saved successfully.',
+                    'settings.general.message.successfullySaved',
                     [],
                     'mosparo'
                 )
@@ -146,8 +146,8 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ];
 
         $form = $this->createFormBuilder($projectMember, ['translation_domain' => 'mosparo'])
-            ->add('email', EmailType::class, ['label' => 'Email address', 'mapped' => false, 'data' => $emailAddress, 'attr' => $emailFieldAttributes])
-            ->add('role', ChoiceType::class, ['label' => 'Role', 'choices' => $projectMemberRoles, 'attr' => ['class' => 'form-select']])
+            ->add('email', EmailType::class, ['label' => 'settings.projectMember.form.email', 'mapped' => false, 'data' => $emailAddress, 'attr' => $emailFieldAttributes])
+            ->add('role', ChoiceType::class, ['label' => 'settings.projectMember.form.role', 'choices' => $projectMemberRoles, 'attr' => ['class' => 'form-select']])
             ->getForm();
 
         $form->handleRequest($request);
@@ -162,7 +162,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                     $session->getFlashBag()->add(
                         'error',
                         $this->translator->trans(
-                            'The user was not found.',
+                            'settings.projectMember.form.message.errorUserNotFound',
                             [],
                             'mosparo'
                         )
@@ -186,7 +186,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                     $session->getFlashBag()->add(
                         'error',
                         $this->translator->trans(
-                            'The project needs at least one owner.',
+                            'settings.projectMember.form.message.errorNeedsOwner',
                             [],
                             'mosparo'
                         )
@@ -202,7 +202,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The project member was saved successfully.',
+                    'settings.projectMember.form.message.successfullySaved',
                     [],
                     'mosparo'
                 )
@@ -236,7 +236,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 $session->getFlashBag()->add(
                     'error',
                     $this->translator->trans(
-                        'The project needs at least one owner.',
+                        'settings.projectMember.form.message.errorNeedsOwner',
                         [],
                         'mosparo'
                     )
@@ -259,7 +259,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 $session->getFlashBag()->add(
                     'error',
                     $this->translator->trans(
-                        'The project member %projectMemberName% was removed successfully from the project.',
+                        'settings.projectMember.remove.message.successfullyRemoved',
                         ['%projectMemberName%' => $projectMember->getUser()->getEmail()],
                         'mosparo'
                     )
@@ -284,20 +284,20 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
             // delay
-            ->add('delayActive', CheckboxType::class, ['label' => 'Request delay active', 'required' => false])
-            ->add('delayNumberOfRequests', NumberType::class, ['label' => 'Number of allowed requests', 'help' => 'The number of allowed requests before the delay come into place.'])
-            ->add('delayDetectionTimeFrame', NumberType::class, ['label' => 'Detection time frame', 'help' => 'In seconds'])
-            ->add('delayTime', NumberType::class, ['label' => 'Base delay time', 'help' => 'In seconds'])
-            ->add('delayMultiplicator', NumberType::class, ['label' => 'Multiplicator', 'help' => 'The base delay time will be increased with every additional request.'])
+            ->add('delayActive', CheckboxType::class, ['label' => 'settings.security.form.delayActive', 'required' => false])
+            ->add('delayNumberOfRequests', NumberType::class, ['label' => 'settings.security.form.delayNumberOfAllowedRequests', 'help' => 'settings.security.form.delayNumberOfAllowedRequestsHelp'])
+            ->add('delayDetectionTimeFrame', NumberType::class, ['label' => 'settings.security.form.delayDetectionTimeFrame', 'help' => 'settings.security.form.delayDetectionTimeFrameHelp'])
+            ->add('delayTime', NumberType::class, ['label' => 'settings.security.form.delayTime', 'help' => 'settings.security.form.delayTimeHelp'])
+            ->add('delayMultiplicator', NumberType::class, ['label' => 'settings.security.form.delayMultiplicator', 'help' => 'settings.security.form.delayMultiplicatorHelp'])
 
             // lockout
-            ->add('lockoutActive', CheckboxType::class, ['label' => 'Automatic lockout active', 'required' => false])
-            ->add('lockoutNumberOfRequests', NumberType::class, ['label' => 'Number of allowed requests', 'help' => 'The number of allowed requests before the lockout come into place.'])
-            ->add('lockoutDetectionTimeFrame', NumberType::class, ['label' => 'Detection time frame', 'help' => 'In seconds'])
-            ->add('lockoutTime', NumberType::class, ['label' => 'Base lockout time', 'help' => 'In seconds'])
-            ->add('lockoutMultiplicator', NumberType::class, ['label' => 'Multiplicator', 'help' => 'The base lockout time will be increased with every additional request.'])
+            ->add('lockoutActive', CheckboxType::class, ['label' => 'settings.security.form.lockoutActive', 'required' => false])
+            ->add('lockoutNumberOfRequests', NumberType::class, ['label' => 'settings.security.form.lockoutNumberOfAllowedRequests', 'help' => 'settings.security.form.lockoutNumberOfAllowedRequestsHelp'])
+            ->add('lockoutDetectionTimeFrame', NumberType::class, ['label' => 'settings.security.form.lockoutDetectionTimeFrame', 'help' => 'settings.security.form.lockoutDetectionTimeFrameHelp'])
+            ->add('lockoutTime', NumberType::class, ['label' => 'settings.security.form.lockoutTime', 'help' => 'settings.security.form.lockoutTimeHelp'])
+            ->add('lockoutMultiplicator', NumberType::class, ['label' => 'settings.security.form.lockoutMultiplicator', 'help' => 'settings.security.form.lockoutMultiplicatorHelp'])
 
-            ->add('ipWhitelist', TextareaType::class, ['label' => 'Whitelisted IP addresses and subnets', 'required' => false, 'help' => 'Specify one ip address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24'])
+            ->add('ipAllowList', TextareaType::class, ['label' => 'settings.security.form.ipAllowList', 'required' => false, 'help' => 'settings.security.form.ipAllowListHelp'])
 
             ->getForm();
 
@@ -316,7 +316,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'The security settings were saved successfully.',
+                    'settings.security.message.successfullySaved',
                     [],
                     'mosparo'
                 )
@@ -351,7 +351,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $session->getFlashBag()->add(
                 'warning',
                 $this->translator->trans(
-                    'Only an owner of the project can reissue the API keys.',
+                    'settings.general.apiKeys.reissueApiKeys.message.errorOnlyOwner',
                     [],
                     'mosparo'
                 )
@@ -376,7 +376,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 $session->getFlashBag()->add(
                     'warning',
                     $this->translator->trans(
-                        'The API keys were reissued successfully.',
+                        'settings.general.apiKey.reissueApiKeys.message.successfullyReissued',
                         [],
                         'mosparo'
                     )

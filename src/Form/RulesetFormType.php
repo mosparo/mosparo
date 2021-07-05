@@ -20,17 +20,17 @@ class RulesetFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'Name'])
-            ->add('url', UrlType::class, ['label' => 'URL'])
+            ->add('name', TextType::class, ['label' => 'ruleset.form.name'])
+            ->add('url', UrlType::class, ['label' => 'ruleset.form.url'])
             ->add('status', ChoiceType::class, [
-                'label' => 'Status',
+                'label' => 'ruleset.form.status',
                 'choices' => ['Inactive' => 0, 'Active' => 1],
                 'attr' => [
                     'class' => 'form-select'
                 ]
             ])
             ->add('spamRatingFactor', NumberType::class, [
-                'label' => 'Spam rating factor',
+                'label' => 'ruleset.form.spamRatingFactor',
                 'required' => false,
 
             ])

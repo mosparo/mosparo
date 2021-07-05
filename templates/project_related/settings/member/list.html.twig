@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Project members'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'Project members'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'settings.projectMember.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'settings.projectMember.title'|trans }}{% endblock %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
@@ -12,7 +12,7 @@
         <div class="btn-list">
             <a href="{{ path('settings_member_add') }}" class="btn btn-success">
                 <i class="ti ti-plus"></i>
-                {{ 'Add project member'|trans }}
+                {{ 'settings.projectMember.add.title'|trans }}
             </a>
         </div>
     </div>

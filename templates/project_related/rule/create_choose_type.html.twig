@@ -2,7 +2,7 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Create project'|trans }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'rule.createChooseType.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
 {% block pageBody %}
@@ -17,7 +17,7 @@
             <div class="col">
                 <div class="card card-md">
                     <div class="card-body">
-                        <h2 class="card-title text-center mb-4">{{ 'Choose type'|trans }}</h2>
+                        <h2 class="card-title text-center mb-4">{{ 'rule.createChooseType.title'|trans }}</h2>
 
                         {% for ruleType in ruleTypes %}
                             <a href="{{ path('rule_create_with_type', { type: ruleType.key }) }}" class="btn btn-outline-secondary w-100 flex-column align-items-start rule-type-button">
@@ -43,7 +43,7 @@
             <div class="col">
                 <a href="{{ path('rule_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
-                    {{ 'Back to rules'|trans }}
+                    {{ 'rule.backToList'|trans }}
                 </a>
             </div>
         </div>

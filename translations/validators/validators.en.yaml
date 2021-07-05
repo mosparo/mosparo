@@ -1,0 +1,12 @@
+password:
+  form:
+    constraint:
+      notBlank: Please enter a password.
+      length: Your password should be at least {{ limit }} characters.
+      passwordMustMatch: The password fields must match.
+
+
+  request:
+    form:
+      constraint:
+        notBlank: Please enter your email.

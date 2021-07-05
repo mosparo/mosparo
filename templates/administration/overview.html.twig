@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Overview'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'Overview'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'administration.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.title'|trans }}{% endblock %}
 
 {% block pageBody %}
     <div class="container-xl">
@@ -16,14 +16,14 @@
                                 <img src="{{ asset('build/images/icons/users.svg') }}" height="128" />
                             </a>
                         </div>
-                        <p class="empty-title">{{ 'Users'|trans }}</p>
+                        <p class="empty-title">{{ 'administration.user.title'|trans }}</p>
                         <p class="empty-subtitle text-muted">
-                            {{ 'Manage all users of this mosparo instance.'|trans }}
+                            {{ 'administration.user.description'|trans }}
                         </p>
                         <div class="empty-action">
                             <a href="{{ path('administration_user_list') }}" class="btn btn-primary">
                                 <i class="ti ti-users"></i>
-                                {{ 'Manage'|trans }}
+                                {{ 'action.manage'|trans }}
                             </a>
                         </div>
                     </div>
@@ -37,14 +37,14 @@
                                 <img src="{{ asset('build/images/icons/geoip.svg') }}" height="128" />
                             </a>
                         </div>
-                        <p class="empty-title">{{ 'GeoIP2'|trans }}</p>
+                        <p class="empty-title">{{ 'administration.geoip2.title'|trans }}</p>
                         <p class="empty-subtitle text-muted">
-                            {{ 'Configure the GeoIP2 integration.'|trans }}
+                            {{ 'administration.geoip2.description'|trans }}
                         </p>
                         <div class="empty-action">
                             <a href="{{ path('administration_geoip2_settings') }}" class="btn btn-primary">
                                 <i class="ti ti-map-pin"></i>
-                                {{ 'Configure'|trans }}
+                                {{ 'action.configure'|trans }}
                             </a>
                         </div>
                     </div>

@@ -1,13 +1,13 @@
 {% trans_default_domain 'mosparo' %}
 
-<h1>{{ 'Hi!'|trans }}</h1>
+<h1>{{ 'password.email.greeting'|trans }}</h1>
 
-<p>{{ 'To reset your password, please visit the following link'|trans }}</p>
+<p>{{ 'password.email.infoUseLink'|trans }}</p>
 
 <a href="{{ url('security_reset_password', {token: resetToken.token}) }}">{{ url('security_reset_password', {token: resetToken.token}) }}</a>
 
-<p>{{ 'This link will expire in %time%.'|trans({ '%time%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }) }}</p>
+<p>{{ 'password.email.infoLinkExpiration'|trans({ '%time%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }) }}</p>
 
-<p>{{ 'Cheers!'|trans }}</p>
+<p>{{ 'password.email.goodbye'|trans }}</p>
 
 <p>mosparo</p>

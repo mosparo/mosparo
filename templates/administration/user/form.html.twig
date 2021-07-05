@@ -3,13 +3,13 @@
 {% trans_default_domain 'mosparo' %}
 
 {% if isNewUser %}
-    {% set pageTitle = 'Create user'|trans %}
+    {% set pageTitle = 'administration.user.create.title'|trans %}
 {% else %}
-    {% set pageTitle = 'Modify user %email%'|trans({ '%email%': user.email }) %}
+    {% set pageTitle = 'administration.user.modify.title'|trans({ '%email%': user.email }) %}
 {% endif %}
 
 {% block documentTitle %}{{ pageTitle }} - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} {{ 'Users'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'administration.user.title'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
 
 {% block pageBody %}
     <div class="container-tight pb-4">
@@ -35,7 +35,7 @@
                             {{ form_help(form.password) }}
                         {% endif %}
 
-                        <h4 class="mt-3">{{ 'Roles'|trans }}</h4>
+                        <h4 class="mt-3">{{ 'administration.user.roles'|trans }}</h4>
                         {{ form_widget(form.isActiveUser) }}
                         {{ form_widget(form.isAdminUser) }}
                     </div>
@@ -46,13 +46,13 @@
             <div class="col">
                 <a href="{{ path('administration_user_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
-                    {{ 'Back to users'|trans }}
+                    {{ 'administration.user.backToOverview'|trans }}
                 </a>
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">
                     <i class="ti ti-device-floppy"></i>
-                    {{ 'Save'|trans }}
+                    {{ 'action.save'|trans }}
                 </button>
             </div>
         </div>

@@ -26,18 +26,18 @@ class RuleAddMultipleItemsType extends AbstractType
         $choices = ChoicesUtil::buildChoices($ruleType->getSubtypes());
         $builder
             ->add('type', ChoiceType::class, [
-                'label' => 'Type',
+                'label' => 'rule.form.addMultipleItems.label',
                 'choices' => $choices,
                 'attr' => [
                     'readonly' => (count($choices) === 1),
                     'class' => 'form-select rule-item-type'
                 ]
             ])
-            ->add('items', TextareaType::class, ['label' => 'Items', 'help' => 'Add one item per line.'])
+            ->add('items', TextareaType::class, ['label' => 'rule.form.addMultipleItems.items', 'help' => 'Add one item per line.'])
             ->add('rating', NumberType::class, [
-                'label' => 'Rating',
+                'label' => 'rule.form.addMultipleItems.rating',
                 'required' => false,
-                'help' => 'If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.'
+                'help' => 'rule.form.addMultipleItems.ratingHelp'
             ])
         ;
     }

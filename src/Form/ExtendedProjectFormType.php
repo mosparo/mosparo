@@ -16,14 +16,14 @@ class ExtendedProjectFormType extends ProjectFormType
 
         $builder
             ->add('status', ChoiceType::class, [
-                'label' => 'Status',
+                'label' => 'project.form.status',
                 'attr' => ['class' => 'form-select'],
                 'choices' => ['Inactive' => 0, 'Active' => 1],
-                'help' => 'Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.'
+                'help' => 'project.form.statusHelp'
             ])
             ->add('spamScore', NumberType::class, [
-                'label' => 'Spam score',
-                'help' => 'Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.'
+                'label' => 'project.form.spamScore',
+                'help' => 'project.form.spamScoreHelp'
             ])
         ;
     }

@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Rulesets'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'Rulesets'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'ruleset.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'ruleset.title'|trans }}{% endblock %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
@@ -13,7 +13,7 @@
             <div class="btn-list">
                 <a href="{{ path('ruleset_add') }}" class="btn btn-success">
                     <i class="ti ti-plus"></i>
-                    {{ 'Add ruleset'|trans }}
+                    {{ 'ruleset.add.title'|trans }}
                 </a>
             </div>
         </div>

@@ -2,10 +2,10 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Reset your password'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'password.reset.title'|trans }}{% endblock %}
 
 {% block small_body %}
-    <h2 class="card-title text-center mb-4">{{ 'Reset your password'|trans }}</h2>
+    <h2 class="card-title text-center mb-4">{{ 'password.reset.title'|trans }}</h2>
 
     {{ form_start(resetForm) }}
         {{ form_row(resetForm.plainPassword) }}
@@ -13,7 +13,7 @@
         <div class="form-footer">
             <button class="btn btn-primary w-100">
                 <i class="ti ti-device-floppy"></i>
-                {{ 'Reset password'|trans }}
+                {{ 'password.reset.action'|trans }}
             </button>
         </div>
     {{ form_end(resetForm) }}

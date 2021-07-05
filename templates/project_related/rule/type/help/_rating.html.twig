@@ -1,22 +1,22 @@
 {% trans_default_domain 'mosparo' %}
 
-<h4>{{ 'Rating'|trans }}</h4>
+<h4>{{ 'rule.type.rating.title'|trans }}</h4>
 <p>
-    {{ 'If an item should get a higher spam rating, you can set an additional spam rating for the item.'|trans }}
+    {{ 'rule.type.rating.intro'|trans }}
 </p>
 <p>
-    {{ 'The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.'|trans }}
+    {{ 'rule.type.rating.infoCalculationMethod'|trans }}
 </p>
 <p>
     {{
-        'The rating is a float number from %zero% to %unlimited%. If no rating is defined, the default rating is %one%.'|trans({
+        'rule.type.rating.infoDefaultAndDataType'|trans({
             '%zero%': '<code>0.0</code>',
-            '%unlimited%': '<code>' ~ 'unlimited'|trans ~ '</code>',
+            '%unlimited%': '<code>' ~ 'general.unlimited'|trans ~ '</code>',
             '%one%': '<code>1.0</code>'
         })|raw
     }}
     {{
-        'If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.'|trans({
+        'rule.type.rating.infoValueEqualZero'|trans({
             '%zero%': '<code>0.0</code>',
         })|raw
     }}

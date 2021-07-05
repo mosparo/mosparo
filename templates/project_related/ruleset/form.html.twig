@@ -5,9 +5,9 @@
 {% form_theme form 'project_related/rule/_form_theme.html.twig' %}
 
 {% if isNew %}
-    {% set title = 'Add ruleset'|trans %}
+    {% set title = 'ruleset.add.title'|trans %}
 {% else %}
-    {% set title = 'Edit ruleset %rulesetName%'|trans({ '%rulesetName%': ruleset.name }) %}
+    {% set title = 'ruleset.edit.title'|trans({ '%rulesetName%': ruleset.name }) %}
 {% endif %}
 
 {% block documentTitle %}{{ title }} - {{ parent() }}{% endblock %}
@@ -47,13 +47,13 @@
             <div class="col">
                 <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
-                    {{ 'Back to rulesets'|trans }}
+                    {{ 'ruleset.backToList'|trans }}
                 </a>
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">
                     <i class="ti ti-device-floppy"></i>
-                    {{ 'Save'|trans }}
+                    {{ 'action.save'|trans }}
                 </button>
             </div>
         </div>

@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Dashboard'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'Dashboard'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'dashboard.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'dashboard.title'|trans }}{% endblock %}
 
 {% block pageBody %}
     <div class="container-xl">
@@ -12,7 +12,7 @@
                 <div class="card">
                     <div class="card-body p-2 text-center">
                         <div class="h1 mt-3">{{ numberOfSubmissions }}</div>
-                        <div class="text-muted mb-3">{{ 'Submissions'|trans }}</div>
+                        <div class="text-muted mb-3">{{ 'submission.title'|trans }}</div>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-body p-2 text-center">
                         <div class="h1 mt-3 text-danger">{{ numberOfSpamSubmissions }}</div>
-                        <div class="text-muted mb-3">{{ 'Spam submissions'|trans }}</div>
+                        <div class="text-muted mb-3">{{ 'dashboard.spamSubmissions'|trans }}</div>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                 <div class="card">
                     <div class="card-body p-2 text-center">
                         <div class="h1 mt-3">{{ numberOfRules }}</div>
-                        <div class="text-muted mb-3">{{ 'Rules'|trans }}</div>
+                        <div class="text-muted mb-3">{{ 'rule.title'|trans }}</div>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                 <div class="card">
                     <div class="card-body p-2 text-center">
                         <div class="h1 mt-3">{{ numberOfRulesets }}</div>
-                        <div class="text-muted mb-3">{{ 'Rulesets'|trans }}</div>
+                        <div class="text-muted mb-3">{{ 'ruleset.title'|trans }}</div>
                     </div>
                 </div>
             </div>

@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Settings'|trans }} - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} {{ 'Settings'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block documentTitle %}{{ 'settings.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'settings.title'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
 
 {% block pageFlashes %}
 {% endblock %}
@@ -16,25 +16,25 @@
                 <li class="nav-item">
                     <a href="{{ path('settings_general') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_general' %}active{% endif %}">
                         <i class="ti ti-tool"></i>
-                        {{ 'General'|trans }}
+                        {{ 'settings.general.title'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('settings_member_list') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_member_list' %}active{% endif %}">
                         <i class="ti ti-users"></i>
-                        {{ 'Project members'|trans }}
+                        {{ 'settings.projectMember.title'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('settings_security') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_security' %}active{% endif %}">
                         <i class="ti ti-shield-x"></i>
-                        {{ 'Security'|trans }}
+                        {{ 'settings.security.title'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('settings_design') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_design' %}active{% endif %}">
                         <i class="ti ti-color-swatch"></i>
-                        {{ 'Design'|trans }}
+                        {{ 'settings.design.title'|trans }}
                     </a>
                 </li>
             </ul>

@@ -2,7 +2,7 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'Delete user %email%'|trans({ '%email%': user.email }) }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'administration.user.delete.title'|trans({ '%email%': user.email }) }} - {{ parent() }}{% endblock %}
 {% block pagePreTitle %}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
@@ -19,19 +19,19 @@
                 <div class="col">
                     <div class="card card-md">
                         <div class="card-body">
-                            <h2 class="card-title text-center mb-4">{{ 'Delete user %email%'|trans({ '%email%': user.email }) }}</h2>
+                            <h2 class="card-title text-center mb-4">{{ 'administration.user.delete.title'|trans({ '%email%': user.email }) }}</h2>
 
                             <div class="alert alert-important alert-danger">
                                 <p>
-                                    {{ 'Do you really want to delete the user %email%?'|trans({ '%email%': '<strong>' ~ user.email ~ '</strong>' })|raw }}
+                                    {{ 'administration.user.delete.confirm'|trans({ '%email%': '<strong>' ~ user.email ~ '</strong>' })|raw }}
                                 </p>
                                 <p>
-                                    {{ 'You cannot undo this process.'|trans }}
+                                    {{ 'general.infoUndo'|trans }}
                                 </p>
                             </div>
 
                             {% if app.user == user %}
-                                <div class="alert alert-info">{{ 'You can\'t delete yourself.'|trans }}</div>
+                                <div class="alert alert-info">{{ 'administration.user.delete.infoCantSelfDelete'|trans }}</div>
                             {% endif %}
                         </div>
                     </div>
@@ -44,14 +44,14 @@
                 <div class="col">
                     <a href="{{ path('administration_user_list') }}" class="btn btn-outline-secondary" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
-                        {{ 'Back to users'|trans }}
+                        {{ 'administration.user.backToOverview'|trans }}
                     </a>
                 </div>
                 <div class="col-auto">
                     {% if app.user != user %}
                         <button type="submit" class="btn btn-danger">
                             <i class="ti ti-circle-minus"></i>
-                            {{ 'Delete'|trans }}
+                            {{ 'action.delete'|trans }}
                         </button>
                     {% endif %}
                 </div>

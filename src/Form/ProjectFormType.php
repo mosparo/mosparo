@@ -15,17 +15,17 @@ class ProjectFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'Name'])
+            ->add('name', TextType::class, ['label' => 'project.form.name'])
             ->add('description', TextareaType::class, [
-                'label' => 'Description',
+                'label' => 'project.form.description',
                 'required' => false,
             ])
             ->add('hosts', CollectionType::class, [
-                'label' => 'Hosts',
+                'label' => 'project.form.hosts',
                 'allow_add' => true,
                 'allow_delete' => true,
                 'delete_empty' => true,
-                'help' => 'Please enter all hosts which this project will include.',
+                'help' => 'project.form.hostsHelp',
                 'entry_type' => TextType::class,
                 'entry_options' => [
                     'attr' => [
