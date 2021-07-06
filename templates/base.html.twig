@@ -28,20 +28,26 @@
                             </a>
                         </h1>
                         <div class="navbar-nav header-navbar flex-row order-md-last">
-                            <div class="nav-item dropdown mx-3">
+                            <div class="nav-item dropdown me-3">
                                 <a href="#" class="btn btn-dark dropdown-toggle project-dropdown-toggle" data-bs-toggle="dropdown" aria-label="Open user menu">
                                     <i class="ti ti-folder"></i>
-                                    {% if activeProject %}
-                                        {{ activeProject.name }}
-                                    {% else %}
-                                        {{ 'header.pleaseChoose'|trans }}
-                                    {% endif %}
+                                    <span class="project-name">
+                                        {% if activeProject %}
+                                            {{ activeProject.name }}
+                                        {% else %}
+                                            {{ 'header.pleaseChoose'|trans }}
+                                        {% endif %}
+                                    </span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     {% if projects %}
                                         {% for project in projects %}
                                             <a href="{{ path('project_switch', { 'project': project.id }) }}" class="dropdown-item">
-                                                <i class="ti ti-folder"></i>
+                                                {% if activeProject and activeProject.id == project.id %}
+                                                    <i class="ti ti-check"></i>
+                                                {% else %}
+                                                    <i class="ti ti-folder"></i>
+                                                {% endif %}
                                                 {{ project.name }}
                                             </a>
                                         {% endfor %}
