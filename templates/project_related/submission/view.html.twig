@@ -245,5 +245,14 @@
                 {% endfor %}
             </div>
         </div>
+
+        <div class="row mt-3">
+            <div class="col">
+                <a href="{{ path('submission_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'submission.backToList'|trans }}
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock %}

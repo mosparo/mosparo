@@ -221,6 +221,7 @@ ruleset:
 # Submission
 submission:
   title: Submissions
+  backToList: Back to submissions
 
   table:
     column:
