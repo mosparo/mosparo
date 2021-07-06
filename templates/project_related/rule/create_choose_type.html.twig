@@ -6,7 +6,7 @@
 {% block pageTitle %}{% endblock %}
 
 {% block pageBody %}
-    <div class="container-tight pb-4">
+    <div class="container-narrow pb-4">
         <div class="row">
             <div class="col text-center">
                 <img src="{{ asset('build/images/icons/rule.svg') }}" class="w-50 mb-5" />
@@ -19,22 +19,26 @@
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">{{ 'rule.createChooseType.title'|trans }}</h2>
 
-                        {% for ruleType in ruleTypes %}
-                            <a href="{{ path('rule_create_with_type', { type: ruleType.key }) }}" class="btn btn-outline-secondary w-100 flex-column align-items-start rule-type-button">
-                                <div class="h2">
-                                    <i class="{{ ruleType.icon }}"></i>
-                                    {{ ruleType.name|trans }}
+                        <div class="row">
+                            {% for ruleType in ruleTypes %}
+                                <div class="col-12 col-md-6 mb-3">
+                                    <a href="{{ path('rule_create_with_type', { type: ruleType.key }) }}" class="btn btn-outline-secondary w-100 h-100 flex-column align-items-start justify-content-start rule-type-button">
+                                        <div class="h2">
+                                            <i class="{{ ruleType.icon }}"></i>
+                                            {{ ruleType.name|trans }}
+                                        </div>
+                                        <p>
+                                            {{ ruleType.description|trans }}
+                                        </p>
+                                        <ul class="align-items-start mb-0">
+                                            {% for subType in ruleType.subtypes %}
+                                                <li>{{ subType.name|trans }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </a>
                                 </div>
-                                <p>
-                                    {{ ruleType.description|trans }}
-                                </p>
-                                <ul class="align-items-start mb-0">
-                                    {% for subType in ruleType.subtypes %}
-                                        <li>{{ subType.name|trans }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </a>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
