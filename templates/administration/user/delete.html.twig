@@ -41,15 +41,15 @@
             <input type="hidden" name="delete-token" value="{{ csrf_token('delete-user') }}"/>
 
             <div class="row mt-3">
-                <div class="col">
-                    <a href="{{ path('administration_user_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+                <div class="col-12 col-md-auto mt-2 mt-md-0">
+                    <a href="{{ path('administration_user_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
                         {{ 'administration.user.backToOverview'|trans }}
                     </a>
                 </div>
-                <div class="col-auto">
+                <div class="col-12 col-md-auto ms-auto order-first order-md-last">
                     {% if app.user != user %}
-                        <button type="submit" class="btn btn-danger">
+                        <button type="submit" class="btn btn-danger w-100">
                             <i class="ti ti-circle-minus"></i>
                             {{ 'action.delete'|trans }}
                         </button>

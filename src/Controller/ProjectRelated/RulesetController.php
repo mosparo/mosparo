@@ -46,23 +46,23 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
     public function index(Request $request, DataTableFactory $dataTableFactory): Response
     {
         $table = $dataTableFactory->create(['autoWidth' => true])
-            ->add('name', TextColumn::class, ['label' => 'Name'])
+            ->add('name', TextColumn::class, ['label' => 'ruleset.list.name'])
             ->add('status', TwigColumn::class, [
-                'label' => 'Status',
+                'label' => 'ruleset.list.status',
                 'template' => 'project_related/ruleset/list/_status.html.twig',
             ])
             ->add('refreshedAt', TwigColumn::class, [
-                'label' => 'Refreshed at',
+                'label' => 'ruleset.list.refreshedAt',
                 'propertyPath' => 'rulesetCache.refreshedAt',
                 'template' => 'project_related/ruleset/list/_date.html.twig',
             ])
             ->add('updatedAt', TwigColumn::class, [
-                'label' => 'Updated at',
+                'label' => 'ruleset.list.updatedAt',
                 'propertyPath' => 'rulesetCache.updatedAt',
                 'template' => 'project_related/ruleset/list/_date.html.twig',
             ])
             ->add('actions', TwigColumn::class, [
-                'label' => 'Actions',
+                'label' => 'ruleset.list.actions',
                 'className' => 'buttons',
                 'template' => 'project_related/ruleset/list/_actions.html.twig'
             ])

@@ -15,14 +15,14 @@
                         <h3 class="card-title">{{ 'ruleset.view.details.title'|trans }}</h3>
                     </div>
                     <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-12 col-lg-4">
+                        <div class="row">
+                            <div class="col-12 col-lg-4 mb-3">
                                 <h4 class="mb-0">{{ 'ruleset.view.details.url'|trans }}</h4>
                                 <div>
                                     <code>{{ ruleset.url }}</code>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-4">
+                            <div class="col-12 col-lg-4 mb-3">
                                 <h4 class="mb-0">{{ 'ruleset.view.details.status'|trans }}</h4>
                                 <div>
                                     {% if ruleset.status %}
@@ -32,7 +32,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-4">
+                            <div class="col-12 col-lg-4 mb-3">
                                 <h4 class="mb-0">{{ 'ruleset.view.details.spamRatingFactor'|trans }}</h4>
                                 <div>
                                     {% if ruleset.spamRatingFactor %}
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-lg-4">
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
                                 <h4 class="mb-0">{{ 'ruleset.view.details.lastRefreshedAt'|trans }}</h4>
                                 <div>
                                     {% if ruleset.rulesetCache.refreshedAt %}
@@ -54,7 +54,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-4">
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
                                 <h4 class="mb-0">{{ 'ruleset.view.details.lastUpdatedAt'|trans }}</h4>
                                 <div>
                                     {% if ruleset.rulesetCache.updatedAt %}
@@ -64,7 +64,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-4">
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0 co">
                                 <h4 class="mb-0">{{ 'ruleset.view.details.numberOfIncludedRules'|trans }}</h4>
                                 <div>
                                     {{ ruleset.rulesetCache.rules|length }}
@@ -82,7 +82,7 @@
             </div>
         {% endif %}
 
-        <h2 class="mt-1">{{ 'ruleset.view.includedRules.title'|trans }}</h2>
+        <h2 class="mt-3 mt-md-1">{{ 'ruleset.view.includedRules.title'|trans }}</h2>
 
         {% for rule in ruleset.rulesetCache.rules %}
             <div class="row" id="{{ rule.uuid }}">
@@ -93,13 +93,13 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <h4 class="mb-0">{{ 'rulset.view.includedRules.name'|trans }}</h4>
+                                <h4 class="mb-0">{{ 'ruleset.view.includedRules.name'|trans }}</h4>
                                 <div>
                                     {{ rule.name }}
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <h4 class="mb-0">{{ 'rulset.view.includedRules.description'|trans }}</h4>
+                                <h4 class="mb-0">{{ 'ruleset.view.includedRules.description'|trans }}</h4>
                                 <div>
                                     {% if rule.description %}
                                         {{ rule.description }}
@@ -123,7 +123,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-8">
-                    <div class="card">
+                    <div class="card mt-3 mt-md-0">
                         <div class="card-header">
                             <h3 class="card-title">{{ 'ruleset.view.includedRules.items'|trans }}</h3>
 
@@ -165,9 +165,9 @@
                 </div>
             </div>
 
-            <div class="d-flex mt-3">
-                <div class="col">
-                    <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto">
+                    <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
                         {{ 'ruleset.backToList'|trans }}
                     </a>

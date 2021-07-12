@@ -8,17 +8,17 @@ use Mosparo\Rule\Tester\ProviderRuleTester;
 final class ProviderRuleType extends AbstractRuleType
 {
     protected $key = 'provider';
-    protected $name = 'Provider';
-    protected $description = 'Allows to filter by provider specific informations';
+    protected $name = 'rule.type.provider.title';
+    protected $description = 'rule.type.provider.shortIntro';
     protected $icon = 'ti ti-wifi';
     protected $subtypes = [
         [
             'key' => 'asNumber',
-            'name' => 'AS number',
+            'name' => 'rule.type.provider.asNumber.title',
         ],
         [
             'key' => 'country',
-            'name' => 'Country',
+            'name' => 'rule.type.provider.country.title',
         ],
     ];
     protected $formClass = ProviderFormType::class;

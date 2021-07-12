@@ -85,13 +85,13 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         $project = $this->getActiveProject();
 
         $table = $dataTableFactory->create(['autoWidth' => true])
-            ->add('user', TextColumn::class, ['label' => 'User', 'propertyPath' => 'user.email'])
+            ->add('user', TextColumn::class, ['label' => 'settings.projectMember.list.user', 'propertyPath' => 'user.email'])
             ->add('role', TwigColumn::class, [
-                'label' => 'Role',
+                'label' => 'settings.projectMember.list.role',
                 'template' => 'project_related/settings/member/list/_role.html.twig'
             ])
             ->add('actions', TwigColumn::class, [
-                'label' => 'Actions',
+                'label' => 'settings.projectMember.list.actions',
                 'className' => 'buttons',
                 'template' => 'project_related/settings/member/list/_actions.html.twig'
             ])
@@ -140,9 +140,9 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         }
 
         $projectMemberRoles = [
-            'Reader' => ProjectMember::ROLE_READER,
-            'Editor' => ProjectMember::ROLE_EDITOR,
-            'Owner' => ProjectMember::ROLE_OWNER
+            'project.roles.reader' => ProjectMember::ROLE_READER,
+            'project.roles.editor' => ProjectMember::ROLE_EDITOR,
+            'project.roles.owner' => ProjectMember::ROLE_OWNER
         ];
 
         $form = $this->createFormBuilder($projectMember, ['translation_domain' => 'mosparo'])

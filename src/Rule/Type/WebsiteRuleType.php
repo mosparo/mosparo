@@ -8,13 +8,13 @@ use Mosparo\Rule\Tester\WebsiteRuleTester;
 final class WebsiteRuleType extends AbstractRuleType
 {
     protected $key = 'website';
-    protected $name = 'Website';
-    protected $description = 'Allows to filter by specific websites';
+    protected $name = 'rule.type.website.title';
+    protected $description = 'rule.type.website.shortIntro';
     protected $icon = 'ti ti-world';
     protected $subtypes = [
         [
-            'key' => 'website',
-            'name' => 'Website'
+            'key' => 'url',
+            'name' => 'rule.type.website.url.title'
         ],
     ];
     protected $formClass = WebsiteFormType::class;

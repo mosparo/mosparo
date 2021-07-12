@@ -53,6 +53,12 @@ rule:
   title: Regeln
   backToList: Zu den Regeln
 
+  list:
+    name: Name
+    type: Typ
+    status: Status
+    actions: Aktionen
+
   createChooseType:
     title: Typ wählen
 
@@ -97,6 +103,7 @@ rule:
   type:
     domain:
       title: Domain
+      shortIntro: Filtert nach Domains
       intro: Der Domain-Regeltyp erlaubt das Filtern nach Domains.
 
       domain:
@@ -105,6 +112,7 @@ rule:
 
     email:
       title: E-Mail
+      shortIntro: Filtert nach E-Mail-Adressen
       intro: Der E-Mail-Adressen-Regeltyp erlaubt das Filtern nach E-Mail-Adressen.
 
       email:
@@ -113,6 +121,7 @@ rule:
 
     ipAddress:
       title: IP-Adresse
+      shortIntro: Filtert nach IP-Adressen und Subnetzen
       intro: Der IP-Adressen-Regeltyp erlaubt das Filtern nach IP-Adressen und Subnetzen.
 
       ipAddress:
@@ -125,6 +134,7 @@ rule:
 
     provider:
       title: Anbieter
+      shortIntro: Filtert nach AS-Nummber und Land
       intro: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
       infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
 
@@ -142,6 +152,7 @@ rule:
 
     website:
       title: Website
+      shortIntro: Filtert nach URLs
       intro: Der Website-Regeltyp erlaubt das Filtern nach URLs.
 
       url:
@@ -151,6 +162,7 @@ rule:
 
     word:
       title: Wort
+      shortIntro: Filtert nach Wörter und RegEx-Muster
       intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
 
       text:
@@ -172,6 +184,13 @@ rule:
 ruleset:
   title: Regel-Pakete
   backToList: Zu den Regel-Paketen
+
+  list:
+    name: Name
+    status: Status
+    refreshedAt: Aktualisiert am
+    updatedAt: Geändert am
+    actions: Aktionen
 
   add:
     title: Regel-Paket hinzufügen
@@ -223,10 +242,17 @@ submission:
   title: Einsendungen
   backToList: Zu den Einsendungen
 
-  table:
-    column:
-      spam: Spam
-      verification: Überprüfung
+  list:
+    id: ID
+    page: Seite
+    spam: Spam
+    verification: Überprüfung
+    ipAddress: IP-Adresse
+    spamRating: Spam-Bewertung
+    submittedAt: Abgesendet am
+    valid: Gültig
+    verifiedAt: Überprüft am
+    actions: Aktionen
 
   view:
     title: Einsendung %submissionId%
@@ -297,6 +323,11 @@ settings:
   projectMember:
     title: Projekt-Mitglieder
     backToList: Zu den Projekt-Mitgliedern
+
+    list:
+      user: Benutzer
+      role: Rolle
+      actions: Aktionen
 
     add:
       title: Projekt-Mitglied hinzufügen
@@ -372,6 +403,11 @@ administration:
     description: Verwalten Sie alle Benutzer dieser mosparo-Instanz.
     backToOverview: Zu den Benutzern
     roles: Rollen
+
+    list:
+      user: Benutzer
+      roles: Rollen
+      actions: Aktionen
 
     create:
       title: Benutzer erstellen

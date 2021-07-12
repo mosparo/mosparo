@@ -27,44 +27,44 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
     public function index(Request $request, DataTableFactory $dataTableFactory): Response
     {
         $table = $dataTableFactory->create(['autoWidth' => true])
-            ->add('id', TextColumn::class, ['label' => 'ID'])
+            ->add('id', TextColumn::class, ['label' => 'submission.list.id'])
             ->add('page', TwigColumn::class, [
-                'label' => 'Page',
+                'label' => 'submission.list.page',
                 'propertyPath' => 'submitToken.pageTitle',
                 'template' => 'project_related/submission/list/_page.html.twig'
             ])
             ->add('data', TwigColumn::class, [
-                'label' => 'IP Address',
+                'label' => 'submission.list.ipAddress',
                 'template' => 'project_related/submission/list/_ipAddress.html.twig'
             ])
             ->add('spam', TwigColumn::class, [
-                'label' => 'SPAM',
+                'label' => 'submission.list.spam',
                 'template' => 'project_related/submission/list/_spam.html.twig',
                 'className' => 'text-center border-left'
             ])
             ->add('spamRating', TwigColumn::class, [
-                'label' => 'Spam rating',
+                'label' => 'submission.list.spamRating',
                 'template' => 'project_related/submission/list/_spamRating.html.twig',
                 'className' => 'text-center'
             ])
             ->add('spamDetectionRating', TextColumn::class, ['visible' => false])
             ->add('submittedAt', TwigColumn::class, [
-                'label' => 'Submitted at',
+                'label' => 'submission.list.submittedAt',
                 'template' => 'project_related/submission/list/_date.html.twig',
                 'className' => 'text-center'
             ])
             ->add('valid', TwigColumn::class, [
-                'label' => 'Valid',
+                'label' => 'submission.list.valid',
                 'template' => 'project_related/submission/list/_valid.html.twig',
                 'className' => 'text-center border-left'
             ])
             ->add('verifiedAt', TwigColumn::class, [
-                'label' => 'Verified at',
+                'label' => 'submission.list.verifiedAt',
                 'template' => 'project_related/submission/list/_date.html.twig',
                 'className' => 'text-center border-right'
             ])
             ->add('submitToken', TwigColumn::class, [
-                'label' => 'Actions',
+                'label' => 'submission.list.actions',
                 'className' => 'text-center',
                 'template' => 'project_related/submission/list/_actions.html.twig',
             ])

@@ -14,5 +14,6 @@ const $ = require('jquery');
 global.$ = global.jQuery = $;
 
 const dt = require('datatables');
+const dtR = require('datatables.net-responsive');
 
 import './js/form.js';

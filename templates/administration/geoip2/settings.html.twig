@@ -8,7 +8,7 @@
 {% block pageBody %}
     <div class="container-xl">
         <div class="row">
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 mb-3">
                 {{ form_start(form) }}
                     <div class="card">
                         <div class="card-header">
@@ -25,9 +25,9 @@
                             {{ form_row(form.geoipLicenseKey) }}
                         </div>
                     </div>
-                    <div class="d-flex mt-3">
-                        <div class="col-auto ms-auto">
-                            <button type="submit" class="btn btn-primary">
+                    <div class="row mt-3">
+                        <div class="col-12 col-md-auto ms-auto">
+                            <button type="submit" class="btn btn-primary w-100">
                                 <i class="ti ti-device-floppy"></i>
                                 {{ 'action.save'|trans }}
                             </button>
@@ -79,7 +79,7 @@
                             {{ random(0, 59) }} {{ random(0, 23) }} * * {{ random(0, 6) }} php bin/console mosparo:geoip2:download-database
                         </code>
                         <p>
-                            {{ 'administration.geoip2.downloadAndUpdate.update.infoAbsolutePath'|trans({ '%pathToBinConsole%': '<code>bin/console</code>'}) }}
+                            {{ 'administration.geoip2.downloadAndUpdate.update.infoAbsolutePath'|trans({ '%pathToBinConsole%': '<code>bin/console</code>'})|raw }}
                         </p>
 
                         <div class="alert alert-info">

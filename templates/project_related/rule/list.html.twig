@@ -11,9 +11,9 @@
     {% if canManage %}
         <div class="col-auto ms-auto">
             <div class="btn-list">
-                <a href="{{ path('rule_create_choose_type') }}" class="btn btn-success">
+                <a href="{{ path('rule_create_choose_type') }}" class="btn btn-success add-button">
                     <i class="ti ti-plus"></i>
-                    {{ 'rule.create.title'|trans }}
+                    <span>{{ 'rule.create.title'|trans }}</span>
                 </a>
             </div>
         </div>
@@ -45,6 +45,7 @@
                 autoWidth: false,
                 searching: false,
                 info: false,
+                responsive: true,
                 columnDefs: [
                     { width: "40%", targets: 0 },
                     { width: "1%", targets: 3 }

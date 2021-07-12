@@ -7,7 +7,7 @@
 
 {% block settingsPageBody %}
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-6 mb-3">
             {{ form_start(form) }}
                 <div class="card">
                     <div class="card-header">
@@ -21,9 +21,9 @@
                         {{ form_row(form.spamScore) }}
                     </div>
                 </div>
-                <div class="d-flex mt-3">
-                    <div class="col-auto ms-auto">
-                        <button type="submit" class="btn btn-primary">
+                <div class="row mt-3">
+                    <div class="col-12 col-md-auto ms-auto">
+                        <button type="submit" class="btn btn-primary w-100">
                             <i class="ti ti-device-floppy"></i>
                             {{ 'action.save'|trans }}
                         </button>
@@ -31,7 +31,7 @@
                 </div>
             {{ form_end(form) }}
         </div>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-6 mb-3">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">{{ 'settings.general.apiKeys.title'|trans }}</h3>
@@ -47,9 +47,9 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mt-3">
-                <div class="col-auto ms-auto">
-                    <a href="{{ path('settings_reissue_keys') }}" class="btn btn-warning">
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto ms-auto">
+                    <a href="{{ path('settings_reissue_keys') }}" class="btn btn-warning w-100">
                         <i class="ti ti-refresh"></i>
                         {{ 'settings.general.action.reissueApiKeys'|trans }}
                     </a>

@@ -5,6 +5,8 @@ $font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, San Francis
 @import '~@tabler/core';
 @import 'node_modules/@tabler/icons/iconfont/tabler-icons.scss';
 
+@import '~datatables.net-responsive-bs5';
+
 /* Mosparo Core */
 @import 'core/base.scss';
 @import 'core/navigation.scss';

@@ -8,17 +8,17 @@ use Mosparo\Rule\Tester\IpAddressRuleTester;
 final class IpAddressRuleType extends AbstractRuleType
 {
     protected $key = 'ipAddress';
-    protected $name = 'IP Address';
-    protected $description = 'Allows to filter by ip addresses and subnets';
+    protected $name = 'rule.type.ipAddress.title';
+    protected $description = 'rule.type.ipAddress.shortIntro';
     protected $icon = 'ti ti-plug';
     protected $subtypes = [
         [
             'key' => 'ipAddress',
-            'name' => 'IP Address',
+            'name' => 'rule.type.ipAddress.ipAddress.title',
         ],
         [
             'key' => 'subnet',
-            'name' => 'Subnet',
+            'name' => 'rule.type.ipAddress.subnet.title',
         ],
     ];
     protected $formClass = IpAddressFormType::class;

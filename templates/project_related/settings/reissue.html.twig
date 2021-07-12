@@ -37,14 +37,14 @@
             <input type="hidden" name="reissue-token" value="{{ csrf_token('reissue-api-keys') }}"/>
 
             <div class="row mt-3">
-                <div class="col">
-                    <a href="{{ path('settings_member_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+                <div class="col-12 col-md-auto mt-2 mt-md-0">
+                    <a href="{{ path('settings_general') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
                         {{ 'settings.backToSettings'|trans }}
                     </a>
                 </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-warning">
+                <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                    <button type="submit" class="btn btn-warning w-100">
                         <i class="ti ti-refresh"></i>
                         {{ 'settings.general.action.reissue'|trans }}
                     </button>

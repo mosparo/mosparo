@@ -17,6 +17,7 @@
     &,
     * {
         text-align: right;
+        justify-content: flex-end;
     }
 }
 
@@ -44,5 +45,39 @@
     i {
         font-size: 1.25em;
         margin-right: 0.4em;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .rule-items {
+        .input-group {
+            padding-right: 2.25rem;
+
+            .rule-item-type,
+            .rule-item-rating {
+                flex: 0 0 50%;
+            }
+
+            .rule-item-type {
+                border-bottom-left-radius: 0;
+            }
+
+            .rule-item-value {
+                flex: 0 0 100%;
+                order: 3;
+
+                margin-left: 0 !important;
+                margin-top: -1px;
+
+                border-bottom-left-radius: 4px !important;
+            }
+
+            .remove-item-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+            }
+        }
     }
 }

@@ -21,22 +21,22 @@
                             {{ 'settings.security.requestDelaying.infoIpAddress'|trans }}
                         </p>
 
-                        <div class="row mb-3">
-                            <div class="col">
+                        <div class="row">
+                            <div class="col mb-3">
                                 {{ form_row(form.delayActive) }}
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-sm-12 col-lg-6">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-6 mb-3">
                                 {{ form_row(form.delayNumberOfRequests) }}
                             </div>
-                            <div class="col-sm-12 col-lg-6">
+                            <div class="col-sm-12 col-lg-6 mb-3">
                                 {{ form_row(form.delayDetectionTimeFrame) }}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 col-lg-6">
+                            <div class="col-sm-12 col-lg-6 mb-3 mb-lg-0">
                                 {{ form_row(form.delayTime) }}
                             </div>
                             <div class="col-sm-12 col-lg-6">
@@ -90,9 +90,9 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex mt-3">
-            <div class="col-auto ms-auto">
-                <button type="submit" class="btn btn-primary">
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto ms-auto">
+                <button type="submit" class="btn btn-primary w-100">
                     <i class="ti ti-device-floppy"></i>
                     {{ 'action.save'|trans }}
                 </button>

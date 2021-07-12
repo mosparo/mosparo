@@ -8,13 +8,13 @@ use Mosparo\Rule\Tester\DomainRuleTester;
 final class DomainRuleType extends AbstractRuleType
 {
     protected $key = 'domain';
-    protected $name = 'Domain';
-    protected $description = 'Allows to filter by specific domains';
+    protected $name = 'rule.type.domain.title';
+    protected $description = 'rule.type.domain.shortIntro';
     protected $icon = 'ti ti-building';
     protected $subtypes = [
         [
             'key' => 'domain',
-            'name' => 'Domain',
+            'name' => 'rule.type.domain.domain.title',
         ],
     ];
     protected $formClass = DomainFormType::class;

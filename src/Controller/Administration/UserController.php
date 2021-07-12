@@ -49,13 +49,13 @@ class UserController extends AbstractController
     public function index(Request $request, RuleRepository $ruleRepository, DataTableFactory $dataTableFactory): Response
     {
         $table = $dataTableFactory->create(['autoWidth' => true])
-            ->add('email', TextColumn::class, ['label' => 'User'])
+            ->add('email', TextColumn::class, ['label' => 'administration.user.list.user'])
             ->add('roles', TwigColumn::class, [
-                'label' => 'Roles',
+                'label' => 'administration.user.list.roles',
                 'template' => 'administration/user/list/_roles.html.twig'
             ])
             ->add('actions', TwigColumn::class, [
-                'label' => 'Actions',
+                'label' => 'administration.user.list.actions',
                 'className' => 'buttons',
                 'template' => 'administration/user/list/_actions.html.twig'
             ])

@@ -53,6 +53,12 @@ rule:
   title: Rules
   backToList: Back to rules
 
+  list:
+    name: Name
+    type: Type
+    status: Status
+    actions: Actions
+
   createChooseType:
     title: Choose type
 
@@ -97,6 +103,7 @@ rule:
   type:
     domain:
       title: Domain
+      shortIntro: Allows to filter by specific domains
       intro: The domain rule type allows to filter for domains.
 
       domain:
@@ -105,6 +112,7 @@ rule:
 
     email:
       title: Email
+      shortIntro: Allows to filter by specific email addresses
       intro: The email rule type allows to filter for email addresses.
 
       email:
@@ -113,6 +121,7 @@ rule:
 
     ipAddress:
       title: IP address
+      shortIntro: Allows to filter by ip addresses and subnets
       intro: The IP address rule type allows to filter for IP addresses or subnets.
 
       ipAddress:
@@ -125,6 +134,7 @@ rule:
 
     provider:
       title: Provider
+      shortIntro: Allows to filter by provider specific informations
       intro: The provider rule type allows to filter for AS numbers and country codes.
       infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
 
@@ -142,6 +152,7 @@ rule:
 
     website:
       title: Website
+      shortIntro: Allows to filter by specific websites
       intro: The website rule type allows to filter for URLs.
 
       url:
@@ -151,6 +162,7 @@ rule:
 
     word:
       title: Word
+      shortIntro: Allows to filter by specific words or patterns
       intro: The word rule type allows to filter for words and Regular Expression patterns.
 
       text:
@@ -172,6 +184,13 @@ rule:
 ruleset:
   title: Rulesets
   backToList: Back to rulesets
+
+  list:
+    name: Name
+    status: Status
+    refreshedAt: Refreshed at
+    updatedAt: Updated at
+    actions: Actions
 
   add:
     title: Add ruleset
@@ -223,10 +242,17 @@ submission:
   title: Submissions
   backToList: Back to submissions
 
-  table:
-    column:
-      spam: Spam
-      verification: Verfication
+  list:
+    id: ID
+    page: Page
+    spam: Spam
+    verification: Verfication
+    ipAddress: IP Address
+    spamRating: Spam rating
+    submittedAt: Submitted at
+    valid: Valid
+    verifiedAt: Verified at
+    actions: Actions
 
   view:
     title: Submission %submissionId%
@@ -297,6 +323,11 @@ settings:
   projectMember:
     title: Project members
     backToList: Back to project members
+
+    list:
+      user: User
+      role: Role
+      actions: Actions
 
     add:
       title: Add project member
@@ -372,6 +403,11 @@ administration:
     description: Manage all users of this mosparo instance.
     backToOverview: Back to users
     roles: Roles
+
+    list:
+      user: User
+      roles: Roles
+      actions: Actions
 
     create:
       title: Create user

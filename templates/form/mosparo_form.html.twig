@@ -65,12 +65,12 @@
         {% if form.vars.allow_add %}
             <div class="row">
                 {% block collection_additional_add_button %}{% endblock %}
-                <div class="col">
+                <div class="col-12 col-md order-last order-md-0 mt-2 mt-md-0">
                     {{- form_help(form) -}}
                 </div>
-                <div class="col-auto">
+                <div class="col-12 col-md-auto">
                     {% if not form.vars.disabled %}
-                        <button type="button" class="btn btn-success ms-auto add-item-button">
+                        <button type="button" class="btn btn-success w-100 ms-auto add-item-button">
                             <i class="ti ti-plus"></i>
                             {{ 'action.add'|trans }}
                         </button>

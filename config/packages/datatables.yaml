@@ -5,11 +5,11 @@ datatables:
         lengthMenu : [10, 25, 50, 100, 250, 500]
         pageLength: 50
         pagingType: 'simple_numbers'
-        dom: "tr<'card-footer d-flex align-items-center'<'m-0 text-muted d-flex align-items-center'<'col-auto'l><'col-auto ms-4'i>><'pagination m-0 ms-auto'p>>"
+        dom: "tr<'card-footer d-flex align-items-center'<'dt-footer'<'dt-page-size'l><'dt-info ms-4'i><'dt-pagination pagination m-0 ms-md-auto'p>>>"
         searching: true
 
     template_parameters:
-        className: 'table table-vcenter card-table table-striped m-0'
+        className: 'table responsive table-vcenter card-table table-striped m-0'
 
     # You can for example override this to "tables" to keep the translation domains separated nicely
     translation_domain: 'mosparo'

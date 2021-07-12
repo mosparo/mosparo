@@ -39,17 +39,17 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     public function index(Request $request, DataTableFactory $dataTableFactory): Response
     {
         $table = $dataTableFactory->create(['autoWidth' => true])
-            ->add('name', TextColumn::class, ['label' => 'Name'])
+            ->add('name', TextColumn::class, ['label' => 'rule.list.name'])
             ->add('type', TwigColumn::class, [
-                'label' => 'Type',
+                'label' => 'rule.list.type',
                 'template' => 'project_related/rule/list/_rule_type.html.twig'
             ])
             ->add('status', TwigColumn::class, [
-                'label' => 'Status',
+                'label' => 'rule.list.status',
                 'template' => 'project_related/rule/list/_status.html.twig'
             ])
             ->add('actions', TwigColumn::class, [
-                'label' => 'Actions',
+                'label' => 'rule.list.actions',
                 'className' => 'buttons',
                 'template' => 'project_related/rule/list/_actions.html.twig'
             ])

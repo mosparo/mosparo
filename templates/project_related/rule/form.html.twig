@@ -7,7 +7,7 @@
 {% block pageTitleColumn %}
     {{ parent() }}
 
-    <div class="col-auto ms-auto rule-type-information">
+    <div class="col-12 col-md-auto ms-auto mt-3 mt-md-0 rule-type-information">
         <div class="page-pretitle">
             {{ 'rule.form.ruleType'|trans }}
         </div>
@@ -25,7 +25,7 @@
         {{ form_start(form) }}
         <div class="row">
             <div class="col-12 col-lg-4">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header">
                         <h3 class="card-title">{{ 'rule.form.rule.title'|trans }}</h3>
                     </div>
@@ -46,24 +46,24 @@
                             {{ 'action.help'|trans }}
                         </button>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body rule-items">
                         {{ form_widget(form.items) }}
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex mt-3">
-            <div class="col">
-                <a href="{{ path('rule_list') }}" class="btn btn-outline-secondary" tabindex="1000">
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto mt-2 mt-md-0">
+                <a href="{{ path('rule_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
                     {{ 'rule.backToList'|trans }}
                 </a>
             </div>
 
             {% if canManage %}
-                <div class="col-auto ms-auto">
-                    <button type="submit" class="btn btn-primary">
+                <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                    <button type="submit" class="btn btn-primary w-100">
                         <i class="ti ti-device-floppy"></i>
                         {{ 'action.save'|trans }}
                     </button>

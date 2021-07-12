@@ -3,9 +3,9 @@
 {% trans_default_domain 'mosparo' %}
 
 {% block collection_additional_add_button %}
-    <div class="col">
+    <div class="col-12 col-md">
         {% if not form.vars.disabled %}
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
+            <button type="button" class="btn btn-secondary w-100 mb-2 m-md-0" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
                 <i class="ti ti-square-plus"></i>
                 {{ 'form.addMultipleItems'|trans }}
             </button>
