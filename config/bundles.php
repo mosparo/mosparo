@@ -17,4 +17,5 @@ return [
     SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
     Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
     Gracious\DoctrineEncryptionBundle\GraciousDoctrineEncryptionBundle::class => ['all' => true],
+    Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],
 ];

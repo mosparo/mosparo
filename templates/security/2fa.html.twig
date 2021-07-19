@@ -1,0 +1,46 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'security.login.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    <h2 class="card-title text-center mb-4">{{ 'security.twoFactor.title'|trans }}</h2>
+
+    {% if authenticationError %}
+        <div class="alert alert-danger">{{ authenticationError|trans(authenticationErrorData, 'SchebTwoFactorBundle') }}</div>
+    {% endif %}
+
+    <p class="label"><label for="_auth_code">{{ 'security.twoFactor.intro'|trans }}</label></p>
+
+    <form class="form" action="{{ checkPathUrl ? checkPathUrl: path(checkPathRoute) }}" method="post">
+        <p class="form-row">
+            <input
+                id="_auth_code"
+                type="text"
+                name="{{ authCodeParameterName }}"
+                autocomplete="one-time-code"
+                autofocus
+                inputmode="numeric"
+                class="form-control"
+            />
+        </p>
+
+        {% if isCsrfProtectionEnabled %}
+            <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
+        {% endif %}
+
+        <div class="form-footer">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="ti ti-2fa"></i>
+                {{ 'security.login.title'|trans }}
+            </button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block after_small_body %}
+    <div class="text-center text-muted mt-3">
+        <a href="{{ logoutPath }}">{{ 'password.backToLogin'|trans }}</a>
+    </div>
+{% endblock %}

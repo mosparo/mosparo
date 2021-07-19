@@ -14,4 +14,9 @@ class TokenGenerator
     {
         return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
     }
+
+    public function generateShortToken()
+    {
+        return rtrim(strtr(base64_encode(random_bytes(8)), '+/', '-_'), '=');
+    }
 }

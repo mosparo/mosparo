@@ -1,0 +1,12 @@
+# See the configuration reference at https://github.com/scheb/2fa/blob/master/doc/configuration.md
+scheb_two_factor:
+    security_tokens:
+        - Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken
+
+    google:
+        enabled: true
+        issuer: '%env(MOSPARO_NAME)%'
+        template: security/2fa.html.twig
+
+    backup_codes:
+        enabled: true

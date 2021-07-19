@@ -6,12 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements UserInterface
+class User implements UserInterface, TwoFactorInterface, BackupCodeInterface
 {
     /**
      * @ORM\Id
@@ -35,6 +37,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
+     */
+    private $googleAuthenticatorSecret;
+
+    /**
+     * @ORM\Column(type="encryptedJson")
+     */
+    private $backupCodes = [];
 
     /**
      * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="user")
@@ -149,6 +161,71 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function isGoogleAuthenticatorEnabled(): bool
+    {
+        return (!empty($this->googleAuthenticatorSecret)) ? true : false;
+    }
+
+    public function getGoogleAuthenticatorUsername(): string
+    {
+        return $this->email;
+    }
+
+    public function getGoogleAuthenticatorSecret(): ?string
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+    {
+        $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+    }
+
+    /**
+     * Check if it is a valid backup code.
+     *
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function isBackupCode(string $code): bool
+    {
+        return in_array($code, $this->backupCodes);
+    }
+
+    /**
+     * Invalidate a backup code
+     *
+     * @param string $code
+     */
+    public function invalidateBackupCode(string $code): void
+    {
+        $key = array_search($code, $this->backupCodes);
+        if ($key !== false){
+            unset($this->backupCodes[$key]);
+        }
+    }
+
+    /**
+     * Add a backup code
+     *
+     * @param string $backUpCode
+     */
+    public function addBackupCode(string $backUpCode): void
+    {
+        if (!in_array($backUpCode, $this->backupCodes)) {
+            $this->backupCodes[] = $backUpCode;
+        }
+    }
+
+    /**
+     * Resets all backup codes
+     */
+    public function resetBackupCodes(): void
+    {
+        $this->backupCodes = [];
     }
 
     /**

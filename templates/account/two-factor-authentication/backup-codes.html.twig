@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'account.twoFactor.backupCodes.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset('build/images/icons/two-factor.svg') }}" class="w-50 mb-5" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">{{ 'account.twoFactor.backupCodes.title'|trans }}</h2>
+
+                        <p>
+                            {{ 'account.twoFactor.backupCodes.intro'|trans }}
+                        </p>
+
+                        <div class="alert alert-info">
+                            {{ 'account.twoFactor.backupCodes.infoResetBackupCodes'|trans }}
+                        </div>
+
+                        <div class="row two-factor-code">
+                            {% for backupCode in backupCodes %}
+                                <div class="col my-2 text-center">
+                                    {{ backupCode }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto mt-2 mt-md-0">
+                <a href="{{ path('account_overview') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'account.backToOverview'|trans }}
+                </a>
+            </div>
+            <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                <a href="{{ path('account_two_factor_status') }}" class="btn btn-primary w-100">
+                    <i class="ti ti-2fa"></i>
+                    {{ 'account.twoFactor.action.continue'|trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

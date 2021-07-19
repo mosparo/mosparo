@@ -15,6 +15,10 @@
     }
 }
 
+.empty-subtitle {
+    flex: 1 0;
+}
+
 @media screen and (max-width: 768px) {
     .project-dropdown-toggle {
         width: 2.25rem;
@@ -38,13 +42,19 @@
         }
     }
 
-    .btn.add-button {
-        .ti:not(.ti-icon-right) {
-            margin-right: 0;
+    .btn {
+        &.add-button {
+            .ti:not(.ti-icon-right) {
+                margin-right: 0;
+            }
+
+            span {
+                display: none;
+            }
         }
 
-        span {
-            display: none;
+        &.w-100 {
+            white-space: normal;
         }
     }
 }

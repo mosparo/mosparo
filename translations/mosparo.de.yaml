@@ -486,6 +486,41 @@ account:
     message:
       successfullyChanged: Ihr Passwort wurde erfolgreich geändert.
 
+  twoFactor:
+    title: Zwei-Faktor-Authentifizierung
+    description: Konfigurieren Sie Zwei-Faktor-Authentifizierung für Ihren Account.
+
+    action:
+      configure: Konfigurieren
+      reconfigure: Neu konfigurieren
+      resetBackupCodes: Wiederherstellungscodes zurücksetzen
+      disable: Deaktivieren
+      continue: Weiter
+      verify: Verifizieren
+
+    status:
+      intro: Ihr Account ist durch Zwei-Faktor-Authentifizierung geschützt.
+
+    start:
+      title: Zwei-Faktor-Authentifizierung einrichten
+      intro: Bitte scannen Sie diesen QR-Code mit Ihrer Authentifizerungs-App auf Ihrem Smartphone. Sie können Google Authenticator, Microsoft Authenticator oder ähnliche Apps verwenden.
+      textManually: Statt den QR-Code zu scannen, können Sie auch den folgenden Code manuell in der Authentifizierungs-App eingeben.
+
+    verify:
+      title: Zwei-Faktor-Authentifizierung bestätigen
+      intro: Bitte geben Sie den Code ein, welcher in der Authentifizierungs-App sichtbar ist, im Feld unten ein, um die Einrichtung zu bestätigen.
+
+    backupCodes:
+      title: Wiederherstellungscodes
+      intro: Bitte speichern Sie dieses Codes an einem sicheren Ort. Wenn Sie den Zugriff auf Ihr Gerät verloren haben, können Sie sich mit diesen Wiederherstellungscodes erneut einloggen.
+      infoResetBackupCodes: Jeder Wiederherstellungscode kann nur einmal verwendet werden. Falls Sie einen Wiederherstellungscode verwendet haben, sollten Sie die Wiederherstellungscodes zurücksetzen.
+
+    message:
+      successfullyDisabled: Zwei-Faktor-Authentifizierung wurde für Ihren Account erfolgreich deaktiviert.
+
+    error:
+      verificationFailed: Die Verifizierung der Zwei-Faktor-Authentifizierung ist fehlgeschlagen. Bitte wiederholen Sie den Prozess.
+
 # Security
 security:
   login:
@@ -499,6 +534,10 @@ security:
 
   forgotPassword:
     title: Ich habe mein Passwort vergessen
+
+  twoFactor:
+    title: Zwei-Faktor-Authentisierung
+    intro: Bitte geben Sie den Code Ihrer Zwei-Faktor-Authentisierungs-App ein.
 
   noAccess:
     title: Kein Zugriff

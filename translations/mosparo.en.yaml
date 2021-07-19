@@ -486,6 +486,42 @@ account:
     message:
       successfullyChanged: Your password was successfully changed.
 
+  twoFactor:
+    title: Two factor authentication
+    description: Configure the two factor authentication for your account.
+
+    action:
+      configure: Configure
+      reconfigure: Reconfigure
+      resetBackupCodes: Reset backup codes
+      disable: Disable
+      continue: Continue
+      verify: Verify
+
+    status:
+      intro: Your account is protected with two factor authentication.
+
+    start:
+      title: Set up two factor authentication
+      intro: Please scan this QR code with your authentication app on your smartphone. You can use Google Authenticator, Microsoft Authenticator or similar apps.
+      textManually: Instead of scanning the QR code, you can enter the following code manually into the authentication app.
+
+    verify:
+      title: Verify two factor authentication
+      intro: Please enter the code which is visible in the authentication app in the field below and verify the set up.
+
+    backupCodes:
+      title: Backup codes
+      intro: Please save these codes in a safe place. If you've lost access to your device you can login with these backup codes.
+      infoResetBackupCodes: You can use every backup code only once. You should reset the backup codes, as soon as you had to use one.
+
+    message:
+      successfullyDisabled: Two factor authentication was successfully disabled for your account.
+
+    error:
+      verificationFailed: The verification of the two factor authentication failed. Please repeat the process.
+
+
 # Security
 security:
   login:
@@ -499,6 +535,10 @@ security:
 
   forgotPassword:
     title: I forgot my password
+
+  twoFactor:
+    title: Two factor authentication
+    intro: Please enter the code from your two factor authentication app.
 
   noAccess:
     title: No access

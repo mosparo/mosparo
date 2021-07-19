@@ -29,6 +29,27 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="empty">
+                        <div class="empty-img">
+                            <a href="{{ path('account_two_factor_status') }}">
+                                <img src="{{ asset('build/images/icons/two-factor.svg') }}" height="128" />
+                            </a>
+                        </div>
+                        <p class="empty-title">{{ 'account.twoFactor.title'|trans }}</p>
+                        <p class="empty-subtitle text-muted">
+                            {{ 'account.twoFactor.description'|trans }}
+                        </p>
+                        <div class="empty-action">
+                            <a href="{{ path('account_two_factor_status') }}" class="btn btn-primary">
+                                <i class="ti ti-2fa"></i>
+                                {{ 'account.twoFactor.action.configure'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
