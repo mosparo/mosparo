@@ -10,7 +10,7 @@ class WebsiteRuleTester extends AbstractRuleTester
     {
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
-            $preparedValue = $item['value'];
+            $preparedValue = $item->getValue();
             if (!preg_match('/((https?\:)?\/\/)/is', $preparedValue)) {
                 $preparedValue = '//' . $preparedValue;
             }
@@ -20,8 +20,8 @@ class WebsiteRuleTester extends AbstractRuleTester
 
             if (strpos($value, $preparedValue) !== false) {
                 $matchingItems[] = [
-                    'type' => $item['type'],
-                    'value' => $item['value'],
+                    'type' => $item->getType(),
+                    'value' => $item->getValue(),
                     'rating' => $this->calculateSpamRating($rule, $item),
                     'uuid' => $rule->getUuid()
                 ];

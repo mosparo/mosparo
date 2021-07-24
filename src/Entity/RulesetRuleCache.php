@@ -2,8 +2,10 @@
 
 namespace Mosparo\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Mosparo\Repository\RulesetRuleCacheRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use Mosparo\Rule\RuleEntityInterface;
 
 /**
@@ -45,9 +47,9 @@ class RulesetRuleCache implements ProjectRelatedEntityInterface, RuleEntityInter
     private $type;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\OneToMany(targetEntity=RulesetRuleItemCache::class, mappedBy="rulesetRuleCache", orphanRemoval=true)
      */
-    private $items = [];
+    private $items;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -59,6 +61,11 @@ class RulesetRuleCache implements ProjectRelatedEntityInterface, RuleEntityInter
      * @ORM\JoinColumn(nullable=false)
      */
     private $project;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,16 +132,45 @@ class RulesetRuleCache implements ProjectRelatedEntityInterface, RuleEntityInter
         return $this;
     }
 
-    public function getItems(): ?array
+    /**
+     * @return Collection|RuleItem[]
+     */
+    public function getItems(): Collection
     {
         return $this->items;
     }
 
-    public function setItems(?array $items): self
+    public function addItem(RulesetRuleItemCache $item): self
     {
-        $this->items = $items;
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setRulesetRuleCache($this);
+        }
 
         return $this;
+    }
+
+    public function removeItem(RulesetRuleItemCache $item): self
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getRulesetRuleCache() === $this) {
+                $item->setRulesetRuleCache(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function findItem($uuid): ?RulesetRuleItemCache
+    {
+        foreach ($this->items as $item) {
+            if ($item->getUuid() === $uuid) {
+                return $item;
+            }
+        }
+
+        return null;
     }
 
     public function getSpamRatingFactor(): ?float

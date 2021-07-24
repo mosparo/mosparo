@@ -4,14 +4,15 @@ namespace Mosparo\Rule\Tester;
 
 use Mosparo\Entity\RulesetRuleCache;
 use Mosparo\Rule\RuleEntityInterface;
+use Mosparo\Rule\RuleItemEntityInterface;
 
 abstract class AbstractRuleTester implements RuleTesterInterface
 {
-    protected function calculateSpamRating(RuleEntityInterface $rule, $item, $additionalFactor = 1): float
+    protected function calculateSpamRating(RuleEntityInterface $rule, RuleItemEntityInterface $item, $additionalFactor = 1): float
     {
         $rating = 1;
-        if (isset($item['rating']) && !empty($item['rating'])) {
-            $rating = floatval($item['rating']);
+        if (!empty($item->getSpamRatingFactor())) {
+            $rating = floatval($item->getSpamRatingFactor());
         }
 
         $ruleSpamRatingFactor = 1;

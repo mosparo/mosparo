@@ -41,6 +41,7 @@ class RuleFormType extends AbstractType
                 'allow_delete' => true,
                 'delete_empty' => true,
                 'entry_type' => $ruleType->getFormClass(),
+                'by_reference' => false,
                 'entry_options' => [
                     'rule_type' => $ruleType
                 ],

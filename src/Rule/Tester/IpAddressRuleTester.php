@@ -12,16 +12,16 @@ class IpAddressRuleTester extends AbstractRuleTester
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
             $result = false;
-            if ($item['type'] === 'ipAddress') {
-                $result = $this->validateIpAddress($value, $item['value']);
-            } else if ($item['type'] === 'subnet') {
-                $result = $this->validateSubnet($value, $item['value']);
+            if ($item->getType() === 'ipAddress') {
+                $result = $this->validateIpAddress($value, $item->getValue());
+            } else if ($item->getType() === 'subnet') {
+                $result = $this->validateSubnet($value, $item->getValue());
             }
 
             if ($result !== false) {
                 $matchingItems[] = [
-                    'type' => $item['type'],
-                    'value' => $item['value'],
+                    'type' => $item->getType(),
+                    'value' => $item->getValue(),
                     'rating' => $this->calculateSpamRating($rule, $item),
                     'uuid' => $rule->getUuid()
                 ];

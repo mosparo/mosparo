@@ -21,7 +21,7 @@ class ProviderFormType extends AbstractRuleTypeFormType
         $builder
             ->add('type', ChoiceType::class, ['choices' => $choices, 'attr' => ['readonly' => (count($choices) === 1), 'class' => 'form-select rule-item-type']])
             ->add('value', TextType::class, ['attr' => ['placeholder' => 'ASN', 'class' => 'rule-item-value']])
-            ->add('rating', NumberType::class, ['required' => false, 'attr' => ['placeholder' => 'Rating', 'class' => 'rule-item-rating']])
+            ->add('spamRatingFactor', NumberType::class, ['required' => false, 'attr' => ['placeholder' => 'Rating', 'class' => 'rule-item-rating']])
         ;
     }
 }

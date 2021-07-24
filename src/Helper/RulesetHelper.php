@@ -6,6 +6,7 @@ use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
+use Mosparo\Entity\RulesetRuleItemCache;
 use Mosparo\Exception;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Entity\RulesetCache;
@@ -131,8 +132,32 @@ class RulesetHelper
             $rulesetRuleCache->setName($rule['name']);
             $rulesetRuleCache->setDescription($rule['description']);
             $rulesetRuleCache->setType($rule['type']);
-            $rulesetRuleCache->setItems($rule['items']);
             $rulesetRuleCache->setSpamRatingFactor($rule['spamRatingFactor']);
+
+            $processedItemUuids = [];
+            foreach ($rule['items'] as $item) {
+                $processedItemUuids[] = $item['uuid'];
+
+                $rulesetRuleItemCache = $rulesetRuleCache->findItem($item['uuid']);
+                if ($rulesetRuleItemCache === null) {
+                    $rulesetRuleItemCache = new RulesetRuleItemCache();
+                    $rulesetRuleItemCache->setRulesetRuleCache($rulesetRuleCache);
+                    $rulesetRuleItemCache->setUuid($item['uuid']);
+
+                    $this->entityManager->persist($rulesetRuleItemCache);
+                }
+
+                $rulesetRuleItemCache->setType($item['type']);
+                $rulesetRuleItemCache->setValue($item['value']);
+                $rulesetRuleItemCache->setSpamRatingFactor((float) $item['rating']);
+            }
+
+            // Remove all rule items which are not in the data anymore
+            foreach ($rulesetRuleCache->getItems() as $item) {
+                if (!in_array($item->getUuid(), $processedItemUuids)) {
+                    $this->entityManager->remove($item);
+                }
+            }
         }
 
         // Remove all rules which are not in the data anymore

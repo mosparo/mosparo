@@ -11,12 +11,12 @@ class EmailRuleTester extends AbstractRuleTester
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
             $value = strtolower($value);
-            $itemValue = strtolower($item['value']);
+            $itemValue = strtolower($item->getValue());
 
             if (strpos($value, $itemValue) !== false) {
                 $matchingItems[] = [
-                    'type' => $item['type'],
-                    'value' => $item['value'],
+                    'type' => $item->getType(),
+                    'value' => $item->getValue(),
                     'rating' => $this->calculateSpamRating($rule, $item),
                     'uuid' => $rule->getUuid()
                 ];

@@ -11,13 +11,13 @@ class DomainRuleTester extends AbstractRuleTester
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
             $value = strtolower($value);
-            $itemValue = strtolower($item['value']);
+            $itemValue = strtolower($item->getValue());
 
             $pattern = '/(.|\/\/|@)' . str_replace('.', '\\.', trim($itemValue, './')) . '/is';
             if (preg_match($pattern, $value)) {
                 $matchingItems[] = [
-                    'type' => $item['type'],
-                    'value' => $item['value'],
+                    'type' => $item->getType(),
+                    'value' => $item->getValue(),
                     'rating' => $this->calculateSpamRating($rule, $item),
                     'uuid' => $rule->getUuid()
                 ];

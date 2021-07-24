@@ -2,6 +2,8 @@
 
 namespace Mosparo\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\RuleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Rule\RuleEntityInterface;
@@ -39,9 +41,9 @@ class Rule implements ProjectRelatedEntityInterface, RuleEntityInterface
     private $type;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\OneToMany(targetEntity=RuleItem::class, mappedBy="rule", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    private $items = [];
+    private $items;
 
     /**
      * @ORM\Column(type="integer")
@@ -62,6 +64,7 @@ class Rule implements ProjectRelatedEntityInterface, RuleEntityInterface
     public function __construct()
     {
         $this->uuid = uuid_create(UUID_TYPE_RANDOM);
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,14 +120,32 @@ class Rule implements ProjectRelatedEntityInterface, RuleEntityInterface
         return $this;
     }
 
-    public function getItems(): ?array
+    /**
+     * @return Collection|RuleItem[]
+     */
+    public function getItems(): Collection
     {
         return $this->items;
     }
 
-    public function setItems(?array $items): self
+    public function addItem(RuleItem $item): self
     {
-        $this->items = $items;
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setRule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(RuleItem $item): self
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getRule() === $this) {
+                $item->setRule(null);
+            }
+        }
 
         return $this;
     }

@@ -151,8 +151,8 @@
                                         <td>{{ rule_subtype(ruleType, item.type)|trans }}</td>
                                         <td><code>{{ item.value }}</code></td>
                                         <td>
-                                            {% if item.rating %}
-                                                {{ item.rating }}
+                                            {% if item.spamRatingFactor %}
+                                                {{ item.spamRatingFactor }}
                                             {% else %}
                                                 <em>1</em>
                                             {% endif %}

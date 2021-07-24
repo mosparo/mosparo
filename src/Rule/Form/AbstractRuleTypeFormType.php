@@ -2,10 +2,8 @@
 
 namespace Mosparo\Rule\Form;
 
+use Mosparo\Entity\RuleItem;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractRuleTypeFormType extends AbstractType
@@ -13,7 +11,8 @@ abstract class AbstractRuleTypeFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'rule_type' => null
+            'rule_type' => null,
+            'data_class' => RuleItem::class
         ]);
     }
 }

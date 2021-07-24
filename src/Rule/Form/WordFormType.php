@@ -20,7 +20,7 @@ class WordFormType extends AbstractRuleTypeFormType
         $builder
             ->add('type', ChoiceType::class, ['choices' => ChoicesUtil::buildChoices($ruleType->getSubtypes()), 'attr' => ['class' => 'form-select rule-item-type']])
             ->add('value', TextType::class, ['attr' => ['placeholder' => 'Word/Pattern', 'class' => 'rule-item-value']])
-            ->add('rating', NumberType::class, ['required' => false, 'attr' => ['placeholder' => 'Rating', 'class' => 'rule-item-rating']])
+            ->add('spamRatingFactor', NumberType::class, ['required' => false, 'attr' => ['placeholder' => 'Rating', 'class' => 'rule-item-rating']])
         ;
     }
 }
