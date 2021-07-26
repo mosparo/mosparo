@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Controller\Api\Verification;
+namespace Mosparo\Controller\Api\V1\Verification;
 
 use DateTime;
 use Mosparo\Helper\ProjectHelper;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/verification")
+ * @Route("/api/v1/verification")
  */
 class VerificationApiController extends AbstractController
 {

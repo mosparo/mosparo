@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Controller\Api\Frontend;
+namespace Mosparo\Controller\Api\V1\Frontend;
 
 use DateTime;
 use DateTimeInterface;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/api/frontend")
+ * @Route("/api/v1/frontend")
  */
 class FrontendApiController extends AbstractController
 {

@@ -25,7 +25,7 @@ function mosparo(containerId, url, publicKey, options)
     this.countdownSeconds = 0;
     this.isLocked = false;
 
-    this.inputFieldSelector = '[name]:not(.mosparo__ignored-field)';
+    this.inputFieldSelector = '[name]:not(.mosparo__ignored-field)'; // @todo add the ignored fields to the list of ignored fields
 
     this.messages = {
         label: 'I agree that my data will be checked for spam. I accept that my data will be stored for 14 days.',
@@ -153,7 +153,7 @@ function mosparo(containerId, url, publicKey, options)
             pageUrl: document.location.href
         };
 
-        this.send('/api/frontend/request-submit-token', data, function (response) {
+        this.send('/api/v1/frontend/request-submit-token', data, function (response) {
             if (response.submitToken) {
                 _this.checkboxElement.classList.remove('mosparo__loading');
                 _this.submitTokenElement.value = response.submitToken;
@@ -202,7 +202,7 @@ function mosparo(containerId, url, publicKey, options)
             submitToken: this.submitTokenElement.value
         };
 
-        this.send('/api/frontend/check-form-data', data, function (response) {
+        this.send('/api/v1/frontend/check-form-data', data, function (response) {
             _this.checkboxElement.classList.remove('mosparo__loading');
 
             if (response.valid) {
