@@ -2,18 +2,11 @@
 
 namespace Mosparo\Controller\ProjectRelated;
 
-use Mosparo\Entity\Project;
-use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Exception;
-use Mosparo\Form\RuleAddMultipleItemsType;
-use Mosparo\Form\RuleFormType;
 use Mosparo\Form\RulesetFormType;
 use Mosparo\Helper\RulesetHelper;
-use Mosparo\Repository\RuleRepository;
-use Mosparo\Rule\RuleTypeManager;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
-use Omines\DataTablesBundle\Column\BoolColumn;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
 use Omines\DataTablesBundle\DataTableFactory;
