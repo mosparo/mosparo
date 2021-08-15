@@ -27,9 +27,9 @@ class CleanupHelper
 
         // If the force parameter is not set, we execute the cleanup only once every 24 hours
         if ($lastCleanup->get() !== null && !$force) {
-            $delta = (new DateTime())->diff($lastCleanup->get());
+            $dayAgo = (new DateTime())->sub(new DateInterval('P1D'));
 
-            if ($delta->h < 24) {
+            if ($lastCleanup->get() > $dayAgo) {
                 return;
             }
         }
