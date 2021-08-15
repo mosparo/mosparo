@@ -7,7 +7,12 @@ function mosparo(containerId, url, publicKey, options)
     this.url = url;
     this.publicKey = publicKey;
     this.defaultOptions = {
+        name: '',
+        allowBrowserValidation: true,
+        inputFieldSelector: '[name]:not(.mosparo__ignored-field)',
 
+        // Callbacks
+        onCheckForm: null
     };
     this.options = {...this.defaultOptions, ...options};
 
@@ -24,8 +29,6 @@ function mosparo(containerId, url, publicKey, options)
     this.countdownInterval = null;
     this.countdownSeconds = 0;
     this.isLocked = false;
-
-    this.inputFieldSelector = '[name]:not(.mosparo__ignored-field)'; // @todo add the ignored fields to the list of ignored fields
 
     this.messages = {
         label: 'I agree that my data will be checked for spam. I accept that my data will be stored for 14 days.',
@@ -61,6 +64,10 @@ function mosparo(containerId, url, publicKey, options)
         }
 
         this.formElement = currentElement;
+        if (this.options.allowBrowserValidation && this.formElement.hasAttribute('novalidate')) {
+            this.formElement.removeAttribute('novalidate');
+            console.log('removed');
+        }
 
         // Create the row
         let rowElement = document.createElement('div');
@@ -73,10 +80,13 @@ function mosparo(containerId, url, publicKey, options)
         rowElement.appendChild(checkboxColumnElement);
 
         // Create the real checkbox element
+        let fieldId = '_mosparo_checkboxField_' + this.id;
         this.checkboxFieldElement = document.createElement('input');
         this.checkboxFieldElement.setAttribute('type', 'checkbox');
         this.checkboxFieldElement.setAttribute('required', 'required');
-        this.checkboxFieldElement.setAttribute('id', '__mosparo__checkbox_field_' + this.id);
+        this.checkboxFieldElement.setAttribute('value', '1');
+        this.checkboxFieldElement.setAttribute('id', fieldId);
+        this.checkboxFieldElement.setAttribute('name', (this.options.name != '') ? this.options.name : fieldId);
         checkboxColumnElement.appendChild(this.checkboxFieldElement);
 
         // Create the visual checkbox element
@@ -90,7 +100,7 @@ function mosparo(containerId, url, publicKey, options)
 
         this.labelElement = document.createElement('label');
         this.labelElement.classList.add('mosparo__label');
-        this.labelElement.setAttribute('for', '__mosparo__checkbox_field_' + this.id);
+        this.labelElement.setAttribute('for', fieldId);
         contentColumnElement.appendChild(this.labelElement);
 
         // Create the error message
@@ -118,7 +128,7 @@ function mosparo(containerId, url, publicKey, options)
         this.checkboxElement.appendChild(this.validationTokenElement);
 
         // RuleSet up the event listener
-        this.formElement.querySelectorAll(this.inputFieldSelector).forEach(function (el, index) {
+        this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el, index) {
             if (el === _this.validationTokenElement) {
                 return;
             }
@@ -126,6 +136,11 @@ function mosparo(containerId, url, publicKey, options)
             el.addEventListener('change', function () {
                 _this.resetState();
             });
+        });
+
+        this.formElement.addEventListener('reset', function() {
+            _this.resetState();
+            _this.requestSubmitToken();
         });
 
         this.checkboxFieldElement.addEventListener('change', function () {
@@ -206,25 +221,31 @@ function mosparo(containerId, url, publicKey, options)
             _this.checkboxElement.classList.remove('mosparo__loading');
 
             if (response.valid) {
-                _this.checkboxFieldElement.setAttribute('checked', 'checked');
+                _this.checkboxFieldElement.checked = true;
                 _this.checkboxElement.classList.add('mosparo__checked');
                 _this.validationTokenElement.value = response.validationToken;
 
                 _this.updateAccessibleStatus(_this.messages.accessibilityDataValid);
             } else if (response.security) {
+                _this.checkboxFieldElement.checked = false;
                 _this.processSecurityResponse(response);
 
                 if (response.type === 'delay') {
                     setTimeout(function () { _this.requestSubmitToken() }, (response.forSeconds + 1) * 1000);
                 }
             } else {
+                _this.checkboxFieldElement.checked = false;
                 _this.checkboxElement.classList.add('mosparo__invalid');
                 _this.validationTokenElement.value = '';
 
                 _this.showError(_this.messages.errorSpamDetected);
             }
 
+            if (_this.options.onCheckForm !== null) {
+                _this.options.onCheckForm();
+            }
         }, function () {
+            _this.checkboxFieldElement.checked = false;
             _this.checkboxElement.classList.remove('mosparo__loading');
             _this.checkboxElement.classList.add('mosparo__invalid');
 
@@ -235,12 +256,15 @@ function mosparo(containerId, url, publicKey, options)
     this.getFormData = function () {
         let fields = [];
         let ignoredFields = [];
-        this.formElement.querySelectorAll(this.inputFieldSelector).forEach(function (el, index) {
+        let processedFields = [];
+        this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el, index) {
             let name = el.getAttribute('name');
-            if (name === '_mosparo_submitToken' || name === '_mosparo_validationToken') {
+            // Ignore mosparo fields
+            if (name.indexOf('_mosparo_') === 0) {
                 return;
             }
 
+            processedFields.push(name);
             let fieldPath = el.tagName.toLowerCase();
 
             if (fieldPath === 'input' || fieldPath === 'button') {
@@ -250,8 +274,11 @@ function mosparo(containerId, url, publicKey, options)
                     return;
                 }
 
-                if (type === 'password' || type === 'file' || type === 'hidden') {
-                    ignoredFields.push(name);
+                if (type === 'password' || type === 'file' || type === 'hidden' || type === 'checkbox' || type === 'radio') {
+                    if (ignoredFields.indexOf(name) === -1) {
+                        ignoredFields.push(name);
+                    }
+
                     return;
                 }
 
@@ -265,6 +292,16 @@ function mosparo(containerId, url, publicKey, options)
                 value: el.value,
                 fieldPath: fieldPath
             });
+        });
+
+        // Add the ignored fields to the list of the ignored fields
+        this.formElement.querySelectorAll('[name]').forEach(function (el, index) {
+            let name = el.getAttribute('name');
+
+            // Only add non-mosparo or not processed fields
+            if (name.indexOf('_mosparo_') !== 0 && processedFields.indexOf(name) === -1 && ignoredFields.indexOf(name) === -1) {
+                ignoredFields.push(name);
+            }
         });
 
         return { fields: fields, ignoredFields: ignoredFields };
