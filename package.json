@@ -21,7 +21,7 @@
     },
     "dependencies": {
         "@fontsource/inter": "^4.4.5",
-        "@tabler/core": "*",
+        "@tabler/core": "^1.0.0-beta",
         "@tabler/icons": "^1.41.1",
         "datatables": "^1.10.18",
         "datatables.net-responsive": "^2.2.9",
