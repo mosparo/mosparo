@@ -368,7 +368,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 $session->getFlashBag()->add(
                     'warning',
                     $this->translator->trans(
-                        'settings.general.apiKey.reissueApiKeys.message.successfullyReissued',
+                        'settings.general.apiKeys.reissueApiKeys.message.successfullyReissued',
                         [],
                         'mosparo'
                     )
