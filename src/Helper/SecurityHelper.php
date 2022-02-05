@@ -26,11 +26,11 @@ class SecurityHelper
     public function checkIpAddress($ipAddress)
     {
         $project = $this->projectHelper->getActiveProject();
-        $ipWhitelist = $project->getConfigValue('ipWhitelist');
+        $ipAllowList = $project->getConfigValue('ipAllowList');
         $delayActive = $project->getConfigValue('delayActive');
         $lockoutActive = $project->getConfigValue('lockoutActive');
 
-        if ($this->isIpOnWhitelist($ipAddress, $ipWhitelist)) {
+        if ($this->isIpOnAllowList($ipAddress, $ipAllowList)) {
             return false;
         }
 
@@ -53,9 +53,9 @@ class SecurityHelper
         return false;
     }
 
-    protected function isIpOnWhitelist($ipAddress, $ipWhitelist)
+    protected function isIpOnAllowList($ipAddress, $ipAllowList): bool
     {
-        $items = explode(PHP_EOL, $ipWhitelist);
+        $items = explode(PHP_EOL, $ipAllowList);
         foreach ($items as $item) {
             if (strpos($item, '/') !== false) {
                 $address = Factory::addressFromString($ipAddress);

@@ -75,7 +75,7 @@ class Project
         'lockoutTime' => 300,
         'lockoutMultiplicator' => 1.2,
 
-        'ipWhitelist' => '',
+        'ipAllowList' => '',
     ];
 
     /**
