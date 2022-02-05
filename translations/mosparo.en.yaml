@@ -636,3 +636,74 @@ datatable:
     aria:
       sortAscending: ": activate to sort column ascending"
       sortDescending: ": activate to sort column ascending"
+
+# Setup
+setup:
+  buttons:
+    continue: Continue
+    install: Install
+    recheck: Recheck
+    goToLogin: Go to login
+
+  start:
+    title: Setup
+    introduction: This setup will guide you throught the mosparo setup process.
+
+  prerequisites:
+    title: Prerequisites
+    introduction: mosparo needs some prerequisites to be able to run correctly. Before we can set up mosparo, these prerequisites have to be okay.
+
+    meetPrerequisites: All prerequisites are okay. You can proceed with the setup.
+    missingPrerequisites: Some prerequisites are missing. Please check the summary below.
+
+    types:
+      general: General
+      phpExtensions: PHP extensions
+
+    subtypes:
+      minPhpVersion: Minimum PHP version
+
+    results:
+      available: Available
+      missing: Missing
+      okay: Okay
+      notOkay: Not okay
+
+  database:
+    title: Database
+    introduction: Please enter the details of your MySQL database.
+    connectionDataInvalid: It was not possible to connect to the database. Please check your settings below and try again.
+
+    form:
+      host: Host
+      port: Port
+      database: Database
+      user: User
+      password: Password
+
+  mail:
+    title: Mail
+    introduction: If you want to send outgoing emails with an SMTP server you have the option to configure the connection details here.
+    infoDefault: If you don't configure SMTP here mosparo will use sendmail to submit emails.
+    infoOtherOptions: There are some other options to send your emails. Please refer to the documentation to see how you can configure them. %linkStart%Go to the documentation%linkEnd%
+
+    form:
+      useSmtp: Use SMTP to send emails
+      host: Host
+      port: Port
+      user: User
+      password: Password
+
+  other:
+    title: Other informations
+    introduction: We have some other values we need. Please fill out the fields below.
+
+    form:
+      name: Name of mosparo
+      subtitleCreateYourUser: Create your user
+      emailAddress: Email address
+      password: Password
+
+  install:
+    title: Installation completed
+    description: The installation was successfully completed. You can now login with your user.

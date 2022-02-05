@@ -1,0 +1,28 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'setup.other.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    {{ form_start(form) }}
+        <h2 class="card-title text-center mb-4">{{ 'setup.other.title'|trans }}</h2>
+
+        <p>
+            {{ 'setup.other.introduction'|trans }}
+        </p>
+
+        {{ form_row(form.name) }}
+
+        <h3 class="mt-4">{{ 'setup.other.form.subtitleCreateYourUser'|trans }}</h3>
+        {{ form_row(form.emailAddress) }}
+        {{ form_widget(form.password) }}
+
+        <div class="form-footer">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="ti ti-settings"></i>
+                {{ 'setup.buttons.install'|trans }}
+            </button>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

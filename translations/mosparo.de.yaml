@@ -635,3 +635,74 @@ datatable:
     aria:
       sortAscending: ": aktivieren, um Spalte aufsteigend zu sortieren"
       sortDescending: ": aktivieren, um Spalte absteigend zu sortieren"
+
+# Setup
+setup:
+  buttons:
+    continue: Weiter
+    install: Installieren
+    recheck: Erneut Überprüfen
+    goToLogin: Weiter zum Login
+
+  start:
+    title: Einrichtung
+    introduction: Dieser Assistent wird Sie durch die Einrichtung von mosparo leiten.
+
+  prerequisites:
+    title: Voraussetzungen
+    introduction: mosparo benötigt einige Voraussetzungen, um korrekt funktionieren zu können. Bevor wir mosparo einrichten können, müssen diese Voraussetzungen erfüllt sein.
+
+    meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit der Einrichtung fortfahren.
+    missingPrerequisites: Einige Voraussetzungen fehlen. Bitte prüfen Sie die Zusammenfassung unten.
+
+    types:
+      general: Allgemein
+      phpExtensions: PHP-Erweiterungen
+
+    subtypes:
+      minPhpVersion: Mindest-PHP-Version
+
+    results:
+      available: Verfügbar
+      missing: Fehlt
+      okay: In Ordnung
+      notOkay: Nicht in Ordnung
+
+  database:
+    title: Datenbank
+    introduction: Bitte geben Sie die Verbindungsdaten zu Ihrer MySQL-Datebank ein.
+    connectionDataInvalid: Es war nicht möglich, eine Verbindung mit der Datenbank herzustellen. Bitte prüfen Sie Ihre Einstellungen und versuchen Sie es erneut.
+
+    form:
+      host: Host
+      port: Port
+      database: Datenbank
+      user: Benutzer
+      password: Passwort
+
+  mail:
+    title: E-Mail
+    introduction: Wenn Sie möchten, dass E-Mails über einen SMTP-Server versendet werden, können Sie diese Verbindung hier konfigurieren.
+    infoDefault: Wenn Sie keinen SMTP-Server konfigurieren, wird mosparo alle E-Mails mit Sendmail versenden.
+    infoOtherOptions: Es gibt weitere Optionen, wie die E-Mails von mosparo versendet werden. Bitte konsultieren Sie dazu die Dokumentation um zu sehen, wie Sie diese konfigurieren können. %linkStart%Gehe zur Dokumentation%linkEnd%
+
+    form:
+      useSmtp: Verwenden einen SMTP-Server um E-Mails zu versenden
+      host: Host
+      port: Port
+      user: Benutzer
+      password: Passwort
+
+  other:
+    title: Weitere Informationen
+    introduction: Wir brauchen noch ein paar weitere Daten. Bitte füllen Sie die Felder unten aus
+
+    form:
+      name: Name von Ihrer mosparo-Installation
+      subtitleCreateYourUser: Ihren Benutzer erstellen
+      emailAddress: E-Mail-Adresse
+      password: Passwort
+
+  install:
+    title: Installation abgeschlossen
+    description: Die Installation wurde erfolgreich abgeschlossen. Sie können sich nun mit Ihrem Benutzer einloggen.

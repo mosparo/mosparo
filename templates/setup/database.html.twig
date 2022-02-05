@@ -1,0 +1,34 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'setup.database.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    {{ form_start(form) }}
+        <h2 class="card-title text-center mb-4">{{ 'setup.database.title'|trans }}</h2>
+
+        <p>
+            {{ 'setup.database.introduction'|trans }}
+        </p>
+
+        {% if submitted and not connected %}
+            <div class="alert alert-danger">
+                {{ 'setup.database.connectionDataInvalid'|trans }}
+            </div>
+        {% endif %}
+
+        {{ form_row(form.host) }}
+        {{ form_row(form.port) }}
+        {{ form_row(form.database) }}
+        {{ form_row(form.user) }}
+        {{ form_row(form.password) }}
+
+        <div class="form-footer">
+            <button type="submit" class="btn btn-primary w-100">
+                {{ 'setup.buttons.continue'|trans }}
+                <i class="ti ti-icon-right ti-chevron-right"></i>
+            </button>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

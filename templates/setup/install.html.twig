@@ -1,0 +1,20 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'setup.install.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    <h2 class="card-title text-center mb-4">{{ 'setup.install.title'|trans }}</h2>
+
+    <p>
+        {{ 'setup.install.description'|trans }}
+    </p>
+
+    <div class="form-footer">
+        <a href="{{ path('security_login') }}" class="btn btn-primary w-100">
+            {{ 'setup.buttons.goToLogin'|trans }}
+            <i class="ti ti-icon-right ti-chevron-right"></i>
+        </a>
+    </div>
+{% endblock %}

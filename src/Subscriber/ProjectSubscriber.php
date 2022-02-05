@@ -9,6 +9,7 @@ use Mosparo\Entity\Rule;
 use Mosparo\Helper\ProjectHelper;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -21,6 +22,8 @@ use Twig\Environment;
 
 class ProjectSubscriber implements EventSubscriberInterface
 {
+    protected $container;
+
     protected $security;
 
     protected $router;
@@ -31,8 +34,9 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     protected $twig;
 
-    public function __construct(Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig)
+    public function __construct(ContainerInterface $container, Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig)
     {
+        $this->container = $container;
         $this->security = $security;
         $this->router = $router;
         $this->entityManager = $entityManager;
@@ -56,6 +60,11 @@ class ProjectSubscriber implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
+            return;
+        }
+
+        $isInstalled = ($this->container->hasParameter('MOSPARO_INSTALLED')) ? $this->container->getParameter('MOSPARO_INSTALLED') : false;
+        if (!$isInstalled) {
             return;
         }
 

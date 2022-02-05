@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    MOSPARO_INSTALLED: '%env(bool:MOSPARO_INSTALLED)%'
 
 services:
     # default configuration for services in *this* file
@@ -76,3 +77,8 @@ services:
         class: Mosparo\Helper\GeoIp2Helper
         arguments:
             $downloadDirectory: '%kernel.project_dir%/var/data/geoip2'
+
+    Mosparo\Helper\SetupHelper:
+        class: Mosparo\Helper\SetupHelper
+        arguments:
+            $kernelRootDirectory: '%kernel.project_dir%'
