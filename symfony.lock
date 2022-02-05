@@ -728,6 +728,9 @@
             "config/packages/reset_password.yaml"
         ]
     },
+    "thecodingmachine/safe": {
+        "version": "v1.3.3"
+    },
     "theseer/tokenizer": {
         "version": "1.2.0"
     },

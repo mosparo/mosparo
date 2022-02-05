@@ -11,7 +11,7 @@
         "stimulus": "^2.0.0",
         "webpack-notifier": "^1.6.0"
     },
-    "license": "UNLICENSED",
+    "license": "MIT",
     "private": true,
     "scripts": {
         "dev-server": "encore dev-server",
@@ -23,7 +23,7 @@
         "@fontsource/inter": "^4.4.5",
         "@tabler/core": "^1.0.0-beta",
         "@tabler/icons": "^1.41.1",
-        "datatables": "^1.10.18",
+        "datatables.net": "^1.11.3",
         "datatables.net-responsive": "^2.2.9",
         "datatables.net-responsive-bs5": "^2.2.9"
     }
