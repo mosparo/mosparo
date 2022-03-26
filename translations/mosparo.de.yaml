@@ -268,6 +268,10 @@ submission:
       isValid: Ist gültig
       verifiedAt: Überprüft am
 
+      minimumTime:
+        requiredTime: Benötigte Zeit
+        timeDifferenceInSeconds: '%seconds% Sekunden'
+
     source:
       title: Quelle
       pageTitle: Seiten-Titel
@@ -281,9 +285,12 @@ submission:
     data:
       value: Wert
       rating: Bewertung
+      points: '%totalPoints% Punkte'
+      fieldMustBeEmpty: Feld muss leer sein
 
       formData:
         title: Formulardaten
+        honeypot: Honeypot
 
       client:
         title: Benutzer
@@ -354,6 +361,14 @@ settings:
   security:
     title: Sicherheit
 
+    minimumTime:
+      title: Mindestzeit
+      intro: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung der Einsendung (nach dem das Formular abgesendet wurde). Wenn die Zeit kleiner ist also die definierte Zeit unten, wird die Einsendung abgewiesen. Wenn Sie ein kurzes Formular haben, sollte diese Funktion deaktiviert sein oder Sie sollten eine sehr kurze Zeit verwenden.
+
+    honeypot:
+      title: Honeypot-Feld
+      intro: Ein Honeypot-Feld ist ein verstecktes Feld innerhalb des Formulars. Menschen sehen das Feld nicht - aber Spam-Bots werden möglicherweise Spam-Inhalt in das Feld einfügen. Wenn das passiert, wissen wir, dass es kein Mensch gewesen sein kann und blockieren die Einsendung.
+
     requestDelaying:
       title: Anfrageverzögerung
       intro: Um es einem Bot schwieriger zu machen, kann mosparo die Erstellung von Absende-Tokens verzögern. Ohne Absende-Token kann ein Formular nicht abgesendet werden. Der Benutzer wird sehen, wie lange der Benutzer warten muss, bevor das Formular absendbar ist.
@@ -367,6 +382,12 @@ settings:
       title: Liste der erlaubten IP-Adressen
 
     form:
+      minimumTimeActive: Mindestzeit aktiv
+      minimumTimeSeconds: Mindestzeit
+      minimumTimeSecondsHelp: In Sekunden
+      honeypotFieldActive: Honeypot-Feld aktiv
+      honeypotFieldName: Feldname
+      honeypotFieldNameHelp: Es muss ein Feldname sein, welchen Sie nicht bereits in Ihrem Formular verwenden und welcher ein normales Feld sein könnte, wie zum Beispiel "url" oder "adress-zeile-2". Bitte verwenden Sie nur Buchstaben, Zahlen und den Bindestrich (-). Wenn Sie dieses Feld leer lassen wird die Funktion nicht verwendet.
       delayActive: Anfrageverzögerung aktiv
       delayNumberOfAllowedRequests: Anzahl erlaubter Anfragen
       delayNumberOfAllowedRequestsHelp:  Die Anzahl der erlaubten Anfragen, bevor die Anfrageverzögerung aktiv wird.
@@ -390,6 +411,9 @@ settings:
 
     message:
       successfullySaved: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
+
+    validation:
+      honeypotFieldNameInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich (-).
 
   design:
     title: Darstellung

@@ -11,6 +11,50 @@
             <div class="col-12">
                 <div class="card mb-3">
                     <div class="card-header">
+                        <h3 class="card-title">{{ 'settings.security.minimumTime.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            {{ 'settings.security.minimumTime.intro'|trans }}
+                        </p>
+
+                        <div class="row">
+                            <div class="col mb-3">
+                                {{ form_row(form.minimumTimeActive) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form_row(form.minimumTimeSeconds) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'settings.security.honeypot.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            {{ 'settings.security.honeypot.intro'|trans }}
+                        </p>
+
+                        <div class="row">
+                            <div class="col mb-3">
+                                {{ form_row(form.honeypotFieldActive) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form_row(form.honeypotFieldName) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
                         <h3 class="card-title">{{ 'settings.security.requestDelaying.title'|trans }}</h3>
                     </div>
                     <div class="card-body">

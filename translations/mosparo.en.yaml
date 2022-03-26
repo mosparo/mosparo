@@ -268,6 +268,10 @@ submission:
       isValid: Is valid
       verifiedAt: Verified at
 
+      minimumTime:
+        requiredTime: Required time
+        timeDifferenceInSeconds: '%seconds% seconds'
+
     source:
       title: Source
       pageTitle: Page title
@@ -281,9 +285,12 @@ submission:
     data:
       value: Value
       rating: Rating
+      points: '%totalPoints% points'
+      fieldMustBeEmpty: Field must be empty
 
       formData:
         title: Form data
+        honeypot: Honeypot
 
       client:
         title: Client
@@ -291,6 +298,11 @@ submission:
         asNumber: AS number
         asOrganization: AS organization
         country: Country
+
+    generalVerifications:
+      minimumTime:
+        title: Submission too fast
+        text: The form was submitted too fast. The submitter required only %seconds% seconds, which is less than the minimum time of %minimumTimeSeconds% seconds.
 
 # Settings
 settings:
@@ -354,6 +366,14 @@ settings:
   security:
     title: Security
 
+    minimumTime:
+      title: Minimum Time
+      intro: The minimum time functionality will measure the time between the initialization of the mosparo checkbox (when the page loads) and the validation of the submission (after the form was submitted). If this time is lower than the entered number below, the validation is invalid. If you have a short form, this check should be disabled or you should us a very low number.
+
+    honeypot:
+      title: Honeypot
+      intro: A honeypot field is a hidden field in the form. Humans will not be able to see it - but spam bots will probably fill some content in this field. If that happens, we know that it was not a human so we can block the submission.
+
     requestDelaying:
       title: Request delaying
       intro: To make it harder for bots, mosparo can delay the creation of submit tokens. Without a submit token, a form cannot be submitted. The user will see, how long he has to wait, until the form is submittable.
@@ -367,6 +387,12 @@ settings:
       title: IP allow list
 
     form:
+      minimumTimeActive: Minimum time active
+      minimumTimeSeconds: Minimum time
+      minimumTimeSecondsHelp: In seconds
+      honeypotFieldActive: Honeypot field active
+      honeypotFieldName: Field name
+      honeypotFieldNameHelp: It has to be a field name which is not already in your form and which is a normal field name like "url" or "address-line-2". Please use only letters, numbers and the dash sign (-). If empty, no honeypot field will be added to the form.
       delayActive: Request delay active
       delayNumberOfAllowedRequests: Number of allowed requests
       delayNumberOfAllowedRequestsHelp: The number of allowed requests before the delay come into place.
@@ -390,6 +416,9 @@ settings:
 
     message:
       successfullySaved: The security settings were saved successfully.
+
+    validation:
+      honeypotFieldNameInvalidCharacter: Please use only letters, numbers and the dash sign (-).
 
   design:
     title: Design

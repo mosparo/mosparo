@@ -11,3 +11,6 @@ error:
   spamDetected: Your data got catched by our spam protection.
   lockedOut: You are locked out. Please try again after %datetime%
   delay: Your request was delayed. Please wait for %seconds% seconds.
+
+hp:
+  fieldTitle: Leave this field blank

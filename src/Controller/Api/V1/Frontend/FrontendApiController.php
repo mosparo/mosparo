@@ -98,10 +98,15 @@ class FrontendApiController extends AbstractController
         $entityManager->persist($submitToken);
         $entityManager->flush();
 
+        $args = [];
+        if ($submitToken->getProject()->getConfigValue('honeypotFieldActive')) {
+            $args['honeypotFieldName'] = $submitToken->getProject()->getConfigValue('honeypotFieldName');
+        }
+
         return new JsonResponse([
             'submitToken' => $submitToken->getToken(),
             'messages' => $this->getTranslations($request),
-        ]);
+        ] + $args);
     }
 
     /**
@@ -181,17 +186,51 @@ class FrontendApiController extends AbstractController
         $submission = new Submission();
         $submission->setSubmitToken($submitToken);
         $submission->setSubmittedAt(new DateTime());
+        $submission->setIgnoredFields($formData['ignoredFields']);
+
+        // Check for the honeypot field
+        if ($submitToken->getProject()->getConfigValue('honeypotFieldActive')) {
+            $hpFieldName = $activeProject->getConfigValue('honeypotFieldName');
+            $hpField = false;
+
+            foreach ($formData['fields'] as $key => $field) {
+                if ($field['name'] === $hpFieldName) {
+                    $hpField = $field;
+                    $formData['fields'][$key]['type'] = 'honeypot';
+                    break;
+                }
+            }
+
+            if ($hpField['value'] != '') {
+                $submission->setSpamRating($activeProject->getSpamScore() + 1);
+                $submission->setSpamDetectionRating($activeProject->getSpamScore());
+                $submission->setSpam(true);
+
+                $matchedRuleItems = [
+                    'formData.' . $hpField['fieldPath'] => [[
+                        'type' => 'honeypot',
+                        'value' => '',
+                        'rating' => $submission->getSpamRating(),
+                        'uuid' => ''
+                    ]
+                ]];
+                $submission->setMatchedRuleItems($matchedRuleItems);
+            }
+        }
+
+        // Set the submission data
         $submission->setData([
             'formData' => $formData['fields'],
             'client' => $clientData
         ]);
-        $submission->setIgnoredFields($formData['ignoredFields']);
 
         // Create signature
         $submission->setSignature($this->createSignature($submitToken, $formData['fields'], $activeProject));
 
         // Check the data
-        $this->ruleTesterHelper->checkRequest($submission);
+        if (!$submission->isSpam()) {
+            $this->ruleTesterHelper->checkRequest($submission);
+        }
 
         $entityManager->persist($submission);
         $entityManager->flush();
@@ -260,6 +299,8 @@ class FrontendApiController extends AbstractController
             'errorSpamDetected' => $this->translator->trans('error.spamDetected', [], 'frontend'),
             'errorLockedOut' => $this->translator->trans('error.lockedOut', [], 'frontend'),
             'errorDelay' => $this->translator->trans('error.delay', [], 'frontend'),
+
+            'hpLeaveEmpty' => $this->translator->trans('hp.fieldTitle', [], 'frontend'),
         ];
     }
 }

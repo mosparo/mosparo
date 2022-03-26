@@ -63,6 +63,12 @@ class Project
      * @var array
      */
     private $defaultConfigValues = [
+        'minimumTimeActive' => false,
+        'minimumTimeSeconds' => 10,
+
+        'honeypotFieldActive' => false,
+        'honeypotFieldName' => '',
+
         'delayActive' => false,
         'delayNumberOfRequests' => 30,
         'delayDetectionTimeFrame' => 30,
@@ -205,7 +211,7 @@ class Project
 
     public function setConfigValue($key, $value): self
     {
-        if ($value == $this->defaultConfigValues[$key]) {
+        if (isset($this->defaultConfigValues[$key]) && $value == $this->defaultConfigValues[$key]) {
             if (isset($this->configValues[$key])) {
                 unset($this->configValues[$key]);
             }

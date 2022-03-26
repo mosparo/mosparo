@@ -4,6 +4,7 @@ namespace Mosparo\Entity;
 
 use Mosparo\Repository\SubmissionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Verification\GeneralVerification;
 
 /**
  * @ORM\Entity(repositoryClass=SubmissionRepository::class)
@@ -56,6 +57,11 @@ class Submission implements ProjectRelatedEntityInterface
      * @ORM\Column(type="json")
      */
     private $ignoredFields = [];
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $generalVerifications = [];
 
     /**
      * @ORM\Column(type="float")
@@ -192,6 +198,52 @@ class Submission implements ProjectRelatedEntityInterface
         $this->ignoredFields = $ignoredFields;
 
         return $this;
+    }
+
+    public function getGeneralVerifications(): array
+    {
+        $gvs = [];
+        foreach ($this->generalVerifications as $key => $data) {
+            $gvs[] = $this->getGeneralVerification($key);
+        }
+
+        return $gvs;
+    }
+
+    public function setGeneralVerifications(array $generalVerifications): self
+    {
+        foreach ($generalVerifications as $generalVerification) {
+            $this->addGeneralVerification($generalVerification);
+        }
+
+        return $this;
+    }
+
+    public function addGeneralVerification(GeneralVerification $generalVerificiation): self
+    {
+        $this->generalVerifications[$generalVerificiation->getKey()] = [
+            'valid' => $generalVerificiation->isValid(),
+            'data' => $generalVerificiation->getData()
+        ];
+
+        return $this;
+    }
+
+    public function getGeneralVerification($key): ?GeneralVerification
+    {
+        if (!isset($this->generalVerifications[$key])) {
+            return null;
+        }
+
+        $data = $this->generalVerifications[$key];
+
+        $gv = new GeneralVerification(
+            $key,
+            $data['valid'],
+            $data['data']
+        );
+
+        return $gv;
     }
 
     public function getSpamRating(): ?float

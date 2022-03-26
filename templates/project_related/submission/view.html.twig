@@ -81,6 +81,20 @@
                                 {% endif %}
                             </div>
                         </div>
+                        {% if minimumTimeActive and minimumTimeGv %}
+                            <div class="mt-3">
+                                <h4 class="mb-0">{{ 'submission.view.verification.minimumTime.requiredTime'|trans }}</h4>
+                                <div>
+                                    {% if minimumTimeGv.valid %}
+                                        <span class="text-success">
+                                    {% else %}
+                                        <span class="text-danger">
+                                    {% endif %}
+                                        {{ 'submission.view.verification.minimumTime.timeDifferenceInSeconds'|trans({'%seconds%': minimumTimeGv.data.seconds}) }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -139,6 +153,24 @@
             </div>
 
             <div class="col-xs-12 col-md-8">
+                {% for generalVerification in generalVerifications %}
+                    {% if not generalVerification.valid %}
+                        <div class="alert alert-danger" role="alert">
+                            {% if generalVerification.key == 'minimumTime' %}
+                                <div class="d-flex">
+                                    <div>
+                                        <i class="ti ti-alarm icon alert-icon"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="alert-title">{{ 'submission.view.generalVerifications.minimumTime.title'|trans }}</h4>
+                                        <div class="text-muted">{{ 'submission.view.generalVerifications.minimumTime.text'|trans({'%seconds%': generalVerification.data.seconds, '%minimumTimeSeconds%': generalVerification.data.minimumTimeSeconds}) }}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
                 {% for groupKey, groupData in submission.data %}
                     <div class="card mb-3">
                         <div class="card-header">
@@ -172,6 +204,10 @@
                                                 {% endif %}
                                             {% else %}
                                                 {{ field.name }}
+
+                                                {% if field.type is defined and field.type == 'honeypot' %}
+                                                    <span class="badge bg-teal-lt">{{ 'submission.view.data.formData.honeypot'|trans }}</span>
+                                                {% endif %}
                                             {% endif %}
                                         </h4>
                                         {% if field.value|trim != '' %}
@@ -194,46 +230,52 @@
                                                 {% else %}
                                                     <span class="text-muted">
                                                 {% endif %}
-                                                        {{ '%totalPoints% points'|trans({ '%totalPoints%': totalPoints }) }}
+                                                    {{ 'submission.view.data.points'|trans({ '%totalPoints%': totalPoints }) }}
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-12">
+                                            <div class="col-12 text-end">
                                                 {% if path in submission.matchedRuleItems|keys %}
-                                                    <table class="table table-bordered table-sm table-vcenter mt-2 mb-0">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>{{ 'submission.view.data.value'|trans }}</th>
-                                                            <th width="15%" class="text-center">{{ 'submission.view.data.rating'|trans }}</th>
-                                                            <th width="1"></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for match in submission.matchedRuleItems[path] %}
-                                                            <tr>
-                                                                <td>{{ match.value }}</td>
-                                                                <td class="text-center">
-                                                                    {% if match.rating > 0 %}
-                                                                        <span class="text-danger">
-                                                                    {% else %}
-                                                                        <span class="text-success">
-                                                                    {% endif %}
-                                                                        {{ match.rating }}
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    {% set url = get_rule_detail_url(match.uuid) %}
-                                                                    {% if url != '' %}
-                                                                        <a href="{{ url }}#{{ match.uuid }}" class="btn btn-ghost-info btn-sm btn-icon-only" target="_blank">
-                                                                            <i class="ti ti-info-circle"></i>
-                                                                        </a>
-                                                                    {% endif %}
-                                                                </td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
+                                                    {% if submission.matchedRuleItems[path][0].type == 'honeypot' %}
+                                                        <span class="badge bg-red">
+                                                            {{ 'submission.view.data.fieldMustBeEmpty'|trans }}
+                                                        </span>
+                                                    {% else %}
+                                                        <table class="table table-bordered table-sm table-vcenter mt-2 mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>{{ 'submission.view.data.value'|trans }}</th>
+                                                                    <th style="width: 15%;" class="text-center">{{ 'submission.view.data.rating'|trans }}</th>
+                                                                    <th style="width: 1%;"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for match in submission.matchedRuleItems[path] %}
+                                                                <tr>
+                                                                    <td>{{ match.value }}</td>
+                                                                    <td class="text-center">
+                                                                        {% if match.rating > 0 %}
+                                                                            <span class="text-danger">
+                                                                        {% else %}
+                                                                            <span class="text-success">
+                                                                        {% endif %}
+                                                                            {{ match.rating }}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        {% set url = get_rule_detail_url(match.uuid) %}
+                                                                        {% if url != '' %}
+                                                                            <a href="{{ url }}#{{ match.uuid }}" class="btn btn-ghost-info btn-sm btn-icon-only" target="_blank">
+                                                                                <i class="ti ti-info-circle"></i>
+                                                                            </a>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    {% endif %}
                                                 {% endif %}
                                             </div>
                                         </div>

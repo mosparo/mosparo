@@ -25,6 +25,7 @@ function mosparo(containerId, url, publicKey, options)
     this.validationTokenElement = null;
     this.labelElement = null;
     this.accessibleStatusElement = null;
+    this.hpFieldElement = null;
 
     this.countdownInterval = null;
     this.countdownSeconds = 0;
@@ -42,6 +43,8 @@ function mosparo(containerId, url, publicKey, options)
         errorSpamDetected: 'Your data got catched by our spam protection.',
         errorLockedOut: 'You are locked out. Please try again after %datetime%',
         errorDelay: 'Your request was delayed. Please wait for %seconds% seconds.',
+
+        hpLeaveEmpty: 'Leave this field blank',
     };
 
     this.init = function () {
@@ -66,7 +69,6 @@ function mosparo(containerId, url, publicKey, options)
         this.formElement = currentElement;
         if (this.options.allowBrowserValidation && this.formElement.hasAttribute('novalidate')) {
             this.formElement.removeAttribute('novalidate');
-            console.log('removed');
         }
 
         // Create the row
@@ -173,6 +175,10 @@ function mosparo(containerId, url, publicKey, options)
                 _this.checkboxElement.classList.remove('mosparo__loading');
                 _this.submitTokenElement.value = response.submitToken;
                 _this.updateMessages(response.messages);
+
+                if ('honeypotFieldName' in response && response.honeypotFieldName != '') {
+                    _this.addHoneypotField(response.honeypotFieldName);
+                }
             } else if (response.security) {
                 _this.processSecurityResponse(response);
 
@@ -337,6 +343,21 @@ function mosparo(containerId, url, publicKey, options)
         request.open('POST', url, true);
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         request.send(this.stringifyData(data));
+    }
+
+    this.addHoneypotField = function (fieldName) {
+        this.hpFieldElement = document.createElement('input');
+        this.hpFieldElement.setAttribute('type', 'text');
+        this.hpFieldElement.setAttribute('name', fieldName);
+        this.hpFieldElement.setAttribute('style', 'position: absolute !important; left: -1000px !important; top: -1000px !important;');
+        this.hpFieldElement.setAttribute('autocomplete', 'off');
+        this.hpFieldElement.setAttribute('tabindex', '-1');
+        this.hpFieldElement.setAttribute('title', this.messages.hpLeaveEmpty);
+        this.formElement.appendChild(this.hpFieldElement);
+
+        this.hpFieldElement.addEventListener('change', function () {
+            _this.resetState();
+        });
     }
 
     this.processSecurityResponse = function (response) {

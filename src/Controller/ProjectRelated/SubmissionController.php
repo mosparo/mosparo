@@ -4,6 +4,8 @@ namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\Submission;
+use Mosparo\Util\TimeUtil;
+use Mosparo\Verification\GeneralVerification;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
@@ -98,8 +100,17 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
      */
     public function view(Request $request, Submission $submission): Response
     {
+        $minimumTimeActive = $submission->getProject()->getConfigValue('minimumTimeActive');
+        $args = ['minimumTimeActive' => $minimumTimeActive];
+        if ($minimumTimeActive) {
+            $minimumTimeGv = $submission->getGeneralVerification(GeneralVerification::MINIMUM_TIME);
+
+            $args['minimumTimeGv'] = $minimumTimeGv;
+        }
+
         return $this->render('project_related/submission/view.html.twig', [
-            'submission' => $submission
-        ]);
+            'submission' => $submission,
+            'generalVerifications' => $submission->getGeneralVerifications(),
+        ] + $args);
     }
 }

@@ -48,4 +48,16 @@ $(document).ready(function () {
 
         collectionToggleRemoveButton(list);
     });
+
+    $('.card-field-switch').on('change', function () {
+        let cardBody = $(this).parents('.card-body');
+        let fields = cardBody.find('input, textarea, select').not($(this));
+        let status = $(this).is(':checked');
+
+        if (status) {
+            fields.prop('disabled', false);
+        } else {
+            fields.prop('disabled', true);
+        }
+    }).trigger('change');
 });

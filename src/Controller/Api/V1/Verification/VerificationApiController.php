@@ -6,6 +6,8 @@ use DateTime;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\HmacSignatureHelper;
 use Mosparo\Repository\SubmitTokenRepository;
+use Mosparo\Util\TimeUtil;
+use Mosparo\Verification\GeneralVerification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,8 +57,28 @@ class VerificationApiController extends AbstractController
         $submitToken->setVerifiedAt(new DateTime());
         $submission->setVerifiedAt(new DateTime());
 
-        $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
+        // Check if the minimum time functionality is active and if the time difference is bigger than the minimum time.
+        if ($activeProject->getConfigValue('minimumTimeActive')) {
+            $minimumTimeSeconds = $activeProject->getConfigValue('minimumTimeSeconds');
+            $seconds = TimeUtil::getDifferenceInSeconds($submission->getSubmitToken()->getCreatedAt(), $submission->getVerifiedAt());
 
+            $minimumTimeGv = new GeneralVerification(
+                GeneralVerification::MINIMUM_TIME,
+                ($seconds >= $minimumTimeSeconds),
+                ['seconds' => $seconds, 'minimumTimeSeconds' => $minimumTimeSeconds]
+            );
+            $submission->addGeneralVerification($minimumTimeGv);
+
+            if (!$minimumTimeGv->isValid()) {
+                $submission->setValid($minimumTimeGv->isValid());
+
+                $this->getDoctrine()->getManager()->flush();
+
+                return new JsonResponse(['error' => true, 'errorMessage' => 'Validation failed.']);
+            }
+        }
+
+        $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
         if ($request->request->get('validationSignature') !== $validationSignature || $request->request->get('formSignature') !== $submission->getSignature()) {
             $submission->setValid(false);
             $this->getDoctrine()->getManager()->flush();
