@@ -35,6 +35,12 @@
     }
 }
 
+.btn.btn-icon-sm {
+    .ti:not(.ti-icon-right) {
+        margin-right: 0;
+    }
+}
+
 .collection-widget {
     ul {
         list-style-type: none;

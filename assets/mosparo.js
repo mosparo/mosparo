@@ -13,6 +13,9 @@ import '@tabler/core';
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 
+const apexCharts = require('apexcharts');
+global.ApexCharts = apexCharts;
+
 const dt = require('datatables.net');
 const dtR = require('datatables.net-responsive');
 

@@ -350,7 +350,7 @@ function mosparo(containerId, url, publicKey, options)
         this.hpFieldElement.setAttribute('type', 'text');
         this.hpFieldElement.setAttribute('name', fieldName);
         this.hpFieldElement.setAttribute('style', 'position: absolute !important; left: -1000px !important; top: -1000px !important;');
-        this.hpFieldElement.setAttribute('autocomplete', 'off');
+        this.hpFieldElement.setAttribute('autocomplete', 'one-time-code');
         this.hpFieldElement.setAttribute('tabindex', '-1');
         this.hpFieldElement.setAttribute('title', this.messages.hpLeaveEmpty);
         this.formElement.appendChild(this.hpFieldElement);

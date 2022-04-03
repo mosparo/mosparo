@@ -46,7 +46,9 @@ project:
 # Dashboard
 dashboard:
   title: Dashboard
-  spamSubmissions: Spam submissions
+  chart:
+    valid: Valid
+    spam: Spam
 
 # Rules
 rule:
