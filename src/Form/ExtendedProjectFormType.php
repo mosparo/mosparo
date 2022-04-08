@@ -18,7 +18,7 @@ class ExtendedProjectFormType extends ProjectFormType
             ->add('status', ChoiceType::class, [
                 'label' => 'project.form.status',
                 'attr' => ['class' => 'form-select'],
-                'choices' => ['Inactive' => 0, 'Active' => 1],
+                'choices' => ['state.inactive' => 0, 'state.active' => 1],
                 'help' => 'project.form.statusHelp'
             ])
             ->add('spamScore', NumberType::class, [
