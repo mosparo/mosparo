@@ -4,3 +4,6 @@ twig:
     strict_variables: '%kernel.debug%'
     exception_controller: null
     form_themes: ['form/mosparo_form.html.twig']
+
+    globals:
+        mosparoName: '%env(mosparo_name)%'

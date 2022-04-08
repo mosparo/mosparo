@@ -4,7 +4,25 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    MOSPARO_INSTALLED: '%env(bool:MOSPARO_INSTALLED)%'
+    env(mosparo_name): 'mosparo'
+    env(mosparo_installed): ~
+
+    env(database_driver): 'pdo_mysql'
+    env(database_host): '127.0.0.1'
+    env(database_port): '3306'
+    env(database_name): 'mosparo'
+    env(database_user): 'root'
+    env(database_password): ~
+    env(database_version): '1.0'
+
+    env(mailer_transport): 'sendmail'
+    env(mailer_host): '127.0.0.1'
+    env(mailer_user): ~
+    env(mailer_password): ~
+    env(mailer_port): ~
+    env(mailer_encryption): ~
+
+    env(secret): 'SecretMosparoToken'
 
 services:
     # default configuration for services in *this* file
@@ -46,6 +64,8 @@ services:
 
     Mosparo\Subscriber\ProjectSubscriber:
         class: Mosparo\Subscriber\ProjectSubscriber
+        arguments:
+            $installed: '%env(mosparo_installed)%'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -58,6 +78,14 @@ services:
         class: Mosparo\Doctrine\ProjectRelatedSubscriber
         tags:
             - { name: doctrine.event_subscriber }
+
+    Mosparo\Subscriber\SetupSubscriber:
+        class: Mosparo\Subscriber\SetupSubscriber
+        arguments:
+            $installed: '%env(mosparo_installed)%'
+            $debug: '%kernel.debug%'
+        tags:
+            - { name: kernel.event_subscriber }
 
     Mosparo\Twig\ProjectExtension:
         class: Mosparo\Twig\ProjectExtension
@@ -80,5 +108,7 @@ services:
 
     Mosparo\Helper\SetupHelper:
         class: Mosparo\Helper\SetupHelper
+
+    Mosparo\Helper\ConfigHelper:
         arguments:
-            $kernelRootDirectory: '%kernel.project_dir%'
+            $projectDirectory: '%kernel.project_dir%'

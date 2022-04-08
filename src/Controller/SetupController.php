@@ -4,14 +4,17 @@ namespace Mosparo\Controller;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception\ConnectionException;
+use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
 use Mosparo\Form\PasswordFormType;
+use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\SetupHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,10 +31,13 @@ class SetupController extends AbstractController
 
     protected $setupHelper;
 
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper)
+    protected $configHelper;
+
+    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper)
     {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
+        $this->configHelper = $configHelper;
     }
 
     /**
@@ -72,22 +78,30 @@ class SetupController extends AbstractController
         $connected = false;
         if ($form->isSubmitted() && $form->isValid()) {
             $data = [
-                'host' => $form->get('host')->getData(),
-                'port' => $form->get('port')->getData(),
-                'database' => $form->get('database')->getData(),
-                'user' => $form->get('user')->getData(),
-                'password' => $form->get('password')->getData()
+                'database_driver' => 'pdo_mysql',
+                'database_host' => $form->get('host')->getData(),
+                'database_port' => $form->get('port')->getData(),
+                'database_name' => $form->get('database')->getData(),
+                'database_user' => $form->get('user')->getData(),
+                'database_password' => $form->get('password')->getData()
             ];
 
-            $dsn = sprintf('mysql://%s:%s@%s:%d/%s', $data['user'], urlencode($data['password']), $data['host'], intval($data['port']), $data['database']);
+            $tmpConnection = DriverManager::getConnection([
+                'host' => $data['database_host'] ?? null,
+                'port' => $data['database_port'] ?? null,
+                'name' => $data['database_name'] ?? null,
+                'user' => $data['database_user'] ?? null,
+                'password' => $data['database_password'] ?? null,
+                'driver' => $data['database_driver'] ?? null,
+            ]);
 
-            $connectionParams = [ 'url' => $dsn ];
-            $connection = DriverManager::getConnection($connectionParams);
             try {
-                $connection->connect();
-                $connected = $connection->isConnected();
+                $tmpConnection->connect();
+                $connected = $tmpConnection->isConnected();
 
-                $request->getSession()->set('setupDatabaseDsn', $dsn);
+                $data['database_version'] = $tmpConnection->getNativeConnection()->getAttribute(\PDO::ATTR_SERVER_VERSION);
+
+                $this->configHelper->writeEnvironmentConfig($data);
             } catch (ConnectionException $e) {
                 $connected = false;
             }
@@ -116,25 +130,36 @@ class SetupController extends AbstractController
             ->add('port', TextType::class, ['label' => 'setup.mail.form.port', 'required' => false, 'data' => 25, 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->add('user', TextType::class, ['label' => 'setup.mail.form.user', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->add('password', PasswordType::class, ['label' => 'setup.mail.form.password', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
+            ->add('encryption', ChoiceType::class, ['label' => 'setup.mail.form.encryption', 'choices' => $this->setupHelper->getMailEncryptionOptions(), 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $session = $request->getSession();
             $useSmtp = $form->get('useSmtp')->getData();
             if ($useSmtp) {
                 $data = [
-                    'host' => $form->get('host')->getData(),
-                    'port' => $form->get('port')->getData(),
-                    'user' => $form->get('user')->getData(),
-                    'password' => $form->get('password')->getData()
+                    'mailer_transport' => 'smtp',
+                    'mailer_host' => $form->get('host')->getData(),
+                    'mailer_port' => intval($form->get('port')->getData()),
+                    'mailer_user' => $form->get('user')->getData(),
+                    'mailer_password' => $form->get('password')->getData(),
+                    'mailer_encryption' => $form->get('encryption')->getData(),
                 ];
-
-                $dsn = sprintf('smtp://%s:%s@%s:%d', urlencode($data['user']), urlencode($data['password']), $data['host'], intval($data['port']));
             } else {
-                $dsn = 'sendmail://default';
+                $session->set('setupMailerTransport', 'sendmail');
+                $session->set('setupMailerHost', 'default');
+                $data = [
+                    'mailer_transport' => 'sendmail',
+                    'mailer_host' => 'default',
+                    'mailer_port' => '',
+                    'mailer_user' => '',
+                    'mailer_password' => '',
+                    'mailer_encryption' => '',
+                ];
             }
 
-            $request->getSession()->set('setupMailerDsn', $dsn);
+            $this->configHelper->writeEnvironmentConfig($data);
 
             return $this->redirectToRoute('setup_other');
         }
@@ -162,31 +187,22 @@ class SetupController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $request->getSession()->set('setupMosparoName', $form->get('name')->getData());
+            $this->configHelper->writeEnvironmentConfig([
+                'mosparo_name' => $form->get('name')->getData(),
+                'mosparo_installed' => true,
+                'encryption_key' => $this->setupHelper->generateEncryptionKey(),
+                'secret' => $this->setupHelper->generateEncryptionKey(),
+            ]);
+
             $request->getSession()->set('setupUserEmailAddress', $form->get('emailAddress')->getData());
             $request->getSession()->set('setupUserPassword', $form->get('password')->get('plainPassword')->getData());
 
-            return $this->redirectToRoute('setup_configure');
+            return $this->redirectToRoute('setup_install');
         }
 
         return $this->render('setup/other.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    public function configure(Request $request): Response
-    {
-        // Create .env.local
-        $session = $request->getSession();
-        $this->setupHelper->saveEnvLocal([
-            'MOSPARO_NAME' => $session->get('setupMosparoName'),
-            'DATABASE_URL' => $session->get('setupDatabaseDsn'),
-            'MAILER_DSN' => $session->get('setupMailerDsn'),
-            'ENCRYPTION_KEY' => $this->setupHelper->generateEncryptionKey(),
-            'MOSPARO_INSTALLED' => true
-        ]);
-
-        return $this->redirectToRoute('setup_install');
     }
 
     /**
@@ -211,11 +227,10 @@ class SetupController extends AbstractController
         // Create user
         try {
             $this->setupHelper->createUser($session->get('setupUserEmailAddress'), $session->get('setupUserPassword'));
-        } catch (UserAlreadyExistsException $e) {
+        } catch (UserAlreadyExistsException|AdminUserAlreadyExistsException $e) {
             // Ignore this exception since the user exists, everything should be good.
         }
 
-        return $this->render('setup/install.html.twig', [
-        ]);
+        return $this->render('setup/install.html.twig');
     }
 }

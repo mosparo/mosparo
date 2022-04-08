@@ -4,14 +4,21 @@ namespace Mosparo\Helper;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ConfigValue;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ConfigHelper
 {
     protected $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    protected $fileSystem;
+
+    protected $environmentConfigFilePath;
+
+    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, $projectDirectory)
     {
         $this->entityManager = $entityManager;
+        $this->fileSystem = $fileSystem;
+        $this->environmentConfigFilePath = $projectDirectory . '/config/env.mosparo.php';
     }
 
     public function getConfigValue($name, $defaultValue = false)
@@ -42,5 +49,22 @@ class ConfigHelper
         $this->entityManager->flush();
 
         return $this;
+    }
+
+    public function writeEnvironmentConfig($values)
+    {
+        $config = array_merge($this->readEnvironmentConfig(), $values);
+        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config, true) . ';' . PHP_EOL;
+
+        $this->fileSystem->dumpFile($this->environmentConfigFilePath, $content);
+    }
+
+    public function readEnvironmentConfig(): array
+    {
+        if (!file_exists($this->environmentConfigFilePath)) {
+            return [];
+        }
+
+        return require $this->environmentConfigFilePath;
     }
 }

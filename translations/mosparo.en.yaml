@@ -724,6 +724,13 @@ setup:
       port: Port
       user: User
       password: Password
+      encryption: Encryption
+
+      options:
+        encryption:
+          none: None
+          tls: TLS
+          ssl: SSL
 
   other:
     title: Other informations

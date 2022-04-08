@@ -34,7 +34,9 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     protected $twig;
 
-    public function __construct(ContainerInterface $container, Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig)
+    protected $installed;
+
+    public function __construct(ContainerInterface $container, Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig, $installed)
     {
         $this->container = $container;
         $this->security = $security;
@@ -42,6 +44,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->twig = $twig;
+        $this->installed = $installed;
     }
 
     public static function getSubscribedEvents(): array
@@ -63,8 +66,7 @@ class ProjectSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $isInstalled = ($this->container->hasParameter('MOSPARO_INSTALLED')) ? $this->container->getParameter('MOSPARO_INSTALLED') : false;
-        if (!$isInstalled) {
+        if (!$this->installed) {
             return;
         }
 

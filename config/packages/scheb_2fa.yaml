@@ -5,7 +5,7 @@ scheb_two_factor:
 
     google:
         enabled: true
-        issuer: '%env(MOSPARO_NAME)%'
+        issuer: '%env(mosparo_name)%'
         template: security/2fa.html.twig
 
     backup_codes:

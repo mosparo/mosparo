@@ -301,6 +301,11 @@ submission:
         asOrganization: AS Organisation
         country: Land
 
+    generalVerifications:
+      minimumTime:
+        title: Einsendung zu schnell
+        text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit beträgt %minimumTimeSeconds% Sekunden.
+
 # Settings
 settings:
   title: Einstellungen
@@ -373,7 +378,7 @@ settings:
 
     requestDelaying:
       title: Anfrageverzögerung
-      intro: Um es einem Bot schwieriger zu machen, kann mosparo die Erstellung von Absende-Tokens verzögern. Ohne Absende-Token kann ein Formular nicht abgesendet werden. Der Benutzer wird sehen, wie lange der Benutzer warten muss, bevor das Formular absendbar ist.
+      intro: Um es einem Bot schwieriger zu machen, kann mosparo die Erstellung von Absende-Tokens verzögern. Ohne Absende-Token kann ein Formular nicht abgesendet werden. Falls ein Mensch diese Mitteilung sieht, wird angezeigt, wie lange der Mensch warten muss, bevor das Formular absendbar ist.
       infoIpAddress: In welchen Fällen die Ausstellung eines Absende-Tokens verzögert werden muss, wird aufgrund der Anzahl Anfragen, welche eine IP-Adresse gemacht hat, entschieden. Mit jeder zusätzlichen Anfrage wird die Verzögerung erhöht.
 
     ipLockout:
@@ -718,6 +723,13 @@ setup:
       port: Port
       user: Benutzer
       password: Passwort
+      encryption: Verschlüsselung
+
+      options:
+        encryption:
+          none: Ohne
+          tls: TLS
+          ssl: SSL
 
   other:
     title: Weitere Informationen

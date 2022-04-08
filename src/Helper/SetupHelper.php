@@ -4,9 +4,11 @@ namespace Mosparo\Helper;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\User;
+use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SetupHelper
 {
@@ -14,7 +16,9 @@ class SetupHelper
 
     protected $passwordEncoder;
 
-    protected $kernelRootDirectory;
+    protected $configHelper;
+
+    protected $translator;
 
     protected $prerequisites = [
         'general' => [
@@ -25,17 +29,17 @@ class SetupHelper
             'iconv',
             'intl',
             'json',
-            'sqlite3',
             'pdo_mysql',
             'sodium',
         ],
     ];
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, $kernelRootDirectory)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ConfigHelper $configHelper, TranslatorInterface $translator)
     {
         $this->entityManager = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
-        $this->kernelRootDirectory = $kernelRootDirectory;
+        $this->configHelper = $configHelper;
+        $this->translator = $translator;
     }
 
     public function checkPrerequisites(): array
@@ -83,21 +87,6 @@ class SetupHelper
         return [ $meetPrerequisites, $checkedPrerequisites ];
     }
 
-    public function saveEnvLocal($values)
-    {
-        $lines = [];
-        foreach ($values as $key => $value) {
-            $lines[] = $key . '="' . addslashes($value) . '"';
-        }
-
-        $content = implode(PHP_EOL, $lines);
-
-        $path = $this->kernelRootDirectory . '/.env.local';
-
-        $filesystem = new Filesystem();
-        $filesystem->dumpFile($path, $content);
-    }
-
     public function generateEncryptionKey(): string
     {
         return sodium_bin2hex(random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES));
@@ -109,6 +98,15 @@ class SetupHelper
         $user = $repository->findOneBy(['email' => $emailAddress]);
         if ($user !== null) {
             throw new UserAlreadyExistsException('User "' . $emailAddress . '" already exists.');
+        }
+
+        $qb = $repository->createQueryBuilder('u');
+        $qb->select('u.id')
+            ->where('u.roles LIKE :role')
+            ->setParameter(':role', '%"ROLE_ADMIN2"%');
+        $adminUsers = $qb->getQuery()->getResult();
+        if (!empty($adminUsers)) {
+            throw new AdminUserAlreadyExistsException('An admin user exists already.');
         }
 
         $user = new User();
@@ -125,5 +123,14 @@ class SetupHelper
         $this->entityManager->flush();
 
         return true;
+    }
+
+    public function getMailEncryptionOptions(): array
+    {
+        return [
+            'setup.mail.form.options.encryption.none' => 'null',
+            'setup.mail.form.options.encryption.tls' => 'tls',
+            'setup.mail.form.options.encryption.ssl' => 'ssl'
+        ];
     }
 }

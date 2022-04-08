@@ -14,16 +14,39 @@ class SetupSubscriber implements EventSubscriberInterface
 
     protected $router;
 
-    public function __construct(ContainerInterface $container, UrlGeneratorInterface $router)
+    protected $installed;
+
+    protected $allowedRoutes = [
+        'setup_start',
+        'setup_prerequisites',
+        'setup_database',
+        'setup_mail',
+        'setup_other',
+        'setup_install',
+    ];
+
+    public function __construct(ContainerInterface $container, UrlGeneratorInterface $router, $installed, $debug = false)
     {
         $this->container = $container;
         $this->router = $router;
+        $this->installed = $installed;
+
+        if ($debug) {
+            $this->allowedRoutes = array_merge($this->allowedRoutes, [
+                '_wdt',
+                '_profiler',
+                '_profiler_search',
+                '_profiler_search_bar',
+                '_profiler_search_results',
+                '_profiler_router',
+            ]);
+        }
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            RequestEvent::class => [['onKernelRequest', 20]],
+            RequestEvent::class => ['onKernelRequest', 20],
         ];
     }
 
@@ -33,13 +56,13 @@ class SetupSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $request = $event->getRequest();
-        if (strpos($request->getRequestUri(), '/setup') === 0) {
+        if ($this->installed) {
             return;
         }
 
-        $isInstalled = ($this->container->hasParameter('MOSPARO_INSTALLED')) ? $this->container->getParameter('MOSPARO_INSTALLED') : false;
-        if ($isInstalled) {
+        $request = $event->getRequest();
+        $route = $request->get('_route');
+        if (in_array($route, $this->allowedRoutes)) {
             return;
         }
 
