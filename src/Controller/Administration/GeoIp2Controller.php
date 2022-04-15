@@ -2,32 +2,14 @@
 
 namespace Mosparo\Controller\Administration;
 
-use Mosparo\Entity\Project;
-use Mosparo\Entity\ProjectMember;
-use Mosparo\Entity\User;
-use Mosparo\Form\PasswordFormType;
-use Mosparo\Form\RuleAddMultipleItemsType;
-use Mosparo\Form\RuleFormType;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\GeoIp2Helper;
-use Mosparo\Repository\RuleRepository;
-use Mosparo\Rule\RuleTypeManager;
-use Mosparo\Util\TokenGenerator;
-use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
-use Omines\DataTablesBundle\Column\BoolColumn;
-use Omines\DataTablesBundle\Column\TextColumn;
-use Omines\DataTablesBundle\Column\TwigColumn;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -51,10 +33,10 @@ class GeoIp2Controller extends AbstractController
     /**
      * @Route("/", name="administration_geoip2_settings")
      */
-    public function settings(Request $request, RuleRepository $ruleRepository): Response
+    public function settings(Request $request): Response
     {
         $config = [
-            'geoipActive' => (bool) $this->configHelper->getConfigValue('geoipActive', false),
+            'geoipActive' => (bool) $this->configHelper->getConfigValue('geoipActive'),
             'geoipLicenseKey' => $this->configHelper->getConfigValue('geoipLicenseKey', '')
         ];
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
@@ -99,7 +81,6 @@ class GeoIp2Controller extends AbstractController
 
         $session = $request->getSession();
         if ($result === true) {
-            $session = $request->getSession();
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
@@ -109,7 +90,6 @@ class GeoIp2Controller extends AbstractController
                 )
             );
         } else {
-            $session = $request->getSession();
             $session->getFlashBag()->add(
                 'error',
                 $this->translator->trans(

@@ -13,9 +13,9 @@ class RefreshRulesetsCommand extends Command
 
     protected $rulesetHelper;
 
-    public function __construct(string $name = null, RulesetHelper $rulesetHelper)
+    public function __construct(RulesetHelper $rulesetHelper)
     {
-        parent::__construct($name);
+        parent::__construct();
 
         $this->rulesetHelper = $rulesetHelper;
     }
@@ -28,13 +28,7 @@ class RefreshRulesetsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $result = $this->rulesetHelper->downloadAll();
-
-        if ($result === true) {
-            return 0;
-        }
-
-        $output->write($result);
+        $this->rulesetHelper->downloadAll();
 
         return 1;
     }

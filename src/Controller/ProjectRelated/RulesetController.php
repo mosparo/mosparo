@@ -165,7 +165,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
     /**
      * @Route("/{id}/view", name="ruleset_view")
      */
-    public function view(Request $request, Ruleset $ruleset): Response
+    public function view(Ruleset $ruleset): Response
     {
         $hasError = false;
         $errorMessage = '';

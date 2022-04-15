@@ -3,6 +3,7 @@
 namespace Mosparo\Entity;
 
 use DateTime;
+use DateTimeInterface;
 use Mosparo\Repository\IpLocalizationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -101,12 +102,12 @@ class IpLocalization
         return $this;
     }
 
-    public function getCachedAt(): ?\DateTimeInterface
+    public function getCachedAt(): ?DateTimeInterface
     {
         return $this->cachedAt;
     }
 
-    public function setCachedAt(\DateTimeInterface $cachedAt): self
+    public function setCachedAt(DateTimeInterface $cachedAt): self
     {
         $this->cachedAt = $cachedAt;
 

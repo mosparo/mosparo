@@ -7,6 +7,7 @@ use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
 use Mosparo\Entity\IpLocalization;
 use Mosparo\Util\HashUtil;
+use tronovav\GeoIP2Update\Client;
 
 class GeoIp2Helper
 {
@@ -35,7 +36,7 @@ class GeoIp2Helper
 
         $this->cleanupHelper->cleanupIpLocalizationCache();
 
-        $client = new \tronovav\GeoIP2Update\Client(array(
+        $client = new Client(array(
             'license_key' => $licenseKey,
             'dir' => $this->downloadDirectory,
             'editions' => array('GeoLite2-ASN', 'GeoLite2-Country'),
@@ -43,7 +44,7 @@ class GeoIp2Helper
         $client->run();
 
         if ($client->errors()) {
-            return $client->getErrors();
+            return $client->errors();
         }
 
         return true;
@@ -51,7 +52,7 @@ class GeoIp2Helper
 
     public function locateIpAddress($ipAddress)
     {
-        $geoipActive = $this->configHelper->getConfigValue('geoipActive', false);
+        $geoipActive = $this->configHelper->getConfigValue('geoipActive');
         if (!$geoipActive) {
             return false;
         }

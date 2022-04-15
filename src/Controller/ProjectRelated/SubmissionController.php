@@ -4,7 +4,6 @@ namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\Submission;
-use Mosparo\Util\TimeUtil;
 use Mosparo\Verification\GeneralVerification;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
@@ -98,7 +97,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
     /**
      * @Route("/{id}/view", name="submission_view")
      */
-    public function view(Request $request, Submission $submission): Response
+    public function view(Submission $submission): Response
     {
         $minimumTimeActive = $submission->getProject()->getConfigValue('minimumTimeActive');
         $args = ['minimumTimeActive' => $minimumTimeActive];

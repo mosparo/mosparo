@@ -165,7 +165,7 @@ class User implements UserInterface, TwoFactorInterface, BackupCodeInterface
 
     public function isGoogleAuthenticatorEnabled(): bool
     {
-        return (!empty($this->googleAuthenticatorSecret)) ? true : false;
+        return !empty($this->googleAuthenticatorSecret);
     }
 
     public function getGoogleAuthenticatorUsername(): string

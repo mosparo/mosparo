@@ -8,7 +8,7 @@ use Mosparo\Entity\Project;
 trait ProjectRelatedTrait
 {
     /**
-     * @var Mosparo\Helper\ProjectHelper
+     * @var ProjectHelper
      */
     protected $projectHelper;
 

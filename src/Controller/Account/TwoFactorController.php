@@ -2,25 +2,17 @@
 
 namespace Mosparo\Controller\Account;
 
-use Mosparo\Entity\User;
-use Mosparo\Form\PasswordFormType;
 use Mosparo\Util\TokenGenerator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use Symfony\Component\Validator\Constraint;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Token;
 
 /**
  * @Route("/account/two-factor")
@@ -29,7 +21,7 @@ class TwoFactorController extends AbstractController
 {
     protected $translator;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
@@ -37,7 +29,7 @@ class TwoFactorController extends AbstractController
     /**
      * @Route("/status", name="account_two_factor_status")
      */
-    public function status(Request $request): Response
+    public function status(): Response
     {
         if (!$this->getUser()->isGoogleAuthenticatorEnabled()) {
             return $this->redirectToRoute('account_two_factor_start');
@@ -86,6 +78,8 @@ class TwoFactorController extends AbstractController
                 'form' => $verifyForm->createView(),
             ]);
         }
+
+        return $this->redirectToRoute('account_two_factor_status');
     }
 
     /**
@@ -135,7 +129,7 @@ class TwoFactorController extends AbstractController
     /**
      * @Route("/reset-backup-codes", name="account_two_factor_reset_backup_codes")
      */
-    public function resetBackupCodes(Request $request): Response
+    public function resetBackupCodes(): Response
     {
         // Generate the backup codes
         $backupCodes = $this->generateBackupCodes();
@@ -189,19 +183,17 @@ class TwoFactorController extends AbstractController
         return $backupCodes;
     }
 
-    protected function createQrCodeForm(): Form
+    protected function createQrCodeForm(): FormInterface
     {
-        $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
+        return $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->setAction($this->generateUrl('account_two_factor_verify'))
             ->add('secret', HiddenType::class)
             ->getForm();
-
-        return $form;
     }
 
-    protected function createVerifyForm(): Form
+    protected function createVerifyForm(): FormInterface
     {
-        $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
+        return $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->setAction($this->generateUrl('account_two_factor_backup_codes'))
             ->add('token', TextType::class, ['attr' => [
                 'autocomplete' => 'one-time-code',
@@ -211,7 +203,5 @@ class TwoFactorController extends AbstractController
             ]])
             ->add('secret', HiddenType::class)
             ->getForm();
-
-        return $form;
     }
 }

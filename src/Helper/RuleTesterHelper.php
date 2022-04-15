@@ -94,7 +94,7 @@ class RuleTesterHelper
         }
     }
 
-    protected function checkRules(array $data)
+    protected function checkRules(array $data): array
     {
         $results = [];
         foreach ($data as $groupKey => $groupData) {
@@ -112,7 +112,7 @@ class RuleTesterHelper
         return $results;
     }
 
-    protected function checkRulesForField($path, $fieldData)
+    protected function checkRulesForField($path, $fieldData): array
     {
         $issues = [];
         foreach ($this->rules as $rule) {
@@ -133,7 +133,7 @@ class RuleTesterHelper
         return $issues;
     }
 
-    protected function isRuleTypeApplicable(RuleTypeInterface $ruleType, $path)
+    protected function isRuleTypeApplicable(RuleTypeInterface $ruleType, $path): bool
     {
         foreach ($ruleType->getTargetFieldKeys() as $fieldKey) {
             if (strpos($path, $fieldKey) === 0) {
@@ -163,7 +163,7 @@ class RuleTesterHelper
     {
         $score = 0;
 
-        foreach ($results as $fieldPath => $issues) {
+        foreach ($results as $issues) {
             foreach ($issues as $issue) {
                 $score += $issue['rating'];
             }

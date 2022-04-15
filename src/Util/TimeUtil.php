@@ -2,8 +2,8 @@
 
 namespace Mosparo\Util;
 
-use \DateTimeInterface;
-use \DateTime;
+use DateTimeInterface;
+use DateTime;
 
 class TimeUtil
 {
@@ -14,7 +14,7 @@ class TimeUtil
      * @param DateTimeInterface $endTime
      * @return string
      */
-    public static function getDifferenceInSeconds(DateTimeInterface $startTime, DateTimeInterface $endTime)
+    public static function getDifferenceInSeconds(DateTimeInterface $startTime, DateTimeInterface $endTime): int
     {
         $diff = $startTime->diff($endTime);
 

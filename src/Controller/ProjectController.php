@@ -124,7 +124,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/switch/{project}", name="project_switch")
      */
-    public function switch(Request $request, Project $project): Response
+    public function switch(Project $project): Response
     {
         // Only admin users or user which are added as project member have access to the project
         if (!$this->isGranted('ROLE_ADMIN') && !$project->isProjectMember($this->getUser())) {

@@ -23,7 +23,7 @@ class CleanupHelper
     public function cleanup($force = false)
     {
         $cache = new FilesystemAdapter();
-        $lastCleanup = $cache->getItem('mosparoLastCleanup', null, null);
+        $lastCleanup = $cache->getItem('mosparoLastCleanup');
 
         // If the force parameter is not set, we execute the cleanup only once every 24 hours
         if ($lastCleanup->get() !== null && !$force) {

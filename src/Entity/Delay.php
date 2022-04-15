@@ -4,6 +4,7 @@ namespace Mosparo\Entity;
 
 use Mosparo\Repository\DelayRepository;
 use Doctrine\ORM\Mapping as ORM;
+use DateTimeInterface;
 
 /**
  * @ORM\Entity(repositoryClass=DelayRepository::class)
@@ -54,12 +55,12 @@ class Delay
         return $this;
     }
 
-    public function getStartedAt(): ?\DateTimeInterface
+    public function getStartedAt(): ?DateTimeInterface
     {
         return $this->startedAt;
     }
 
-    public function setStartedAt(\DateTimeInterface $startedAt): self
+    public function setStartedAt(DateTimeInterface $startedAt): self
     {
         $this->startedAt = $startedAt;
 
@@ -78,12 +79,12 @@ class Delay
         return $this;
     }
 
-    public function getValidUntil(): ?\DateTimeInterface
+    public function getValidUntil(): ?DateTimeInterface
     {
         return $this->validUntil;
     }
 
-    public function setValidUntil(\DateTimeInterface $validUntil): self
+    public function setValidUntil(DateTimeInterface $validUntil): self
     {
         $this->validUntil = $validUntil;
 

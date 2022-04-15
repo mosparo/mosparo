@@ -13,9 +13,9 @@ class CleanupDatabaseCommand extends Command
 
     protected $cleanupHelper;
 
-    public function __construct(string $name = null, CleanupHelper $cleanupHelper)
+    public function __construct(CleanupHelper $cleanupHelper)
     {
-        parent::__construct($name);
+        parent::__construct();
 
         $this->cleanupHelper = $cleanupHelper;
     }

@@ -40,7 +40,6 @@ class RulesetHelper
             $this->projectHelper->setActiveProject($project);
 
             foreach ($rulesetRepository->findBy(['status' => 1]) as $ruleset) {
-                echo $ruleset->getName() . PHP_EOL;
                 $this->downloadRuleset($ruleset);
             }
         }
@@ -111,7 +110,7 @@ class RulesetHelper
         // We do nothing if the ruleset wasn't updated
         $updatedAt = new DateTime($data['lastUpdatedAt']);
         if ($updatedAt == $rulesetCache->getUpdatedAt()) {
-            return false;
+            return;
         }
 
         $rulesetCache->setUpdatedAt($updatedAt);

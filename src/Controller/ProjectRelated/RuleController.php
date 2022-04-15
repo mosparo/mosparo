@@ -67,7 +67,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     /**
      * @Route("/create/choose-type", name="rule_create_choose_type")
      */
-    public function createChooseType(Request $request, RuleTypeManager $ruleTypeManager): Response
+    public function createChooseType(RuleTypeManager $ruleTypeManager): Response
     {
         return $this->render('project_related/rule/create_choose_type.html.twig', [
             'ruleTypes' => $ruleTypeManager->getRuleTypes()

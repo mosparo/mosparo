@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\EnvVarLoaderInterface;
 final class EnvLoader implements EnvVarLoaderInterface
 {
     /**
-     * @var \Mosparo\Helper\ConfigHelper
+     * @var ConfigHelper
      */
     protected $configHelper;
 

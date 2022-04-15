@@ -10,12 +10,12 @@ namespace Mosparo\Util;
  */
 class TokenGenerator
 {
-    public function generateToken()
+    public function generateToken(): string
     {
         return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
     }
 
-    public function generateShortToken()
+    public function generateShortToken(): string
     {
         return rtrim(strtr(base64_encode(random_bytes(8)), '+/', '-_'), '=');
     }

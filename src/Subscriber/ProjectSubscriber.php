@@ -5,10 +5,8 @@ namespace Mosparo\Subscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
-use Mosparo\Entity\Rule;
 use Mosparo\Helper\ProjectHelper;
 use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -55,7 +53,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onConsoleCommand(ConsoleCommandEvent $event)
+    public function onConsoleCommand()
     {
         $this->enableDoctrineFilter();
     }
@@ -102,7 +100,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                 $activeProject = $projectRepository->find($activeProjectId);
             }
 
-            // If the project does not exists we have to clean the session value and return to the project list
+            // If the project does not exist we have to clean the session value and return to the project list
             if ($activeProject === null || (!$this->security->isGranted('ROLE_ADMIN') && !$activeProject->isProjectMember($this->security->getUser()))) {
                 if ($abortRequest) {
                     $event->setResponse(new RedirectResponse($this->router->generate('project_list')));

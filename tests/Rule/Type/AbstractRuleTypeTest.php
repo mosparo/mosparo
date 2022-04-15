@@ -2,8 +2,6 @@
 
 namespace Mosparo\Tests\Rule\Type;
 
-use Mosparo\Entity\Rule;
-use Mosparo\Rule\Tester\WordRuleTester;
 use PHPUnit\Framework\TestCase;
 
 class AbstractRuleTypeTest extends TestCase

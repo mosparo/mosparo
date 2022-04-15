@@ -5,6 +5,7 @@ namespace Mosparo\Doctrine\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use Exception;
 
 class EncryptedJson extends Type
 {
@@ -14,12 +15,12 @@ class EncryptedJson extends Type
     /**
      * Gets the SQL declaration snippet for a field of this type.
      *
-     * @param array $fieldDeclaration The field declaration.
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform The currently used database platform.
+     * @param array $column The field declaration.
+     * @param AbstractPlatform $platform The currently used database platform.
      *
      * @return string
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return 'LONGTEXT COMMENT \'(EncryptedJson)\'';
     }
@@ -29,7 +30,7 @@ class EncryptedJson extends Type
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return self::ENCRYPTEDJSON;
     }
@@ -64,7 +65,7 @@ class EncryptedJson extends Type
      * @param mixed $value
      * @param AbstractPlatform $platform
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {

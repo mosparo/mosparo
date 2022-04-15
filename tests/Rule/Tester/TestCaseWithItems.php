@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class TestCaseWithItems extends TestCase
 {
-    protected function buildItemsCollection($className, $items)
+    protected function buildItemsCollection($className, $items): ArrayCollection
     {
         $col = new ArrayCollection();
 

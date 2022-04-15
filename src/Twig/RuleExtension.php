@@ -4,8 +4,6 @@ namespace Mosparo\Twig;
 
 use Mosparo\Repository\RuleRepository;
 use Mosparo\Repository\RulesetRuleCacheRepository;
-use Mosparo\Rule\RuleTypeManager;
-use Mosparo\Rule\Type\RuleTypeInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

@@ -6,7 +6,6 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Mosparo\Entity\ProjectRelatedEntityInterface;
-use Mosparo\Entity\Rule;
 use Mosparo\Helper\ProjectHelper;
 
 class ProjectRelatedSubscriber implements EventSubscriber

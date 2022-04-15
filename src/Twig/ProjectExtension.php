@@ -5,7 +5,6 @@ namespace Mosparo\Twig;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Helper\ProjectHelper;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -85,7 +84,7 @@ class ProjectExtension extends AbstractExtension implements GlobalsInterface
         ];
     }
 
-    protected function sortProjects(Project $a, Project $b)
+    protected function sortProjects(Project $a, Project $b): int
     {
         if ($a->getName() > $b->getName()) {
             return 1;

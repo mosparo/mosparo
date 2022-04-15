@@ -31,7 +31,7 @@ class IpAddressRuleTester extends AbstractRuleTester
         return $matchingItems;
     }
 
-    protected function validateIpAddress($value, $itemValue)
+    protected function validateIpAddress($value, $itemValue): bool
     {
         $value = strtolower($value);
         $itemValue = strtolower($itemValue);
@@ -43,7 +43,7 @@ class IpAddressRuleTester extends AbstractRuleTester
         return false;
     }
 
-    protected function validateSubnet($value, $itemValue)
+    protected function validateSubnet($value, $itemValue): bool
     {
         $address = Factory::addressFromString($value);
         $subnet = Factory::rangeFromString($itemValue);

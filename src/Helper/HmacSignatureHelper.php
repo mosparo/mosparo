@@ -2,8 +2,6 @@
 
 namespace Mosparo\Helper;
 
-use Mosparo\Entity\Project;
-
 class HmacSignatureHelper
 {
     public function createSignatureFromArray(array $data, $privateKey): string

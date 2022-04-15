@@ -2,6 +2,8 @@
 
 namespace Mosparo\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Mosparo\Repository\SubmitTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -138,48 +140,48 @@ class SubmitToken implements ProjectRelatedEntityInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCheckedAt(): ?\DateTimeInterface
+    public function getCheckedAt(): ?DateTimeInterface
     {
         return $this->checkedAt;
     }
 
-    public function setCheckedAt(?\DateTimeInterface $checkedAt): self
+    public function setCheckedAt(?DateTimeInterface $checkedAt): self
     {
         $this->checkedAt = $checkedAt;
 
         return $this;
     }
 
-    public function getVerifiedAt(): ?\DateTimeInterface
+    public function getVerifiedAt(): ?DateTimeInterface
     {
         return $this->verifiedAt;
     }
 
-    public function setVerifiedAt(?\DateTimeInterface $verifiedAt): self
+    public function setVerifiedAt(?DateTimeInterface $verifiedAt): self
     {
         $this->verifiedAt = $verifiedAt;
 
         return $this;
     }
 
-    public function getValidUntil(): ?\DateTimeInterface
+    public function getValidUntil(): ?DateTimeInterface
     {
         return $this->validUntil;
     }
 
-    public function setValidUntil(\DateTimeInterface $validUntil): self
+    public function setValidUntil(DateTimeInterface $validUntil): self
     {
         $this->validUntil = $validUntil;
 

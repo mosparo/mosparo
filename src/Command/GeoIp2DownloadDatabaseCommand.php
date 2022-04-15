@@ -13,9 +13,9 @@ class GeoIp2DownloadDatabaseCommand extends Command
 
     protected $geoIp2Helper;
 
-    public function __construct(string $name = null, GeoIp2Helper $geoIp2Helper)
+    public function __construct(GeoIp2Helper $geoIp2Helper)
     {
-        parent::__construct($name);
+        parent::__construct();
 
         $this->geoIp2Helper = $geoIp2Helper;
     }

@@ -2,6 +2,7 @@
 
 namespace Mosparo\Entity;
 
+use DateTimeInterface;
 use Mosparo\Repository\SubmissionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Verification\GeneralVerification;
@@ -152,24 +153,24 @@ class Submission implements ProjectRelatedEntityInterface
         return $this;
     }
 
-    public function getSubmittedAt(): ?\DateTimeInterface
+    public function getSubmittedAt(): ?DateTimeInterface
     {
         return $this->submittedAt;
     }
 
-    public function setSubmittedAt(\DateTimeInterface $submittedAt): self
+    public function setSubmittedAt(DateTimeInterface $submittedAt): self
     {
         $this->submittedAt = $submittedAt;
 
         return $this;
     }
 
-    public function getVerifiedAt(): ?\DateTimeInterface
+    public function getVerifiedAt(): ?DateTimeInterface
     {
         return $this->verifiedAt;
     }
 
-    public function setVerifiedAt(\DateTimeInterface $verifiedAt): self
+    public function setVerifiedAt(DateTimeInterface $verifiedAt): self
     {
         $this->verifiedAt = $verifiedAt;
 
@@ -237,13 +238,11 @@ class Submission implements ProjectRelatedEntityInterface
 
         $data = $this->generalVerifications[$key];
 
-        $gv = new GeneralVerification(
+        return new GeneralVerification(
             $key,
             $data['valid'],
             $data['data']
         );
-
-        return $gv;
     }
 
     public function getSpamRating(): ?float

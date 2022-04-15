@@ -2,7 +2,9 @@
 
 namespace Mosparo\Exception;
 
-class AdminUserAlreadyExistsException extends \Mosparo\Exception
+use Mosparo\Exception;
+
+class AdminUserAlreadyExistsException extends Exception
 {
 
 }

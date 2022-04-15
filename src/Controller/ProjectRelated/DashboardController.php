@@ -5,6 +5,7 @@ namespace Mosparo\Controller\ProjectRelated;
 use DateInterval;
 use DatePeriod;
 use DateTime;
+use IntlDateFormatter;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Entity\Submission;
@@ -43,12 +44,12 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
 
         // Get the date format for the chart
         // @TODO: Replace the date format with an user setting
-        $intlDateFormatter = new \IntlDateFormatter(
+        $intlDateFormatter = new IntlDateFormatter(
             $request->getLocale(),
-            \IntlDateFormatter::SHORT,
-            \IntlDateFormatter::NONE,
+            IntlDateFormatter::SHORT,
+            IntlDateFormatter::NONE,
             'UTC',
-            \IntlDateFormatter::GREGORIAN
+            IntlDateFormatter::GREGORIAN
         );
 
         return $this->render('project_related/dashboard/dashboard.html.twig', [
@@ -60,7 +61,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
         ]);
     }
 
-    protected function getSubmissionDataForChart($entityManager)
+    protected function getSubmissionDataForChart($entityManager): array
     {
         $noSpamSubmissionsData = $spamSubmissionsData = $this->createEmptyDateArray();
 
@@ -91,7 +92,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
         return [$this->convertIntoChartArray($noSpamSubmissionsData), $this->convertIntoChartArray($spamSubmissionsData)];
     }
 
-    protected function createEmptyDateArray()
+    protected function createEmptyDateArray(): array
     {
         $dateArray = [];
         $endDate = new DateTime();
@@ -110,7 +111,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
         return $dateArray;
     }
 
-    protected function convertIntoChartArray($data)
+    protected function convertIntoChartArray($data): array
     {
         $convertedData = [];
         foreach ($data as $date => $count) {

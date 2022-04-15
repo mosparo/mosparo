@@ -11,6 +11,7 @@ use Mosparo\Verification\GeneralVerification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -31,7 +32,7 @@ class VerificationApiController extends AbstractController
     /**
      * @Route("/verify", name="verification_api_verify")
      */
-    public function verify(Request $request, SubmitTokenRepository $submitTokenRepository)
+    public function verify(Request $request, SubmitTokenRepository $submitTokenRepository): Response
     {
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {

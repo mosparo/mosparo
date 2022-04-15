@@ -31,7 +31,7 @@ class WordRuleTester extends AbstractRuleTester
         return $matchingItems;
     }
 
-    protected function validateTextItem($value, $itemValue)
+    protected function validateTextItem($value, $itemValue): bool
     {
         $value = strtolower($value);
         $itemValue = strtolower($itemValue);

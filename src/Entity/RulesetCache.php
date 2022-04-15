@@ -2,6 +2,7 @@
 
 namespace Mosparo\Entity;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\RulesetCacheRepository;
@@ -73,24 +74,24 @@ class RulesetCache implements ProjectRelatedEntityInterface
         return $this;
     }
 
-    public function getRefreshedAt(): ?\DateTimeInterface
+    public function getRefreshedAt(): ?DateTimeInterface
     {
         return $this->refreshedAt;
     }
 
-    public function setRefreshedAt(\DateTimeInterface $refreshedAt): self
+    public function setRefreshedAt(DateTimeInterface $refreshedAt): self
     {
         $this->refreshedAt = $refreshedAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

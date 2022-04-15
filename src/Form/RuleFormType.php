@@ -2,7 +2,6 @@
 
 namespace Mosparo\Form;
 
-use Doctrine\DBAL\Types\FloatType;
 use Mosparo\Entity\Rule;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

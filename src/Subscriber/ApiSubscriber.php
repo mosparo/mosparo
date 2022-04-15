@@ -1,10 +1,10 @@
-<?php
+<?php /** @noinspection ALL */
 
 namespace Mosparo\Subscriber;
 
-use http\Env\Response;
 use Mosparo\Helper\ProjectHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 

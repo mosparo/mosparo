@@ -16,7 +16,7 @@ class ProjectRelatedFilter extends SQLFilter
         $this->projectHelper = $projectHelper;
     }
 
-    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
+    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias): string
     {
         // Return if this is not a project aware interface
         if (!$targetEntity->reflClass->implementsInterface('Mosparo\Entity\ProjectRelatedEntityInterface')) {

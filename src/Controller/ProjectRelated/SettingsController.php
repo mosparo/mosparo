@@ -345,7 +345,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     /**
      * @Route("/design", name="settings_design")
      */
-    public function design(Request $request): Response
+    public function design(): Response
     {
         return $this->render('project_related/settings/design.html.twig');
     }

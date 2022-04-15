@@ -19,6 +19,7 @@ use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -66,7 +67,7 @@ class FrontendApiController extends AbstractController
     /**
      * @Route("/request-submit-token", name="frontend_api_request_submit_token")
      */
-    public function request(Request $request)
+    public function request(Request $request): Response
     {
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {
@@ -112,7 +113,7 @@ class FrontendApiController extends AbstractController
     /**
      * @Route("/check-form-data", name="frontend_api_check_form_data")
      */
-    public function checkFormData(Request $request)
+    public function checkFormData(Request $request): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -238,14 +239,12 @@ class FrontendApiController extends AbstractController
         return new JsonResponse(['valid' => (!$submission->isSpam()), 'validationToken' => $submission->getValidationToken()]);
     }
 
-    protected function createSignature(SubmitToken $submitToken, $formData, Project $activeProject)
+    protected function createSignature(SubmitToken $submitToken, $formData, Project $activeProject): string
     {
         $payload = $this->hmacSignatureHelper->prepareData($this->createFormStructure($formData))
                  . $submitToken->getToken();
 
-        $signature = $this->hmacSignatureHelper->createSignature($payload, $activeProject->getPrivateKey());
-
-        return $signature;
+        return $this->hmacSignatureHelper->createSignature($payload, $activeProject->getPrivateKey());
     }
 
     protected function createFormStructure(array $data): array
@@ -258,7 +257,7 @@ class FrontendApiController extends AbstractController
         return $formData;
     }
 
-    protected function prepareSecurityResponse(Request $request, $result, $withMessages = false)
+    protected function prepareSecurityResponse(Request $request, $result, $withMessages = false): Response
     {
         $data = [];
         if ($result instanceof Lockout) {
@@ -272,7 +271,7 @@ class FrontendApiController extends AbstractController
                 'security' => true,
                 'type' => 'delay',
                 'forSeconds' => $result->getDuration(),
-                'now' => (new DateTime())->format(\DateTimeInterface::ATOM)
+                'now' => (new DateTime())->format(DateTimeInterface::ATOM)
             ];
         }
 

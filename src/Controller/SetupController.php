@@ -9,6 +9,7 @@ use Mosparo\Exception\UserAlreadyExistsException;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\SetupHelper;
+use PDO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -51,7 +52,7 @@ class SetupController extends AbstractController
     /**
      * @Route("/prerequisites", name="setup_prerequisites")
      */
-    public function prerequisites(Request $request): Response
+    public function prerequisites(): Response
     {
         [ $meetPrerequisites, $prerequisites ] = $this->setupHelper->checkPrerequisites();
 
@@ -92,14 +93,14 @@ class SetupController extends AbstractController
                 'name' => $data['database_name'] ?? null,
                 'user' => $data['database_user'] ?? null,
                 'password' => $data['database_password'] ?? null,
-                'driver' => $data['database_driver'] ?? null,
+                'driver' => $data['database_driver'],
             ]);
 
             try {
                 $tmpConnection->connect();
                 $connected = $tmpConnection->isConnected();
 
-                $data['database_version'] = $tmpConnection->getNativeConnection()->getAttribute(\PDO::ATTR_SERVER_VERSION);
+                $data['database_version'] = $tmpConnection->getNativeConnection()->getAttribute(PDO::ATTR_SERVER_VERSION);
 
                 $this->configHelper->writeEnvironmentConfig($data);
             } catch (ConnectionException $e) {
