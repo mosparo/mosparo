@@ -21,6 +21,7 @@
         </div>
     {% endif %}
 
+    {% set showOptionalExtensionsAlert = false %}
     {% for type in prerequisites|keys %}
         <div class="mb-3">
             <h3 class="mb-0">
@@ -42,6 +43,10 @@
                                 {{ subtype }}
                             {% endif %}
                         </strong>
+
+                        {% if not prerequisite.required %}
+                            <span class="text-info">({{ 'setup.prerequisites.optional'|trans }})</span>
+                        {% endif %}
                     </div>
                     <div class="flex-fill d-flex justify-content-end">
                         {% if prerequisite.pass %}
@@ -56,6 +61,10 @@
                             <span class="text-danger">
                                 {% if type == 'phpExtensions' %}
                                     {{ 'setup.prerequisites.results.missing'|trans }}
+
+                                    {% if not prerequisite.required %}
+                                        {% set showOptionalExtensionsAlert = true %}
+                                    {% endif %}
                                 {% else %}
                                     {{ 'setup.prerequisites.results.notOkay'|trans }}
                                 {% endif %}
@@ -66,6 +75,12 @@
             {% endfor %}
         </div>
     {% endfor %}
+
+    {% if showOptionalExtensionsAlert %}
+        <div class="alert alert-info">
+            {{ 'setup.prerequisites.installOptionalExtensions'|trans }}
+        </div>
+    {% endif %}
 
     {% if meetPrerequisites %}
         <div class="form-footer">

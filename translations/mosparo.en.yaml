@@ -686,6 +686,7 @@ setup:
 
     meetPrerequisites: All prerequisites are okay. You can proceed with the setup.
     missingPrerequisites: Some prerequisites are missing. Please check the summary below.
+    installOptionalExtensions: Some optional extensions are not installed. We recommend you to install these extensions before you proceed.
 
     types:
       general: General
@@ -699,6 +700,8 @@ setup:
       missing: Missing
       okay: Okay
       notOkay: Not okay
+
+    optional: optional
 
   database:
     title: Database

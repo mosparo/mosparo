@@ -57,6 +57,11 @@ class ConfigHelper
         $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config, true) . ';' . PHP_EOL;
 
         $this->fileSystem->dumpFile($this->environmentConfigFilePath, $content);
+
+        // Invalidate the cache for the environment file, if opcache is enabled
+        if (function_exists('opcache_is_script_cached') && opcache_is_script_cached($this->environmentConfigFilePath)) {
+            opcache_invalidate($this->environmentConfigFilePath, true);
+        }
     }
 
     public function readEnvironmentConfig(): array

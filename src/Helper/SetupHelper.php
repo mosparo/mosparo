@@ -25,12 +25,14 @@ class SetupHelper
             'minPhpVersion' => '7.4.0',
         ],
         'phpExtensions' => [
-            'ctype',
-            'iconv',
-            'intl',
-            'json',
-            'pdo_mysql',
-            'sodium',
+            'ctype' => true,
+            'iconv' => true,
+            'intl' => true,
+            'json' => true,
+            'pdo' => true,
+            'pdo_mysql' => true,
+            'sodium' => false,
+            'Zend OPcache' => false,
         ],
     ];
 
@@ -69,16 +71,16 @@ class SetupHelper
                     }
                 }
             } else if ($type === 'phpExtensions') {
-                foreach ($prerequisites as $extensionKey) {
+                foreach ($prerequisites as $extensionKey => $isRequired) {
                     $version = phpversion($extensionKey);
-                    if ($version == '') {
+                    if ($version == '' && $isRequired) {
                         $meetPrerequisites = false;
                     }
 
                     $checkedPrerequisites[$type][$extensionKey] = [
-                        'required' => true,
+                        'required' => $isRequired,
                         'available' => ($version != ''),
-                        'pass' => ($version != '')
+                        'pass' => ($version != ''),
                     ];
                 }
             }

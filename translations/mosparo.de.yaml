@@ -685,6 +685,7 @@ setup:
 
     meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit der Einrichtung fortfahren.
     missingPrerequisites: Einige Voraussetzungen fehlen. Bitte prüfen Sie die Zusammenfassung unten.
+    installOptionalExtensions: Einige optionale Erweiterungen sind nicht installiert. Wir empfehlen Ihnen, diese Erweiterungen zu installieren, bevor Sie fortfahren.
 
     types:
       general: Allgemein
@@ -698,6 +699,8 @@ setup:
       missing: Fehlt
       okay: In Ordnung
       notOkay: Nicht in Ordnung
+
+    optional: optional
 
   database:
     title: Datenbank

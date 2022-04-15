@@ -166,6 +166,9 @@
     "paragonie/constant_time_encoding": {
         "version": "v2.4.0"
     },
+    "paragonie/sodium_compat": {
+        "version": "v1.17.1"
+    },
     "phar-io/manifest": {
         "version": "2.0.1"
     },

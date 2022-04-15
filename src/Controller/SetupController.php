@@ -223,6 +223,7 @@ class SetupController extends AbstractController
 
         $output = new BufferedOutput();
         $application->run($input, $output);
+        $output->fetch();
 
         // Create user
         try {

@@ -7,7 +7,7 @@
         "ext-iconv": "*",
         "ext-intl": "*",
         "ext-json": "*",
-        "ext-sodium": "*",
+        "ext-pdo": "*",
         "composer/package-versions-deprecated": "1.11.99.1",
         "doctrine/annotations": "^1.12",
         "doctrine/doctrine-bundle": "^2.3",
@@ -17,6 +17,7 @@
         "gracious/doctrine-encryption-bundle": "^3.0",
         "mlocati/ip-lib": "^1.16",
         "omines/datatables-bundle": "^0.5.4",
+        "paragonie/sodium_compat": "^1.17",
         "phpdocumentor/reflection-docblock": "^5.2",
         "rkr/wildcards": "1.*",
         "scheb/2fa-backup-code": "^5.10",
@@ -95,6 +96,10 @@
         "symfony/polyfill-php71": "*",
         "symfony/polyfill-php70": "*",
         "symfony/polyfill-php56": "*"
+    },
+    "suggest": {
+        "ext-sodium": "*",
+        "ext-zend-opcache": "*"
     },
     "scripts": {
         "auto-scripts": {

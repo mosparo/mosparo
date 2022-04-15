@@ -1,8 +1,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteBase /
+
     RewriteRule ^build(.*)$ public/build/$1 [L]
     RewriteRule ^bundles(.*)$ public/bundles/$1 [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/index.php [QSA,L]
 </IfModule>
