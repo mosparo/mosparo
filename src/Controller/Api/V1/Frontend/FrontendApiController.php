@@ -251,6 +251,10 @@ class FrontendApiController extends AbstractController
     {
         $formData = [];
         foreach ($data as $field) {
+            if (isset($field['type']) && $field['type'] == 'honeypot') {
+                continue;
+            }
+
             $formData[$field['name']] = $field['value'];
         }
 
