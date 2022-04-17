@@ -34,7 +34,7 @@ $(document).ready(function () {
     $('.collection-widget.add-allowed').each(function () {
         let list = $(this).find('.collection-list');
 
-        if (list.find('li').length == 0) {
+        if (list.find('li').length === 0) {
             $('.add-item-button').trigger('click');
         }
     });
