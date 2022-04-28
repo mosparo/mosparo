@@ -1,8 +1,9 @@
-<p style="text-align: center; padding: 2em 0 1em;">
+&nbsp;
+<p align="center">
     <img src="https://github.com/mosparo/mosparo/blob/master/assets/images/mosparo-logo.svg?raw=true" alt="mosparo logo contains a bird with the name Mo and the mosparo text"/>
 </p>
 
-<p style="text-align: center;">
+<p align="center">
     The <b>mo</b>dern <b>spa</b>m p<b>ro</b>tection tool.<br>
     It replaces other captcha methods with a simple and easy to use spam protection solution.<br>
     <em>FYI: The bird is called <a href="https://mothesparrow.com" target="_blank">Mo (the sparrow)</a>.</em>
