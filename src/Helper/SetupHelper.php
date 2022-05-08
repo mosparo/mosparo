@@ -104,7 +104,7 @@ class SetupHelper
         $qb = $repository->createQueryBuilder('u');
         $qb->select('u.id')
             ->where('u.roles LIKE :role')
-            ->setParameter(':role', '%"ROLE_ADMIN2"%');
+            ->setParameter(':role', '%"ROLE_ADMIN"%');
         $adminUsers = $qb->getQuery()->getResult();
         if (!empty($adminUsers)) {
             throw new AdminUserAlreadyExistsException('An admin user exists already.');
@@ -124,14 +124,5 @@ class SetupHelper
         $this->entityManager->flush();
 
         return true;
-    }
-
-    public function getMailEncryptionOptions(): array
-    {
-        return [
-            'setup.mail.form.options.encryption.none' => 'null',
-            'setup.mail.form.options.encryption.tls' => 'tls',
-            'setup.mail.form.options.encryption.ssl' => 'ssl'
-        ];
     }
 }
