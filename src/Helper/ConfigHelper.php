@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
+<?php
 
 namespace Mosparo\Helper;
 
@@ -71,5 +71,14 @@ class ConfigHelper
         }
 
         return require $this->environmentConfigFilePath;
+    }
+
+    public function getMailEncryptionOptions(): array
+    {
+        return [
+            'administration.settings.mailSettings.form.options.encryption.none' => 'null',
+            'administration.settings.mailSettings.form.options.encryption.tls' => 'tls',
+            'administration.settings.mailSettings.form.options.encryption.ssl' => 'ssl'
+        ];
     }
 }

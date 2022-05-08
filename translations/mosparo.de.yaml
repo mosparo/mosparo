@@ -429,6 +429,45 @@ settings:
 administration:
   title: Administration
 
+  settings:
+    title: Einstellungen
+    description: Konfigurieren Sie verschiedene Einstellungen, welche für Ihre mosparo-Installation gelten.
+
+    mainSettings:
+      title: Haupteinstellungen
+      form:
+        mosparoName: Name der mosparo-Installation
+
+    localeSettings:
+      title: Lokalisierungseinstellungen
+      form:
+        defaultLocale: Standard-Sprache
+        defaultDateFormat: Standard-Datumsformat
+        defaultTimeFormat: Standard-Zeitformat
+        defaultTimezone: Standard-Zeitzone
+
+    mailSettings:
+      title: Maileinstellungen
+      form:
+        useSmtp: Einen SMTP-Server für den E-Mail-Versand verwenden
+        host: Host
+        port: Port
+        user: Benutzer
+        password: Passwort
+        encryption: Verschlüsselung
+
+        options:
+          encryption:
+            none: Ohne
+            tls: TLS
+            ssl: SSL
+
+      help:
+        password: Wenn Sie dieses Feld ausfüllen, wird das bereits gespeicherte Passwort überschrieben.
+
+    message:
+      savedSuccessfully: Die Einstellungen wurden erfolgreich gespeichert.
+
   user:
     title: Benutzer
     description: Verwalten Sie alle Benutzer dieser mosparo-Instanz.
@@ -506,6 +545,19 @@ administration:
 account:
   title: Account
   backToOverview: Zurück zur Übersicht
+
+  settings:
+    title: Einstellungen
+    description: Ändern Sie grundlegende Einstellungen zu Ihrem Account.
+
+    form:
+      locale: Sprache
+      dateFormat: Datumsformat
+      timeFormat: Zeitformat
+      timezone: Zeitzone
+
+    message:
+      successfullySaved: Ihre Einstellungen wurden erfolgreich gespeichert.
 
   changePassword:
     title: Passwort ändern
@@ -643,6 +695,9 @@ roles:
 
 form:
   addMultipleItems: Mehrere Einträge hinzufügen
+  choices:
+    systemDefault: Standard-Einstellung
+    browserLanguage: Sprache des Browsers
 
 # Datatables
 datatable:
@@ -713,26 +768,6 @@ setup:
       database: Datenbank
       user: Benutzer
       password: Passwort
-
-  mail:
-    title: E-Mail
-    introduction: Wenn Sie möchten, dass E-Mails über einen SMTP-Server versendet werden, können Sie diese Verbindung hier konfigurieren.
-    infoDefault: Wenn Sie keinen SMTP-Server konfigurieren, wird mosparo alle E-Mails mit Sendmail versenden.
-    infoOtherOptions: Es gibt weitere Optionen, wie die E-Mails von mosparo versendet werden. Bitte konsultieren Sie dazu die Dokumentation um zu sehen, wie Sie diese konfigurieren können. %linkStart%Gehe zur Dokumentation%linkEnd%
-
-    form:
-      useSmtp: Verwenden einen SMTP-Server um E-Mails zu versenden
-      host: Host
-      port: Port
-      user: Benutzer
-      password: Passwort
-      encryption: Verschlüsselung
-
-      options:
-        encryption:
-          none: Ohne
-          tls: TLS
-          ssl: SSL
 
   other:
     title: Weitere Informationen

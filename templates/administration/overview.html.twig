@@ -12,6 +12,27 @@
                 <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
+                            <a href="{{ path('administration_settings') }}">
+                                <img src="{{ asset('build/images/icons/settings.svg') }}" height="128" />
+                            </a>
+                        </div>
+                        <p class="empty-title">{{ 'administration.settings.title'|trans }}</p>
+                        <p class="empty-subtitle text-muted">
+                            {{ 'administration.settings.description'|trans }}
+                        </p>
+                        <div class="empty-action">
+                            <a href="{{ path('administration_settings') }}" class="btn btn-primary">
+                                <i class="ti ti-settings"></i>
+                                {{ 'action.configure'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="empty">
+                        <div class="empty-img">
                             <a href="{{ path('administration_user_list') }}">
                                 <img src="{{ asset('build/images/icons/users.svg') }}" height="128" />
                             </a>

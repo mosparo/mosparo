@@ -20,7 +20,6 @@ class SetupSubscriber implements EventSubscriberInterface
         'setup_start',
         'setup_prerequisites',
         'setup_database',
-        'setup_mail',
         'setup_other',
         'setup_install',
     ];

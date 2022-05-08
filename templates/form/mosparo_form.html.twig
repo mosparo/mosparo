@@ -29,6 +29,14 @@
     </{{ element|default('div') }}>
 {%- endblock form_row %}
 
+{%- block choice_widget_options -%}
+    {%- if not render_preferred_choices -%}
+        {% set options = options|filter(option => option not in preferred_choices) %}
+    {%- endif -%}
+    {%- set render_preferred_choices = false -%}
+    {{ parent() }}
+{%- endblock choice_widget_options -%}
+
 {% block collection_row %}
     {%- if compound is defined and compound -%}
         {%- set element = 'fieldset' -%}

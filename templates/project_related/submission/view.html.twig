@@ -43,7 +43,7 @@
                         <div class="">
                             <h4 class="mb-0">{{ 'submission.view.spam.submittedAt'|trans }}</h4>
                             <div>
-                                {{ submission.submittedAt|format_datetime }}
+                                {{ submission.submittedAt|date }}
                             </div>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                             <h4 class="mb-0">{{ 'submission.view.verification.verifiedAt'|trans }}</h4>
                             <div>
                                 {% if not submission.valid is null %}
-                                    {{ submission.verifiedAt|format_datetime }}
+                                    {{ submission.verifiedAt|date }}
                                 {% else %}
                                     -
                                 {% endif %}
@@ -125,7 +125,7 @@
                         <div class="">
                             <h4 class="mb-0">{{ 'submission.view.source.requestedAt'|trans }}</h4>
                             <div>
-                                {{ submission.submitToken.createdAt|format_datetime }}
+                                {{ submission.submitToken.createdAt|date }}
                             </div>
                         </div>
                     </div>

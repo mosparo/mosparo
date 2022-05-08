@@ -7,6 +7,11 @@ parameters:
     env(mosparo_name): 'mosparo'
     env(mosparo_installed): ~
 
+    env(default_locale): 'en'
+    env(default_date_format): 'Y-m-d'
+    env(default_time_format): 'H:i:s'
+    env(default_timezone): 'UTC'
+
     env(database_driver): 'pdo_mysql'
     env(database_host): '127.0.0.1'
     env(database_port): '3306'
@@ -71,6 +76,10 @@ services:
 
     Mosparo\Subscriber\LocaleSubscriber:
         class: Mosparo\Subscriber\LocaleSubscriber
+        arguments:
+            $defaultDateFormat: '%env(default_date_format)%'
+            $defaultTimeFormat: '%env(default_time_format)%'
+            $defaultTimezone: '%env(default_timezone)%'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -110,5 +119,9 @@ services:
         class: Mosparo\Helper\SetupHelper
 
     Mosparo\Helper\ConfigHelper:
+        arguments:
+            $projectDirectory: '%kernel.project_dir%'
+
+    Mosparo\Helper\LocaleHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'

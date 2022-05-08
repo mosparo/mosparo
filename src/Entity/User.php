@@ -53,6 +53,11 @@ class User implements UserInterface, TwoFactorInterface, BackupCodeInterface
      */
     private $projectMemberships;
 
+    /**
+     * @ORM\Column(type="encryptedJson")
+     */
+    private $configValues = [];
+
     public function __construct()
     {
         $this->projectMemberships = new ArrayCollection();
@@ -254,6 +259,34 @@ class User implements UserInterface, TwoFactorInterface, BackupCodeInterface
                 $projectMembership->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getConfigValues(): ?array
+    {
+        return $this->configValues;
+    }
+
+    public function setConfigValues(array $configValues): self
+    {
+        $this->configValues = $configValues;
+
+        return $this;
+    }
+
+    public function getConfigValue($key)
+    {
+        if (!isset($this->configValues[$key])) {
+            return null;
+        }
+
+        return $this->configValues[$key];
+    }
+
+    public function setConfigValue($key, $value): self
+    {
+        $this->configValues[$key] = $value;
 
         return $this;
     }

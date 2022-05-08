@@ -107,9 +107,9 @@ class SetupController extends AbstractController
                 $connected = false;
             }
 
-            // Save the database connection in the session and continue to mail setup
+            // Save the database connection in the session and continue with the setup
             if ($connected) {
-                return $this->redirectToRoute('setup_mail');
+                return $this->redirectToRoute('setup_other');
             }
         }
 
@@ -117,56 +117,6 @@ class SetupController extends AbstractController
             'form' => $form->createView(),
             'submitted' => $form->isSubmitted(),
             'connected' => $connected,
-        ]);
-    }
-
-    /**
-     * @Route("/mail", name="setup_mail")
-     */
-    public function mail(Request $request): Response
-    {
-        $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
-            ->add('useSmtp', CheckboxType::class, ['label' => 'setup.mail.form.useSmtp', 'required' => false])
-            ->add('host', TextType::class, ['label' => 'setup.mail.form.host', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
-            ->add('port', TextType::class, ['label' => 'setup.mail.form.port', 'required' => false, 'data' => 25, 'attr' => ['disabled' => true, 'class' => 'mail-option']])
-            ->add('user', TextType::class, ['label' => 'setup.mail.form.user', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
-            ->add('password', PasswordType::class, ['label' => 'setup.mail.form.password', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
-            ->add('encryption', ChoiceType::class, ['label' => 'setup.mail.form.encryption', 'choices' => $this->setupHelper->getMailEncryptionOptions(), 'attr' => ['disabled' => true, 'class' => 'mail-option']])
-            ->getForm();
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $session = $request->getSession();
-            $useSmtp = $form->get('useSmtp')->getData();
-            if ($useSmtp) {
-                $data = [
-                    'mailer_transport' => 'smtp',
-                    'mailer_host' => $form->get('host')->getData(),
-                    'mailer_port' => intval($form->get('port')->getData()),
-                    'mailer_user' => $form->get('user')->getData(),
-                    'mailer_password' => $form->get('password')->getData(),
-                    'mailer_encryption' => $form->get('encryption')->getData(),
-                ];
-            } else {
-                $session->set('setupMailerTransport', 'sendmail');
-                $session->set('setupMailerHost', 'default');
-                $data = [
-                    'mailer_transport' => 'sendmail',
-                    'mailer_host' => 'default',
-                    'mailer_port' => '',
-                    'mailer_user' => '',
-                    'mailer_password' => '',
-                    'mailer_encryption' => '',
-                ];
-            }
-
-            $this->configHelper->writeEnvironmentConfig($data);
-
-            return $this->redirectToRoute('setup_other');
-        }
-
-        return $this->render('setup/mail.html.twig', [
-            'form' => $form->createView(),
         ]);
     }
 

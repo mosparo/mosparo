@@ -429,6 +429,45 @@ settings:
 administration:
   title: Administration
 
+  settings:
+    title: Settings
+    description: Configure various settings which apply to your mosparo installation.
+
+    mainSettings:
+      title: Main settings
+      form:
+        mosparoName: Name of the mosparo installation
+
+    localeSettings:
+      title: Locale settings
+      form:
+        defaultLocale: Default language
+        defaultDateFormat: Default date format
+        defaultTimeFormat: Default time format
+        defaultTimezone: Default timezone
+
+    mailSettings:
+      title: Mail settings
+      form:
+        useSmtp: Use a SMTP server to send emails
+        host: Host
+        port: Port
+        user: User
+        password: Password
+        encryption: Encryption
+
+        options:
+          encryption:
+            none: Without
+            tls: TLS
+            ssl: SSL
+
+      help:
+        password: If you enter something in this field, the existing value will be overwritten.
+
+    message:
+      savedSuccessfully: The settings were saved successfully.
+
   user:
     title: Users
     description: Manage all users of this mosparo instance.
@@ -506,6 +545,19 @@ administration:
 account:
   title: Account
   backToOverview: Back to overview
+
+  settings:
+    title: Settings
+    description: Change the general settings for your account.
+
+    form:
+      locale: Language
+      dateFormat: Date format
+      timeFormat: Time format
+      timezone: Timezone
+
+    message:
+      successfullySaved: Your settings were saved successfully.
 
   changePassword:
     title: Change password
@@ -644,6 +696,9 @@ roles:
 
 form:
   addMultipleItems: Add multiple items
+  choices:
+    systemDefault: Default setting
+    browserLanguage: Browser language
 
 # Datatables
 datatable:
@@ -714,26 +769,6 @@ setup:
       database: Database
       user: User
       password: Password
-
-  mail:
-    title: Mail
-    introduction: If you want to send outgoing emails with an SMTP server you have the option to configure the connection details here.
-    infoDefault: If you don't configure SMTP here mosparo will use sendmail to submit emails.
-    infoOtherOptions: There are some other options to send your emails. Please refer to the documentation to see how you can configure them. %linkStart%Go to the documentation%linkEnd%
-
-    form:
-      useSmtp: Use SMTP to send emails
-      host: Host
-      port: Port
-      user: User
-      password: Password
-      encryption: Encryption
-
-      options:
-        encryption:
-          none: None
-          tls: TLS
-          ssl: SSL
 
   other:
     title: Other informations

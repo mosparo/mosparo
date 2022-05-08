@@ -48,7 +48,7 @@
                                 <h4 class="mb-0">{{ 'ruleset.view.details.lastRefreshedAt'|trans }}</h4>
                                 <div>
                                     {% if ruleset.rulesetCache.refreshedAt %}
-                                        {{ ruleset.rulesetCache.refreshedAt|format_datetime }}
+                                        {{ ruleset.rulesetCache.refreshedAt|date }}
                                     {% else %}
                                         <em>Empty</em>
                                     {% endif %}
@@ -58,7 +58,7 @@
                                 <h4 class="mb-0">{{ 'ruleset.view.details.lastUpdatedAt'|trans }}</h4>
                                 <div>
                                     {% if ruleset.rulesetCache.updatedAt %}
-                                        {{ ruleset.rulesetCache.updatedAt|format_datetime }}
+                                        {{ ruleset.rulesetCache.updatedAt|date }}
                                     {% else %}
                                         <em>Empty</em>
                                     {% endif %}
