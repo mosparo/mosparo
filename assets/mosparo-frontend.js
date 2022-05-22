@@ -66,6 +66,12 @@ function mosparo(containerId, url, publicKey, options)
             currentElement = currentElement.parentNode;
         }
 
+        if (currentElement === null) {
+            this.debug('Cannot find the form container.');
+
+            return;
+        }
+
         this.formElement = currentElement;
         if (this.options.allowBrowserValidation && this.formElement.hasAttribute('novalidate')) {
             this.formElement.removeAttribute('novalidate');
@@ -130,7 +136,7 @@ function mosparo(containerId, url, publicKey, options)
         this.checkboxElement.appendChild(this.validationTokenElement);
 
         // RuleSet up the event listener
-        this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el, index) {
+        this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el) {
             if (el === _this.validationTokenElement) {
                 return;
             }
@@ -267,7 +273,7 @@ function mosparo(containerId, url, publicKey, options)
         let fields = [];
         let ignoredFields = [];
         let processedFields = [];
-        this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el, index) {
+        this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el) {
             let name = el.getAttribute('name');
             // Ignore mosparo fields
             if (name.indexOf('_mosparo_') === 0) {
@@ -305,7 +311,7 @@ function mosparo(containerId, url, publicKey, options)
         });
 
         // Add the ignored fields to the list of the ignored fields
-        this.formElement.querySelectorAll('[name]').forEach(function (el, index) {
+        this.formElement.querySelectorAll('[name]').forEach(function (el) {
             let name = el.getAttribute('name');
 
             // Only add non-mosparo or not processed fields
