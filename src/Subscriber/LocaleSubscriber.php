@@ -52,7 +52,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         $timezone = $this->defaultTimezone;
 
         $session = $request->getSession();
-        if ($session !== null) {
+        if ($session !== null && $session->has('userLocale')) {
             $userLocale = $session->get('userLocale');
 
             if ($userLocale === 'browser' && $browserLocale !== null) {
