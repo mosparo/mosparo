@@ -16,6 +16,10 @@ class SetupSubscriber implements EventSubscriberInterface
 
     protected $installed;
 
+    protected $installedVersion;
+
+    protected $mosparoVersion;
+
     protected $allowedRoutes = [
         'setup_start',
         'setup_prerequisites',
@@ -24,11 +28,13 @@ class SetupSubscriber implements EventSubscriberInterface
         'setup_install',
     ];
 
-    public function __construct(ContainerInterface $container, UrlGeneratorInterface $router, $installed, $debug = false)
+    public function __construct(ContainerInterface $container, UrlGeneratorInterface $router, $installed, $installedVersion, $mosparoVersion, $debug = false)
     {
         $this->container = $container;
         $this->router = $router;
         $this->installed = $installed;
+        $this->installedVersion = $installedVersion;
+        $this->mosparoVersion = $mosparoVersion;
 
         if ($debug) {
             $this->allowedRoutes = array_merge($this->allowedRoutes, [
@@ -56,6 +62,8 @@ class SetupSubscriber implements EventSubscriberInterface
         }
 
         if ($this->installed) {
+            $this->checkForUpgrade($event);
+
             return;
         }
 
@@ -66,5 +74,32 @@ class SetupSubscriber implements EventSubscriberInterface
         }
 
         $event->setResponse(new RedirectResponse($this->router->generate('setup_start')));
+    }
+
+    protected function checkForUpgrade(RequestEvent $event)
+    {
+        // If the two versions aren't the same, redirect to the upgrade controller
+        if ($this->mosparoVersion != $this->installedVersion) {
+            $request = $event->getRequest();
+            $route = $request->get('_route');
+
+            // We redirect only GET requests
+            if ($request->getMethod() !== 'GET') {
+                return;
+            }
+
+            // Do nothing if it is already the upgrade_execute request
+            $noRedirectsRoutes = [
+                'upgrade_execute',
+                'frontend_api_request_submit_token',
+                'frontend_api_check_form_data',
+                'verification_api_verify'
+            ];
+            if (in_array($route, $noRedirectsRoutes)) {
+                return;
+            }
+
+            $event->setResponse(new RedirectResponse($this->router->generate('upgrade_execute')));
+        }
     }
 }

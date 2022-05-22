@@ -1,0 +1,20 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'upgrade.executed.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    <h2 class="card-title text-center mb-4">{{ 'upgrade.executed.title'|trans }}</h2>
+
+    <p>
+        {{ 'upgrade.executed.description'|trans }}
+    </p>
+
+    <div class="form-footer">
+        <a href="{{ path('dashboard') }}" class="btn btn-primary w-100">
+            {{ 'setup.buttons.continue'|trans }}
+            <i class="ti ti-icon-right ti-chevron-right"></i>
+        </a>
+    </div>
+{% endblock %}

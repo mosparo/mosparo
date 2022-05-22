@@ -783,3 +783,12 @@ setup:
   install:
     title: Installation completed
     description: The installation was successfully completed. You can now login with your user.
+
+# Upgrade
+upgrade:
+  buttons:
+    continue: Continue
+
+  executed:
+    title: Upgrade executed
+    description: The needed changes for this upgrade were executed. Your installation is up to date.

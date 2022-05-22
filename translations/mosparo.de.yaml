@@ -782,3 +782,12 @@ setup:
   install:
     title: Installation abgeschlossen
     description: Die Installation wurde erfolgreich abgeschlossen. Sie können sich nun mit Ihrem Benutzer einloggen.
+
+# Upgrade
+upgrade:
+  buttons:
+    continue: Weiter
+
+  executed:
+    title: Upgrade ausgeführt
+    description: Die notwendigen Änderungen für dieses Upgrade wurden ausgeführt. Ihre Installation ist aktuell.

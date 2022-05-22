@@ -6,6 +6,7 @@
 parameters:
     env(mosparo_name): 'mosparo'
     env(mosparo_installed): ~
+    env(mosparo_installed_version): ~
 
     env(default_locale): 'en'
     env(default_date_format): 'Y-m-d'
@@ -92,6 +93,8 @@ services:
         class: Mosparo\Subscriber\SetupSubscriber
         arguments:
             $installed: '%env(mosparo_installed)%'
+            $installedVersion: '%env(mosparo_installed_version)%'
+            $mosparoVersion: '%env(MOSPARO_VERSION)%'
             $debug: '%kernel.debug%'
         tags:
             - { name: kernel.event_subscriber }
@@ -125,3 +128,8 @@ services:
     Mosparo\Helper\LocaleHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+
+    Mosparo\Controller\UpgradeController:
+        class: Mosparo\Controller\UpgradeController
+        arguments:
+            $mosparoVersion: '%env(MOSPARO_VERSION)%'
