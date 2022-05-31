@@ -10,6 +10,7 @@ function mosparo(containerId, url, publicKey, options)
         name: '',
         allowBrowserValidation: true,
         inputFieldSelector: '[name]:not(.mosparo__ignored-field)',
+        desingMode: false,
 
         // Callbacks
         onCheckForm: null
@@ -102,6 +103,15 @@ function mosparo(containerId, url, publicKey, options)
         this.checkboxElement.classList.add('mosparo__checkbox');
         checkboxColumnElement.appendChild(this.checkboxElement);
 
+        // Create the icons for the checkbox element
+        let checkmarkIconElement = document.createElement('div');
+        checkmarkIconElement.classList.add('mosparo__icon-checkmark');
+        this.checkboxElement.appendChild(checkmarkIconElement);
+
+        let failureIconElement = document.createElement('div');
+        failureIconElement.classList.add('mosparo__icon-failure');
+        this.checkboxElement.appendChild(failureIconElement);
+
         let contentColumnElement = document.createElement('div');
         contentColumnElement.classList.add('mosparo__content_column');
         rowElement.appendChild(contentColumnElement);
@@ -135,31 +145,38 @@ function mosparo(containerId, url, publicKey, options)
         this.validationTokenElement.classList.add('mosparo__validation-token');
         this.checkboxElement.appendChild(this.validationTokenElement);
 
-        // RuleSet up the event listener
-        this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el) {
-            if (el === _this.validationTokenElement) {
-                return;
-            }
+        // Do not set up the event listener in design mode
+        if (this.options.designMode) {
+            this.containerElement.classList.add('mosparo__design-mode');
+            this.checkboxFieldElement.removeAttribute('required');
+            this.labelElement.textContent = this.messages.label;
+        } else {
+            // Set up the event listener
+            this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el) {
+                if (el === _this.validationTokenElement) {
+                    return;
+                }
 
-            el.addEventListener('change', function () {
-                _this.resetState();
+                el.addEventListener('change', function () {
+                    _this.resetState();
+                });
             });
-        });
 
-        this.formElement.addEventListener('reset', function() {
-            _this.resetState();
-            _this.requestSubmitToken();
-        });
+            this.formElement.addEventListener('reset', function () {
+                _this.resetState();
+                _this.requestSubmitToken();
+            });
 
-        this.checkboxFieldElement.addEventListener('change', function () {
-            _this.checkForm();
-        })
+            this.checkboxFieldElement.addEventListener('change', function () {
+                _this.checkForm();
+            })
 
-        this.checkboxElement.addEventListener('click', function () {
-            _this.checkForm();
-        });
+            this.checkboxElement.addEventListener('click', function () {
+                _this.checkForm();
+            });
 
-        this.requestSubmitToken();
+            this.requestSubmitToken();
+        }
     }
 
     this.getRandomHash = function () {
@@ -169,7 +186,7 @@ function mosparo(containerId, url, publicKey, options)
 
     this.requestSubmitToken = function () {
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
-        this.checkboxElement.classList.add('mosparo__loading');
+        this.containerElement.classList.add('mosparo__loading');
 
         let data = {
             pageTitle: document.title,
@@ -178,7 +195,7 @@ function mosparo(containerId, url, publicKey, options)
 
         this.send('/api/v1/frontend/request-submit-token', data, function (response) {
             if (response.submitToken) {
-                _this.checkboxElement.classList.remove('mosparo__loading');
+                _this.containerElement.classList.remove('mosparo__loading');
                 _this.submitTokenElement.value = response.submitToken;
                 _this.updateMessages(response.messages);
 
@@ -192,14 +209,14 @@ function mosparo(containerId, url, publicKey, options)
                     setTimeout(function () { _this.requestSubmitToken() }, (response.forSeconds + 1) * 1000);
                 }
             } else {
-                _this.checkboxElement.classList.remove('mosparo__loading');
-                _this.checkboxElement.classList.add('mosparo__invalid');
+                _this.containerElement.classList.remove('mosparo__loading');
+                _this.containerElement.classList.add('mosparo__invalid');
 
                 _this.showError(_this.messages.errorGotNoToken);
             }
         }, function () {
-            _this.checkboxElement.classList.remove('mosparo__loading');
-            _this.checkboxElement.classList.add('mosparo__invalid');
+            _this.containerElement.classList.remove('mosparo__loading');
+            _this.containerElement.classList.add('mosparo__invalid');
 
             _this.showError(_this.messages.errorInternalError);
         });
@@ -211,17 +228,17 @@ function mosparo(containerId, url, publicKey, options)
         }
 
         if (this.submitTokenElement.value === '') {
-            this.checkboxElement.classList.add('mosparo__invalid');
+            this.containerElement.classList.add('mosparo__invalid');
 
             this.showError(this.messages.errorNoSubmitTokenAvailable);
             return;
         }
 
-        this.checkboxElement.classList.remove('mosparo__invalid');
-        this.checkboxElement.classList.remove('mosparo__checked');
+        this.containerElement.classList.remove('mosparo__invalid');
+        this.containerElement.classList.remove('mosparo__checked');
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
 
-        this.checkboxElement.classList.add('mosparo__loading');
+        this.containerElement.classList.add('mosparo__loading');
         this.updateAccessibleStatus(this.messages.accessibilityCheckingData);
 
         let data = {
@@ -230,12 +247,12 @@ function mosparo(containerId, url, publicKey, options)
         };
 
         this.send('/api/v1/frontend/check-form-data', data, function (response) {
-            _this.checkboxElement.classList.remove('mosparo__loading');
+            _this.containerElement.classList.remove('mosparo__loading');
 
             if (response.valid) {
                 _this.checkboxFieldElement.checked = true;
                 _this.setHpFieldElementDisabled(true);
-                _this.checkboxElement.classList.add('mosparo__checked');
+                _this.containerElement.classList.add('mosparo__checked');
                 _this.validationTokenElement.value = response.validationToken;
 
                 _this.updateAccessibleStatus(_this.messages.accessibilityDataValid);
@@ -250,7 +267,7 @@ function mosparo(containerId, url, publicKey, options)
             } else {
                 _this.checkboxFieldElement.checked = false;
                 _this.setHpFieldElementDisabled(false);
-                _this.checkboxElement.classList.add('mosparo__invalid');
+                _this.containerElement.classList.add('mosparo__invalid');
                 _this.validationTokenElement.value = '';
 
                 _this.showError(_this.messages.errorSpamDetected);
@@ -262,8 +279,8 @@ function mosparo(containerId, url, publicKey, options)
         }, function () {
             _this.checkboxFieldElement.checked = false;
             _this.setHpFieldElementDisabled(false);
-            _this.checkboxElement.classList.remove('mosparo__loading');
-            _this.checkboxElement.classList.add('mosparo__invalid');
+            _this.containerElement.classList.remove('mosparo__loading');
+            _this.containerElement.classList.add('mosparo__invalid');
 
             _this.showError(_this.messages.errorInternalError);
         });
@@ -326,11 +343,11 @@ function mosparo(containerId, url, publicKey, options)
     this.resetState = function () {
         this.checkboxFieldElement.removeAttribute('checked');
         this.setHpFieldElementDisabled(false);
-        this.checkboxElement.classList.remove('mosparo__checked');
+        this.containerElement.classList.remove('mosparo__checked');
         this.validationTokenElement.value = '';
 
         if (!this.isLocked) {
-            this.checkboxElement.classList.remove('mosparo__invalid');
+            this.containerElement.classList.remove('mosparo__invalid');
             this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         }
     }
@@ -385,8 +402,8 @@ function mosparo(containerId, url, publicKey, options)
         }
 
         if (response.type === 'lockout') {
-            this.checkboxElement.classList.remove('mosparo__loading');
-            this.checkboxElement.classList.add('mosparo__invalid');
+            this.containerElement.classList.remove('mosparo__loading');
+            this.containerElement.classList.add('mosparo__invalid');
 
             let date = new Date(response.until);
             this.showError(this.messages.errorLockedOut.replace('%datetime%', date.toLocaleString()));
@@ -404,7 +421,7 @@ function mosparo(containerId, url, publicKey, options)
         if (this.countdownSeconds === 0) {
             this.isLocked = false;
 
-            this.checkboxElement.classList.remove('mosparo__loading');
+            this.containerElement.classList.remove('mosparo__loading');
             this.errorMessageElement.classList.remove('mosparo__error-message-visible');
 
             clearInterval(this.countdownInterval);

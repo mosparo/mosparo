@@ -4,6 +4,16 @@
     &:last-child {
         margin-bottom: 0;
     }
+
+    legend.form-label:first-child {
+        padding-top: 0;
+    }
+
+    &:last-child {
+        .form-check {
+            margin-bottom: 0;
+        }
+    }
 }
 
 .btn .ti {

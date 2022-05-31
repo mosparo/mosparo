@@ -26,6 +26,7 @@
         "apexcharts": "^3.33.2",
         "datatables.net": "^1.11.3",
         "datatables.net-responsive": "^2.2.9",
-        "datatables.net-responsive-bs5": "^2.2.9"
+        "datatables.net-responsive-bs5": "^2.2.9",
+        "spectrum-colorpicker": "^1.8.1"
     }
 }

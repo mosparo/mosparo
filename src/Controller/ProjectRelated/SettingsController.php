@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
 use Mosparo\Form\ExtendedProjectFormType;
+use Mosparo\Util\ChoicesUtil;
 use Mosparo\Util\TokenGenerator;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
@@ -14,6 +15,7 @@ use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -110,8 +112,6 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             'datatable' => $table
         ]);
     }
-
-
 
     /**
      * @Route("/members/add", name="settings_member_add")
@@ -345,9 +345,155 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     /**
      * @Route("/design", name="settings_design")
      */
-    public function design(): Response
+    public function design(Request $request): Response
     {
-        return $this->render('project_related/settings/design.html.twig');
+        $project = $this->getActiveProject();
+        $config = $project->getConfigValues();
+
+        $boxSizeChoices = [
+            'settings.design.choices.boxSize.small' => 'small',
+            'settings.design.choices.boxSize.medium' => 'medium',
+            'settings.design.choices.boxSize.large' => 'large',
+        ];
+        $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
+            ->add('boxSize', ChoiceType::class, ['label' => 'settings.design.form.boxSize', 'expanded' => true, 'choices' => $boxSizeChoices])
+            ->add('boxRadius', NumberType::class, ['label' => 'settings.design.form.boxRadius', 'attr' => ['class' => 'text-end', 'min' => 0, 'data-variable' => '--mosparo-border-radius']])
+            ->add('colorBackground', TextType::class, ['label' => 'settings.design.form.color.background', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-background-color']])
+            ->add('colorBorder', TextType::class, ['label' => 'settings.design.form.color.border', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-border-color']])
+            ->add('colorCheckbox', TextType::class, ['label' => 'settings.design.form.color.checkbox', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-circle-border-color']])
+            ->add('colorText', TextType::class, ['label' => 'settings.design.form.color.text', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-text-color']])
+            ->add('colorShadow', TextType::class, ['label' => 'settings.design.form.color.shadow', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-shadow-color']])
+            ->add('colorShadowInset', TextType::class, ['label' => 'settings.design.form.color.shadowInset', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-shadow-inset-color']])
+            ->add('colorFocusCheckbox', TextType::class, ['label' => 'settings.design.form.color.checkbox', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-focus-circle-border-color']])
+            ->add('colorFocusCheckboxShadow', TextType::class, ['label' => 'settings.design.form.color.checkboxShadow', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-focus-circle-shadow-color']])
+            ->add('colorLoadingCheckbox', TextType::class, ['label' => 'settings.design.form.color.checkbox', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-loading-circle-border-color']])
+            ->add('colorLoadingCheckboxAnimatedCircle', TextType::class, ['label' => 'settings.design.form.color.checkboxAnimatedCircle', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-loading-circle-animated-border-color']])
+            ->add('colorSuccessBackground', TextType::class, ['label' => 'settings.design.form.color.background', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-success-background-color']])
+            ->add('colorSuccessBorder', TextType::class, ['label' => 'settings.design.form.color.border', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-success-border-color']])
+            ->add('colorSuccessCheckbox', TextType::class, ['label' => 'settings.design.form.color.checkbox', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-success-circle-border-color']])
+            ->add('colorSuccessText', TextType::class, ['label' => 'settings.design.form.color.text', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-success-text-color']])
+            ->add('colorSuccessShadow', TextType::class, ['label' => 'settings.design.form.color.shadow', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-success-shadow-color']])
+            ->add('colorSuccessShadowInset', TextType::class, ['label' => 'settings.design.form.color.shadowInset', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-success-shadow-inset-color']])
+            ->add('colorFailureBackground', TextType::class, ['label' => 'settings.design.form.color.background', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-failure-background-color']])
+            ->add('colorFailureBorder', TextType::class, ['label' => 'settings.design.form.color.border', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-failure-border-color']])
+            ->add('colorFailureCheckbox', TextType::class, ['label' => 'settings.design.form.color.checkbox', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-failure-circle-border-color']])
+            ->add('colorFailureText', TextType::class, ['label' => 'settings.design.form.color.text', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-failure-text-color']])
+            ->add('colorFailureShadow', TextType::class, ['label' => 'settings.design.form.color.shadow', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-failure-shadow-color']])
+            ->add('colorFailureShadowInset', TextType::class, ['label' => 'settings.design.form.color.shadowInset', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-failure-shadow-inset-color']])
+            ->add('showPingAnimation', CheckboxType::class, ['label' => 'settings.design.form.showPingAnimation', 'required' => false, 'attr' => ['data-variable' => '--mosparo-ping-animation-name', 'data-variable-value' => 'mosparo__ping-animation']])
+            ->add('showMosparoLogo', CheckboxType::class, ['label' => 'settings.design.form.showMosparoLogo', 'required' => false, 'attr' => ['data-variable' => '--mosparo-show-logo', 'data-variable-value' => 'block']])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $data = $form->getData();
+            foreach ($data as $key => $value) {
+                $project->setConfigValue($key, $value);
+            }
+
+            $entityManager->flush();
+
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'settings.design.message.successfullySaved',
+                    [],
+                    'mosparo'
+                )
+            );
+
+            return $this->redirectToRoute('settings_design');
+        }
+
+        $sizeVariables = [
+            'small' => [
+                '--mosparo-font-size' => 12,
+                '--mosparo-line-height' => 16,
+                '--mosparo-padding-top' => 16,
+                '--mosparo-padding-left' => 20,
+                '--mosparo-padding-right' => 16,
+                '--mosparo-padding-bottom' => 16,
+                '--mosparo-border-radius' => 8,
+                '--mosparo-border-width' => 2,
+                '--mosparo-container-min-width' => 250,
+                '--mosparo-container-max-width' => 430,
+                '--mosparo-circle-size' => 32,
+                '--mosparo-circle-radius' => 16,
+                '--mosparo-circle-border-width' => 2,
+                '--mosparo-circle-offset' => -2,
+                '--mosparo-circle-margin-right' => 16,
+                '--mosparo-shadow-blur-radius' => 8,
+                '--mosparo-shadow-spread-radius' => 2,
+                '--mosparo-icon-border-offset' => -1,
+                '--mosparo-icon-border-width' => 2,
+                '--mosparo-checkmark-icon-height' => 8,
+                '--mosparo-logo-left' => 9,
+                '--mosparo-logo-bottom' => 1,
+                '--mosparo-logo-width' => 55,
+                '--mosparo-logo-height' => 10,
+            ],
+            'medium' => [
+                '--mosparo-font-size' => 16,
+                '--mosparo-line-height' => 22,
+                '--mosparo-padding-top' => 20,
+                '--mosparo-padding-left' => 24,
+                '--mosparo-padding-right' => 20,
+                '--mosparo-padding-bottom' => 20,
+                '--mosparo-border-radius' => 11,
+                '--mosparo-border-width' => 3,
+                '--mosparo-container-min-width' => 320,
+                '--mosparo-container-max-width' => 500,
+                '--mosparo-circle-size' => 40,
+                '--mosparo-circle-radius' => 20,
+                '--mosparo-circle-border-width' => 3,
+                '--mosparo-circle-offset' => -3,
+                '--mosparo-circle-margin-right' => 20,
+                '--mosparo-shadow-blur-radius' => 12,
+                '--mosparo-shadow-spread-radius' => 3,
+                '--mosparo-icon-border-offset' => -1,
+                '--mosparo-icon-border-width' => 2,
+                '--mosparo-checkmark-icon-height' => 10,
+                '--mosparo-logo-left' => 10,
+                '--mosparo-logo-bottom' => 5,
+                '--mosparo-logo-width' => 70,
+                '--mosparo-logo-height' => 15,
+            ],
+            'large' => [
+                '--mosparo-font-size' => 24,
+                '--mosparo-line-height' => 32,
+                '--mosparo-padding-top' => 26,
+                '--mosparo-padding-left' => 30,
+                '--mosparo-padding-right' => 26,
+                '--mosparo-padding-bottom' => 26,
+                '--mosparo-border-radius' => 16,
+                '--mosparo-border-width' => 4,
+                '--mosparo-container-min-width' => 390,
+                '--mosparo-container-max-width' => 570,
+                '--mosparo-circle-size' => 44,
+                '--mosparo-circle-radius' => 22,
+                '--mosparo-circle-border-width' => 4,
+                '--mosparo-circle-offset' => -4,
+                '--mosparo-circle-margin-right' => 24,
+                '--mosparo-shadow-blur-radius' => 16,
+                '--mosparo-shadow-spread-radius' => 4,
+                '--mosparo-icon-border-offset' => -2,
+                '--mosparo-icon-border-width' => 4,
+                '--mosparo-checkmark-icon-height' => 11,
+                '--mosparo-logo-left' => 15,
+                '--mosparo-logo-bottom' => 10,
+                '--mosparo-logo-width' => 75,
+                '--mosparo-logo-height' => 15,
+            ],
+        ];
+
+        return $this->render('project_related/settings/design.html.twig', [
+            'form' => $form->createView(),
+            'project' => $project,
+            'sizeVariables' => $sizeVariables,
+        ]);
     }
 
     /**

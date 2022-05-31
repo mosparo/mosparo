@@ -425,6 +425,43 @@ settings:
   design:
     title: Design
 
+    subtitles:
+      dimensionSettings: Dimensions
+      colorSettings: Colors
+      colors:
+        normal: Normal
+        focus: On focus
+        loading: When loading
+        success: Success
+        failure: Failure
+
+    preview:
+      background: Preview background
+
+    form:
+      boxSize: Box size
+      boxRadius: Box radius
+      showMosparoLogo: Show mosparo logo below the checkbox
+      showPingAnimation: Show ping animation to highlight the checkbox
+      color:
+        background: Background
+        border: Border
+        checkbox: Checkbox
+        checkboxShadow: Checkbox Shadow
+        checkboxAnimatedCircle: Animated Part
+        text: Text
+        shadow: Shadow
+        shadowInset: Shadow Inset
+
+    choices:
+      boxSize:
+        small: Small
+        medium: Medium
+        large: Large
+
+    message:
+      successfullySaved: The design settings were saved successfully.
+
 # Administration
 administration:
   title: Administration

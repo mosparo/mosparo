@@ -1,12 +1,273 @@
 {% extends 'project_related/settings/settings_base.html.twig' %}
 
-{% block documentTitle %}Design - {{ parent() }}{% endblock %}
-{% block pageTitle %}Design{% endblock %}
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'settings.design.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'settings.design.title'|trans }}{% endblock %}
 
 {% block settingsPageBody %}
     <div class="row">
-        <div class="col-12">
-            <div class="alert alert-info">This functionality will be implemented before V1.0.</div>
+        <div class="col-12 mb-3">
+            {{ form_start(form) }}
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">{{ 'settings.design.subtitles.dimensionSettings'|trans }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-lg-4">
+                            {{ form_row(form.boxSize) }}
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <div class="form-group">
+                                {{ form_label(form.boxRadius) }}
+                                <div class="input-group">
+                                    <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                        <i class="ti ti-minus"></i>
+                                    </button>
+                                    {{ form_widget(form.boxRadius) }}
+                                    <span class="input-group-text">px</span>
+                                    <button class="btn btn-icon-only btn-increase-value" type="button">
+                                        <i class="ti ti-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h2 class="card-title">{{ 'settings.design.subtitles.colorSettings'|trans }}</h2>
+                    <div class="card-actions">
+                        <div class="d-flex align-items-center">
+                            <label for="page_body_backgroundColor" class="me-2">{{ 'settings.design.preview.background'|trans }}</label>
+                            <input type="text" id="page_body_backgroundColor" name="" class="colorpicker form-control" data-variable="--page-body-background" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-lg-2">
+                            <h3>{{ 'settings.design.subtitles.colors.normal'|trans }}</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorBackground) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorBorder) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorCheckbox) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorText) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorShadow) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorShadowInset) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form_row(form.showPingAnimation) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="design-mode-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="normal"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 col-lg-2">
+                            <h3>{{ 'settings.design.subtitles.colors.focus'|trans }}</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFocusCheckbox) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFocusCheckboxShadow) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form_row(form.showMosparoLogo) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="design-mode-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="focus"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 col-lg-2">
+                            <h3>{{ 'settings.design.subtitles.colors.loading'|trans }}</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorLoadingCheckbox) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorLoadingCheckboxAnimatedCircle) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="design-mode-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="loading"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 col-lg-2">
+                            <h3>{{ 'settings.design.subtitles.colors.success'|trans }}</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorSuccessBackground) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorSuccessBorder) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorSuccessCheckbox) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorSuccessText) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorSuccessShadow) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorSuccessShadowInset) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="design-mode-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="success"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 col-lg-2">
+                            <h3>{{ 'settings.design.subtitles.colors.failure'|trans }}</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFailureBackground) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFailureBorder) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFailureCheckbox) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFailureText) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFailureShadow) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFailureShadowInset) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="design-mode-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="failure"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto ms-auto">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="ti ti-device-floppy"></i>
+                        {{ 'action.save'|trans }}
+                    </button>
+                </div>
+            </div>
+            {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <link href="{{ asset('/build/mosparo-frontend.css') }}" rel="stylesheet">
+    <script src="{{ asset('/build/mosparo-frontend.js') }}"></script>
+    <script>
+        var sizeVariables = {{ sizeVariables|json_encode()|raw }};
+        var initialTrigger = false;
+
+        $(document).ready(function () {
+            $('.mosparo-box').each(function () {
+                new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.publicKey }}', { designMode: true });
+
+                let type = $(this).data('type');
+                switch (type) {
+                    case 'focus':
+                        $(this).addClass('mosparo__focus');
+                        break;
+                    case 'loading':
+                        $(this).addClass('mosparo__loading');
+                        break;
+                    case 'success':
+                        $(this).addClass('mosparo__checked');
+                        break;
+                    case 'failure':
+                        $(this).addClass('mosparo__invalid');
+                        break;
+                }
+            });
+
+            $('input[name="form[boxSize]"]').change(function () {
+                let size = $(this).val();
+                if (!(size in sizeVariables)) {
+                    return;
+                }
+
+                let variables = sizeVariables[size];
+                for (let variableName in variables) {
+                    let fieldForVariable = $('input[data-variable="' + variableName + '"]');
+                    if (fieldForVariable.length > 0 && initialTrigger) {
+                        continue;
+                    } else if (fieldForVariable.length > 0) {
+                        fieldForVariable.val(variables[variableName]);
+                    }
+
+                    updateCssVariable(variableName, variables[variableName], 'number');
+                }
+
+            });
+
+            initialTrigger = true;
+            $('input[name="form[boxSize]"]:checked').trigger('change');
+            initialTrigger = false;
+        });
+    </script>
 {% endblock %}

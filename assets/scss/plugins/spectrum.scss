@@ -1,0 +1,54 @@
+.colorpicker-container {
+    display: flex;
+
+    margin-bottom: 1rem;
+
+    input {
+        display: block !important;
+        flex: 1;
+
+        border-radius: 3px 0 0 3px;
+        border-right-width: 0;
+    }
+
+    .sp-replacer {
+        display: flex;
+        align-items: center;
+
+        color: #206bc4;
+        background: rgba(32, 107, 196, 0.04);
+
+        border-color: #206bc4;
+        border-radius: 0 3px 3px 0;
+
+        &:hover,
+        &.sp-active {
+            border-color: #000000;
+        }
+
+        .sp-preview {
+            height: 26px;
+        }
+
+        .sp-dd {
+            padding: 0 2px;
+        }
+    }
+}
+
+.card-actions {
+    .colorpicker-container {
+        max-width: 150px;
+        margin-bottom: 0;
+    }
+}
+
+.sp-container {
+    color: #206bc4;
+    background: #F6F9FD;
+
+    border-color: #206bc4;
+    border-radius: 3px;
+
+    box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.3);
+}

@@ -88,3 +88,16 @@
         {% endif %}
     </div>
 {% endblock %}
+
+{%- block _form_boxSize_widget -%}
+    <div class="form-selectgroup">
+        {% for child in form.children %}
+            <label class="form-selectgroup-item">
+                <input type="radio" class="form-selectgroup-input" id="{{ child.vars.id }}" name="{{ child.vars.full_name }}" {% if child.vars.value is defined %} value="{{ child.vars.value }}"{% endif %}{% if child.vars.checked %} checked="checked"{% endif %} />
+                <span class="form-selectgroup-label">
+                    {{ child.vars.label|trans({}, translation_domain) }}
+                </span>
+            </label>
+        {% endfor %}
+    </div>
+{%- endblock -%}

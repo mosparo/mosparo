@@ -1,8 +1,20 @@
 .mosparo__container {
-    border: 2px solid #DDDDDD;
-    background: #F8F8F8;
-    padding: 1em;
-    border-radius: 5px;
+    border: var(--mosparo-border-width, 3px) solid var(--mosparo-border-color, #000);
+    background: var(--mosparo-background-color, #FFFFFF);
+    padding: var(--mosparo-padding-top, 20px) var(--mosparo-padding-right, 20px) var(--mosparo-padding-bottom, 20px) var(--mosparo-padding-left, 24px);
+    border-radius: var(--mosparo-border-radius, 11px);
+
+    box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-shadow-inset-color, transparent);
+
+    font-size: var(--mosparo-font-size, 16px);
+    line-height: var(--mosparo-line-height, 22px);
+    color: var(--mosparo-text-color, #000);
+
+    min-width: var(--mosparo-container-min-width, 320px);
+    max-width: var(--mosparo-container-max-width, 500px);
+
+    display: flex;
+    position: relative;
 
     user-select: none;
 
@@ -13,6 +25,7 @@
 
     .mosparo__checkbox_column {
         position: relative;
+        margin-right: var(--mosparo-circle-margin-right, 20px);
 
         input[type="checkbox"] {
             opacity: 0;
@@ -26,46 +39,97 @@
         }
 
         .mosparo__checkbox {
-            flex: 0 0 32px;
+            flex: 0 0 var(--mosparo-circle-size, 40px);
 
-            border: 5px solid #DDDDDD;
-            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: var(--mosparo-circle-border-width, 3px) solid var(--mosparo-circle-border-color, #000000);
+            border-radius: var(--mosparo-circle-radius, 20px);
 
             position: relative;
 
-            width: 32px;
-            height: 32px;
+            width: var(--mosparo-circle-size, 40px);
+            height: var(--mosparo-circle-size, 40px);
 
             cursor: pointer;
 
             transition: all 0.25s;
 
             &:not(.mosparo__loading):not(.mosparo__checked):not(.mosparo__invalid):hover {
-                border-color: #AAAAAA;
+                border-color: var(--mosparo-focus-circle-border-color, #AAAAAA);
+            }
+
+            &:before,
+            &:after {
+                content: '';
+
+                display: block;
+                width: var(--mosparo-circle-size, 40px);
+                height: var(--mosparo-circle-size, 40px);
+
+                position: absolute;
+                top: var(--mosparo-circle-offset, -3px);
+                left: var(--mosparo-circle-offset, -3px);
+
+                border-radius: var(--mosparo-circle-radius, 20px);
+            }
+
+            &:before {
+                border: 2px solid var(--mosparo-circle-border-color, #000000);
+
+                transform: scale(1);
+
+                transform-origin: center;
+                animation-iteration-count: infinite;
+                animation-duration: 2.5s;
+
+                opacity: 0;
             }
 
             &:after {
-                display: block;
-                width: 32px;
-                height: 32px;
-
-                position: absolute;
-                top: -5px;
-                left: -5px;
-
-                border: 5px solid transparent;
-                border-left-color: #0000FF;
-                border-radius: 16px;
-
-                content: '';
+                border: var(--mosparo-circle-border-width, 3px) solid transparent;
+                border-left-color: var(--mosparo-loading-circle-animated-border-color, #0000FF);
 
                 opacity: 0;
 
                 transition: all 0.25s;
             }
 
-            &.mosparo__loading {
-                border-radius: 16px;
+            .mosparo__icon-checkmark,
+            .mosparo__icon-failure {
+                display: none;
+            }
+        }
+    }
+
+    &:after {
+        content: '';
+        display: none;
+
+        position: absolute;
+        left: var(--mosparo-logo-left, 10px);
+        bottom: var(--mosparo-logo-bottom, 5px);
+
+        width: var(--mosparo-logo-width, 70px);
+        height: var(--mosparo-logo-height, 70px);
+
+        z-index: 0;
+    }
+
+    &:not(.mosparo__checked):not(.mosparo__invalid):hover {
+        &:after {
+            display: var(--mosparo-show-logo, none);
+            background: url('../images/mosparo_text_logo.svg') no-repeat center;
+        }
+    }
+
+    &.mosparo__loading {
+        .mosparo__checkbox_column {
+            .mosparo__checkbox {
+                border-color: var(--mosparo-loading-circle-border-color, transparent);
+                border-radius: var(--mosparo-circle-radius, 20px);
 
                 &:after {
                     opacity: 1;
@@ -73,68 +137,148 @@
                     animation: mosparo__loading-animation 1s linear infinite;
                 }
             }
-
-            &.mosparo__checked {
-                border-color: #00AA00;
-
-                &:before {
-                    content: '';
-
-                    display: block;
-                    width: 16px;
-                    height: 10px;
-
-                    position: absolute;
-                    top: 5px;
-                    left: 3px;
-
-                    border: 5px solid #00AA00;
-                    border-width: 0 0 5px 5px;
-
-                    transform: rotate(-45deg);
-                }
-            }
-
-            &.mosparo__invalid {
-                border-color: #FF0000;
-
-                &:before {
-                    content: '';
-
-                    display: block;
-                    width: 16px;
-                    height: 5px;
-
-                    position: absolute;
-                    top: 8px;
-                    left: 3px;
-
-                    border-bottom: 5px solid #FF0000;
-
-                    transform: rotate(-45deg);
-                }
-            }
         }
+    }
 
-        input[type="checkbox"]:focus + .mosparo__checkbox {
+    &.mosparo__checked {
+        border-color: var(--mosparo-success-border-color, #000);
+        background: var(--mosparo-success-background-color, #FFFFFF);
+        color: var(--mosparo-success-text-color, #000);
+        box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-success-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-success-shadow-inset-color, transparent);
 
-            &:not(.mosparo__checked):not(.mosparo__invalid):not(.mosparo__loading) {
-                border-color: #86b7fe;
-                box-shadow: 0 0 0 0.25rem rgb(13, 110, 253, 0.25);
-            }
+        .mosparo__checkbox_column {
+            .mosparo__checkbox {
+                border-color: var(--mosparo-success-circle-border-color, #00AA00);
 
-            &.mosparo__checked {
-                box-shadow: 0 0 0 0.25rem rgb(0, 170, 0, 0.25);
-            }
+                .mosparo__icon-checkmark {
+                    display: block;
+                    width: var(--mosparo-circle-radius, 20px);
+                    height: var(--mosparo-checkmark-icon-height, 10px);
 
-            &.mosparo__invalid {
-                box-shadow: 0 0 0 0.25rem rgb(255, 0, 0, 0.25);
+                    margin-top: -4px;
+
+                    transform: rotate(-45deg);
+
+                    &:before {
+                        content: '';
+
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+
+                        border-style: solid;
+                        border-color: var(--mosparo-success-circle-border-color, #00AA00);
+                        border-width: 0 0 var(--mosparo-icon-border-width, 2px) var(--mosparo-icon-border-width, 2px);
+                    }
+                }
             }
         }
     }
 
-    .mosparo__content_column {
-        margin-left: 1em;
+    &.mosparo__invalid {
+        border-color: var(--mosparo-failure-border-color, #000);
+        background: var(--mosparo-failure-background-color, #FFFFFF);
+        color: var(--mosparo-failure-text-color, #000);
+        box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-failure-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-failure-shadow-inset-color, transparent);
+
+        .mosparo__checkbox_column {
+            .mosparo__checkbox {
+                border-color: var(--mosparo-failure-circle-border-color, #00AA00);
+
+                .mosparo__icon-failure {
+                    display: block;
+
+                    position: relative;
+                    width: var(--mosparo-circle-radius, 20px);
+                    height: var(--mosparo-circle-radius, 20px);
+
+                    transform: rotate(45deg);
+
+                    &:before,
+                    &:after {
+                        content: '';
+
+                        display: block;
+
+                        position: absolute;
+                    }
+
+                    &:before {
+                        top: 50%;
+                        left: 0;
+
+                        width: 100%;
+                        height: 0;
+
+                        margin-top: var(--mosparo-icon-border-offset, -1px);
+                        border-bottom: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, #00AA00);
+                    }
+
+                    &:after {
+                        top: 0;
+                        left: 50%;
+
+                        width: 0;
+                        height: 100%;
+
+                        margin-left: var(--mosparo-icon-border-offset, -1px);
+                        border-right: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, #00AA00);
+                    }
+                }
+            }
+        }
+    }
+
+    &:not(.mosparo__checked):not(.mosparo__invalid):not(.mosparo__loading) {
+        .mosparo__checkbox_column {
+            .mosparo__checkbox {
+                &:before {
+                    animation-name: var(--mosparo-ping-animation-name, unset);
+                }
+            }
+
+            input[type="checkbox"]:focus + .mosparo__checkbox {
+                border-color: var(--mosparo-focus-circle-border-color, #AAAAAA);
+                box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
+            }
+        }
+    }
+
+    &.mosparo__checked {
+        input[type="checkbox"]:focus + .mosparo__checkbox {
+            box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
+        }
+    }
+
+    &.mosparo__invalid {
+        input[type="checkbox"]:focus + .mosparo__checkbox {
+            box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
+        }
+    }
+
+    &.mosparo__design-mode {
+        &:not(.mosparo__checked):not(.mosparo__invalid):not(.mosparo__focus):hover {
+            &:after {
+                display: none;
+            }
+        }
+
+        &.mosparo__focus,
+        &.mosparo__focus:hover {
+            input[type="checkbox"] + .mosparo__checkbox {
+                border-color: var(--mosparo-focus-circle-border-color, #AAAAAA);
+                box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
+            }
+
+            &:after {
+                display: var(--mosparo-show-logo, none);
+
+                -webkit-mask: url('../images/mosparo_text_logo.svg') no-repeat center;
+                mask: url('../images/mosparo_text_logo.svg') no-repeat center;
+
+                background: var(--mosparo-text-color, #000);
+            }
+        }
     }
 
     .mosparo__accessible-message {
@@ -153,6 +297,20 @@
 
     &.mosparo__error-message-visible {
         display: block;
+    }
+}
+
+@keyframes mosparo__ping-animation {
+    0% {
+        transform: scale(1);
+        opacity: 0;
+    }
+    5% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
     }
 }
 

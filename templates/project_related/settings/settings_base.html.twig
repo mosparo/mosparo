@@ -11,7 +11,7 @@
 {% block pageBody %}
 <div class="container-xl">
     <div class="row gx-lg-4">
-        <div class="d-none d-lg-block col-lg-3">
+        <div class="d-none d-lg-block col-lg-2">
             <ul class="nav nav-pills nav-vertical">
                 <li class="nav-item">
                     <a href="{{ path('settings_general') }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_general' %}active{% endif %}">
@@ -39,7 +39,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-10">
             {% set flashes = app.flashes %}
             {% if flashes|length > 0 %}
                 {% for label, messages in flashes %}

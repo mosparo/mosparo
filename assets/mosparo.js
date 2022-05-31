@@ -13,6 +13,8 @@ import '@tabler/core';
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 
+import 'spectrum-colorpicker';
+
 const apexCharts = require('apexcharts');
 global.ApexCharts = apexCharts;
 
