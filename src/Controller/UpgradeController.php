@@ -25,7 +25,7 @@ class UpgradeController extends AbstractController
 
     protected $mosparoVersion;
 
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper, $mosparoVersion)
+    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper, string $mosparoVersion)
     {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
@@ -52,9 +52,9 @@ class UpgradeController extends AbstractController
         $output->fetch();
 
         // Update the installed version
-        $values = $this->configHelper->readEnvironmentConfig();
-        $values['mosparo_installed_version'] = $this->mosparoVersion;
-        $this->configHelper->writeEnvironmentConfig($values);
+        $this->configHelper->writeEnvironmentConfig([
+            'mosparo_installed_version' => $this->mosparoVersion,
+        ]);
 
         return $this->render('upgrade/executed.html.twig');
     }
