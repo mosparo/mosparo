@@ -569,6 +569,7 @@ administration:
         message:
           successfullyDownloaded: The database was downloaded successfully.
           errorDownload: An error occurred while mosparo tried to download the database. %error%
+          specifyLicenseKey: Please enter a license key before you try to download the database.
 
       cli:
         title: CLI

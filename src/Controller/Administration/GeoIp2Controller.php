@@ -51,8 +51,13 @@ class GeoIp2Controller extends AbstractController
             $entityManager->flush();
 
             // Save the config value
+            $licenseKey = $form->get('geoipLicenseKey')->getData();
+            if ($licenseKey === null) {
+                $licenseKey = '';
+            }
+
             $this->configHelper->setConfigValue('geoipActive', $form->get('geoipActive')->getData());
-            $this->configHelper->setConfigValue('geoipLicenseKey', $form->get('geoipLicenseKey')->getData());
+            $this->configHelper->setConfigValue('geoipLicenseKey', $licenseKey);
 
             $session = $request->getSession();
             $session->getFlashBag()->add(
@@ -69,6 +74,7 @@ class GeoIp2Controller extends AbstractController
 
         return $this->render('administration/geoip2/settings.html.twig', [
             'form' => $form->createView(),
+            'hasLicenseKey' => ($this->configHelper->getConfigValue('geoipLicenseKey', '') != '')
         ]);
     }
 
@@ -77,24 +83,36 @@ class GeoIp2Controller extends AbstractController
      */
     public function download(Request $request): Response
     {
-        $result = $this->geoIp2Helper->downloadDatabase();
-
         $session = $request->getSession();
-        if ($result === true) {
-            $session->getFlashBag()->add(
-                'success',
-                $this->translator->trans(
-                    'administration.geoip2.downloadAndUpdate.web.message.successfullyDownloaded',
-                    [],
-                    'mosparo'
-                )
-            );
+        $licenseKey = $this->configHelper->getConfigValue('geoipLicenseKey', '');
+        if ($licenseKey !== '') {
+            $result = $this->geoIp2Helper->downloadDatabase();
+
+            if ($result === true) {
+                $session->getFlashBag()->add(
+                    'success',
+                    $this->translator->trans(
+                        'administration.geoip2.downloadAndUpdate.web.message.successfullyDownloaded',
+                        [],
+                        'mosparo'
+                    )
+                );
+            } else {
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans(
+                        'administration.geoip2.downloadAndUpdate.web.message.errorDownload',
+                        ['%error%' => implode(' ', $result)],
+                        'mosparo'
+                    )
+                );
+            }
         } else {
             $session->getFlashBag()->add(
                 'error',
                 $this->translator->trans(
-                    'administration.geoip2.downloadAndUpdate.web.message.errorDownload',
-                    ['%error%' => implode(' ', $result)],
+                    'administration.geoip2.downloadAndUpdate.web.message.specifyLicenseKey',
+                    [],
                     'mosparo'
                 )
             );

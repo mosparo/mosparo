@@ -570,6 +570,7 @@ administration:
         message:
           successfullyDownloaded: Die Datenbank wurde erfolgreich heruntergeladen.
           errorDownload: Während mosparo versucht hat, die Datenbank herunterzuladen, trat ein Fehler auf. %error%
+          specifyLicenseKey: Bitte geben Sie einen Lizenz-Schlüssel ein, bevor Sie versuchen die Datenbank herunterzuladen.
 
       cli:
         title: CLI
