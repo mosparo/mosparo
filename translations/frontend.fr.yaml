@@ -1,0 +1,16 @@
+label: J’accepte que mes données soient vérifiées pour éviter les spams et qu’elles soient conservées pendant 14 jours.
+
+accessibility:
+  checkingData: Nous vérifions vos données. Veuillez patienter s’il vous plaît.
+  dataValid: Vos données ne contiennent pas de spam. Vous pouvez envoyer le formulaire.
+
+error:
+  gotNoToken: mosparo n’a pas émis de token.
+  internalError: Une erreur s’est produite. Veuillez répéter la procédure s’il vous plaît.
+  noSubmitTokenAvailable: Aucun token disponible. La validation de vos données n’est pas possible.
+  spamDetected: Vos données contiennent du spam.
+  lockedOut: Vous avez été temporairement bloqué. Veuillez réessayer après %datetime% s’il vous plaît.
+  delay: Votre demande a été retardée. Veuillez attendre %seconds% secondes s’il vous plaît.
+
+hp:
+  fieldTitle: Laisser ce champ libre

@@ -41,6 +41,7 @@ class PasswordFormType extends AbstractType
                     'attr' => ['autocomplete' => 'new-password'],
                     'constraints' => $constraints,
                     'label' => $firstFieldLabel,
+                    'help' => $options['help'],
                 ],
                 'second_options' => [
                     'attr' => ['autocomplete' => 'new-password'],

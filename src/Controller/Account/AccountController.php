@@ -80,7 +80,8 @@ class AccountController extends AbstractController
                 $this->translator->trans(
                     'account.settings.message.successfullySaved',
                     [],
-                    'mosparo'
+                    'mosparo',
+                    $form->get('locale')->getData()
                 )
             );
 

@@ -308,7 +308,7 @@ submission:
 
 # Settings
 settings:
-  title: Einstellungen
+  title: Projekt-Einstellungen
   backToSettings: Zu den Einstellungen
 
   general:
@@ -403,7 +403,7 @@ settings:
       delayTime: Anfangsverzögerungszeit
       delayTimeHelp: In Sekunden
       delayMultiplicator: Multiplikator
-      delayMultiplicatorHelp: The base delay time will be increased with every additional request.
+      delayMultiplicatorHelp: Die Anfagsverzögerungszeit wird mit jeder weiteren Anfrage erhöht.
       lockoutActive: Automatische Sperre aktiv
       lockoutNumberOfAllowedRequests: Anzahl erlaubter Anfragen
       lockoutNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Sperre aktiv wird.
@@ -468,7 +468,7 @@ administration:
   title: Administration
 
   settings:
-    title: Einstellungen
+    title: System-Einstellungen
     description: Konfigurieren Sie verschiedene Einstellungen, welche für Ihre mosparo-Installation gelten.
 
     mainSettings:
@@ -532,6 +532,9 @@ administration:
       message:
         successfullySaved: Der Benutzer wurde erfolgreich gespeichert.
 
+    help:
+      password: Lassen Sie das Feld leer wenn kein neues Passwort gespeichert werden soll.
+
 
     delete:
       title: Benutzer %email% löschen
@@ -585,8 +588,8 @@ account:
   backToOverview: Zurück zur Übersicht
 
   settings:
-    title: Einstellungen
-    description: Ändern Sie grundlegende Einstellungen zu Ihrem Account.
+    title: Benutzer-Einstellungen
+    description: Ändern Sie Ihre persönlichen Einstellungen zu Ihrem Account.
 
     form:
       locale: Sprache
@@ -654,7 +657,7 @@ security:
     title: Abmelden
 
   forgotPassword:
-    title: Ich habe mein Passwort vergessen
+    title: Passwort vergessen
 
   twoFactor:
     title: Zwei-Faktor-Authentisierung

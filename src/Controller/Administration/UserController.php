@@ -92,7 +92,7 @@ class UserController extends AbstractController
                 'mapped' => false,
                 'required' => $isNewUser,
                 'is_new_password' => (!$isNewUser),
-                'help' => 'Leave these fields empty if no password change is required.'
+                'help' => 'administration.user.help.password'
             ])
             ->add('isActiveUser', CheckboxType::class, [
                 'label' => 'administration.user.form.isActiveUser',

@@ -1,0 +1,16 @@
+label: Accetto che i miei dati siano controllati per lo spam e conservati per 14 giorni.
+
+accessibility:
+  checkingData: Stiamo controllando i tuoi dati. Attendere prego.
+  dataValid: I tuoi dati sono validi. Puoi inviare il formulario.
+
+error:
+  gotNoToken: mosparo non ha emesso alcun token di invio.
+  internalError: Si è verificato un errore. Per favore riprova.
+  noSubmitTokenAvailable: Nessun token di invio disponibile. La convalida dei tuoi dati non è possibile.
+  spamDetected: I tuoi dati contengono spam.
+  lockedOut: Sei stato temporaneamente bloccato. Riprova dopo %datetime%.
+  delay: La tua richiesta è stata ritardata. Attendi %secondi% secondi.
+
+hp:
+  fieldTitle: Lascia vuoto questo campo

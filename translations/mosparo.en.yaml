@@ -308,7 +308,7 @@ submission:
 
 # Settings
 settings:
-  title: Settings
+  title: Project settings
   backToSettings: Back to settings
 
   general:
@@ -468,7 +468,7 @@ administration:
   title: Administration
 
   settings:
-    title: Settings
+    title: System settings
     description: Configure various settings which apply to your mosparo installation.
 
     mainSettings:
@@ -532,6 +532,8 @@ administration:
       message:
         successfullySaved: The user was saved successfully.
 
+    help:
+      password: Leave these fields empty if no password change is required.
 
     delete:
       title: Delete user %email%
@@ -585,7 +587,7 @@ account:
   backToOverview: Back to overview
 
   settings:
-    title: Settings
+    title: User settings
     description: Change the general settings for your account.
 
     form:
@@ -655,7 +657,7 @@ security:
     title: Logout
 
   forgotPassword:
-    title: I forgot my password
+    title: Forgot password
 
   twoFactor:
     title: Two factor authentication
