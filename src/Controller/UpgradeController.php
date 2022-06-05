@@ -56,6 +56,16 @@ class UpgradeController extends AbstractController
             'mosparo_installed_version' => $this->mosparoVersion,
         ]);
 
+        // Clear the cache after the upgrade
+        $input = new ArrayInput(array(
+            'command' => 'cache:clear',
+            '-n'
+        ));
+
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+        $output->fetch();
+
         return $this->render('upgrade/executed.html.twig');
     }
 }

@@ -188,6 +188,16 @@ class SetupController extends AbstractController
             'mosparo_installed_version' => $this->mosparoVersion,
         ]);
 
+        // Clear the cache after the installation
+        $input = new ArrayInput(array(
+            'command' => 'cache:clear',
+            '-n'
+        ));
+
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+        $output->fetch();
+
         return $this->render('setup/install.html.twig');
     }
 }
