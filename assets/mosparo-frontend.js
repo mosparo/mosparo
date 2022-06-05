@@ -169,7 +169,13 @@ function mosparo(containerId, url, publicKey, options)
 
             this.checkboxFieldElement.addEventListener('change', function () {
                 _this.checkForm();
-            })
+            });
+            this.checkboxFieldElement.addEventListener('focus', function () {
+                _this.containerElement.classList.add('mosparo__focus');
+            });
+            this.checkboxFieldElement.addEventListener('blur', function () {
+                _this.containerElement.classList.remove('mosparo__focus');
+            });
 
             this.checkboxElement.addEventListener('click', function () {
                 _this.checkForm();
@@ -199,7 +205,7 @@ function mosparo(containerId, url, publicKey, options)
                 _this.submitTokenElement.value = response.submitToken;
                 _this.updateMessages(response.messages);
 
-                if ('honeypotFieldName' in response && response.honeypotFieldName != '') {
+                if ('honeypotFieldName' in response && response.honeypotFieldName) {
                     _this.addHoneypotField(response.honeypotFieldName);
                 }
             } else if (response.security) {

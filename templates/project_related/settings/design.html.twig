@@ -49,7 +49,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12 col-lg-2">
+                        <div class="col-12">
                             <h3>{{ 'settings.design.subtitles.colors.normal'|trans }}</h3>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-12 col-lg-2">
+                        <div class="col-12">
                             <h3>{{ 'settings.design.subtitles.colors.focus'|trans }}</h3>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-12 col-lg-2">
+                        <div class="col-12">
                             <h3>{{ 'settings.design.subtitles.colors.loading'|trans }}</h3>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-12 col-lg-2">
+                        <div class="col-12">
                             <h3>{{ 'settings.design.subtitles.colors.success'|trans }}</h3>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                         </div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-12 col-lg-2">
+                        <div class="col-12">
                             <h3>{{ 'settings.design.subtitles.colors.failure'|trans }}</h3>
                         </div>
                     </div>
@@ -191,6 +191,9 @@
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     {{ form_row(form.colorFailureShadowInset) }}
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    {{ form_row(form.colorFailureTextError) }}
                                 </div>
                             </div>
                         </div>
@@ -228,6 +231,7 @@
             $('.mosparo-box').each(function () {
                 new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.publicKey }}', { designMode: true });
 
+                $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend') }}');
                 let type = $(this).data('type');
                 switch (type) {
                     case 'focus':
@@ -241,11 +245,12 @@
                         break;
                     case 'failure':
                         $(this).addClass('mosparo__invalid');
+                        $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend') }}');
                         break;
                 }
             });
 
-            $('input[name="form[boxSize]"]').change(function () {
+            $('input[name="design_settings_form[boxSize]"]').change(function () {
                 let size = $(this).val();
                 if (!(size in sizeVariables)) {
                     return;
@@ -266,7 +271,7 @@
             });
 
             initialTrigger = true;
-            $('input[name="form[boxSize]"]:checked').trigger('change');
+            $('input[name="design_settings_form[boxSize]"]:checked').trigger('change');
             initialTrigger = false;
         });
     </script>

@@ -430,7 +430,7 @@ settings:
       colorSettings: Farben
       colors:
         normal: Normal
-        focus: Bei Fokus
+        focus: Bei Fokus und Hover
         loading: Beim Laden
         success: Erfolg
         failure: Fehler
@@ -450,6 +450,7 @@ settings:
         checkboxShadow: Checkbox Shatten
         checkboxAnimatedCircle: Animierter Teil
         text: Text
+        textError: Text, Fehler
         shadow: Schatten
         shadowInset: Schatten, Innen
 

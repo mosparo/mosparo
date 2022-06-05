@@ -8,4 +8,9 @@ class HashUtil
     {
         return hash('whirlpool', $value);
     }
+
+    public static function sha256Hash($value)
+    {
+        return hash('sha256', $value);
+    }
 }

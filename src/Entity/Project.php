@@ -20,6 +20,11 @@ class Project
     private $id;
 
     /**
+     * @ORM\Column(type="guid")
+     */
+    private $uuid;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
@@ -82,6 +87,34 @@ class Project
         'lockoutMultiplicator' => 1.2,
 
         'ipAllowList' => '',
+
+        'boxSize' => 'medium',
+        'boxRadius' => 11,
+        'colorBackground' => '#FFF',
+        'colorBorder' => '#000',
+        'colorCheckbox' => '#000',
+        'colorText' => '#000',
+        'colorShadow' => 'rgba(170, 170, 170, 0.3)',
+        'colorShadowInset' => 'transparent',
+        'colorFocusCheckbox' => '#AAA',
+        'colorFocusCheckboxShadow' => 'rgba(170, 170, 170, 0.3)',
+        'colorLoadingCheckbox' => 'transparent',
+        'colorLoadingCheckboxAnimatedCircle' => '#00F',
+        'colorSuccessBackground' => '#FFF',
+        'colorSuccessBorder' => '#000',
+        'colorSuccessCheckbox' => '#0A0',
+        'colorSuccessText' => '#000',
+        'colorSuccessShadow' => 'rgba(170, 170, 170, 0.3)',
+        'colorSuccessShadowInset' => 'transparent',
+        'colorFailureBackground' => '#FFF',
+        'colorFailureBorder' => '#000',
+        'colorFailureCheckbox' => '#F00',
+        'colorFailureText' => '#000',
+        'colorFailureTextError' => '#F00',
+        'colorFailureShadow' => 'rgba(170, 170, 170, 0.3)',
+        'colorFailureShadowInset' => 'transparent',
+        'showPingAnimation' => true,
+        'showMosparoLogo' => true,
     ];
 
     /**
@@ -91,12 +124,18 @@ class Project
 
     public function __construct()
     {
+        $this->uuid = uuid_create(UUID_TYPE_RANDOM);
         $this->projectMembers = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
     }
 
     public function getName(): ?string
@@ -211,7 +250,7 @@ class Project
 
     public function setConfigValue($key, $value): self
     {
-        if (isset($this->defaultConfigValues[$key]) && $value == $this->defaultConfigValues[$key]) {
+        if (isset($this->defaultConfigValues[$key]) && $value === $this->defaultConfigValues[$key]) {
             if (isset($this->configValues[$key])) {
                 unset($this->configValues[$key]);
             }
@@ -222,6 +261,11 @@ class Project
         $this->configValues[$key] = $value;
 
         return $this;
+    }
+
+    public function getDefaultConfigValues(): ?array
+    {
+        return $this->defaultConfigValues;
     }
 
     /**

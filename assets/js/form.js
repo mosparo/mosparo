@@ -81,7 +81,7 @@ $(document).ready(function () {
                 if (el.is(':checked')) {
                     value = el.data('variable-value');
                 } else {
-                    value = null;
+                    value = el.data('disabled-variable-value');
                 }
             }
 

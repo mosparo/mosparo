@@ -1,6 +1,6 @@
 .mosparo__container {
     border: var(--mosparo-border-width, 3px) solid var(--mosparo-border-color, #000);
-    background: var(--mosparo-background-color, #FFFFFF);
+    background: var(--mosparo-background-color, #FFF);
     padding: var(--mosparo-padding-top, 20px) var(--mosparo-padding-right, 20px) var(--mosparo-padding-bottom, 20px) var(--mosparo-padding-left, 24px);
     border-radius: var(--mosparo-border-radius, 11px);
 
@@ -17,6 +17,12 @@
     position: relative;
 
     user-select: none;
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box;
+    }
 
     .mosparo__row {
         display: flex;
@@ -45,7 +51,7 @@
             align-items: center;
             justify-content: center;
 
-            border: var(--mosparo-circle-border-width, 3px) solid var(--mosparo-circle-border-color, #000000);
+            border: var(--mosparo-circle-border-width, 3px) solid var(--mosparo-circle-border-color, #000);
             border-radius: var(--mosparo-circle-radius, 20px);
 
             position: relative;
@@ -56,10 +62,6 @@
             cursor: pointer;
 
             transition: all 0.25s;
-
-            &:not(.mosparo__loading):not(.mosparo__checked):not(.mosparo__invalid):hover {
-                border-color: var(--mosparo-focus-circle-border-color, #AAAAAA);
-            }
 
             &:before,
             &:after {
@@ -77,20 +79,20 @@
             }
 
             &:before {
-                border: 2px solid var(--mosparo-circle-border-color, #000000);
+                border: 1px solid var(--mosparo-circle-border-color, #000);
 
                 transform: scale(1);
 
                 transform-origin: center;
                 animation-iteration-count: infinite;
-                animation-duration: 2.5s;
+                animation-duration: 3s;
 
                 opacity: 0;
             }
 
             &:after {
                 border: var(--mosparo-circle-border-width, 3px) solid transparent;
-                border-left-color: var(--mosparo-loading-circle-animated-border-color, #0000FF);
+                border-left-color: var(--mosparo-loading-circle-animated-border-color, #00F);
 
                 opacity: 0;
 
@@ -113,14 +115,15 @@
         bottom: var(--mosparo-logo-bottom, 5px);
 
         width: var(--mosparo-logo-width, 70px);
-        height: var(--mosparo-logo-height, 70px);
+        height: var(--mosparo-logo-height, 15px);
 
         z-index: 0;
     }
 
+    &:not(.mosparo__checked):not(.mosparo__invalid).mosparo__focus,
     &:not(.mosparo__checked):not(.mosparo__invalid):hover {
         &:after {
-            display: var(--mosparo-show-logo, none);
+            display: var(--mosparo-show-logo, block);
             background: url('../images/mosparo_text_logo.svg') no-repeat center;
         }
     }
@@ -142,13 +145,13 @@
 
     &.mosparo__checked {
         border-color: var(--mosparo-success-border-color, #000);
-        background: var(--mosparo-success-background-color, #FFFFFF);
+        background: var(--mosparo-success-background-color, #FFF);
         color: var(--mosparo-success-text-color, #000);
         box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-success-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-success-shadow-inset-color, transparent);
 
         .mosparo__checkbox_column {
             .mosparo__checkbox {
-                border-color: var(--mosparo-success-circle-border-color, #00AA00);
+                border-color: var(--mosparo-success-circle-border-color, #0A0);
 
                 .mosparo__icon-checkmark {
                     display: block;
@@ -167,7 +170,7 @@
                         height: 100%;
 
                         border-style: solid;
-                        border-color: var(--mosparo-success-circle-border-color, #00AA00);
+                        border-color: var(--mosparo-success-circle-border-color, #0A0);
                         border-width: 0 0 var(--mosparo-icon-border-width, 2px) var(--mosparo-icon-border-width, 2px);
                     }
                 }
@@ -177,13 +180,13 @@
 
     &.mosparo__invalid {
         border-color: var(--mosparo-failure-border-color, #000);
-        background: var(--mosparo-failure-background-color, #FFFFFF);
+        background: var(--mosparo-failure-background-color, #FFF);
         color: var(--mosparo-failure-text-color, #000);
         box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-failure-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-failure-shadow-inset-color, transparent);
 
         .mosparo__checkbox_column {
             .mosparo__checkbox {
-                border-color: var(--mosparo-failure-circle-border-color, #00AA00);
+                border-color: var(--mosparo-failure-circle-border-color, #F00);
 
                 .mosparo__icon-failure {
                     display: block;
@@ -211,7 +214,7 @@
                         height: 0;
 
                         margin-top: var(--mosparo-icon-border-offset, -1px);
-                        border-bottom: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, #00AA00);
+                        border-bottom: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, #F00);
                     }
 
                     &:after {
@@ -222,7 +225,7 @@
                         height: 100%;
 
                         margin-left: var(--mosparo-icon-border-offset, -1px);
-                        border-right: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, #00AA00);
+                        border-right: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, #F00);
                     }
                 }
             }
@@ -232,13 +235,17 @@
     &:not(.mosparo__checked):not(.mosparo__invalid):not(.mosparo__loading) {
         .mosparo__checkbox_column {
             .mosparo__checkbox {
+                &:hover {
+                    border-color: var(--mosparo-focus-circle-border-color, #AAA);
+                }
+
                 &:before {
-                    animation-name: var(--mosparo-ping-animation-name, unset);
+                    animation-name: var(--mosparo-ping-animation-name, mosparo__ping-animation);
                 }
             }
 
             input[type="checkbox"]:focus + .mosparo__checkbox {
-                border-color: var(--mosparo-focus-circle-border-color, #AAAAAA);
+                border-color: var(--mosparo-focus-circle-border-color, #AAA);
                 box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
             }
         }
@@ -256,31 +263,6 @@
         }
     }
 
-    &.mosparo__design-mode {
-        &:not(.mosparo__checked):not(.mosparo__invalid):not(.mosparo__focus):hover {
-            &:after {
-                display: none;
-            }
-        }
-
-        &.mosparo__focus,
-        &.mosparo__focus:hover {
-            input[type="checkbox"] + .mosparo__checkbox {
-                border-color: var(--mosparo-focus-circle-border-color, #AAAAAA);
-                box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
-            }
-
-            &:after {
-                display: var(--mosparo-show-logo, none);
-
-                -webkit-mask: url('../images/mosparo_text_logo.svg') no-repeat center;
-                mask: url('../images/mosparo_text_logo.svg') no-repeat center;
-
-                background: var(--mosparo-text-color, #000);
-            }
-        }
-    }
-
     .mosparo__accessible-message {
         position: absolute;
         top: -1000px;
@@ -293,7 +275,7 @@
 
     margin-top: 0.5em;
 
-    color: #FF0000;
+    color: var(--mosparo-failure-text-error-color, #F00);
 
     &.mosparo__error-message-visible {
         display: block;
