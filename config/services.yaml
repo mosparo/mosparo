@@ -134,6 +134,11 @@ services:
             $entrypointLookupCollection: '@webpack_encore.entrypoint_lookup_collection'
             $projectDirectory: '%kernel.project_dir%'
 
+    Mosparo\Controller\SetupController:
+        class: Mosparo\Controller\SetupController
+        arguments:
+            $mosparoVersion: '%env(MOSPARO_VERSION)%'
+
     Mosparo\Controller\UpgradeController:
         class: Mosparo\Controller\UpgradeController
         arguments:

@@ -14,8 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,11 +32,14 @@ class SetupController extends AbstractController
 
     protected $configHelper;
 
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper)
+    protected $mosparoVersion;
+
+    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper, string $mosparoVersion)
     {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
         $this->configHelper = $configHelper;
+        $this->mosparoVersion = $mosparoVersion;
     }
 
     /**
@@ -140,7 +141,6 @@ class SetupController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->configHelper->writeEnvironmentConfig([
                 'mosparo_name' => $form->get('name')->getData(),
-                'mosparo_installed' => true,
                 'encryption_key' => $this->setupHelper->generateEncryptionKey(),
                 'secret' => $this->setupHelper->generateEncryptionKey(),
             ]);
@@ -182,6 +182,11 @@ class SetupController extends AbstractController
         } catch (UserAlreadyExistsException|AdminUserAlreadyExistsException $e) {
             // Ignore this exception since the user exists, everything should be good.
         }
+
+        $this->configHelper->writeEnvironmentConfig([
+            'mosparo_installed' => true,
+            'mosparo_installed_version' => $this->mosparoVersion,
+        ]);
 
         return $this->render('setup/install.html.twig');
     }
