@@ -47,7 +47,7 @@ class SettingsController extends AbstractController
             'defaultTimeFormat' => $environmentConfig['default_time_format'] ?? 'H:i:s',
             'defaultTimezone' => $environmentConfig['default_timezone'] ?? 'UTC',
 
-            'mailerUseSmtp' => (bool) $environmentConfig['mailer_transport'] ?? '' == 'smtp',
+            'mailerUseSmtp' => (bool) ($environmentConfig['mailer_transport'] ?? '') == 'smtp',
             'mailerHost' => $environmentConfig['mailer_host'] ?? '',
             'mailerPort' => $environmentConfig['mailer_port'] ?? '25',
             'mailerUser' => $environmentConfig['mailer_user'] ?? '',
