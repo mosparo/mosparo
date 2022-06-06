@@ -293,8 +293,7 @@ class DesignHelper
             $realValue = $this->translateValue($key, $realValue, $configValue['type']);
             $defaultValue = $this->translateValue($key, $defaultValue, $configValue['type']);
 
-            $cssVariable = 'var(' . $cssVariableName . ', ' . $defaultValue . ')';
-            $content = str_replace($cssVariable, $realValue, $content);
+            $content = $this->replaceCssVariable($content, $cssVariableName, $defaultValue, $realValue);
         }
 
         $boxSize = $designConfigValues['boxSize'];
@@ -302,12 +301,22 @@ class DesignHelper
         $defaultBoxCssVariables = self::$boxSizeVariables[$defaultConfigValues['boxSize']];
         foreach ($boxCssVariables as $cssVariableName => $value) {
             $realValue = $value . 'px';
-            $cssVariable = 'var(' . $cssVariableName . ', ' . $defaultBoxCssVariables[$cssVariableName] . 'px)';
 
-            $content = str_replace($cssVariable, $realValue, $content);
+            $content = $this->replaceCssVariable($content, $cssVariableName, $defaultBoxCssVariables[$cssVariableName] . 'px', $realValue);
         }
 
         return $content;
+    }
+
+    protected function replaceCssVariable($content, $cssVariableName, $defaultValue, $realValue)
+    {
+        return str_replace([
+                'var(' . $cssVariableName . ', ' . $defaultValue . ')',
+                'var(' . $cssVariableName . ',' . $defaultValue . ')',
+            ],
+            $realValue,
+            $content
+        );
     }
 
     protected function translateValue($key, $value, $type)
