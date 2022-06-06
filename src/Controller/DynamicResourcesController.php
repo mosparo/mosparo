@@ -7,9 +7,11 @@ use DateTimeZone;
 use Mosparo\Entity\Project;
 use Mosparo\Helper\DesignHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @Route("/resources")
@@ -27,7 +29,7 @@ class DynamicResourcesController extends AbstractController
      * @Route("/{projectUuid}.css", name="resources_project_css")
      * @Route("/{projectUuid}/{styleHash}.css", name="resources_project_hash_css")
      */
-    public function projectUuidHashCss(string $projectUuid, string $styleHash = ''): Response
+    public function redirectToStyleResource(string $projectUuid, string $styleHash = ''): Response
     {
         $repository = $this->getDoctrine()->getRepository(Project::class);
         $project = $repository->findOneBy(['uuid' => $projectUuid]);
@@ -44,9 +46,14 @@ class DynamicResourcesController extends AbstractController
         $cssFileTime = filemtime($cssFilePath);
         $cssFileDate = (new \DateTime())->setTimestamp($cssFileTime)->setTimezone(new DateTimeZone('UTC'));
 
-        $redirectResponse = $this->redirectToRoute(
+        $resourceUrl = $this->generateUrl(
             'resources_project_hash_css',
             ['projectUuid' => $projectUuid, 'styleHash' => $project->getConfigValue('designConfigHash')],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $redirectResponse = new RedirectResponse(
+            $resourceUrl,
             307
         );
         $redirectResponse->setPublic();
@@ -58,5 +65,18 @@ class DynamicResourcesController extends AbstractController
         $redirectResponse->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
 
         return $redirectResponse;
+    }
+
+    /**
+     * @Route("/{projectUuid}/url", name="resources_project_css_url")
+     */
+    public function returnStyleResourceUrl(string $projectUuid): Response
+    {
+        $redirectResponse = $this->redirectToStyleResource($projectUuid);
+        if (!($redirectResponse instanceof RedirectResponse)) {
+            return new Response('404 Not Found', 404);
+        }
+
+        return new Response($redirectResponse->getTargetUrl());
     }
 }
