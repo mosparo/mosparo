@@ -321,6 +321,10 @@ settings:
       reissueApiKeys: Reissue API keys
       reissue: Reissue
 
+    identification:
+      title: Identification
+      uuid: Unique identification number
+
     apiKeys:
       title: API Keys
       publicKey: Public key

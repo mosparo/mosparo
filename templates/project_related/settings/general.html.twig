@@ -32,6 +32,17 @@
             {{ form_end(form) }}
         </div>
         <div class="col-12 col-lg-6 mb-3">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'settings.general.identification.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label" for="projectUuid">{{ 'settings.general.identification.uuid'|trans }}</label>
+                        <input type="text" class="form-control" id="projectUuid" value="{{ activeProject.uuid }}" readonly>
+                    </div>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">{{ 'settings.general.apiKeys.title'|trans }}</h3>

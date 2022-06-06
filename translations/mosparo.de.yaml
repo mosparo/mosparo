@@ -321,6 +321,10 @@ settings:
       reissueApiKeys: API-Zugangsdaten neu ausstellen
       reissue: Neu ausstellen
 
+    identification:
+      title: Identifikation
+      uuid: Eindeutige Identifikationsnummer
+
     apiKeys:
       title: API-Zugangsdaten
       publicKey: Öffentlicher Schlüssel
