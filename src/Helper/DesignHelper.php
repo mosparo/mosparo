@@ -310,9 +310,11 @@ class DesignHelper
 
     protected function replaceCssVariable($content, $cssVariableName, $defaultValue, $realValue)
     {
+        $fullVar = 'var(' . $cssVariableName . ', ' . $defaultValue . ')';
+
         return str_replace([
-                'var(' . $cssVariableName . ', ' . $defaultValue . ')',
-                'var(' . $cssVariableName . ',' . $defaultValue . ')',
+                $fullVar,
+                str_replace([', ', '0.'], [',', '.'], $fullVar),
             ],
             $realValue,
             $content

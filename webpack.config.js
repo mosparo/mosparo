@@ -87,17 +87,20 @@ if (Encore.isProduction()) {
     var optimization = [];
     for (var key in config.optimization.minimizer) {
         if (config.optimization.minimizer[key] instanceof CssMinimizerPlugin) {
-            continue;
+           continue;
         }
         optimization.push(config.optimization.minimizer[key]);
     }
 
     optimization.push(new CssMinimizerPlugin({
-            minify: CssMinimizerPlugin.cleanCssMinify,
+            minify: CssMinimizerPlugin.cssnanoMinify,
             minimizerOptions: {
-                properties: {
-                    colors: false
-                }
+                preset: [
+                    'default',
+                    {
+                        colormin: false,
+                    }
+                ]
             },
         })
     );
