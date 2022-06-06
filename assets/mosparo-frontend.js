@@ -1,16 +1,19 @@
 import './scss/mosparo-frontend.scss';
 
-function mosparo(containerId, url, publicKey, options)
+function mosparo(containerId, url, uuid, publicKey, options)
 {
     let _this = this;
     this.containerId = containerId;
     this.url = url;
+    this.uuid = uuid;
     this.publicKey = publicKey;
     this.defaultOptions = {
         name: '',
         allowBrowserValidation: true,
         inputFieldSelector: '[name]:not(.mosparo__ignored-field)',
         desingMode: false,
+        loadCssResource: false,
+        cssResourceUrl: '',
 
         // Callbacks
         onCheckForm: null
@@ -56,6 +59,11 @@ function mosparo(containerId, url, publicKey, options)
             this.debug('Cannot find the mosparo container.');
 
             return;
+        }
+
+        // Load the css resource, if needed
+        if (this.options.loadCssResource) {
+            this.loadCssResource();
         }
 
         this.containerElement.classList.add('mosparo__container');
@@ -185,9 +193,24 @@ function mosparo(containerId, url, publicKey, options)
         }
     }
 
+    this.loadCssResource = function () {
+        let url = this.options.cssResourceUrl;
+        if (url === '') {
+            url = this.url + '/resources/' + this.uuid + '.css';
+        }
+
+        let link  = document.createElement('link');
+        link.rel  = 'stylesheet';
+        link.type = 'text/css';
+        link.href = url;
+        link.media = 'all';
+
+        let head  = document.getElementsByTagName('head')[0];
+        head.appendChild(link);
+    }
+
     this.getRandomHash = function () {
-        // Source: https://gist.github.com/6174/6062387
-        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        return Math.random().toString().substring(2, 16);
     }
 
     this.requestSubmitToken = function () {
