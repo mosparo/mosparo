@@ -106,6 +106,13 @@
         }
     }
 
+    .mosparo__content_column {
+        .mosparo__label {
+            margin: 0;
+            cursor: pointer;
+        }
+    }
+
     &:after {
         content: '';
         display: none;
