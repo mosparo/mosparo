@@ -9,8 +9,7 @@ let collectionToggleRemoveButton = function (list) {
 };
 
 let collectionGetRandomHash = function () {
-    // Source: https://gist.github.com/6174/6062387
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    return Math.random().toString().substring(2, 16);
 }
 
 let updateCssVariable = function (variableName, value, type) {
