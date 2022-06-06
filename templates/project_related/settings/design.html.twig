@@ -229,7 +229,7 @@
 
         $(document).ready(function () {
             $('.mosparo-box').each(function () {
-                new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.publicKey }}', { designMode: true });
+                new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
 
                 $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend') }}');
                 let type = $(this).data('type');
