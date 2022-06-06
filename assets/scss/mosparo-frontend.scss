@@ -6,9 +6,17 @@
 
     box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-shadow-inset-color, transparent);
 
-    font-size: var(--mosparo-font-size, 16px);
-    line-height: var(--mosparo-line-height, 22px);
-    color: var(--mosparo-text-color, #000);
+    &,
+    .mosparo__label,
+    .mosparo__error-message {
+        font-size: var(--mosparo-font-size, 16px);
+        line-height: var(--mosparo-line-height, 22px);
+    }
+
+    &,
+    .mosparo__label, {
+        color: var(--mosparo-text-color, #000);
+    }
 
     min-width: var(--mosparo-container-min-width, 320px);
     max-width: var(--mosparo-container-max-width, 500px);
@@ -153,8 +161,12 @@
     &.mosparo__checked {
         border-color: var(--mosparo-success-border-color, #000);
         background: var(--mosparo-success-background-color, #fff);
-        color: var(--mosparo-success-text-color, #000);
         box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-success-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-success-shadow-inset-color, transparent);
+
+        &,
+        .mosparo__label, {
+            color: var(--mosparo-success-text-color, #000);
+        }
 
         .mosparo__checkbox_column {
             .mosparo__checkbox {
@@ -188,8 +200,12 @@
     &.mosparo__invalid {
         border-color: var(--mosparo-failure-border-color, #000);
         background: var(--mosparo-failure-background-color, #fff);
-        color: var(--mosparo-failure-text-color, #000);
         box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-failure-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-failure-shadow-inset-color, transparent);
+
+        &,
+        .mosparo__label, {
+            color: var(--mosparo-failure-text-color, #000);
+        }
 
         .mosparo__checkbox_column {
             .mosparo__checkbox {
