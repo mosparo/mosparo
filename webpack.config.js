@@ -79,4 +79,29 @@ Encore
     .autoProvidejQuery()
 ;
 
-module.exports = Encore.getWebpackConfig();
+var config = Encore.getWebpackConfig();
+
+if (Encore.isProduction()) {
+    const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+
+    var optimization = [];
+    for (var key in config.optimization.minimizer) {
+        if (config.optimization.minimizer[key] instanceof CssMinimizerPlugin) {
+            continue;
+        }
+        optimization.push(config.optimization.minimizer[key]);
+    }
+
+    optimization.push(new CssMinimizerPlugin({
+            minify: CssMinimizerPlugin.cleanCssMinify,
+            minimizerOptions: {
+                properties: {
+                    colors: false
+                }
+            },
+        })
+    );
+    config.optimization.minimizer = optimization;
+}
+
+module.exports = config;
