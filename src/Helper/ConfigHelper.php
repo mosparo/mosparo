@@ -73,12 +73,27 @@ class ConfigHelper
         return require $this->environmentConfigFilePath;
     }
 
-    public function getMailEncryptionOptions(): array
+    public function buildMailerDsn(array $configValues): string
     {
-        return [
-            'administration.settings.mailSettings.form.options.encryption.none' => 'null',
-            'administration.settings.mailSettings.form.options.encryption.tls' => 'tls',
-            'administration.settings.mailSettings.form.options.encryption.ssl' => 'ssl'
-        ];
+        $dsn = 'sendmail://default';
+        if ($configValues['mailer_transport'] === 'smtp') {
+            $dsn = 'smtp://';
+
+            if (isset($configValues['mailer_user']) && $configValues['mailer_user'] != '') {
+                $dsn .= urlencode($configValues['mailer_user']);
+
+                $mailerPassword = $configValues['mailer_password'] ?? '';
+                if (!isset($configValues['mailer_password'])) {
+                    $storedConfigValues = $this->readEnvironmentConfig();
+                    $mailerPassword = $storedConfigValues['mailer_password'];
+                }
+
+                $dsn .= ':' . urlencode($mailerPassword) . '@';
+            }
+
+            $dsn .= urlencode($configValues['mailer_host']) . ':' . $configValues['mailer_port'];
+        }
+
+        return $dsn;
     }
 }

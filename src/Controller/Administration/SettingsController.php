@@ -7,6 +7,7 @@ use Mosparo\Helper\LocaleHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
@@ -52,7 +53,8 @@ class SettingsController extends AbstractController
             'mailerPort' => $environmentConfig['mailer_port'] ?? '25',
             'mailerUser' => $environmentConfig['mailer_user'] ?? '',
             'mailerPassword' => $environmentConfig['mailer_password'] ?? '',
-            'mailerEncryption' => $environmentConfig['mailer_encryption'] ?? '',
+            'mailerFromAddress' => $environmentConfig['mailer_from_address'] ?? '',
+            'mailerFromName' => $environmentConfig['mailer_from_name'] ?? '',
         ];
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
             ->add('mosparoName', TextType::class, ['label' => 'administration.settings.mainSettings.form.mosparoName'])
@@ -65,7 +67,8 @@ class SettingsController extends AbstractController
             ->add('mailerPort', TextType::class, ['label' => 'administration.settings.mailSettings.form.port', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->add('mailerUser', TextType::class, ['label' => 'administration.settings.mailSettings.form.user', 'required' => false, 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->add('mailerPassword', PasswordType::class, ['label' => 'administration.settings.mailSettings.form.password', 'help' => 'administration.settings.mailSettings.help.password', 'required' => false, 'attr' => ['disabled' => true, 'class' => 'mail-option']])
-            ->add('mailerEncryption', ChoiceType::class, ['label' => 'administration.settings.mailSettings.form.encryption', 'choices' => $this->configHelper->getMailEncryptionOptions(), 'attr' => ['disabled' => true, 'class' => 'mail-option']])
+            ->add('mailerFromAddress', EmailType::class, ['label' => 'administration.settings.mailSettings.form.fromAddress', 'required' => false])
+            ->add('mailerFromName', TextType::class, ['label' => 'administration.settings.mailSettings.form.fromName', 'required' => false])
             ->getForm();
 
         $form->handleRequest($request);
@@ -80,6 +83,8 @@ class SettingsController extends AbstractController
                 'default_timezone' => $form->get('defaultTimezone')->getData(),
 
                 'mailer_transport' => !$form->get('mailerUseSmtp')->isEmpty() ? 'smtp' : '',
+                'mailer_from_address' => $form->get('mailerFromAddress')->getData(),
+                'mailer_from_name' => $form->get('mailerFromName')->getData(),
             ];
 
             if ($configValues['mailer_transport'] === 'smtp') {
@@ -87,7 +92,6 @@ class SettingsController extends AbstractController
                     'mailer_host' => $form->get('mailerHost')->getData(),
                     'mailer_port' => $form->get('mailerPort')->getData(),
                     'mailer_user' => $form->get('mailerUser')->getData(),
-                    'mailer_encryption' => $form->get('mailerEncryption')->getData(),
                 ]);
 
                 if (!$form->get('mailerPassword')->isEmpty()) {
@@ -96,6 +100,8 @@ class SettingsController extends AbstractController
                     $configValues['mailer_password'] = '';
                 }
             }
+
+            $configValues['mailer_dsn'] = $this->configHelper->buildMailerDsn($configValues);
 
             $this->configHelper->writeEnvironmentConfig($configValues);
 

@@ -18,5 +18,4 @@ return [
     Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
     Gracious\DoctrineEncryptionBundle\GraciousDoctrineEncryptionBundle::class => ['all' => true],
     Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],
-    Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle::class => ['all' => true],
 ];

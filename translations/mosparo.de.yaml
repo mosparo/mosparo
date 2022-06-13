@@ -497,13 +497,8 @@ administration:
         port: Port
         user: Benutzer
         password: Passwort
-        encryption: Verschlüsselung
-
-        options:
-          encryption:
-            none: Ohne
-            tls: TLS
-            ssl: SSL
+        fromAddress: Absender-E-Mail-Adresse
+        fromName: Absender-Name
 
       help:
         password: Wenn Sie dieses Feld ausfüllen, wird das bereits gespeicherte Passwort überschrieben.

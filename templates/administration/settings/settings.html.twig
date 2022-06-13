@@ -36,12 +36,14 @@
                             <h3 class="card-title">{{ 'administration.settings.mailSettings.title'|trans }}</h3>
                         </div>
                         <div class="card-body">
+                            {{ form_row(form.mailerFromAddress) }}
+                            {{ form_row(form.mailerFromName) }}
+                            <hr>
                             {{ form_row(form.mailerUseSmtp) }}
                             {{ form_row(form.mailerHost) }}
                             {{ form_row(form.mailerPort) }}
                             {{ form_row(form.mailerUser) }}
                             {{ form_row(form.mailerPassword) }}
-                            {{ form_row(form.mailerEncryption) }}
                         </div>
                     </div>
                 </div>

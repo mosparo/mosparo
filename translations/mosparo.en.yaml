@@ -497,13 +497,8 @@ administration:
         port: Port
         user: User
         password: Password
-        encryption: Encryption
-
-        options:
-          encryption:
-            none: Without
-            tls: TLS
-            ssl: SSL
+        fromAddress: From email address
+        fromName: From name
 
       help:
         password: If you enter something in this field, the existing value will be overwritten.
