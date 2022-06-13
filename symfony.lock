@@ -496,12 +496,12 @@
         "version": "v2.1.0"
     },
     "symfony/panther": {
-        "version": "1.0",
+        "version": "1.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "1.0",
-            "ref": "93d9baa582d0a755cc9ef81bc38a921d5fa16973"
+            "ref": "877d853a05c6713665a2f4b954734592680abff6"
         }
     },
     "symfony/phpunit-bridge": {
