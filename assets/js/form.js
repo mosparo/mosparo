@@ -129,31 +129,105 @@ $(document).ready(function () {
         updateVariable($(this), val, type);
     });
 
-    $('.btn-decrease-value').click(function () {
+    var changeDirection = '';
+    var changeInputField = null;
+    var changeIntervalTime = 500;
+    var changeValueCallback = function ()
+    {
+        console.log(changeIntervalTime);
+        if (changeDirection === '' || changeInputField === null) {
+            return;
+        }
+
+        let val = parseInt(changeInputField.val());
+
+        if (changeDirection === '-') {
+            val -= 1;
+        } else if (changeDirection === '+') {
+            val += 1;
+        }
+
+        if (val < 0) {
+            val = 0;
+        }
+
+        changeInputField.val(val).trigger('change');
+
+        changeIntervalTime = changeIntervalTime * 0.85;
+        if (changeIntervalTime < 50) {
+            changeIntervalTime = 50;
+        }
+
+        setTimeout(changeValueCallback, changeIntervalTime);
+    }
+
+    $('.btn-decrease-value, .btn-increase-value').click(function () {
         let inputGroup = $(this).parents('.input-group');
         let input = inputGroup.find('input');
 
         let val = parseInt(input.val());
-        val -= 1;
+
+        if ($(this).hasClass('btn-decrease-value')) {
+            val -= 1;
+        } else if ($(this).hasClass('btn-increase-value')) {
+            val += 1;
+        }
 
         if (val < 0) {
             val = 0;
         }
 
         input.val(val).trigger('change');
+    }).on('mousedown mouseup', function (ev) {
+        if (ev.type === 'mousedown') {
+            if (changeDirection !== '') {
+                return;
+            }
+
+            if ($(this).hasClass('btn-decrease-value')) {
+                changeDirection = '-';
+            } else if ($(this).hasClass('btn-increase-value')) {
+                changeDirection = '+';
+            }
+
+            changeInputField = $(this).parents('.input-group').find('input');
+            changeIntervalTime = 400;
+            changeValueCallback();
+        } else if (ev.type === 'mouseup') {
+            changeDirection = '';
+            changeInputField = null;
+
+            ev.preventDefault();
+            return false;
+        }
     });
 
-    $('.btn-increase-value').click(function () {
-        let inputGroup = $(this).parents('.input-group');
-        let input = inputGroup.find('input');
-
-        let val = parseInt(input.val());
-        val += 1;
-
-        if (val < 0) {
-            val = 0;
+    $('.btn-decrease-value').parents('.input-group').find('input').on('keydown keyup', function (ev) {
+        if (ev.keyCode !== 37 && ev.keyCode !== 38 && ev.keyCode !== 39 && ev.keyCode !== 40) {
+            return;
         }
 
-        input.val(val).trigger('change');
-    });
+        if (ev.type === 'keydown') {
+            if (changeDirection !== '') {
+                return;
+            }
+
+            changeDirection = '';
+            if (ev.keyCode === 37 || ev.keyCode === 40) {
+                changeDirection = '-';
+            } else if (ev.keyCode === 38 || ev.keyCode === 39) {
+                changeDirection = '+';
+            }
+
+            changeInputField = $(this);
+            changeIntervalTime = 400;
+            changeValueCallback();
+        } else if (ev.type === 'keyup') {
+            changeDirection = '';
+            changeInputField = null;
+        }
+
+        ev.preventDefault();
+        return false;
+    }).attr("autocomplete", "off");
 });
