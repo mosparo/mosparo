@@ -1,6 +1,6 @@
 .mosparo__container {
-    border: var(--mosparo-border-width, 3px) solid var(--mosparo-border-color, #000);
-    background: var(--mosparo-background-color, #fff);
+    border: var(--mosparo-border-width, 3px) solid var(--mosparo-border-color, rgb(0, 0, 0));
+    background: var(--mosparo-background-color, rgb(255, 255, 255));
     padding: var(--mosparo-padding-top, 20px) var(--mosparo-padding-right, 20px) var(--mosparo-padding-bottom, 20px) var(--mosparo-padding-left, 24px);
     border-radius: var(--mosparo-border-radius, 11px);
 
@@ -15,7 +15,7 @@
 
     &,
     .mosparo__label, {
-        color: var(--mosparo-text-color, #000);
+        color: var(--mosparo-text-color, rgb(0, 0, 0));
     }
 
     min-width: var(--mosparo-container-min-width, 320px);
@@ -59,7 +59,7 @@
             align-items: center;
             justify-content: center;
 
-            border: var(--mosparo-circle-border-width, 3px) solid var(--mosparo-circle-border-color, #000);
+            border: var(--mosparo-circle-border-width, 3px) solid var(--mosparo-circle-border-color, rgb(0, 0, 0));
             border-radius: var(--mosparo-circle-radius, 20px);
 
             position: relative;
@@ -87,7 +87,7 @@
             }
 
             &:before {
-                border: 1px solid var(--mosparo-circle-border-color, #000);
+                border: 1px solid var(--mosparo-circle-border-color, rgb(0, 0, 0));
 
                 transform: scale(1);
 
@@ -100,7 +100,7 @@
 
             &:after {
                 border: var(--mosparo-circle-border-width, 3px) solid transparent;
-                border-left-color: var(--mosparo-loading-circle-animated-border-color, #00f);
+                border-left-color: var(--mosparo-loading-circle-animated-border-color, rgb(0, 0, 255));
 
                 opacity: 0;
 
@@ -159,18 +159,18 @@
     }
 
     &.mosparo__checked {
-        border-color: var(--mosparo-success-border-color, #000);
-        background: var(--mosparo-success-background-color, #fff);
+        border-color: var(--mosparo-success-border-color, rgb(0, 0, 0));
+        background: var(--mosparo-success-background-color, rgb(255, 255, 255));
         box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-success-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-success-shadow-inset-color, transparent);
 
         &,
         .mosparo__label, {
-            color: var(--mosparo-success-text-color, #000);
+            color: var(--mosparo-success-text-color, rgb(0, 0, 0));
         }
 
         .mosparo__checkbox_column {
             .mosparo__checkbox {
-                border-color: var(--mosparo-success-circle-border-color, #0a0);
+                border-color: var(--mosparo-success-circle-border-color, rgb(0, 170, 0));
 
                 .mosparo__icon-checkmark {
                     display: block;
@@ -189,7 +189,7 @@
                         height: 100%;
 
                         border-style: solid;
-                        border-color: var(--mosparo-success-circle-border-color, #0a0);
+                        border-color: var(--mosparo-success-circle-border-color, rgb(0, 170, 0));
                         border-width: 0 0 var(--mosparo-icon-border-width, 2px) var(--mosparo-icon-border-width, 2px);
                     }
                 }
@@ -198,18 +198,18 @@
     }
 
     &.mosparo__invalid {
-        border-color: var(--mosparo-failure-border-color, #000);
-        background: var(--mosparo-failure-background-color, #fff);
+        border-color: var(--mosparo-failure-border-color, rgb(0, 0, 0));
+        background: var(--mosparo-failure-background-color, rgb(255, 255, 255));
         box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-failure-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-failure-shadow-inset-color, transparent);
 
         &,
         .mosparo__label, {
-            color: var(--mosparo-failure-text-color, #000);
+            color: var(--mosparo-failure-text-color, rgb(0, 0, 0));
         }
 
         .mosparo__checkbox_column {
             .mosparo__checkbox {
-                border-color: var(--mosparo-failure-circle-border-color, #f00);
+                border-color: var(--mosparo-failure-circle-border-color, rgb(255, 0, 0));
 
                 .mosparo__icon-failure {
                     display: block;
@@ -237,7 +237,7 @@
                         height: 0;
 
                         margin-top: var(--mosparo-icon-border-offset, -1px);
-                        border-bottom: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, #f00);
+                        border-bottom: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, rgb(255, 0, 0));
                     }
 
                     &:after {
@@ -248,7 +248,7 @@
                         height: 100%;
 
                         margin-left: var(--mosparo-icon-border-offset, -1px);
-                        border-right: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, #f00);
+                        border-right: var(--mosparo-icon-border-width, 2px) solid var(--mosparo-failure-circle-border-color, rgb(255, 0, 0));
                     }
                 }
             }
@@ -259,7 +259,7 @@
         .mosparo__checkbox_column {
             .mosparo__checkbox {
                 &:hover {
-                    border-color: var(--mosparo-focus-circle-border-color, #aaa);
+                    border-color: var(--mosparo-focus-circle-border-color, rgb(170, 170, 170));
                 }
 
                 &:before {
@@ -268,7 +268,7 @@
             }
 
             input[type="checkbox"]:focus + .mosparo__checkbox {
-                border-color: var(--mosparo-focus-circle-border-color, #aaa);
+                border-color: var(--mosparo-focus-circle-border-color, rgb(170, 170, 170));
                 box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
             }
         }
@@ -298,7 +298,7 @@
 
     margin-top: 0.5em;
 
-    color: var(--mosparo-failure-text-error-color, #f00);
+    color: var(--mosparo-failure-text-error-color, rgb(255, 0, 0));
 
     &.mosparo__error-message-visible {
         display: block;
