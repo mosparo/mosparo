@@ -74,7 +74,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
 
         foreach ($builder->getQuery()->getResult() as $submission) {
             $dateKey = $submission->getSubmittedAt()->format('Y-m-d');
-            if ($submission->isSpam()) {
+            if ($submission->isSpam() || !$submission->isValid()) {
                 if (!isset($spamSubmissionsData[$dateKey])) {
                     continue;
                 }
