@@ -321,8 +321,9 @@ settings:
       reissueApiKeys: Reissue API keys
       reissue: Reissue
 
-    identification:
-      title: Identification
+    connectionDetails:
+      title: Connection details
+      host: Host
       uuid: Unique identification number
 
     apiKeys:

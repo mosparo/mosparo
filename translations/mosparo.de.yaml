@@ -321,8 +321,9 @@ settings:
       reissueApiKeys: API-Zugangsdaten neu ausstellen
       reissue: Neu ausstellen
 
-    identification:
-      title: Identifikation
+    connectionDetails:
+      title: Verbindungsdetails
+      host: Host
       uuid: Eindeutige Identifikationsnummer
 
     apiKeys:
