@@ -7,3 +7,7 @@ twig:
 
     globals:
         mosparoName: '%env(mosparo_name)%'
+
+when@test:
+    twig:
+        strict_variables: true
