@@ -27,7 +27,7 @@ security:
             pattern: ^/(setup|upgrade)/(.*)
             security: false
         main:
-            anonymous: lazy
+            lazy: true
             provider: mosparo_user_provider
             guard:
                 authenticators:

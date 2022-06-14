@@ -6,7 +6,7 @@ webpack_encore:
 
     # Set attributes that will be rendered on all script and link tags
     script_attributes:
-        defer: true
+        defer: false
         # Uncomment (also under link_attributes) if using Turbo Drive
         # https://turbo.hotwired.dev/handbook/drive#reloading-when-assets-change
         # 'data-turbo-track': reload
