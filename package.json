@@ -1,14 +1,14 @@
 {
     "devDependencies": {
-        "@symfony/stimulus-bridge": "^2.0.0",
-        "@symfony/webpack-encore": "^1.0.0",
-        "core-js": "^3.0.0",
+        "@symfony/stimulus-bridge": "^3.2.0",
+        "@symfony/webpack-encore": "^2.1.0",
+        "core-js": "^3.23.0",
         "file-loader": "^6.2.0",
         "jquery": "^3.6.0",
         "regenerator-runtime": "^0.13.2",
-        "sass": "^1.32.12",
-        "sass-loader": "^11.0.1",
-        "stimulus": "^2.0.0",
+        "sass": "^1.52.3",
+        "sass-loader": "^12.0.0",
+        "stimulus": "^3.0.1",
         "webpack-notifier": "^1.6.0"
     },
     "license": "MIT",
@@ -20,13 +20,13 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@fontsource/inter": "^4.4.5",
-        "@tabler/core": "^1.0.0-beta",
-        "@tabler/icons": "^1.41.1",
+        "@fontsource/inter": "^4.5.11",
+        "@tabler/core": "^1.0.0-beta9",
+        "@tabler/icons": "^1.68.0",
         "apexcharts": "^3.33.2",
-        "datatables.net": "^1.11.3",
-        "datatables.net-responsive": "^2.2.9",
-        "datatables.net-responsive-bs5": "^2.2.9",
+        "datatables.net": "^1.12.1",
+        "datatables.net-responsive": "^2.3.0",
+        "datatables.net-responsive-bs5": "^2.3.0",
         "spectrum-colorpicker": "^1.8.1"
     }
 }
