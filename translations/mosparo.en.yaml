@@ -640,6 +640,7 @@ account:
       title: Set up two factor authentication
       intro: Please scan this QR code with your authentication app on your smartphone. You can use Google Authenticator, Microsoft Authenticator or similar apps.
       textManually: Instead of scanning the QR code, you can enter the following code manually into the authentication app.
+      qrCodeAlt: This image shows the QR code, which you have to scane with your authentication app on your smartphone.
 
     verify:
       title: Verify two factor authentication

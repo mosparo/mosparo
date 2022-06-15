@@ -60,7 +60,7 @@
                         {{ form_widget(field) }}
 
                         {% if not form.vars.disabled %}
-                            <button type="button" class="btn btn-danger btn-icon-only remove-item-button" alt="{{ 'action.remove'|trans }}">
+                            <button type="button" class="btn btn-danger btn-icon-only remove-item-button" title="{{ 'action.remove'|trans }}">
                                 <i class="ti ti-circle-minus"></i>
                             </button>
                         {% endif %}

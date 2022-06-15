@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -286,7 +287,9 @@ class FrontendApiController extends AbstractController
 
     protected function getTranslations(Request $request): array
     {
-        $this->translator->setLocale($request->getPreferredLanguage());
+        if ($this->translator instanceof LocaleAwareInterface) {
+            $this->translator->setLocale($request->getPreferredLanguage());
+        }
 
         return [
             'label' => $this->translator->trans('label', [], 'frontend'),

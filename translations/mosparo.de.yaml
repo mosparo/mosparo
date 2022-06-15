@@ -639,8 +639,9 @@ account:
 
     start:
       title: Zwei-Faktor-Authentifizierung einrichten
-      intro: Bitte scannen Sie diesen QR-Code mit Ihrer Authentifizerungs-App auf Ihrem Smartphone. Sie können Google Authenticator, Microsoft Authenticator oder ähnliche Apps verwenden.
+      intro: Bitte scannen Sie diesen QR-Code mit Ihrer Authentifizierungs-App auf Ihrem Smartphone. Sie können Google Authenticator, Microsoft Authenticator oder ähnliche Apps verwenden.
       textManually: Statt den QR-Code zu scannen, können Sie auch den folgenden Code manuell in der Authentifizierungs-App eingeben.
+      qrCodeAlt: Dieses Bild zeigt den QR-Code, welchen Sie mit Ihrer Authentifizierungs-App auf Ihrem Smartphone scannen müssen.
 
     verify:
       title: Zwei-Faktor-Authentifizierung bestätigen

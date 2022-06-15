@@ -27,7 +27,7 @@ window.collectionGetRandomHash = collectionGetRandomHash;
 window.updateCssVariable = updateCssVariable;
 
 $(document).ready(function () {
-    $('.collection-widget.add-allowed .add-item-button').click(function (e) {
+    $('.collection-widget.add-allowed .add-item-button').click(function () {
         let collectionObj = $(this).parents('.collection-widget');
         let list = collectionObj.find('.collection-list');
         let newWidget = list.attr('data-prototype');
@@ -50,7 +50,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.collection-widget.remove-allowed').on('click', '.remove-item-button', function (e) {
+    $('.collection-widget.remove-allowed').on('click', '.remove-item-button', function () {
         let list = $(this).parents('.collection-list');
 
         if (list.find('li').length > 1) {
