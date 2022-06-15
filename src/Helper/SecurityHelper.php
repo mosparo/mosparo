@@ -5,7 +5,8 @@ namespace Mosparo\Helper;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use IPLib\Factory;
+use IPLib\Address\IPv4;
+use IPLib\Range\Subnet;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
@@ -58,8 +59,8 @@ class SecurityHelper
         $items = explode(PHP_EOL, $ipAllowList);
         foreach ($items as $item) {
             if (strpos($item, '/') !== false) {
-                $address = Factory::addressFromString($ipAddress);
-                $subnet = Factory::rangeFromString($item);
+                $address = IPv4::parseString($ipAddress);
+                $subnet = Subnet::parseString($item);
 
                 if ($address->getAddressType() == $subnet->getAddressType() && $subnet->contains($address)) {
                     return true;
