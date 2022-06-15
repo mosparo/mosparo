@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     /**
      * @ORM\Column(type="json")
      */
-    private array $roles = [];
+    private ?array $roles = [];
 
     /**
      * @var string The hashed password
@@ -57,7 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     /**
      * @ORM\Column(type="encryptedJson")
      */
-    private array $configValues = [];
+    private ?array $configValues = [];
 
     public function __construct()
     {
