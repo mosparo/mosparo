@@ -4,6 +4,7 @@ namespace Mosparo\Controller\Api\V1\Frontend;
 
 use DateTime;
 use DateTimeInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
@@ -28,21 +29,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class FrontendApiController extends AbstractController
 {
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
-    protected $tokenGenerator;
+    protected TokenGenerator $tokenGenerator;
 
-    protected $ruleTesterHelper;
+    protected RuleTesterHelper $ruleTesterHelper;
 
-    protected $hmacSignatureHelper;
+    protected HmacSignatureHelper $hmacSignatureHelper;
 
-    protected $securityHelper;
+    protected SecurityHelper $securityHelper;
 
-    protected $cleanupHelper;
+    protected CleanupHelper $cleanupHelper;
 
-    protected $geoIp2Helper;
+    protected GeoIp2Helper $geoIp2Helper;
 
-    protected $translatorInterface;
+    protected TranslatorInterface $translator;
 
     public function __construct(
         ProjectHelper $projectHelper,
@@ -67,7 +68,7 @@ class FrontendApiController extends AbstractController
     /**
      * @Route("/request-submit-token", name="frontend_api_request_submit_token")
      */
-    public function request(Request $request): Response
+    public function request(Request $request, EntityManagerInterface $entityManager): Response
     {
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {
@@ -95,7 +96,6 @@ class FrontendApiController extends AbstractController
         $submitToken->setPageTitle($request->request->get('pageTitle'));
         $submitToken->setPageUrl($request->request->get('pageUrl'));
 
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($submitToken);
         $entityManager->flush();
 
@@ -113,10 +113,8 @@ class FrontendApiController extends AbstractController
     /**
      * @Route("/check-form-data", name="frontend_api_check_form_data")
      */
-    public function checkFormData(Request $request): Response
+    public function checkFormData(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);

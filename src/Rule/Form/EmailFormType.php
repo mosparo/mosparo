@@ -20,8 +20,8 @@ class EmailFormType extends AbstractRuleTypeFormType
         $choices = ChoicesUtil::buildChoices($ruleType->getSubtypes());
         $builder
             ->add('type', ChoiceType::class, ['choices' => $choices, 'attr' => ['readonly' => (count($choices) === 1), 'class' => 'form-select rule-item-type']])
-            ->add('value', EmailType::class, ['attr' => ['placeholder' => 'Email address', 'class' => 'rule-item-value']])
-            ->add('spamRatingFactor', NumberType::class, ['required' => false, 'attr' => ['placeholder' => 'Rating', 'class' => 'rule-item-rating']])
+            ->add('value', EmailType::class, ['attr' => ['placeholder' => 'rule.type.email.placeholder', 'class' => 'rule-item-value']])
+            ->add('spamRatingFactor', NumberType::class, ['required' => false, 'attr' => ['placeholder' => 'rule.type.rating.placeholder', 'class' => 'rule-item-rating']])
         ;
     }
 }

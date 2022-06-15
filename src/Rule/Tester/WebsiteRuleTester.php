@@ -11,7 +11,7 @@ class WebsiteRuleTester extends AbstractRuleTester
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
             $preparedValue = $item->getValue();
-            if (!preg_match('/((https?:)?\/\/)/is', $preparedValue)) {
+            if (!preg_match('/((https?:)?\/\/)/i', $preparedValue)) {
                 $preparedValue = '//' . $preparedValue;
             }
 

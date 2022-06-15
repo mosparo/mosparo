@@ -10,9 +10,9 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class CleanupHelper
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
     public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper)
     {

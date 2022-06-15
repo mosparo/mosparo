@@ -12,7 +12,7 @@ use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 
 class DesignHelper
 {
-    protected static $designConfigValueKeys = [
+    protected static array $designConfigValueKeys = [
         'boxSize',
         'boxRadius',
         'colorBackground',
@@ -42,7 +42,7 @@ class DesignHelper
         'showMosparoLogo',
     ];
 
-    protected static $cssVariableNames = [
+    protected static array $cssVariableNames = [
         '--mosparo-border-color' => ['key' => 'colorBorder', 'type' => 'color'],
         '--mosparo-border-radius' => ['key' => 'boxRadius', 'type' => 'number'],
         '--mosparo-background-color' => ['key' => 'colorBackground', 'type' => 'color'],
@@ -71,7 +71,7 @@ class DesignHelper
         '--mosparo-show-logo' => ['key' => 'showMosparoLogo', 'type' => 'bool'],
     ];
 
-    protected static $boxSizeVariables = [
+    protected static array $boxSizeVariables = [
         'small' => [
             '--mosparo-font-size' => 12,
             '--mosparo-line-height' => 16,
@@ -152,13 +152,13 @@ class DesignHelper
         ],
     ];
 
-    protected $entrypointLookupCollection;
+    protected EntrypointLookupCollection $entrypointLookupCollection;
 
-    protected $filesystem;
+    protected Filesystem $filesystem;
 
-    protected $projectDirectory;
+    protected string $projectDirectory;
 
-    public function __construct(EntrypointLookupCollection $entrypointLookupCollection, Filesystem $filesystem, $projectDirectory)
+    public function __construct(EntrypointLookupCollection $entrypointLookupCollection, Filesystem $filesystem, string $projectDirectory)
     {
         $this->entrypointLookupCollection = $entrypointLookupCollection;
         $this->filesystem = $filesystem;
@@ -274,13 +274,11 @@ class DesignHelper
         // Resolve the variables and replace them with the values
         $content = $this->resolveCssVariables($content, $designConfigValues, $defaultConfigValues);
 
-        $content = preg_replace('%\/\*(.[^*]*)\*\/%i', '', $content);
+        $content = preg_replace('%/\*(.[^*]*)\*/%i', '', $content);
         $content = str_replace(PHP_EOL, '', $content);
 
         // Include images and replace potential css variables
-        $content = $this->includeImages($content, $designConfigValues, $defaultConfigValues);
-
-        return $content;
+        return $this->includeImages($content, $designConfigValues, $defaultConfigValues);
     }
 
     protected function resolveCssVariables(string $content, array $designConfigValues, array $defaultConfigValues): string
@@ -350,7 +348,7 @@ class DesignHelper
     {
         $mimeTypes = new MimeTypes();
 
-        preg_match_all('/(url\((.[^\)]*)\))/i', $content, $results, PREG_SET_ORDER);
+        preg_match_all('/(url\((.[^)]*)\))/i', $content, $results, PREG_SET_ORDER);
         foreach ($results as $result) {
             if (strpos($result[2], 'mosparo_text_logo') !== false && isset($designConfigValues['showMosparoLogo']) && !$designConfigValues['showMosparoLogo']) {
                 $content = str_replace($result[1], '', $content);

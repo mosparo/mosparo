@@ -2,18 +2,18 @@
 
 namespace Mosparo\Controller;
 
-use Mosparo\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Form\ResetPasswordRequestFormType;
+use Mosparo\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -26,13 +26,19 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    private $resetPasswordHelper;
+    protected EntityManagerInterface $entityManager;
 
-    protected $translator;
+    protected ResetPasswordHelperInterface $resetPasswordHelper;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, TranslatorInterface $translator)
+    protected UserPasswordHasherInterface $userPasswordHasher;
+
+    protected TranslatorInterface $translator;
+
+    public function __construct(EntityManagerInterface $entityManager, ResetPasswordHelperInterface $resetPasswordHelper, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $translator)
     {
+        $this->entityManager = $entityManager;
         $this->resetPasswordHelper = $resetPasswordHelper;
+        $this->userPasswordHasher = $userPasswordHasher;
         $this->translator = $translator;
     }
 
@@ -41,7 +47,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="security_reset")
      */
-    public function request(Request $request, MailerInterface $mailer): Response
+    public function request(Request $request, UserRepository $userRepository, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
@@ -49,6 +55,7 @@ class ResetPasswordController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
+                $userRepository,
                 $mailer
             );
         }
@@ -81,7 +88,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/reset/{token}", name="security_reset_password")
      */
-    public function reset(Request $request, UserPasswordEncoderInterface $passwordEncoder, string $token = null): Response
+    public function reset(Request $request, string $token = null): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -97,6 +104,7 @@ class ResetPasswordController extends AbstractController
         }
 
         try {
+            /** @var \Mosparo\Entity\User $user */
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
             $this->addFlash('reset_password_error', sprintf(
@@ -116,13 +124,13 @@ class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
 
             // Encode the plain password, and set it.
-            $encodedPassword = $passwordEncoder->encodePassword(
+            $encodedPassword = $this->userPasswordHasher->hashPassword(
                 $user,
                 $form->get('plainPassword')->getData()
             );
 
             $user->setPassword($encodedPassword);
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -137,9 +145,9 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, UserRepository $userRepository, MailerInterface $mailer): RedirectResponse
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+        $user = $userRepository->findOneBy([
             'email' => $emailFormData,
         ]);
 

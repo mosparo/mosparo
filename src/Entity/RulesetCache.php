@@ -18,39 +18,39 @@ class RulesetCache implements ProjectRelatedEntityInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\OneToOne(targetEntity=Ruleset::class, inversedBy="rulesetCache", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $ruleset;
+    private ?Ruleset $ruleset;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $refreshedAt;
+    private ?DateTimeInterface $refreshedAt;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?DateTimeInterface $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $refreshInterval;
+    private ?int $refreshInterval;
 
     /**
      * @ORM\OneToMany(targetEntity=RulesetRuleCache::class, mappedBy="rulesetCache", orphanRemoval=true)
      */
-    private $rules;
+    private Collection $rules;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $project;
+    private ?Project $project;
 
     public function __construct()
     {

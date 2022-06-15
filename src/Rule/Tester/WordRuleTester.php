@@ -50,12 +50,8 @@ class WordRuleTester extends AbstractRuleTester
         return false;
     }
 
-    protected function validateRegexItem($value, $itemValue)
+    protected function validateRegexItem($value, $itemValue): ?bool
     {
-        if (preg_match($itemValue, $value)) {
-            return 1;
-        }
-
-        return false;
+        return (@preg_match($itemValue, $value));
     }
 }

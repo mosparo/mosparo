@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\Account;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Util\TokenGenerator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator;
@@ -19,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TwoFactorController extends AbstractController
 {
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     public function __construct(TranslatorInterface $translator)
     {
@@ -31,7 +32,10 @@ class TwoFactorController extends AbstractController
      */
     public function status(): Response
     {
-        if (!$this->getUser()->isGoogleAuthenticatorEnabled()) {
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+
+        if (!$user->isGoogleAuthenticatorEnabled()) {
             return $this->redirectToRoute('account_two_factor_start');
         }
 
@@ -44,11 +48,12 @@ class TwoFactorController extends AbstractController
      */
     public function start(Request $request, GoogleAuthenticatorInterface $googleAuthenticator, QrCodeGenerator $qrCodeGenerator): Response
     {
-        if ($this->getUser()->isGoogleAuthenticatorEnabled() && $request->get('_route') !== 'account_two_factor_start_force') {
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+
+        if ($user->isGoogleAuthenticatorEnabled() && $request->get('_route') !== 'account_two_factor_start_force') {
             return $this->redirectToRoute('account_two_factor_status');
         } else {
-            $user = $this->getUser();
-
             $form = $this->createQrCodeForm();
             $secret = $googleAuthenticator->generateSecret();
             $user->setGoogleAuthenticatorSecret($secret);
@@ -85,7 +90,7 @@ class TwoFactorController extends AbstractController
     /**
      * @Route("/backup-codes", name="account_two_factor_backup_codes")
      */
-    public function backupCodes(Request $request, GoogleAuthenticatorInterface $googleAuthenticator): Response
+    public function backupCodes(Request $request, EntityManagerInterface $entityManager, GoogleAuthenticatorInterface $googleAuthenticator): Response
     {
         $form = $this->createVerifyForm();
         $form->handleRequest($request);
@@ -93,6 +98,7 @@ class TwoFactorController extends AbstractController
             $secret = $form->get('secret')->getData();
             $token = $form->get('token')->getData();
 
+            /** @var \Mosparo\Entity\User $user */
             $user = $this->getUser();
             $user->setGoogleAuthenticatorSecret($secret);
 
@@ -115,7 +121,6 @@ class TwoFactorController extends AbstractController
             $backupCodes = $this->generateBackupCodes();
 
             // Save the secret
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
             return $this->render('account/two-factor-authentication/backup-codes.html.twig', [
@@ -129,13 +134,12 @@ class TwoFactorController extends AbstractController
     /**
      * @Route("/reset-backup-codes", name="account_two_factor_reset_backup_codes")
      */
-    public function resetBackupCodes(): Response
+    public function resetBackupCodes(EntityManagerInterface $entityManager): Response
     {
         // Generate the backup codes
         $backupCodes = $this->generateBackupCodes();
 
         // Save the secret
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->flush();
 
         return $this->render('account/two-factor-authentication/backup-codes.html.twig', [
@@ -146,12 +150,12 @@ class TwoFactorController extends AbstractController
     /**
      * @Route("/disable", name="account_two_factor_disable")
      */
-    public function disable(Request $request): Response
+    public function disable(Request $request, EntityManagerInterface $entityManager): Response
     {
+        /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
         $user->setGoogleAuthenticatorSecret(null);
 
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->flush();
 
         $session = $request->getSession();
@@ -169,6 +173,7 @@ class TwoFactorController extends AbstractController
 
     protected function generateBackupCodes(): array
     {
+        /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
         $user->resetBackupCodes();
         $backupCodes = [];

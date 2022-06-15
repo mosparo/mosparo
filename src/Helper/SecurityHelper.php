@@ -13,9 +13,9 @@ use Mosparo\Util\HashUtil;
 
 class SecurityHelper
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
     public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper)
     {

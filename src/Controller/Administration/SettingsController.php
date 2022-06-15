@@ -21,11 +21,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class SettingsController extends AbstractController
 {
-    protected $configHelper;
+    protected ConfigHelper $configHelper;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    protected $localeHelper;
+    protected LocaleHelper $localeHelper;
 
     public function __construct(ConfigHelper $configHelper, TranslatorInterface $translator, LocaleHelper $localeHelper)
     {

@@ -10,8 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -20,18 +20,18 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class AccountController extends AbstractController
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $passwordEncoder;
+    protected UserPasswordHasherInterface $userPasswordHasher;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    protected $localeHelper;
+    protected LocaleHelper $localeHelper;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator, LocaleHelper $localeHelper)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $translator, LocaleHelper $localeHelper)
     {
         $this->entityManager = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordHasher = $userPasswordHasher;
         $this->translator = $translator;
         $this->localeHelper = $localeHelper;
     }
@@ -49,6 +49,7 @@ class AccountController extends AbstractController
      */
     public function settings(Request $request): Response
     {
+        /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
         $config = [
             'locale' => $user->getConfigValue('locale'),
@@ -99,7 +100,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/change-password", name="account_change_password")
      */
-    public function changePassword(Request $request): Response
+    public function changePassword(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->add('oldPassword', PasswordType::class, ['label' => 'account.changePassword.form.oldPassword', 'constraints' => [new UserPassword()]])
@@ -111,12 +112,12 @@ class AccountController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            /** @var \Mosparo\Entity\User $user */
             $user = $this->getUser();
 
             // RuleSet the new password and save the user
             $passwordField = $form->get('newPassword');
-            $user->setPassword($this->passwordEncoder->encodePassword(
+            $user->setPassword($this->userPasswordHasher->hashPassword(
                 $user,
                 $passwordField->get('plainPassword')->getData()
             ));

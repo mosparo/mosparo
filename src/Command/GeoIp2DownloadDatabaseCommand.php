@@ -11,7 +11,7 @@ class GeoIp2DownloadDatabaseCommand extends Command
 {
     protected static $defaultName = 'mosparo:geoip2:download-database';
 
-    protected $geoIp2Helper;
+    protected GeoIp2Helper $geoIp2Helper;
 
     public function __construct(GeoIp2Helper $geoIp2Helper)
     {

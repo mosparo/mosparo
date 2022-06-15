@@ -17,78 +17,78 @@ class Submission implements ProjectRelatedEntityInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=SubmitToken::class)
      */
-    private $submitToken;
+    private ?SubmitToken $submitToken;
 
     /**
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $validationToken;
+    private ?string $validationToken;
 
     /**
      * @ORM\Column(type="encryptedJson")
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $signature;
+    private ?string $signature;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $submittedAt;
+    private ?DateTimeInterface $submittedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $verifiedAt;
+    private ?DateTimeInterface $verifiedAt;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $matchedRuleItems = [];
+    private array $matchedRuleItems = [];
 
     /**
      * @ORM\Column(type="json")
      */
-    private $ignoredFields = [];
+    private array $ignoredFields = [];
 
     /**
      * @ORM\Column(type="json")
      */
-    private $generalVerifications = [];
+    private array $generalVerifications = [];
 
     /**
      * @ORM\Column(type="float")
      */
-    private $spamRating;
+    private ?float $spamRating;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $project;
+    private ?Project $project;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $spam;
+    private bool $spam;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $spamDetectionRating;
+    private ?float $spamDetectionRating;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $valid;
+    private bool $valid;
 
     public function getId(): ?int
     {

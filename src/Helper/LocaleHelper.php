@@ -4,26 +4,26 @@ namespace Mosparo\Helper;
 
 use DateTimeZone;
 use DirectoryIterator;
+use Mosparo\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Component\Intl\Locales;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LocaleHelper
 {
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    protected $translationsDirectory;
+    protected string $translationsDirectory;
 
-    protected static $dateFormats = [
+    protected static array $dateFormats = [
         'Y-m-d',
         'm/d/Y',
         'd.m.Y',
         'd-m-Y',
     ];
 
-    protected static $timeFormats = [
+    protected static array $timeFormats = [
         'H:i:s',
         'h:i:s A'
     ];
@@ -34,7 +34,7 @@ class LocaleHelper
         $this->translationsDirectory = $projectDirectory . '/translations';
     }
 
-    public function storeUserSettingsInSession(Session $session, UserInterface $user)
+    public function storeUserSettingsInSession(Session $session, User $user)
     {
         $session->set('userLocale', $user->getConfigValue('locale'));
         $session->set('userDateFormat', $user->getConfigValue('dateFormat'));

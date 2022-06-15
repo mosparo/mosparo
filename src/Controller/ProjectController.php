@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Form\ProjectFormType;
 use Mosparo\Helper\CleanupHelper;
@@ -19,11 +20,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ProjectController extends AbstractController
 {
-    protected $session;
+    protected SessionInterface $session;
 
-    protected $cleanupHelper;
+    protected CleanupHelper $cleanupHelper;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     public function __construct(SessionInterface $session, CleanupHelper $cleanupHelper, TranslatorInterface $translator)
     {
@@ -43,7 +44,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/create", name="project_create")
      */
-    public function create(Request $request): Response
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = new Project();
 
@@ -51,8 +52,6 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
             $tokenGenerator = new TokenGenerator();
             $project->setPublicKey($tokenGenerator->generateToken());
             $project->setPrivateKey($tokenGenerator->generateToken());
@@ -88,14 +87,12 @@ class ProjectController extends AbstractController
     /**
      * @Route("/delete/{project}", name="project_delete")
      */
-    public function delete(Request $request, Project $project): Response
+    public function delete(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
         if ($request->request->has('delete-token')) {
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-project', $submittedToken)) {
-                $entityManager = $this->getDoctrine()->getManager();
-
                 // Delete all to the project associated objects
                 $this->cleanupHelper->cleanupProjectEntities($project);
 

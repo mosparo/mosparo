@@ -6,20 +6,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\User;
 use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SetupHelper
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $passwordEncoder;
+    protected UserPasswordHasherInterface $userPasswordHasher;
 
-    protected $configHelper;
+    protected ConfigHelper $configHelper;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    protected $prerequisites = [
+    protected array $prerequisites = [
         'general' => [
             'minPhpVersion' => '7.4.0',
         ],
@@ -35,10 +35,10 @@ class SetupHelper
         ],
     ];
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ConfigHelper $configHelper, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, ConfigHelper $configHelper, TranslatorInterface $translator)
     {
         $this->entityManager = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordHasher = $userPasswordHasher;
         $this->configHelper = $configHelper;
         $this->translator = $translator;
     }
@@ -112,7 +112,7 @@ class SetupHelper
 
         $user = new User();
         $user->setEmail($emailAddress);
-        $user->setPassword($this->passwordEncoder->encodePassword(
+        $user->setPassword($this->userPasswordHasher->hashPassword(
             $user,
             $password
         ));

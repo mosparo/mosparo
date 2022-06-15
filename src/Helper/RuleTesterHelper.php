@@ -13,18 +13,18 @@ use Mosparo\Util\TokenGenerator;
 
 class RuleTesterHelper
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $ruleTypeManager;
+    protected RuleTypeManager $ruleTypeManager;
 
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
-    protected $tokenGenerator;
+    protected TokenGenerator $tokenGenerator;
 
-    protected $rulesetHelper;
+    protected RulesetHelper $rulesetHelper;
 
-    protected $rules = [];
-    protected $ruleTesters = [];
+    protected array $rules = [];
+    protected array $ruleTesters = [];
 
     public function __construct(
         EntityManagerInterface $entityManager,

@@ -3,6 +3,7 @@
 namespace Mosparo\Controller\Api\V1\Verification;
 
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\HmacSignatureHelper;
 use Mosparo\Repository\SubmitTokenRepository;
@@ -19,9 +20,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class VerificationApiController extends AbstractController
 {
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
-    protected $hmacSignatureHelper;
+    protected HmacSignatureHelper $hmacSignatureHelper;
 
     public function __construct(ProjectHelper $projectHelper, HmacSignatureHelper $hmacSignatureHelper)
     {
@@ -32,7 +33,7 @@ class VerificationApiController extends AbstractController
     /**
      * @Route("/verify", name="verification_api_verify")
      */
-    public function verify(Request $request, SubmitTokenRepository $submitTokenRepository): Response
+    public function verify(Request $request, EntityManagerInterface $entityManager, SubmitTokenRepository $submitTokenRepository): Response
     {
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {
@@ -73,7 +74,7 @@ class VerificationApiController extends AbstractController
             if (!$minimumTimeGv->isValid()) {
                 $submission->setValid($minimumTimeGv->isValid());
 
-                $this->getDoctrine()->getManager()->flush();
+                $entityManager->flush();
 
                 return new JsonResponse(['error' => true, 'errorMessage' => 'Validation failed.']);
             }
@@ -82,7 +83,7 @@ class VerificationApiController extends AbstractController
         $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
         if ($request->request->get('validationSignature') !== $validationSignature || $request->request->get('formSignature') !== $submission->getSignature()) {
             $submission->setValid(false);
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->flush();
 
             return new JsonResponse(['error' => true, 'errorMessage' => 'Validation failed.']);
         }
@@ -90,7 +91,7 @@ class VerificationApiController extends AbstractController
         $verificationSignature = $this->hmacSignatureHelper->createSignature($validationSignature . $submission->getSignature(), $activeProject->getPrivateKey());
 
         $submission->setValid(true);
-        $this->getDoctrine()->getManager()->flush();
+        $entityManager->flush();
 
         return new JsonResponse(['valid' => true, 'verificationSignature' => $verificationSignature]);
     }

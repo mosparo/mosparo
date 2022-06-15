@@ -8,55 +8,56 @@ use Mosparo\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements UserInterface, TwoFactorInterface, BackupCodeInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface, BackupCodeInterface
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
      */
-    private $googleAuthenticatorSecret;
+    private ?string $googleAuthenticatorSecret;
 
     /**
      * @ORM\Column(type="encryptedJson")
      */
-    private $backupCodes = [];
+    private ?array $backupCodes = [];
 
     /**
      * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="user")
      */
-    private $projectMemberships;
+    private Collection $projectMemberships;
 
     /**
      * @ORM\Column(type="encryptedJson")
      */
-    private $configValues = [];
+    private array $configValues = [];
 
     public function __construct()
     {
@@ -134,7 +135,7 @@ class User implements UserInterface, TwoFactorInterface, BackupCodeInterface
     }
 
     /**
-     * @see UserInterface
+     * @see PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
     {

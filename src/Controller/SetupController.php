@@ -26,13 +26,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SetupController extends AbstractController
 {
-    protected $kernel;
+    protected KernelInterface $kernel;
 
-    protected $setupHelper;
+    protected SetupHelper $setupHelper;
 
-    protected $configHelper;
+    protected ConfigHelper $configHelper;
 
-    protected $mosparoVersion;
+    protected string $mosparoVersion;
 
     public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper, string $mosparoVersion)
     {

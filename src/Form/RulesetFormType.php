@@ -20,7 +20,7 @@ class RulesetFormType extends AbstractType
             ->add('url', UrlType::class, ['label' => 'ruleset.form.url'])
             ->add('status', ChoiceType::class, [
                 'label' => 'ruleset.form.status',
-                'choices' => ['Inactive' => 0, 'Active' => 1],
+                'choices' => ['state.inactive' => 0, 'state.active' => 1],
                 'attr' => [
                     'class' => 'form-select'
                 ]

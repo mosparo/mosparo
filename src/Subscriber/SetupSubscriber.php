@@ -10,17 +10,17 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SetupSubscriber implements EventSubscriberInterface
 {
-    protected $container;
+    protected ContainerInterface $container;
 
-    protected $router;
+    protected UrlGeneratorInterface $router;
 
-    protected $installed;
+    protected bool $installed;
 
-    protected $installedVersion;
+    protected string $installedVersion;
 
-    protected $mosparoVersion;
+    protected string $mosparoVersion;
 
-    protected $allowedRoutes = [
+    protected array $allowedRoutes = [
         'setup_start',
         'setup_prerequisites',
         'setup_database',

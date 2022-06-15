@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\Administration;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\GeoIp2Helper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,11 +18,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class GeoIp2Controller extends AbstractController
 {
-    protected $configHelper;
+    protected ConfigHelper $configHelper;
 
-    protected $geoIp2Helper;
+    protected GeoIp2Helper $geoIp2Helper;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     public function __construct(ConfigHelper $configHelper, GeoIp2Helper $geoIp2Helper, TranslatorInterface $translator)
     {
@@ -33,7 +34,7 @@ class GeoIp2Controller extends AbstractController
     /**
      * @Route("/", name="administration_geoip2_settings")
      */
-    public function settings(Request $request): Response
+    public function settings(Request $request, EntityManagerInterface $entityManager): Response
     {
         $config = [
             'geoipActive' => (bool) $this->configHelper->getConfigValue('geoipActive'),
@@ -47,7 +48,6 @@ class GeoIp2Controller extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
             // Save the config value

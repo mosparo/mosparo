@@ -21,8 +21,14 @@
     }
 }
 
-.input-group {
-    .form-control {
+.error-container {
+    display: flex;
+}
+
+.input-group,
+.error-container {
+    .form-control,
+    .form-field {
         &.rule-item-type {
             flex: 0 0 15%;
         }

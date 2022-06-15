@@ -18,3 +18,21 @@
         {{ form_widget(field) }}
     {% endfor %}
 {% endblock %}
+
+{% block _rule_form_items_entry_errors %}
+    <div class="error-container">
+        {% for field in form %}
+            {% if 'rule-item-type' in field.vars.attr.class %}
+                {% set class = 'rule-item-type' %}
+            {% elseif 'rule-item-value' in field.vars.attr.class %}
+                {% set class = 'rule-item-value' %}
+            {% elseif 'rule-item-rating' in field.vars.attr.class %}
+                {% set class = 'rule-item-rating' %}
+            {% endif %}
+
+            <div class="form-field {{ class }}">
+                {{ form_errors(field) }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -11,15 +11,15 @@ use tronovav\GeoIP2Update\Client;
 
 class GeoIp2Helper
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $configHelper;
+    protected ConfigHelper $configHelper;
 
-    protected $cleanupHelper;
+    protected CleanupHelper $cleanupHelper;
 
-    protected $downloadDirectory;
+    protected string $downloadDirectory;
 
-    public function __construct(EntityManagerInterface $entityManager, ConfigHelper $configHelper, CleanupHelper $cleanupHelper, $downloadDirectory)
+    public function __construct(EntityManagerInterface $entityManager, ConfigHelper $configHelper, CleanupHelper $cleanupHelper, string $downloadDirectory)
     {
         $this->entityManager = $entityManager;
         $this->configHelper = $configHelper;

@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\ProjectRelated;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
@@ -33,7 +34,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 {
     use ProjectRelatedTrait;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     public function __construct(TranslatorInterface $translator)
     {
@@ -43,7 +44,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     /**
      * @Route("/general", name="settings_general")
      */
-    public function general(Request $request): Response
+    public function general(Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = $this->getActiveProject();
 
@@ -51,7 +52,6 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
             $session = $request->getSession();
@@ -117,7 +117,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
      * @Route("/members/add", name="settings_member_add")
      * @Route("/members/{id}/edit", name="settings_member_edit")
      */
-    public function memberModify(Request $request, ProjectMember $projectMember = null): Response
+    public function memberModify(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember = null): Response
     {
         $isNew = false;
         $isOwner = false;
@@ -146,7 +146,6 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $userRepository = $entityManager->getRepository(User::class);
 
             if ($isNew) {
@@ -215,7 +214,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     /**
      * @Route("/members/{id}/remove", name="settings_member_remove")
      */
-    public function memberRemove(Request $request, ProjectMember $projectMember): Response
+    public function memberRemove(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember): Response
     {
         if ($projectMember->getRole() === ProjectMember::ROLE_OWNER) {
             $numberOfOwner = 0;
@@ -244,8 +243,6 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-project-member', $submittedToken)) {
-                $entityManager = $this->getDoctrine()->getManager();
-
                 $entityManager->remove($projectMember);
                 $entityManager->flush();
 
@@ -271,7 +268,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     /**
      * @Route("/security", name="settings_security")
      */
-    public function security(Request $request): Response
+    public function security(Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = $this->getActiveProject();
         $config = $project->getConfigValues();
@@ -314,8 +311,6 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
             $data = $form->getData();
             foreach ($data as $key => $value) {
                 $project->setConfigValue($key, $value);
@@ -345,7 +340,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     /**
      * @Route("/design", name="settings_design")
      */
-    public function design(Request $request, DesignHelper $designHelper): Response
+    public function design(Request $request, EntityManagerInterface $entityManager, DesignHelper $designHelper): Response
     {
         $project = $this->getActiveProject();
         $config = $project->getConfigValues();
@@ -354,8 +349,6 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
             $data = $form->getData();
             foreach ($data as $key => $value) {
                 if ($value === null) {
@@ -393,7 +386,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     /**
      * @Route("/reissue-keys", name="settings_reissue_keys")
      */
-    public function reissueKeys(Request $request): Response
+    public function reissueKeys(Request $request, EntityManagerInterface $entityManager): Response
     {
         $activeProject = $this->projectHelper->getActiveProject();
 
@@ -415,8 +408,6 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $submittedToken = $request->request->get('reissue-token');
 
             if ($this->isCsrfTokenValid('reissue-api-keys', $submittedToken)) {
-                $entityManager = $this->getDoctrine()->getManager();
-
                 $tokenGenerator = new TokenGenerator();
                 $activeProject->setPublicKey($tokenGenerator->generateToken());
                 $activeProject->setPrivateKey($tokenGenerator->generateToken());

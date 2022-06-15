@@ -7,11 +7,11 @@ use Mosparo\Rule\Tester\WordRuleTester;
 
 final class WordRuleType extends AbstractRuleType
 {
-    protected $key = 'word';
-    protected $name = 'rule.type.word.title';
-    protected $description = 'rule.type.word.shortIntro';
-    protected $icon = 'ti ti-forms';
-    protected $subtypes = [
+    protected string $key = 'word';
+    protected string $name = 'rule.type.word.title';
+    protected string $description = 'rule.type.word.shortIntro';
+    protected string $icon = 'ti ti-forms';
+    protected array $subtypes = [
         [
             'key' => 'text',
             'name' => 'rule.type.word.text.title',
@@ -21,8 +21,8 @@ final class WordRuleType extends AbstractRuleType
             'name' => 'rule.type.word.regex.title'
         ]
     ];
-    protected $formClass = WordFormType::class;
-    protected $testerClass = WordRuleTester::class;
-    protected $targetFieldKeys = ['formData.'];
-    protected $helpTemplate = 'project_related/rule/type/help/word.html.twig';
+    protected string $formClass = WordFormType::class;
+    protected string $testerClass = WordRuleTester::class;
+    protected array $targetFieldKeys = ['formData.'];
+    protected string $helpTemplate = 'project_related/rule/type/help/word.html.twig';
 }

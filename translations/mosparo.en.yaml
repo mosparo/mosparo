@@ -92,6 +92,7 @@ rule:
     addMultipleItems:
       label: Label
       items: Items
+      itemsHelp: Add one item per line.
       rating: Rating
       ratingHelp: If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.
 
@@ -107,6 +108,7 @@ rule:
       title: Domain
       shortIntro: Allows to filter by specific domains
       intro: The domain rule type allows to filter for domains.
+      placeholder: Domain
 
       domain:
         title: Domain
@@ -116,6 +118,7 @@ rule:
       title: Email
       shortIntro: Allows to filter by specific email addresses
       intro: The email rule type allows to filter for email addresses.
+      placeholder: Email address
 
       email:
         title: Email address
@@ -125,6 +128,7 @@ rule:
       title: IP address
       shortIntro: Allows to filter by ip addresses and subnets
       intro: The IP address rule type allows to filter for IP addresses or subnets.
+      placeholder: IP address/Subnet
 
       ipAddress:
         title: IP address
@@ -139,6 +143,7 @@ rule:
       shortIntro: Allows to filter by provider specific informations
       intro: The provider rule type allows to filter for AS numbers and country codes.
       infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
+      placeholder: ASN
 
       action:
         configureGeoip2: GeoIP2 Configuration
@@ -156,6 +161,7 @@ rule:
       title: Website
       shortIntro: Allows to filter by specific websites
       intro: The website rule type allows to filter for URLs.
+      placeholder: URL/Domain
 
       url:
         title: URL
@@ -166,6 +172,7 @@ rule:
       title: Word
       shortIntro: Allows to filter by specific words or patterns
       intro: The word rule type allows to filter for words and Regular Expression patterns.
+      placeholder: Word/Pattern
 
       text:
         title: Text
@@ -175,12 +182,16 @@ rule:
         title: Regular Expression
         intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
 
+        validation:
+          invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
+
     rating:
       title: Rating
       intro: If an item should get a higher spam rating, you can set an additional spam rating for the item.
       infoCalculationMethod: The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.
       infoDefaultAndDataType: The rating is a float number from %zero% to %unlimited%. If no rating is defined, the default rating is %one%.
       infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
+      placeholder: Rating
 
 # Ruleset
 ruleset:

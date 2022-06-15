@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 
 class RuleTypeManager
 {
-    protected $ruleTypes = [];
+    protected array $ruleTypes = [];
 
     public function __construct(RewindableGenerator $generator)
     {

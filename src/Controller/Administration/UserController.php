@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\Administration;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
 use Mosparo\Form\PasswordFormType;
@@ -14,8 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -23,13 +24,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserController extends AbstractController
 {
-    protected $passwordEncoder;
+    protected UserPasswordHasherInterface $userPasswordHasher;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator)
+    public function __construct(UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $translator)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordHasher = $userPasswordHasher;
         $this->translator = $translator;
     }
 
@@ -67,7 +68,7 @@ class UserController extends AbstractController
      * @Route("/add", name="administration_user_add")
      * @Route("/{id}/edit", name="administration_user_edit")
      */
-    public function modifyUser(Request $request, User $user = null): Response
+    public function modifyUser(Request $request, EntityManagerInterface $entityManager, User $user = null): Response
     {
         $isNewUser = false;
         if ($user === null) {
@@ -110,11 +111,9 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
             $passwordField = $form->get('password');
             if ($isNewUser || !empty($passwordField->get('plainPassword')->getData())) {
-                $user->setPassword($this->passwordEncoder->encodePassword(
+                $user->setPassword($this->userPasswordHasher->hashPassword(
                     $user,
                     $passwordField->get('plainPassword')->getData()
                 ));
@@ -163,7 +162,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/delete", name="administration_user_delete")
      */
-    public function delete(Request $request, User $user): Response
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $isOwnerInProject = false;
         foreach ($user->getProjectMemberships() as $membership) {
@@ -184,8 +183,6 @@ class UserController extends AbstractController
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-user', $submittedToken)) {
-                $entityManager = $this->getDoctrine()->getManager();
-
                 $entityManager->remove($user);
                 $entityManager->flush();
 

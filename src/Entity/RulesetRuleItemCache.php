@@ -16,39 +16,39 @@ class RulesetRuleItemCache implements ProjectRelatedEntityInterface, RuleItemEnt
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="guid")
      */
-    private $uuid;
+    private ?string $uuid;
 
     /**
      * @ORM\ManyToOne(targetEntity=RulesetRuleCache::class, inversedBy="items")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $rulesetRuleCache;
+    private ?RulesetRuleCache $rulesetRuleCache;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $type;
+    private ?string $type;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $value;
+    private ?string $value;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $spamRatingFactor;
+    private ?float $spamRatingFactor;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $project;
+    private ?Project $project;
 
     public function __construct()
     {

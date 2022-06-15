@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\ProjectRelated;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Rule;
 use Mosparo\Form\RuleAddMultipleItemsType;
 use Mosparo\Form\RuleFormType;
@@ -23,7 +24,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 {
     use ProjectRelatedTrait;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     public function __construct(TranslatorInterface $translator)
     {
@@ -77,7 +78,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     /**
      * @Route("/create/{type}", name="rule_create_with_type")
      */
-    public function createWithType(Request $request, RuleTypeManager $ruleTypeManager, $type): Response
+    public function createWithType(Request $request, $type, EntityManagerInterface $entityManager, RuleTypeManager $ruleTypeManager): Response
     {
         $ruleType = $ruleTypeManager->getRuleType($type);
 
@@ -88,7 +89,6 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($rule);
             $entityManager->flush();
 
@@ -118,7 +118,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     /**
      * @Route("/{id}/edit", name="rule_edit")
      */
-    public function edit(Request $request, RuleTypeManager $ruleTypeManager, Rule $rule): Response
+    public function edit(Request $request, Rule $rule, EntityManagerInterface $entityManager, RuleTypeManager $ruleTypeManager): Response
     {
         $readOnly = false;
         if (!$this->projectHelper->canManage()) {
@@ -131,7 +131,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$readOnly) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->flush();
 
             $session = $request->getSession();
             $session->getFlashBag()->add(
@@ -159,14 +159,12 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     /**
      * @Route("/{id}/delete", name="rule_delete")
      */
-    public function delete(Request $request, Rule $rule): Response
+    public function delete(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         if ($request->request->has('delete-token')) {
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-rule', $submittedToken)) {
-                $entityManager = $this->getDoctrine()->getManager();
-
                 $entityManager->remove($rule);
                 $entityManager->flush();
 

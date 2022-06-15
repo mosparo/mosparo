@@ -20,19 +20,19 @@ use Twig\Environment;
 
 class ProjectSubscriber implements EventSubscriberInterface
 {
-    protected $container;
+    protected ContainerInterface $container;
 
-    protected $security;
+    protected Security $security;
 
-    protected $router;
+    protected UrlGeneratorInterface $router;
 
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
-    protected $twig;
+    protected Environment $twig;
 
-    protected $installed;
+    protected bool $installed;
 
     public function __construct(ContainerInterface $container, Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig, $installed)
     {

@@ -7,11 +7,11 @@ use Mosparo\Rule\Tester\ProviderRuleTester;
 
 final class ProviderRuleType extends AbstractRuleType
 {
-    protected $key = 'provider';
-    protected $name = 'rule.type.provider.title';
-    protected $description = 'rule.type.provider.shortIntro';
-    protected $icon = 'ti ti-wifi';
-    protected $subtypes = [
+    protected string $key = 'provider';
+    protected string $name = 'rule.type.provider.title';
+    protected string $description = 'rule.type.provider.shortIntro';
+    protected string $icon = 'ti ti-wifi';
+    protected array $subtypes = [
         [
             'key' => 'asNumber',
             'name' => 'rule.type.provider.asNumber.title',
@@ -21,8 +21,8 @@ final class ProviderRuleType extends AbstractRuleType
             'name' => 'rule.type.provider.country.title',
         ],
     ];
-    protected $formClass = ProviderFormType::class;
-    protected $testerClass = ProviderRuleTester::class;
-    protected $targetFieldKeys = ['client.asNumber', 'client.country'];
-    protected $helpTemplate = 'project_related/rule/type/help/provider.html.twig';
+    protected string $formClass = ProviderFormType::class;
+    protected string $testerClass = ProviderRuleTester::class;
+    protected array $targetFieldKeys = ['client.asNumber', 'client.country'];
+    protected string $helpTemplate = 'project_related/rule/type/help/provider.html.twig';
 }

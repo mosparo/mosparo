@@ -9,13 +9,13 @@ use Twig\Extension\CoreExtension;
 
 class LocaleSubscriber implements EventSubscriberInterface
 {
-    protected $twig;
+    protected Environment $twig;
 
-    protected $defaultDateFormat;
+    protected string $defaultDateFormat;
 
-    protected $defaultTimeFormat;
+    protected string $defaultTimeFormat;
 
-    protected $defaultTimezone;
+    protected string $defaultTimezone;
 
     public function __construct(Environment $twig, $defaultDateFormat, $defaultTimeFormat, $defaultTimezone)
     {

@@ -15,38 +15,38 @@ class Ruleset implements ProjectRelatedEntityInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $url;
+    private ?string $url;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $spamRatingFactor;
+    private ?float $spamRatingFactor;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $status;
+    private ?bool $status;
 
     /**
      * @ORM\OneToOne(targetEntity=RulesetCache::class, mappedBy="ruleset", cascade={"persist", "remove"})
      */
-    private $rulesetCache;
+    private ?RulesetCache $rulesetCache;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $project;
+    private ?Project $project;
 
     public function getId(): ?int
     {

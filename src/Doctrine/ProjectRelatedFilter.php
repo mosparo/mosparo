@@ -9,7 +9,7 @@ use Mosparo\Helper\ProjectHelper;
 
 class ProjectRelatedFilter extends SQLFilter
 {
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
     public function setProjectHelper(ProjectHelper $projectHelper)
     {

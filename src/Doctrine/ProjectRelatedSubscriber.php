@@ -10,7 +10,7 @@ use Mosparo\Helper\ProjectHelper;
 
 class ProjectRelatedSubscriber implements EventSubscriber
 {
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
     public function __construct(ProjectHelper $projectHelper)
     {

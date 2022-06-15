@@ -29,7 +29,7 @@ class RuleAddMultipleItemsType extends AbstractType
                     'class' => 'form-select rule-item-type'
                 ]
             ])
-            ->add('items', TextareaType::class, ['label' => 'rule.form.addMultipleItems.items', 'help' => 'Add one item per line.'])
+            ->add('items', TextareaType::class, ['label' => 'rule.form.addMultipleItems.items', 'help' => 'rule.form.addMultipleItems.itemsHelp'])
             ->add('rating', NumberType::class, [
                 'label' => 'rule.form.addMultipleItems.rating',
                 'required' => false,

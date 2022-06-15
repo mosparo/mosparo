@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\ProjectRelated;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Exception;
 use Mosparo\Form\RulesetFormType;
@@ -23,9 +24,9 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
 {
     use ProjectRelatedTrait;
 
-    protected $rulesetHelper;
+    protected RulesetHelper $rulesetHelper;
 
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     public function __construct(RulesetHelper $rulesetHelper, TranslatorInterface $translator)
     {
@@ -77,7 +78,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
      * @Route("/add", name="ruleset_add")
      * @Route("/{id}/edit", name="ruleset_edit")
      */
-    public function form(Request $request, Ruleset $ruleset = null): Response
+    public function form(Request $request, EntityManagerInterface $entityManager, Ruleset $ruleset = null): Response
     {
         $isNew = false;
         if ($ruleset === null) {
@@ -93,7 +94,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         $errorMessage = '';
         if ($form->isSubmitted() && $form->isValid()) {
             if ($isNew) {
-                $this->getDoctrine()->getManager()->persist($ruleset);
+                $entityManager->persist($ruleset);
             }
 
             try {
@@ -104,7 +105,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             }
 
             if (!$hasError) {
-                $this->getDoctrine()->getManager()->flush();
+                $entityManager->flush();
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
@@ -132,14 +133,12 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
     /**
      * @Route("/{id}/delete", name="ruleset_delete")
      */
-    public function delete(Request $request, Ruleset $ruleset): Response
+    public function delete(Request $request, EntityManagerInterface $entityManager, Ruleset $ruleset): Response
     {
         if ($request->request->has('delete-token')) {
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-ruleset', $submittedToken)) {
-                $entityManager = $this->getDoctrine()->getManager();
-
                 $entityManager->remove($ruleset);
                 $entityManager->flush();
 
@@ -165,7 +164,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
     /**
      * @Route("/{id}/view", name="ruleset_view")
      */
-    public function view(Ruleset $ruleset): Response
+    public function view(EntityManagerInterface $entityManager, Ruleset $ruleset): Response
     {
         $hasError = false;
         $errorMessage = '';
@@ -173,7 +172,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             $result = $this->rulesetHelper->downloadRuleset($ruleset);
 
             if ($result) {
-                $this->getDoctrine()->getManager()->flush();
+                $entityManager->flush();
             }
         } catch (Exception $e) {
             $hasError = true;

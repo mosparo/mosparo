@@ -17,32 +17,32 @@ class IpLocalization
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="hashed")
      */
-    private $ipAddress;
+    private ?string $ipAddress;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $asNumber;
+    private ?int $asNumber;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $asOrganization;
+    private ?string $asOrganization;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
      */
-    private $country;
+    private ?string $country;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $cachedAt;
+    private DateTimeInterface $cachedAt;
 
     public function __construct()
     {

@@ -12,7 +12,7 @@ class TimeUtil
      *
      * @param DateTimeInterface $startTime
      * @param DateTimeInterface $endTime
-     * @return string
+     * @return int
      */
     public static function getDifferenceInSeconds(DateTimeInterface $startTime, DateTimeInterface $endTime): int
     {

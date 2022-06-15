@@ -10,7 +10,7 @@ trait ProjectRelatedTrait
     /**
      * @var ProjectHelper
      */
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
     public function setProjectHelper(ProjectHelper $projectHelper)
     {

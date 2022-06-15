@@ -10,17 +10,17 @@ class GeneralVerification
     /**
      * @var string
      */
-    protected $key;
+    protected string $key;
 
     /**
      * @var boolean
      */
-    protected $valid;
+    protected bool $valid;
 
     /**
      * @var array
      */
-    protected $data = [];
+    protected array $data = [];
 
     /**
      * Constructs the object

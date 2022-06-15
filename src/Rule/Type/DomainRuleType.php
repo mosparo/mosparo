@@ -7,18 +7,18 @@ use Mosparo\Rule\Tester\DomainRuleTester;
 
 final class DomainRuleType extends AbstractRuleType
 {
-    protected $key = 'domain';
-    protected $name = 'rule.type.domain.title';
-    protected $description = 'rule.type.domain.shortIntro';
-    protected $icon = 'ti ti-building';
-    protected $subtypes = [
+    protected string $key = 'domain';
+    protected string $name = 'rule.type.domain.title';
+    protected string $description = 'rule.type.domain.shortIntro';
+    protected string $icon = 'ti ti-building';
+    protected array $subtypes = [
         [
             'key' => 'domain',
             'name' => 'rule.type.domain.domain.title',
         ],
     ];
-    protected $formClass = DomainFormType::class;
-    protected $testerClass = DomainRuleTester::class;
-    protected $targetFieldKeys = ['formData.input[url]', 'formData.input[email]', 'formData.textarea'];
-    protected $helpTemplate = 'project_related/rule/type/help/domain.html.twig';
+    protected string $formClass = DomainFormType::class;
+    protected string $testerClass = DomainRuleTester::class;
+    protected array $targetFieldKeys = ['formData.input[url]', 'formData.input[email]', 'formData.textarea'];
+    protected string $helpTemplate = 'project_related/rule/type/help/domain.html.twig';
 }

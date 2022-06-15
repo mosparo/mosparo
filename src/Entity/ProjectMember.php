@@ -19,24 +19,24 @@ class ProjectMember
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="projectMembers")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $project;
+    private ?Project $project;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="projectMemberships")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private ?User $user;
 
     /**
      * @ORM\Column(type="string", length=30)
      */
-    private $role;
+    private ?string $role;
 
     public function getId(): ?int
     {

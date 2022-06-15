@@ -28,7 +28,7 @@ class RuleFormType extends AbstractType
             ->add('description', TextareaType::class, ['label' => 'rule.form.rule.description', 'required' => false, 'disabled' => $readonly])
             ->add('status', ChoiceType::class, [
                 'label' => 'rule.form.rule.status',
-                'choices' => ['Inactive' => 0, 'Active' => 1],
+                'choices' => ['state.inactive' => 0, 'state.active' => 1],
                 'disabled' => $readonly,
                 'attr' => [
                     'class' => 'form-select',

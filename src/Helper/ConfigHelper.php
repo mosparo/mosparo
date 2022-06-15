@@ -8,13 +8,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ConfigHelper
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $fileSystem;
+    protected Filesystem $fileSystem;
 
-    protected $environmentConfigFilePath;
+    protected string $environmentConfigFilePath;
 
-    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, $projectDirectory)
+    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory)
     {
         $this->entityManager = $entityManager;
         $this->fileSystem = $fileSystem;

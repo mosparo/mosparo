@@ -2,10 +2,10 @@
 
 namespace Mosparo\Controller;
 
-use DateTimeInterface;
+use DateTime;
 use DateTimeZone;
-use Mosparo\Entity\Project;
 use Mosparo\Helper\DesignHelper;
+use Mosparo\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +18,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class DynamicResourcesController extends AbstractController
 {
-    protected $designHelper;
+    protected ProjectRepository $projectRepository;
 
-    public function __construct(DesignHelper $designHelper)
+    protected DesignHelper $designHelper;
+
+    public function __construct(ProjectRepository $projectRepository, DesignHelper $designHelper)
     {
+        $this->projectRepository = $projectRepository;
         $this->designHelper = $designHelper;
     }
 
@@ -29,10 +32,9 @@ class DynamicResourcesController extends AbstractController
      * @Route("/{projectUuid}.css", name="resources_project_css")
      * @Route("/{projectUuid}/{styleHash}.css", name="resources_project_hash_css")
      */
-    public function redirectToStyleResource(string $projectUuid, string $styleHash = ''): Response
+    public function redirectToStyleResource(string $projectUuid): Response
     {
-        $repository = $this->getDoctrine()->getRepository(Project::class);
-        $project = $repository->findOneBy(['uuid' => $projectUuid]);
+        $project = $this->projectRepository->findOneBy(['uuid' => $projectUuid]);
 
         if ($project === null) {
             return new Response('404 Not Found', 404);
@@ -44,7 +46,7 @@ class DynamicResourcesController extends AbstractController
         }
 
         $cssFileTime = filemtime($cssFilePath);
-        $cssFileDate = (new \DateTime())->setTimestamp($cssFileTime)->setTimezone(new DateTimeZone('UTC'));
+        $cssFileDate = (new DateTime())->setTimestamp($cssFileTime)->setTimezone(new DateTimeZone('UTC'));
 
         $resourceUrl = $this->generateUrl(
             'resources_project_hash_css',

@@ -11,7 +11,7 @@ class CleanupDatabaseCommand extends Command
 {
     protected static $defaultName = 'mosparo:cleanup-database';
 
-    protected $cleanupHelper;
+    protected CleanupHelper $cleanupHelper;
 
     public function __construct(CleanupHelper $cleanupHelper)
     {

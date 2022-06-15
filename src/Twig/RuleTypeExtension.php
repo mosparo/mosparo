@@ -9,7 +9,7 @@ use Twig\TwigFunction;
 
 class RuleTypeExtension extends AbstractExtension
 {
-    protected $ruleTypeManager;
+    protected RuleTypeManager $ruleTypeManager;
 
     public function __construct(RuleTypeManager $ruleTypeManager)
     {

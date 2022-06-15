@@ -11,7 +11,7 @@ class RefreshRulesetsCommand extends Command
 {
     protected static $defaultName = 'mosparo:rulesets:refresh';
 
-    protected $rulesetHelper;
+    protected RulesetHelper $rulesetHelper;
 
     public function __construct(RulesetHelper $rulesetHelper)
     {

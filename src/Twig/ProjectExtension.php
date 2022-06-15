@@ -13,11 +13,11 @@ use Twig\TwigFunction;
 
 class ProjectExtension extends AbstractExtension implements GlobalsInterface
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
-    protected $security;
+    protected Security $security;
 
     public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Security $security)
     {
@@ -55,6 +55,7 @@ class ProjectExtension extends AbstractExtension implements GlobalsInterface
         if ($this->security->isGranted('ROLE_ADMIN')) {
             $projects = $projectRepository->findBy([], ['name' => 'ASC']);
         } else {
+            /** @var \Mosparo\Entity\User $user */
             $user = $this->security->getUser();
             foreach ($user->getProjectMemberships() as $membership) {
                 $projects[] = $membership->getProject();

@@ -38,7 +38,7 @@ class EncryptedJson extends Type
     /**
      * @param mixed $value
      * @param AbstractPlatform $platform
-     * @return string
+     * @return null|array
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?array
     {

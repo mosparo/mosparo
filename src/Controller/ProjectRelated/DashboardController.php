@@ -5,6 +5,7 @@ namespace Mosparo\Controller\ProjectRelated;
 use DateInterval;
 use DatePeriod;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use IntlDateFormatter;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
@@ -22,10 +23,8 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
     /**
      * @Route("/", name="dashboard")
      */
-    public function dashboard(Request $request): Response
+    public function dashboard(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         [$noSpamSubmissionsData, $spamSubmissionsData] = $this->getSubmissionDataForChart($entityManager);
 
         $builder = $entityManager->createQueryBuilder();

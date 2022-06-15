@@ -17,57 +17,57 @@ class Project
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="guid")
      */
-    private $uuid;
+    private ?string $uuid;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="array", nullable=true)
      */
-    private $hosts = [];
+    private array $hosts = [];
 
     /**
      * @ORM\Column(type="string", length=64)
      */
-    private $publicKey;
+    private ?string $publicKey;
 
     /**
      * @ORM\Column(type="encrypted")
      */
-    private $privateKey;
+    private ?string $privateKey;
 
     /**
      * @ORM\Column(type="integer", length=15)
      */
-    private $status = 1;
+    private int $status = 1;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $spamScore = 5;
+    private int $spamScore = 5;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $configValues = [];
+    private array $configValues = [];
 
     /**
      * @var array
      */
-    private $defaultConfigValues = [
+    private array $defaultConfigValues = [
         'minimumTimeActive' => false,
         'minimumTimeSeconds' => 10,
 
@@ -120,7 +120,7 @@ class Project
     /**
      * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="project", orphanRemoval=true)
      */
-    private $projectMembers;
+    private Collection $projectMembers;
 
     public function __construct()
     {

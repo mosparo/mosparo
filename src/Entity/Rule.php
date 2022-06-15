@@ -18,48 +18,48 @@ class Rule implements ProjectRelatedEntityInterface, RuleEntityInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="guid")
      */
-    private $uuid;
+    private ?string $uuid;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="string", length=30)
      */
-    private $type;
+    private ?string $type;
 
     /**
      * @ORM\OneToMany(targetEntity=RuleItem::class, mappedBy="rule", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    private $items;
+    private Collection $items;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $status = 1;
+    private int $status = 1;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $spamRatingFactor;
+    private ?float $spamRatingFactor;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $project;
+    private ?Project $project;
 
     public function __construct()
     {

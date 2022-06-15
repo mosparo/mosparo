@@ -7,10 +7,7 @@ use Symfony\Component\DependencyInjection\EnvVarLoaderInterface;
 
 final class EnvLoader implements EnvVarLoaderInterface
 {
-    /**
-     * @var ConfigHelper
-     */
-    protected $configHelper;
+    protected ConfigHelper $configHelper;
 
     public function __construct(ConfigHelper $configHelper)
     {

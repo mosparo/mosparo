@@ -15,13 +15,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RulesetHelper
 {
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected $client;
+    protected HttpClientInterface $client;
 
-    protected $cleanupHelper;
+    protected CleanupHelper $cleanupHelper;
 
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
     public function __construct(EntityManagerInterface $entityManager, HttpClientInterface $client, CleanupHelper $cleanupHelper, ProjectHelper $projectHelper)
     {

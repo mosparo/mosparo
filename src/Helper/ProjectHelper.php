@@ -8,9 +8,9 @@ use Symfony\Component\Security\Core\Security;
 
 class ProjectHelper
 {
-    protected $security;
+    protected Security $security;
 
-    protected $activeProject;
+    protected ?Project $activeProject = null;
 
     public function __construct(Security $security)
     {

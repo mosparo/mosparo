@@ -92,6 +92,7 @@ rule:
     addMultipleItems:
       label: Bezeichnung
       items: Einträge
+      itemsHelp: Geben Sie ein Element pro Zeile ein.
       rating: Bewertung
       ratingHelp: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt wird, werden die Einträge werden nicht als Spam erkannt.
 
@@ -107,6 +108,7 @@ rule:
       title: Domain
       shortIntro: Filtert nach Domains
       intro: Der Domain-Regeltyp erlaubt das Filtern nach Domains.
+      placeholder: Domain
 
       domain:
         title: Domain
@@ -116,6 +118,7 @@ rule:
       title: E-Mail
       shortIntro: Filtert nach E-Mail-Adressen
       intro: Der E-Mail-Adressen-Regeltyp erlaubt das Filtern nach E-Mail-Adressen.
+      placeholder: E-Mail-Adresse
 
       email:
         title: E-Mail-Adresse
@@ -125,6 +128,7 @@ rule:
       title: IP-Adresse
       shortIntro: Filtert nach IP-Adressen und Subnetzen
       intro: Der IP-Adressen-Regeltyp erlaubt das Filtern nach IP-Adressen und Subnetzen.
+      placeholder: IP-Adresse/Subnetz
 
       ipAddress:
         title: IP-Adresse
@@ -139,6 +143,7 @@ rule:
       shortIntro: Filtert nach AS-Nummber und Land
       intro: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
       infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
+      placeholder: ASN
 
       action:
         configureGeoip2: GeoIP2 Konfiguration
@@ -156,6 +161,7 @@ rule:
       title: Website
       shortIntro: Filtert nach URLs
       intro: Der Website-Regeltyp erlaubt das Filtern nach URLs.
+      placeholder: URL/Domain
 
       url:
         title: URL
@@ -166,6 +172,7 @@ rule:
       title: Wort
       shortIntro: Filtert nach Wörter und RegEx-Muster
       intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
+      placeholder: Wort/Muster
 
       text:
         title: Text
@@ -175,12 +182,16 @@ rule:
         title: Regular Expression
         intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
 
+        validation:
+          invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
+
     rating:
       title: Bewertung
       intro: Wenn ein Eintrag eine stärkere Bewertung erhalten soll, können Sie die Spambewertung pro Eintrag spezifizieren.
       infoCalculationMethod: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
       infoDefaultAndDataType: Die Bewertung ist eine Kommazahl zwischen %zero% bis %unlimited%. Wenn keine Bewertung gesetzt ist, wird die Standard-Bewertung %one% verwendet.
       infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
+      placeholder: Bew.
 
 # Ruleset
 ruleset:

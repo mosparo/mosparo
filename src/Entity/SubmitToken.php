@@ -17,63 +17,63 @@ class SubmitToken implements ProjectRelatedEntityInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="hashed")
      */
-    private $ipAddress;
+    private ?string $ipAddress;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $pageTitle;
+    private ?string $pageTitle;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $pageUrl;
+    private ?string $pageUrl;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
      */
-    private $signature;
+    private ?string $signature;
 
     /**
      * @ORM\Column(type="string", length=64)
      */
-    private $token;
+    private ?string $token;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $checkedAt;
+    private ?DateTimeInterface $checkedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $verifiedAt;
+    private ?DateTimeInterface $verifiedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $validUntil;
+    private ?DateTimeInterface $validUntil;
 
     /**
      * @ORM\OneToOne(targetEntity=Submission::class)
      */
-    private $submission;
+    private ?Submission $submission;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $project;
+    private ?Project $project;
 
     public function getId(): ?int
     {

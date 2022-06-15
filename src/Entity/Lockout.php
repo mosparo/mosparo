@@ -16,27 +16,27 @@ class Lockout
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="hashed")
      */
-    private $ipAddress;
+    private ?string $ipAddress;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $startedAt;
+    private ?DateTimeInterface $startedAt;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $duration;
+    private ?int $duration;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $validUntil;
+    private ?DateTimeInterface $validUntil;
 
     public function getId(): ?int
     {

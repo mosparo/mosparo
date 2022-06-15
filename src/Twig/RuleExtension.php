@@ -10,11 +10,11 @@ use Twig\TwigFunction;
 
 class RuleExtension extends AbstractExtension
 {
-    protected $router;
+    protected UrlGeneratorInterface $router;
 
-    protected $ruleRepository;
+    protected RuleRepository $ruleRepository;
 
-    protected $rulesetRuleCacheRepository;
+    protected RulesetRuleCacheRepository $rulesetRuleCacheRepository;
 
     public function __construct(UrlGeneratorInterface $router, RuleRepository $ruleRepository, RulesetRuleCacheRepository $rulesetRuleCacheRepository)
     {
