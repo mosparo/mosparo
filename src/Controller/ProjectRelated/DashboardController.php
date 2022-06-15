@@ -6,10 +6,10 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use IntlDateFormatter;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Entity\Submission;
+use Mosparo\Helper\LocaleHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
     /**
      * @Route("/", name="dashboard")
      */
-    public function dashboard(Request $request, EntityManagerInterface $entityManager): Response
+    public function dashboard(Request $request, EntityManagerInterface $entityManager, LocaleHelper $localeHelper): Response
     {
         [$noSpamSubmissionsData, $spamSubmissionsData] = $this->getSubmissionDataForChart($entityManager);
 
@@ -42,21 +42,15 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
         $numberOfRulesets = $result['rulesets'];
 
         // Get the date format for the chart
-        // @TODO: Replace the date format with an user setting
-        $intlDateFormatter = new IntlDateFormatter(
-            $request->getLocale(),
-            IntlDateFormatter::SHORT,
-            IntlDateFormatter::NONE,
-            'UTC',
-            IntlDateFormatter::GREGORIAN
-        );
+        [ , $dateFormat, , ] = $localeHelper->determineLocaleValues($request);
+        $dateFormat = str_replace(['d', 'm', 'Y'], ['dd', 'MM', 'yy'], $dateFormat);
 
         return $this->render('project_related/dashboard/dashboard.html.twig', [
             'noSpamSubmissionsData' => $noSpamSubmissionsData,
             'spamSubmissionsData' => $spamSubmissionsData,
             'numberOfRules' => $numberOfRules,
             'numberOfRulesets' => $numberOfRulesets,
-            'chartDateFormat' => $intlDateFormatter->getPattern(),
+            'chartDateFormat' => $dateFormat,
         ]);
     }
 

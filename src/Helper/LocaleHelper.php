@@ -5,6 +5,7 @@ namespace Mosparo\Helper;
 use DateTimeZone;
 use DirectoryIterator;
 use Mosparo\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Component\Intl\Locales;
@@ -15,6 +16,12 @@ class LocaleHelper
     protected TranslatorInterface $translator;
 
     protected string $translationsDirectory;
+
+    protected string $defaultDateFormat;
+
+    protected string $defaultTimeFormat;
+
+    protected string $defaultTimezone;
 
     protected static array $dateFormats = [
         'Y-m-d',
@@ -28,10 +35,56 @@ class LocaleHelper
         'h:i:s A'
     ];
 
-    public function __construct(TranslatorInterface $translator, $projectDirectory)
+    public function __construct(TranslatorInterface $translator, $projectDirectory, $defaultDateFormat, $defaultTimeFormat, $defaultTimezone)
     {
         $this->translator = $translator;
         $this->translationsDirectory = $projectDirectory . '/translations';
+        $this->defaultDateFormat = $defaultDateFormat;
+        $this->defaultTimeFormat = $defaultTimeFormat;
+        $this->defaultTimezone = $defaultTimezone;
+    }
+
+    public function determineLocaleValues(Request $request): array
+    {
+        $browserLocale = null;
+        if (!empty($request->getPreferredLanguage())) {
+            $browserLocale = $request->getPreferredLanguage();
+        }
+
+        $locale = '';
+        $dateFormat = $this->defaultDateFormat;
+        $timeFormat = $this->defaultTimeFormat;
+        $timezone = $this->defaultTimezone;
+
+        $session = $request->getSession();
+        if ($session !== null && $session->has('userLocale')) {
+            $userLocale = $session->get('userLocale');
+
+            if ($userLocale === 'browser' && $browserLocale !== null) {
+                $locale = $browserLocale;
+            } else if ($userLocale !== null && $userLocale !== 'default') {
+                $locale = $userLocale;
+            }
+
+            $userDateFormat = $session->get('userDateFormat');
+            if ($userDateFormat !== null && $userDateFormat !== 'default') {
+                $dateFormat = $userDateFormat;
+            }
+
+            $userTimeFormat = $session->get('userTimeFormat');
+            if ($userTimeFormat !== null && $userTimeFormat !== 'default') {
+                $timeFormat = $userTimeFormat;
+            }
+
+            $userTimezone = $session->get('userTimezone');
+            if ($userTimezone !== null && $userTimezone !== 'default') {
+                $timezone = $userTimezone;
+            }
+        } else if ($browserLocale !== null) {
+            $locale = $browserLocale;
+        }
+
+        return [$locale, $dateFormat, $timeFormat, $timezone];
     }
 
     public function storeUserSettingsInSession(Session $session, User $user)

@@ -79,10 +79,6 @@ services:
 
     Mosparo\Subscriber\LocaleSubscriber:
         class: Mosparo\Subscriber\LocaleSubscriber
-        arguments:
-            $defaultDateFormat: '%env(default_date_format)%'
-            $defaultTimeFormat: '%env(default_time_format)%'
-            $defaultTimezone: '%env(default_timezone)%'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -130,6 +126,9 @@ services:
     Mosparo\Helper\LocaleHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+            $defaultDateFormat: '%env(default_date_format)%'
+            $defaultTimeFormat: '%env(default_time_format)%'
+            $defaultTimezone: '%env(default_timezone)%'
 
     Mosparo\Helper\DesignHelper:
         arguments:
