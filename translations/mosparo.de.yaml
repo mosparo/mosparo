@@ -707,6 +707,13 @@ password:
     title: Ihr Passwort zurücksetzen
     action: Passwort zurücksetzen
 
+    message:
+      successfullyReset: Ihr Passwort wurde erfolgreich zurückgesetzt.
+
+    error:
+      tokenNotFound: Es wurde kein Passwort-Token in der Adresse oder in der Session gefunden.
+      errorOccurred: Mit der Passwort-zurücksetzen-Anfrage gab es ein Problem. %error%
+
   form:
     password: Passwort
     newPassword: Neues Passwort

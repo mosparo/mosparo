@@ -707,6 +707,13 @@ password:
     title: Reset your password
     action: Reset password
 
+    message:
+      successfullyReset: Your password was reset successfully.
+
+    error:
+      tokenNotFound: No reset password token found in the URL or in the session.
+      errorOccurred: There was a problem validating your reset request. %error%
+
   form:
     password: Password
     newPassword: New password
