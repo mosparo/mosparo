@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     /**
      * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
      */
-    private ?string $googleAuthenticatorSecret;
+    private ?string $googleAuthenticatorSecret = null;
 
     /**
      * @ORM\Column(type="encryptedJson")

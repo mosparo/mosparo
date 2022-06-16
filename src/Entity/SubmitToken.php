@@ -37,7 +37,7 @@ class SubmitToken implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
      */
-    private ?string $signature;
+    private ?string $signature = null;
 
     /**
      * @ORM\Column(type="string", length=64)
@@ -52,17 +52,17 @@ class SubmitToken implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?DateTimeInterface $checkedAt;
+    private ?DateTimeInterface $checkedAt = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?DateTimeInterface $verifiedAt;
+    private ?DateTimeInterface $verifiedAt = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?DateTimeInterface $validUntil;
+    private ?DateTimeInterface $validUntil = null;
 
     /**
      * @ORM\OneToOne(targetEntity=Submission::class)

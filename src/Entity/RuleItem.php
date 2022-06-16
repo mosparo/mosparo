@@ -42,7 +42,7 @@ class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private ?float $spamRatingFactor;
+    private ?float $spamRatingFactor = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)

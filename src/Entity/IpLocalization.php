@@ -27,17 +27,17 @@ class IpLocalization
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private ?int $asNumber;
+    private ?int $asNumber = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $asOrganization;
+    private ?string $asOrganization = null;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
      */
-    private ?string $country;
+    private ?string $country = null;
 
     /**
      * @ORM\Column(type="datetime")

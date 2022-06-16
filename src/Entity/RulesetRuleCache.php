@@ -39,7 +39,7 @@ class RulesetRuleCache implements ProjectRelatedEntityInterface, RuleEntityInter
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private ?string $description;
+    private ?string $description = null;
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -54,7 +54,7 @@ class RulesetRuleCache implements ProjectRelatedEntityInterface, RuleEntityInter
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private ?float $spamRatingFactor;
+    private ?float $spamRatingFactor = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)

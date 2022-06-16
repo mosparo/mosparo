@@ -27,7 +27,7 @@ class Submission implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private ?string $validationToken;
+    private ?string $validationToken = null;
 
     /**
      * @ORM\Column(type="encryptedJson")
@@ -37,7 +37,7 @@ class Submission implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private ?string $signature;
+    private ?string $signature = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -47,7 +47,7 @@ class Submission implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?DateTimeInterface $verifiedAt;
+    private ?DateTimeInterface $verifiedAt = null;
 
     /**
      * @ORM\Column(type="json")
@@ -78,7 +78,7 @@ class Submission implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private bool $spam;
+    private ?bool $spam = null;
 
     /**
      * @ORM\Column(type="float")
@@ -88,7 +88,7 @@ class Submission implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private bool $valid;
+    private ?bool $valid = null;
 
     public function getId(): ?int
     {

@@ -27,7 +27,7 @@ class RulesetRuleItemCache implements ProjectRelatedEntityInterface, RuleItemEnt
      * @ORM\ManyToOne(targetEntity=RulesetRuleCache::class, inversedBy="items")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?RulesetRuleCache $rulesetRuleCache;
+    private ?RulesetRuleCache $rulesetRuleCache = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -42,7 +42,7 @@ class RulesetRuleItemCache implements ProjectRelatedEntityInterface, RuleItemEnt
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private ?float $spamRatingFactor;
+    private ?float $spamRatingFactor = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)

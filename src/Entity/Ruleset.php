@@ -30,7 +30,7 @@ class Ruleset implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private ?float $spamRatingFactor;
+    private ?float $spamRatingFactor = null;
 
     /**
      * @ORM\Column(type="boolean")
