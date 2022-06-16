@@ -29,17 +29,17 @@ class RulesetCache implements ProjectRelatedEntityInterface
     /**
      * @ORM\Column(type="datetime")
      */
-    private ?DateTimeInterface $refreshedAt;
+    private ?DateTimeInterface $refreshedAt = null;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private ?DateTimeInterface $updatedAt;
+    private ?DateTimeInterface $updatedAt = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $refreshInterval;
+    private ?int $refreshInterval = 86400;
 
     /**
      * @ORM\OneToMany(targetEntity=RulesetRuleCache::class, mappedBy="rulesetCache", orphanRemoval=true)
