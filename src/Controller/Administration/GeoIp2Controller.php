@@ -37,8 +37,8 @@ class GeoIp2Controller extends AbstractController
     public function settings(Request $request, EntityManagerInterface $entityManager): Response
     {
         $config = [
-            'geoipActive' => (bool) $this->configHelper->getConfigValue('geoipActive'),
-            'geoipLicenseKey' => $this->configHelper->getConfigValue('geoipLicenseKey', '')
+            'geoipActive' => $this->configHelper->getEnvironmentConfigValue('geoipActive', false),
+            'geoipLicenseKey' => $this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', '')
         ];
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
             ->add('geoipActive', CheckboxType::class, ['label' => 'administration.geoip2.settings.useGeoip2Field', 'required' => false])
@@ -56,8 +56,10 @@ class GeoIp2Controller extends AbstractController
                 $licenseKey = '';
             }
 
-            $this->configHelper->setConfigValue('geoipActive', $form->get('geoipActive')->getData());
-            $this->configHelper->setConfigValue('geoipLicenseKey', $licenseKey);
+            $this->configHelper->writeEnvironmentConfig([
+                'geoipActive' => $form->get('geoipActive')->getData(),
+                'geoipLicenseKey' => $licenseKey
+            ]);
 
             $session = $request->getSession();
             $session->getFlashBag()->add(
@@ -74,7 +76,7 @@ class GeoIp2Controller extends AbstractController
 
         return $this->render('administration/geoip2/settings.html.twig', [
             'form' => $form->createView(),
-            'hasLicenseKey' => ($this->configHelper->getConfigValue('geoipLicenseKey', '') != '')
+            'hasLicenseKey' => ($this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', ''))
         ]);
     }
 
@@ -84,7 +86,7 @@ class GeoIp2Controller extends AbstractController
     public function download(Request $request): Response
     {
         $session = $request->getSession();
-        $licenseKey = $this->configHelper->getConfigValue('geoipLicenseKey', '');
+        $licenseKey = $this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', '');
         if ($licenseKey !== '') {
             $result = $this->geoIp2Helper->downloadDatabase();
 

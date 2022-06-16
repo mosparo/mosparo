@@ -29,7 +29,7 @@ class GeoIp2Helper
 
     public function downloadDatabase()
     {
-        $licenseKey = $this->configHelper->getConfigValue('geoipLicenseKey', '');
+        $licenseKey = $this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', '');
         if (trim($licenseKey) === '') {
             return false;
         }
@@ -52,7 +52,7 @@ class GeoIp2Helper
 
     public function locateIpAddress($ipAddress)
     {
-        $geoipActive = $this->configHelper->getConfigValue('geoipActive');
+        $geoipActive = $this->configHelper->getEnvironmentConfigValue('geoipActive', false);
         if (!$geoipActive) {
             return false;
         }

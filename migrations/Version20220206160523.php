@@ -32,7 +32,6 @@ final class Version20220206160523 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE config_value CHANGE name name VARCHAR(255) NOT NULL COLLATE `utf8mb4_unicode_ci`, CHANGE value value LONGTEXT NOT NULL COLLATE `utf8mb4_unicode_ci`');
         $this->addSql('ALTER TABLE delay CHANGE ip_address ip_address VARCHAR(255) NOT NULL COLLATE `utf8mb4_unicode_ci` COMMENT \'(Hashed)\'');
         $this->addSql('ALTER TABLE ip_localization CHANGE ip_address ip_address VARCHAR(255) NOT NULL COLLATE `utf8mb4_unicode_ci` COMMENT \'(Hashed)\', CHANGE as_organization as_organization VARCHAR(255) DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, CHANGE country country VARCHAR(2) DEFAULT NULL COLLATE `utf8mb4_unicode_ci`');
         $this->addSql('ALTER TABLE lockout CHANGE ip_address ip_address VARCHAR(255) NOT NULL COLLATE `utf8mb4_unicode_ci` COMMENT \'(Hashed)\'');

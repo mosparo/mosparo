@@ -3,7 +3,6 @@
 namespace Mosparo\Helper;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Mosparo\Entity\ConfigValue;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ConfigHelper
@@ -14,6 +13,8 @@ class ConfigHelper
 
     protected string $environmentConfigFilePath;
 
+    protected array $environmentConfigValues = [];
+
     public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory)
     {
         $this->entityManager = $entityManager;
@@ -21,34 +22,17 @@ class ConfigHelper
         $this->environmentConfigFilePath = $projectDirectory . '/config/env.mosparo.php';
     }
 
-    public function getConfigValue($name, $defaultValue = false)
+    public function getEnvironmentConfigValue($name, $defaultValue = false)
     {
-        $configValueRepository = $this->entityManager->getRepository(ConfigValue::class);
+        if (!$this->environmentConfigValues) {
+            $this->environmentConfigValues = $this->readEnvironmentConfig();
+        }
 
-        $configValue = $configValueRepository->findOneBy(['name' => $name]);
-        if ($configValue === null) {
+        if (!isset($this->environmentConfigValues[$name])) {
             return $defaultValue;
         }
 
-        return $configValue->getValue();
-    }
-
-    public function setConfigValue($name, $value): self
-    {
-        $configValueRepository = $this->entityManager->getRepository(ConfigValue::class);
-
-        $configValue = $configValueRepository->findOneBy(['name' => $name]);
-        if ($configValue === null) {
-            $configValue = new ConfigValue();
-            $configValue->setName($name);
-
-            $this->entityManager->persist($configValue);
-        }
-
-        $configValue->setValue($value);
-        $this->entityManager->flush();
-
-        return $this;
+        return $this->environmentConfigValues[$name];
     }
 
     public function writeEnvironmentConfig($values)
