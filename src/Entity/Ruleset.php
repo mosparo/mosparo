@@ -40,7 +40,7 @@ class Ruleset implements ProjectRelatedEntityInterface
     /**
      * @ORM\OneToOne(targetEntity=RulesetCache::class, mappedBy="ruleset", cascade={"persist", "remove"})
      */
-    private ?RulesetCache $rulesetCache;
+    private ?RulesetCache $rulesetCache = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
