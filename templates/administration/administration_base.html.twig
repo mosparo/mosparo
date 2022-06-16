@@ -4,3 +4,54 @@
 
 {% block documentTitle %}{{ 'administration.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pagePreTitle %}{{ parent() }} {{ 'administration.title'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        <div class="row gx-lg-4">
+            <div class="d-none d-lg-block col-lg-2">
+                <ul class="nav nav-pills nav-vertical">
+                    <li class="nav-item">
+                        <a href="{{ path('administration_settings') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_settings' %}active{% endif %}">
+                            <i class="ti ti-settings"></i>
+                            {{ 'administration.settings.title'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('administration_user_list') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_user_list' %}active{% endif %}">
+                            <i class="ti ti-users"></i>
+                            {{ 'administration.user.title'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('administration_geoip2_settings') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_geoip2_settings' %}active{% endif %}">
+                            <i class="ti ti-map-pin"></i>
+                            {{ 'administration.geoip2.title'|trans }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-10">
+                {% set flashes = app.flashes %}
+                {% if flashes|length > 0 %}
+                    {% for label, messages in flashes %}
+                        {%- if label == 'notice' -%}
+                            {% set class = 'info' %}
+                        {%- elseif label == 'success' -%}
+                            {% set class = 'success' %}
+                        {%- elseif label == 'warning' -%}
+                            {% set class = 'warning' %}
+                        {%- elseif label == 'error' -%}
+                            {% set class = 'danger' %}
+                        {%- endif -%}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ class }}">
+                                {{ message|trans }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+                {% block administrationPageBody %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

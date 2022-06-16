@@ -5,86 +5,84 @@
 {% block documentTitle %}{{ 'administration.geoip2.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'administration.geoip2.title'|trans }}{% endblock %}
 
-{% block pageBody %}
-    <div class="container-xl">
-        <div class="row">
-            <div class="col-12 col-lg-6 mb-3">
-                {{ form_start(form) }}
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">{{ 'administration.geoip2.settings.title'|trans }}</h3>
-                        </div>
-                        <div class="card-body">
-                            <p>
-                                {{ 'administration.geoip2.settings.getLicenseKey'|trans }}
-                                <a href="https://dev.maxmind.com/geoip/geolite2-free-geolocation-data" target="_blank">
-                                    https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
-                                </a> <i class="ti ti-external-link"></i>
-                            </p>
-                            {{ form_row(form.geoipActive) }}
-                            {{ form_row(form.geoipLicenseKey) }}
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-12 col-md-auto ms-auto">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="ti ti-device-floppy"></i>
-                                {{ 'action.save'|trans }}
-                            </button>
-                        </div>
-                    </div>
-                {{ form_end(form) }}
-            </div>
-            <div class="col-12 col-lg-6">
+{% block administrationPageBody %}
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            {{ form_start(form) }}
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">{{ 'administration.geoip2.downloadAndUpdate.title'|trans }}</h3>
+                        <h3 class="card-title">{{ 'administration.geoip2.settings.title'|trans }}</h3>
                     </div>
                     <div class="card-body">
                         <p>
-                            {{ 'administration.geoip2.downloadAndUpdate.intro'|trans }}
+                            {{ 'administration.geoip2.settings.getLicenseKey'|trans }}
+                            <a href="https://dev.maxmind.com/geoip/geolite2-free-geolocation-data" target="_blank">
+                                https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
+                            </a> <i class="ti ti-external-link"></i>
                         </p>
+                        {{ form_row(form.geoipActive) }}
+                        {{ form_row(form.geoipLicenseKey) }}
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-auto ms-auto">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="ti ti-device-floppy"></i>
+                            {{ 'action.save'|trans }}
+                        </button>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.geoip2.downloadAndUpdate.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'administration.geoip2.downloadAndUpdate.intro'|trans }}
+                    </p>
 
-                        <h4>
-                            {{ 'administration.geoip2.downloadAndUpdate.web.title'|trans }}
-                        </h4>
-                        <p>
-                            {{ 'administration.geoip2.downloadAndUpdate.web.intro'|trans }}
-                        </p>
+                    <h4>
+                        {{ 'administration.geoip2.downloadAndUpdate.web.title'|trans }}
+                    </h4>
+                    <p>
+                        {{ 'administration.geoip2.downloadAndUpdate.web.intro'|trans }}
+                    </p>
 
-                        <div class="d-flex mb-3">
-                            <a href="{{ path('administration_geoip2_download') }}" class="btn btn-orange mx-auto {% if not hasLicenseKey %}disabled{% endif %}">
-                                <i class="ti ti-download"></i>
-                                {{ 'administration.geoip2.downloadAndUpdate.web.action'|trans }}
-                            </a>
-                        </div>
+                    <div class="d-flex mb-3">
+                        <a href="{{ path('administration_geoip2_download') }}" class="btn btn-orange mx-auto {% if not hasLicenseKey %}disabled{% endif %}">
+                            <i class="ti ti-download"></i>
+                            {{ 'administration.geoip2.downloadAndUpdate.web.action'|trans }}
+                        </a>
+                    </div>
 
-                        <h4>
-                            {{ 'administration.geoip2.downloadAndUpdate.cli.title'|trans }}
-                        </h4>
-                        <p>
-                            {{ 'administration.geoip2.downloadAndUpdate.cli.intro'|trans }}
-                        </p>
-                        <code class="d-inline-block mb-3">
-                            php bin/console mosparo:geoip2:download-database
-                        </code>
+                    <h4>
+                        {{ 'administration.geoip2.downloadAndUpdate.cli.title'|trans }}
+                    </h4>
+                    <p>
+                        {{ 'administration.geoip2.downloadAndUpdate.cli.intro'|trans }}
+                    </p>
+                    <code class="d-inline-block mb-3">
+                        php bin/console mosparo:geoip2:download-database
+                    </code>
 
-                        <h4>
-                            {{ 'administration.geoip2.downloadAndUpdate.update.title'|trans }}
-                        </h4>
-                        <p>
-                            {{ 'administration.geoip2.downloadAndUpdate.update.intro'|trans }}
-                        </p>
-                        <code class="d-inline-block mb-3">
-                            {{ random(0, 59) }} {{ random(0, 23) }} * * {{ random(0, 6) }} php bin/console mosparo:geoip2:download-database
-                        </code>
-                        <p>
-                            {{ 'administration.geoip2.downloadAndUpdate.update.infoAbsolutePath'|trans({ '%pathToBinConsole%': '<code>bin/console</code>'})|raw }}
-                        </p>
+                    <h4>
+                        {{ 'administration.geoip2.downloadAndUpdate.update.title'|trans }}
+                    </h4>
+                    <p>
+                        {{ 'administration.geoip2.downloadAndUpdate.update.intro'|trans }}
+                    </p>
+                    <code class="d-inline-block mb-3">
+                        {{ random(0, 59) }} {{ random(0, 23) }} * * {{ random(0, 6) }} php bin/console mosparo:geoip2:download-database
+                    </code>
+                    <p>
+                        {{ 'administration.geoip2.downloadAndUpdate.update.infoAbsolutePath'|trans({ '%pathToBinConsole%': '<code>bin/console</code>'})|raw }}
+                    </p>
 
-                        <div class="alert alert-info">
-                            {{ 'administration.geoip2.downloadAndUpdate.update.infoRateLimit'|trans }}
-                        </div>
+                    <div class="alert alert-info">
+                        {{ 'administration.geoip2.downloadAndUpdate.update.infoRateLimit'|trans }}
                     </div>
                 </div>
             </div>
