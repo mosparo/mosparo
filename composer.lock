@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0b3d1e46e884088e7cbd3b4c6de89ac",
+    "content-hash": "4a481c39591c13de382289f3299955e4",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1977,16 +1977,16 @@
         },
         {
             "name": "gracious/doctrine-encryption-bundle",
-            "version": "3.0.0",
+            "version": "dev-bugfix-migrations",
             "source": {
                 "type": "git",
-                "url": "https://github.com/graciousagency/doctrine-encryption-bundle.git",
-                "reference": "3da82807642a4471afa76a079816e7efa609ae13"
+                "url": "https://github.com/mosparo/doctrine-encryption-bundle.git",
+                "reference": "848b6a55bd82eb05e9c79eb65e335692a792cf34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/graciousagency/doctrine-encryption-bundle/zipball/3da82807642a4471afa76a079816e7efa609ae13",
-                "reference": "3da82807642a4471afa76a079816e7efa609ae13",
+                "url": "https://api.github.com/repos/mosparo/doctrine-encryption-bundle/zipball/848b6a55bd82eb05e9c79eb65e335692a792cf34",
+                "reference": "848b6a55bd82eb05e9c79eb65e335692a792cf34",
                 "shasum": ""
             },
             "require": {
@@ -2008,7 +2008,12 @@
                     "Gracious\\DoctrineEncryptionBundle\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "auto-scripts": {
+                    "cache:clear": "symfony-cmd",
+                    "assets:install %PUBLIC_DIR%": "symfony-cmd"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -2025,10 +2030,9 @@
                 "hashing"
             ],
             "support": {
-                "issues": "https://github.com/graciousagency/doctrine-encryption-bundle/issues",
-                "source": "https://github.com/graciousagency/doctrine-encryption-bundle/tree/3.0.0"
+                "source": "https://github.com/mosparo/doctrine-encryption-bundle/tree/bugfix-migrations"
             },
-            "time": "2021-01-11T16:06:57+00:00"
+            "time": "2022-06-16T12:21:22+00:00"
         },
         {
             "name": "khanamiryan/qrcode-detector-decoder",
@@ -4846,16 +4850,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.19.1",
+            "version": "v1.19.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "9c612796a68de4196fff4bc159db5071aa62d428"
+                "reference": "d1a692369be53445af6e391170b509d7f5d026cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/9c612796a68de4196fff4bc159db5071aa62d428",
-                "reference": "9c612796a68de4196fff4bc159db5071aa62d428",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/d1a692369be53445af6e391170b509d7f5d026cf",
+                "reference": "d1a692369be53445af6e391170b509d7f5d026cf",
                 "shasum": ""
             },
             "require": {
@@ -4891,7 +4895,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.19.1"
+                "source": "https://github.com/symfony/flex/tree/v1.19.2"
             },
             "funding": [
                 {
@@ -4907,7 +4911,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-06T15:14:39+00:00"
+            "time": "2022-06-14T21:13:39+00:00"
         },
         {
             "name": "symfony/form",
@@ -12237,7 +12241,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "gracious/doctrine-encryption-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

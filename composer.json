@@ -14,7 +14,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.8",
         "geoip2/geoip2": "~2.0",
-        "gracious/doctrine-encryption-bundle": "^3.0",
+        "gracious/doctrine-encryption-bundle": "dev-bugfix-migrations",
         "mlocati/ip-lib": "^1.16",
         "omines/datatables-bundle": "^0.5.4",
         "paragonie/sodium_compat": "^1.17",
@@ -123,5 +123,11 @@
             "allow-contrib": false,
             "require": "5.4.*"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:mosparo/doctrine-encryption-bundle.git"
+        }
+    ]
 }

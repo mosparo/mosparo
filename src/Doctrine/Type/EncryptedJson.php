@@ -22,7 +22,7 @@ class EncryptedJson extends Type
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return 'LONGTEXT COMMENT \'(EncryptedJson)\'';
+        return 'LONGTEXT COMMENT \'(DC2Type:encryptedJson)\'';
     }
 
     /**
