@@ -16,7 +16,7 @@ class SetupSubscriber implements EventSubscriberInterface
 
     protected bool $installed;
 
-    protected string $installedVersion;
+    protected ?string $installedVersion;
 
     protected string $mosparoVersion;
 
