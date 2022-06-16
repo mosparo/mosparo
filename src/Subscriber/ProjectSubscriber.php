@@ -42,7 +42,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->twig = $twig;
-        $this->installed = ($installed);
+        $this->installed = ($installed == true);
     }
 
     public static function getSubscribedEvents(): array
