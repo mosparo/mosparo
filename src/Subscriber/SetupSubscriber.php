@@ -32,7 +32,7 @@ class SetupSubscriber implements EventSubscriberInterface
     {
         $this->container = $container;
         $this->router = $router;
-        $this->installed = $installed;
+        $this->installed = ($installed);
         $this->installedVersion = $installedVersion;
         $this->mosparoVersion = $mosparoVersion;
 

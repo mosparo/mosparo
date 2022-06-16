@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class ApiSubscriber implements EventSubscriberInterface
 {
-    protected $projectHelper;
+    protected ProjectHelper $projectHelper;
 
     public function __construct(ProjectHelper $projectHelper)
     {
