@@ -60,9 +60,9 @@ class Project
     private int $spamScore = 5;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\OneToMany(targetEntity=ProjectConfigValue::class, mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    private array $configValues = [];
+    private Collection $configValues;
 
     /**
      * @var array
@@ -125,6 +125,7 @@ class Project
     public function __construct()
     {
         $this->uuid = uuid_create(UUID_TYPE_RANDOM);
+        $this->configValues = new ArrayCollection();
         $this->projectMembers = new ArrayCollection();
     }
 
@@ -229,38 +230,61 @@ class Project
 
     public function getConfigValues(): ?array
     {
-        return array_merge($this->defaultConfigValues, $this->configValues);
-    }
+        $configValues = $this->defaultConfigValues;
+        foreach ($this->configValues as $configValue) {
+            $configValues[$configValue->getName()] = $configValue->getValue();
+        }
 
-    public function setConfigValues(array $configValues): self
-    {
-        $this->configValues = $configValues;
-
-        return $this;
+        return $configValues;
     }
 
     public function getConfigValue($key)
     {
-        if (!isset($this->configValues[$key])) {
+        $configValue = $this->findConfigValue($key);
+        if (!$configValue) {
             return $this->defaultConfigValues[$key] ?? null;
         }
 
-        return $this->configValues[$key];
+        return $configValue->getValue();
     }
 
     public function setConfigValue($key, $value): self
     {
-        if (isset($this->defaultConfigValues[$key]) && $value === $this->defaultConfigValues[$key]) {
-            if (isset($this->configValues[$key])) {
-                unset($this->configValues[$key]);
+        $configValue = $this->findConfigValue($key);
+        if ((isset($this->defaultConfigValues[$key]) && $value === $this->defaultConfigValues[$key]) || $value === null) {
+            if ($configValue && $this->configValues->contains($configValue)) {
+                $this->configValues->removeElement($configValue);
             }
 
             return $this;
         }
 
-        $this->configValues[$key] = $value;
+        if (!$configValue) {
+            $configValue = new ProjectConfigValue();
+            $configValue->setName($key);
+            $this->configValues->add($configValue);
+        }
+
+        $configValue->setValue($value);
 
         return $this;
+    }
+
+    protected function findConfigValue($key): ?ProjectConfigValue
+    {
+        $filteredConfigValues = $this->configValues->filter(function ($el) use ($key) {
+            if ($el->getName() === $key) {
+                return $el;
+            }
+
+            return false;
+        });
+
+        if ($filteredConfigValues->isEmpty()) {
+            return null;
+        }
+
+        return $filteredConfigValues->first();
     }
 
     public function getDefaultConfigValues(): ?array
