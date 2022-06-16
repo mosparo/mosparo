@@ -5,6 +5,7 @@ namespace Mosparo\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Form\ResetPasswordRequestFormType;
+use Mosparo\Helper\MailHelper;
 use Mosparo\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,7 +48,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="security_reset")
      */
-    public function request(Request $request, UserRepository $userRepository, MailerInterface $mailer): Response
+    public function request(Request $request, UserRepository $userRepository, MailerInterface $mailer, MailHelper $mailHelper): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
@@ -56,7 +57,8 @@ class ResetPasswordController extends AbstractController
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
                 $userRepository,
-                $mailer
+                $mailer,
+                $mailHelper
             );
         }
 
@@ -156,7 +158,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, UserRepository $userRepository, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, UserRepository $userRepository, MailerInterface $mailer, MailHelper $mailHelper): RedirectResponse
     {
         $user = $userRepository->findOneBy([
             'email' => $emailFormData,
@@ -173,14 +175,15 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('security_check_email');
         }
 
+
         $email = (new TemplatedEmail())
             ->to($user->getEmail())
             ->subject($this->translator->trans('password.email.subject', [], 'mosparo'))
-            ->htmlTemplate('password/email.html.twig')
+            ->htmlTemplate('non_http/email/password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
-            ])
-        ;
+                'cssCode' => $mailHelper->getEmailCssCode(),
+            ]);
 
         $mailer->send($email);
 

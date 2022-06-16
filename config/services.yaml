@@ -135,6 +135,10 @@ services:
             $entrypointLookupCollection: '@webpack_encore.entrypoint_lookup_collection'
             $projectDirectory: '%kernel.project_dir%'
 
+    Mosparo\Helper\MailHelper:
+        arguments:
+            $projectDirectory: '%kernel.project_dir%'
+
     Mosparo\Controller\SetupController:
         class: Mosparo\Controller\SetupController
         arguments:

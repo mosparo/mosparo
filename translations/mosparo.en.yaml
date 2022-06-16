@@ -694,9 +694,11 @@ password:
   email:
     subject: Your password reset request
     greeting: Hi!
-    infoUseLink: To reset your password, please visit the following link
+    infoClickButton: To reset your password, click on the button below and follow the instructions.
+    resetPasswordButton: Reset password
     infoLinkExpiration: This link will expire in %time%.
-    goodbye: Cheers!
+    goodbye: Thanks,
+    help: If you’re having trouble with the button above, copy and paste the URL below into your web browser.
 
   emailSent:
     title: Password reset email sent

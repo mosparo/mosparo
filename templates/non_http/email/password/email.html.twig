@@ -1,0 +1,50 @@
+{% extends 'non_http/email/base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block content %}
+    <p>
+        <strong>{{ 'password.email.greeting'|trans }}</strong>
+    </p>
+
+    <p>{{ 'password.email.infoClickButton'|trans }}</p>
+
+    <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+        <tr>
+            <td align="center">
+                <!-- Border based button https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                    <tr>
+                        <td align="center">
+                            <a href="{{ url('security_reset_password', {token: resetToken.token}) }}" class="f-fallback button button--blue" target="_blank">{{ 'password.email.resetPasswordButton'|trans }}</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <p>{{ 'password.email.infoLinkExpiration'|trans({ '%time%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }) }}</p>
+
+    <p>
+        {{ 'password.email.goodbye'|trans }}<br>
+        {{ mosparoName }}
+    </p>
+
+    <table class="body-sub" role="presentation" width="100%">
+        <tr>
+            <td>
+                <p class="f-fallback sub">{{ 'password.email.help'|trans }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="word-break-all">
+                <p class="f-fallback sub">
+                    <a href="{{ url('security_reset_password', {token: resetToken.token}) }}">
+                        {{ url('security_reset_password', {token: resetToken.token}) }}
+                    </a>
+                </p>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

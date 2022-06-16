@@ -694,9 +694,11 @@ password:
   email:
     subject: Ihr Passwort zurücksetzen
     greeting: Guten Tag
-    infoUseLink: Um Ihr Passwort zurückzusetzen, besuchen Sie bitte folgenden Link
-    infoLinkExpiration: This link will expire in %time%.
+    infoClickButton: Um Ihr Passwort zurückzusetzen, klicken Sie bitte auf die untenstehende Schaltfläche und folgen Sie den Anweisungen.
+    resetPasswordButton: Passwort zurücksetzen
+    infoLinkExpiration: Dieser Link ist für %time% gültig.
     goodbye: Mit freundlichen Grüssen
+    help: Wenn Sie Probleme mit der Schaltfläche haben, kopieren Sie den untenstehenden Link und fügen Sie ihn in Ihrem Browser ein.
 
   emailSent:
     title: Passwort-E-Mail versendet
