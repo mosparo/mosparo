@@ -230,4 +230,22 @@ $(document).ready(function () {
         ev.preventDefault();
         return false;
     }).attr("autocomplete", "off");
+
+    $('.btn-copy-input-value').click(function () {
+        let button = $(this);
+        let inputGroup = $(this).parents('.input-group');
+        if (inputGroup.length === 0) {
+            return;
+        }
+
+        button.removeClass('text-success text-danger').find('i').addClass('ti-clipboard-list').removeClass('ti-clipboard-check ti-clipboard-x');
+
+        let inputField = inputGroup.find('input');
+        console.log(inputField.val());
+        navigator.clipboard.writeText(inputField.val()).then(function() {
+            button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-check');
+        }, function() {
+            button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-x');
+        });
+    });
 });
