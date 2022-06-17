@@ -27,7 +27,7 @@ class ProjectConfigValue implements ProjectRelatedEntityInterface
     private $value = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="configValues")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?Project $project;
