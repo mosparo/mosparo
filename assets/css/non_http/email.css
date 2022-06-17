@@ -352,13 +352,9 @@ p {
     padding: 45px;
 }
 
-.mosparo-logo-dark-container {
-    display: none;
-}
-
 .mosparo-logo {
-    width: 348px;
-    height: 51px;
+    width: 372px;
+    height: 75px;
 }
 
 /*Media Queries ------------------------------ */
@@ -398,12 +394,6 @@ p {
     }
     .email-masthead_name {
         text-shadow: none !important;
-    }
-    .mosparo-logo-light-container {
-        display: none;
-    }
-    .mosparo-logo-dark-container {
-        display: block;
     }
 }
 
