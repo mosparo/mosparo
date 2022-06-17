@@ -352,15 +352,13 @@ p {
     padding: 45px;
 }
 
+.mosparo-logo-dark-container {
+    display: none;
+}
+
 .mosparo-logo {
     width: 348px;
     height: 51px;
-}
-
-.mosparo-logo-dark {
-    display: none;
-    width: 0;
-    height: 0;
 }
 
 /*Media Queries ------------------------------ */
@@ -401,13 +399,11 @@ p {
     .email-masthead_name {
         text-shadow: none !important;
     }
-    .mosparo-logo-light {
+    .mosparo-logo-light-container {
         display: none;
     }
-    .mosparo-logo-dark {
+    .mosparo-logo-dark-container {
         display: block;
-        width: 348px;
-        height: 51px;
     }
 }
 
