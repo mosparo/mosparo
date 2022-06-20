@@ -287,7 +287,7 @@ class FrontendApiController extends AbstractController
 
     protected function getTranslations(Request $request): array
     {
-        if ($this->translator instanceof LocaleAwareInterface) {
+        if ($this->translator instanceof LocaleAwareInterface && $request->getPreferredLanguage()) {
             $this->translator->setLocale($request->getPreferredLanguage());
         }
 
