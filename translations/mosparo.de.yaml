@@ -454,6 +454,13 @@ settings:
     preview:
       background: Hintergrund der Vorschau
 
+    cr:
+      title: Kontrastverhältnis
+      value: Wert
+      text: Text
+      textError: Text, Fehler
+      description: Der oben angezeigte Wert beschreibt das Verhältnis zwischen der Hintergrundfarbe und der Textfarbe. Die zwei Spalten daneben geben an, ob die Mindestanforderung für die WCAG-Richtlinien erfüllt werden.
+
     form:
       boxSize: Grösse der Box
       boxRadius: Radius der Box

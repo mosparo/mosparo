@@ -87,22 +87,31 @@ $(document).ready(function () {
             updateCssVariable(variableName, value, type);
         }
     };
-    $('input.colorpicker').wrap('<div class="colorpicker-container"></div>').spectrum({
-        preferredFormat: "rgb",
-        allowEmpty: true,
-        showInitial: true,
-        showButtons: false,
-        showAlpha: true,
-        clickoutFiresChange: true,
-        move: function (color) {
-            $(this).val(color);
-
-            updateVariable($(this), color, 'color');
+    $('input.colorpicker').wrap('<div class="colorpicker-container"></div>').each(function () {
+        let showAlpha = $(this).data('colorpicker-allow-alpha-value');
+        if (showAlpha == null) {
+            showAlpha = true;
         }
+
+        $(this).spectrum({
+            preferredFormat: "rgb",
+            allowEmpty: true,
+            showInitial: true,
+            showButtons: false,
+            showAlpha: showAlpha,
+            clickoutFiresChange: true,
+            move: function (color) {
+                $(this).val(color);
+
+                updateVariable($(this), color, 'color');
+                $(this).trigger('color-change');
+            }
+        });
     }).on('change', function () {
         $(this).spectrum('set', $(this).val());
 
         updateVariable($(this), $(this).val(), 'color');
+        $(this).trigger('color-change');
     });
 
     $('input[data-variable!=""]:not(.colorpicker)').change(function () {
@@ -129,12 +138,29 @@ $(document).ready(function () {
         updateVariable($(this), val, type);
     });
 
+    $('.btn-copy-input-value').click(function () {
+        let button = $(this);
+        let inputGroup = $(this).parents('.input-group');
+        if (inputGroup.length === 0) {
+            return;
+        }
+
+        button.removeClass('text-success text-danger').find('i').addClass('ti-clipboard-list').removeClass('ti-clipboard-check ti-clipboard-x');
+
+        let inputField = inputGroup.find('input');
+
+        navigator.clipboard.writeText(inputField.val()).then(function() {
+            button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-check');
+        }, function() {
+            button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-x');
+        });
+    });
+
     var changeDirection = '';
     var changeInputField = null;
     var changeIntervalTime = 500;
     var changeValueCallback = function ()
     {
-        console.log(changeIntervalTime);
         if (changeDirection === '' || changeInputField === null) {
             return;
         }
@@ -230,22 +256,4 @@ $(document).ready(function () {
         ev.preventDefault();
         return false;
     }).attr("autocomplete", "off");
-
-    $('.btn-copy-input-value').click(function () {
-        let button = $(this);
-        let inputGroup = $(this).parents('.input-group');
-        if (inputGroup.length === 0) {
-            return;
-        }
-
-        button.removeClass('text-success text-danger').find('i').addClass('ti-clipboard-list').removeClass('ti-clipboard-check ti-clipboard-x');
-
-        let inputField = inputGroup.find('input');
-        console.log(inputField.val());
-        navigator.clipboard.writeText(inputField.val()).then(function() {
-            button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-check');
-        }, function() {
-            button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-x');
-        });
-    });
 });

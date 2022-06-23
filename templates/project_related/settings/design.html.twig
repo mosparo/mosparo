@@ -5,6 +5,85 @@
 {% block documentTitle %}{{ 'settings.design.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'settings.design.title'|trans }}{% endblock %}
 
+{% macro contrastRatioBox(name) %}
+    <div class="accordion cr-accordion" id="contrast-ratio-box-{{ name }}">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-crb-{{ name }}" aria-expanded="true">
+                    <span class="cra-title">
+                        {{ 'settings.design.cr.title'|trans }}
+                    </span>
+                    <span class="cra-value contrast-ratio-aa">
+                        <i class="ti ti-x"></i>
+                        AA
+                    </span>
+                    <span class="cra-value contrast-ratio-aaa">
+                        <i class="ti ti-x"></i>
+                        AAA
+                    </span>
+                </button>
+            </h2>
+            <div id="collapse-crb-{{ name }}" class="accordion-collapse collapse" data-bs-parent="#contrast-ratio-box-{{ name }}" style="">
+                <div class="accordion-body pt-0">
+                    <table class="table table-bordered table-sm table-vcenter mb-3">
+                        <thead>
+                            <tr>
+                                <td class="col-3"></td>
+                                <th class="col-3">{{ 'settings.design.cr.value'|trans }}</th>
+                                <th class="col-3">AA</th>
+                                <th class="col-3">AAA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="cr-text">
+                                <th>
+                                    {{ 'settings.design.cr.text'|trans }}
+                                </th>
+                                <td class="cra-table-value">
+                                    <div class="contrast-ratio-value">
+                                        0
+                                    </div>
+                                </td>
+                                <td class="cra-table-value contrast-ratio-aa">
+                                    <i class="ti ti-x"></i>
+                                    <span class="cr-min-value"></span>
+                                </td>
+                                <td class="cra-table-value contrast-ratio-aaa">
+                                    <i class="ti ti-x"></i>
+                                    <span class="cr-min-value"></span>
+                                </td>
+                            </tr>
+                            {% if name == 'failure' %}
+                                <tr class="cr-text-error">
+                                    <th>
+                                        {{ 'settings.design.cr.textError'|trans }}
+                                    </th>
+                                    <td class="cra-table-value">
+                                        <div class="contrast-ratio-value">
+                                            0
+                                        </div>
+                                    </td>
+                                    <td class="cra-table-value contrast-ratio-aa">
+                                        <i class="ti ti-x"></i>
+                                        <span class="cr-min-value"></span>
+                                    </td>
+                                    <td class="cra-table-value contrast-ratio-aaa">
+                                        <i class="ti ti-x"></i>
+                                        <span class="cr-min-value"></span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    <p class="mb-0">
+                        {{ 'settings.design.cr.description'|trans }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
 {% block settingsPageBody %}
     <div class="row">
         <div class="col-12 mb-3">
@@ -43,7 +122,7 @@
                     <div class="card-actions">
                         <div class="d-flex align-items-center">
                             <label for="page_body_backgroundColor" class="me-2">{{ 'settings.design.preview.background'|trans }}</label>
-                            <input type="text" id="page_body_backgroundColor" name="" class="colorpicker form-control" data-variable="--page-body-background" value="">
+                            <input type="text" id="page_body_backgroundColor" name="" class="colorpicker form-control" data-variable="--page-body-background" data-colorpicker-allow-alpha-value="false" value="">
                         </div>
                     </div>
                 </div>
@@ -53,7 +132,7 @@
                             <h3>{{ 'settings.design.subtitles.colors.normal'|trans }}</h3>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row contrast-ratio-group">
                         <div class="col-12 col-lg-6">
                             <div class="row">
                                 <div class="col-12 col-lg-6">
@@ -80,9 +159,11 @@
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
-                            <div class="design-mode-page-container">
+                            <div class="design-mode-page-container mb-3">
                                 <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="normal"></div>
                             </div>
+
+                            {{ _self.contrastRatioBox('normal') }}
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -137,7 +218,7 @@
                             <h3>{{ 'settings.design.subtitles.colors.success'|trans }}</h3>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row contrast-ratio-group">
                         <div class="col-12 col-lg-6">
                             <div class="row">
                                 <div class="col-12 col-lg-6">
@@ -161,9 +242,11 @@
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
-                            <div class="design-mode-page-container">
+                            <div class="design-mode-page-container mb-3">
                                 <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="success"></div>
                             </div>
+
+                            {{ _self.contrastRatioBox('success') }}
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -171,7 +254,7 @@
                             <h3>{{ 'settings.design.subtitles.colors.failure'|trans }}</h3>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row contrast-ratio-group">
                         <div class="col-12 col-lg-6">
                             <div class="row">
                                 <div class="col-12 col-lg-6">
@@ -198,9 +281,11 @@
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
-                            <div class="design-mode-page-container">
+                            <div class="design-mode-page-container mb-3">
                                 <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="failure"></div>
                             </div>
+
+                            {{ _self.contrastRatioBox('failure') }}
                         </div>
                     </div>
                 </div>

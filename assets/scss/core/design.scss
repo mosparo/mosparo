@@ -24,3 +24,18 @@
         }
     }
 }
+
+.cr-accordion {
+    .cra-title {
+        flex: 1 0 auto;
+    }
+
+    .cra-value {
+        text-align: right;
+        margin-right: 1rem;
+    }
+
+    .cra-table-value {
+        font-weight: bold;
+    }
+}

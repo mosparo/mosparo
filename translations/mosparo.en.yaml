@@ -454,6 +454,13 @@ settings:
     preview:
       background: Preview background
 
+    cr:
+      title: Contrast ratio
+      value: Value
+      text: Text
+      textError: Text Error
+      description: The value shown above describes the ratio between the background color and the text color. The two columns next to it indicate whether the minimum requirement for the WCAG guidelines are met.
+
     form:
       boxSize: Box size
       boxRadius: Box radius
