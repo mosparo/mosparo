@@ -23,7 +23,4 @@ const dtR = require('datatables.net-responsive');
 
 import './js/form.js';
 import './js/color.js';
-
-
-const { normal } = require('color-blend');
-global.ColorBlendNormal = normal;
+import './js/table.js';

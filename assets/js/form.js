@@ -149,9 +149,9 @@ $(document).ready(function () {
 
         let inputField = inputGroup.find('input');
 
-        navigator.clipboard.writeText(inputField.val()).then(function() {
+        navigator.clipboard.writeText(inputField.val()).then(function () {
             button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-check');
-        }, function() {
+        }, function () {
             button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-x');
         });
     });
@@ -159,8 +159,7 @@ $(document).ready(function () {
     var changeDirection = '';
     var changeInputField = null;
     var changeIntervalTime = 500;
-    var changeValueCallback = function ()
-    {
+    var changeValueCallback = function () {
         if (changeDirection === '' || changeInputField === null) {
             return;
         }

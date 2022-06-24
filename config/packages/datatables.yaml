@@ -1,6 +1,6 @@
 # Latest documentation available at https://omines.github.io/datatables-bundle/#configuration
 datatables:
-    # RuleSet options, as documented at https://datatables.net/reference/option/
+    # Datatables options, as documented at https://datatables.net/reference/option/
     options:
         lengthMenu : [10, 25, 50, 100, 250, 500]
         pageLength: 50
