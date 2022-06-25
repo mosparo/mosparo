@@ -27,7 +27,7 @@ class ApiSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -81,7 +81,7 @@ class ApiSubscriber implements EventSubscriberInterface
     public function onKernelResponse(ResponseEvent $event)
     {
         // Don't do anything if it's not the master request.
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
