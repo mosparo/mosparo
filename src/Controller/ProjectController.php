@@ -10,7 +10,6 @@ use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Mosparo\Entity\Project;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,15 +19,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ProjectController extends AbstractController
 {
-    protected SessionInterface $session;
-
     protected CleanupHelper $cleanupHelper;
 
     protected TranslatorInterface $translator;
 
-    public function __construct(SessionInterface $session, CleanupHelper $cleanupHelper, TranslatorInterface $translator)
+    public function __construct(CleanupHelper $cleanupHelper, TranslatorInterface $translator)
     {
-        $this->session = $session;
         $this->cleanupHelper = $cleanupHelper;
         $this->translator = $translator;
     }
@@ -121,14 +117,14 @@ class ProjectController extends AbstractController
     /**
      * @Route("/switch/{project}", name="project_switch")
      */
-    public function switch(Project $project): Response
+    public function switch(Request $request, Project $project): Response
     {
         // Only admin users or user which are added as project member have access to the project
         if (!$this->isGranted('ROLE_ADMIN') && !$project->isProjectMember($this->getUser())) {
             return $this->redirectToRoute('project_list');
         }
 
-        $this->session->set('activeProjectId', $project->getId());
+        $request->getSession()->set('activeProjectId', $project->getId());
 
         return $this->redirectToRoute('dashboard');
     }
