@@ -7,7 +7,6 @@ use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Helper\ProjectHelper;
 use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,8 +19,6 @@ use Twig\Environment;
 
 class ProjectSubscriber implements EventSubscriberInterface
 {
-    protected ContainerInterface $container;
-
     protected Security $security;
 
     protected UrlGeneratorInterface $router;
@@ -34,9 +31,8 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     protected bool $installed;
 
-    public function __construct(ContainerInterface $container, Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig, $installed)
+    public function __construct(Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig, $installed)
     {
-        $this->container = $container;
         $this->security = $security;
         $this->router = $router;
         $this->entityManager = $entityManager;

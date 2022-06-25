@@ -2,7 +2,6 @@
 
 namespace Mosparo\Subscriber;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -10,8 +9,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SetupSubscriber implements EventSubscriberInterface
 {
-    protected ContainerInterface $container;
-
     protected UrlGeneratorInterface $router;
 
     protected bool $installed;
@@ -28,9 +25,8 @@ class SetupSubscriber implements EventSubscriberInterface
         'setup_install',
     ];
 
-    public function __construct(ContainerInterface $container, UrlGeneratorInterface $router, $installed, $installedVersion, $mosparoVersion, $debug = false)
+    public function __construct(UrlGeneratorInterface $router, $installed, $installedVersion, $mosparoVersion, $debug = false)
     {
-        $this->container = $container;
         $this->router = $router;
         $this->installed = ($installed == true);
         $this->installedVersion = $installedVersion;
