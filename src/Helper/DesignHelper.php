@@ -8,6 +8,7 @@ use Mosparo\Util\HashUtil;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 
 class DesignHelper
@@ -154,13 +155,16 @@ class DesignHelper
 
     protected EntrypointLookupCollection $entrypointLookupCollection;
 
+    protected UrlGeneratorInterface $router;
+
     protected Filesystem $filesystem;
 
     protected string $projectDirectory;
 
-    public function __construct(EntrypointLookupCollection $entrypointLookupCollection, Filesystem $filesystem, string $projectDirectory)
+    public function __construct(EntrypointLookupCollection $entrypointLookupCollection, UrlGeneratorInterface $router, Filesystem $filesystem, string $projectDirectory)
     {
         $this->entrypointLookupCollection = $entrypointLookupCollection;
+        $this->router = $router;
         $this->filesystem = $filesystem;
         $this->projectDirectory = $projectDirectory;
     }
@@ -175,7 +179,7 @@ class DesignHelper
         return $this->projectDirectory . '/public' . $relativePath;
     }
 
-    public function getBaseCssFilePath(): ?string
+    public function getBaseCssFileName(): ?string
     {
         $entrypoint = $this->entrypointLookupCollection->getEntrypointLookup();
         $cssFiles = $entrypoint->getCssFiles('mosparo-frontend');
@@ -184,8 +188,12 @@ class DesignHelper
             return null;
         }
 
-        $cssFile = current($cssFiles);
-        return $this->getBuildFilePath($cssFile);
+        return current($cssFiles);
+    }
+
+    public function getBaseCssFilePath(): ?string
+    {
+        return $this->getBuildFilePath($this->getBaseCssFileName());
     }
 
     public function getCssFilePath(Project $project, string $designConfigHash = ''): string
@@ -208,6 +216,35 @@ class DesignHelper
         // Update the design config hash
         if ($result) {
             $project->setConfigValue('designConfigHash', $designConfigHash);
+
+            // Update the mapping file
+            $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
+            $cssUri = $this->router->generate('resources_project_hash_css', ['projectUuid' => $project->getUuid(), 'styleHash' => $designConfigHash]);
+            $this->updateMappings($projectUri, $cssUri);
+        }
+    }
+
+    public function loadMappings(): array
+    {
+        $path = $this->getBuildFilePath('/resources/mappings.php');
+        if ($this->filesystem->exists($path)) {
+            return include($path);
+        }
+
+        return [];
+    }
+
+    public function updateMappings($projectUri, $cssUri)
+    {
+        $path = $this->getBuildFilePath('/resources/mappings.php');
+        $mappings = array_merge($this->loadMappings(), [$projectUri => $cssUri]);
+        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($mappings, true) . ';' . PHP_EOL;
+
+        $this->filesystem->dumpFile($path, $content);
+
+        // Invalidate the cache for the environment file, if opcache is enabled
+        if (function_exists('opcache_is_script_cached') && opcache_is_script_cached($path)) {
+            opcache_invalidate($path, true);
         }
     }
 
