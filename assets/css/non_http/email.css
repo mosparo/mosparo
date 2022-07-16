@@ -1,6 +1,5 @@
 /* Base ------------------------------ */
 
-@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:400,700&display=swap");
 body {
     width: 100% !important;
     height: 100%;
@@ -36,7 +35,7 @@ td {
 body,
 td,
 th {
-    font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 h1 {
