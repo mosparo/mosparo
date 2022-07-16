@@ -698,6 +698,9 @@ password:
     form:
       email: E-Mail-Adresse
 
+    message:
+      failedToSendEmail: 'Aufgrund eines technischen Fehlers konnte das E-Mail nicht versendet werden. Bitte versuchen Sie es später erneut. Fehlermeldung: %errorMessage%'
+
   email:
     subject: Ihr Passwort zurücksetzen
     greeting: Guten Tag

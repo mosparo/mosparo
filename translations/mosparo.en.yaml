@@ -698,6 +698,9 @@ password:
     form:
       email: Email
 
+    message:
+      failedToSendEmail: 'Due to a technical error, the email could not be sent. Please try again later. Error message: %errorMessage%'
+
   email:
     subject: Your password reset request
     greeting: Hi!
