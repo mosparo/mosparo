@@ -220,11 +220,28 @@ class DesignHelper
             // Update the mapping file
             $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
             $cssUri = $this->router->generate('resources_project_hash_css', ['projectUuid' => $project->getUuid(), 'styleHash' => $designConfigHash]);
-            $this->updateMappings($projectUri, $cssUri);
+            $this->addMapping($projectUri, $cssUri);
         }
     }
 
-    public function loadMappings(): array
+    public function clearCssCache(Project $project)
+    {
+        $designConfigHash = $project->getConfigValue('designConfigHash');
+        if ($designConfigHash === null) {
+            return;
+        }
+
+        // Delete the project directory in the cache directory
+        $cssFilePath = $this->getCssFilePath($project, $designConfigHash);
+        $directoryPath = dirname($cssFilePath);
+        $this->filesystem->remove($directoryPath);
+
+        // Remove the url from the mapping file
+        $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
+        $this->removeMapping($projectUri);
+    }
+
+    protected function loadMappings(): array
     {
         $path = $this->getBuildFilePath('/resources/mappings.php');
         if ($this->filesystem->exists($path)) {
@@ -234,10 +251,27 @@ class DesignHelper
         return [];
     }
 
-    public function updateMappings($projectUri, $cssUri)
+    protected function addMapping(string $projectUri, string $cssUri)
+    {
+        $mappings = array_merge($this->loadMappings(), [$projectUri => $cssUri]);
+
+        $this->storeMappings($mappings);
+    }
+
+    protected function removeMapping(string $projectUri)
+    {
+        $mappings = $this->loadMappings();
+        if (!isset($mappings[$projectUri])) {
+            return;
+        }
+
+        unset($mappings[$projectUri]);
+        $this->storeMappings($mappings);
+    }
+
+    protected function storeMappings(array $mappings)
     {
         $path = $this->getBuildFilePath('/resources/mappings.php');
-        $mappings = array_merge($this->loadMappings(), [$projectUri => $cssUri]);
         $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($mappings, true) . ';' . PHP_EOL;
 
         $this->filesystem->dumpFile($path, $content);

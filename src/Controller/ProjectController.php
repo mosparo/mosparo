@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Form\ProjectFormType;
 use Mosparo\Helper\CleanupHelper;
+use Mosparo\Helper\DesignHelper;
+use Mosparo\Helper\ProjectHelper;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +42,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/create", name="project_create")
      */
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, DesignHelper $designHelper): Response
     {
         $project = new Project();
 
@@ -57,8 +59,16 @@ class ProjectController extends AbstractController
             $projectMember->setUser($this->getUser());
             $projectMember->setRole(ProjectMember::ROLE_OWNER);
 
+            // Initial save
             $entityManager->persist($project);
             $entityManager->persist($projectMember);
+            $entityManager->flush();
+
+            // Set the active project
+            $projectHelper->setActiveProject($project);
+
+            // Prepare the css cache and save again
+            $designHelper->generateCssCache($project);
             $entityManager->flush();
 
             $session = $request->getSession();
@@ -83,7 +93,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/delete/{project}", name="project_delete")
      */
-    public function delete(Request $request, Project $project, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Project $project, EntityManagerInterface $entityManager, DesignHelper $designHelper): Response
     {
         if ($request->request->has('delete-token')) {
             $submittedToken = $request->request->get('delete-token');
@@ -91,6 +101,9 @@ class ProjectController extends AbstractController
             if ($this->isCsrfTokenValid('delete-project', $submittedToken)) {
                 // Delete all to the project associated objects
                 $this->cleanupHelper->cleanupProjectEntities($project);
+
+                // Remove the cached resources
+                $designHelper->clearCssCache($project);
 
                 $entityManager->remove($project);
                 $entityManager->flush();
