@@ -145,14 +145,14 @@ $(document).ready(function () {
             return;
         }
 
-        button.removeClass('text-success text-danger').find('i').addClass('ti-clipboard-list').removeClass('ti-clipboard-check ti-clipboard-x');
+        button.removeClass('text-success text-danger').find('i').addClass('ti-copy').removeClass('ti-clipboard-check ti-clipboard-x');
 
         let inputField = inputGroup.find('input');
 
         navigator.clipboard.writeText(inputField.val()).then(function () {
-            button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-check');
+            button.addClass('text-success').find('i').removeClass('ti-copy').addClass('ti-clipboard-check');
         }, function () {
-            button.addClass('text-success').find('i').removeClass('ti-clipboard-list').addClass('ti-clipboard-x');
+            button.addClass('text-success').find('i').removeClass('ti-copy').addClass('ti-clipboard-x');
         });
     });
 
