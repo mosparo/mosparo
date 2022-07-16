@@ -117,7 +117,7 @@ class SetupController extends AbstractController
                     }
                 }
 
-                if (!$tablesExist) {
+                if ($connected && !$tablesExist) {
                     $this->configHelper->writeEnvironmentConfig($data);
                 }
             } catch (ConnectionException $e) {
