@@ -4,6 +4,9 @@ namespace Mosparo\Controller;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception\ConnectionException;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
 use Mosparo\Form\PasswordFormType;
@@ -66,7 +69,7 @@ class SetupController extends AbstractController
     /**
      * @Route("/database", name="setup_database")
      */
-    public function database(Request $request): Response
+    public function database(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->add('host', TextType::class, ['label' => 'setup.database.form.host'])
@@ -78,6 +81,7 @@ class SetupController extends AbstractController
 
         $form->handleRequest($request);
         $connected = false;
+        $tablesExist = false;
         if ($form->isSubmitted() && $form->isValid()) {
             $data = [
                 'database_driver' => 'pdo_mysql',
@@ -91,7 +95,7 @@ class SetupController extends AbstractController
             $tmpConnection = DriverManager::getConnection([
                 'host' => $data['database_host'] ?? null,
                 'port' => $data['database_port'] ?? null,
-                'name' => $data['database_name'] ?? null,
+                'dbname' => $data['database_name'] ?? null,
                 'user' => $data['database_user'] ?? null,
                 'password' => $data['database_password'] ?? null,
                 'driver' => $data['database_driver'],
@@ -103,13 +107,25 @@ class SetupController extends AbstractController
 
                 $data['database_version'] = $tmpConnection->getNativeConnection()->getAttribute(PDO::ATTR_SERVER_VERSION);
 
-                $this->configHelper->writeEnvironmentConfig($data);
+                /** @var AbstractSchemaManager $schemaManager */
+                $schemaManager = $tmpConnection->createSchemaManager();
+                $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
+                foreach ($metadata as $classMetadata) {
+                    if ($schemaManager->tablesExist($classMetadata->getTableName())) {
+                        $tablesExist = true;
+                        break;
+                    }
+                }
+
+                if (!$tablesExist) {
+                    $this->configHelper->writeEnvironmentConfig($data);
+                }
             } catch (ConnectionException $e) {
                 $connected = false;
             }
 
             // Save the database connection in the session and continue with the setup
-            if ($connected) {
+            if ($connected && !$tablesExist) {
                 return $this->redirectToRoute('setup_other');
             }
         }
@@ -118,6 +134,7 @@ class SetupController extends AbstractController
             'form' => $form->createView(),
             'submitted' => $form->isSubmitted(),
             'connected' => $connected,
+            'tablesExist' => $tablesExist
         ]);
     }
 

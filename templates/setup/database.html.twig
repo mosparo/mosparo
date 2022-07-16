@@ -12,9 +12,19 @@
             {{ 'setup.database.introduction'|trans }}
         </p>
 
+        <div class="alert alert-info">
+            {{ 'setup.database.useEmptyDatabase'|trans }}
+        </div>
+
         {% if submitted and not connected %}
             <div class="alert alert-danger">
                 {{ 'setup.database.connectionDataInvalid'|trans }}
+            </div>
+        {% endif %}
+
+        {% if submitted and tablesExist %}
+            <div class="alert alert-danger">
+                {{ 'setup.database.mosparoTablesExistInDatabase'|trans }}
             </div>
         {% endif %}
 

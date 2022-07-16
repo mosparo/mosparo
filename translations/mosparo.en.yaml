@@ -830,6 +830,8 @@ setup:
   database:
     title: Database
     introduction: Please enter the details of your MySQL database.
+    useEmptyDatabase: Please use an empty database or a database in which no tables of mosparo exist.
+    mosparoTablesExistInDatabase: Tables of mosparo were found in the specified database. Please use another database or delete the tables.
     connectionDataInvalid: It was not possible to connect to the database. Please check your settings below and try again.
 
     form:

@@ -830,6 +830,8 @@ setup:
   database:
     title: Datenbank
     introduction: Bitte geben Sie die Verbindungsdaten zu Ihrer MySQL-Datebank ein.
+    useEmptyDatabase: Bitte verwenden Sie eine leere Datenbank bzw. eine Datenbank, in welcher keine Tabellen von mosparo existieren.
+    mosparoTablesExistInDatabase: In der angegebenen Datenbank wurden Tabellen von mosparo gefunden. Bitte verwenden Sie eine andere Datenbank oder löschen Sie die Tabellen.
     connectionDataInvalid: Es war nicht möglich, eine Verbindung mit der Datenbank herzustellen. Bitte prüfen Sie Ihre Einstellungen und versuchen Sie es erneut.
 
     form:
