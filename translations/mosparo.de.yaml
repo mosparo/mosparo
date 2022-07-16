@@ -575,6 +575,16 @@ administration:
 
       message:
         savedSuccessfully: Die Einstellungen wurden erfolgreich gespeichert.
+        infoActivationTime: Falls Sie Ihren Lizenz-Schlüssel gerade angefordert haben, dauert es eine gewisse Zeit, bis der Lizenz-Schlüssel aktiv ist.
+
+    version:
+      titleAvailable: GeoIP2 verfügbar
+      messageAvailable: 'Die GeoIP2-Datenbank wurde erfolgreich heruntergeladen und ist aktiv. Folgende Versionen sind aktiv:'
+      typeAsn: 'AS-Nummer:'
+      typeCountry: 'Land:'
+
+      titleNotAvailable: GeoIP2 nicht verfügbar
+      messageDatabaseNotAvailable: Die GeoIP2-Datenbank wurde noch nicht heruntergeladen oder es trat ein Fehler beim Herunterladen auf.
 
     downloadAndUpdate:
       title: Herunterladen & automatische Upates

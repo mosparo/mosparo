@@ -2,9 +2,10 @@
 
 namespace Mosparo\Helper;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use GeoIp2\Database\Reader;
-use GeoIp2\Exception\AddressNotFoundException;
 use Mosparo\Entity\IpLocalization;
 use Mosparo\Util\HashUtil;
 use tronovav\GeoIP2Update\Client;
@@ -50,6 +51,28 @@ class GeoIp2Helper
         return true;
     }
 
+    public function getDatabaseInformations(): array
+    {
+        $versions = ['GeoLite2-ASN' => false, 'GeoLite2-Country' => false];
+        try {
+            $asReader = new Reader($this->downloadDirectory . '/GeoLite2-ASN/GeoLite2-ASN.mmdb');
+            $metadata = $asReader->metadata();
+            $versions['GeoLite2-ASN'] = (new DateTime())->setTimestamp($metadata->buildEpoch);
+        } catch (Exception $e) {
+            // Do nothing
+        }
+
+        try {
+            $countryReader = new Reader($this->downloadDirectory . '/GeoLite2-Country/GeoLite2-Country.mmdb');
+            $metadata = $countryReader->metadata();
+            $versions['GeoLite2-Country'] = (new DateTime())->setTimestamp($metadata->buildEpoch);
+        } catch (Exception $e) {
+            // Do nothing
+        }
+
+        return $versions;
+    }
+
     public function locateIpAddress($ipAddress)
     {
         $geoipActive = $this->configHelper->getEnvironmentConfigValue('geoipActive', false);
@@ -73,7 +96,7 @@ class GeoIp2Helper
 
             $ipLocalization->setAsNumber($asn->autonomousSystemNumber);
             $ipLocalization->setAsOrganization($asn->autonomousSystemOrganization);
-        } catch (AddressNotFoundException $e) {
+        } catch (Exception $e) {
             // Do nothing
         }
 
@@ -83,7 +106,7 @@ class GeoIp2Helper
             $country = $countryReader->country($ipAddress);
 
             $ipLocalization->setCountry($country->country->isoCode);
-        } catch (AddressNotFoundException $e) {
+        } catch (Exception $e) {
             // Do nothing
         }
 

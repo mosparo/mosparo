@@ -575,6 +575,16 @@ administration:
       message:
         savedSuccessfully: The settings were saved successfully.
 
+    version:
+      titleAvailable: GeoIP2 available
+      messageAvailable: 'The GeoIP2 database has been successfully downloaded and is active. The following versions are active:'
+      typeAsn: 'AS number:'
+      typeCountry: 'Country:'
+
+      titleNotAvailable: GeoIP2 not available
+      messageDatabaseNotAvailable: The GeoIP2 database has not been downloaded yet or an error occurred during download.
+
+
     downloadAndUpdate:
       title: Download & automatic update
       intro: After you\'ve saved the license key, mosparo needs to download the database. You can do that here directly or you can use a SSH connection to execute the command.

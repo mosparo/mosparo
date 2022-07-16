@@ -74,9 +74,15 @@ class GeoIp2Controller extends AbstractController
             return $this->redirectToRoute('administration_geoip2_settings');
         }
 
+        $versions = $this->geoIp2Helper->getDatabaseInformations();
+        $hasDatabase = !in_array(false, $versions);
+
         return $this->render('administration/geoip2/settings.html.twig', [
             'form' => $form->createView(),
-            'hasLicenseKey' => ($this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', ''))
+            'isActive' => ($this->configHelper->getEnvironmentConfigValue('geoipActive', false)),
+            'hasLicenseKey' => ($this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', '')),
+            'versions' => $versions,
+            'hasDatabase' => $hasDatabase,
         ]);
     }
 

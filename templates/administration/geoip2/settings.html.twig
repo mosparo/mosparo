@@ -8,6 +8,35 @@
 {% block administrationPageBody %}
     <div class="row">
         <div class="col-12 col-lg-6 mb-3">
+            {% if isActive and hasLicenseKey %}
+                <div class="card mb-3">
+                    {% if hasDatabase %}
+                        <div class="card-status-start bg-success"></div>
+                        <div class="card-header">
+                            <h3 class="card-title">{{ 'administration.geoip2.version.titleAvailable'|trans }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ 'administration.geoip2.version.messageAvailable'|trans }}</p>
+
+                            <p class="mb-0">
+                                <strong>{{ 'administration.geoip2.version.typeAsn'|trans }}</strong> {{ versions['GeoLite2-ASN']|date }}
+                            </p>
+                            <p class="mb-0">
+                                <strong>{{ 'administration.geoip2.version.typeCountry'|trans }}</strong> {{ versions['GeoLite2-Country']|date }}
+                            </p>
+                        </div>
+                    {% else %}
+                        <div class="card-status-start bg-danger"></div>
+                        <div class="card-header">
+                            <h3 class="card-title">{{ 'administration.geoip2.version.titleNotAvailable'|trans }}</h3>
+                        </div>
+                        <div class="card-body">
+                            {{ 'administration.geoip2.version.messageDatabaseNotAvailable'|trans }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
             {{ form_start(form) }}
                 <div class="card">
                     <div class="card-header">
@@ -16,10 +45,14 @@
                     <div class="card-body">
                         <p>
                             {{ 'administration.geoip2.settings.getLicenseKey'|trans }}
-                            <a href="https://dev.maxmind.com/geoip/geolite2-free-geolocation-data" target="_blank">
-                                https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
-                            </a> <i class="ti ti-external-link"></i>
+                            <a href="https://dev.maxmind.com/geoip/geolite2-free-geolocation-data" target="_blank">https://dev.maxmind.com/geoip/geolite2-free-geolocation-data</a>
+                            <i class="ti ti-external-link"></i>
                         </p>
+
+                        <div class="alert alert-info">
+                            {{ 'administration.geoip2.settings.message.infoActivationTime'|trans }}
+                        </div>
+
                         {{ form_row(form.geoipActive) }}
                         {{ form_row(form.geoipLicenseKey) }}
                     </div>
@@ -52,7 +85,7 @@
                     </p>
 
                     <div class="d-flex mb-3">
-                        <a href="{{ path('administration_geoip2_download') }}" class="btn btn-orange mx-auto {% if not hasLicenseKey %}disabled{% endif %}">
+                        <a href="{{ path('administration_geoip2_download') }}" class="btn btn-orange mx-auto {% if not isActive or not hasLicenseKey %}disabled{% endif %}">
                             <i class="ti ti-download"></i>
                             {{ 'administration.geoip2.downloadAndUpdate.web.action'|trans }}
                         </a>
