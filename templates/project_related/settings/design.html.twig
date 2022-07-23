@@ -94,7 +94,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12 col-lg-4">
+                        <div class="col-12 col-lg-4 mb-3 mb-lg-0">
                             {{ form_row(form.boxSize) }}
                         </div>
                         <div class="col-12 col-lg-4">
@@ -117,7 +117,7 @@
             </div>
 
             <div class="card mt-3">
-                <div class="card-header">
+                <div class="card-header card-header-with-actions">
                     <h2 class="card-title">{{ 'settings.design.subtitles.colorSettings'|trans }}</h2>
                     <div class="card-actions">
                         <div class="d-flex align-items-center">
@@ -154,7 +154,9 @@
                                     {{ form_row(form.colorShadowInset) }}
                                 </div>
                                 <div class="col-12">
-                                    {{ form_row(form.showPingAnimation) }}
+                                    <div class="mb-3">
+                                        {{ form_row(form.showPingAnimation) }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -181,9 +183,11 @@
                                     {{ form_row(form.colorFocusCheckboxShadow) }}
                                 </div>
                                 <div class="col-12 logo-container">
-                                    {{ form_row(form.showMosparoLogo) }}
-                                    <div class="message-box bg-azure-lt p-3 d-none">
-                                        {{ 'settings.design.message.boxRadiusTooLarge'|trans }}
+                                    <div class="mb-3">
+                                        {{ form_row(form.showMosparoLogo) }}
+                                        <div class="message-box bg-azure-lt p-3 mb-3 d-none">
+                                            {{ 'settings.design.message.boxRadiusTooLarge'|trans }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -38,6 +38,16 @@
     .cra-table-value {
         font-weight: bold;
     }
+
+    @media only screen and (max-width: 500px) {
+        .accordion-button {
+            padding: 0.875rem;
+        }
+
+        .cra-value {
+            margin-right: 0.5rem;
+        }
+    }
 }
 
 .message-box {
