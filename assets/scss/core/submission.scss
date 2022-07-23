@@ -10,6 +10,16 @@
     .page-name {
         font-weight: bold;
     }
+
+    .dtr-details {
+        .border-left {
+            border-left: none;
+        }
+
+        .border-right {
+            border-right: none;
+        }
+    }
 }
 
 .submission-row {

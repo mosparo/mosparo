@@ -1,18 +1,14 @@
 {% trans_default_domain datatable.translationDomain %}
 
-<table id="{{ datatable.name }}" class="{% if className is defined and className is not empty %}{{ className }}{% endif %}  submission-table">
+<table id="{{ datatable.name }}" class="{% if className is defined and className is not empty %}{{ className }}{% endif %} submission-table">
     <thead>
-    <tr>
-        <th colspan="3"></th>
-        <th colspan="4" class="text-center border-left">{{ 'submission.list.spam'|trans }}</th>
-        <th colspan="2" class="text-center border-left border-right">{{ 'submission.list.verification'|trans }}</th>
-        <th></th>
-    </tr>
-    <tr>
-        {% for column in datatable.columns %}
-            <th>{{ column.label|trans }}</th>
-        {% endfor %}
-    </tr>
+        <tr>
+            {% for column in datatable.columns %}
+                <th>
+                    {{ column.label|trans }}
+                </th>
+            {% endfor %}
+        </tr>
     </thead>
     <tbody>
     </tbody>

@@ -25,11 +25,77 @@
     <!-- Insert this at the end of your body element, but before the closing tag -->
     <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
     <script>
+        var drawLabelTimeout = null;
+
+        function drawAdditionalLabels()
+        {
+            let submissionTableContainer = $('#submissions');
+            drawAdditionalLabel(submissionTableContainer, 'th.spam-column', 'spam-column-label', '{{ 'submission.list.spam'|trans }}');
+            drawAdditionalLabel(submissionTableContainer, 'th.verification-column', 'verification-column-label', '{{ 'submission.list.verification'|trans }}');
+        }
+
+        function drawAdditionalLabel(container, columnSelector, labelClass, labelText)
+        {
+            let startPos = -1;
+            let endPos = -1;
+            container.find(columnSelector + ':visible').each(function () {
+                let pos = $(this).position();
+                console.log(pos);
+                if (startPos === -1 || pos.left < startPos) {
+                    startPos = Math.floor(pos.left);
+                }
+
+                let columnEndPos = Math.floor(pos.left) + Math.floor($(this).outerWidth(true));
+                if (endPos < columnEndPos) {
+                    endPos = columnEndPos;
+                }
+            });
+
+            let labelEl = container.find('.' + labelClass);
+            if (labelEl.length === 0) {
+                labelEl = $('<div></div>').addClass('additional-column-label ' + labelClass).text(labelText).appendTo(container);
+            }
+
+            if (startPos === -1 || endPos === -1) {
+                labelEl.hide();
+            } else {
+                labelEl
+                    .show()
+                    .css({
+                        'left': startPos,
+                        'width': endPos - startPos + 2
+                    });
+            }
+        }
+
         $(function() {
             $('#submissions').initDataTables({{ datatable_settings(datatable) }}, {
                 autoWidth: false,
                 searching: false,
                 info: false,
+                responsive: {
+                    details: {
+                        renderer: function (api, rowIndex, columns) {
+                            var data = $.map(columns, function (col, i) {
+                                if (!col.hidden) {
+                                    return '';
+                                }
+
+                                let row = $('<tr></tr>').attr('data-dt-row', col.rowIndex).attr('data-dt-column', col.columnIndex);
+
+                                // Title
+                                $('<td></td>').html('<strong>' + col.title.trim() + '</strong>').appendTo(row);
+
+                                // Value
+                                $('<td></td>').html(col.data).appendTo(row);
+
+                                return row.prop('outerHTML');
+                            }).join('');
+
+                            return data ? $('<table/>').addClass('dt-details-table').append(data) : false;
+                        }
+                    }
+                },
                 columnDefs: [
                     { width: "1%", targets: 0 },
                     { width: "20%", targets: 1 },
@@ -38,9 +104,22 @@
                     { width: "9%", targets: 4 },
                     { width: "15%", targets: 5 },
                     { width: "5%", targets: 7 },
-                    { width: "15%", targets: 8 },
-                    { width: "1", targets: 9 }
+                    { width: "15%", targets: 8 }
                 ]
+            }).then(function (dataTable) {
+                dataTable.on('responsive-resize', function (e, datatable, columns) {
+                    drawAdditionalLabels();
+                });
+
+                drawAdditionalLabels();
+            });
+
+            $(window).resize(function () {
+                drawLabelTimeout = setTimeout(function () {
+                    clearTimeout(drawLabelTimeout);
+
+                    drawAdditionalLabels();
+                }, 200);
             });
         });
     </script>

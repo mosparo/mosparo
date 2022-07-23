@@ -41,32 +41,32 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
             ->add('spam', TwigColumn::class, [
                 'label' => 'submission.list.spam',
                 'template' => 'project_related/submission/list/_spam.html.twig',
-                'className' => 'text-center border-left'
+                'className' => 'text-center border-left spam-column'
             ])
             ->add('spamRating', TwigColumn::class, [
                 'label' => 'submission.list.spamRating',
                 'template' => 'project_related/submission/list/_spamRating.html.twig',
-                'className' => 'text-center'
+                'className' => 'text-center spam-column'
             ])
             ->add('spamDetectionRating', TextColumn::class, ['visible' => false])
             ->add('submittedAt', TwigColumn::class, [
                 'label' => 'submission.list.submittedAt',
                 'template' => 'project_related/submission/list/_date.html.twig',
-                'className' => 'text-center'
+                'className' => 'text-center spam-column'
             ])
             ->add('valid', TwigColumn::class, [
                 'label' => 'submission.list.valid',
                 'template' => 'project_related/submission/list/_valid.html.twig',
-                'className' => 'text-center border-left'
+                'className' => 'text-center border-left verification-column'
             ])
             ->add('verifiedAt', TwigColumn::class, [
                 'label' => 'submission.list.verifiedAt',
                 'template' => 'project_related/submission/list/_date.html.twig',
-                'className' => 'text-center border-right'
+                'className' => 'text-center border-right verification-column'
             ])
-            ->add('submitToken', TwigColumn::class, [
+            ->add('actions', TwigColumn::class, [
                 'label' => 'submission.list.actions',
-                'className' => 'text-center',
+                'className' => 'buttons',
                 'template' => 'project_related/submission/list/_actions.html.twig',
             ])
             ->addOrderBy('submittedAt', DataTable::SORT_DESCENDING)
