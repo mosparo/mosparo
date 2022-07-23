@@ -33,6 +33,11 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
+        // Do not set the locale for stateless sessions
+        if ($event->getRequest()->attributes->get('_stateless', false)) {
+            return;
+        }
+
         $request = $event->getRequest();
         $coreExtension = $this->twig->getExtension(CoreExtension::class);
 

@@ -29,8 +29,8 @@ class DynamicResourcesController extends AbstractController
     }
 
     /**
-     * @Route("/{projectUuid}.css", name="resources_project_css")
-     * @Route("/{projectUuid}/{styleHash}.css", name="resources_project_hash_css")
+     * @Route("/{projectUuid}.css", name="resources_project_css", stateless=true)
+     * @Route("/{projectUuid}/{styleHash}.css", name="resources_project_hash_css", stateless=true)
      */
     public function redirectToStyleResource(string $projectUuid): Response
     {
@@ -62,9 +62,6 @@ class DynamicResourcesController extends AbstractController
         $redirectResponse->setLastModified($cssFileDate);
         $redirectResponse->setPublic();
         $redirectResponse->headers->addCacheControlDirective('no-cache');
-
-        // Allow to cache the response since it is not a sensitive response
-        $redirectResponse->headers->set(SessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
 
         return $redirectResponse;
     }
