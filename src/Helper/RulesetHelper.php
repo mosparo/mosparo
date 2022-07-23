@@ -11,11 +11,14 @@ use Mosparo\Exception;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Entity\RulesetCache;
 use Mosparo\Entity\RulesetRuleCache;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RulesetHelper
 {
     protected EntityManagerInterface $entityManager;
+
+    protected UrlGeneratorInterface $router;
 
     protected HttpClientInterface $client;
 
@@ -23,9 +26,10 @@ class RulesetHelper
 
     protected ProjectHelper $projectHelper;
 
-    public function __construct(EntityManagerInterface $entityManager, HttpClientInterface $client, CleanupHelper $cleanupHelper, ProjectHelper $projectHelper)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $router, HttpClientInterface $client, CleanupHelper $cleanupHelper, ProjectHelper $projectHelper)
     {
         $this->entityManager = $entityManager;
+        $this->router = $router;
         $this->client = $client;
         $this->cleanupHelper = $cleanupHelper;
         $this->projectHelper = $projectHelper;
@@ -64,9 +68,16 @@ class RulesetHelper
             'content' => $ruleset->getUrl(),
             'hash' => $ruleset->getUrl() . '.sha256'
         ];
+        $args = [
+            'headers' => [
+                'X-mosparo-host' => $this->router->generate('dashboard', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'X-mosparo-project-uuid' => $ruleset->getProject()->getUuid()
+            ]
+        ];
+
         $files = [];
         foreach ($urls as $fileType => $url) {
-            $response = $this->client->request('GET', $url);
+            $response = $this->client->request('GET', $url, $args);
 
             if ($response->getStatusCode() !== 200) {
                 throw new Exception('Cannot download the ruleset file.');
