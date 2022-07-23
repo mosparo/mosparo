@@ -40,7 +40,7 @@
             let endPos = -1;
             container.find(columnSelector + ':visible').each(function () {
                 let pos = $(this).position();
-                console.log(pos);
+
                 if (startPos === -1 || pos.left < startPos) {
                     startPos = Math.floor(pos.left);
                 }
