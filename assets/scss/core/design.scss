@@ -39,3 +39,10 @@
         font-weight: bold;
     }
 }
+
+.message-box {
+    &.bg-azure-lt {
+        border: 1px solid #4299e1;
+        border-radius: 5px;
+    }
+}

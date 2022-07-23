@@ -153,6 +153,8 @@ class DesignHelper
         ],
     ];
 
+    protected static $maxRadiusForLogo = ['small' => 15, 'medium' => 20, 'large' => 35];
+
     protected EntrypointLookupCollection $entrypointLookupCollection;
 
     protected UrlGeneratorInterface $router;
@@ -172,6 +174,11 @@ class DesignHelper
     public function getBoxSizeVariables(): array
     {
         return self::$boxSizeVariables;
+    }
+
+    public function getMaxRadiusForLogo(): array
+    {
+        return self::$maxRadiusForLogo;
     }
 
     public function getBuildFilePath(string $relativePath): string
@@ -210,6 +217,9 @@ class DesignHelper
         $designConfigValues = $this->getDesignConfigValues($project);
         $designConfigHash = $this->generateDesignConfigHash($designConfigValues);
 
+        // Adjust the visibility of the logo
+        $designConfigValues = $this->adjustLogoVisibility($designConfigValues);
+
         // Prepare the css cache content
         $result = $this->createCssCache($project, $designConfigValues, $designConfigHash);
 
@@ -239,6 +249,19 @@ class DesignHelper
         // Remove the url from the mapping file
         $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
         $this->removeMapping($projectUri);
+    }
+
+    protected function adjustLogoVisibility($configValues): array
+    {
+        $size = $configValues['boxSize'] ?? 'medium';
+        $radius = $configValues['boxRadius'] ?? 0;
+        $maxRadius = self::$maxRadiusForLogo[$size] ?? 0;
+
+        if ($radius > $maxRadius) {
+            $configValues['showMosparoLogo'] = false;
+        }
+
+        return $configValues;
     }
 
     protected function loadMappings(): array

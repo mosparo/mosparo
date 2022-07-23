@@ -77,7 +77,7 @@ $(document).ready(function () {
             let variableName = el.data('variable');
 
             if (type === 'checkbox') {
-                if (el.is(':checked')) {
+                if (el.is(':checked') && !el.prop('readonly')) {
                     value = el.data('variable-value');
                 } else {
                     value = el.data('disabled-variable-value');
@@ -156,10 +156,14 @@ $(document).ready(function () {
         });
     });
 
+    var changeTimeout = null;
     var changeDirection = '';
     var changeInputField = null;
     var changeIntervalTime = 500;
     var changeValueCallback = function () {
+        clearTimeout(changeTimeout);
+        changeTimeout = null;
+
         if (changeDirection === '' || changeInputField === null) {
             return;
         }
@@ -183,27 +187,10 @@ $(document).ready(function () {
             changeIntervalTime = 50;
         }
 
-        setTimeout(changeValueCallback, changeIntervalTime);
+        changeTimeout = setTimeout(changeValueCallback, changeIntervalTime);
     }
 
-    $('.btn-decrease-value, .btn-increase-value').click(function () {
-        let inputGroup = $(this).parents('.input-group');
-        let input = inputGroup.find('input');
-
-        let val = parseInt(input.val());
-
-        if ($(this).hasClass('btn-decrease-value')) {
-            val -= 1;
-        } else if ($(this).hasClass('btn-increase-value')) {
-            val += 1;
-        }
-
-        if (val < 0) {
-            val = 0;
-        }
-
-        input.val(val).trigger('change');
-    }).on('mousedown mouseup', function (ev) {
+    $('.btn-decrease-value, .btn-increase-value').on('mousedown mouseup', function (ev) {
         if (ev.type === 'mousedown') {
             if (changeDirection !== '') {
                 return;
@@ -219,6 +206,9 @@ $(document).ready(function () {
             changeIntervalTime = 400;
             changeValueCallback();
         } else if (ev.type === 'mouseup') {
+            clearTimeout(changeTimeout);
+            changeTimeout = null;
+
             changeDirection = '';
             changeInputField = null;
 
@@ -245,7 +235,7 @@ $(document).ready(function () {
             }
 
             changeInputField = $(this);
-            changeIntervalTime = 400;
+            changeIntervalTime = 500;
             changeValueCallback();
         } else if (ev.type === 'keyup') {
             changeDirection = '';

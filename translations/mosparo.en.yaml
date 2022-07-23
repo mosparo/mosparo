@@ -485,6 +485,7 @@ settings:
 
     message:
       successfullySaved: The design settings were saved successfully.
+      boxRadiusTooLarge: The logo can only be displayed if the radius of the box is below a certain value.
 
 # Administration
 administration:

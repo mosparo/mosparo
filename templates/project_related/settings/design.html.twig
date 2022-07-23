@@ -180,8 +180,11 @@
                                 <div class="col-12 col-lg-6">
                                     {{ form_row(form.colorFocusCheckboxShadow) }}
                                 </div>
-                                <div class="col-12">
+                                <div class="col-12 logo-container">
                                     {{ form_row(form.showMosparoLogo) }}
+                                    <div class="message-box bg-azure-lt p-3 d-none">
+                                        {{ 'settings.design.message.boxRadiusTooLarge'|trans }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -310,7 +313,35 @@
     <script src="{{ asset('/build/mosparo-frontend.js') }}"></script>
     <script>
         var sizeVariables = {{ sizeVariables|json_encode()|raw }};
+        var maxRadiusForLogo = {{ maxRadiusForLogo|json_encode()|raw }};
         var initialTrigger = false;
+
+        function checkLogoAvailability()
+        {
+            let radius = $('input[name="design_settings_form[boxRadius]"]').val();
+            let size = $('input[name="design_settings_form[boxSize]"]:checked').val();
+            let logoCheckbox = $('input[name="design_settings_form[showMosparoLogo]"]');
+            let logoContainer = $('.logo-container');
+            if (!(size in maxRadiusForLogo)) {
+                return;
+            }
+
+            let maxRadius = maxRadiusForLogo[size];
+
+            if (radius > maxRadius) {
+                logoCheckbox.prop('readonly', true);
+                logoContainer
+                    .find('.form-group').addClass('d-none').end()
+                    .find('.message-box').removeClass('d-none').end();
+            } else {
+                logoCheckbox.prop('readonly', false);
+                logoContainer
+                    .find('.form-group').removeClass('d-none').end()
+                    .find('.message-box').addClass('d-none').end();
+            }
+
+            logoCheckbox.trigger('change');
+        }
 
         $(document).ready(function () {
             $('.mosparo-box').each(function () {
@@ -335,6 +366,10 @@
                 }
             });
 
+            $('input[name="design_settings_form[boxRadius]"]').change(function () {
+                checkLogoAvailability();
+            });
+
             $('input[name="design_settings_form[boxSize]"]').change(function () {
                 let size = $(this).val();
                 if (!(size in sizeVariables)) {
@@ -352,6 +387,8 @@
 
                     updateCssVariable(variableName, variables[variableName], 'number');
                 }
+
+                checkLogoAvailability();
             });
 
             initialTrigger = true;

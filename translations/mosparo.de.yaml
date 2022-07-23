@@ -485,6 +485,7 @@ settings:
 
     message:
       successfullySaved: Die Darstellungs-Einstellungen wurden erfolgreich gespeichert.
+      boxRadiusTooLarge: Das Logo kann nur angezeigt werden, wenn der Radius der Box unterhalb eines gewissen Wertes liegt.
 
 # Administration
 administration:
