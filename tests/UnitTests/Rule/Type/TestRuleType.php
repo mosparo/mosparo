@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Tests\Rule\Type;
+namespace Mosparo\Tests\UnitTests\Rule\Type;
 
 use Mosparo\Rule\Type\AbstractRuleType;
 

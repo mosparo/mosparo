@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Tests\Util;
+namespace Mosparo\Tests\UnitTests\Util;
 
 use Mosparo\Util\TokenGenerator;
 use PHPUnit\Framework\TestCase;

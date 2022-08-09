@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Tests\Util;
+namespace Mosparo\Tests\UnitTests\Util;
 
 use Mosparo\Util\ChoicesUtil;
 use PHPUnit\Framework\TestCase;

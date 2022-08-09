@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Tests\Rule\Tester;
+namespace Mosparo\Tests\UnitTests\Rule\Tester;
 
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
