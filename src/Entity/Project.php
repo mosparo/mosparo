@@ -57,7 +57,7 @@ class Project
     /**
      * @ORM\Column(type="float")
      */
-    private int $spamScore = 5;
+    private float $spamScore = 5;
 
     /**
      * @ORM\OneToMany(targetEntity=ProjectConfigValue::class, mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true)
