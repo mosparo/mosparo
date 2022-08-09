@@ -64,6 +64,7 @@ class RulesetRuleCache implements ProjectRelatedEntityInterface, RuleEntityInter
 
     public function __construct()
     {
+        $this->uuid = uuid_create(UUID_TYPE_RANDOM);
         $this->items = new ArrayCollection();
     }
 

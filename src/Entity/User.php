@@ -92,6 +92,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     }
 
     /**
+     * Returns the user identifier
+     *
+     * @return string
+     */
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
+    }
+
+    /**
      * @see UserInterface
      */
     public function getRoles(): array

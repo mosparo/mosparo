@@ -24,7 +24,7 @@ class RulesetCache implements ProjectRelatedEntityInterface
      * @ORM\OneToOne(targetEntity=Ruleset::class, inversedBy="rulesetCache", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Ruleset $ruleset;
+    private ?Ruleset $ruleset = null;
 
     /**
      * @ORM\Column(type="datetime")
