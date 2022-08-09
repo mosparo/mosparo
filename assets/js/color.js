@@ -78,7 +78,6 @@ const updateContrastRatioValues = function (el, score, aaMin, aaaMin)
 
 const recalculateContrastRatioForGroup = function (groupEl)
 {
-    let backgroundColor = getContrastValueColor(groupEl, 'background', 'rgb');
     let aaMin = 4.5;
     let aaaMin = 7.0;
     if ($('input[name="design_settings_form[boxSize]"]:checked').val() === 'large') {
@@ -86,14 +85,16 @@ const recalculateContrastRatioForGroup = function (groupEl)
         aaaMin = 4.5;
     }
 
-    if (backgroundColor === false) {
-        backgroundColor = getSpectrumValue($('#page_body_backgroundColor'), 'rgb');
-    } else if (backgroundColor.a < 1) {
-        let bodyBackgroundColor = getSpectrumValue($('#page_body_backgroundColor'), 'rgb');
-        if (bodyBackgroundColor === false) {
-            bodyBackgroundColor = { r: 255, g: 255, b: 255, a: 1 };
-        }
+    let backgroundColor = getContrastValueColor(groupEl, 'background', 'rgb');
+    let bodyBackgroundColor = getSpectrumValue($('#page_body_backgroundColor'), 'rgb');
 
+    if (bodyBackgroundColor === false) {
+        bodyBackgroundColor = {r: 255, g: 255, b: 255, a: 1};
+    }
+
+    if (backgroundColor === false) {
+        backgroundColor = bodyBackgroundColor;
+    } else if (backgroundColor.a < 1) {
         backgroundColor = normal(bodyBackgroundColor, backgroundColor);
     }
 
