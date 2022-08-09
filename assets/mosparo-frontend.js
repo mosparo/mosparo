@@ -14,6 +14,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         designMode: false,
         loadCssResource: false,
         cssResourceUrl: '',
+        requestSubmitTokenOnInit: true,
 
         // Callbacks
         onCheckForm: null
@@ -189,7 +190,9 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 _this.checkForm();
             });
 
-            this.requestSubmitToken();
+            if (this.options.requestSubmitTokenOnInit) {
+                this.requestSubmitToken();
+            }
         }
     }
 
