@@ -398,11 +398,12 @@ settings:
       infoIpAddress: In which case the creation of the token needs to be delayed, will be decided because of the number of requests the IP address has made. With every additional token request, the delay will be extended.
 
     ipLockout:
-      title: IP Lockout
+      title: IP lockout
       intro: To make it even harder for bots, mosparo can automatically block IP addresses temporary. If an IP address requests a lot of tokens, mosparo can automatically count the requests and block the IP address if a specific number is reached.
 
     ipAllowList:
       title: IP allow list
+      intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above (Request delaying and IP lockout).
 
     form:
       minimumTimeActive: Minimum time active
