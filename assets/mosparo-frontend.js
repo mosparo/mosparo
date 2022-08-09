@@ -11,7 +11,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         name: '',
         allowBrowserValidation: true,
         inputFieldSelector: '[name]:not(.mosparo__ignored-field)',
-        desingMode: false,
+        designMode: false,
         loadCssResource: false,
         cssResourceUrl: '',
 
