@@ -20,6 +20,33 @@
             border-right: none;
         }
     }
+
+    .client-information {
+        display: flex;
+        flex-wrap: wrap;
+
+        .information-part {
+            line-height: var(--tblr-body-line-height);
+            margin: 0.125rem;
+            padding: 2px 4px;
+
+            &.ip-address {
+                order: 1;
+            }
+
+            &.ip-country {
+                order: 2;
+            }
+
+            &.ip-as-number {
+                order: 3;
+            }
+
+            &.ip-as-organization {
+                order: 4;
+            }
+        }
+    }
 }
 
 .submission-row {
