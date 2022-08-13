@@ -13,6 +13,12 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('mosparo') }}
         {% endblock %}
+
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('build/images/favicons/apple-touch-icon-180x180.png') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/images/favicons/favicon-32x32.ico') }}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('build/images/favicons/favicon-96x96.png') }}">
+        <meta name="msapplication-square310x310logo" content="{{ asset('build/images/favicons/mstile-310x310.png') }}">
+        <meta name="msapplication-TileColor" content="#1d1d1b">
     </head>
     <body class="{% block bodyClasses %}antialised{% endblock %}">
         {% block body %}
