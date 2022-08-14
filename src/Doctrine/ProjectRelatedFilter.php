@@ -28,6 +28,6 @@ class ProjectRelatedFilter extends SQLFilter
             throw new Exception('Access to a project related entity is not allowed without active project.');
         }
 
-        return sprintf('%s.project_id = ' . $activeProject->getId(), $targetTableAlias);
+        return sprintf('%s.project_id = %d', $targetTableAlias, $activeProject->getId());
     }
 }
