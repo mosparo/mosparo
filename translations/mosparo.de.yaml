@@ -548,10 +548,12 @@ administration:
       password: Passwort
       isActiveUser: Ist ein aktiver Benutzer
       isAdministrator: Ist ein Administrator
+      sendPasswordResetEmail: Dem Benutzer ein E-Mail zum Setzen des Passworts senden
 
       message:
         successfullySaved: Der Benutzer wurde erfolgreich gespeichert.
-
+        errorCreatingResetToken: 'Beim Erstellen des E-Mails gab es einen technischen Fehler. Fehler: %errorMessage%'
+        errorSendingResetEmail: 'Das E-Mail mit dem Link konnte nicht korrekt versendet werden. Fehler: %errorMessage%'
     help:
       password: Lassen Sie das Feld leer wenn kein neues Passwort gespeichert werden soll.
 

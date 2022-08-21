@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
 use Mosparo\Form\PasswordFormType;
+use Mosparo\Helper\PasswordHelper;
+use Mosparo\Util\TokenGenerator;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
@@ -15,9 +17,11 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 
 /**
  * @Route("/administration/users")
@@ -68,12 +72,19 @@ class UserController extends AbstractController
      * @Route("/add", name="administration_user_add")
      * @Route("/{id}/edit", name="administration_user_edit")
      */
-    public function modifyUser(Request $request, EntityManagerInterface $entityManager, User $user = null): Response
+    public function modifyUser(Request $request, EntityManagerInterface $entityManager, TokenGenerator $tokenGenerator, PasswordHelper $passwordHelper, User $user = null): Response
     {
+        $sendPasswordAttributes = [];
+        $passwordHelp = 'administration.user.help.password';
         $isNewUser = false;
+        $passwordDisabled = false;
         if ($user === null) {
             $user = new User();
             $isNewUser = true;
+
+            $passwordHelp = '';
+            $passwordDisabled = true;
+            $sendPasswordAttributes['checked'] = 'checked';
         }
 
         $isActiveUserAttributes = [];
@@ -91,32 +102,47 @@ class UserController extends AbstractController
             ->add('password', PasswordFormType::class, [
                 'label' => 'administration.user.form.password',
                 'mapped' => false,
-                'required' => $isNewUser,
+                'required' => false,
                 'is_new_password' => (!$isNewUser),
-                'help' => 'administration.user.help.password'
+                'help' => $passwordHelp,
+                'disabled' => $passwordDisabled,
             ])
             ->add('isActiveUser', CheckboxType::class, [
                 'label' => 'administration.user.form.isActiveUser',
                 'mapped' => false,
                 'required' => false,
-                'attr' => $isActiveUserAttributes
+                'attr' => $isActiveUserAttributes,
             ])
             ->add('isAdminUser', CheckboxType::class, [
                 'label' => 'administration.user.form.isAdministrator',
                 'mapped' => false,
                 'required' => false,
-                'attr' => $isAdminUserAttributes
+                'attr' => $isAdminUserAttributes,
+            ])
+            ->add('sendPasswordResetEmail', CheckboxType::class, [
+                'label' => 'administration.user.form.sendPasswordResetEmail',
+                'mapped' => false,
+                'required' => false,
+                'attr' => $sendPasswordAttributes,
             ])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $passwordField = $form->get('password');
-            if ($isNewUser || !empty($passwordField->get('plainPassword')->getData())) {
+            $sendPasswordResetEmail = ($form->get('sendPasswordResetEmail')->getData());
+            if ($sendPasswordResetEmail) {
                 $user->setPassword($this->userPasswordHasher->hashPassword(
                     $user,
-                    $passwordField->get('plainPassword')->getData()
+                    $tokenGenerator->generateToken()
                 ));
+            } else {
+                $passwordField = $form->get('password');
+                if ($isNewUser || !empty($passwordField->get('plainPassword')->getData())) {
+                    $user->setPassword($this->userPasswordHasher->hashPassword(
+                        $user,
+                        $passwordField->get('plainPassword')->getData()
+                    ));
+                }
             }
 
             $isActiveUser = false;
@@ -138,6 +164,29 @@ class UserController extends AbstractController
             }
 
             $entityManager->flush();
+
+            // Send reset email
+            if ($sendPasswordResetEmail) {
+                try {
+                    $passwordHelper->sendResetPasswordEmail($user, true);
+                } catch (ResetPasswordExceptionInterface $e) {
+                    $this->addFlash('error', $this->translator->trans(
+                        'administration.user.form.message.errorCreatingResetToken',
+                        ['%errorMessage%' => $e->getMessage()],
+                        'mosparo'
+                    ));
+
+                    return $this->redirectToRoute('administration_user_list');
+                } catch (TransportException $e) {
+                    $this->addFlash('error', $this->translator->trans(
+                        'administration.user.form.message.errorSendingResetEmail',
+                        ['%errorMessage%' => $e->getMessage()],
+                        'mosparo'
+                    ));
+
+                    return $this->redirectToRoute('administration_user_list');
+                }
+            }
 
             $session = $request->getSession();
             $session->getFlashBag()->add(
@@ -188,7 +237,7 @@ class UserController extends AbstractController
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'error',
+                    'success',
                     $this->translator->trans(
                         'administration.user.delete.message.successfullyDeleted',
                         ['%email%' => $user->getEmail()],

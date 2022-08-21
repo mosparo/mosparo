@@ -29,11 +29,16 @@
                         </h2>
 
                         {{ form_row(form.email) }}
+
                         {{ form_widget(form.password) }}
 
                         {% if not isNewUser %}
                             {{ form_help(form.password) }}
                         {% endif %}
+
+                        <div class="mt-3">
+                            {{ form_widget(form.sendPasswordResetEmail) }}
+                        </div>
 
                         <h4 class="mt-3">{{ 'administration.user.roles'|trans }}</h4>
                         {{ form_widget(form.isActiveUser) }}
@@ -58,4 +63,30 @@
         </div>
         {{ form_end(form) }}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function () {
+            $('#form_sendPasswordResetEmail').change(function () {
+                let isActive = $(this).is(':checked');
+                let passwordFields = $('#form_password_plainPassword_first, #form_password_plainPassword_second');
+
+                passwordFields.prop('disabled', isActive);
+
+                let isNewUser = {{ isNewUser|json_encode }};
+                if (isNewUser) {
+                    if (isActive) {
+                        passwordFields.prop('required', false);
+                        passwordFields.prev('label').removeClass('required');
+                    } else {
+                        passwordFields.prop('required', true);
+                        passwordFields.prev('label').addClass('required');
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}

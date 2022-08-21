@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Form\ResetPasswordRequestFormType;
 use Mosparo\Helper\MailHelper;
+use Mosparo\Helper\PasswordHelper;
 use Mosparo\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,8 +37,12 @@ class ResetPasswordController extends AbstractController
 
     protected TranslatorInterface $translator;
 
-    public function __construct(EntityManagerInterface $entityManager, ResetPasswordHelperInterface $resetPasswordHelper, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $translator)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ResetPasswordHelperInterface $resetPasswordHelper,
+        UserPasswordHasherInterface $userPasswordHasher,
+        TranslatorInterface $translator
+    ) {
         $this->entityManager = $entityManager;
         $this->resetPasswordHelper = $resetPasswordHelper;
         $this->userPasswordHasher = $userPasswordHasher;
@@ -49,7 +54,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="security_reset")
      */
-    public function request(Request $request, UserRepository $userRepository, MailerInterface $mailer, MailHelper $mailHelper): Response
+    public function request(Request $request, UserRepository $userRepository, PasswordHelper $passwordHelper): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
@@ -58,8 +63,7 @@ class ResetPasswordController extends AbstractController
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
                 $userRepository,
-                $mailer,
-                $mailHelper
+                $passwordHelper
             );
         }
 
@@ -159,7 +163,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, UserRepository $userRepository, MailerInterface $mailer, MailHelper $mailHelper): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, UserRepository $userRepository, PasswordHelper $passwordHelper): RedirectResponse
     {
         $user = $userRepository->findOneBy([
             'email' => $emailFormData,
@@ -171,26 +175,10 @@ class ResetPasswordController extends AbstractController
         }
 
         try {
-            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
+            $resetToken = $passwordHelper->sendResetPasswordEmail($user);
         } catch (ResetPasswordExceptionInterface $e) {
             return $this->redirectToRoute('security_check_email');
-        }
-
-        $email = (new TemplatedEmail())
-            ->to($user->getEmail())
-            ->subject($this->translator->trans('password.email.subject', [], 'mosparo'))
-            ->htmlTemplate('non_http/email/password/email.html.twig')
-            ->context([
-                'resetToken' => $resetToken,
-                'cssCode' => $mailHelper->getEmailCssCode(),
-            ]);
-
-        try {
-            $mailer->send($email);
         } catch (TransportException $e) {
-            // Remove the reset request again since the mail wasn't sent
-            $this->resetPasswordHelper->removeResetRequest($resetToken->getToken());
-
             $this->addFlash('reset_password_error', $this->translator->trans(
                 'password.request.message.failedToSendEmail',
                 ['%errorMessage%' => $e->getMessage()],

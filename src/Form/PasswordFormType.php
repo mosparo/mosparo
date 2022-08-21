@@ -21,30 +21,36 @@ class PasswordFormType extends AbstractType
                 new NotBlank([
                     'message' => 'password.form.constraint.notBlank',
                 ]),
-                new Length([
-                    'min' => 6,
-                    'minMessage' => 'password.form.constraint.length',
-                    // max length allowed by Symfony for security reasons
-                    'max' => 4096,
-                ]),
             ];
         }
 
+        $constraints[] = new Length([
+            'min' => 6,
+            'minMessage' => 'password.form.constraint.length',
+            // max length allowed by Symfony for security reasons
+            'max' => 4096,
+        ]);
+
         if ($options['is_new_password']) {
             $firstFieldLabel = 'password.form.newPassword';
+        }
+
+        $attributes = ['autocomplete' => 'new-password'];
+        if ($options['disabled'] ?? false) {
+            $attributes['disabled'] = 'disabled';
         }
 
         $builder
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    'attr' => ['autocomplete' => 'new-password'],
+                    'attr' => $attributes,
                     'constraints' => $constraints,
                     'label' => $firstFieldLabel,
                     'help' => $options['help'],
                 ],
                 'second_options' => [
-                    'attr' => ['autocomplete' => 'new-password'],
+                    'attr' => $attributes,
                     'label' => 'password.form.repeatPassword',
                 ],
                 'invalid_message' => 'password.form.constraint.passwordMustMatch',
