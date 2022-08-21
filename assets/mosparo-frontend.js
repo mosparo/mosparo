@@ -335,7 +335,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             if (fieldPath === 'input' || fieldPath === 'button') {
                 let type = el.getAttribute('type');
 
-                if (type === 'submit' || type === 'reset') {
+                if (type === 'submit' || type === 'reset' || type === 'button') {
                     return;
                 }
 
