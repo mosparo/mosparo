@@ -35,6 +35,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.countdownInterval = null;
     this.countdownSeconds = 0;
     this.isLocked = false;
+    this.checkedFormData = null;
 
     this.messages = {
         label: 'I agree that my data will be checked for spam. I accept that my data will be stored for 14 days.',
@@ -171,6 +172,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 });
             });
 
+            this.formElement.addEventListener('submit', function (ev) {
+                if (!_this.verifyCheckedFormData()) {
+                    ev.preventDefault();
+                }
+            });
+
             this.formElement.addEventListener('reset', function () {
                 _this.resetState();
                 _this.requestSubmitToken();
@@ -273,10 +280,13 @@ function mosparo(containerId, url, uuid, publicKey, options)
         this.containerElement.classList.add('mosparo__loading');
         this.updateAccessibleStatus(this.messages.accessibilityCheckingData);
 
+        let formData = JSON.stringify(this.getFormData());
         let data = {
-            formData: JSON.stringify(this.getFormData()),
+            formData: formData,
             submitToken: this.submitTokenElement.value
         };
+
+        this.checkedFormData = formData;
 
         this.send('/api/v1/frontend/check-form-data', data, function (response) {
             _this.containerElement.classList.remove('mosparo__loading');
@@ -316,6 +326,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
             _this.showError(_this.messages.errorInternalError);
         });
+    }
+
+    this.verifyCheckedFormData = function () {
+        let formData = JSON.stringify(this.getFormData());
+
+        return (this.checkedFormData === formData);
     }
 
     this.getFormData = function () {
