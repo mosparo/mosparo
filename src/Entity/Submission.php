@@ -12,6 +12,10 @@ use Mosparo\Verification\GeneralVerification;
  */
 class Submission implements ProjectRelatedEntityInterface
 {
+    const SUBMISSION_FIELD_NOT_VERIFIED = 'not-verified';
+    const SUBMISSION_FIELD_VALID = 'valid';
+    const SUBMISSION_FIELD_INVALID = 'invalid';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -58,6 +62,11 @@ class Submission implements ProjectRelatedEntityInterface
      * @ORM\Column(type="json")
      */
     private array $ignoredFields = [];
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private array $verifiedFields = [];
 
     /**
      * @ORM\Column(type="json")
@@ -199,6 +208,32 @@ class Submission implements ProjectRelatedEntityInterface
         $this->ignoredFields = $ignoredFields;
 
         return $this;
+    }
+
+    public function getVerifiedFields(): ?array
+    {
+        return $this->verifiedFields;
+    }
+
+    public function setVerifiedFields(array $verifiedFields): self
+    {
+        $this->verifiedFields = $verifiedFields;
+
+        return $this;
+    }
+
+    public function setVerifiedField(string $key, string $value)
+    {
+        $this->verifiedFields[$key] = $value;
+    }
+
+    public function getVerifiedField(string $key): string
+    {
+        if (!isset($this->verifiedFields[$key])) {
+            return self::SUBMISSION_FIELD_NOT_VERIFIED;
+        }
+
+        return $this->verifiedFields[$key];
     }
 
     public function getGeneralVerifications(): array

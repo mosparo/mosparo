@@ -317,6 +317,9 @@
     "spomky-labs/otphp": {
         "version": "v9.1.4"
     },
+    "symfony-bundles/json-request-bundle": {
+        "version": "4.1.2"
+    },
     "symfony/asset": {
         "version": "v4.4.20"
     },

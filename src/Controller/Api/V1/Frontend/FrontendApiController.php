@@ -235,7 +235,10 @@ class FrontendApiController extends AbstractController
         $entityManager->persist($submission);
         $entityManager->flush();
 
-        return new JsonResponse(['valid' => (!$submission->isSpam()), 'validationToken' => $submission->getValidationToken()]);
+        return new JsonResponse([
+            'valid' => (!$submission->isSpam()),
+            'validationToken' => $submission->getValidationToken(),
+        ]);
     }
 
     protected function createSignature(SubmitToken $submitToken, $formData, Project $activeProject): string

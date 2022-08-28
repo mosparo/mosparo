@@ -3,6 +3,7 @@
 namespace Mosparo\Subscriber;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Helper\ProjectHelper;
@@ -69,7 +70,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         $activeProject = null;
         $projectRepository = $this->entityManager->getRepository(Project::class);
 
-        if (strpos($activeRoute, 'frontend_api_') === 0 || strpos($activeRoute, 'verification_api_') === 0) {
+        if (strpos($activeRoute, 'frontend_api_') === 0) {
             if (!$request->request->has('publicKey')) {
                 $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No public key sent.']));
                 return;
@@ -80,6 +81,41 @@ class ProjectSubscriber implements EventSubscriberInterface
 
             if ($activeProject === null) {
                 $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No project available for the sent public key.']));
+                return;
+            }
+        } else if (strpos($activeRoute, 'verification_api_') === 0) {
+            if (!$request->headers->has('authorization') || empty($request->headers->get('authorization'))) {
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No authorization header found.']));
+                return;
+            }
+
+            $authorizationHeader = $request->headers->get('authorization');
+            if (strpos($authorizationHeader, 'Basic ') === 0) {
+                $authorizationHeader = substr($authorizationHeader, 6);
+            }
+
+            $authData = explode(':', base64_decode($authorizationHeader));
+            if (count($authData) !== 2) {
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Authorization header invalid.']));
+                return;
+            }
+
+            [$publicKey, $requestSignature] = $authData;
+
+            // Search the active project
+            $activeProject = $projectRepository->findOneBy(['publicKey' => $publicKey]);
+            if ($activeProject === null) {
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No project available for the sent public key.']));
+                return;
+            }
+
+            $apiEndpoint = $this->router->generate($activeRoute);
+            $requestData = $request->request->all();
+
+            // Verify the request signature
+            $requestHelper = new RequestHelper($publicKey, $activeProject->getPrivateKey());
+            if ($requestSignature !== $requestHelper->createHmacHash($apiEndpoint . $requestHelper->toJson($requestData))) {
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Request invalid.']));
                 return;
             }
         } else if ($this->security->getToken() && $this->security->isGranted('IS_AUTHENTICATED_FULLY')) {

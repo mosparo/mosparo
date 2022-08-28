@@ -205,7 +205,18 @@
                                                 {{ field.name }}
 
                                                 {% if field.type is defined and field.type == 'honeypot' %}
-                                                    <span class="badge bg-teal-lt">{{ 'submission.view.data.formData.honeypot'|trans }}</span>
+                                                    <span class="badge bg-azure-lt">{{ 'submission.view.data.formData.honeypot'|trans }}</span>
+                                                {% else %}
+                                                    {% set verifiedStatus = submission.getVerifiedField(field.name) %}
+                                                    {% if verifiedStatus == 'valid' %}
+                                                        <span class="badge bg-green-lt" title="{{ 'submission.view.data.formData.valid'|trans }}">
+                                                            <i class="ti ti-circle-check"></i>
+                                                        </span>
+                                                    {% elseif verifiedStatus == 'invalid' %}
+                                                        <span class="badge bg-red-lt">{{ 'submission.view.data.formData.invalid'|trans }}</span>
+                                                    {% else %}
+                                                        <span class="badge bg-purple-lt">{{ 'submission.view.data.formData.notVerified'|trans }}</span>
+                                                    {% endif %}
                                                 {% endif %}
                                             {% endif %}
                                         </h4>

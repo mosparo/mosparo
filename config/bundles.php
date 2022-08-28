@@ -18,4 +18,5 @@ return [
     Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
     Gracious\DoctrineEncryptionBundle\GraciousDoctrineEncryptionBundle::class => ['all' => true],
     Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],
+    SymfonyBundles\JsonRequestBundle\JsonRequestBundle::class => ['all' => true],
 ];

@@ -304,6 +304,9 @@ submission:
       formData:
         title: Formulardaten
         honeypot: Honeypot
+        valid: Verifizierung erfolgreich
+        invalid: Verifizierung fehlgeschlagen
+        notVerified: Nicht verifiziert
 
       client:
         title: Benutzer

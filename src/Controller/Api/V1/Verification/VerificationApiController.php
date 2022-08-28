@@ -4,8 +4,10 @@ namespace Mosparo\Controller\Api\V1\Verification;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\HmacSignatureHelper;
+use Mosparo\Helper\VerificationHelper;
 use Mosparo\Repository\SubmitTokenRepository;
 use Mosparo\Util\TimeUtil;
 use Mosparo\Verification\GeneralVerification;
@@ -24,10 +26,13 @@ class VerificationApiController extends AbstractController
 
     protected HmacSignatureHelper $hmacSignatureHelper;
 
-    public function __construct(ProjectHelper $projectHelper, HmacSignatureHelper $hmacSignatureHelper)
+    protected VerificationHelper $verificationHelper;
+
+    public function __construct(ProjectHelper $projectHelper, HmacSignatureHelper $hmacSignatureHelper, VerificationHelper $verificationHelper)
     {
         $this->projectHelper = $projectHelper;
         $this->hmacSignatureHelper = $hmacSignatureHelper;
+        $this->verificationHelper = $verificationHelper;
     }
 
     /**
@@ -81,18 +86,35 @@ class VerificationApiController extends AbstractController
         }
 
         $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
-        if ($request->request->get('validationSignature') !== $validationSignature || $request->request->get('formSignature') !== $submission->getSignature()) {
+        if ($request->request->get('validationSignature') !== $validationSignature) {
             $submission->setValid(false);
             $entityManager->flush();
 
             return new JsonResponse(['error' => true, 'errorMessage' => 'Validation failed.']);
         }
 
-        $verificationSignature = $this->hmacSignatureHelper->createSignature($validationSignature . $submission->getSignature(), $activeProject->getPrivateKey());
+        $formData = (array) $request->request->get('formData');
+        $verificationSignature = '';
+        $verificationResult = $this->verificationHelper->verifyFormData($submission, $formData);
+        if ($verificationResult['valid']) {
+            $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
+            $formSignature = $requestHelper->createFormDataHmacHash($formData);
 
-        $submission->setValid(true);
+            $validationSignature = $requestHelper->createHmacHash($submission->getValidationToken());
+            $verificationSignature = $requestHelper->createHmacHash($validationSignature . $formSignature);
+
+            $submission->setValid(true);
+        } else {
+            $submission->setValid(false);
+        }
+
         $entityManager->flush();
 
-        return new JsonResponse(['valid' => true, 'verificationSignature' => $verificationSignature]);
+        return new JsonResponse([
+            'valid' => $verificationResult['valid'],
+            'verificationSignature' => $verificationSignature,
+            'verifiedFields' => $verificationResult['verifiedFields'],
+            'issues' => $verificationResult['issues'],
+        ]);
     }
 }
