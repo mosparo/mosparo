@@ -6,6 +6,9 @@
     RewriteRule ^build(.*)$ public/build/$1 [L]
     RewriteRule ^bundles(.*)$ public/bundles/$1 [L]
 
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/index.php [QSA,L]
