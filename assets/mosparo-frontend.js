@@ -175,6 +175,9 @@ function mosparo(containerId, url, uuid, publicKey, options)
             this.formElement.addEventListener('submit', function (ev) {
                 if (!_this.verifyCheckedFormData()) {
                     ev.preventDefault();
+                    ev.stopImmediatePropagation();
+
+                    _this.resetState();
                 }
             });
 
