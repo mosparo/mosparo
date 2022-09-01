@@ -6,6 +6,8 @@
     RewriteRule ^build(.*)$ public/build/$1 [L]
     RewriteRule ^bundles(.*)$ public/bundles/$1 [L]
 
+    RewriteRule ^robots.txt$ public/robots.txt [L]
+
     RewriteCond %{HTTP:Authorization} ^(.*)
     RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 
