@@ -177,6 +177,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
 
+                    _this.formElement.dispatchEvent(new CustomEvent('submit-aborted', { bubbles: true }));
+
                     _this.resetState();
                 }
             });
@@ -401,6 +403,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
             this.containerElement.classList.remove('mosparo__invalid');
             this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         }
+
+        _this.formElement.dispatchEvent(new CustomEvent('state-reset'));
     }
 
     this.send = function (endpoint, data, callbackSuccess, callbackError) {
