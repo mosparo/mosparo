@@ -541,6 +541,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
     // Initialize the mosparo checkboxes
     this.init();
+
+    return this;
 }
 
 global.mosparo = mosparo;
