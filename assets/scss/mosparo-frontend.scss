@@ -288,8 +288,16 @@
 
     .mosparo__accessible-message {
         position: absolute;
-        top: -1000px;
-        left: -1000px;
+
+        margin: -10px;
+
+        height: 1px;
+        width: 1px;
+
+        overflow: hidden;
+
+        padding: 0;
+        border: 0;
     }
 }
 
