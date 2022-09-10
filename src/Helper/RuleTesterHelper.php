@@ -123,7 +123,19 @@ class RuleTesterHelper
 
             $ruleTester = $this->ruleTesters[$rule->getType()];
 
-            $result = $ruleTester->validateData($fieldData['name'], $fieldData['value'], $rule);
+            $value = $fieldData['value'];
+            if (is_array($value)) {
+                $result = [];
+                foreach ($value as $key => $subValue) {
+                    $subResult = $ruleTester->validateData($fieldData['name'], $subValue, $rule);
+
+                    if (count($subResult) > 0) {
+                        $result = array_merge($result, $subResult);
+                    }
+                }
+            } else {
+                $result = $ruleTester->validateData($fieldData['name'], $value, $rule);
+            }
 
             if (count($result) > 0) {
                 $issues = array_merge($issues, $result);

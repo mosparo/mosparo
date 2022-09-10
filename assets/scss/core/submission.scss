@@ -63,4 +63,20 @@
     code {
         display: inline-block;
     }
+
+    ul {
+        margin-bottom: 0;
+
+        li {
+            margin: 0.25rem 0;
+
+            &:first-child {
+                margin-top: 0;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
 }

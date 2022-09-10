@@ -351,7 +351,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
             }
 
             processedFields.push(name);
-            let fieldPath = el.tagName.toLowerCase();
+            let tagName = el.tagName.toLowerCase();
+            let fieldPath = tagName;
 
             if (fieldPath === 'input' || fieldPath === 'button') {
                 let type = el.getAttribute('type');
@@ -373,11 +374,41 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
             fieldPath += '.' + name;
 
-            fields.push({
-                name: name,
-                value: el.value,
-                fieldPath: fieldPath
+            let value = el.value;
+            if (name.indexOf('[]') === name.length - 2) {
+                name = name.substring(0, name.length - 2);
+                if (value === '') {
+                    value = [];
+                } else {
+                    value = [value];
+                }
+            }
+
+            if (tagName === 'select' && el.getAttribute('multiple') !== null) {
+                value = [];
+                el.querySelectorAll('option:checked').forEach(function (el) {
+                    value.push(el.value);
+                });
+            }
+
+            let fieldData = fields.find(function (element, index) {
+                if (element.name === name) {
+                    return true;
+                }
             });
+            if (fieldData === undefined) {
+                fields.push({
+                    name: name,
+                    value: value,
+                    fieldPath: fieldPath
+                });
+            } else {
+                if (typeof fieldData.value !== 'object') {
+                    fieldData.value = [fieldData.value];
+                }
+
+                fieldData.value = fieldData.value.concat(value);
+            }
         });
 
         // Add the ignored fields to the list of the ignored fields
@@ -429,6 +460,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
     }
 
     this.addHoneypotField = function (fieldName) {
+        if (this.hpFieldElement !== null) {
+            return;
+        }
+
         this.hpFieldElement = document.createElement('input');
         this.hpFieldElement.setAttribute('type', 'text');
         this.hpFieldElement.setAttribute('name', fieldName);
