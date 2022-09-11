@@ -45,6 +45,11 @@
             &.ip-as-organization {
                 order: 4;
             }
+
+            .badge {
+                max-width: 180px;
+                text-overflow: ellipsis;
+            }
         }
     }
 }
