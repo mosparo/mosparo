@@ -85,7 +85,7 @@
                     </p>
 
                     <div class="d-flex mb-3">
-                        <a href="{{ path('administration_geoip2_download') }}" class="btn btn-orange mx-auto {% if not isActive or not hasLicenseKey %}disabled{% endif %}">
+                        <a href="{{ path('administration_geoip2_download') }}" class="btn btn-secondary mx-auto {% if not isActive or not hasLicenseKey %}disabled{% endif %}">
                             <i class="ti ti-download"></i>
                             {{ 'administration.geoip2.downloadAndUpdate.web.action'|trans }}
                         </a>
