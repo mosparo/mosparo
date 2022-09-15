@@ -28,9 +28,9 @@ class StatisticApiController extends AbstractController
     }
 
     /**
-     * @Route("/daily", name="statistic_api_daily")
+     * @Route("/by-date", name="statistic_api_by_date")
      */
-    public function summary(Request $request, EntityManagerInterface $entityManager): Response
+    public function byDate(Request $request, EntityManagerInterface $entityManager): Response
     {
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {
@@ -71,17 +71,17 @@ class StatisticApiController extends AbstractController
         $submissions = $queryBuilder->getQuery()->getResult();
 
         // Collect the statistic data
-        $data = ['valid' => 0, 'spam' => 0, 'days' => []];
+        $data = ['numberOfValidSubmissions' => 0, 'numberOfSpamSubmissions' => 0, 'numbersByDate' => []];
         foreach ($submissions as $submission) {
-            $type = ($submission->isSpam() || !$submission->isValid()) ? 'spam' : 'valid';
+            $type = ($submission->isSpam() || !$submission->isValid()) ? 'numberOfSpamSubmissions' : 'numberOfValidSubmissions';
             $data[$type]++;
 
             $day = $submission->getSubmittedAt()->format('Y-m-d');
-            if (!isset($data['days'][$day])) {
-                $data['days'][$day] = ['valid' => 0, 'spam' => 0];
+            if (!isset($data['numbersByDate'][$day])) {
+                $data['numbersByDate'][$day] = ['numberOfValidSubmissions' => 0, 'numberOfSpamSubmissions' => 0];
             }
 
-            $data['days'][$day][$type]++;
+            $data['numbersByDate'][$day][$type]++;
         }
 
         return new JsonResponse(['result' => true, 'data' => $data]);
