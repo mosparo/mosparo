@@ -83,7 +83,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                 $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No project available for the sent public key.']));
                 return;
             }
-        } else if (strpos($activeRoute, 'verification_api_') === 0) {
+        } else if (strpos($activeRoute, 'verification_api_') === 0 || strpos($activeRoute, 'statistic_api_') === 0) {
             if (!$request->headers->has('authorization') || empty($request->headers->get('authorization'))) {
                 $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No authorization header found.']));
                 return;
@@ -110,7 +110,7 @@ class ProjectSubscriber implements EventSubscriberInterface
             }
 
             $apiEndpoint = $this->router->generate($activeRoute);
-            $requestData = $request->request->all();
+            $requestData = array_merge($request->query->all(), $request->request->all());
 
             // Verify the request signature
             $requestHelper = new RequestHelper($publicKey, $activeProject->getPrivateKey());

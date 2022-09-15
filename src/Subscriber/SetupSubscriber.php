@@ -89,7 +89,8 @@ class SetupSubscriber implements EventSubscriberInterface
                 'upgrade_execute',
                 'frontend_api_request_submit_token',
                 'frontend_api_check_form_data',
-                'verification_api_verify'
+                'verification_api_verify',
+                'statistic_api_daily',
             ];
             if (in_array($route, $noRedirectsRoutes)) {
                 return;
