@@ -28,7 +28,7 @@ class RulesetFormType extends AbstractType
             ->add('spamRatingFactor', NumberType::class, [
                 'label' => 'ruleset.form.spamRatingFactor',
                 'required' => false,
-
+                'help' => 'ruleset.form.spamRatingFactorHelp',
             ])
         ;
     }

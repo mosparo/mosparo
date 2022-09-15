@@ -85,6 +85,7 @@ rule:
       description: Description
       status: Status
       spamRatingFactor: Spam rating factor
+      spamRatingFactorHelp: With the spam rating factor you can define a factor which strengthens or weakens the entries of this rule. If the value is greater than 1.0, the entries are strengthened, if the value is less than 1.0, the entries are weakened.
 
     items:
       title: Items
@@ -216,6 +217,7 @@ ruleset:
     url: URL
     status: Status
     spamRatingFactor: Spam rating factor
+    spamRatingFactorHelp: With the spam rating factor you can define a factor that strengthens or weakens all rules of this ruleset. If the value is greater than 1.0, the rules will be strengthened, if the value is less than 1.0, the rules will be weakened.
 
     message:
       successfullySaved: The ruleset was saved successfully.

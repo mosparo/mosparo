@@ -32,9 +32,14 @@ class RuleFormType extends AbstractType
                 'disabled' => $readonly,
                 'attr' => [
                     'class' => 'form-select',
-                ]
+                ],
             ])
-            ->add('spamRatingFactor', NumberType::class, ['label' => 'rule.form.rule.spamRatingFactor', 'required' => false, 'disabled' => $readonly])
+            ->add('spamRatingFactor', NumberType::class, [
+                'label' => 'rule.form.rule.spamRatingFactor',
+                'required' => false,
+                'disabled' => $readonly,
+                'help' => 'rule.form.rule.spamRatingFactorHelp',
+            ])
             ->add('items', CollectionType::class, [
                 'allow_add' => true,
                 'allow_delete' => true,

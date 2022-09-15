@@ -85,6 +85,7 @@ rule:
       description: Beschreibung
       status: Status
       spamRatingFactor: Spam-Bewertungsfaktor
+      spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher die Einträge dieser Regel verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Einträge verstärkt, ist der Wert kleiner als 1.0, werden die Einträge abgeschwächt.
 
     items:
       title: Einträge
@@ -216,6 +217,7 @@ ruleset:
     url: URL
     status: Status
     spamRatingFactor: Spam-Bewertungsfaktor
+    spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher alle Regel dieses Regel-Paketes verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Regeln verstärkt, ist der Wert kleiner als 1.0, werden die Regeln abgeschwächt.
 
     message:
       successfullySaved: Das Regel-Paket wurde erfolgreich gespeichert.
