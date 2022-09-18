@@ -16,7 +16,7 @@
         "geoip2/geoip2": "~2.0",
         "gracious/doctrine-encryption-bundle": "dev-bugfix-migrations",
         "mlocati/ip-lib": "^1.16",
-        "mosparo/php-api-client": "dev-master",
+        "mosparo/php-api-client": "^1.0",
         "omines/datatables-bundle": "^0.5.4",
         "paragonie/sodium_compat": "^1.17",
         "phpdocumentor/reflection-docblock": "^5.2",
@@ -130,10 +130,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:mosparo/doctrine-encryption-bundle.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:mosparo/php-api-client.git"
         }
     ]
 }
