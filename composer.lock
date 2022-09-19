@@ -2775,16 +2775,16 @@
         },
         {
             "name": "mosparo/php-api-client",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mosparo/php-api-client.git",
-                "reference": "c05916111d853fc2883574bf47d459cc15636eb2"
+                "reference": "3d42ec994ba24df6d57add124760026d602a7055"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mosparo/php-api-client/zipball/c05916111d853fc2883574bf47d459cc15636eb2",
-                "reference": "c05916111d853fc2883574bf47d459cc15636eb2",
+                "url": "https://api.github.com/repos/mosparo/php-api-client/zipball/3d42ec994ba24df6d57add124760026d602a7055",
+                "reference": "3d42ec994ba24df6d57add124760026d602a7055",
                 "shasum": ""
             },
             "require": {
@@ -2822,9 +2822,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mosparo/php-api-client/issues",
-                "source": "https://github.com/mosparo/php-api-client/tree/v1.0.0"
+                "source": "https://github.com/mosparo/php-api-client/tree/v1.0.1"
             },
-            "time": "2022-09-18T08:26:18+00:00"
+            "time": "2022-09-19T05:24:39+00:00"
         },
         {
             "name": "myclabs/php-enum",
