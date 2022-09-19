@@ -82,11 +82,19 @@ blockquote {
 
 p.sub {
     font-size: 13px;
+    line-height: 16px;
+    margin: 0;
+    padding: 0 0 5px 0;
 }
 
 p:last-child {
     margin-bottom: 0;
 }
+
+tr:last-child > td > p.sub {
+    padding: 0;
+}
+
 /* Utilities ------------------------------ */
 
 .align-right {
