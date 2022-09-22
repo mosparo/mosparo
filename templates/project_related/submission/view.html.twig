@@ -192,6 +192,8 @@
                                             {% if groupKey == 'client' %}
                                                 {% if field.name == 'ipAddress' %}
                                                     {{ 'submission.view.data.client.ipAddress'|trans }}
+                                                {% elseif field.name == 'userAgent' %}
+                                                    {{ 'submission.view.data.client.userAgent'|trans }}
                                                 {% elseif field.name == 'asNumber' %}
                                                     {{ 'submission.view.data.client.asNumber'|trans }}
                                                 {% elseif field.name == 'asOrganization' %}

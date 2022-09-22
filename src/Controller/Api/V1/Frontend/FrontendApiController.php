@@ -161,6 +161,11 @@ class FrontendApiController extends AbstractController
                 'name' => 'ipAddress',
                 'value' => $request->getClientIp(),
                 'fieldPath' => 'ipAddress'
+            ],
+            [
+                'name' => 'userAgent',
+                'value' => $request->headers->get('User-Agent', null),
+                'fieldPath' => 'userAgent'
             ]
         ];
         $ipLocalization = $this->geoIp2Helper->locateIpAddress($request->getClientIp());

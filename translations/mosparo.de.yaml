@@ -158,6 +158,23 @@ rule:
         intro: Geben Sie ein ISO-Ländercode ein, welcher nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche diesem Ländercode zugeordnet werden, werden blockiert.
         infoCountryBlock: Wenn Sie ein Land zur Regel hinzufügen, bedeutet dass, dass niemand aus diesem Land eine Einsendung machen kann. Auf der einen Seite klingt das gut, auf der anderen Seite könnte diese Regel reale Benutzer davon abhalten, Einsendungen vorzunehmen. Bitte benutzen Sie diese Option vorsichtig. Die genaue Lokalisierung einer IP-Adresse ist nie garantiert.
 
+    userAgent:
+      title: User-Agent
+      shortIntro: Filtert nach Wörter und RegEx-Muster im User-Agent
+      intro: Der Word-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular Expression Pattern zu filtern.
+      placeholder: Wort/Muster
+
+      text:
+        title: Text
+        intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
+
+      regex:
+        title: Regular Expression
+        intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
+
+        validation:
+          invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
+
     website:
       title: Website
       shortIntro: Filtert nach URLs
@@ -313,6 +330,7 @@ submission:
       client:
         title: Benutzer
         ipAddress: IP-Adresse
+        userAgent: User-Agent
         asNumber: AS Nummer
         asOrganization: AS Organisation
         country: Land

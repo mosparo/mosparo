@@ -158,6 +158,23 @@ rule:
         intro: Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.
         infoCountryBlock: If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side it could mean that this will block a real user from submitting a form. Please be careful with this option. The correct localization of IP addresses is never guaranteed.
 
+    userAgent:
+      title: User agent
+      shortIntro: Allows to filter by specific words or patterns in the user agent
+      intro: The user agent rule type allows to filter for words and Regular Expression patterns in the user agent of the user.
+      placeholder: Word/Pattern
+
+      text:
+        title: Text
+        intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
+
+      regex:
+        title: Regular Expression
+        intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
+
+        validation:
+          invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
+
     website:
       title: Website
       shortIntro: Allows to filter by specific websites
@@ -313,6 +330,7 @@ submission:
       client:
         title: Client
         ipAddress: IP address
+        userAgent: User-Agent
         asNumber: AS number
         asOrganization: AS organization
         country: Country
