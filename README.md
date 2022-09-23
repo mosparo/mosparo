@@ -44,7 +44,7 @@ We have therefore defined our main objective: to collect only data that is neces
 
 ## Key features
 
-- mosparo only uses the data which the user has entered in the form and the IP address of the user but does not collect other data
+- mosparo only uses the data which the user has entered in the form, the IP address of the user and the user agent of the browser but does not collect other data
   - All user data are encrypted by default 
   - All collected data are deleted in a fixed time interval. All data will be deleted after 14 days (maybe 15 days because of cronjob execution and so on)
 - Usable for everybody: the mosparo spam protection method does not use puzzles or obscured images to protected the form.
