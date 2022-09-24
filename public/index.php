@@ -25,6 +25,11 @@ if (file_exists($mappingFile)) {
     }
 }
 
+// Add a special check to show a better error message in case an user forgot to copy hidden files
+if (!file_exists(__DIR__ . '/../.env')) {
+    die('.env file not found! Have you forgot to copy it?');
+}
+
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 return function (array $context) {
