@@ -85,7 +85,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         $rule = new Rule();
         $rule->setType($type);
 
-        $form = $this->createForm(RuleFormType::class, $rule, [ 'rule_type' => $ruleType ]);
+        $form = $this->createForm(RuleFormType::class, $rule, [ 'rule_type' => $ruleType, 'locale' => $request->getLocale() ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -127,7 +127,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
         $ruleType = $ruleTypeManager->getRuleType($rule->getType());
 
-        $form = $this->createForm(RuleFormType::class, $rule, [ 'rule_type' => $ruleType, 'readonly' => $readOnly ]);
+        $form = $this->createForm(RuleFormType::class, $rule, [ 'rule_type' => $ruleType, 'readonly' => $readOnly, 'locale' => $request->getLocale() ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$readOnly) {

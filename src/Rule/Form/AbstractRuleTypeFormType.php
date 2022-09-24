@@ -12,7 +12,8 @@ abstract class AbstractRuleTypeFormType extends AbstractType
     {
         $resolver->setDefaults([
             'rule_type' => null,
-            'data_class' => RuleItem::class
+            'data_class' => RuleItem::class,
+            'locale' => null,
         ]);
     }
 }

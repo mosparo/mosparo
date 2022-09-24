@@ -47,7 +47,7 @@
                         </button>
                     </div>
                     <div class="card-body rule-items">
-                        {{ form_widget(form.items) }}
+                        {{ form_widget(form.items, {'attr': {'allowAddMultiple': ruleType.allowAddMultiple }}) }}
                     </div>
                 </div>
             </div>

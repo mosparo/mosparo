@@ -4,7 +4,7 @@
 
 {% block collection_additional_add_button %}
     <div class="col-12 col-md">
-        {% if not form.vars.disabled %}
+        {% if not form.vars.disabled and attr.allowAddMultiple %}
             <button type="button" class="btn btn-secondary w-100 mb-2 m-md-0" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
                 <i class="ti ti-square-plus"></i>
                 {{ 'form.addMultipleItems'|trans }}
@@ -22,12 +22,15 @@
 {% block _rule_form_items_entry_errors %}
     <div class="error-container">
         {% for field in form %}
-            {% if 'rule-item-type' in field.vars.attr.class %}
-                {% set class = 'rule-item-type' %}
-            {% elseif 'rule-item-value' in field.vars.attr.class %}
-                {% set class = 'rule-item-value' %}
-            {% elseif 'rule-item-rating' in field.vars.attr.class %}
-                {% set class = 'rule-item-rating' %}
+            {% set class = '' %}
+            {% if field.vars.attr.class is defined %}
+                {% if 'rule-item-type' in field.vars.attr.class %}
+                    {% set class = 'rule-item-type' %}
+                {% elseif 'rule-item-value' in field.vars.attr.class %}
+                    {% set class = 'rule-item-value' %}
+                {% elseif 'rule-item-rating' in field.vars.attr.class %}
+                    {% set class = 'rule-item-rating' %}
+                {% endif %}
             {% endif %}
 
             <div class="form-field {{ class }}">

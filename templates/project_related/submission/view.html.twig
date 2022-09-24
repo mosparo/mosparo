@@ -186,6 +186,12 @@
                         <div class="card-body">
                             {% for field in groupData %}
                                 {% set path = groupKey ~ '.' ~ field.fieldPath %}
+                                {% set totalPoints = 0 %}
+                                {% if path in submission.matchedRuleItems|keys %}
+                                    {% for match in submission.matchedRuleItems[path] %}
+                                        {% set totalPoints = totalPoints + match.rating %}
+                                    {% endfor %}
+                                {% endif %}
                                 <div class="row submission-row">
                                     <div class="col-sm-12 col-md-8">
                                         <h4>
@@ -208,7 +214,7 @@
 
                                                 {% if field.type is defined and field.type == 'honeypot' %}
                                                     <span class="badge bg-azure-lt">{{ 'submission.view.data.formData.honeypot'|trans }}</span>
-                                                {% else %}
+                                                {% elseif not submission.valid is null %}
                                                     {% set verifiedStatus = submission.getVerifiedField(field.name) %}
                                                     {% if verifiedStatus == 'valid' %}
                                                         <span class="badge bg-green-lt" title="{{ 'submission.view.data.formData.valid'|trans }}">
@@ -219,6 +225,8 @@
                                                     {% else %}
                                                         <span class="badge bg-purple-lt">{{ 'submission.view.data.formData.notVerified'|trans }}</span>
                                                     {% endif %}
+                                                {% elseif totalPoints > 0 %}
+                                                    <span class="badge bg-red-lt">{{ 'submission.view.data.formData.hasPoints'|trans }}</span>
                                                 {% endif %}
                                             {% endif %}
                                         </h4>
@@ -237,12 +245,6 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-sm-12 col-md-4">
-                                        {% set totalPoints = 0 %}
-                                        {% if path in submission.matchedRuleItems|keys %}
-                                            {% for match in submission.matchedRuleItems[path] %}
-                                                {% set totalPoints = totalPoints + match.rating %}
-                                            {% endfor %}
-                                        {% endif %}
                                         <div class="row">
                                             <div class="col-12 text-end">
                                                 {% if totalPoints > 0 %}
@@ -273,7 +275,7 @@
                                                             <tbody>
                                                             {% for match in submission.matchedRuleItems[path] %}
                                                                 <tr>
-                                                                    <td>{{ match.value }}</td>
+                                                                    <td>{{ match.value|format_rule_value(match.uuid, app.request.locale) }}</td>
                                                                     <td class="text-center">
                                                                         {% if match.rating > 0 %}
                                                                             <span class="text-danger">

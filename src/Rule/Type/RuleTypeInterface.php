@@ -13,4 +13,6 @@ interface RuleTypeInterface
     public function getTesterClass(): string;
     public function getTargetFieldKeys(): array;
     public function getHelpTemplate(): string;
+    public function allowAddMultiple(): bool;
+    public function formatValue(string $value, string $locale = ''): string;
 }

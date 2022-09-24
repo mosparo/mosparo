@@ -21,6 +21,8 @@ class RuleFormType extends AbstractType
             return;
         }
 
+        $locale = $options['locale'] ?? null;
+
         $readonly = $options['readonly'];
 
         $builder
@@ -47,7 +49,8 @@ class RuleFormType extends AbstractType
                 'entry_type' => $ruleType->getFormClass(),
                 'by_reference' => false,
                 'entry_options' => [
-                    'rule_type' => $ruleType
+                    'rule_type' => $ruleType,
+                    'locale' => $locale,
                 ],
                 'disabled' => $readonly,
             ])
@@ -59,6 +62,7 @@ class RuleFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Rule::class,
             'rule_type' => null,
+            'locale' => null,
             'readonly' => false,
             'translation_domain' => 'mosparo',
         ]);

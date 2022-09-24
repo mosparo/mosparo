@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0621e9c1ca82773c8d1170c762fd340",
+    "content-hash": "23e3ca7174b221cc912014a9c4ff4577",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -10360,6 +10360,51 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "zepi/unicode",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zepi/unicode.git",
+                "reference": "2c6c0ed2d541f56e95fb52a0f824ebb744db5526"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zepi/unicode/zipball/2c6c0ed2d541f56e95fb52a0f824ebb744db5526",
+                "reference": "2c6c0ed2d541f56e95fb52a0f824ebb744db5526",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "zepi\\Unicode\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthias Zobrist",
+                    "homepage": "https://zepi.net"
+                }
+            ],
+            "description": "Unicode blocks with English and German names, as well as with the regex pattern.",
+            "keywords": [
+                "block",
+                "range",
+                "unicode"
+            ],
+            "support": {
+                "issues": "https://github.com/zepi/unicode/issues",
+                "source": "https://github.com/zepi/unicode/tree/v1.0.0"
+            },
+            "time": "2022-09-23T18:08:29+00:00"
         }
     ],
     "packages-dev": [

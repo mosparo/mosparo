@@ -158,6 +158,18 @@ rule:
         intro: Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.
         infoCountryBlock: If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side it could mean that this will block a real user from submitting a form. Please be careful with this option. The correct localization of IP addresses is never guaranteed.
 
+    unicodeBlock:
+      title: Unicode block
+      shortIntro: Filters the input based on the characters used.
+      intro: The Unicode block rule type allows to evaluate the use of certain characters.
+
+      block:
+        title: Block
+        intro: Please select one of the blocks which should be rated accordingly during input. Then enter a corresponding rating.
+        hintExtended: Please note that there are extensions and additions to some blocks, which must also be added as a rule entry.
+        explanationCounting: In the validation, each block is counted only once, even if several characters from one block were used.
+        exampleCounting: Suppose you enter a rule entry with the "Smileys" block with a rating of 3 points. In a submission, the user uses 5 smileys. The submission is now rated with 3 points because a smiley was used.
+
     userAgent:
       title: User agent
       shortIntro: Allows to filter by specific words or patterns in the user agent
@@ -326,6 +338,7 @@ submission:
         valid: Verification successful
         invalid: Verification failed
         notVerified: Not verified
+        hasPoints: Points
 
       client:
         title: Client

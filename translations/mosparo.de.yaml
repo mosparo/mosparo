@@ -158,10 +158,22 @@ rule:
         intro: Geben Sie ein ISO-Ländercode ein, welcher nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche diesem Ländercode zugeordnet werden, werden blockiert.
         infoCountryBlock: Wenn Sie ein Land zur Regel hinzufügen, bedeutet dass, dass niemand aus diesem Land eine Einsendung machen kann. Auf der einen Seite klingt das gut, auf der anderen Seite könnte diese Regel reale Benutzer davon abhalten, Einsendungen vorzunehmen. Bitte benutzen Sie diese Option vorsichtig. Die genaue Lokalisierung einer IP-Adresse ist nie garantiert.
 
+    unicodeBlock:
+      title: Unicode-Block
+      shortIntro: Filtert die Eingaben aufgrund der verwendeten Zeichen.
+      intro: Der Unicode-Block-Regeltyp erlaubt die Verwendung von bestimmten Zeichen zu bewerten.
+
+      block:
+        title: Block
+        intro: Bitte wählen Sie einen der Blöcke aus, welcher bei der Eingabe entsprechend bewertet werden soll. Geben Sie anschliessend eine entsprechende Bewertung ein.
+        hintExtended: Bitte beachten Sie, dass es bei einigen Blöcken Erweiterungen und Ergänzungen gibt, welche ebenfalls als Regel-Eintrag erfasst werden müssen.
+        explanationCounting: Bei der Auswertung wird jeder Block nur einmal gezählt, auch wenn mehrere Charakter aus einem Block verwendet wurden.
+        exampleCounting: Angenommen, Sie erfassen einen Regeleintrag mit dem Block "Smileys" mit einer Bewertung von 3 Punkten. In einer Einsendung werden nun 5 Smileys verwendet. Die Einsendung wird nun mit 3 Punkten bewertet weil ein Smiley verwendet wurde.
+
     userAgent:
       title: User-Agent
       shortIntro: Filtert nach Wörter und RegEx-Muster im User-Agent
-      intro: Der Word-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular Expression Pattern zu filtern.
+      intro: Der User-Agent-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular Expression Pattern zu filtern.
       placeholder: Wort/Muster
 
       text:
@@ -326,6 +338,7 @@ submission:
         valid: Verifizierung erfolgreich
         invalid: Verifizierung fehlgeschlagen
         notVerified: Nicht verifiziert
+        hasPoints: Punkte
 
       client:
         title: Benutzer

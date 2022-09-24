@@ -1,0 +1,19 @@
+{% trans_default_domain 'mosparo' %}
+
+<p>{{ 'rule.type.unicodeBlock.intro'|trans }}</p>
+
+<strong>{{ 'rule.type.unicodeBlock.block.title'|trans }}</strong>
+<p>
+    {{ 'rule.type.unicodeBlock.block.intro'|trans }}
+</p>
+<p>
+    {{ 'rule.type.unicodeBlock.block.hintExtended'|trans }}
+</p>
+<p>
+    {{ 'rule.type.unicodeBlock.block.explanationCounting'|trans }}
+</p>
+<p>
+    <u>{{ 'general.example'|trans }}:</u> {{ 'rule.type.unicodeBlock.block.exampleCounting'|trans }}
+</p>
+
+{% include 'project_related/rule/type/help/_rating.html.twig' %}

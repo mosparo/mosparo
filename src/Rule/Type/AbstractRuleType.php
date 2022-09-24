@@ -4,6 +4,16 @@ namespace Mosparo\Rule\Type;
 
 abstract class AbstractRuleType implements RuleTypeInterface
 {
+    protected string $key = '';
+    protected string $name = '';
+    protected string $description = '';
+    protected string $icon = '';
+    protected array $subtypes = [];
+    protected string $formClass = '';
+    protected string $testerClass = '';
+    protected array $targetFieldKeys = [];
+    protected bool $allowAddMultiple = true;
+
     public function getKey(): string
     {
         return $this->key;
@@ -47,5 +57,15 @@ abstract class AbstractRuleType implements RuleTypeInterface
     public function getHelpTemplate(): string
     {
         return $this->helpTemplate;
+    }
+
+    public function allowAddMultiple(): bool
+    {
+        return ($this->allowAddMultiple);
+    }
+
+    public function formatValue(string $value, string $locale = ''): string
+    {
+        return $value;
     }
 }

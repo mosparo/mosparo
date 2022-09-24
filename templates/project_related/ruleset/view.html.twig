@@ -149,7 +149,7 @@
                                 {% for item in rule.items %}
                                     <tr>
                                         <td>{{ rule_subtype(ruleType, item.type)|trans }}</td>
-                                        <td><code>{{ item.value }}</code></td>
+                                        <td><code>{{ item.value|format_rule_value(rule.uuid, app.request.locale) }}</code></td>
                                         <td>
                                             {% if item.spamRatingFactor %}
                                                 {{ item.spamRatingFactor }}
