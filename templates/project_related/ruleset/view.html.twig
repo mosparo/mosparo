@@ -85,7 +85,7 @@
         <h2 class="mt-3 mt-md-1">{{ 'ruleset.view.includedRules.title'|trans }}</h2>
 
         {% for rule in ruleset.rulesetCache.rules %}
-            <div class="row" id="{{ rule.uuid }}">
+            <div class="row mb-3" id="{{ rule.uuid }}">
                 <div class="col-12 col-lg-4">
                     <div class="card">
                         <div class="card-header">
@@ -164,15 +164,15 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row mt-3">
-                <div class="col-12 col-md-auto">
-                    <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
-                        <i class="ti ti-chevron-left"></i>
-                        {{ 'ruleset.backToList'|trans }}
-                    </a>
-                </div>
-            </div>
         {% endfor %}
+
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto">
+                <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'ruleset.backToList'|trans }}
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock %}
