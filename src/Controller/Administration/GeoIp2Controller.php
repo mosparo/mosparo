@@ -34,7 +34,7 @@ class GeoIp2Controller extends AbstractController
     /**
      * @Route("/", name="administration_geoip2_settings")
      */
-    public function settings(Request $request, EntityManagerInterface $entityManager): Response
+    public function settings(Request $request): Response
     {
         $config = [
             'geoipActive' => $this->configHelper->getEnvironmentConfigValue('geoipActive', false),
@@ -48,8 +48,6 @@ class GeoIp2Controller extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
             // Save the config value
             $licenseKey = $form->get('geoipLicenseKey')->getData();
             if ($licenseKey === null) {
