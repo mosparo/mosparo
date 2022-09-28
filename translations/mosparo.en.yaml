@@ -650,6 +650,44 @@ administration:
         infoAbsolutePath: You maybe have to adjust the path of the %pathToBinConsole% file. It could be possible that you have to fill in the absolute path.
         infoRateLimit: Please remember that the number of downloads a license key can make is limited. Please do not use the download functionality to often.
 
+  update:
+    title: Update
+    description: Check for new versions and update your mosparo installation.
+
+    updateChannel: Update channel
+    installedVersion: Installed version
+    availableVersion: Available version
+
+    check:
+      title: Status
+      intro: If you want to check for updates, please click on the button below.
+
+    version:
+      titleAvailable: Update available
+      messageAvailable: A new update for mosparo is available. Please click on the install button below if you would like to install the update.
+      warningUpdate: Please backup the mosparo files and the database before update. This automatic update process will not backup the files or the database. If something does not work correctly, it can destroy your mosparo installation.
+
+    execute:
+      title: Update mosparo
+      description: Please wait and don't leave this page. Update progress started...
+      log: Process
+
+    settings:
+      title: Update settings
+
+      form:
+        channelStable: Stable
+        channelDevelop: Develop
+
+      message:
+        infoDevelopChannel: The develop channel contains untested and unstable versions which are not ready for production use. Please use it not in a production environment.
+
+    buttons:
+      continue: Continue
+
+    finalize:
+      title: Update executed
+      description: The needed changes for this update were executed. Your installation is up to date.
 
 # Account
 account:
@@ -795,6 +833,8 @@ action:
   close: Close
   manage: Manage
   configure: Configure
+  checkForUpdate: Check for update
+  installUpdate: Install update
 
 # General values
 general:
@@ -908,12 +948,3 @@ setup:
   install:
     title: Installation completed
     description: The installation was successfully completed. You can now login with your user.
-
-# Upgrade
-upgrade:
-  buttons:
-    continue: Continue
-
-  executed:
-    title: Upgrade executed
-    description: The needed changes for this upgrade were executed. Your installation is up to date.

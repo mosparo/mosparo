@@ -28,6 +28,12 @@
                             {{ 'administration.geoip2.title'|trans }}
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ path('administration_update_overview') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_update_overview' %}active{% endif %}">
+                            <i class="ti ti-refresh"></i>
+                            {{ 'administration.update.title'|trans }}
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="col-12 col-lg-10">

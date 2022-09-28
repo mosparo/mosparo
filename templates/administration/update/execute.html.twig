@@ -1,0 +1,135 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.update.execute.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    <h2 class="card-title text-center mb-4">{{ 'administration.update.execute.title'|trans }}</h2>
+
+    <p>
+        {{ 'administration.update.execute.description'|trans }}
+    </p>
+
+    <div class="row mb-3">
+        <div class="col-6">
+            <h4 class="mb-0">
+                {{ 'administration.update.installedVersion'|trans }}
+            </h4>
+            <div>
+                {{ mosparoVersion }}
+            </div>
+        </div>
+        <div class="col-6">
+            <h4 class="mb-0">
+                {{ 'administration.update.availableVersion'|trans }}
+            </h4>
+            <div>
+                {{ availableUpdateData.version }}
+            </div>
+        </div>
+    </div>
+
+    <h4>{{ 'administration.update.execute.log'|trans }}</h4>
+    <div class="update-log">
+        <ul class="update-log-list">
+        </ul>
+    </div>
+
+    <div class="form-footer d-none">
+        <a href="{{ path('administration_update_finalize') }}" class="btn btn-primary w-100">
+            {{ 'setup.buttons.continue'|trans }}
+            <i class="ti ti-icon-right ti-chevron-right"></i>
+        </a>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var lastResponseText = '';
+
+        function extractNewMessage(responseText)
+        {
+            let newData = responseText.substring(lastResponseText.length).trim();
+
+            lastResponseText = responseText;
+
+            return newData.split("\n");
+        }
+
+        function markRunningAsCompleted(type)
+        {
+            let runningEl = $('.update-log-list .running');
+            let iconEl = runningEl.find('.update-loader');
+
+            runningEl.removeClass('running');
+            iconEl.removeClass('update-loader');
+
+            if (type === 'completed') {
+                runningEl.addClass('completed');
+                iconEl.addClass('ti ti-check');
+            } else if (type === 'error') {
+                runningEl.addClass('error');
+                iconEl.addClass('ti ti-x');
+            }
+        }
+
+        function processMessage(message)
+        {
+            message = JSON.parse(message);
+
+            if (message.inProgress) {
+                markRunningAsCompleted('completed');
+                let statusItem = $('<li></li>').addClass('running');
+
+                $('<i></i>').addClass('update-loader').appendTo(statusItem);
+                $('<div></div>').text(message.message).appendTo(statusItem);
+
+                $('.update-log-list').append(statusItem);
+            } else {
+                if (message.error) {
+                    markRunningAsCompleted('error');
+
+                    let statusItem = $('<li></li>').addClass('error').text(message.message);
+                    $('.update-log-list').append(statusItem);
+                } else {
+                    markRunningAsCompleted('completed');
+                    $('.form-footer').removeClass('d-none');
+                }
+            }
+        }
+
+        $.ajax({
+            url: '{{ path('administration_update_execute_update') }}',
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'GET',
+            dataType: "text",
+            beforeSend: function(jqXHR, settings) {
+                let that = this;
+                let xhr = settings.xhr;
+                settings.xhr = function() {
+                    var output = xhr();
+                    output.onreadystatechange = function() {
+                        if (typeof(that.readyStateChanged) == "function") {
+                            that.readyStateChanged(this);
+                        }
+                    };
+                    return output;
+                };
+            },
+            readyStateChanged: function(jqXHR) {
+                if (jqXHR.readyState == 3) {
+                    let newMessages = extractNewMessage(jqXHR.responseText);
+
+                    for (let index in newMessages) {
+                        processMessage(newMessages[index]);
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

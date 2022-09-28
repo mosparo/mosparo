@@ -144,7 +144,17 @@ services:
         arguments:
             $mosparoVersion: '%env(MOSPARO_VERSION)%'
 
-    Mosparo\Controller\UpgradeController:
-        class: Mosparo\Controller\UpgradeController
+    Mosparo\Command\UpdateMosparoCommand:
+        arguments:
+            $projectDirectory: '%kernel.project_dir%'
+
+    Mosparo\Helper\UpdateHelper:
+        arguments:
+            $projectDirectory: '%kernel.project_dir%'
+            $mosparoVersion: '%env(MOSPARO_VERSION)%'
+            $env: '%kernel.environment%'
+
+    Mosparo\Controller\Administration\UpdateController:
+        class: Mosparo\Controller\Administration\UpdateController
         arguments:
             $mosparoVersion: '%env(MOSPARO_VERSION)%'

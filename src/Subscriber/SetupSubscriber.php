@@ -58,7 +58,7 @@ class SetupSubscriber implements EventSubscriberInterface
         }
 
         if ($this->installed) {
-            $this->checkForUpgrade($event);
+            $this->checkForUpdate($event);
 
             return;
         }
@@ -72,9 +72,9 @@ class SetupSubscriber implements EventSubscriberInterface
         $event->setResponse(new RedirectResponse($this->router->generate('setup_start')));
     }
 
-    protected function checkForUpgrade(RequestEvent $event)
+    protected function checkForUpdate(RequestEvent $event)
     {
-        // If the two versions aren't the same, redirect to the upgrade controller
+        // If the two versions aren't the same, redirect to the update controller
         if ($this->mosparoVersion != $this->installedVersion) {
             $request = $event->getRequest();
             $route = $request->get('_route');
@@ -84,9 +84,10 @@ class SetupSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            // Do nothing if it is already the upgrade_execute request
+            // Do nothing if it is one of these predefined requests
             $noRedirectsRoutes = [
-                'upgrade_execute',
+                'administration_update_execute',
+                'administration_update_finalize',
                 'frontend_api_request_submit_token',
                 'frontend_api_check_form_data',
                 'verification_api_verify',
@@ -96,7 +97,7 @@ class SetupSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            $event->setResponse(new RedirectResponse($this->router->generate('upgrade_execute')));
+            $event->setResponse(new RedirectResponse($this->router->generate('administration_update_finalize')));
         }
     }
 }

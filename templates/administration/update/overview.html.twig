@@ -1,0 +1,129 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.update.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.update.title'|trans }}{% endblock %}
+
+{% block administrationPageBody %}
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            {% if checkedForUpdates %}
+                <div class="card mb-3">
+                    {% if isUpdateAvailable %}
+                        <div class="card-status-start bg-info"></div>
+                        <div class="card-header">
+                            <h3 class="card-title">{{ 'administration.update.version.titleAvailable'|trans }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ 'administration.update.version.messageAvailable'|trans }}</p>
+
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <h4 class="mb-0">
+                                        {{ 'administration.update.installedVersion'|trans }}
+                                    </h4>
+                                    <div>
+                                        {{ mosparoVersion }}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="mb-0">
+                                        {{ 'administration.update.availableVersion'|trans }}
+                                    </h4>
+                                    <div>
+                                        {{ availableUpdateData.version }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-danger">
+                                {{ 'administration.update.version.warningUpdate'|trans }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card-status-start bg-danger"></div>
+                        <div class="card-header">
+                            <h3 class="card-title">{{ 'administration.update.version.titleNotAvailable'|trans }}</h3>
+                        </div>
+                        <div class="card-body">
+                            {{ 'administration.update.version.messageNotAvailable'|trans }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% if isUpdateAvailable %}
+                    <div class="row mt-3 mb-3">
+                        <div class="col-12 col-md-auto ms-auto">
+                            <a href="{{ path('administration_update_execute') }}" class="btn btn-danger w-100">
+                                <i class="ti ti-refresh-dot"></i>
+                                {{ 'action.installUpdate'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.update.check.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'administration.update.check.intro'|trans }}
+                    </p>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="mb-0">
+                                {{ 'administration.update.updateChannel'|trans }}
+                            </h4>
+                            <div>
+                                {{ updateChannel|trans }}
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="mb-0">
+                                {{ 'administration.update.installedVersion'|trans }}
+                            </h4>
+                            <div>
+                                {{ mosparoVersion }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto ms-auto">
+                    <a href="{{ path('administration_update_check') }}" class="btn btn-primary w-100">
+                        <i class="ti ti-refresh-dot"></i>
+                        {{ 'action.checkForUpdate'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            {{ form_start(settingsForm) }}
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'administration.update.settings.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-warning">
+                            {{ 'administration.update.settings.message.infoDevelopChannel'|trans }}
+                        </div>
+
+                        {{ form_row(settingsForm.updateChannel) }}
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-auto ms-auto">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="ti ti-device-floppy"></i>
+                            {{ 'action.save'|trans }}
+                        </button>
+                    </div>
+                </div>
+            {{ form_end(settingsForm) }}
+        </div>
+    </div>
+{% endblock %}

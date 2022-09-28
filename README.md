@@ -59,7 +59,10 @@ We have therefore defined our main objective: to collect only data that is neces
   - `intl`
   - `json`
   - `pdo`
-  - `pdo_mysql` 
+  - `pdo_mysql`
+  - `openssl`
+  - `zip`
+  - `posix` *(optional)*
   - `sodium` *(optional)*
   - `Zend OPcache` *(optional)*
 

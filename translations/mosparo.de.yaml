@@ -650,6 +650,44 @@ administration:
         infoAbsolutePath: Sie müssen möglicherweise den Pfad zur Datei %pathToBinConsole% anpassen. Es ist möglich, dass Sie den absoluten Pfad eingeben müssen.
         infoRateLimit: Bitte denken Sie dran, dass die Anzahl Downloads, welche ein Lizenz-Schlüssel machen kann, limitiert ist. Bitte benützen Sie die Download-Funktion nicht zu oft.
 
+  update:
+    title: Update
+    description: Prüfen Sie, ob neue mosparo-Versionen verfügbar sind und Aktualisieren Sie Ihre mosparo-Installation.
+
+    updateChannel: Update-Kanal
+    installedVersion: Installierte Version
+    availableVersion: Verfügbare Version
+
+    check:
+      title: Status
+      intro: Wenn Sie prüfen möchten, ob eine neue Version verfügbar ist, klicken Sie bitte auf die Schaltfläche unten.
+
+    version:
+      titleAvailable: Update verfügbar
+      messageAvailable: Eine Update für mosparo ist verfügbar. Bitte klicken Sie auf die Installieren-Schaltfläche, wenn Sie dieses Update installieren möchten.
+      warningUpdate: Bitte erstellen Sie eine Backup der Dateien und der Datenbank von mosparo. Dieser automatische Update-Prozess erstellt kein Backup der Dateien oder der Datenbank. Wenn beim Update etwas nicht korrekt funktioniert, kann Ihre mosparo-Installation zerstört werden.
+
+    execute:
+      title: mosparo aktualisieren
+      description: Bitte warten Sie und verlassen Sie diese Seite nicht. Der Update-Prozess wurde gestartet...
+      log: Fortschritt
+
+    settings:
+      title: Update-Einstellungen
+
+      form:
+        channelStable: Stabil
+        channelDevelop: Entwicklung
+
+      message:
+        infoDevelopChannel: Der Entwicklungs-Kanal enthält ungetestet und instabile Versionen von mosparo, welche nicht für den produktiven Einsatz gedacht sind. Bitte verwenden Sie den Entwicklungs-Kanal nicht in einer produktiven Umgebung.
+
+    buttons:
+      continue: Weiter
+
+    finalize:
+      title: Update ausgeführt
+      description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
 
 # Account
 account:
@@ -794,6 +832,8 @@ action:
   close: Schliessen
   manage: Verwalten
   configure: Konfigurieren
+  checkForUpdate: Nach Updates suchen
+  installUpdate: Update installieren
 
 # General values
 general:
@@ -908,11 +948,3 @@ setup:
     title: Installation abgeschlossen
     description: Die Installation wurde erfolgreich abgeschlossen. Sie können sich nun mit Ihrem Benutzer einloggen.
 
-# Upgrade
-upgrade:
-  buttons:
-    continue: Weiter
-
-  executed:
-    title: Upgrade ausgeführt
-    description: Die notwendigen Änderungen für dieses Upgrade wurden ausgeführt. Ihre Installation ist aktuell.
