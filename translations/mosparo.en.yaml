@@ -662,6 +662,9 @@ administration:
       title: Status
       intro: If you want to check for updates, please click on the button below.
 
+      message:
+        errorCheckingForUpdates: 'An error occurred while checking for updates. Error: %errorMessage%'
+
     version:
       titleAvailable: Update available
       messageAvailable: A new update for mosparo is available. Please click on the install button below if you would like to install the update.

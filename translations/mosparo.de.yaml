@@ -662,6 +662,9 @@ administration:
       title: Status
       intro: Wenn Sie prüfen möchten, ob eine neue Version verfügbar ist, klicken Sie bitte auf die Schaltfläche unten.
 
+      message:
+        errorCheckingForUpdates: 'Beim Suchen nach Updates trat ein Fehler auf. Fehler: %errorMessage%'
+
     version:
       titleAvailable: Update verfügbar
       messageAvailable: Eine Update für mosparo ist verfügbar. Bitte klicken Sie auf die Installieren-Schaltfläche, wenn Sie dieses Update installieren möchten.

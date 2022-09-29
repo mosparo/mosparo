@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\Administration;
 
+use Mosparo\Exception;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Helper\UpdateHelper;
@@ -107,7 +108,18 @@ class UpdateController extends AbstractController
     public function check(Request $request): Response
     {
         $session = $request->getSession();
-        $this->updateHelper->checkForUpdates();
+
+        try {
+            $this->updateHelper->checkForUpdates();
+        } catch (Exception $e) {
+            $this->addFlash('error', $this->translator->trans(
+                'administration.update.check.message.errorCheckingForUpdates',
+                ['%errorMessage%' => $e->getMessage()],
+                'mosparo'
+            ));
+
+            return $this->redirectToRoute('administration_update_overview');
+        }
 
         $session->set('isUpdateAvailable', $this->updateHelper->isUpdateAvailable());
         $session->set('availableUpdateData', $this->updateHelper->getAvailableUpdateData());
