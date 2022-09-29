@@ -670,6 +670,9 @@ administration:
       messageAvailable: Eine Update für mosparo ist verfügbar. Bitte klicken Sie auf die Installieren-Schaltfläche, wenn Sie dieses Update installieren möchten.
       warningUpdate: Bitte erstellen Sie eine Backup der Dateien und der Datenbank von mosparo. Dieser automatische Update-Prozess erstellt kein Backup der Dateien oder der Datenbank. Wenn beim Update etwas nicht korrekt funktioniert, kann Ihre mosparo-Installation zerstört werden.
 
+      titleNotAvailable: Neuste Version
+      messageNotAvailable: Kein neues Update verfügbar. Sie verwenden bereits die neuste Version von mosparo.
+
     execute:
       title: mosparo aktualisieren
       description: Bitte warten Sie und verlassen Sie diese Seite nicht. Der Update-Prozess wurde gestartet...
