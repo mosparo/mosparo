@@ -58,7 +58,7 @@ class UpdateMosparoCommand extends Command
             if (!$helper->ask($input, $output, $question)) {
                 return Command::SUCCESS;
             }
-        } else {
+        } else if ($user === false) {
             // Backup in case ext-posix is not available
             $output->writeln('');
             $output->writeln('<fg=black;bg=red> This command cannot determine, if you\'re using the correct user to update mosparo. </>');
