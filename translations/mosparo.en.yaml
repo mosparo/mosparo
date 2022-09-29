@@ -678,6 +678,10 @@ administration:
       description: Please wait and don't leave this page. Update progress started...
       log: Process
 
+      message:
+        successfullyUpdated: mosparo was successfully updated. Please continue to the dashboard.
+        updateError: An error occurred while updating mosparo. Please check the error message below.
+
     settings:
       title: Update settings
 
@@ -687,6 +691,7 @@ administration:
 
       message:
         infoDevelopChannel: The develop channel contains untested and unstable versions which are not ready for production use. Please use it not in a production environment.
+        savedSuccessfully: The update channel was saved successfully.
 
     buttons:
       continue: Continue

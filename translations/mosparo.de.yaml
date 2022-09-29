@@ -678,6 +678,10 @@ administration:
       description: Bitte warten Sie und verlassen Sie diese Seite nicht. Der Update-Prozess wurde gestartet...
       log: Fortschritt
 
+      message:
+        successfullyUpdated: mosparo wurde erfolgreich aktualisiert. Klicken Sie auf die Schaltfläche unten um fortzufahren.
+        updateError: Beim Aktualisieren von mosparo trat ein Fehler auf. Bitte prüfen Sie die Fehlermeldung unterhalb.
+
     settings:
       title: Update-Einstellungen
 
@@ -687,6 +691,7 @@ administration:
 
       message:
         infoDevelopChannel: Der Entwicklungs-Kanal enthält ungetestet und instabile Versionen von mosparo, welche nicht für den produktiven Einsatz gedacht sind. Bitte verwenden Sie den Entwicklungs-Kanal nicht in einer produktiven Umgebung.
+        savedSuccessfully: Der Update-Kanal wurde erfolgreich gespeichert.
 
     buttons:
       continue: Weiter

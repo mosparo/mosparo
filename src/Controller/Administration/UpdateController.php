@@ -157,6 +157,10 @@ class UpdateController extends AbstractController
                 'completed' => $message->isCompleted(),
                 'message' => $message->getMessage(),
             ]) . PHP_EOL;
+
+            // Add 4kb of spaces to force the output buffer to clean
+            echo str_pad('', 4096, ' ');
+
             ob_flush();
             flush();
         });

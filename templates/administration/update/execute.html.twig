@@ -7,6 +7,37 @@
 {% block small_body %}
     <h2 class="card-title text-center mb-4">{{ 'administration.update.execute.title'|trans }}</h2>
 
+    <div class="alert alert-info update-alert alert-in-progress" role="alert">
+        <div class="d-flex align-items-center">
+            <div>
+                <i class="update-loader"></i>
+            </div>
+            <div>
+                {{ 'administration.update.execute.description'|trans }}
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-success update-alert alert-update-completed d-none" role="alert">
+        <div class="d-flex align-items-center">
+            <div>
+                <i class="ti ti-check icon alert-icon"></i>
+            </div>
+            <div>
+                {{ 'administration.update.execute.message.successfullyUpdated'|trans }}
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-danger update-alert alert-update-error d-none" role="alert">
+        <div class="d-flex align-items-center">
+            <div>
+                <i class="ti ti-x icon alert-icon"></i>
+            </div>
+            <div>
+                {{ 'administration.update.execute.message.updateError'|trans }}
+            </div>
+        </div>
+    </div>
+
     <p>
         {{ 'administration.update.execute.description'|trans }}
     </p>
@@ -76,6 +107,31 @@
             }
         }
 
+        /**
+         * alert-in-progress" role="alert">
+         <div class="d-flex align-items-center">
+         <div>
+         <i class="update-loader"></i>
+         </div>
+         <div>
+         {{ 'administration.update.execute.description'|trans }}
+         </div>
+         </div>
+         </div>
+         <div class="alert alert-success update-alert alert-update-completed d-none" role="alert">
+         <div class="d-flex align-items-center">
+         <div>
+         <i class="ti ti-check icon alert-icon"></i>
+         </div>
+         <div>
+         {{ 'administration.update.execute.message.successfullyUpdated'|trans }}
+         </div>
+         </div>
+         </div>
+         <div class="alert alert-danger update-alert alert-update-error
+         * @param message
+         */
+
         function processMessage(message)
         {
             message = JSON.parse(message);
@@ -94,9 +150,15 @@
 
                     let statusItem = $('<li></li>').addClass('error').text(message.message);
                     $('.update-log-list').append(statusItem);
+
+                    $('.alert-in-progress').addClass('d-none');
+                    $('.alert-update-error').removeClass('d-none');
                 } else {
                     markRunningAsCompleted('completed');
                     $('.form-footer').removeClass('d-none');
+
+                    $('.alert-in-progress').addClass('d-none');
+                    $('.alert-update-completed').removeClass('d-none');
                 }
             }
         }

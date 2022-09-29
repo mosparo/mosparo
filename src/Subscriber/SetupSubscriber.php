@@ -87,6 +87,7 @@ class SetupSubscriber implements EventSubscriberInterface
             // Do nothing if it is one of these predefined requests
             $noRedirectsRoutes = [
                 'administration_update_execute',
+                'administration_update_execute_update',
                 'administration_update_finalize',
                 'frontend_api_request_submit_token',
                 'frontend_api_check_form_data',
