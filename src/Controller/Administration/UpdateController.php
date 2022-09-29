@@ -150,6 +150,8 @@ class UpdateController extends AbstractController
      */
     public function executeUpdate(Request $request)
     {
+        ob_implicit_flush(true);
+
         $this->updateHelper->setOutputHandler(function (UpdateMessage $message) {
             echo json_encode([
                 'inProgress' => $message->isInProgress(),
