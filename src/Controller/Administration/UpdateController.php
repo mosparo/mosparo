@@ -11,15 +11,13 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -138,10 +136,14 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
+        [$temporaryLogFilePath, $temporaryLogFileUrl] = $this->updateHelper->defineTemporaryLogFile();
+        $session->set('temporaryLogFile', $temporaryLogFilePath);
+
         $availableUpdateData = $session->get('availableUpdateData', []);
         return $this->render('administration/update/execute.html.twig', [
             'mosparoVersion' => $this->mosparoVersion,
             'availableUpdateData' => $availableUpdateData,
+            'temporaryLogFileUrl' => $temporaryLogFileUrl,
         ]);
     }
 
@@ -150,53 +152,50 @@ class UpdateController extends AbstractController
      */
     public function executeUpdate(Request $request)
     {
-        ob_implicit_flush(true);
+        $session = $request->getSession();
+        if (!$session->has('isUpdateAvailable')) {
+            $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_ERROR, 'No update data found.'));
+            return new JsonResponse(['error' => true, 'errorMessage' => 'No update data found.']);
+        }
 
-        $this->updateHelper->setOutputHandler(function (UpdateMessage $message) {
-            echo json_encode([
-                'inProgress' => $message->isInProgress(),
-                'error' => $message->isError(),
-                'completed' => $message->isCompleted(),
-                'message' => $message->getMessage(),
-            ]) . PHP_EOL;
+        $versionData = $session->get('availableUpdateData');
 
-            // Add 4kb of spaces to force the output buffer to clean
-            echo str_pad('', 4096, ' ');
+        $temporaryLogFile = $session->get('temporaryLogFile', null);
+        if ($temporaryLogFile === null) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'No temporary log file defined.']);
+        }
 
-            ob_flush();
-            flush();
+        $this->updateHelper->setOutputHandler(function (UpdateMessage $message) use ($temporaryLogFile) {
+            $message = json_encode([
+                    'timestamp' => $message->getDateTime()->getTimestamp(),
+                    'inProgress' => $message->isInProgress(),
+                    'error' => $message->isError(),
+                    'completed' => $message->isCompleted(),
+                    'message' => $message->getMessage(),
+                ]) . PHP_EOL;
+
+            $flag = (file_exists($temporaryLogFile)) ? FILE_APPEND : 0;
+            file_put_contents($temporaryLogFile, $message, $flag);
         });
 
-        $response = new StreamedResponse();
-        $response->setCallback(function () use ($request) {
-            $session = $request->getSession();
-            if (!$session->has('isUpdateAvailable')) {
-                $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_ERROR, 'No update data found.'));
-                return;
-            }
+        try {
+            $result = $this->updateHelper->updateMosparo($versionData);
+        } catch (\Exception $e) {
+            $this->updateHelper->output(new UpdateMessage('error', UpdateMessage::STATUS_ERROR, $e->getMessage()));
+            return new JsonResponse(['error' => true, 'errorMessage' => $e->getMessage()]);
+        }
 
-            $versionData = $session->get('availableUpdateData');
+        if ($result) {
+            $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_COMPLETED, 'Completed'));
+        }
 
-            try {
-                $result = $this->updateHelper->updateMosparo($versionData);
-            } catch (\Exception $e) {
-                $this->updateHelper->output(new UpdateMessage('error', UpdateMessage::STATUS_ERROR, $e->getMessage()));
-                return;
-            }
-
-            if ($result) {
-                $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_COMPLETED, 'Completed'));
-            }
-        });
-
-        $response->headers->set('X-Accel-Buffering', 'no');
-        $response->send();
+        return new JsonResponse(['result' => true]);
     }
 
     /**
      * @Route("/finalize", name="administration_update_finalize")
      */
-    public function finalize(): Response
+    public function finalize(Request $request, Filesystem $filesystem): Response
     {
         // Prepare database and execute the migrations
         $application = new Application($this->kernel);
@@ -225,6 +224,12 @@ class UpdateController extends AbstractController
         $output = new BufferedOutput();
         $application->run($input, $output);
         $output->fetch();
+
+        // Remove the temporary log file
+        $session = $request->getSession();
+        if ($session->has('temporaryLogFile')) {
+            $filesystem->remove($session->get('temporaryLogFile'));
+        }
 
         return $this->render('administration/update/finalize.html.twig');
     }

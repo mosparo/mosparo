@@ -80,6 +80,24 @@
 
     <script type="text/javascript">
         var lastResponseText = '';
+        var lastMessageTimestamp = 0;
+        var isRunning = true;
+
+        function calculateCheckInterval()
+        {
+            let timestampNow = (new Date()).getTime() / 1000;
+            let diff = timestampNow - lastMessageTimestamp;
+
+            if (diff < 1) {
+                return 250;
+            } else if (diff < 2) {
+                return 500;
+            } else if (diff < 5) {
+                return 1000;
+            } else {
+                return 2000;
+            }
+        }
 
         function extractNewMessage(responseText)
         {
@@ -107,34 +125,14 @@
             }
         }
 
-        /**
-         * alert-in-progress" role="alert">
-         <div class="d-flex align-items-center">
-         <div>
-         <i class="update-loader"></i>
-         </div>
-         <div>
-         {{ 'administration.update.execute.description'|trans }}
-         </div>
-         </div>
-         </div>
-         <div class="alert alert-success update-alert alert-update-completed d-none" role="alert">
-         <div class="d-flex align-items-center">
-         <div>
-         <i class="ti ti-check icon alert-icon"></i>
-         </div>
-         <div>
-         {{ 'administration.update.execute.message.successfullyUpdated'|trans }}
-         </div>
-         </div>
-         </div>
-         <div class="alert alert-danger update-alert alert-update-error
-         * @param message
-         */
-
         function processMessage(message)
         {
+            if (message.trim() === '') {
+                return;
+            }
             message = JSON.parse(message);
+
+            lastMessageTimestamp = message.timestamp;
 
             if (message.inProgress) {
                 markRunningAsCompleted('completed');
@@ -145,6 +143,8 @@
 
                 $('.update-log-list').append(statusItem);
             } else {
+                isRunning = false;
+
                 if (message.error) {
                     markRunningAsCompleted('error');
 
@@ -163,34 +163,34 @@
             }
         }
 
-        $.ajax({
-            url: '{{ path('administration_update_execute_update') }}',
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: 'GET',
-            dataType: "text",
-            beforeSend: function(jqXHR, settings) {
-                let that = this;
-                let xhr = settings.xhr;
-                settings.xhr = function() {
-                    var output = xhr();
-                    output.onreadystatechange = function() {
-                        if (typeof(that.readyStateChanged) == "function") {
-                            that.readyStateChanged(this);
-                        }
-                    };
-                    return output;
-                };
-            },
-            readyStateChanged: function(jqXHR) {
-                if (jqXHR.readyState == 3) {
-                    let newMessages = extractNewMessage(jqXHR.responseText);
+        function checkLogFile()
+        {
+            $.get('{{ temporaryLogFileUrl }}', function (responseText) {
+                let newMessages = extractNewMessage(responseText);
 
-                    for (let index in newMessages) {
-                        processMessage(newMessages[index]);
-                    }
+                for (let index in newMessages) {
+                    processMessage(newMessages[index]);
                 }
+
+                if (isRunning) {
+                    setTimeout(checkLogFile, calculateCheckInterval());
+                }
+            });
+        }
+
+        setTimeout(checkLogFile, 250);
+
+        $.get('{{ path('administration_update_execute_update') }}', function (response) {
+            if (typeof response.error !== 'undefined' && response.error) {
+                isRunning = false;
+
+                markRunningAsCompleted('error');
+
+                let statusItem = $('<li></li>').addClass('error').text(response.errorMessage);
+                $('.update-log-list').append(statusItem);
+
+                $('.alert-in-progress').addClass('d-none');
+                $('.alert-update-error').removeClass('d-none');
             }
         });
     </script>

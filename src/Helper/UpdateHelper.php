@@ -138,6 +138,38 @@ class UpdateHelper
     }
 
     /**
+     * Defines and creates the directory for the update log file
+     *
+     * @return string
+     */
+    public function getUpdateLogFileDirectory(): string
+    {
+        $directory = $this->projectDirectory . '/public/update-log';
+        if (!$this->fileSystem->exists($directory)) {
+            $this->fileSystem->mkdir($directory);
+        }
+
+        return $directory;
+    }
+
+    /**
+     * Returns an array with the path and the absolute URI to the
+     * temporary log file.
+     *
+     * @return array
+     */
+    public function defineTemporaryLogFile(): array
+    {
+        $directory = $this->getUpdateLogFileDirectory();
+        $fileName = '/update-log-' . uniqid() . '.txt';
+        $filePath = $directory . $fileName;
+
+        $fileUrl = '/update-log' . $fileName;
+
+        return [$filePath, $fileUrl];
+    }
+
+    /**
      * Downloads the latest version data from the mosparo update site and determines, if there is an update
      * available for this mosparo installation
      *
@@ -613,7 +645,7 @@ class UpdateHelper
                 'path' => '/public',
                 'exclude' => [
                     '/public/build',
-                    '/public/bundles'
+                    '/public/bundles',
                 ],
             ],
         ];
