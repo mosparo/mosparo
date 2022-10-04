@@ -187,9 +187,11 @@ class UpdateController extends AbstractController
 
         if ($result) {
             $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_COMPLETED, 'Completed'));
+
+            return new JsonResponse(['result' => true]);
         }
 
-        return new JsonResponse(['result' => true]);
+        return new JsonResponse(['error' => true, 'errorMessage' => 'An unknown error occurred.']);
     }
 
     /**

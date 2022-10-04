@@ -6,6 +6,7 @@
 /config/env.mosparo.php
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/public/update-log/
 /var/
 !/var/data/geoip2/.gitkeep
 /vendor/

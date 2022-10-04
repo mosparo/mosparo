@@ -735,11 +735,17 @@ class UpdateHelper
     protected function executeChanges(array $changes)
     {
         clearstatcache();
+        $opcacheEnabled = function_exists('opcache_is_script_cached');
 
         foreach ($changes as $change) {
             $type = $change['mode'];
             $sourcePath = $change['source'];
             $destinationPath = $change['destination'];
+
+            // If opcache is available, invalidate the cache for file we will copy or remove
+            if ($opcacheEnabled && opcache_is_script_cached($destinationPath)) {
+                opcache_invalidate($destinationPath, true);
+            }
 
             if ($type === self::FILE_COPY) {
                 if (!$this->fileSystem->exists(dirname($destinationPath))) {
@@ -799,6 +805,10 @@ class UpdateHelper
      */
     protected function cleanup(string $filePath, string $sourcePath)
     {
-        $this->fileSystem->remove([$filePath, $sourcePath]);
+        $this->fileSystem->remove([
+            $filePath,
+            $sourcePath,
+            $this->projectDirectory . '/var/cache/' . $this->env . '/',
+        ]);
     }
 }
