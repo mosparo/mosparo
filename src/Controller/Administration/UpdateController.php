@@ -186,6 +186,19 @@ class UpdateController extends AbstractController
         }
 
         if ($result) {
+            // Clear the cache after the upgrade
+            $input = new ArrayInput(array(
+                'command' => 'cache:clear',
+                '-n'
+            ));
+
+            $application = new Application($this->kernel);
+            $application->setAutoExit(false);
+
+            $output = new BufferedOutput();
+            $application->run($input, $output);
+            $output->fetch();
+
             $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_COMPLETED, 'Completed'));
 
             return new JsonResponse(['result' => true]);

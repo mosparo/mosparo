@@ -161,7 +161,7 @@ class UpdateHelper
     public function defineTemporaryLogFile(): array
     {
         $directory = $this->getUpdateLogFileDirectory();
-        $fileName = '/update-log-' . uniqid() . '.txt';
+        $fileName = '/update-log-' . uniqid() . '.html';
         $filePath = $directory . $fileName;
 
         $fileUrl = '/update-log' . $fileName;
@@ -808,7 +808,6 @@ class UpdateHelper
         $this->fileSystem->remove([
             $filePath,
             $sourcePath,
-            $this->projectDirectory . '/var/cache/' . $this->env . '/',
         ]);
     }
 }
