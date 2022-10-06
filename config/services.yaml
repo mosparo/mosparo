@@ -140,7 +140,6 @@ services:
             $projectDirectory: '%kernel.project_dir%'
 
     Mosparo\Controller\SetupController:
-        class: Mosparo\Controller\SetupController
         arguments:
             $mosparoVersion: '%env(MOSPARO_VERSION)%'
 
@@ -155,6 +154,10 @@ services:
             $env: '%kernel.environment%'
 
     Mosparo\Controller\Administration\UpdateController:
-        class: Mosparo\Controller\Administration\UpdateController
         arguments:
             $mosparoVersion: '%env(MOSPARO_VERSION)%'
+
+    Mosparo\Controller\Administration\SystemController:
+        arguments:
+            $mosparoVersion: '%env(MOSPARO_VERSION)%'
+            $projectDirectory: '%kernel.project_dir%'

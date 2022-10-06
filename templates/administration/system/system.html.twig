@@ -1,0 +1,275 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.system.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.system.title'|trans }}{% endblock %}
+
+{% block administrationPageBody %}
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.system.general.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-5">
+                            <h4 class="mb-0">
+                                {{ 'administration.system.general.mosparoVersion'|trans }}
+                            </h4>
+                        </div>
+                        <div class="col-7">
+                            {{ mosparoVersion }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5">
+                            <h4 class="mb-0">
+                                {{ 'administration.system.general.serverInfo'|trans }}
+                            </h4>
+                        </div>
+                        <div class="col-7">
+                            {{ serverInfo }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5">
+                            <h4 class="mb-0">
+                                {{ 'administration.system.general.phpVersion'|trans }}
+                            </h4>
+                        </div>
+                        <div class="col-7">
+                            {{ phpVersion }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <h4 class="mb-0">
+                                {{ 'administration.system.general.extensions'|trans }}
+                            </h4>
+                        </div>
+                        <div class="col-7">
+                            {% for extension, versionNumber in extensionsData %}
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>{{ extension }}</strong>
+                                    </div>
+                                    <div class="col">
+                                        {{ versionNumber }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.system.license.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <pre>{{ licenseContent|raw }}</pre>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.system.logo.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'administration.system.logo.intro'|trans }}
+                    </p>
+                    <p>
+                        {{ 'administration.system.logo.license'|trans({'%linkStart%': '<a rel="license" href="http://creativecommons.org/licenses/by-nd/4.0/" target="_blank">', '%linkEnd%': '</a>'})|raw }}
+                    </p>
+                    <pre>Copyright 2021 - 2022 Jan Kosa</pre>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.system.projectMembers.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'administration.system.projectMembers.intro'|trans }}
+                    </p>
+
+                    <ul>
+                        <li class="py-1">
+                            Jan Kosa
+                            <span class="badge bg-green-lt ms-2">Designer</span>
+                            <a href="https://jankosa.com/" target="_blank" class="badge bg-blue-lt">{{ 'administration.system.website'|trans }}</a>
+                        </li>
+                        <li class="py-1">
+                            Marc Brühwiler
+                            <span class="badge bg-green-lt">Project Management / Project Lead</span>
+                        </li>
+                        <li class="py-1">
+                            Matthias Zobrist
+                            <span class="badge bg-green-lt ms-2">Main Developer / Project Lead</span>
+                            <a href="https://zepi.net/" target="_blank" class="badge bg-blue-lt">{{ 'administration.system.website'|trans }}</a>
+                        </li>
+                    </ul>
+
+                    <!-- Want to be listed here? If you help make mosparo better in example with bug fixes or new features, we will probably list you here. We're looking forward to your pull request. -->
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.system.usedLibrariesAndResources.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'administration.system.usedLibrariesAndResources.intro'|trans }}
+                    </p>
+
+                    <h4>{{ 'administration.system.usedLibrariesAndResources.frontend'|trans }}</h4>
+                    <ul>
+                        <li class="py-1">
+                            apexcharts
+                            <a href="https://apexcharts.com/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/apexcharts/apexcharts.js/blob/main/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            color-blend
+                            <a href="https://github.com/Loilo/color-blend" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/loilo/color-blend/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            core-js
+                            <a href="https://github.com/zloirock/core-js" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/zloirock/core-js/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            DataTables and extensions
+                            <a href="https://datatables.net/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://datatables.net/license/mit" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            jQuery
+                            <a href="https://jquery.com/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://jquery.org/license/#source-codes" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            SASS
+                            <a href="https://sass-lang.com/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/sass/dart-sass/blob/main/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            spectrum-colorpicker
+                            <a href="http://bgrins.github.io/spectrum/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/bgrins/spectrum/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            stimulus
+                            <a href="https://stimulus.hotwired.dev/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/hotwired/stimulus/blob/main/LICENSE.md" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            Tabler
+                            <a href="https://tabler.io" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/tabler/tabler/blob/dev/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            Tabler Icons
+                            <a href="https://tabler-icons.io" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/tabler/tabler-icons/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            tinycolor2
+                            <a href="https://github.com/bgrins/TinyColor" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/bgrins/TinyColor/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            unDraw
+                            <a href="https://undraw.co" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://undraw.co/license" target="_blank" class="badge bg-purple-lt">{{ 'administration.system.usedLibrariesAndResources.license'|trans }}</a>
+                        </li>
+                        <li class="py-1">
+                            webpack and extensions
+                            <a href="https://webpack.js.org/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/webpack/webpack/blob/main/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                    </ul>
+
+                    <h4>{{ 'administration.system.usedLibrariesAndResources.backend'|trans }}</h4>
+                    <ul>
+                        <li class="py-1">
+                            Doctrine and extensions
+                            <a href="https://www.doctrine-project.org/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/doctrine/orm/blob/2.13.x/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            geoip2/geoip2
+                            <a href="https://github.com/maxmind/GeoIP2-php" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/maxmind/GeoIP2-php/blob/main/LICENSE" target="_blank" class="badge bg-purple-lt">Apache-2.0</a>
+                        </li>
+                        <li class="py-1">
+                            gracious/doctrine-encryption-bundle
+                            <a href="https://github.com/graciousagency/doctrine-encryption-bundle" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/graciousagency/doctrine-encryption-bundle/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            mlocati/ip-lib
+                            <a href="https://github.com/mlocati/ip-lib" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/mlocati/ip-lib/blob/master/LICENSE.txt" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            omines/datatables-bundle
+                            <a href="https://github.com/omines/datatables-bundle" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/omines/datatables-bundle/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            paragonie/sodium_compat
+                            <a href="https://github.com/paragonie/sodium_compat" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/paragonie/sodium_compat/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">ISC</a>
+                        </li>
+                        <li class="py-1">
+                            phpdocumentor/reflection-docblock
+                            <a href="https://github.com/phpDocumentor/ReflectionDocBlock" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/phpDocumentor/ReflectionDocBlock/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            rkrx/wildcards
+                            <a href="https://github.com/rkrx/php-wildcards" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/rkrx/php-wildcards/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            scheb/2fa-bundle and extensions
+                            <a href="https://github.com/scheb/2fa-bundle" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/scheb/2fa-bundle/blob/6.x/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            Symfony and extensions
+                            <a href="https://symfony.com/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://symfony.com/doc/current/contributing/code/license.html" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            symfonycasts/reset-password-bundle
+                            <a href="https://github.com/symfonycasts/reset-password-bundle" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/SymfonyCasts/reset-password-bundle/blob/main/LICENSE.md" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            tronovav/geoip2-update
+                            <a href="https://github.com/tronovav/geoip2-update" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/tronovav/geoip2-update/blob/main/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                        <li class="py-1">
+                            Twig and extensions
+                            <a href="https://twig.symfony.com/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://twig.symfony.com/license" target="_blank" class="badge bg-purple-lt">BSD-3-Clause</a>
+                        </li>
+                        <li class="py-1">
+                            zepi/unicode ;)
+                            <a href="https://github.com/zepi/unicode" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://github.com/zepi/unicode/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

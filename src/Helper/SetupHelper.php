@@ -128,4 +128,19 @@ class SetupHelper
 
         return true;
     }
+
+    public function getExtensionsData(): array
+    {
+        $data = [];
+        foreach ($this->prerequisites['phpExtensions'] as $extension => $isRequired) {
+            $versionNumber = phpversion($extension);
+            if (!$versionNumber) {
+                $versionNumber = null;
+            }
+
+            $data[$extension] = $versionNumber;
+        }
+
+        return $data;
+    }
 }

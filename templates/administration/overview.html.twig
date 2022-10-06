@@ -92,6 +92,27 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="empty">
+                        <div class="empty-img">
+                            <a href="{{ path('administration_system') }}">
+                                <img src="{{ asset('build/images/icons/system.svg') }}" height="128" alt="" />
+                            </a>
+                        </div>
+                        <p class="empty-title">{{ 'administration.system.title'|trans }}</p>
+                        <p class="empty-subtitle text-muted">
+                            {{ 'administration.system.description'|trans }}
+                        </p>
+                        <div class="empty-action">
+                            <a href="{{ path('administration_system') }}" class="btn btn-primary">
+                                <i class="ti ti-info-circle"></i>
+                                {{ 'action.view'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

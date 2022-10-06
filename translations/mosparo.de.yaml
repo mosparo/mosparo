@@ -700,6 +700,38 @@ administration:
       title: Update ausgeführt
       description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
 
+  system:
+    title: System-Informationen
+    description: Alle Informationen über mosparo.
+
+    general:
+      title: Generell
+      mosparoVersion: mosparo Version
+      serverInfo: Server
+      phpVersion: PHP-Version
+      extensions: Erweiterungen
+
+    logo:
+      title: Logo
+      intro: Das Logo wurde von Jan Kosa gestaltet.
+      license: Das Logo ist lizenziert unter einer %linkStart%Creative Commons Namensnennung - Keine Bearbeitung 4.0 International Lizenz%linkEnd%.
+
+    license:
+      title: Lizenz mosparo
+
+    projectMembers:
+      title: Projekt-Mitglieder
+      intro: Diese Personen haben mosparo zu dem gemacht, was es ist - eine installierte Software auf Ihrem Web-Hosting.
+
+    usedLibrariesAndResources:
+      title: Verwendete Libraries und Ressourcen
+      intro: Wir möchten allen Open Source Entwickler:in für ihre unglaubliche Arbeit danken.
+      frontend: Frontend / Visuell
+      backend: Backend / PHP-Libraries
+      license: Lizenz
+
+    website: Website
+
 # Account
 account:
   title: Account

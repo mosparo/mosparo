@@ -34,6 +34,12 @@
                             {{ 'administration.update.title'|trans }}
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ path('administration_system') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_system' %}active{% endif %}">
+                            <i class="ti ti-info-circle"></i>
+                            {{ 'administration.system.title'|trans }}
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="col-12 col-lg-10">
