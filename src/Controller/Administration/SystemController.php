@@ -33,7 +33,7 @@ class SystemController extends AbstractController
     /**
      * @Route("/", name="administration_system")
      */
-    public function settings(Request $request): Response
+    public function systemOverview(Request $request): Response
     {
         return $this->render('administration/system/system.html.twig', [
             'mosparoVersion' => $this->mosparoVersion,
