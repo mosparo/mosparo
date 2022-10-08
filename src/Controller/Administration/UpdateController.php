@@ -37,7 +37,9 @@ class UpdateController extends AbstractController
 
     protected string $mosparoVersion;
 
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, UpdateHelper $updateHelper, ConfigHelper $configHelper, TranslatorInterface $translator, string $mosparoVersion)
+    protected bool $updatesEnabled;
+
+    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, UpdateHelper $updateHelper, ConfigHelper $configHelper, TranslatorInterface $translator, string $mosparoVersion, bool $updatesEnabled)
     {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
@@ -45,6 +47,7 @@ class UpdateController extends AbstractController
         $this->configHelper = $configHelper;
         $this->translator = $translator;
         $this->mosparoVersion = $mosparoVersion;
+        $this->updatesEnabled = $updatesEnabled;
     }
 
     /**
@@ -60,12 +63,23 @@ class UpdateController extends AbstractController
             'administration.update.settings.form.channelStable' => 'stable',
             'administration.update.settings.form.channelDevelop' => 'develop',
         ];
+        $attr = [
+            'class' => 'form-select',
+        ];
+        if (!$this->updatesEnabled) {
+            $attr['disabled'] = 'disabled';
+        }
         $settingsForm = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
-            ->add('updateChannel', ChoiceType::class, ['label' => 'administration.update.updateChannel', 'required' => true, 'choices' => $channels, 'attr' => ['class' => 'form-select']])
+            ->add('updateChannel', ChoiceType::class, [
+                'label' => 'administration.update.updateChannel',
+                'required' => true,
+                'choices' => $channels,
+                'attr' => $attr
+            ])
             ->getForm();
 
         $settingsForm->handleRequest($request);
-        if ($settingsForm->isSubmitted() && $settingsForm->isValid()) {
+        if ($settingsForm->isSubmitted() && $settingsForm->isValid() && !$this->updatesEnabled) {
             $this->configHelper->writeEnvironmentConfig([
                 'updateChannel' => $settingsForm->get('updateChannel')->getData(),
             ]);
@@ -83,7 +97,6 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
-
         $checkedForUpdates = $request->query->has('checkedForUpdates');
         $session = $request->getSession();
         $isUpdateAvailable = $session->get('isUpdateAvailable', false);
@@ -97,6 +110,7 @@ class UpdateController extends AbstractController
             'checkedForUpdates' => $checkedForUpdates,
             'isUpdateAvailable' => $isUpdateAvailable,
             'availableUpdateData' => $availableUpdateData,
+            'updatesEnabled' => $this->updatesEnabled
         ]);
     }
 
@@ -132,7 +146,7 @@ class UpdateController extends AbstractController
     {
         $session = $request->getSession();
 
-        if (!$session->has('isUpdateAvailable')) {
+        if (!$session->has('isUpdateAvailable') || !$this->updatesEnabled) {
             return $this->redirectToRoute('administration_update_overview');
         }
 
@@ -153,7 +167,7 @@ class UpdateController extends AbstractController
     public function executeUpdate(Request $request)
     {
         $session = $request->getSession();
-        if (!$session->has('isUpdateAvailable')) {
+        if (!$session->has('isUpdateAvailable') || !$this->updatesEnabled) {
             $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_ERROR, 'No update data found.'));
             return new JsonResponse(['error' => true, 'errorMessage' => 'No update data found.']);
         }

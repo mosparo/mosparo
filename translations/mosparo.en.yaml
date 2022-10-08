@@ -669,6 +669,7 @@ administration:
       titleAvailable: Update available
       messageAvailable: A new update for mosparo is available. Please click on the install button below if you would like to install the update.
       warningUpdate: Please backup the mosparo files and the database before update. This automatic update process will not backup the files or the database. If something does not work correctly, it can destroy your mosparo installation.
+      warningUpdatesDisabled: Updates are disabled for this mosparo installation. Please check the documentation to see other options to update your mosparo installation.
 
       titleNotAvailable: No update available
       messageNotAvailable: No new update for mosparo is available. Please check again later.

@@ -156,6 +156,7 @@ services:
     Mosparo\Controller\Administration\UpdateController:
         arguments:
             $mosparoVersion: '%env(MOSPARO_VERSION)%'
+            $updatesEnabled: '%env(MOSPARO_UPDATES_ENABLED)%'
 
     Mosparo\Controller\Administration\SystemController:
         arguments:

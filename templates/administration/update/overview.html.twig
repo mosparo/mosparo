@@ -38,7 +38,11 @@
                             </div>
 
                             <div class="alert alert-danger">
-                                {{ 'administration.update.version.warningUpdate'|trans }}
+                                {% if updatesEnabled %}
+                                    {{ 'administration.update.version.warningUpdate'|trans }}
+                                {% else %}
+                                    {{ 'administration.update.version.warningUpdatesDisabled'|trans }}
+                                {% endif %}
                             </div>
                         </div>
                     {% else %}
@@ -51,7 +55,8 @@
                         </div>
                     {% endif %}
                 </div>
-                {% if isUpdateAvailable %}
+
+                {% if isUpdateAvailable and updatesEnabled %}
                     <div class="row mt-3 mb-3">
                         <div class="col-12 col-md-auto ms-auto">
                             <a href="{{ path('administration_update_execute') }}" class="btn btn-danger w-100">
@@ -117,7 +122,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-12 col-md-auto ms-auto">
-                        <button type="submit" class="btn btn-primary w-100">
+                        <button type="submit" class="btn btn-primary w-100" {% if not updatesEnabled %}disabled{% endif %}>
                             <i class="ti ti-device-floppy"></i>
                             {{ 'action.save'|trans }}
                         </button>
