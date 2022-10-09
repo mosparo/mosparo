@@ -228,6 +228,9 @@ ruleset:
   title: Regel-Pakete
   backToList: Zu den Regel-Paketen
 
+  message:
+    errorWhileUpdating: 'Beim Aktualisieren des Regel-Pakets trat ein Fehler auf:'
+
   list:
     name: Name
     status: Status

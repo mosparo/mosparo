@@ -78,6 +78,7 @@
 
         {% if hasError %}
             <div class="alert alert-danger">
+                {{ 'ruleset.message.errorWhileUpdating'|trans }}
                 {{ errorMessage|trans }}
             </div>
         {% endif %}

@@ -228,6 +228,9 @@ ruleset:
   title: Rulesets
   backToList: Back to rulesets
 
+  message:
+    errorWhileUpdating: 'An error occurred while updating the ruleset:'
+
   list:
     name: Name
     status: Status
