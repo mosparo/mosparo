@@ -4,6 +4,8 @@ namespace Mosparo\Helper;
 
 use Mosparo\Exception;
 use Mosparo\Message\UpdateMessage;
+use Mosparo\Specifications\Specifications;
+use Opis\JsonSchema\Validator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -174,6 +176,7 @@ class UpdateHelper
      * available for this mosparo installation
      *
      * @throws \Mosparo\Exception Signature validation failed for "{URL}".
+     * @throws \Mosparo\Exception The update data is not valid against the schema.
      */
     public function checkForUpdates()
     {
@@ -188,12 +191,32 @@ class UpdateHelper
             throw new Exception(sprintf('Signature validation failed for "%s".', $url));
         }
 
-        // @TODO: Validate the json schema
+        if (!$this->validateUpdateData($versionData)) {
+            throw new Exception('The update data is not valid against the schema.');
+        }
 
         // Parse the data and process it
         $updateData = json_decode($versionData, true);
 
         $this->processVersionData($updateData);
+    }
+
+    /**
+     * Validates the given version data against the update JSON schema
+     *
+     * @param string $versionData
+     * @return bool
+     */
+    protected function validateUpdateData(string $versionData): bool
+    {
+        $jsonData = json_decode($versionData);
+
+        $validator = new Validator();
+        $validator->resolver()->registerFile('http://schema.mosparo.io/update.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_UPDATE));
+
+        $result = $validator->validate($jsonData, 'http://schema.mosparo.io/update.json');
+
+        return $result->isValid();
     }
 
     /**

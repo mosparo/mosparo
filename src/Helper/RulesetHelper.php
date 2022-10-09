@@ -11,6 +11,8 @@ use Mosparo\Exception;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Entity\RulesetCache;
 use Mosparo\Entity\RulesetRuleCache;
+use Mosparo\Specifications\Specifications;
+use Opis\JsonSchema\Validator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -95,9 +97,27 @@ class RulesetHelper
             throw new Exception('Hash verification failed.');
         }
 
+        $isValid = $this->validateJsonSchema($files['content']);
+        if (!$isValid) {
+            throw new Exception('The ruleset content is not valid against the schema.');
+        }
+
         $this->processRulesetContent($ruleset, $files['content']);
 
         return true;
+    }
+
+    protected function validateJsonSchema($content): bool
+    {
+        $json = json_decode($content);
+
+        $validator = new Validator();
+        $validator->resolver()->registerFile('http://schema.mosparo.io/ruleset.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_RULESET));
+        $validator->resolver()->registerFile('http://schema.mosparo.io/rule.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_RULE));
+
+        $result = $validator->validate($json, 'http://schema.mosparo.io/ruleset.json');
+
+        return $result->isValid();
     }
 
     protected function processRulesetContent(Ruleset $ruleset, $content)
