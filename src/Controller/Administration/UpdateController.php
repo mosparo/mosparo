@@ -203,6 +203,7 @@ class UpdateController extends AbstractController
             // Clear the cache after the upgrade
             $input = new ArrayInput(array(
                 'command' => 'cache:clear',
+                '--no-warmup',
                 '-n'
             ));
 
