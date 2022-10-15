@@ -1,5 +1,7 @@
 {% trans_default_domain 'mosparo' %}
 
+{% set route = app.request.attributes.get('_route') %}
+
 <!DOCTYPE html>
 <html lang="{{ app.request.locale }}">
     <head>
@@ -23,7 +25,7 @@
     <body class="{% block bodyClasses %}antialised{% endblock %}">
         {% block body %}
             <div class="wrapper">
-                <header class="navbar navbar-expand-md navbar-light d-print-none">
+                <header class="navbar navbar-expand-lg navbar-light d-print-none">
                     <div class="container-xl">
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
                             <span class="navbar-toggler-icon"></span>
@@ -34,43 +36,18 @@
                             </a>
                         </h1>
                         <div class="navbar-nav header-navbar flex-row order-md-last">
-                            <div class="nav-item dropdown me-3">
-                                <a href="#" class="btn btn-dark dropdown-toggle project-dropdown-toggle" data-bs-toggle="dropdown" aria-label="Open user menu">
-                                    <i class="ti ti-folder"></i>
-                                    <span class="project-name">
-                                        {% if activeProject %}
-                                            {{ activeProject.name }}
-                                        {% else %}
-                                            {{ 'header.pleaseChoose'|trans }}
-                                        {% endif %}
-                                    </span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    {% if projects %}
-                                        {% for project in projects %}
-                                            <a href="{{ path('project_switch', { 'project': project.id }) }}" class="dropdown-item">
-                                                {% if activeProject and activeProject.id == project.id %}
-                                                    <i class="ti ti-check"></i>
-                                                {% else %}
-                                                    <i class="ti ti-folder"></i>
-                                                {% endif %}
-                                                {{ project.name }}
-                                            </a>
-                                        {% endfor %}
-                                        <div class="dropdown-divider"></div>
-                                    {% endif %}
-                                    <a href="{{ path('project_list') }}" class="dropdown-item">
-                                        <i class="ti ti-folders"></i>
-                                        {{ 'project.action.manage'|trans }}
-                                    </a>
-                                    <a href="{{ path('project_create') }}" class="dropdown-item">
-                                        <i class="ti ti-plus"></i>
-                                        {{ 'project.create.title'|trans }}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="nav-item {% if route starts with 'administration_' %}active{% endif %} me-lg-3">
+                                    <a class="nav-link" href="{{ path('administration_overview') }}">
+                                        <i class="ti ti-adjustments-horizontal"></i>
+                                        <span class="d-none d-xl-block nav-link-title">
+                                            {{ 'administration.title'|trans }}
+                                        </span>
                                     </a>
                                 </div>
-                            </div>
+                            {% endif %}
 
-                            <div class="nav-item dropdown">
+                            <div class="nav-item {% if route starts with 'account_' %}active{% endif %} dropdown">
                                 <a href="#" class="nav-link avatar-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                                     <span class="avatar avatar-sm text-center">
                                         <i class="ti ti-user"></i>
@@ -94,13 +71,50 @@
                     </div>
                 </header>
 
-                <div class="navbar-expand-md">
+                <div class="navbar-expand-lg">
                     <div class="collapse navbar-collapse" id="navbar-menu">
-                        <div class="navbar navbar-light">
+                        <div class="navbar navbar-light project-navbar">
                             <div class="container-xl">
                                 <ul class="navbar-nav">
+                                    <div class="nav-item dropdown me-lg-2">
+                                        <a href="#" class="btn btn-secondary dropdown-toggle project-dropdown-toggle" data-bs-toggle="dropdown" aria-label="Open user menu">
+                                            <i class="ti ti-folder"></i>
+                                            <span class="project-name">
+                                                {% if activeProject %}
+                                                    {{ activeProject.name }}
+                                                {% else %}
+                                                    {{ 'header.pleaseChoose'|trans }}
+                                                {% endif %}
+                                            </span>
+                                        </a>
+                                        <div class="dropdown-menu project-dropdown-menu">
+                                            {% if projects %}
+                                                {% for project in projects %}
+                                                    <a href="{{ path('project_switch', { 'project': project.id }) }}" class="dropdown-item">
+                                                        {% if activeProject and activeProject.id == project.id %}
+                                                            <i class="ti ti-check"></i>
+                                                        {% else %}
+                                                            <i class="ti ti-folder"></i>
+                                                        {% endif %}
+                                                        {{ project.name }}
+                                                    </a>
+                                                {% endfor %}
+                                                <div class="dropdown-divider"></div>
+                                            {% endif %}
+                                            <a href="{{ path('project_list') }}" class="dropdown-item">
+                                                <i class="ti ti-folders"></i>
+                                                {{ 'project.action.manage'|trans }}
+                                            </a>
+                                            <a href="{{ path('project_create') }}" class="dropdown-item">
+                                                <i class="ti ti-plus"></i>
+                                                {{ 'project.create.title'|trans }}
+                                            </a>
+                                            <div class="dropdown-divider d-block d-lg-none"></div>
+                                        </div>
+                                    </div>
+
                                     {% if activeProject %}
-                                        <li class="nav-item">
+                                        <li class="nav-item {% if route == 'dashboard' %}active{% endif %}">
                                             <a class="nav-link" href="{{ path('dashboard') }}">
                                                 <i class="ti ti-dashboard"></i>
                                                 <span class="nav-link-title">
@@ -109,7 +123,7 @@
                                             </a>
                                         </li>
 
-                                        <li class="nav-item">
+                                        <li class="nav-item {% if route starts with 'submission_' %}active{% endif %}">
                                             <a class="nav-link" href="{{ path('submission_list') }}">
                                                 <i class="ti ti-mail"></i>
                                                 <span class="nav-link-title">
@@ -118,7 +132,7 @@
                                             </a>
                                         </li>
 
-                                        <li class="nav-item">
+                                        <li class="nav-item {% if route starts with 'rule_' %}active{% endif %}">
                                             <a class="nav-link" href="{{ path('rule_list') }}">
                                                 <i class="ti ti-filter"></i>
                                                 <span class="nav-link-title">
@@ -127,7 +141,7 @@
                                             </a>
                                         </li>
 
-                                        <li class="nav-item">
+                                        <li class="nav-item {% if route starts with 'ruleset_' %}active{% endif %}">
                                             <a class="nav-link" href="{{ path('ruleset_list') }}">
                                                 <i class="ti ti-stack"></i>
                                                 <span class="nav-link-title">
@@ -137,7 +151,7 @@
                                         </li>
 
                                         {% if canManage %}
-                                            <li class="nav-item dropdown">
+                                            <li class="nav-item {% if route starts with 'settings_' %}active{% endif %} dropdown">
                                                 <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
                                                     <i class="ti ti-settings"></i>
                                                     <span class="nav-link-title">
@@ -166,21 +180,6 @@
                                         {% endif %}
                                     {% endif %}
                                 </ul>
-
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <div class="mt-3 mt-md-0 flex-grow-1 flex-md-grow-0">
-                                        <ul class="navbar-nav">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="{{ path('administration_overview') }}">
-                                                    <i class="ti ti-adjustments-horizontal"></i>
-                                                    <span class="nav-link-title">
-                                                        {{ 'administration.title'|trans }}
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                {% endif %}
                             </div>
                         </div>
                     </div>
