@@ -38,6 +38,11 @@ class UpdateHelper
     /**
      * @var string
      */
+    protected string $cacheDirectory;
+
+    /**
+     * @var string
+     */
     protected string $mosparoVersion;
 
     /**
@@ -72,15 +77,17 @@ class UpdateHelper
      * @param \Symfony\Contracts\HttpClient\HttpClientInterface $client
      * @param \Symfony\Component\Filesystem\Filesystem $fileSystem
      * @param string $projectDirectory
+     * @param string $cacheDirectory
      * @param string $mosparoVersion
      * @param string $env
      */
-    public function __construct(ConfigHelper $configHelper,  HttpClientInterface $client, Filesystem $fileSystem, string $projectDirectory, string $mosparoVersion, string $env)
+    public function __construct(ConfigHelper $configHelper,  HttpClientInterface $client, Filesystem $fileSystem, string $projectDirectory, string $cacheDirectory, string $mosparoVersion, string $env)
     {
         $this->configHelper = $configHelper;
         $this->client = $client;
         $this->fileSystem = $fileSystem;
         $this->projectDirectory = $projectDirectory;
+        $this->cacheDirectory = $cacheDirectory;
         $this->mosparoVersion = $mosparoVersion;
         $this->env = $env;
     }
@@ -832,5 +839,17 @@ class UpdateHelper
             $filePath,
             $sourcePath,
         ]);
+
+        // Clear the cache
+        $directoryIterator = new \DirectoryIterator($this->cacheDirectory);
+        foreach ($directoryIterator as $item) {
+            // We cannot delete the cached Container because that leads to missing classes, so we exclude these files
+            // from this custom cache clear method.
+            if ($item->isDot() || strpos($item->getPathname(), '/Container') !== false) {
+                continue;
+            }
+
+            $this->fileSystem->remove($item->getPathname());
+        }
     }
 }

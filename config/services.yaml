@@ -150,6 +150,7 @@ services:
     Mosparo\Helper\UpdateHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+            $cacheDirectory: '%kernel.cache_dir%'
             $mosparoVersion: '%env(MOSPARO_VERSION)%'
             $env: '%kernel.environment%'
 
