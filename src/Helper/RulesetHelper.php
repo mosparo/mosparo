@@ -55,6 +55,8 @@ class RulesetHelper
 
     public function downloadRuleset(Ruleset $ruleset): bool
     {
+        $this->verifyUrl($ruleset->getUrl());
+
         $rulesetCache = $ruleset->getRulesetCache();
         if ($rulesetCache !== null) {
             $refreshInterval = new DateInterval('PT' . $rulesetCache->getRefreshInterval() . 'S');
@@ -195,6 +197,15 @@ class RulesetHelper
             if (!in_array($rule->getUuid(), $processedUuids)) {
                 $this->entityManager->remove($rule);
             }
+        }
+    }
+
+    protected function verifyUrl($url)
+    {
+        $path = parse_url($url, PHP_URL_PATH);
+
+        if (empty($path)) {
+            throw new Exception(sprintf('The URL to a ruleset needs to be fully qualified. There is no path in the URL "%s".', $url));
         }
     }
 }
