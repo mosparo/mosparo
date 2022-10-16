@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2917617d639a13b7d01b5478dcefac1d",
+    "content-hash": "ac8ec7f819ca0548b0dc9d7386b8be87",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2829,16 +2829,16 @@
         },
         {
             "name": "mosparo/specifications",
-            "version": "v1.0",
+            "version": "v1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mosparo/specifications.git",
-                "reference": "b8dd1778f875ee97c1b03e7007ac619d4814a297"
+                "reference": "751b7d015f50be1e2975b940cba2c68a2e5942cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mosparo/specifications/zipball/b8dd1778f875ee97c1b03e7007ac619d4814a297",
-                "reference": "b8dd1778f875ee97c1b03e7007ac619d4814a297",
+                "url": "https://api.github.com/repos/mosparo/specifications/zipball/751b7d015f50be1e2975b940cba2c68a2e5942cb",
+                "reference": "751b7d015f50be1e2975b940cba2c68a2e5942cb",
                 "shasum": ""
             },
             "require": {
@@ -2873,9 +2873,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mosparo/specifications/issues",
-                "source": "https://github.com/mosparo/specifications/tree/v1.0"
+                "source": "https://github.com/mosparo/specifications/tree/v1.1"
             },
-            "time": "2022-10-09T10:07:52+00:00"
+            "time": "2022-10-16T13:34:48+00:00"
         },
         {
             "name": "myclabs/php-enum",

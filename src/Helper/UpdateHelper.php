@@ -253,7 +253,7 @@ class UpdateHelper
 
             // Validate the downloaded file with the signature from the version data
             $this->output(new UpdateMessage('validate_download', UpdateMessage::STATUS_IN_PROGRESS, 'Validate downloaded file'));
-            $isValid = $this->validateFileSignature($filePath, $versionData['signature']);
+            $isValid = $this->validateFileSignature($filePath, $versionData['downloadSignature']);
 
             if (!$isValid) {
                 throw new Exception('Signature not valid.');
@@ -265,7 +265,7 @@ class UpdateHelper
 
             // Download the hash file
             $this->output(new UpdateMessage('download_hash_file', UpdateMessage::STATUS_IN_PROGRESS, 'Download hash file'));
-            $hashes = $this->downloadHashFile($versionData['downloadUrl']);
+            $hashes = $this->downloadHashFile($versionData['hashesUrl'], $versionData['hashesSignature']);
 
             // Define the needed changes
             $this->output(new UpdateMessage('calculate_changes', UpdateMessage::STATUS_IN_PROGRESS, 'Calculate changes'));
@@ -499,24 +499,23 @@ class UpdateHelper
     /**
      * Downloads the hashes file for the given update url. Returns the array with all hashes from the hash file.
      *
-     * @param string $url
+     * @param string $hashesUrl
+     * @param string $signature
      * @return array
      *
      * @throws \Mosparo\Exception Cannot download hash file.
      * @throws \Mosparo\Exception Signature validation failed for "{URL}".
      */
-    protected function downloadHashFile(string $url): array
+    protected function downloadHashFile(string $hashesUrl, string $hashesSignature): array
     {
-        $url = substr($url, 0, strrpos($url, '.')) . '.hashes';
         try {
-            $content = $this->loadRemoteData($url);
-            $hashSignature = $this->loadRemoteData($url . '.signature');
+            $content = $this->loadRemoteData($hashesUrl);
         } catch (\Exception $e) {
             throw new Exception('Cannot download hash file.', 0, $e);
         }
 
-        if (!$this->validateSignature($content, $hashSignature)) {
-            throw new Exception(sprintf('Signature validation failed for "%s".', $url));
+        if (!$this->validateSignature($content, $hashesSignature)) {
+            throw new Exception(sprintf('Signature validation failed for "%s".', $hashesUrl));
         }
 
         $hashes = [];
