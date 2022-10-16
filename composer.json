@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": ">=7.4.0",
+        "php": ">=7.4.0 <8.1.0 || >=8.1.10",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
@@ -58,7 +58,7 @@
         "symfony/web-link": "5.4.*",
         "symfony/webpack-encore-bundle": "^1.14",
         "symfony/yaml": "5.4.*",
-        "symfonycasts/reset-password-bundle": "^1.13",
+        "symfonycasts/reset-password-bundle": "^1.16",
         "tronovav/geoip2-update": "^2.1",
         "twig/cssinliner-extra": "^3.4",
         "twig/extra-bundle": "^3.4",
