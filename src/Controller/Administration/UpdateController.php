@@ -79,7 +79,7 @@ class UpdateController extends AbstractController
             ->getForm();
 
         $settingsForm->handleRequest($request);
-        if ($settingsForm->isSubmitted() && $settingsForm->isValid() && !$this->updatesEnabled) {
+        if ($settingsForm->isSubmitted() && $settingsForm->isValid() && $this->updatesEnabled) {
             $this->configHelper->writeEnvironmentConfig([
                 'updateChannel' => $settingsForm->get('updateChannel')->getData(),
             ]);
