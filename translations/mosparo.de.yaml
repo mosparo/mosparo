@@ -308,7 +308,7 @@ submission:
       title: Spam
       isSpam: Ist Spam
       spamRating: Spam-Bewertung
-      submittedAt: Eingesendet am
+      submittedAt: Abgesendet am
 
     verification:
       title: Überprüfung

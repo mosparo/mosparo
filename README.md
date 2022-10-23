@@ -65,6 +65,9 @@ We have therefore defined our main objective: to collect only data that is neces
   - `posix` *(optional)*
   - `sodium` *(optional)*
   - `Zend OPcache` *(optional)*
+- A MySQL database (MySQL or MariaDB)
+- Less than 100 MB disk space
+- A domain or subdomain
 
 ## Installation
 
