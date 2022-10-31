@@ -12,6 +12,7 @@ use Mosparo\Exception\UserAlreadyExistsException;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\SetupHelper;
+use Mosparo\Kernel;
 use PDO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -35,14 +36,11 @@ class SetupController extends AbstractController
 
     protected ConfigHelper $configHelper;
 
-    protected string $mosparoVersion;
-
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper, string $mosparoVersion)
+    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper)
     {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
         $this->configHelper = $configHelper;
-        $this->mosparoVersion = $mosparoVersion;
     }
 
     /**
@@ -202,7 +200,7 @@ class SetupController extends AbstractController
 
         $this->configHelper->writeEnvironmentConfig([
             'mosparo_installed' => true,
-            'mosparo_installed_version' => $this->mosparoVersion,
+            'mosparo_installed_version' => Kernel::VERSION,
         ]);
 
         // Clear the cache after the installation

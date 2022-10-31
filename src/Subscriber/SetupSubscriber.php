@@ -2,6 +2,7 @@
 
 namespace Mosparo\Subscriber;
 
+use Mosparo\Kernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -15,8 +16,6 @@ class SetupSubscriber implements EventSubscriberInterface
 
     protected ?string $installedVersion;
 
-    protected string $mosparoVersion;
-
     protected array $allowedRoutes = [
         'setup_start',
         'setup_prerequisites',
@@ -25,12 +24,11 @@ class SetupSubscriber implements EventSubscriberInterface
         'setup_install',
     ];
 
-    public function __construct(UrlGeneratorInterface $router, $installed, $installedVersion, $mosparoVersion, $debug = false)
+    public function __construct(UrlGeneratorInterface $router, $installed, $installedVersion, $debug = false)
     {
         $this->router = $router;
         $this->installed = ($installed == true);
         $this->installedVersion = $installedVersion;
-        $this->mosparoVersion = $mosparoVersion;
 
         if ($debug) {
             $this->allowedRoutes = array_merge($this->allowedRoutes, [
@@ -75,7 +73,7 @@ class SetupSubscriber implements EventSubscriberInterface
     protected function checkForUpdate(RequestEvent $event)
     {
         // If the two versions aren't the same, redirect to the update controller
-        if ($this->mosparoVersion != $this->installedVersion) {
+        if (Kernel::VERSION != $this->installedVersion) {
             $request = $event->getRequest();
             $route = $request->get('_route');
 

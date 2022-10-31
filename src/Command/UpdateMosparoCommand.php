@@ -3,6 +3,7 @@
 namespace Mosparo\Command;
 
 use Mosparo\Helper\UpdateHelper;
+use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -83,7 +84,7 @@ class UpdateMosparoCommand extends Command
 
         $output->writeln('<question> Update for mosparo available! </>');
         $output->writeln('');
-        $output->writeln(sprintf("<fg=red>Installed version:</>\t<comment>%s</>", $this->updateHelper->getMosparoVersion()));
+        $output->writeln(sprintf("<fg=red>Installed version:</>\t<comment>%s</>", Kernel::VERSION));
         $output->writeln(sprintf("<fg=green>New version:</>\t\t<comment>%s</>", $versionData['version']));
         $output->writeln('');
 

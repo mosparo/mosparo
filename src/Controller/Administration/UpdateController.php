@@ -6,6 +6,7 @@ use Mosparo\Exception;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Helper\UpdateHelper;
+use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,18 +36,15 @@ class UpdateController extends AbstractController
 
     protected TranslatorInterface $translator;
 
-    protected string $mosparoVersion;
-
     protected bool $updatesEnabled;
 
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, UpdateHelper $updateHelper, ConfigHelper $configHelper, TranslatorInterface $translator, string $mosparoVersion, bool $updatesEnabled)
+    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, UpdateHelper $updateHelper, ConfigHelper $configHelper, TranslatorInterface $translator, bool $updatesEnabled)
     {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
         $this->updateHelper = $updateHelper;
         $this->configHelper = $configHelper;
         $this->translator = $translator;
-        $this->mosparoVersion = $mosparoVersion;
         $this->updatesEnabled = $updatesEnabled;
     }
 
@@ -104,7 +102,7 @@ class UpdateController extends AbstractController
 
         $translatedChannels = array_flip($channels);
         return $this->render('administration/update/overview.html.twig', [
-            'mosparoVersion' => $this->mosparoVersion,
+            'mosparoVersion' => Kernel::VERSION,
             'updateChannel' => $translatedChannels[$updateChannel],
             'settingsForm' => $settingsForm->createView(),
             'checkedForUpdates' => $checkedForUpdates,
@@ -155,7 +153,7 @@ class UpdateController extends AbstractController
 
         $availableUpdateData = $session->get('availableUpdateData', []);
         return $this->render('administration/update/execute.html.twig', [
-            'mosparoVersion' => $this->mosparoVersion,
+            'mosparoVersion' => Kernel::VERSION,
             'availableUpdateData' => $availableUpdateData,
             'temporaryLogFileUrl' => $temporaryLogFileUrl,
         ]);
@@ -228,7 +226,7 @@ class UpdateController extends AbstractController
 
         // Update the installed version
         $this->configHelper->writeEnvironmentConfig([
-            'mosparo_installed_version' => $this->mosparoVersion,
+            'mosparo_installed_version' => Kernel::VERSION,
         ]);
 
         // Clear the cache after the upgrade

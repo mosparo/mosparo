@@ -3,6 +3,7 @@
 namespace Mosparo\Helper;
 
 use Mosparo\Exception;
+use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
@@ -43,11 +44,6 @@ class UpdateHelper
     /**
      * @var string
      */
-    protected string $mosparoVersion;
-
-    /**
-     * @var string
-     */
     protected string $env;
 
     /**
@@ -78,17 +74,15 @@ class UpdateHelper
      * @param \Symfony\Component\Filesystem\Filesystem $fileSystem
      * @param string $projectDirectory
      * @param string $cacheDirectory
-     * @param string $mosparoVersion
      * @param string $env
      */
-    public function __construct(ConfigHelper $configHelper,  HttpClientInterface $client, Filesystem $fileSystem, string $projectDirectory, string $cacheDirectory, string $mosparoVersion, string $env)
+    public function __construct(ConfigHelper $configHelper,  HttpClientInterface $client, Filesystem $fileSystem, string $projectDirectory, string $cacheDirectory, string $env)
     {
         $this->configHelper = $configHelper;
         $this->client = $client;
         $this->fileSystem = $fileSystem;
         $this->projectDirectory = $projectDirectory;
         $this->cacheDirectory = $cacheDirectory;
-        $this->mosparoVersion = $mosparoVersion;
         $this->env = $env;
     }
 
@@ -114,16 +108,6 @@ class UpdateHelper
     public function setOutputHandler($outputHandler)
     {
         $this->outputHandler = $outputHandler;
-    }
-
-    /**
-     * Returns the mosparo version of the mosparo installation
-     *
-     * @return string
-     */
-    public function getMosparoVersion(): string
-    {
-        return $this->mosparoVersion;
     }
 
     /**
@@ -439,7 +423,7 @@ class UpdateHelper
     {
         foreach ($versionData as $version) {
             if (
-                version_compare($this->mosparoVersion, $version['version'], '<')
+                version_compare(Kernel::VERSION, $version['version'], '<')
                 && (empty($this->newVersionData) || version_compare($this->newVersionData['version'], $version['version'], '<'))
             ) {
                 $this->newVersionData = $version;
