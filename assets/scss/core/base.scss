@@ -40,6 +40,14 @@
     flex: 1 0;
 }
 
+pre {
+    white-space: pre-wrap;
+
+    background: #fdfdfe;
+    color: unset;
+    border: 1px solid rgba(98,105,118,.16);
+}
+
 @media screen and (max-width: 768px) {
     .project-navbar {
         > .container-xl {
