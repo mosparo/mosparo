@@ -89,7 +89,7 @@ class AccountController extends AbstractController
             // Update the values in the session
             $this->localeHelper->storeUserSettingsInSession($session, $user);
 
-            return $this->redirectToRoute('account_settings');
+            return $this->redirectToRoute('account_overview');
         }
 
         return $this->render('account/settings.html.twig', [
