@@ -21,6 +21,20 @@
         }
     }
 
+    .origin-page-url-container {
+        display: flex;
+        align-items: center;
+
+        .origin-page-url {
+            max-width: 300px;
+            flex: 1;
+
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+
     .client-information {
         display: flex;
         flex-wrap: wrap;
