@@ -75,6 +75,18 @@ class AccountController extends AbstractController
             // Store the user settings
             $this->entityManager->flush();
 
+            // Try to display the success message in the correct language
+            $newLocale = $form->get('locale')->getData();
+            if ($newLocale == 'default') {
+                $newLocale = '';
+            } else if ($newLocale == 'browser') {
+                if (!empty($request->getPreferredLanguage())) {
+                    $newLocale = $request->getPreferredLanguage();
+                } else {
+                    $newLocale = '';
+                }
+            }
+
             $session = $request->getSession();
             $session->getFlashBag()->add(
                 'success',
@@ -82,7 +94,7 @@ class AccountController extends AbstractController
                     'account.settings.message.successfullySaved',
                     [],
                     'mosparo',
-                    $form->get('locale')->getData()
+                    $newLocale
                 )
             );
 
