@@ -29,6 +29,12 @@ class RulesetFormType extends AbstractType
                 'label' => 'ruleset.form.spamRatingFactor',
                 'required' => false,
                 'help' => 'ruleset.form.spamRatingFactorHelp',
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'min' => 0.1,
+                    'step' => 'any',
+                ]
             ])
         ;
     }

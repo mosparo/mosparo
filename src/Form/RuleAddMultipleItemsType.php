@@ -33,7 +33,13 @@ class RuleAddMultipleItemsType extends AbstractType
             ->add('rating', NumberType::class, [
                 'label' => 'rule.form.addMultipleItems.rating',
                 'required' => false,
-                'help' => 'rule.form.addMultipleItems.ratingHelp'
+                'help' => 'rule.form.addMultipleItems.ratingHelp',
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'min' => 0.1,
+                    'step' => 'any',
+                ]
             ])
         ;
     }

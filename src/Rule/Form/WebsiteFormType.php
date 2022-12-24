@@ -21,7 +21,17 @@ class WebsiteFormType extends AbstractRuleTypeFormType
         $builder
             ->add('type', ChoiceType::class, ['choices' => $choices, 'attr' => ['readonly' => (count($choices) === 1), 'class' => 'form-select rule-item-type']])
             ->add('value', TextType::class, ['attr' => ['placeholder' => 'rule.type.website.placeholder', 'class' => 'rule-item-value']])
-            ->add('spamRatingFactor', NumberType::class, ['required' => false, 'attr' => ['placeholder' => 'rule.type.rating.placeholder', 'class' => 'rule-item-rating']])
+            ->add('spamRatingFactor', NumberType::class, [
+                'required' => false,
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'placeholder' => 'rule.type.rating.placeholder',
+                    'class' => 'rule-item-rating',
+                    'min' => 0.1,
+                    'step' => 'any',
+                ]
+            ])
         ;
     }
 }

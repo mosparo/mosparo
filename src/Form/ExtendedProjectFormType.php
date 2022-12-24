@@ -23,7 +23,13 @@ class ExtendedProjectFormType extends ProjectFormType
             ])
             ->add('spamScore', NumberType::class, [
                 'label' => 'project.form.spamScore',
-                'help' => 'project.form.spamScoreHelp'
+                'help' => 'project.form.spamScoreHelp',
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'min' => 0.1,
+                    'step' => 'any',
+                ]
             ])
         ;
     }

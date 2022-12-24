@@ -41,6 +41,12 @@ class RuleFormType extends AbstractType
                 'required' => false,
                 'disabled' => $readonly,
                 'help' => 'rule.form.rule.spamRatingFactorHelp',
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'min' => 0.1,
+                    'step' => 'any',
+                ]
             ])
             ->add('items', CollectionType::class, [
                 'allow_add' => true,
