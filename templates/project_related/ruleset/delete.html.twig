@@ -23,7 +23,7 @@
 
                             <div class="alert alert-important alert-danger">
                                 <p>
-                                    {{ 'ruleset.delete.confirm'|trans({ '%rulesetName%': '<strong>' ~ ruleset.name ~ '</strong>' })|raw }}
+                                    {{ 'ruleset.delete.confirm'|trans({ '%rulesetName%': '<strong>' ~ ruleset.name|raw ~ '</strong>' })|raw }}
                                 </p>
                                 <p>
                                     {{ 'general.infoUndo'|trans }}

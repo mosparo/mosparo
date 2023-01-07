@@ -23,7 +23,7 @@
 
                             <div class="alert alert-important alert-danger">
                                 <p>
-                                    {{ 'administration.user.delete.confirm'|trans({ '%email%': '<strong>' ~ user.email ~ '</strong>' })|raw }}
+                                    {{ 'administration.user.delete.confirm'|trans({ '%email%': '<strong>' ~ user.email|escape ~ '</strong>' })|raw }}
                                 </p>
                                 <p>
                                     {{ 'general.infoUndo'|trans }}

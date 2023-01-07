@@ -22,7 +22,7 @@
 
                             <div class="alert alert-important alert-danger">
                                 <p>
-                                    {{ 'project.delete.confirm'|trans({ '%projectName%': '<strong>' ~ project.name ~ '</strong>' })|raw }}
+                                    {{ 'project.delete.confirm'|trans({ '%projectName%': '<strong>' ~ project.name|escape ~ '</strong>' })|raw }}
                                 </p>
                                 <p>
                                     {{ 'general.infoUndo'|trans }}
