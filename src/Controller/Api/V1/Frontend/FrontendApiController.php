@@ -139,7 +139,6 @@ class FrontendApiController extends AbstractController
         $submitTokenRepository = $entityManager->getRepository(SubmitToken::class);
         $submitToken = $submitTokenRepository->findOneBy([
             'token' => $request->request->get('submitToken'),
-
         ]);
 
         if ($submitToken === null || !$submitToken->isValid()) {
