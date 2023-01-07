@@ -13,7 +13,7 @@
 
 ## Now in open beta!
 
-mosparo is finally available in open beta. Please report to us possible bugs as an issue.
+**mosparo is finally available in open beta. Please report to us possible bugs as an issue.**
 
 ## Description
 
