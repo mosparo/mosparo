@@ -8,6 +8,8 @@ use Exception;
 use GeoIp2\Database\Reader;
 use Mosparo\Entity\IpLocalization;
 use Mosparo\Util\HashUtil;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 use tronovav\GeoIP2Update\Client;
 
 class GeoIp2Helper
@@ -18,13 +20,16 @@ class GeoIp2Helper
 
     protected CleanupHelper $cleanupHelper;
 
+    protected Filesystem $filesystem;
+
     protected string $downloadDirectory;
 
-    public function __construct(EntityManagerInterface $entityManager, ConfigHelper $configHelper, CleanupHelper $cleanupHelper, string $downloadDirectory)
+    public function __construct(EntityManagerInterface $entityManager, ConfigHelper $configHelper, CleanupHelper $cleanupHelper, Filesystem $filesystem, string $downloadDirectory)
     {
         $this->entityManager = $entityManager;
         $this->configHelper = $configHelper;
         $this->cleanupHelper = $cleanupHelper;
+        $this->filesystem = $filesystem;
         $this->downloadDirectory = $downloadDirectory;
     }
 
@@ -36,6 +41,17 @@ class GeoIp2Helper
         }
 
         $this->cleanupHelper->cleanupIpLocalizationCache();
+
+        // Create the directory if it does not exist already
+        if (!$this->filesystem->exists($this->downloadDirectory)) {
+            try {
+                $this->filesystem->mkdir($this->downloadDirectory);
+            } catch (IOException $e) {
+                return [
+                    $e->getMessage()
+                ];
+            }
+        }
 
         $client = new Client(array(
             'license_key' => $licenseKey,
