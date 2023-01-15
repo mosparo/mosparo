@@ -618,6 +618,7 @@ administration:
 
       message:
         savedSuccessfully: The settings were saved successfully.
+        infoActivationTime: If you have just requested your license key, it will take some time for the license key to become active.
 
     version:
       titleAvailable: GeoIP2 available
