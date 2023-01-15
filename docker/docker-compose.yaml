@@ -1,0 +1,28 @@
+services:
+  db:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10.6.4-focal
+    # If you want to use MySQL, uncomment the following line
+    #image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=mosparo_root_pw
+      - MYSQL_DATABASE=mosparo
+      - MYSQL_USER=mosparo
+      - MYSQL_PASSWORD=mosparo_password
+    expose:
+      - 3306
+      - 33060
+  mosparo:
+    image: mosparo:latest
+    ports:
+      - 8080:80
+    restart: always
+    volumes:
+      - mosparo_data:/mosparo-data
+volumes:
+  db_data:
+  mosparo_data:
