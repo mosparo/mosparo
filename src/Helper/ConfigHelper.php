@@ -19,7 +19,7 @@ class ConfigHelper
     {
         $this->entityManager = $entityManager;
         $this->fileSystem = $fileSystem;
-        $this->environmentConfigFilePath = realpath($projectDirectory . '/config/env.mosparo.php');
+        $this->environmentConfigFilePath = $projectDirectory . '/config/env.mosparo.php';
     }
 
     public function getEnvironmentConfigValue($name, $defaultValue = false)
