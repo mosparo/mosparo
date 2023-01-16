@@ -1,11 +1,17 @@
-# With this Dockerfile it is possible to build the image for a version released on the develop update channel
+# With this Dockerfile it is possible to build the image for a version released on the develop release channel
 
 FROM php:8.2.1-fpm
 
 ARG MOSPARO_VERSION
 
-ENV MOSPARO_UPDATES_ENABLED 0
 ENV TERM xterm
+
+# Docker related
+ENV MOSPARO_ENABLE_WEBSERVER 1
+ENV MOSPARO_ENABLE_CRON 1
+
+# mosparo related
+ENV MOSPARO_UPDATES_ENABLED 0
 
 SHELL ["/bin/bash", "-c"]
 
@@ -24,6 +30,7 @@ RUN apt-get update && \
         libzip-dev \
         unzip \
         autoconf \
+        cron \
         wget \
         nginx  && \
     docker-php-ext-install -j$(nproc) intl pdo_mysql zip opcache && \
@@ -37,7 +44,10 @@ RUN wget "https://updates.mosparo.io/packages/develop/mosparo-develop-${MOSPARO_
     rm "mosparo-develop-${MOSPARO_VERSION}.zip"
 
 ADD config/nginx.conf /etc/nginx/sites-enabled/default
+ADD config/mosparo.cron /etc/cron.d/mosparo
 ADD scripts/run.sh /usr/bin/run
+
+RUN crontab /etc/cron.d/mosparo
 
 VOLUME /mosparo-data
 

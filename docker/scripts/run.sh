@@ -8,10 +8,19 @@ set -o history -o histexpand
 [ -d /mosparo-data/var ] || mkdir /mosparo-data/var
 [ -f /mosparo-data/env.mosparo.php ] || echo "<?php return [];" > /mosparo-data/env.mosparo.php
 chown -R www-data: /mosparo-data/
-ln -s /mosparo-data/resources/ /mosparo/public/resources
-ln -s /mosparo-data/var/ /mosparo/var
-ln -s /mosparo-data/env.mosparo.php /mosparo/config/env.mosparo.php
+[ -L /mosparo/public/resources ] || ln -s /mosparo-data/resources/ /mosparo/public/resources
+[ -L /mosparo/var ] || ln -s /mosparo-data/var/ /mosparo/var
+[ -L /mosparo/config/env.mosparo.php ] || ln -s /mosparo-data/env.mosparo.php /mosparo/config/env.mosparo.php
 
-php-fpm -D -R
+if [ $MOSPARO_ENABLE_CRON -eq 1 ]; then
+  if [ $MOSPARO_ENABLE_WEBSERVER -eq 1 ]; then
+    cron -f &
+  else
+    cron -f
+  fi
+fi
 
-nginx -g "daemon off;"
+if [ $MOSPARO_ENABLE_WEBSERVER -eq 1 ]; then
+  php-fpm -D -R
+  nginx -g "daemon off;"
+fi
