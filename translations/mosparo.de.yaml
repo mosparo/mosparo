@@ -679,7 +679,7 @@ administration:
 
     execute:
       title: mosparo aktualisieren
-      description: Bitte warten Sie und verlassen Sie diese Seite nicht. Der Update-Prozess wurde gestartet...
+      description: Bitte warten Sie und verlassen Sie diese Seite nicht. Der Update-Prozess wurde gestartet…
       log: Fortschritt
 
       message:
@@ -912,13 +912,13 @@ form:
 # Datatables
 datatable:
   datatable:
-    processing: Bitte warten...
+    processing: Bitte warten…
     search: "Suche:"
     lengthMenu: _MENU_ Zeilen anzeigen
     info: _START_ bis _END_ von _TOTAL_ Einträgen
     infoEmpty: Keine Daten vorhanden
     infoFiltered: (gefiltert von _MAX_ Einträgen)
-    loadingRecords: Wird geladen...
+    loadingRecords: Wird geladen…
     zeroRecords: Keine passenden Einträge gefunden
     emptyTable: Keine Daten in der Tabelle vorhanden
     searchPlaceholder: Suchbegriff eingeben
@@ -982,7 +982,7 @@ setup:
 
   other:
     title: Weitere Informationen
-    introduction: Wir brauchen noch ein paar weitere Daten. Bitte füllen Sie die Felder unten aus
+    introduction: Wir brauchen noch ein paar weitere Daten. Bitte füllen Sie die Felder unten aus.
 
     form:
       name: Name von Ihrer mosparo-Installation
