@@ -1,4 +1,5 @@
-label: I accept that the form entries are checked for spam and stored encrypted for 14 days.
+label: I accept that the form entries are checked for spam and stored encrypted for
+  14 days.
 
 accessibility:
   checkingData: We're checking your data. Please wait.
@@ -7,9 +8,10 @@ accessibility:
 error:
   gotNoToken: mosparo returned no submit token.
   internalError: An error occurred. Please try again.
-  noSubmitTokenAvailable: No submit token available. Validation of this form is not possible.
+  noSubmitTokenAvailable: No submit token available. Validation of this form is not
+    possible.
   spamDetected: Your data got catched by our spam protection.
-  lockedOut: You are locked out. Please try again after %datetime%
+  lockedOut: You are locked out. Please try again after %datetime%.
   delay: Your request was delayed. Please wait for %seconds% seconds.
 
 hp:
