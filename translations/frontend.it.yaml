@@ -11,7 +11,7 @@ error:
   noSubmitTokenAvailable: Nessun token di invio disponibile. La convalida dei tuoi
     dati non è possibile.
   spamDetected: I tuoi dati contengono spam.
-  lockedOut: Sei stato/a temporaneamente bloccato. Riprova dopo %datetime%
+  lockedOut: Sei stato/a temporaneamente bloccato. Riprova dopo %datetime%.
   delay: La tua richiesta è stata ritardata. Attendi %secondi% secondi.
 
 hp:
