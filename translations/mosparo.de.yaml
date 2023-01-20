@@ -918,7 +918,6 @@ datatable:
     info: _START_ bis _END_ von _TOTAL_ Einträgen
     infoEmpty: Keine Daten vorhanden
     infoFiltered: (gefiltert von _MAX_ Einträgen)
-    infoPostFix: ""
     loadingRecords: Wird geladen...
     zeroRecords: Keine passenden Einträge gefunden
     emptyTable: Keine Daten in der Tabelle vorhanden
