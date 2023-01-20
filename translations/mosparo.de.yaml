@@ -1,6 +1,6 @@
 # Header
 header:
-  pleaseChoose: Bitte wählen...
+  pleaseChoose: Bitte wählen…
   account: Account
 
 # Projects
@@ -453,7 +453,7 @@ settings:
       honeypotFieldNameHelp: Es muss ein Feldname sein, welchen Sie nicht bereits in Ihrem Formular verwenden und welcher ein normales Feld sein könnte, wie zum Beispiel "url" oder "adress-zeile-2". Bitte verwenden Sie nur Buchstaben, Zahlen und den Bindestrich (-). Wenn Sie dieses Feld leer lassen wird die Funktion nicht verwendet.
       delayActive: Anfrageverzögerung aktiv
       delayNumberOfAllowedRequests: Anzahl erlaubter Anfragen
-      delayNumberOfAllowedRequestsHelp:  Die Anzahl der erlaubten Anfragen, bevor die Anfrageverzögerung aktiv wird.
+      delayNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Anfrageverzögerung aktiv wird.
       delayDetectionTimeFrame: Erkennungszeitraum
       delayDetectionTimeFrameHelp: In Sekunden
       delayTime: Anfangsverzögerungszeit
