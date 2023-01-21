@@ -9,7 +9,7 @@ error:
   internalError: An error occurred. Please try again.
   noSubmitTokenAvailable: No submit token available. Validation of this form is not possible.
   spamDetected: Your data got catched by our spam protection.
-  lockedOut: You are locked out. Please try again after %datetime%
+  lockedOut: You are locked out. Please try again after %datetime%.
   delay: Your request was delayed. Please wait for %seconds% seconds.
 
 hp:
