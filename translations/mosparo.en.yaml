@@ -1,6 +1,6 @@
 # Header
 header:
-  pleaseChoose: Please choose...
+  pleaseChoose: Please choose…
   account: Account
 
 # Projects
@@ -680,7 +680,7 @@ administration:
 
     execute:
       title: Update mosparo
-      description: Please wait and don't leave this page. Update progress started...
+      description: Please wait and don't leave this page. Update progress started…
       log: Process
 
       message:
@@ -806,7 +806,7 @@ account:
 security:
   login:
     title: Login
-    youAreLoggedIn: You are logged in as %username%
+    youAreLoggedIn: You are logged in as %username%.
     emailLabel: Email address
     passwordLabel: Password
 
@@ -914,14 +914,13 @@ form:
 # Datatables
 datatable:
   datatable:
-    processing: "Processing..."
+    processing: "Processing…"
     search: "Search:"
     lengthMenu: Show _MENU_ entries
     info: Showing _START_ to _END_ of _TOTAL_ entries
     infoEmpty: Showing 0 to 0 of 0 entries
     infoFiltered: (filtered from _MAX_ total entries)
-    infoPostFix: ""
-    loadingRecords: Loading...
+    loadingRecords: Loading…
     zeroRecords: No matching records found
     emptyTable: No data available in table
     searchPlaceholder: Search

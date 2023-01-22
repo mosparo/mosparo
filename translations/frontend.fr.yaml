@@ -1,4 +1,5 @@
-label: J'accepte que les données saisies dans le formulaire soient vérifiées pour éviter les spams et stockées sous forme cryptée pendant 14 jours.
+label: J'accepte que les données saisies dans le formulaire soient vérifiées pour
+  éviter les spams et stockées sous forme cryptée pendant 14 jours.
 
 accessibility:
   checkingData: Nous vérifions vos données. Veuillez patienter s’il vous plaît.
@@ -6,11 +7,14 @@ accessibility:
 
 error:
   gotNoToken: mosparo n’a pas émis de token.
-  internalError: Une erreur s’est produite. Veuillez répéter la procédure s’il vous plaît.
-  noSubmitTokenAvailable: Aucun token disponible. La validation de vos données n’est pas possible.
+  internalError: Une erreur s’est produite. Veuillez répéter la procédure s’il vous
+    plaît.
+  noSubmitTokenAvailable: Aucun token disponible. La validation de vos données n’est
+    pas possible.
   spamDetected: Vos données contiennent du spam.
-  lockedOut: Vous avez été temporairement bloqué. Veuillez réessayer après %datetime% s’il vous plaît.
-  delay: Votre demande a été retardée. Veuillez attendre %seconds% secondes s’il vous plaît.
+  lockedOut: Vous avez été temporairement bloqué. Veuillez réessayer après %datetime%.
+  delay: Votre demande a été retardée. Veuillez attendre %seconds% secondes s’il vous
+    plaît.
 
 hp:
   fieldTitle: Laisser ce champ libre
