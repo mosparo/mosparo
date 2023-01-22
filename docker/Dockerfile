@@ -2,10 +2,6 @@ FROM php:8.2.1-fpm
 
 ARG MOSPARO_VERSION
 
-# This second arg is only needed because the package file name does not contain the 'v' at the
-# beginning of the version number. We will fix this with the next release.
-ARG MOSPARO_NUMERIC_VERSION
-
 ENV TERM xterm
 
 # Docker related
@@ -14,6 +10,19 @@ ENV MOSPARO_ENABLE_CRON 1
 
 # mosparo related
 ENV MOSPARO_UPDATES_ENABLED 0
+ENV TRUSTED_PROXIES '127.0.0.1,REMOTE_ADDR'
+
+# OCI annotations to image
+LABEL org.opencontainers.image.authors="mosparo Core Developers" \
+      org.opencontainers.image.title="mosparo" \
+      org.opencontainers.image.description="The Modern Spam Protection for your form." \
+      org.opencontainers.image.documentation="https://documentation.mosparo.io/" \
+      org.opencontainers.image.base.name="php:8.2.1-fpm" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://github.com/mosparo/mosparo" \
+      org.opencontainers.image.vendor="mosparo Core Developers" \
+      org.opencontainers.image.version="${MOSPARO_VERSION}" \
+      org.opencontainers.image.url="https://github.com/mosparo/mosparo"
 
 SHELL ["/bin/bash", "-c"]
 
@@ -41,9 +50,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get remove ${PHPIZE_DEPS} -y
 
-RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-stable-${MOSPARO_NUMERIC_VERSION}.zip" && \
-    unzip "mosparo-stable-${MOSPARO_NUMERIC_VERSION}.zip" && \
-    rm "mosparo-stable-${MOSPARO_NUMERIC_VERSION}.zip"
+RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-stable-${MOSPARO_VERSION}.zip" && \
+    unzip "mosparo-stable-${MOSPARO_VERSION}.zip" && \
+    rm "mosparo-stable-${MOSPARO_VERSION}.zip"
 
 ADD config/nginx.conf /etc/nginx/sites-enabled/default
 ADD config/mosparo.cron /etc/cron.d/mosparo

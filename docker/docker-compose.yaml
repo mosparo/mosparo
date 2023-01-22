@@ -1,7 +1,7 @@
 services:
   db:
     # We recommend the mariadb image
-    image: mariadb:10.6.4-focal
+    image: mariadb:10.10
     # If you want to use MySQL, uncomment the following line (and comment the one above)
     #image: mysql:8.0.27
     command: '--default-authentication-plugin=mysql_native_password'
@@ -17,7 +17,7 @@ services:
       - 3306
       - 33060
   mosparo_web:
-    image: mosparo/mosparo:v0.3.1
+    image: mosparo/mosparo:latest
     ports:
       - 8080:80
     restart: always
@@ -29,7 +29,7 @@ services:
       - mosparo_data:/mosparo-data
   # If you want to run the cron jobs in a seperated container, uncomment the following lines
   #mosparo_cron:
-  #  image: mosparo/mosparo:v0.3.1
+  #  image: mosparo/mosparo:latest
   #  restart: always
   #  environment:
   #    - MOSPARO_ENABLE_WEBSERVER=0
