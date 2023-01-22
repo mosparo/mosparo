@@ -125,3 +125,9 @@ Please see the [LICENSE](LICENSE) file for the full license.
 
 See [CONTRIBUTING](CONTRIBUTING.md)
 
+### Translate mosparo
+
+We're using [Weblate](https://weblate.org/) to translate mosparo. If you want to help translate mosparo, please head over to our Weblate project: https://hosted.weblate.org/projects/mosparo/
+
+Thank you for helping to make mosparo better.
+
