@@ -1,0 +1,13 @@
+error:
+  delay: 您的请求已被延迟，请等待 %seconds% 秒。
+  noSubmitTokenAvailable: 没有可用的提交令牌。无法验证此表单。
+  gotNoToken: mosparo 没有返回提交令牌。
+  internalError: 发生错误，请再试一次。
+  spamDetected: 您的数据被我们的垃圾邮件保护捕获。
+  lockedOut: 您已被锁定，请在%datetime%后重新尝试。
+hp:
+  fieldTitle: 将此字段留空
+accessibility:
+  checkingData: 我们正在检查您的数据，请稍等。
+  dataValid: 您的数据有效，可以提交表单。
+label: 我接受对表单条目进行垃圾邮件检查并加密存储 14 天。
