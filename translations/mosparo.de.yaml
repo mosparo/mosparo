@@ -47,7 +47,7 @@ project:
 dashboard:
   title: Übersicht
   chart:
-    valid: Valid
+    valid: Gültig
     spam: Spam
 
 # Rules
@@ -823,7 +823,7 @@ security:
 
 # Password reset
 password:
-  backToLogin: Zurück zum Anmelden
+  backToLogin: Zurück zur Anmeldung
 
   request:
     title: Ihr Passwort zurücksetzen
