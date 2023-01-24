@@ -1,1 +1,16 @@
-{}
+project:
+  infoCreateProjectOrRequestAccess: 新建一个项目或者请求访问另一个项目。
+  title: 项目
+  backToList: 回到项目
+  infoNoProjectAvailable: 没有可用的项目
+  action:
+    manage: 管理项目
+    goto: 打开项目
+    delete: 删除项目
+  create:
+    title: 创建项目
+    message:
+      successfullyCreated: 新项目已成功创建。
+header:
+  pleaseChoose: 请选择
+  account: 账号
