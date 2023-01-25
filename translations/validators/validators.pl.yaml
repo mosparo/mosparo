@@ -1,1 +1,10 @@
-{}
+password:
+  form:
+    constraint:
+      notBlank: Proszę wprowadzić hasło.
+      length: Twoje hasło powinno mieć co najmniej {{ limit }} znaków.
+      passwordMustMatch: Pola hasła muszą być ze sobą zgodne.
+  request:
+    form:
+      constraint:
+        notBlank: Proszę podać swój adres e-mail.
