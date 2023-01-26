@@ -10,7 +10,14 @@ project:
   create:
     title: 创建项目
     message:
-      successfullyCreated: 新项目已成功创建。
+      successfullyCreated: 新项目已创建成功。
+  form:
+    name: 名字
+    hostsHelp: 请输入这个项目包括的所有主机。
+    description: 描述
+    hosts: 主机
+    status: 状态
+    statusHelp: 激活或关闭垃圾邮件检测。如果激活，系统将把所有的提交存入日志，但是不会阻止任何提交。
 header:
   pleaseChoose: 请选择
   account: 账号
