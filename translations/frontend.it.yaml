@@ -1,5 +1,4 @@
-label: Accetto che i dati inseriti nel modulo vengano controllati per verificare la
-  presenza di spam e conservati in modo criptato per 14 giorni.
+label: Accetto che i dati inseriti nel modulo vengano controllati per verificare la presenza di spam e conservati in modo criptato per 14 giorni.
 
 accessibility:
   checkingData: Stiamo controllando i tuoi dati. Attendere prego.
@@ -8,11 +7,10 @@ accessibility:
 error:
   gotNoToken: mosparo non ha emesso alcun token di invio.
   internalError: Si è verificato un errore. Per favore riprova.
-  noSubmitTokenAvailable: Nessun token di invio disponibile. La convalida dei tuoi
-    dati non è possibile.
+  noSubmitTokenAvailable: Nessun token di invio disponibile. La convalida dei tuoi dati non è possibile.
   spamDetected: I tuoi dati contengono spam.
   lockedOut: Sei stato/a temporaneamente bloccato. Riprova dopo %datetime%.
-  delay: La tua richiesta è stata ritardata. Attendi %secondi% secondi.
+  delay: La tua richiesta è stata ritardata. Attendi %seconds% secondi.
 
 hp:
   fieldTitle: Lascia vuoto questo campo

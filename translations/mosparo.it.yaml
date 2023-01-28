@@ -1,1 +1,88 @@
-{}
+project:
+  infoNoProjectAvailable: Nessun progetto disponibile
+  title: Progetti
+  backToList: Ritorna ai progetti
+  infoCreateProjectOrRequestAccess: Crea un nuovo progetto o richiedi l'accesso a un altro progetto.
+  action:
+    delete: Elimina progetto
+    goto: Vai al progetto
+    manage: Gestisci progetto
+  create:
+    title: Crea progetto
+    message:
+      successfullyCreated: Il nuovo progetto è stato creato con successo.
+  form:
+    status: Stato
+    name: Nome
+    description: Descrizione
+    hosts: Host
+    spamScore: Punteggio spam
+    hostsHelp: Inserisci tutti gli host che questo progetto includerà.
+    statusHelp: Attiva o disattiva il rilevamento dello spam. Se inattivo, il sistema registrerà tutti gli invii ma non impedirà alcun invio.
+  delete:
+    confirm: Vuoi davvero eliminare il progetto %projectName%?
+    title: Elimina progetto %projectName%
+    message:
+      successfullyDeleted: Il progetto %projectName% è stato eliminato correttamente.
+header:
+  pleaseChoose: Per favore, scegli…
+  account: Account
+rule:
+  edit:
+    title: Modifica regola %ruleName%
+    message:
+      successfullySaved: La regola è stata salvata correttamente.
+  list:
+    name: Nome
+    type: Tipo
+    status: Stato
+    actions: Azioni
+  create:
+    title: Crea regola
+    message:
+      successfullyCreated: La nuova regola è stata creata correttamente.
+  createChooseType:
+    title: Scegli il tipo
+  title: Regole
+  backToList: Ritorna alle regole
+  form:
+    rule:
+      description: Descrizione
+      name: Nome
+      status: Stato
+    addMultipleItems:
+      label: Etichetta
+  delete:
+    confirm: Vuoi davvero eliminare la regola %ruleName%?
+    title: Elimina regola %ruleName%
+    message:
+      successfullyDeleted: La regola %ruleName% è stata eliminata correttamente.
+  type:
+    domain:
+      title: Dominio
+      shortIntro: Consente di filtrare per domini specifici
+      placeholder: Dominio
+      domain:
+        title: Dominio
+      intro: Il tipo di regola di dominio consente di filtrare i domini.
+    email:
+      title: Email
+      intro: Il tipo di regola email consente di filtrare gli indirizzi email.
+      shortIntro: Consente di filtrare per indirizzi email specifici
+      placeholder: Indirizzo email
+      email:
+        title: Indirizzo email
+    ipAddress:
+      title: Indirizzo IP
+      shortIntro: Consente di filtrare per indirizzi IP e sottoreti
+      intro: Il tipo di regola dell'indirizzo IP consente di filtrare gli indirizzi IP o le sottoreti.
+      ipAddress:
+        title: Indirizzo IP
+      placeholder: Indirizzo IP/sottorete
+      subnet:
+        title: Sottorete
+    provider:
+      title: Provider
+dashboard:
+  chart:
+    spam: Spam

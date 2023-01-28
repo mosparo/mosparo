@@ -1,1 +1,13 @@
-{}
+label: Acepto que las entradas del formulario se comprueben en busca de spam y se almacenen encriptadas durante 14 días.
+accessibility:
+  checkingData: Estamos comprobando sus datos. Por favor, espere.
+  dataValid: Sus datos son válidos. Puede enviar el formulario.
+error:
+  gotNoToken: mosparo no devolvió ningún token de envío.
+  noSubmitTokenAvailable: No hay token de envío disponible. No es posible validar este formulario.
+  spamDetected: Tus datos han sido capturados por nuestra protección antispam.
+  lockedOut: Está bloqueado. Inténtalo de nuevo después de %datetime%.
+  internalError: Se ha producido un error. Por favor, inténtelo de nuevo.
+  delay: Tu solicitud se ha retrasado. Espere %seconds% segundos.
+hp:
+  fieldTitle: Deja este campo en blanco
