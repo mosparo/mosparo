@@ -43,11 +43,7 @@ class VerificationHelper
             $fValue = $formData[$sKey];
 
             if (!$this->verifyValues($sValue, $fValue)) {
-                $formattedValue = $fValue;
-                if (is_array($fValue)) {
-                    $formattedValue = implode(', ', $fValue);
-                }
-                $issues[] = ['name' => $sKey, 'message' => 'Field not valid.' . $formattedValue];
+                $issues[] = ['name' => $sKey, 'message' => 'Field not valid.'];
                 $submission->setVerifiedField($sKey, Submission::SUBMISSION_FIELD_INVALID);
             } else {
                 $submission->setVerifiedField($sKey, Submission::SUBMISSION_FIELD_VALID);
