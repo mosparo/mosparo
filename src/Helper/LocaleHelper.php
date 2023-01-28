@@ -44,11 +44,39 @@ class LocaleHelper
         $this->defaultTimezone = $defaultTimezone;
     }
 
+    /**
+     * The Request from the Symfony HttpFoundation will return the preferred language in the format of
+     * [a-z]_[A-Z]{2,}. ISO 15924 (https://en.wikipedia.org/wiki/ISO_15924) lists the names of the scripts like zh_Hans
+     * with one uppercase character only. Weblate exports the translation files with the same script format.
+     * Because of this, we have to fix the Symfony logic for the preferred language.
+     *
+     * If someone knows a better solution, please get in touch with us.
+     *
+     * @param string $locale
+     * @return string
+     */
+    public function fixPreferredLanguage(string $locale): string
+    {
+        if (strpos($locale,'_') === false) {
+            return $locale;
+        }
+
+        [ $languagePart, $scriptPart ] = explode('_', $locale);
+
+        // To be compatible with the country and region script codes,
+        // we can change the script only if it's longer than two characters.
+        if (strlen($scriptPart) > 2) {
+            $scriptPart = ucfirst(strtolower($scriptPart));
+        }
+
+        return $languagePart . '_' . $scriptPart;
+    }
+
     public function determineLocaleValues(Request $request): array
     {
         $browserLocale = null;
         if (!empty($request->getPreferredLanguage())) {
-            $browserLocale = $request->getPreferredLanguage();
+            $browserLocale = $this->fixPreferredLanguage($request->getPreferredLanguage());
         }
 
         $locale = '';

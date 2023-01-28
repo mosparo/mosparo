@@ -10,6 +10,7 @@ use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\SubmitToken;
+use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\GeoIp2Helper;
@@ -46,6 +47,8 @@ class FrontendApiController extends AbstractController
 
     protected TranslatorInterface $translator;
 
+    protected LocaleHelper $localeHelper;
+
     public function __construct(
         ProjectHelper $projectHelper,
         TokenGenerator $tokenGenerator,
@@ -54,7 +57,8 @@ class FrontendApiController extends AbstractController
         SecurityHelper $securityHelper,
         CleanupHelper $cleanupHelper,
         GeoIp2Helper $geoIp2Helper,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        LocaleHelper $localeHelper
     ) {
         $this->projectHelper = $projectHelper;
         $this->tokenGenerator = $tokenGenerator;
@@ -64,6 +68,7 @@ class FrontendApiController extends AbstractController
         $this->cleanupHelper = $cleanupHelper;
         $this->geoIp2Helper = $geoIp2Helper;
         $this->translator = $translator;
+        $this->localeHelper = $localeHelper;
     }
 
     /**
@@ -295,7 +300,7 @@ class FrontendApiController extends AbstractController
     protected function getTranslations(Request $request): array
     {
         if ($this->translator instanceof LocaleAwareInterface && $request->getPreferredLanguage()) {
-            $this->translator->setLocale($request->getPreferredLanguage());
+            $this->translator->setLocale($this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage()));
         }
 
         return [
