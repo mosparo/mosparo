@@ -1,1 +1,13 @@
-{}
+accessibility:
+  checkingData: Kita sedang mengecek data anda. Silakan menunggu.
+  dataValid: Datamu valid. Kau bisa menyerahkan formulirnya.
+error:
+  gotNoToken: Ketika kesalahan ini muncul, mosparo tidak secara tepat mengembalikan tanda terimanya. Ini bisa menjadi kesalahan umum dengan mosparo atau masalah dengan pengaturan keamanan.
+  internalError: Sebuah kesalahan terjadi. Tolong coba lagi.
+  spamDetected: Datamu rusak karena perlindungan kami.
+  delay: Permintaanmu tertunda. Silakan tunggu %detik% detik.
+  lockedOut: Kau telah terkunci. Silakan coba lagi setelah %tanggalwaktu%.
+  noSubmitTokenAvailable: Gagal memasukan token. Validasi bentuk ini tidak dimungkin.
+hp:
+  fieldTitle: Biarkan bidang ini kosong
+label: Saya menerima bahwa isi formulir diperiksa untuk spam dan disimpan terenkripsi selama 14 hari.
