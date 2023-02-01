@@ -1,5 +1,5 @@
 <div class="page-name">{{ row.submitToken.pageTitle }}</div>
 <div class="origin-page-url-container">
-    <a href="{{ row.submitToken.pageUrl }}" target="_blank" class="origin-page-url">{{ row.submitToken.pageUrl }}</a>
+    <a href="{{ row.submitToken.pageUrl }}" target="_blank" class="origin-page-url">{{ row.submitToken.pageUrl|replace({'https://': ''}) }}</a>
     <i class="ti ti-external-link"></i>
 </div>
