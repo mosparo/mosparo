@@ -1,1 +1,13 @@
-{}
+label: 양식 항목에 스팸이 있는지 확인하고 14일 동안 암호화된 상태로 저장되는 것에 동의합니다.
+accessibility:
+  checkingData: 당신의 데이터를 확인하고 있습니다. 기다려 주세요.
+  dataValid: 데이터가 유효합니다. 양식을 제출할 수 있습니다.
+error:
+  gotNoToken: mosparo가 제출 토큰을 반환하지 않았습니다.
+  internalError: 오류가 발생했습니다. 다시 시도해 주세요.
+  noSubmitTokenAvailable: 사용 가능한 제출 토큰이 없습니다. 이 양식의 유효성을 검사할 수 없습니다.
+  spamDetected: 사용자의 데이터가 스팸 방지 기능에 의해 탐지되었습니다.
+  lockedOut: 잠겼습니다. %datetime% 이후에 다시 시도하십시오.
+  delay: 사용자의 요청이 지연되었습니다. %seconds%초 동안 기다려 주세요.
+hp:
+  fieldTitle: 이 필드는 비워 둡니다

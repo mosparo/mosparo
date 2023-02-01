@@ -1,1 +1,13 @@
-{}
+accessibility:
+  checkingData: Estem comprovant les dades. Els preguem paciència.
+  dataValid: Les dades són vàlides. Podeu enviar el formulari.
+label: Accepto que les entrades del formulari seràn comprovades com a spam i emmagatzemades amb encriptació durant 14 dies.
+error:
+  gotNoToken: mosparo no ha retornat un submit token.
+  internalError: Alguna cosa no ha anat bé. Si us plau torneu a intentar-ho.
+  noSubmitTokenAvailable: submit token no disponible. La validació d'aquest formulari no és possible.
+  spamDetected: Les teves dades han sigut comprovades per la nostra protecció de spam.
+  lockedOut: Estàs bloquejat. Si us plau torneu a intentar-ho després de %datetime%.
+  delay: La teva sol·licitud s'ha enlentit. Si us plau espereu durant %seconds% segons.
+hp:
+  fieldTitle: Deixa aquest espai en blanc
