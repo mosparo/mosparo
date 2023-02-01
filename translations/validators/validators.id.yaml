@@ -1,0 +1,10 @@
+password:
+  form:
+    constraint:
+      passwordMustMatch: Kata sandi harus cocok.
+      notBlank: Silahkan masukan kata sandi.
+      length: Kata sandi kamu tidak boleh harus {{ limit }} karakter.
+  request:
+    form:
+      constraint:
+        notBlank: Silahkan masukan email anda.
