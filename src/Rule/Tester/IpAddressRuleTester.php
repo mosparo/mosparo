@@ -2,7 +2,7 @@
 
 namespace Mosparo\Rule\Tester;
 
-use IPLib\Address\IPv4;
+use IPLib\Factory;
 use IPLib\Range\Subnet;
 use Mosparo\Rule\RuleEntityInterface;
 
@@ -46,7 +46,7 @@ class IpAddressRuleTester extends AbstractRuleTester
 
     protected function validateSubnet($value, $itemValue): bool
     {
-        $address = IPv4::parseString($value);
+        $address = Factory::parseAddressString($value);
         $subnet = Subnet::parseString($itemValue);
 
         if ($address->getAddressType() == $subnet->getAddressType() && $subnet->contains($address)) {
