@@ -18,6 +18,75 @@ project:
     hosts: 主机
     status: 状态
     statusHelp: 激活或关闭垃圾邮件检测。如果激活，系统将把所有的提交存入日志，但是不会阻止任何提交。
+  delete:
+    message:
+      successfullyDeleted: 项目%projectName%未被成功删除。
+    confirm: 确定要删除项目%projectName%？
 header:
-  pleaseChoose: 请选择
+  pleaseChoose: 请选择…
   account: 账号
+general:
+  infoUndo: 此操作不可撤回。
+  example: 例子
+  unlimited: 无限制
+password:
+  reset:
+    action: 重置密码
+    message:
+      successfullyReset: 你的密码已重置成功。
+    error:
+      tokenNotFound: URL或者会话中未发现重置密码令牌。
+      errorOccurred: 密码请求验证发生错误。%error%
+    title: 重置密码
+  form:
+    repeatPassword: 重复密码
+    password: 密码
+    newPassword: 新密码
+action:
+  remove: 移除
+  edit: 编辑
+  delete: 删除
+  close: 关闭
+  add: 添加
+  help: 帮助
+  actions: 操作
+  view: 保存
+  manage: 管理
+  installUpdate: 安装更新
+  configure: 配置
+  checkForUpdate: 检查更新
+state:
+  active: 激活
+  inactive: 未激活
+  ignored: 已忽略
+roles:
+  user: 用户
+  administrator: 管理员
+  inactive: 未激活
+datatable:
+  datatable:
+    search: 搜索：
+    processing: 处理中…
+    paginate:
+      last: 尾页
+      next: 下一页
+      first: 首页
+      previous: 前一页
+form:
+  addMultipleItems: 增加多个项目
+  choices:
+    systemDefault: 默认设置
+    browserLanguage: 浏览语言
+rule:
+  edit:
+    title: 编辑角色%ruleName%
+    message:
+      successfullySaved: 角色保存成功。
+  createChooseType:
+    title: 选择类型
+  create:
+    title: 创建角色
+    message:
+      successfullyCreated: 新角色已成功创建。
+  form:
+    ruleType: 角色类型
