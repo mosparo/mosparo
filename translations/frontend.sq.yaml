@@ -1,6 +1,6 @@
 error:
   spamDetected: Të dhënat tuaja përmbajnë spam.
-  gotNoToken: Mosparo nuk ktheu asnjë shenjë parashtrimi.
+  gotNoToken: mosparo nuk ktheu asnjë shenjë parashtrimi.
   internalError: Një gabim ndodhi. Ju lutemi provoni përsëri.
   delay: Kërkesa juaj është vonuar. Ju lutemi prisni për %seconds% sekonda.
   noSubmitTokenAvailable: Nuk disponohet asnjë shenjë e dorëzimit. Verifikimi i këtij formulari nuk është i mundur.
