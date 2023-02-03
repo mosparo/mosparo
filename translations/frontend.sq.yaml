@@ -1,1 +1,13 @@
-{}
+error:
+  spamDetected: Të dhënat tuaja përmbajnë spam.
+  gotNoToken: Mosparo nuk ktheu asnjë shenjë parashtrimi.
+  internalError: Një gabim ndodhi. Ju lutemi provoni përsëri.
+  delay: Kërkesa juaj është vonuar. Ju lutemi prisni për %seconds% sekonda.
+  noSubmitTokenAvailable: Nuk disponohet asnjë shenjë e dorëzimit. Verifikimi i këtij formulari nuk është i mundur.
+  lockedOut: Ju jeni ndaluar përkohësisht. Ju lutemi provoni përsëri pas %datetime%.
+label: Unë pranoj që hyrjet e formularit kontrollohen për postë të padëshiruar dhe ruhen të koduara për 14 ditë.
+accessibility:
+  checkingData: Ne po kontrollojmë të dhënat tuaja. Ju lutem prisni.
+  dataValid: Të dhënat tuaja nuk përmbajnë spam. Ju mund të dorëzoni formularin.
+hp:
+  fieldTitle: Lëreni këtë fushë hyrjes bosh
