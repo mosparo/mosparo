@@ -5,7 +5,7 @@ error:
   gotNoToken: Ketika kesalahan ini muncul, mosparo tidak secara tepat mengembalikan tanda terimanya. Ini bisa menjadi kesalahan umum dengan mosparo atau masalah dengan pengaturan keamanan.
   internalError: Sebuah kesalahan terjadi. Tolong coba lagi.
   spamDetected: Datamu rusak karena perlindungan kami.
-  delay: Permintaanmu tertunda. Silakan tunggu %detik% detik.
+  delay: Permintaanmu tertunda. Silakan tunggu %seconds% detik.
   lockedOut: Kau telah terkunci. Silakan coba lagi setelah %tanggalwaktu%.
   noSubmitTokenAvailable: Gagal memasukan token. Validasi bentuk ini tidak dimungkin.
 hp:
