@@ -4,7 +4,7 @@ error:
   spamDetected: Vaši podaci sadrže neželjenu poštu.
   gotNoToken: mosparo nije izdao token za slanje.
   lockedOut: Privremeno ste zabranjeni. Pokušajte ponovno nakon %datetime%.
-  delay: Vaš zahtjev je odgođen. Molimo pričekajte % seconds% sekundi.
+  delay: Vaš zahtjev je odgođen. Pričekajte % seconds% s.
 label: Prihvaćam da se unosi obrasca provjeravaju na spam i pohranjuju šifrirani 14 dana.
 accessibility:
   checkingData: Provjeravamo vaše podatke. Molimo pričekajte.
