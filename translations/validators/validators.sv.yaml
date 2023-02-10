@@ -1,1 +1,10 @@
-{}
+password:
+  request:
+    form:
+      constraint:
+        notBlank: Vänligen ange din e-postadress.
+  form:
+    constraint:
+      notBlank: Vänligen ange ett lösenord.
+      passwordMustMatch: Lösenordsfälten måste matcha.
+      length: Ditt lösenord bör vara minst {{ limit }} tecken.
