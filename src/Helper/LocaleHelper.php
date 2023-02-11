@@ -144,6 +144,11 @@ class LocaleHelper
             }
 
             if ($nameParts[0] === 'mosparo') {
+                // If the translation file is empty, we do not offer it as available language.
+                if (!$this->containsContent($file->getPathname())) {
+                    continue;
+                }
+
                 try {
                     $name = Locales::getName($nameParts[1]);
                 } catch (MissingResourceException $exception) {
@@ -220,5 +225,19 @@ class LocaleHelper
         }
 
         return $format;
+    }
+
+    /**
+     * Returns true if the given file contains content, false if not.
+     *
+     * @param string $filename
+     * @return bool
+     */
+    protected function containsContent(string $filename): bool
+    {
+        $content = trim(file_get_contents($filename));
+        $content = trim($content, '{}');
+
+        return ($content != '');
     }
 }
