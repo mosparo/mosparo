@@ -8,20 +8,25 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 
 ## Frontend
 
-| Language             | Language Code | Contributors                                                               |
-|----------------------|---------------|----------------------------------------------------------------------------|
-| Catalan              | ca            | [limusina10](https://hosted.weblate.org/user/limusina10/)                  |
-| Chinese (Simplified) | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                      |
-| English              | en            | mosparo Core Developers                                                    |
-| French               | fr            | mosparo Core Developers                                                    |
-| German               | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/) |
-| Indonesian           | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                          |
-| Italian              | it            | mosparo Core Developers                                                    |
-| Khmer (Central)      | km            | [mahonebay](https://hosted.weblate.org/user/mahonebay/)                    |
-| Korean               | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                |
-| Polish               | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)                        |
-| Spanish              | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)            |
-| Ukrainian            | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                    |
+| Language              | Language Code | Contributors                                                                                                 |
+|-----------------------|---------------|--------------------------------------------------------------------------------------------------------------|
+| Albanian              | sq            | [fim](https://hosted.weblate.org/user/fim/)                                                                  |
+| Catalan               | ca            | [limusina10](https://hosted.weblate.org/user/limusina10/)                                                    |
+| Chinese (Simplified)  | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                                                        |
+| Chinese (Traditional) | zh_Hant       | Célia (via [mahonebay](https://hosted.weblate.org/user/mahonebay))                                           |
+| Croatian              | hr            | DMI (via [fim](https://hosted.weblate.org/user/fim/)), [milotype](https://hosted.weblate.org/user/milotype/) |
+| English               | en            | mosparo Core Developers                                                                                      |
+| French                | fr            | mosparo Core Developers                                                                                      |
+| German                | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/)                                   |
+| Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                                                            |
+| Italian               | it            | mosparo Core Developers                                                                                      |
+| Khmer (Central)       | km            | Sourkea (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
+| Korean                | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                                                  |
+| Polish                | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)                                                          |
+| Portuguese            | pt            | Northon (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
+| Spanish               | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)                                              |
+| Swedish               | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                            |
+| Ukrainian             | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                      |
 
 ## Backend
 | Language             | Language Code | Contributors                                                            |
