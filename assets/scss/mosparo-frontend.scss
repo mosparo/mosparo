@@ -16,6 +16,7 @@
     &,
     .mosparo__label, {
         color: var(--mosparo-text-color, rgb(0, 0, 0));
+        font-weight: normal;
     }
 
     min-width: var(--mosparo-container-min-width, 320px);
