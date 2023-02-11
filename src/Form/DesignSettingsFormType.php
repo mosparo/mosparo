@@ -22,6 +22,7 @@ class DesignSettingsFormType extends AbstractType
         $builder
             ->add('boxSize', ChoiceType::class, ['label' => 'settings.design.form.boxSize', 'expanded' => true, 'choices' => $boxSizeChoices])
             ->add('boxRadius', IntegerType::class, ['label' => 'settings.design.form.boxRadius', 'attr' => ['class' => 'text-end', 'min' => 0, 'data-variable' => '--mosparo-border-radius']])
+            ->add('boxBorderWidth', IntegerType::class, ['label' => 'settings.design.form.boxBorderWidth', 'attr' => ['class' => 'text-end', 'min' => 0, 'max' => 20, 'data-variable' => '--mosparo-border-width']])
             ->add('colorBackground', TextType::class, ['label' => 'settings.design.form.color.background', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-background-color', 'data-contrast-value' => 'background']])
             ->add('colorBorder', TextType::class, ['label' => 'settings.design.form.color.border', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-border-color']])
             ->add('colorCheckbox', TextType::class, ['label' => 'settings.design.form.color.checkbox', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--mosparo-circle-border-color']])

@@ -16,6 +16,7 @@ class DesignHelper
     protected static array $designConfigValueKeys = [
         'boxSize',
         'boxRadius',
+        'boxBorderWidth',
         'colorBackground',
         'colorBorder',
         'colorCheckbox',
@@ -46,6 +47,7 @@ class DesignHelper
     protected static array $cssVariableNames = [
         '--mosparo-border-color' => ['key' => 'colorBorder', 'type' => 'color'],
         '--mosparo-border-radius' => ['key' => 'boxRadius', 'type' => 'number'],
+        '--mosparo-border-width' => ['key' => 'boxBorderWidth', 'type' => 'number'],
         '--mosparo-background-color' => ['key' => 'colorBackground', 'type' => 'color'],
         '--mosparo-text-color' => ['key' => 'colorText', 'type' => 'color'],
         '--mosparo-shadow-color' => ['key' => 'colorShadow', 'type' => 'color'],

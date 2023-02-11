@@ -90,6 +90,7 @@ class Project
 
         'boxSize' => 'medium',
         'boxRadius' => 11,
+        'boxBorderWidth' => 3,
         'colorBackground' => 'rgb(255, 255, 255)',
         'colorBorder' => 'rgb(0, 0, 0)',
         'colorCheckbox' => 'rgb(0, 0, 0)',

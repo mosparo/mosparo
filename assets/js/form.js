@@ -174,6 +174,11 @@ $(document).ready(function () {
 
         let val = parseInt(changeInputField.val());
 
+        let max = 0;
+        if (changeInputField.attr('max')) {
+            max = parseInt(changeInputField.attr('max'));
+        }
+
         if (changeDirection === '-') {
             val -= 1;
         } else if (changeDirection === '+') {
@@ -182,6 +187,10 @@ $(document).ready(function () {
 
         if (val < 0) {
             val = 0;
+        }
+
+        if (max > 0 && val > max) {
+            val = max;
         }
 
         changeInputField.val(val).trigger('change');

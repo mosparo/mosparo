@@ -514,6 +514,7 @@ settings:
     form:
       boxSize: Box size
       boxRadius: Box radius
+      boxBorderWidth: Border width
       showMosparoLogo: Show mosparo logo below the checkbox
       showPingAnimation: Show ping animation to highlight the checkbox
       color:

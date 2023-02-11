@@ -112,6 +112,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-12 col-lg-4">
+                            <div class="form-group">
+                                {{ form_label(form.boxBorderWidth) }}
+                                <div class="input-group">
+                                    <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                        <i class="ti ti-minus"></i>
+                                    </button>
+                                    {{ form_widget(form.boxBorderWidth) }}
+                                    <span class="input-group-text">px</span>
+                                    <button class="btn btn-icon-only btn-increase-value" type="button">
+                                        <i class="ti ti-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
