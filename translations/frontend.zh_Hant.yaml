@@ -1,1 +1,13 @@
-{}
+label: 我同意對表單內容進行垃圾郵件檢查並且加密儲存14天。
+error:
+  lockedOut: 您已被鎖住，請在%datetime%後再試一次。
+  internalError: 發生錯誤，請再試一次。
+  gotNoToken: mosparo沒有回應提交代碼。
+  noSubmitTokenAvailable: 沒有有效的提交代碼。無法驗證此表單。
+  delay: 您的請求已被延遲，請等待%seconds%秒。
+  spamDetected: 您的數據已被我們的垃圾郵件防護阻擋。
+accessibility:
+  checkingData: 我們正在檢查您的數據，請稍等。
+  dataValid: 您的數據有效，您可以提交表單。
+hp:
+  fieldTitle: 請將此區留空白
