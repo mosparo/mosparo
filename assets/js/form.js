@@ -35,8 +35,12 @@ $(document).ready(function () {
         newWidget = newWidget.replace(/__name__/g, collectionGetRandomHash());
 
         let newElem = $(list.attr('data-widget-tags'));
-        newElem.find('.input-group').append(newWidget);
-        newElem.find('.input-group').append($('<button></button>').attr('type', 'button').addClass('btn btn-danger btn-icon-only remove-item-button').html('<i class="ti ti-circle-minus"></i>'));
+        let containerEl = newElem;
+        if (newElem.find('.input-group').length > 0) {
+            containerEl = newElem.find('.input-group');
+        }
+        containerEl.append(newWidget);
+        containerEl.append($('<button></button>').attr('type', 'button').addClass('btn btn-danger btn-icon-only remove-item-button').html('<i class="ti ti-circle-minus"></i>'));
         newElem.appendTo(list);
 
         collectionToggleRemoveButton(list);

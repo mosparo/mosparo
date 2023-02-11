@@ -89,6 +89,8 @@ rule:
 
     items:
       title: Einträge
+      type: Typ
+      rating: Bewertung
 
     addMultipleItems:
       label: Bezeichnung
@@ -109,7 +111,8 @@ rule:
       title: Domain
       shortIntro: Filtert nach Domains
       intro: Der Domain-Regeltyp erlaubt das Filtern nach Domains.
-      placeholder: Domain
+      label: Domain
+      placeholder: example.com
 
       domain:
         title: Domain
@@ -119,7 +122,8 @@ rule:
       title: E-Mail
       shortIntro: Filtert nach E-Mail-Adressen
       intro: Der E-Mail-Adressen-Regeltyp erlaubt das Filtern nach E-Mail-Adressen.
-      placeholder: E-Mail-Adresse
+      label: E-Mail-Adresse
+      placeholder: info@example.com
 
       email:
         title: E-Mail-Adresse
@@ -129,7 +133,8 @@ rule:
       title: IP-Adresse
       shortIntro: Filtert nach IP-Adressen und Subnetzen
       intro: Der IP-Adressen-Regeltyp erlaubt das Filtern nach IP-Adressen und Subnetzen.
-      placeholder: IP-Adresse/Subnetz
+      label: IP-Adresse/Subnetz
+      placeholder: 0.0.0.0
 
       ipAddress:
         title: IP-Adresse
@@ -144,7 +149,8 @@ rule:
       shortIntro: Filtert nach AS-Nummer und Land
       intro: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
       infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
-      placeholder: ASN
+      label: AS Nummer/Land
+      placeholder: ''
 
       action:
         configureGeoip2: GeoIP2 Konfiguration
@@ -162,6 +168,7 @@ rule:
       title: Unicode-Block
       shortIntro: Filtert die Eingaben aufgrund der verwendeten Zeichen.
       intro: Der Unicode-Block-Regeltyp erlaubt die Verwendung von bestimmten Zeichen zu bewerten.
+      label: Unicode-Block
 
       block:
         title: Block
@@ -174,7 +181,8 @@ rule:
       title: User-Agent
       shortIntro: Filtert nach Wörter und RegEx-Muster im User-Agent
       intro: Der User-Agent-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular Expression Pattern zu filtern.
-      placeholder: Wort/Muster
+      label: User-Agent (Wort/Muster)
+      placeholder: ''
 
       text:
         title: Text
@@ -191,7 +199,8 @@ rule:
       title: Website
       shortIntro: Filtert nach URLs
       intro: Der Website-Regeltyp erlaubt das Filtern nach URLs.
-      placeholder: URL/Domain
+      label: URL/Domain
+      placeholder: 'https://example.com'
 
       url:
         title: URL
@@ -202,7 +211,8 @@ rule:
       title: Wort
       shortIntro: Filtert nach Wörter und RegEx-Muster
       intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
-      placeholder: Wort/Muster
+      label: Wort/Muster
+      placeholder: ''
 
       text:
         title: Text

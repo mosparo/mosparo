@@ -2,20 +2,69 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block collection_additional_add_button %}
-    <div class="col-12 col-md">
-        {% if not form.vars.disabled and attr.allowAddMultiple %}
-            <button type="button" class="btn btn-secondary w-100 mb-2 m-md-0" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
-                <i class="ti ti-square-plus"></i>
-                {{ 'form.addMultipleItems'|trans }}
-            </button>
+{% block _rule_form_items_widget %}
+    <div class="collection-widget {% if form.vars.allow_add %}add-allowed{% endif %} {% if form.vars.allow_delete %}remove-allowed{% endif %}">
+        <div class="label-row">
+            {% for field in form.vars.prototype.children %}
+                <div class="rule-item-field-container {{ field.vars.attr.class|replace({'form-select': ''}) }}">
+                    {{ form_label(field) }}
+                </div>
+            {% endfor %}
+
+            {% if not form.vars.disabled %}
+                <button type="button" class="btn btn-danger btn-icon-only remove-item-button" title="{{ 'action.remove'|trans }}">
+                    <i class="ti ti-circle-minus"></i>
+                </button>
+            {% endif %}
+        </div>
+        <ul class="collection-list" data-prototype="{{ form_widget(form.vars.prototype)|e }}" data-widget-tags="{{ '<li></li>'|e }}" data-widget-counter="{{ form|length }}">
+            {% for field in form %}
+                <li>
+                    {{ form_widget(field) }}
+
+                    {% if not form.vars.disabled %}
+                        <button type="button" class="btn btn-danger btn-icon-only remove-item-button" title="{{ 'action.remove'|trans }}">
+                            <i class="ti ti-circle-minus"></i>
+                        </button>
+                    {% endif %}
+
+                    {{ form_errors(field) }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% if form.vars.allow_add %}
+            <div class="row">
+                <div class="col-12 col-md">
+                    {% if not form.vars.disabled and attr.allowAddMultiple %}
+                        <button type="button" class="btn btn-secondary w-100 mb-2 m-md-0" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
+                            <i class="ti ti-square-plus"></i>
+                            {{ 'form.addMultipleItems'|trans }}
+                        </button>
+                    {% endif %}
+                </div>
+                <div class="col-12 col-md order-last order-md-0 mt-2 mt-md-0">
+                    {{- form_help(form) -}}
+                </div>
+                <div class="col-12 col-md-auto">
+                    {% if not form.vars.disabled %}
+                        <button type="button" class="btn btn-success w-100 ms-auto add-item-button">
+                            <i class="ti ti-plus"></i>
+                            {{ 'action.add'|trans }}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
         {% endif %}
     </div>
 {% endblock %}
 
 {% block _rule_form_items_entry_widget %}
     {% for field in form %}
-        {{ form_widget(field) }}
+        <div class="rule-item-field-container {{ field.vars.attr.class|replace({'form-select': ''}) }}">
+            {{ form_label(field) }}
+            {{ form_widget(field) }}
+        </div>
     {% endfor %}
 {% endblock %}
 

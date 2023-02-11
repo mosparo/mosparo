@@ -30,14 +30,23 @@ class UnicodeBlockFormType extends AbstractRuleTypeFormType
 
         $choices = ChoicesUtil::buildChoices($ruleType->getSubtypes());
         $builder
-            ->add('type', ChoiceType::class, ['choices' => $choices, 'attr' => ['readonly' => (count($choices) === 1), 'class' => 'form-select rule-item-type']])
-            ->add('value', ChoiceType::class, ['choices' => $blockChoices, 'attr' => ['class' => 'form-select rule-item-value']])
+            ->add('type', ChoiceType::class, [
+                'label' => 'rule.form.items.type',
+                'choices' => $choices,
+                'attr' => ['readonly' => (count($choices) === 1), 'class' => 'form-select rule-item-type']
+            ])
+            ->add('value', ChoiceType::class, [
+                'label' => 'rule.type.unicodeBlock.label',
+                'choices' => $blockChoices,
+                'attr' => ['class' => 'form-select rule-item-value']
+            ])
             ->add('spamRatingFactor', NumberType::class, [
+                'label' => 'rule.form.items.rating',
                 'required' => false,
                 'html5' => true,
                 'scale' => 1,
                 'attr' => [
-                    'placeholder' => 'rule.type.rating.placeholder',
+                    'placeholder' => '1.0',
                     'class' => 'rule-item-rating',
                     'min' => 0.1,
                     'step' => 'any',
