@@ -47,6 +47,12 @@
 
             .form-control {
                 border-radius: 0;
+
+                position: relative;
+            }
+
+            .form-control:focus {
+                z-index: 5;
             }
 
             &:first-child {
@@ -60,6 +66,12 @@
                     border-radius: 0 var(--tblr-border-radius) var(--tblr-border-radius) 0;
                 }
             }
+        }
+
+        .btn.remove-item-button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            margin-left: -1px;
         }
     }
 }
