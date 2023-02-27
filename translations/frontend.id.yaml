@@ -6,7 +6,7 @@ error:
   internalError: Sebuah kesalahan terjadi. Tolong coba lagi.
   spamDetected: Datamu rusak karena perlindungan kami.
   delay: Permintaanmu tertunda. Silakan tunggu %seconds% detik.
-  lockedOut: Kau telah terkunci. Silakan coba lagi setelah %tanggalwaktu%.
+  lockedOut: Kau telah terkunci. Silakan coba lagi setelah %datetime%.
   noSubmitTokenAvailable: Gagal memasukan token. Validasi bentuk ini tidak dimungkin.
 hp:
   fieldTitle: Biarkan bidang ini kosong
