@@ -20,10 +20,13 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | German                | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/)                                   |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                                                            |
 | Italian               | it            | mosparo Core Developers                                                                                      |
+| Japanese              | ja            | Claudia and Melody (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                             |
 | Khmer (Central)       | km            | Sourkea (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
 | Korean                | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                                                  |
 | Polish                | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)                                                          |
 | Portuguese            | pt            | Northon (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
+| Russian               | ru            | [Senya0](https://hosted.weblate.org/user/Senya0/), [Andrej730](https://hosted.weblate.org/user/Andrej730/)   |
+| Slovenian             | sl            | Alona and Lesly (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                |
 | Spanish               | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)                                              |
 | Swedish               | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                            |
 | Ukrainian             | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                      |
@@ -34,13 +37,15 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Chinese (Simplified) | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                   |
 | English              | en            | mosparo Core Developers                                                 |
 | German               | de            | mosparo Core Developers                                                 |
+| Indonesian           | id            | [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/)             |
 | Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/) |
 
 ## Validators
-| Language | Language Code | Contributors                                                |
-|----------|---------------|-------------------------------------------------------------|
-| Catalan  | ca            | [limusina10](https://hosted.weblate.org/user/limusina10/)   |
-| English  | en            | mosparo Core Developers                                     |
-| German   | de            | mosparo Core Developers                                     |
-| Korean   | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/) |
-| Polish   | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)         |
+| Language   | Language Code | Contributors                                                |
+|------------|---------------|-------------------------------------------------------------|
+| English    | en            | mosparo Core Developers                                     |
+| German     | de            | mosparo Core Developers                                     |
+| Indonesian | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)           |
+| Korean     | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/) |
+| Polish     | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)         |
+| Swedish    | sv            | [bittin](https://hosted.weblate.org/user/bittin/)           |
