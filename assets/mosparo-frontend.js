@@ -38,7 +38,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.checkedFormData = null;
 
     this.messages = {
-        label: 'I agree that my data will be checked for spam. I accept that my data will be stored for 14 days.',
+        label: 'I accept that the form entries are checked for spam and stored encrypted for 14 days.',
 
         accessibilityCheckingData: 'We\'re checking your data. Please wait.',
         accessibilityDataValid: 'Your data are valid. You can submit the form.',
