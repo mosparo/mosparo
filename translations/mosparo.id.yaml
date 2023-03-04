@@ -1,1 +1,20 @@
-{}
+project:
+  backToList: Kembali ke proyek
+  infoCreateProjectOrRequestAccess: Membuat proyek baru atau meminta akses ke proyek lain.
+  title: Proyek
+  infoNoProjectAvailable: Tidak ada proyek yang tersedia
+  action:
+    manage: Kelola proyek
+    delete: Hapus proyek
+    goto: Pergi ke proyek
+  create:
+    title: Buat proyek
+    message:
+      successfullyCreated: Proyek baru berhasil dibuat.
+  form:
+    name: Nama
+    description: Deskripsi
+    hosts: Pemilik
+header:
+  pleaseChoose: Silakan pilih…
+  account: Akun

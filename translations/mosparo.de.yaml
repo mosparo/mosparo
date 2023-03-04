@@ -231,7 +231,7 @@ rule:
       infoCalculationMethod: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
       infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %zero% bis %unlimited%. Wenn keine Bewertung gesetzt ist, wird die Standard-Bewertung %one% verwendet.
       infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
-      placeholder: Bew.
+      placeholder: Bewertung
 
 # Ruleset
 ruleset:

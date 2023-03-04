@@ -1,1 +1,13 @@
-{}
+label: Strinjam se, da se vnosi v formular preverijo na morebiten spam in se kriptirani hranijo 14 dni.
+accessibility:
+  checkingData: Preverjamo vaše podatke. Prosimo počakajte.
+  dataValid: Vaši podatki ne vsebujejo spam sporočil. Lahko posredujete formular.
+error:
+  gotNoToken: Mosparo ne vrača odgovorov.
+  internalError: Prišlo je do napake. Prosimo ponovite predhodni korak.
+  noSubmitTokenAvailable: Odgovor ni možen. Formularja ni mogoče preveriti.
+  spamDetected: Med vašimi podatki se nahaja spam(vsiljena pošta) zato je sporočilo zadržano.
+  lockedOut: Vaše sporočilo je začasno zaklenjeno. Prosim poskusite ponovno čez %datetime%.
+  delay: Vaše povpraševanje je bilo začasno zadržano. Prosim počakajte nekaj %seconds%.
+hp:
+  fieldTitle: To polje pustite prezno
