@@ -68,7 +68,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             this.loadCssResource();
         }
 
-        this.containerElement.classList.add('mosparo__container');
+        this.containerElement.classList.add('mosparo__container', 'mosparo__' + this.uuid);
 
         // Find the form
         let forms = document.querySelectorAll('form');
