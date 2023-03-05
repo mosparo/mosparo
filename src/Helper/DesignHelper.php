@@ -370,6 +370,11 @@ class DesignHelper
         // Resolve the variables and replace them with the values
         $content = $this->resolveCssVariables($content, $designConfigValues, $defaultConfigValues);
 
+        // Replace the .mosparo__container selector with .mosparo__{projectUuid} to allow multiple different
+        // mosparo designs on the same website.
+        $content = str_replace('.mosparo__container', '.mosparo__' . $project->getUuid(), $content);
+
+        // Remove comments and new lines
         $content = preg_replace('%/\*(.[^*]*)\*/%i', '', $content);
         $content = str_replace(PHP_EOL, '', $content);
 
