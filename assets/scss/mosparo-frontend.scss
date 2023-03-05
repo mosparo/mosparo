@@ -300,17 +300,17 @@
         padding: 0;
         border: 0;
     }
-}
 
-.mosparo__error-message {
-    display: none;
+    .mosparo__error-message {
+        display: none;
 
-    margin-top: 0.5em;
+        margin-top: 0.5em;
 
-    color: var(--mosparo-failure-text-error-color, rgb(255, 0, 0));
+        color: var(--mosparo-failure-text-error-color, rgb(255, 0, 0));
 
-    &.mosparo__error-message-visible {
-        display: block;
+        &.mosparo__error-message-visible {
+            display: block;
+        }
     }
 }
 
