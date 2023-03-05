@@ -3,6 +3,7 @@
 namespace Mosparo\Helper;
 
 use DirectoryIterator;
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Util\HashUtil;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -157,6 +158,10 @@ class DesignHelper
 
     protected static $maxRadiusForLogo = ['small' => 15, 'medium' => 20, 'large' => 35];
 
+    protected EntityManagerInterface $entityManager;
+
+    protected ProjectHelper $projectHelper;
+
     protected EntrypointLookupCollection $entrypointLookupCollection;
 
     protected UrlGeneratorInterface $router;
@@ -165,12 +170,37 @@ class DesignHelper
 
     protected string $projectDirectory;
 
-    public function __construct(EntrypointLookupCollection $entrypointLookupCollection, UrlGeneratorInterface $router, Filesystem $filesystem, string $projectDirectory)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ProjectHelper $projectHelper,
+        EntrypointLookupCollection $entrypointLookupCollection,
+        UrlGeneratorInterface $router,
+        Filesystem $filesystem,
+        string $projectDirectory
+    ) {
+        $this->entityManager = $entityManager;
+        $this->projectHelper = $projectHelper;
         $this->entrypointLookupCollection = $entrypointLookupCollection;
         $this->router = $router;
         $this->filesystem = $filesystem;
         $this->projectDirectory = $projectDirectory;
+    }
+
+    public function refreshFrontendResourcesForAllProjects()
+    {
+        // Get the originally active project to set it again after the refresh.
+        $activeProject = $this->projectHelper->getActiveProject();
+
+        $projectRepository = $this->entityManager->getRepository(Project::class);
+        $projects = $projectRepository->findAll();
+
+        foreach ($projects as $project) {
+            $this->projectHelper->setActiveProject($project);
+            $this->generateCssCache($project);
+        }
+
+        // Set the originally active project again
+        $this->projectHelper->setActiveProject($activeProject);
     }
 
     public function getBoxSizeVariables(): array
@@ -196,6 +226,8 @@ class DesignHelper
         if (!$cssFiles) {
             return null;
         }
+
+        $entrypoint->reset();
 
         return current($cssFiles);
     }

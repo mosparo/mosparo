@@ -4,6 +4,7 @@ namespace Mosparo\Controller\Administration;
 
 use Mosparo\Exception;
 use Mosparo\Helper\ConfigHelper;
+use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Helper\UpdateHelper;
 use Mosparo\Kernel;
@@ -34,16 +35,26 @@ class UpdateController extends AbstractController
 
     protected ConfigHelper $configHelper;
 
+    protected DesignHelper $designHelper;
+
     protected TranslatorInterface $translator;
 
     protected bool $updatesEnabled;
 
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, UpdateHelper $updateHelper, ConfigHelper $configHelper, TranslatorInterface $translator, bool $updatesEnabled)
-    {
+    public function __construct(
+        KernelInterface $kernel,
+        SetupHelper $setupHelper,
+        UpdateHelper $updateHelper,
+        ConfigHelper $configHelper,
+        DesignHelper $designHelper,
+        TranslatorInterface $translator,
+        bool $updatesEnabled
+    ) {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
         $this->updateHelper = $updateHelper;
         $this->configHelper = $configHelper;
+        $this->designHelper = $designHelper;
         $this->translator = $translator;
         $this->updatesEnabled = $updatesEnabled;
     }
@@ -238,6 +249,9 @@ class UpdateController extends AbstractController
         $output = new BufferedOutput();
         $application->run($input, $output);
         $output->fetch();
+
+        // Refresh the frontend resources
+        $this->designHelper->refreshFrontendResourcesForAllProjects();
 
         // Remove the temporary log file
         $session = $request->getSession();
