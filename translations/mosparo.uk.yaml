@@ -1,1 +1,78 @@
-{}
+project:
+  form:
+    hostsHelp: Будь ласка, введіть всі хости, до яких буде включено цей проєкт.
+    spamScore: Оцінка спаму
+    name: Ім’я
+    hosts: Хости
+    description: Опис
+    status: Стан
+    statusHelp: Увімкніть або вимкніть виявлення спаму. Якщо вимкнено, система буде реєструвати всі відправлення, але не буде запобігати жодному відправленню.
+    spamScoreHelp: Визначає межу, при якій заявка визнається спамом. Якщо рейтинг заявки перевищує це значення, заявку буде визнано спамом.
+  infoCreateProjectOrRequestAccess: Створіть новий проєкт або запросіть доступ до іншого проєкту.
+  title: Проєкти
+  infoNoProjectAvailable: Немає доступних проєктів
+  create:
+    title: Створити проєкт
+    message:
+      successfullyCreated: Новий проєкт успішно створено.
+  backToList: Назад до проєктів
+  action:
+    manage: Керування проєктом
+    delete: Видалити проєкт
+    goto: Перейти до проєкту
+  delete:
+    message:
+      successfullyDeleted: Проєкт %projectName% успішно видалено.
+    title: Видалити проєкт %projectName%
+    confirm: Ви дійсно хочете видалити проєкт %projectName%?
+  roles:
+    reader: Читач
+    editor: Редактор
+    owner: Власник
+rule:
+  form:
+    rule:
+      title: Правило
+      status: Стан
+      name: Ім’я
+      description: Опис
+      spamRatingFactor: Коефіцієнт рейтингу спаму
+      spamRatingFactorHelp: За допомогою коефіцієнта рейтингу спаму можна визначити фактор, який підсилює або послаблює записи цього правила. Якщо значення більше 1.0, записи посилюються, якщо значення менше 1.0, записи послаблюються.
+    addMultipleItems:
+      itemsHelp: Додавайте по одному елементу в рядок.
+      label: Мітка
+      items: Елементи
+      rating: Рейтинг
+      ratingHelp: Якщо не встановлено, типовим значенням є 1.0. Якщо рейтинг встановлено на 0.0, елементи не будуть оцінені як спам-елементи.
+    ruleType: Тип правила
+    items:
+      title: Елементи
+      type: Тип
+      rating: Рейтинг
+  edit:
+    title: Редагувати правило %ruleName%
+    message:
+      successfullySaved: Правило успішно збережено.
+  title: Правила
+  backToList: Назад до правил
+  list:
+    name: Ім’я
+    type: Тип
+    status: Стан
+    actions: Дії
+  createChooseType:
+    title: Виберіть тип
+  create:
+    title: Створити правило
+    message:
+      successfullyCreated: Нове правило успішно створено.
+  delete:
+    title: Видалити правило %ruleName%
+header:
+  pleaseChoose: Будь ласка, оберіть…
+  account: Обліковий запис
+dashboard:
+  title: Інформаційна панель
+  chart:
+    spam: Спам
+    valid: Дійсний
