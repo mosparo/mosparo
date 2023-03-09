@@ -163,6 +163,12 @@ class UpdateController extends AbstractController
         $session->set('temporaryLogFile', $temporaryLogFilePath);
 
         $availableUpdateData = $session->get('availableUpdateData', []);
+
+        // Abort, if this version is already installed.
+        if ($availableUpdateData['version'] == Kernel::VERSION) {
+            return $this->redirectToRoute('administration_update_overview');
+        }
+
         return $this->render('administration/update/execute.html.twig', [
             'mosparoVersion' => Kernel::VERSION,
             'availableUpdateData' => $availableUpdateData,
@@ -186,6 +192,11 @@ class UpdateController extends AbstractController
         $temporaryLogFile = $session->get('temporaryLogFile', null);
         if ($temporaryLogFile === null) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'No temporary log file defined.']);
+        }
+
+        // Abort, if this version is already installed.
+        if ($versionData['version'] == Kernel::VERSION) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Version already installed.']);
         }
 
         $this->updateHelper->setOutputHandler(function (UpdateMessage $message) use ($temporaryLogFile) {
