@@ -1,0 +1,10 @@
+password:
+  form:
+    constraint:
+      notBlank: Zadejte prosím heslo.
+      length: Vaše heslo by mělo mít alespoň {{ limit }} znaků.
+      passwordMustMatch: Pole hesla se musí shodovat.
+  request:
+    form:
+      constraint:
+        notBlank: Zadejte prosím svůj e-mail.
