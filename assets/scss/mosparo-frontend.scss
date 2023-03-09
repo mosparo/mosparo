@@ -314,6 +314,23 @@
     }
 }
 
+[dir="rtl"] {
+    .mosparo__container {
+        padding-left: var(--mosparo-padding-right, 20px);
+        padding-right: var(--mosparo-padding-left, 24px);
+
+        &:after {
+            left: 0;
+            right: var(--mosparo-logo-left, 10px);
+        }
+
+        .mosparo__checkbox_column {
+            margin-right: 0;
+            margin-left: var(--mosparo-circle-margin-right, 20px);
+        }
+    }
+}
+
 @keyframes mosparo__ping-animation {
     0% {
         transform: scale(1);
