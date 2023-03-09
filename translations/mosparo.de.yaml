@@ -381,6 +381,9 @@ settings:
       reissueApiKeys: API-Zugangsdaten neu ausstellen
       reissue: Neu ausstellen
 
+    help:
+      integrateMosparo: mosparo integrieren
+
     connectionDetails:
       title: Verbindungsdetails
       host: Host

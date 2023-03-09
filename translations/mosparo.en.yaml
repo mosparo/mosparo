@@ -381,6 +381,9 @@ settings:
       reissueApiKeys: Reissue API keys
       reissue: Reissue
 
+    help:
+      integrateMosparo: Integrate mosparo
+
     connectionDetails:
       title: Connection details
       host: Host
