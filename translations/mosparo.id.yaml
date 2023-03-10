@@ -15,6 +15,32 @@ project:
     name: Nama
     description: Deskripsi
     hosts: Pemilik
+    statusHelp: Aktifkan atau nonaktifkan deteksi spam. Jika tidak aktif, sistem akan mencatat semua kiriman tetapi tidak akan mencegah kiriman apa pun.
+    spamScore: Skor spam
+    hostsHelp: Masukkan semua host yang akan disertakan dalam proyek ini.
+    spamScoreHelp: Tentukan angka dari mana sebuah kiriman akan dinilai sebagai spam. Jika peringkat suatu kiriman berada di atas angka ini, maka kiriman tersebut akan dinilai sebagai spam.
+    status: Status
+  delete:
+    confirm: Apakah Anda benar-benar ingin menghapus proyek %projectName%?
+    title: Hapus proyek% nama proyek%
+    message:
+      successfullyDeleted: Proyek %nama proyek% berhasil dihapus.
+  roles:
+    reader: Pembaca
+    editor: Editor
+    owner: Pemilik
 header:
   pleaseChoose: Silakan pilih…
   account: Akun
+dashboard:
+  title: Dasbor
+  chart:
+    valid: Valid
+    spam: Spam
+rule:
+  title: Aturan
+  backToList: Kembali ke aturan
+  list:
+    name: Nama
+    type: Tipe
+    status: Status
