@@ -1,1 +1,10 @@
-{}
+password:
+  request:
+    form:
+      constraint:
+        notBlank: Upiši svoju e-mail adresu.
+  form:
+    constraint:
+      notBlank: Upiši lozinku.
+      length: Lozinka mora sadržati barem {{ limit }} znakova.
+      passwordMustMatch: Polja lozinki se moraju poklapati.
