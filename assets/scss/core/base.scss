@@ -36,6 +36,28 @@
     }
 }
 
+.illustration-light {
+    display: inline-block;
+}
+
+.illustration-dark {
+    display: none;
+}
+
+.theme-dark {
+    .mosparo-logo-container {
+        filter: brightness(0) invert(1);
+    }
+
+    .illustration-light {
+        display: none;
+    }
+
+    .illustration-dark {
+        display: inline-block;
+    }
+}
+
 .empty-subtitle {
     flex: 1 0;
 }
@@ -46,6 +68,14 @@ pre {
     background: #fdfdfe;
     color: unset;
     border: 1px solid rgba(98,105,118,.16);
+}
+
+.theme-dark {
+    pre {
+        background: var(--tblr-bg-surface-dark);
+        color: var(--tblr-light);
+        border-radius: var(--tblr-border-radius);
+    }
 }
 
 @media screen and (max-width: 768px) {

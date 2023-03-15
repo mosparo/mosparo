@@ -562,6 +562,11 @@ administration:
         defaultTimeFormat: Default time format
         defaultTimezone: Default timezone
 
+    interfaceSettings:
+      title: Interface settings
+      form:
+        defaultColorMode: Default color mode
+
     mailSettings:
       title: Mail settings
       form:
@@ -765,6 +770,7 @@ account:
       dateFormat: Date format
       timeFormat: Time format
       timezone: Timezone
+      colorMode: Color mode
 
     message:
       successfullySaved: Your settings were saved successfully.
@@ -924,6 +930,11 @@ form:
   choices:
     systemDefault: Default setting
     browserLanguage: Browser language
+
+interface:
+  colorModes:
+    light: Light
+    dark: Dark
 
 # Datatables
 datatable:

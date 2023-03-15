@@ -12,7 +12,7 @@
                 <div class="card mb-3">
                     <div class="card-header border-0">
                         <div class="card-title">{{ 'submission.title'|trans }}</div>
-                        <a href="{{ path('submission_list') }}" class="ms-auto btn btn-light btn-pill btn-icon-sm">
+                        <a href="{{ path('submission_list') }}" class="ms-auto btn btn-primary btn-pill btn-icon-sm">
                             <i class="ti ti-chevron-right"></i>
                         </a>
                     </div>
@@ -25,7 +25,7 @@
                 <div class="card mb-3 flex-fill">
                     <div class="card-header border-0">
                         <div class="card-title">{{ 'rule.title'|trans }}</div>
-                        <a href="{{ path('rule_list') }}" class="ms-auto btn btn-light btn-pill btn-icon-sm">
+                        <a href="{{ path('rule_list') }}" class="ms-auto btn btn-primary btn-pill btn-icon-sm">
                             <i class="ti ti-chevron-right"></i>
                         </a>
                     </div>
@@ -36,7 +36,7 @@
                 <div class="card mb-3 flex-fill">
                     <div class="card-header border-0">
                         <div class="card-title">{{ 'ruleset.title'|trans }}</div>
-                        <a href="{{ path('ruleset_list') }}" class="ms-auto btn btn-light btn-pill btn-icon-sm">
+                        <a href="{{ path('ruleset_list') }}" class="ms-auto btn btn-primary btn-pill btn-icon-sm">
                             <i class="ti ti-chevron-right"></i>
                         </a>
                     </div>
@@ -54,6 +54,24 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            let colors = {
+                background: '#FFFFFF',
+                fill: ['#EAF7EC', '#FBEBEB'],
+                colors: ['#56B344', '#D63939'],
+                shade: 'light',
+                tooltipTheme: 'light',
+            };
+
+            if ($('body').hasClass('theme-dark')) {
+                colors = {
+                    background: '#1d273b',
+                    fill: ['#1d3b21', '#3b1d1d'],
+                    colors: ['#56B344', '#D63939'],
+                    shade: 'dark',
+                    tooltipTheme: 'dark',
+                };
+            }
+
             let chartOptions = {
                 series: [
                     {
@@ -67,7 +85,7 @@
                 ],
                 chart: {
                     type: "area",
-                    background: '#fff',
+                    background: colors.background,
                     fontFamily: 'inherit',
                     height: 250,
                     stacked: true,
@@ -87,11 +105,11 @@
                     enabled: false,
                 },
                 fill: {
-                    colors: ['#EAF7EC', '#FBEBEB'],
+                    colors: colors.fill,
                     type: 'gradient',
                     gradient: {
                         inverseColors: false,
-                        shade: 'light',
+                        shade: colors.shade,
                         type: "vertical",
                         opacityFrom: 0.9,
                         opacityTo: 0.6,
@@ -99,6 +117,7 @@
                     }
                 },
                 tooltip: {
+                    theme: colors.tooltipTheme,
                     x: {
                         show: true,
                         format: '{{ chartDateFormat }}',
@@ -110,7 +129,7 @@
                     lineCap: "round",
                     curve: "smooth",
                 },
-                colors: ['#56B344', '#D63939'],
+                colors: colors.colors,
                 grid: {
                     show: true
                 },

@@ -13,6 +13,8 @@ parameters:
     env(default_time_format): 'H:i:s'
     env(default_timezone): 'UTC'
 
+    env(default_color_mode): 'light'
+
     env(database_driver): 'pdo_mysql'
     env(database_host): '127.0.0.1'
     env(database_port): '3306'
@@ -70,6 +72,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Mosparo\Subscriber\AuthenticationSubscriber:
+        class: Mosparo\Subscriber\AuthenticationSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
     Mosparo\Subscriber\ProjectSubscriber:
         class: Mosparo\Subscriber\ProjectSubscriber
         arguments:
@@ -79,6 +86,11 @@ services:
 
     Mosparo\Subscriber\LocaleSubscriber:
         class: Mosparo\Subscriber\LocaleSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
+    Mosparo\Subscriber\InterfaceSubscriber:
+        class: Mosparo\Subscriber\InterfaceSubscriber
         tags:
             - { name: kernel.event_subscriber }
 
@@ -128,6 +140,10 @@ services:
             $defaultDateFormat: '%env(default_date_format)%'
             $defaultTimeFormat: '%env(default_time_format)%'
             $defaultTimezone: '%env(default_timezone)%'
+
+    Mosparo\Helper\InterfaceHelper:
+        arguments:
+            $defaultColorMode: '%env(default_color_mode)%'
 
     Mosparo\Helper\DesignHelper:
         arguments:

@@ -3,6 +3,7 @@
 namespace Mosparo\Controller\Administration;
 
 use Mosparo\Helper\ConfigHelper;
+use Mosparo\Helper\InterfaceHelper;
 use Mosparo\Helper\LocaleHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -27,11 +28,14 @@ class SettingsController extends AbstractController
 
     protected LocaleHelper $localeHelper;
 
-    public function __construct(ConfigHelper $configHelper, TranslatorInterface $translator, LocaleHelper $localeHelper)
+    protected InterfaceHelper $interfaceHelper;
+
+    public function __construct(ConfigHelper $configHelper, TranslatorInterface $translator, LocaleHelper $localeHelper, InterfaceHelper $interfaceHelper)
     {
         $this->configHelper = $configHelper;
         $this->translator = $translator;
         $this->localeHelper = $localeHelper;
+        $this->interfaceHelper = $interfaceHelper;
     }
 
     /**
@@ -48,6 +52,8 @@ class SettingsController extends AbstractController
             'defaultTimeFormat' => $environmentConfig['default_time_format'] ?? 'H:i:s',
             'defaultTimezone' => $environmentConfig['default_timezone'] ?? 'UTC',
 
+            'defaultColorMode' => $environmentConfig['default_color_mode'] ?? 'light',
+
             'mailerUseSmtp' => (bool) ($environmentConfig['mailer_transport'] ?? '') == 'smtp',
             'mailerHost' => $environmentConfig['mailer_host'] ?? '',
             'mailerPort' => $environmentConfig['mailer_port'] ?? '25',
@@ -62,6 +68,7 @@ class SettingsController extends AbstractController
             ->add('defaultDateFormat', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultDateFormat', 'choices' => $this->localeHelper->getDateFormats(), 'attr' => ['class' => 'form-select']])
             ->add('defaultTimeFormat', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultTimeFormat', 'choices' => $this->localeHelper->getTimeFormats(), 'attr' => ['class' => 'form-select']])
             ->add('defaultTimezone', TimezoneType::class, ['label' => 'administration.settings.localeSettings.form.defaultTimezone', 'attr' => ['class' => 'form-select']])
+            ->add('defaultColorMode', ChoiceType::class, ['label' => 'administration.settings.interfaceSettings.form.defaultColorMode', 'choices' => $this->interfaceHelper->getColorModes(), 'attr' => ['class' => 'form-select']])
             ->add('mailerUseSmtp', CheckboxType::class, ['label' => 'administration.settings.mailSettings.form.useSmtp', 'required' => false])
             ->add('mailerHost', TextType::class, ['label' => 'administration.settings.mailSettings.form.host', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->add('mailerPort', TextType::class, ['label' => 'administration.settings.mailSettings.form.port', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
@@ -81,6 +88,8 @@ class SettingsController extends AbstractController
                 'default_date_format' => $form->get('defaultDateFormat')->getData(),
                 'default_time_format' => $form->get('defaultTimeFormat')->getData(),
                 'default_timezone' => $form->get('defaultTimezone')->getData(),
+
+                'default_color_mode' => $form->get('defaultColorMode')->getData(),
 
                 'mailer_transport' => !$form->get('mailerUseSmtp')->isEmpty() ? 'smtp' : '',
                 'mailer_from_address' => $form->get('mailerFromAddress')->getData(),
