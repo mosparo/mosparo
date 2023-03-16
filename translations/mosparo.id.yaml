@@ -44,3 +44,8 @@ rule:
     name: Nama
     type: Tipe
     status: Status
+    actions: Aksi
+  createChooseType:
+    title: Pilih tipe
+  create:
+    title: Buat peraturan
