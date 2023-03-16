@@ -1,1 +1,13 @@
-{}
+error:
+  spamDetected: Vaše údaje zachytila naša ochrana proti spamu.
+  internalError: Vyskytla sa chyba. Prosím, skúste to znova.
+  gotNoToken: mosparo nevrátil žiadny token odoslania.
+  noSubmitTokenAvailable: Nie je k dispozícii žiadny token na odoslanie. Overenie tohto formulára nie je možné.
+  lockedOut: Ste zablokovaní. Skúste to prosím znova po %datetime%.
+  delay: Vaša žiadosť bola odložená. Počkajte prosím %seconds% sekúnd.
+hp:
+  fieldTitle: Toto pole nechajte prázdne
+label: Súhlasím s tým, aby sa vstupy z formulára kontrolovali na prítomnosť spamu a aby sa uchovávali zašifrované 14 dní.
+accessibility:
+  checkingData: Kontrolujeme vaše údaje. Počkajte, prosím.
+  dataValid: Vaše údaje sú platné. Formulár môžete odoslať.

@@ -1,0 +1,18 @@
+header:
+  account: Аккаунт
+  pleaseChoose: Пожалуйста выберите…
+project:
+  title: Проекты
+  backToList: Назад к проектам
+  infoNoProjectAvailable: Нет доступных проектов
+  action:
+    manage: Управлять проектом
+    delete: Управлять проектом
+    goto: Перейти к проекту
+  create:
+    title: Создать проект
+    message:
+      successfullyCreated: Новый проект успешно создан.
+  form:
+    name: Имя
+  infoCreateProjectOrRequestAccess: Создайте новый проект или запросите доступ к другому проекту.

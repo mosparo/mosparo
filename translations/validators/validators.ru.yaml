@@ -1,0 +1,10 @@
+password:
+  form:
+    constraint:
+      notBlank: Пожалуйста введите пароль.
+      length: Ваш пароль должен содержать не менее {{ limit }} символов.
+      passwordMustMatch: Поля пароля должны совпадать.
+  request:
+    form:
+      constraint:
+        notBlank: Пожалуйста введите свой email.
