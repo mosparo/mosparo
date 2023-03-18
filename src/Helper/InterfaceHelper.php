@@ -25,7 +25,11 @@ class InterfaceHelper
 
         $session = $request->getSession();
         if ($session !== null && $session->has('userColorMode')) {
-            $colorMode = $session->get('userColorMode');
+            $userColorMode = $session->get('userColorMode');
+
+            if ($userColorMode !== null && $userColorMode !== 'default') {
+                $colorMode = $userColorMode;
+            }
         }
 
         return $colorMode;
