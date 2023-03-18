@@ -76,6 +76,21 @@ pre {
         color: var(--tblr-light);
         border-radius: var(--tblr-border-radius);
     }
+
+    .dropdown-menu {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+    }
+
+    /**
+     * Autofill styles for WebKit browsers
+     */
+    .form-control:-webkit-autofill,
+    .form-control:-webkit-autofill:hover,
+    .form-control:-webkit-autofill:focus,
+    .form-control:-webkit-autofill:active {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #fff !important;
+    }
 }
 
 @media screen and (max-width: 768px) {
