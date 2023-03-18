@@ -28,6 +28,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Polish                | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)                                                          |
 | Portuguese            | pt            | Northon (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
 | Russian               | ru            | [Senya0](https://hosted.weblate.org/user/Senya0/), [Andrej730](https://hosted.weblate.org/user/Andrej730/)   |
+| Slovak                | sk            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                          |
 | Slovenian             | sl            | Alona and Lesly (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                |
 | Spanish               | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)                                              |
 | Swedish               | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                            |
@@ -37,10 +38,12 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Language             | Language Code | Contributors                                                            |
 |----------------------|---------------|-------------------------------------------------------------------------|
 | Chinese (Simplified) | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                   |
+| Czech                | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                     |
 | English              | en            | mosparo Core Developers                                                 |
 | German               | de            | mosparo Core Developers                                                 |
 | Indonesian           | id            | [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/)             |
 | Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/) |
+| Russian              | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                     |
 | Ukrainian            | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                 |
 
 ## Validators
@@ -52,5 +55,6 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Indonesian | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)           |
 | Korean     | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/) |
 | Polish     | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)         |
+| Russian    | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)         |
 | Swedish    | sv            | [bittin](https://hosted.weblate.org/user/bittin/)           |
 | Ukrainian  | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)     |

@@ -2,7 +2,7 @@ password:
   form:
     constraint:
       notBlank: Будь ласка, введіть пароль.
-      length: Ваш пароль повинен містити щонайменше {{ ліміт}} символів.
+      length: Ваш пароль повинен містити щонайменше {{ limit }} символів.
       passwordMustMatch: Поля паролів повинні збігатися.
   request:
     form:

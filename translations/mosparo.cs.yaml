@@ -1,1 +1,791 @@
-{}
+header:
+  pleaseChoose: Vyberte prosím…
+  account: Účet
+project:
+  title: Projekty
+  backToList: Zpět na projekty
+  infoNoProjectAvailable: Žádné projekty k dispozici
+  infoCreateProjectOrRequestAccess: Vytvořte nový projekt nebo požádejte o přístup k jinému projektu.
+  form:
+    hosts: Hostitelé
+    name: Název
+    description: Popis
+    status: Stav
+    hostsHelp: Zadejte prosím všechny hostitele, které bude projekt zahrnovat.
+    statusHelp: Aktivace nebo deaktivace detekce spamu. Pokud je neaktivní, systém zaznamená všechny požadavky, ale nezabrání žádnému odeslání.
+    spamScore: Skóre spamu
+    spamScoreHelp: Definuje číslo, od kterého bude podání hodnoceno jako spam. Pokud je hodnocení poždavku vyšší než toto číslo, je požadavek vyhodnocena jako spam.
+  roles:
+    reader: Čtenář
+    editor: Editor
+    owner: Vlastník
+  action:
+    manage: Spravovat projekt
+    delete: Odstranit projekt
+    goto: Přejít na projekt
+  create:
+    title: Vytvořit projekt
+    message:
+      successfullyCreated: Nový projekt byl úspěšně vytvořen.
+  delete:
+    title: Odstranit projekt %projectName%
+    confirm: Opravdu chcete odstranit projekt %projectName%?
+    message:
+      successfullyDeleted: Projekt %projectName% byl úspěšně odstraněn.
+dashboard:
+  chart:
+    valid: Platné
+    spam: Spam
+  title: Nástěnka
+rule:
+  list:
+    name: Název
+    type: Typ
+    status: Stav
+    actions: Akce
+  createChooseType:
+    title: Zvolte typ
+  create:
+    title: Vytvořit pravidlo
+    message:
+      successfullyCreated: Nové pravidlo bylo úspěšně vytvořeno.
+  edit:
+    title: Upravit pravidlo %ruleName%
+    message:
+      successfullySaved: Pravidlo bylo úspěšně uloženo.
+  form:
+    ruleType: Typ pravidla
+    rule:
+      title: Pravidlo
+      name: Název
+      description: Popis
+      status: Stav
+      spamRatingFactor: Faktor hodnocení spamu
+      spamRatingFactorHelp: Pomocí faktoru hodnocení spamu můžete definovat faktor, který posiluje nebo oslabuje záznamy tohoto pravidla. Pokud je hodnota větší než 1,0, jsou položky posíleny, pokud je hodnota menší než 1,0, jsou položky poníženy.
+    addMultipleItems:
+      label: Štítek
+      itemsHelp: Přidejte jednu položku na řádek.
+      items: Položky
+      rating: Hodnocení
+      ratingHelp: Pokud není nastaveno, je výchozí hodnocení 1,0. Pokud je hodnocení nastaveno na 0,0, položky nebudou hodnoceny jako spam.
+    items:
+      title: Položky
+      type: Typ
+      rating: Hodnocení
+  delete:
+    message:
+      successfullyDeleted: Pravidlo %ruleName% bylo úspěšně odstraněno.
+    title: Odstranit pravidlo %ruleName%
+    confirm: Opravdu chcete odstranit pravidlo %ruleName%?
+  type:
+    domain:
+      shortIntro: Umožňuje filtrovat podle konkrétních domén
+      title: Doména
+      domain:
+        title: Doména
+        intro: Zadejte doménu, která nemá povoleno odeslání. V případě zadání, budou zachyceny také všechny e-mailové adresy s touto doménou.
+      placeholder: domena.cz
+      label: Doména
+      intro: Typ pravidla domény umožňuje filtrovat dle domény.
+    email:
+      title: E-mail
+      placeholder: info@domena.cz
+      label: E-mailová adresa
+      email:
+        title: E-mailová adresa
+        intro: Zadejte e-mailovou adresu, která není oprávněna odeslat příspěvek.
+      shortIntro: Umožňuje filtrovat podle konkrétních e-mailových adres
+      intro: Typ pravidla e-mailu umožňuje filtrovat e-mailové adresy.
+    ipAddress:
+      shortIntro: Umožňuje filtrovat podle IP adres a podsítí
+      title: IP adresa
+      label: IP adresa/podsíť
+      placeholder: 0.0.0.0
+      ipAddress:
+        intro: Zadejte IP adresu, která nemá povoleno odesílat žádné požadavky.
+        title: IP adresa
+      subnet:
+        intro: Zadejte podsíť s maskou, která nemá povoleno odesílat žádné požadavky.
+        title: Podsíť
+      intro: Typ pravidla IP adresy umožňuje filtrovat IP adresy nebo podsítě.
+    provider:
+      title: Poskytovatel
+      shortIntro: Umožňuje filtrovat podle informací o konkrétním poskytovateli
+      intro: Typ pravidla pro poskytovatele umožňuje filtrovat čísla AS a kódy zemí.
+      label: Číslo AS/země
+      action:
+        configureGeoip2: Konfigurace GeoIP2
+      asNumber:
+        title: Číslo AS
+        intro: Zadejte číslo přidruženého systému, který nesmí odesílat žádné požadavky. Všechny IP adresy, které patří k tomuto číslu přidruženého systému, budou zablokovány.
+      country:
+        title: Země
+        infoCountryBlock: Pokud přidáte zemi do pravidla, znamená to, že nikdo z této země nemůže odeslat požadavek. To sice na jednu stranu zní dobře, ale může to znamenat, že to skutečnému uživateli zablokuje možnost odeslat formulář. Buďte prosím s touto možností opatrní. Správná lokalizace IP adres není nikdy zaručena.
+        intro: Zadejte kód země ISO, který není povolen pro odeslání požadavku. Všechny IP adresy registrované v této zemi budou označeny jako spam.
+      infoGeoip2: Pro použití typu poskytovatele je nutné nakonfigurovat databázi MindMax GeoLite2, jinak nebudou mít položky poskytovatele žádný účinek.
+    unicodeBlock:
+      shortIntro: Filtruje vstup na základě použitých znaků.
+      title: Blok Unicode
+      label: Blok Unicode
+      intro: Typ blokového pravidla Unicode umožňuje vyhodnotit použití určitých znaků.
+      block:
+        title: Blok
+        intro: Vyberte jeden z bloků, který by měl být při zadávání odpovídajícím způsobem ohodnocen. Poté zadejte odpovídající hodnocení.
+        hintExtended: Vezměte prosím na vědomí, že existují rozšíření a doplňky některých bloků, které musí být také přidány jako položka pravidla.
+        explanationCounting: Při ověřování se každý blok započítává pouze jednou, i když bylo použito několik znaků z jednoho bloku.
+        exampleCounting: Předpokládejme, že zadáte položku pravidla s blokem "Smajlíci" s hodnocením 3 body. Uživatel při odesílání použije 5 smajlíků. Záznam je nyní ohodnocen 3 body, protože byl použit smajlík.
+    userAgent:
+      title: Uživatelský agent
+      label: Uživatelský agent (Slovo/Vzor)
+      text:
+        title: Text
+        intro: Zadejte slovo, které má být vyhodnoceno jako spam. Jako zástupný znak můžete použít hvězdičku %star%. Funkce pro porovnávání bude hledat %value%, takže nemusíte přidávat zástupný znak na začátek nebo na konec hodnoty.
+      regex:
+        title: Regulární výraz
+        intro: Zadejte vzor regulárního výrazu, který bude odpovídat nepovolenému slovu. Vzor musí splňovat požadavky na regulární výrazy PHP.
+        validation:
+          invalidRegexPattern: 'Zadaný vzor je neplatný. Chyba: %error%'
+      shortIntro: Umožňuje filtrovat podle určitých slov nebo vzorů v agentu uživatele
+      intro: Typ pravidla pro agenta uživatele umožňuje filtrovat slova a vzory regulárních výrazů v uživatelském agentovi uživatele.
+    website:
+      shortIntro: Umožňuje filtrovat podle konkrétních webových stránek
+      title: Webové stránky
+      url:
+        title: URL
+        intro: Zadejte adresu URL, která nemá povoleno odeslání.
+        infoProtocol: Doporučujeme začínat adresu URL protokolem nebo dvěma lomítky pro adresy URL nezávislé na protokolu. Pokud hodnota nezačíná protokolem, mohlo by pravidlo odpovídat nesprávným URL.
+      intro: Typ pravidla pro webové stránky umožňuje filtrovat adresy URL.
+      label: URL/doména
+      placeholder: https://domena.cz
+    word:
+      text:
+        title: Text
+        intro: Zadejte slovo, které má být vyhodnoceno jako spam. Jako zástupný znak můžete použít hvězdičku %star%. Funkce pro porovnávání bude hledat %value%, takže nemusíte přidávat zástupný znak na začátek nebo na konec hodnoty.
+      regex:
+        title: Regulární výraz
+        intro: Zadejte vzor regulárního výrazu, který bude odpovídat nepovolenému slovu. Vzor musí splňovat požadavky na regulární výrazy PHP.
+        validation:
+          invalidRegexPattern: 'Zadaný vzor je neplatný. Chyba: %error%'
+      title: Slovo
+      shortIntro: Umožňuje filtrovat podle určitých slov nebo vzorů
+      intro: Typ pravidla pro slova umožňuje filtrovat slova a vzory regulárních výrazů.
+      label: Slovo/gesto
+    rating:
+      title: Hodnocení
+      placeholder: Hodnocení
+      intro: Pokud má položka vyšší hodnocení spamu, můžete pro ni nastavit další hodnocení spamu.
+      infoCalculationMethod: Hodnocení spamu se vypočítá vynásobením hodnocení položky a faktoru hodnocení spamu, který je definován v pravidle.
+      infoDefaultAndDataType: Hodnocení je pohyblivé číslo od %zero% do %unlimited%. Pokud není rating definován, je výchozí rating %one%.
+      infoValueEqualZero: Pokud je hodnocení nastaveno na %zero%, položka nebude detekována jako spam, protože hodnota hodnocení spamu bude v každém případě %zero%.
+  title: Pravidla
+  backToList: Zpět na pravidla
+ruleset:
+  list:
+    refreshedAt: Aktualizováno v
+    name: Název
+    status: Stav
+    actions: Akce
+    updatedAt: Aktualizováno
+  form:
+    name: Název
+    url: URL
+    status: Stav
+    spamRatingFactor: Faktor hodnocení spamu
+    spamRatingFactorHelp: Pomocí faktoru hodnocení spamu můžete definovat faktor, který posílí nebo oslabí všechna pravidla této sady pravidel. Pokud je hodnota větší než 1,0, budou pravidla posílena, pokud je hodnota menší než 1,0, budou pravidla oslabena.
+    message:
+      successfullySaved: Sada pravidel byla úspěšně uložena.
+  view:
+    details:
+      url: URL
+      lastRefreshedAt: Naposledy aktualizováno v
+      status: Stav
+      spamRatingFactor: Faktor hodnocení spamu
+      title: Podrobnosti sady pravidel
+      lastUpdatedAt: Naposledy aktualizováno
+      numberOfIncludedRules: Počet zahrnutých pravidel
+    includedRules:
+      name: Jméno
+      description: Popis
+      type: Typ
+      spamRatingFactor: Faktor hodnocení spamu
+      items: Položky
+      value: Hodnota
+      rating: Hodnocení
+      title: Zahrnutá pravidla
+      ruleDetails: Podrobnosti pravidla
+    title: Zobrazit sadu pravidel %rulesetName%
+  delete:
+    title: Odstranit sadu pravidel %rulesetName%
+    confirm: Opravdu chcete odstranit sadu pravidel %rulesetName%?
+    message:
+      successfullyDeleted: Sada pravidel %rulesetName% byla úspěšně odstraněna.
+  title: Sady pravidel
+  backToList: Zpět na sady pravidel
+  message:
+    errorWhileUpdating: 'Při aktualizaci sady pravidel došlo k chybě:'
+  add:
+    title: Přidat sadu pravidel
+  edit:
+    title: Úprava sady pravidel %rulesetName%
+submission:
+  title: Záznamy
+  list:
+    page: Stránka
+    spam: Spam
+    valid: Platné
+    verification: Ověření
+    ipAddress: IP adresa
+    spamRating: Hodnocení spamu
+    submittedAt: Odesláno v
+    verifiedAt: Ověřeno v
+    actions: Akce
+    id: ID
+  view:
+    spam:
+      title: Spam
+      spamRating: Hodnocení spamu
+      submittedAt: Odesláno v
+      isSpam: Je spam
+    verification:
+      title: Ověřování
+      verifiedAt: Ověřeno v
+      isValid: Je platný
+      minimumTime:
+        timeDifferenceInSeconds: '%seconds% sekund'
+        requiredTime: Potřebný čas
+    ignoredFields:
+      intro: Následující pole nebyla přenesena kvůli typu pole (například heslo nebo pole pro nahrání souboru).
+      title: Ignorovaná pole
+    data:
+      value: Hodnota
+      rating: Hodnocení
+      points: '%totalPoints% bodů'
+      formData:
+        honeypot: Honeypot
+        title: Údaje formuláře
+        valid: Úspěšné ověření
+        invalid: Ověření se nezdařilo
+        notVerified: Neověřeno
+        hasPoints: Body
+      client:
+        country: Země
+        asOrganization: Organizace AS
+        ipAddress: IP adresse
+        asNumber: Číslo AS
+        title: Klient
+        userAgent: Uživatelský agent
+      fieldMustBeEmpty: Pole musí být prázdné
+    title: Záznam %submissionId%
+    source:
+      title: Zdroj
+      pageTitle: Název stránky
+      pageUrl: URL stránky
+      requestedAt: Požadavek vytvořen
+    generalVerifications:
+      minimumTime:
+        title: Záznam odeslán příliš rychle
+        text: Formulář byl odeslán příliš rychle. Zadavatel požadoval pouze %seconds% sekund, což je méně než minimální čas %minimumTimeSeconds% sekund.
+  backToList: Zpět k záznamům
+settings:
+  title: Nastavení projektu
+  general:
+    message:
+      successfullySaved: Nastavení bylo úspěšně uloženo.
+    action:
+      reissueApiKeys: Opětovné vygenerování API klíčů
+      reissue: Přegenerovat
+    connectionDetails:
+      host: Hostitel
+      title: Detaily připojení
+      uuid: Jedinečné identifikační číslo
+    apiKeys:
+      reissueApiKeys:
+        confirm: Opravdu chcete znovu spustit API klíče pro projekt %projectName%?
+        title: Opětovné vygenerování API klíčů
+        message:
+          successfullyReissued: API klíče byly úspěšně znovu vygenerovány.
+          errorOnlyOwner: Pouze vlastník projektu může znovu vygenerovat API klíče.
+      title: API klíče
+      publicKey: Veřejný klíč
+      privateKey: Soukromý klíč
+    help:
+      integrateMosparo: Integrovat mosparo
+    title: Obecná nastavení
+  security:
+    honeypot:
+      title: Honeypot
+      intro: Pole honeypot je skryté pole ve formuláři. Lidé ho neuvidí, ale spamovací boti do něj pravděpodobně vyplní nějaký obsah. Pokud se tak stane, víme, že to nebyl člověk, takže můžeme odeslání zablokovat.
+    form:
+      minimumTimeActive: Minimální aktivní čas
+      delayTimeHelp: V sekundách
+      delayMultiplicator: Multiplikátor
+      delayMultiplicatorHelp: Základní doba zpoždění se s každým dalším požadavkem prodlužuje.
+      lockoutActive: Automatické uzamčení aktivní
+      lockoutMultiplicatorHelp: S každým dalším požadavkem se základní doba uzamčení prodlužuje.
+      ipAllowList: Vždy povolené IP adresy a podsítě
+      ipAllowListHelp: 'Na každém řádku zadejte jednu adresu ip nebo podsíť. Příklad: 192.168.1.13 nebo 192.168.1.0/24'
+      minimumTimeSeconds: Minimální čas
+      lockoutTimeHelp: V sekundách
+      honeypotFieldActive: Pole Honeypot aktivní
+      honeypotFieldName: Název pole
+      minimumTimeSecondsHelp: V sekundách
+      delayNumberOfAllowedRequests: Počet povolených požadavků
+      delayDetectionTimeFrame: Časový rámec detekce
+      delayDetectionTimeFrameHelp: V sekundách
+      lockoutDetectionTimeFrameHelp: V sekundách
+      honeypotFieldNameHelp: Musí to být název pole, který se ve formuláři ještě nenachází a který je normálním názvem pole, například "url" nebo "address-line-2". Používejte pouze písmena, číslice a znak pomlčky (-). Pokud je prázdné, nebude do formuláře přidáno žádné pole honeypot.
+      delayActive: Zpoždění požadavku je aktivní
+      lockoutNumberOfAllowedRequests: Počet povolených požadavků
+      delayNumberOfAllowedRequestsHelp: Počet povolených požadavků předtím, než dojde ke zpoždění.
+      lockoutDetectionTimeFrame: Časový rámec detekce
+      delayTime: Základní doba zpoždění
+      lockoutMultiplicator: Multiplikátor
+      lockoutNumberOfAllowedRequestsHelp: Počet povolených požadavků před uzamčením.
+      lockoutTime: Základní doba uzamčení
+    ipLockout:
+      title: Zablokování IP
+      intro: Pro ztížení botům, může mosparo automaticky dočasně blokovat IP adresy. Pokud IP adresa požaduje hodně tokenů, může mosparo automaticky počítat požadavky a při dosažení určitého počtu IP adresu zablokovat.
+    ipAllowList:
+      intro: Zadejte IP adresy a podsítě, které mají být vyloučeny z výše nakonfigurovaných bezpečnostních opatření (zpoždění požadavků a uzamčení IP).
+      title: Seznam povolených IP
+    title: Zabezpečení
+    minimumTime:
+      title: Minimální čas
+      intro: Funkce minimálního času měří čas mezi inicializací zaškrtávacího políčka mosparo (při načtení stránky) a validací odeslání (po odeslání formuláře). Pokud je tento čas nižší než níže zadané číslo, je validace neplatná. Pokud máte krátký formulář, měla by být tato kontrola vypnuta nebo byste měli použít velmi nízké číslo.
+    requestDelaying:
+      title: Žádost o odložení
+      intro: Pro ztížení botům, může mosparo tvorbu odesílaných tokenů odložit. Bez odesílacího tokenu nelze formulář odeslat. Uživatel uvidí, jak dlouho musí čekat, než bude možné formulář odeslat.
+      infoIpAddress: V případě, že je třeba vytvoření tokenu odložit, bude rozhodnuto na základě počtu požadavků, které IP adresa učinila. S každým dalším požadavkem na zpoždění prodlouží.
+    message:
+      successfullySaved: Nastavení zabezpečení bylo úspěšně uloženo.
+    validation:
+      honeypotFieldNameInvalidCharacter: Používejte pouze písmena, číslice a pomlčku (-).
+  design:
+    cr:
+      text: Text
+      value: Hodnota
+      textError: Chyba textu
+      title: Poměr kontrastu
+      description: Výše uvedená hodnota popisuje poměr mezi barvou pozadí a barvou textu. Dva sloupce vedle ní udávají, zda jsou splněny minimální požadavky pokynů WCAG.
+    form:
+      boxSize: Velikost boxu
+      color:
+        text: Text
+        textError: Chyba textu
+        checkboxAnimatedCircle: Animovaná část
+        shadow: Stín
+        background: Pozadí
+        border: Ohraničení
+        checkbox: Zaškrtávací pole
+        checkboxShadow: Stín zaškrtávacího políčka
+        shadowInset: Vnitřní stín
+      boxRadius: Poloměr rámečku
+      boxBorderWidth: Šířka okraje
+      showMosparoLogo: Zobrazit logo mosparo pod zaškrtávacím políčkem
+      showPingAnimation: Zobrazit animaci pro zvýraznění zaškrtávacího políčka
+    title: Vzhled
+    subtitles:
+      dimensionSettings: Rozměry
+      colorSettings: Barvy
+      colors:
+        normal: Normální
+        focus: Při zaostření a přejetí myší
+        loading: Při načítání
+        success: Úspěch
+        failure: Selhání
+    preview:
+      background: Pozadí náhledu
+    choices:
+      boxSize:
+        small: Malý
+        medium: Střední
+        large: Velký
+    message:
+      successfullySaved: Nastavení návrhu byla úspěšně uložena.
+      boxRadiusTooLarge: Logo lze zobrazit pouze tehdy, pokud je poloměr rámečku menší než určitá hodnota.
+  projectMember:
+    title: Členové projektu
+    list:
+      user: Uživatel
+      role: Role
+      actions: Akce
+    form:
+      email: E-mailová adresa
+      role: Role
+      message:
+        successfullySaved: Člen projektu byl úspěšně uložen.
+        errorUserNotFound: Uživatel nebyl nalezen.
+        errorNeedsOwner: Projekt potřebuje alespoň jednoho vlastníka.
+    backToList: Zpět na členy projektu
+    add:
+      title: Přidat člena projektu
+    edit:
+      title: Upravit člena projektu %projectMemberName%
+    delete:
+      title: Odebrat člena projektu %projectMemberName%
+      confirm: Opravdu chcete odstranit člena projektu %projectMemberName%?
+      message:
+        successfullyRemoved: Člen projektu %projectMemberName% byl úspěšně odstraněn z projektu.
+  backToSettings: Zpět do nastavení
+administration:
+  settings:
+    mailSettings:
+      help:
+        password: Pokud do tohoto pole něco zadáte, stávající hodnota se přepíše.
+      form:
+        host: Hostitel
+        port: Port
+        user: Uživatel
+        password: Heslo
+        useSmtp: Použít SMTP server k odesílání e-mailů
+        fromAddress: Z e-mailové adresy
+        fromName: Jméno odesílatele
+      title: Nastavení e-mailu
+    message:
+      savedSuccessfully: Nastavení bylo úspěšně uloženo.
+    title: Systémová nastavení
+    description: Nakonfigurujte různá nastavení, která se vztahují na vaši instalaci systému mosparo.
+    mainSettings:
+      title: Hlavní nastavení
+      form:
+        mosparoName: Název instalace mosparo
+    localeSettings:
+      title: Místní nastavení
+      form:
+        defaultLocale: Výchozí jazyk
+        defaultDateFormat: Výchozí formát data
+        defaultTimeFormat: Výchozí formát času
+        defaultTimezone: Výchozí časové pásmo
+  user:
+    help:
+      password: Pokud není vyžadována změna hesla, ponechte tato pole prázdná.
+    backToOverview: Zpět na uživatele
+    list:
+      roles: Role
+      user: Uživatel
+      actions: Akce
+    roles: Role
+    modify:
+      title: Upravit uživatele %email%
+    form:
+      isActiveUser: Je aktivní uživatel
+      isAdministrator: Je administrátor
+      message:
+        successfullySaved: Uživatel byl úspěšně uložen.
+        errorSendingResetEmail: 'E-mail s odkazem nemohl být odeslán správně. Chyba: %errorMessage%'
+        errorCreatingResetToken: 'Při vytváření e-mailu došlo k technické chybě. Chyba: %errorMessage%'
+      password: Heslo
+      email: E-mail
+      sendPasswordResetEmail: Pošlete uživateli e-mail pro nastavení hesla
+    delete:
+      infoCantSelfDelete: Nemůžete smazat sami sebe.
+      message:
+        successfullyDeleted: Uživatel %email% byl úspěšně odstraněn.
+        errorUserIsOwner: Uživatel je vlastníkem alespoň jednoho projektu. Vlastníka projektů nelze odstranit.
+      title: Odstranit uživatele %email%
+      confirm: Opravdu chcete odstranit uživatele %email%?
+    title: Uživatelé
+    description: Spravovat všechny uživatele této instance mosparo.
+    create:
+      title: Vytvořit uživatele
+  geoip2:
+    downloadAndUpdate:
+      web:
+        title: Web
+        intro: 'Pomocí následujícího tlačítka necháte mosparo stáhnout databázi:'
+        action: Stáhnout databázi
+        message:
+          successfullyDownloaded: Databáze byla úspěšně stažena.
+          errorDownload: Při pokusu o stažení databáze došlo k chybě. %error%
+          specifyLicenseKey: Před pokusem o stažení databáze zadejte licenční klíč.
+      title: Stažení a automatická aktualizace
+      intro: Po uložení licenčního klíče je třeba stáhnout databázi. To můžete provést přímo zde nebo můžete k provedení příkazu použít připojení SSH.
+      cli:
+        title: CLI
+        intro: 'Ke stažení databáze prostřednictvím rozhraní CLI použijte následující příkaz:'
+      update:
+        title: Automatická aktualizace
+        intro: 'Pro automatické obnovování databáze doporučujeme nastavit cronjob, který bude databázi automaticky stahovat. Chcete-li použít automatickou aktualizaci, nastavte cronjob takto:'
+        infoAbsolutePath: Možná budete muset upravit cestu k souboru %pathToBinConsole%. Je možné, že budete muset vyplnit absolutní cestu.
+        infoRateLimit: Nezapomeňte, že počet stažení licenčního klíče je omezen. Nepoužívejte prosím funkci stahování příliš často.
+    title: GeoIP2
+    version:
+      messageAvailable: 'Databáze GeoIP2 byla úspěšně stažena a je aktivní. Aktivní jsou následující verze:'
+      typeAsn: 'Číslo AS:'
+      typeCountry: 'Země:'
+      titleNotAvailable: GeoIP2 není k dispozici
+      messageDatabaseNotAvailable: Databáze GeoIP2 ještě nebyla stažena nebo došlo k chybě během stahování.
+      titleAvailable: GeoIP2 k dispozici
+    settings:
+      message:
+        savedSuccessfully: Nastavení bylo úspěšně uloženo.
+        infoActivationTime: Pokud jste právě požádali o licenční klíč, bude nějakou dobu trvat, než se licenční klíč aktivuje.
+      title: Nastavení
+      getLicenseKey: 'Pro získání licenčního klíče potřebujete účet MaxMind. Navštivte prosím následující stránku:'
+      useGeoip2Field: Použít automatickou IP adresu lokalizaci
+      licenseKeyField: Licenční klíč
+    description: Konfigurace integrace GeoIP2.
+  update:
+    title: Aktualizovat
+    check:
+      title: Stav
+      intro: Pokud chcete zkontrolovat aktualizace, klikněte na tlačítko níže.
+      message:
+        errorCheckingForUpdates: 'Při kontrole aktualizací došlo k chybě. Chyba: %errorMessage%'
+    installedVersion: Nainstalovaná verze
+    version:
+      titleAvailable: K dispozici je aktualizace
+      warningUpdate: Před aktualizací zálohujte soubory mosparo a databázi. Tento proces automatické aktualizace nezálohuje soubory ani databázi. Pokud něco nebude fungovat správně, může to zničit vaši instalaci systému mosparo.
+      titleNotAvailable: Žádná aktualizace není k dispozici
+      messageAvailable: K dispozici je nová aktualizace aplikace mosparo. Pokud chcete aktualizaci nainstalovat, klikněte prosím na tlačítko instalace níže.
+      warningUpdatesDisabled: Aktualizace jsou pro tuto instalaci mosparo zakázány. Další možnosti aktualizace instalace mosparo naleznete v dokumentaci.
+      messageNotAvailable: Žádná nová aktualizace pro mosparo není k dispozici. Zkontrolujte ji prosím později.
+    settings:
+      form:
+        channelStable: Stabilní
+        channelDevelop: Vývojářská
+      message:
+        infoDevelopChannel: Vývojový kanál obsahuje netestované a nestabilní verze, které nejsou připraveny pro produkční použití. Nepoužívejte jej prosím v produkčním prostředí.
+        savedSuccessfully: Aktualizační kanál byl úspěšně uložen.
+      title: Aktualizovat nastavení
+    finalize:
+      description: Potřebné změny pro tuto aktualizaci byly provedeny. Vaše instalace je aktuální.
+      title: Aktualizace provedena
+    buttons:
+      continue: Pokračovat
+    description: Zkontrolujte nové verze a aktualizujte instalaci systému mosparo.
+    updateChannel: Aktualizační kanál
+    availableVersion: Dostupná verze
+    execute:
+      title: Aktualizace mosparo
+      description: Počkejte prosím a neopouštějte tuto stránku. Průběh aktualizace začal…
+      log: Proces
+      message:
+        successfullyUpdated: mosparo byl úspěšně aktualizován. Pokračujte prosím na ovládací panel.
+        updateError: Při aktualizaci systému mosparo došlo k chybě. Zkontrolujte prosím níže uvedené chybové hlášení.
+  system:
+    general:
+      title: Obecné
+      mosparoVersion: verze mosparo
+      serverInfo: Server
+      phpVersion: Verze PHP
+      extensions: Rozšíření
+    website: Webové stránky
+    projectMembers:
+      title: Členové projektu
+      intro: Díky těmto osobám je mosparo tím, čím je - nainstalovaným softwarem na vašem webhostingu.
+    title: Systémové informace
+    description: Najděte všechny informace o mosparo.
+    logo:
+      title: Logo
+      intro: Logo navrhl Jan Kosa.
+      license: Logo je licencováno pod %linkStart%Creative Commons Attribution-NoDerivatives 4.0 International License%linkEnd%.
+    license:
+      title: Licence mosparo
+    usedLibrariesAndResources:
+      title: Použité knihovny a zdroje
+      intro: Rádi bychom poděkovali všem vývojářům open source za jejich neuvěřitelnou práci.
+      frontend: Frontend / Vizuální
+      backend: Backend / Knihovny PHP
+      license: Licence
+  title: Správa
+account:
+  settings:
+    form:
+      locale: Jazyk
+      dateFormat: Formát data
+      timeFormat: Formát času
+      timezone: Časové pásmo
+    title: Uživatelská nastavení
+    description: Změňte obecná nastavení svého účtu.
+    message:
+      successfullySaved: Vaše nastavení bylo úspěšně uloženo.
+  changePassword:
+    message:
+      successfullyChanged: Vaše heslo bylo úspěšně změněno.
+    description: Změňte heslo svého účtu.
+    form:
+      oldPassword: Staré heslo
+    title: Změna hesla
+  twoFactor:
+    action:
+      disable: Zakázat
+      continue: Pokračovat
+      configure: Konfigurace
+      reconfigure: Překonfigurovat
+      resetBackupCodes: Resetovat záložní kódy
+      verify: Ověřit
+    start:
+      textManually: Namísto naskenování QR kódu můžete do ověřovací aplikace zadat následující kód ručně.
+      title: Nastavení dvoufaktorového ověřování
+      intro: Naskenujte prosím tento QR kód pomocí autentizační aplikace ve svém chytrém telefonu. Můžete použít Google Authenticator, Microsoft Authenticator nebo podobné aplikace.
+      qrCodeAlt: Na tomto obrázku je zobrazen kód QR, který je třeba naskenovat pomocí ověřovací aplikace v chytrém telefonu.
+    verify:
+      intro: Do níže uvedeného pole zadejte kód, který je viditelný v ověřovací aplikaci, a ověřte nastavení.
+      title: Ověření dvoufaktorového ověřování
+    backupCodes:
+      infoResetBackupCodes: Každý záložní kód můžete použít pouze jednou. Jakmile jste museli použít záložní kódy, měli byste je resetovat.
+      title: Záložní kódy
+      intro: Tyto kódy si prosím uložte na bezpečné místo. Pokud jste ztratili přístup ke svému zařízení, můžete se přihlásit pomocí těchto záložních kódů.
+    message:
+      successfullyDisabled: Dvoufaktorové ověřování bylo pro váš účet úspěšně zakázáno.
+    description: Nakonfigurujte dvoufaktorové ověřování pro svůj účet.
+    title: Dvoufázové ověření
+    status:
+      intro: Váš účet je chráněn dvoufázovým ověřením.
+    error:
+      verificationFailed: Ověření dvoufaktorového ověření se nezdařilo. Zopakujte prosím proces.
+  title: Účet
+  backToOverview: Zpět na přehled
+security:
+  login:
+    emailLabel: E-mailová adresa
+    passwordLabel: Heslo
+    title: Přihlášení
+    youAreLoggedIn: Jste přihlášeni jako %username%.
+  twoFactor:
+    title: Dvoufázové ověření
+    intro: Zadejte kód z aplikace pro dvoufaktorové ověřování.
+  logout:
+    title: Odhlásit
+  forgotPassword:
+    title: Zapomenuté heslo
+  noAccess:
+    title: Žádný přístup
+roles:
+  inactive: Neaktivní
+  user: Uživatel
+  administrator: Administrátor
+setup:
+  buttons:
+    continue: Pokračovat
+    install: Instalovat
+    recheck: Překontrolovat
+    goToLogin: Přejít na přihlášení
+  prerequisites:
+    types:
+      general: Obecné
+      phpExtensions: PHP rozšíření
+    title: Předpoklady
+    meetPrerequisites: Všechny předpoklady jsou v pořádku. Můžete pokračovat v nastavení.
+    subtypes:
+      minPhpVersion: Minimální verze PHP
+    results:
+      available: Dostupné
+      missing: Chybějící
+      okay: Dobře
+      notOkay: Není v pořádku
+    optional: volitelný
+    introduction: mosparo potřebuje ke správnému spuštění některé předpoklady. Než budeme moci mosparo nastavit, musí být tyto předpoklady v pořádku.
+    missingPrerequisites: Chybí některé předpoklady. Podívejte se na níže uvedený přehled.
+    installOptionalExtensions: Některá volitelná rozšíření nejsou nainstalována. Doporučujeme vám, abyste si tato rozšíření nainstalovali dříve, než budete pokračovat.
+  start:
+    title: Nastavení
+    introduction: Toto nastavení vás provede procesem nastavení systému mosparo.
+  database:
+    title: Databáze
+    form:
+      user: Uživatel
+      password: Heslo
+      host: Hostitel
+      port: Port
+      database: Databáze
+    introduction: Zadejte prosím podrobnosti o vaší MySQL databázi.
+    useEmptyDatabase: Použijte prázdnou databázi nebo databázi, ve které neexistují žádné tabulky mosparo.
+    mosparoTablesExistInDatabase: V zadané databázi byly nalezeny tabulky mosparo. Použijte prosím jinou databázi nebo tabulky odstraňte.
+    connectionDataInvalid: K databázi se nebylo možné připojit. Zkontrolujte prosím níže uvedené nastavení a zkuste to znovu.
+  other:
+    form:
+      password: Heslo
+      emailAddress: E-mailová adresa
+      name: Název mosparo
+      subtitleCreateYourUser: Vytvoření uživatele
+    title: Další informace
+    introduction: Máme několik dalších hodnot, které potřebujeme. Vyplňte prosím níže uvedená pole.
+  install:
+    title: Instalace dokončena
+    description: Instalace byla úspěšně dokončena. Nyní se můžete přihlásit pomocí svého uživatele.
+password:
+  request:
+    title: Obnovení hesla
+    form:
+      email: E-mail
+    intro: Zadejte svou e-mailovou adresu a my vám zašleme odkaz pro obnovení hesla.
+    action: Odeslat e-mail pro obnovení hesla
+    message:
+      failedToSendEmail: 'Z důvodu technické chyby se e-mail nepodařilo odeslat. Zkuste to prosím později. Chybové hlášení: %errorMessage%'
+  email:
+    resetPasswordButton: Obnovit heslo
+    subject: Vaše žádost o resetování hesla
+    greeting: Ahoj!
+    infoClickButton: Chcete-li obnovit heslo, klikněte na tlačítko níže a postupujte podle pokynů.
+    infoLinkExpiration: Tento odkaz vyprší za %time%.
+    goodbye: Děkuji,
+    help: Pokud máte potíže s výše uvedeným tlačítkem, zkopírujte a vložte níže uvedenou adresu URL do webového prohlížeče.
+  form:
+    password: Heslo
+    newPassword: Nové heslo
+    repeatPassword: Opakovat heslo
+  backToLogin: Zpět na přihlášení
+  reset:
+    title: Obnovení hesla
+    action: Obnovit heslo
+    message:
+      successfullyReset: Vaše heslo bylo úspěšně obnoveno.
+    error:
+      tokenNotFound: V adrese URL ani v relaci nebyl nalezen token pro resetování hesla.
+      errorOccurred: Při ověřování vašeho požadavku na resetování došlo k problému. %error%
+  emailSent:
+    title: E-mail pro obnovení hesla byl odeslán
+    infoEmailWithLink: Pokud existuje účet odpovídající vašemu e-mailu, byl právě odeslán e-mail s odkazem, který můžete použít k obnovení hesla. Platnost tohoto odkazu vyprší na adrese %time%.
+    infoSpamFolder: Pokud e-mail neobdržíte, zkontrolujte složku se spamem nebo %linkStart%try znovu%linkEnd%.
+action:
+  configure: Konfigurace
+  manage: Spravovat
+  checkForUpdate: Zkontrolovat aktualizace
+  installUpdate: Instalovat aktualizaci
+  actions: Akce
+  add: Přidat
+  remove: Odstranit
+  save: Uložit
+  view: Zobrazit
+  edit: Upravit
+  delete: Smazat
+  help: Pomoc
+  close: Zavřít
+general:
+  infoUndo: Tento proces nelze vrátit zpět.
+  example: Příklad
+  empty: Prázdné stránky
+  unlimited: Neomezené
+state:
+  active: Aktivní
+  inactive: Neaktivní
+  ignored: Ignorováno
+  yes: Ano
+  no: Ne
+datatable:
+  datatable:
+    processing: Zpracovávání…
+    aria:
+      sortAscending: ': aktivovat řazení vzestupně'
+      sortDescending: ': aktivovat řazení vzestupně'
+    search: 'Hledat:'
+    lengthMenu: Zobrazit položky _MENU_
+    info: Zobrazuji záznamy _START_ až _END_ z _TOTAL_
+    infoEmpty: Zobrazeno 0 až 0 z 0 záznamů
+    infoFiltered: (filtrováno z _MAX_ celkových položek)
+    loadingRecords: Načítání…
+    zeroRecords: Nebyly nalezeny žádné odpovídající záznamy
+    emptyTable: V tabulce nejsou k dispozici žádné údaje
+    searchPlaceholder: Vyhledávání
+    paginate:
+      first: První
+      previous: Předchozí
+      next: Další
+      last: Poslední
+form:
+  addMultipleItems: Přidat více položek
+  choices:
+    systemDefault: Výchozí nastavení
+    browserLanguage: Jazyk prohlížeče

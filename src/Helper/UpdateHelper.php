@@ -675,6 +675,16 @@ class UpdateHelper
             }
         }
 
+        $ignoredFiles = [
+            '/.env.local',
+            '/.env.prod.local',
+        ];
+        foreach ($ignoredFiles as $ignoredFile) {
+            if ($ignoredFile === $filePath) {
+                return true;
+            }
+        }
+
         return false;
     }
 
