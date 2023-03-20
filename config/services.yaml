@@ -118,6 +118,14 @@ services:
         tags:
             - { name: twig.extension }
 
+    Mosparo\Twig\UpdateExtension:
+        class: Mosparo\Twig\UpdateExtension
+        arguments:
+            $updatesEnabled: '%env(MOSPARO_UPDATES_ENABLED)%'
+            $automaticUpdateCheckEnabled: '%env(MOSPARO_AUTOMATIC_UPDATE_CHECK_ENABLED)%'
+        tags:
+            - { name: twig.extension }
+
     Mosparo\Rule\RuleTypeManager:
         class: Mosparo\Rule\RuleTypeManager
         arguments: [ !tagged mosparo.ruleType ]

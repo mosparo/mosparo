@@ -37,6 +37,14 @@
                         </h1>
                         <div class="navbar-nav header-navbar flex-row order-md-last">
                             {% if is_granted('ROLE_ADMIN') %}
+                                {% if updatesEnabled and isUpdateAvailable %}
+                                    <div class="nav-item pe-3">
+                                        <a href="{{ path('administration_update_overview') }}" class="btn btn-outline-warning">
+                                            <i class="ti ti-refresh"></i>
+                                            {{ 'administration.update.button.updateAvailable'|trans }}
+                                        </a>
+                                    </div>
+                                {% endif %}
                                 <div class="nav-item {% if route starts with 'administration_' %}active{% endif %} me-lg-3">
                                     <a class="nav-link" href="{{ path('administration_overview') }}">
                                         <i class="ti ti-adjustments-horizontal"></i>

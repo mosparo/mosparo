@@ -7,8 +7,10 @@ use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
+use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class UpdateHelper
 {
@@ -30,6 +32,11 @@ class UpdateHelper
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     protected Filesystem $fileSystem;
+
+    /**
+     * @var \Symfony\Contracts\Cache\CacheInterface
+     */
+    protected CacheInterface $cache;
 
     /**
      * @var string
@@ -72,15 +79,17 @@ class UpdateHelper
      * @param \Mosparo\Helper\ConfigHelper $configHelper
      * @param \Symfony\Contracts\HttpClient\HttpClientInterface $client
      * @param \Symfony\Component\Filesystem\Filesystem $fileSystem
+     * @param \Symfony\Contracts\Cache\CacheInterface $cache
      * @param string $projectDirectory
      * @param string $cacheDirectory
      * @param string $env
      */
-    public function __construct(ConfigHelper $configHelper,  HttpClientInterface $client, Filesystem $fileSystem, string $projectDirectory, string $cacheDirectory, string $env)
+    public function __construct(ConfigHelper $configHelper, HttpClientInterface $client, Filesystem $fileSystem, CacheInterface $cache, string $projectDirectory, string $cacheDirectory, string $env)
     {
         $this->configHelper = $configHelper;
         $this->client = $client;
         $this->fileSystem = $fileSystem;
+        $this->cache = $cache;
         $this->projectDirectory = $projectDirectory;
         $this->cacheDirectory = $cacheDirectory;
         $this->env = $env;
@@ -111,55 +120,86 @@ class UpdateHelper
     }
 
     /**
-     * Returns true if there is an update available
+     * Returns true if we have cached update data
      *
      * @return bool
      */
-    public function isUpdateAvailable(): bool
+    public function hasCachedData(): bool
     {
-        return ($this->updateAvailable);
+        return (bool) ($this->getCachedUpdateData(false)['checkedAt'] ?? false);
+    }
+
+    /**
+     * Returns true if there is an update available
+     *
+     * @param bool $checkForUpdates
+     * @return bool
+     */
+    public function isUpdateAvailable(bool $checkForUpdates = false): bool
+    {
+        return $this->getCachedUpdateData($checkForUpdates)['isUpdateAvailable'] ?? false;
+    }
+
+    /**
+     * Returns the available update data
+     *
+     * @param bool $checkForUpdates
+     * @return array
+     */
+    public function getAvailableUpdateData(bool $checkForUpdates = false): array
+    {
+        return $this->getCachedUpdateData($checkForUpdates)['availableUpdate'] ?? [];
+    }
+
+    /**
+     * Returns a DateTime object, at which the update check was done, or returns null
+     * if no cached data is available.
+     *
+     * @return \DateTime|null
+     */
+    public function getCheckedAt(): ?\DateTime
+    {
+        return $this->getCachedUpdateData(false)['checkedAt'] ?? null;
     }
 
     /**
      * Returns the data for the available update
      *
+     * @param bool $checkForUpdates
      * @return array
      */
-    public function getAvailableUpdateData(): array
+    public function getCachedUpdateData(bool $checkForUpdates = false): array
     {
-        return $this->newVersionData;
-    }
-
-    /**
-     * Defines and creates the directory for the update log file
-     *
-     * @return string
-     */
-    public function getUpdateLogFileDirectory(): string
-    {
-        $directory = $this->projectDirectory . '/public/update-log';
-        if (!$this->fileSystem->exists($directory)) {
-            $this->fileSystem->mkdir($directory);
+        $cacheKey = 'availableUpdateData';
+        if ($checkForUpdates) {
+            $this->cache->delete($cacheKey);
         }
 
-        return $directory;
-    }
+        $cachedData = $this->cache->get($cacheKey, function (CacheItemInterface $item) use ($checkForUpdates) {
+            if ($checkForUpdates) {
+                $item->expiresAfter(86400);
 
-    /**
-     * Returns an array with the path and the absolute URI to the
-     * temporary log file.
-     *
-     * @return array
-     */
-    public function defineTemporaryLogFile(): array
-    {
-        $directory = $this->getUpdateLogFileDirectory();
-        $fileName = '/update-log-' . uniqid() . '.html';
-        $filePath = $directory . $fileName;
+                $this->checkForUpdates();
 
-        $fileUrl = '/update-log' . $fileName;
+                $data = [
+                    'isUpdateAvailable' => !empty($this->newVersionData),
+                    'availableUpdate' => $this->newVersionData,
+                    'checkedAt' => new \DateTime(),
+                ];
 
-        return [$filePath, $fileUrl];
+                $item->set($data);
+
+                return $data;
+            }
+
+            return $item->get();
+        });
+
+        if ($cachedData === null) {
+            return [];
+        }
+
+        return $cachedData;
     }
 
     /**
@@ -209,6 +249,58 @@ class UpdateHelper
 
         return $result->isValid();
     }
+
+    /**
+     * Processes the version data and tries to determine the next available version.
+     *
+     * @param array $versionData
+     */
+    protected function processVersionData(array $versionData): void
+    {
+        foreach ($versionData as $version) {
+            if (
+                version_compare(Kernel::VERSION, $version['version'], '<')
+                && (empty($this->newVersionData) || version_compare($this->newVersionData['version'], $version['version'], '<'))
+            ) {
+                $this->newVersionData = $version;
+            }
+        }
+
+        $this->updateAvailable = (!empty($this->newVersionData));
+    }
+
+    /**
+     * Defines and creates the directory for the update log file
+     *
+     * @return string
+     */
+    public function getUpdateLogFileDirectory(): string
+    {
+        $directory = $this->projectDirectory . '/public/update-log';
+        if (!$this->fileSystem->exists($directory)) {
+            $this->fileSystem->mkdir($directory);
+        }
+
+        return $directory;
+    }
+
+    /**
+     * Returns an array with the path and the absolute URI to the
+     * temporary log file.
+     *
+     * @return array
+     */
+    public function defineTemporaryLogFile(): array
+    {
+        $directory = $this->getUpdateLogFileDirectory();
+        $fileName = '/update-log-' . uniqid() . '.html';
+        $filePath = $directory . $fileName;
+
+        $fileUrl = '/update-log' . $fileName;
+
+        return [$filePath, $fileUrl];
+    }
+
 
     /**
      * Updates the mosparo installation. Returns true if everything worked correctly or false if an
@@ -412,25 +504,6 @@ class UpdateHelper
         }
 
         return false;
-    }
-
-    /**
-     * Processes the version data and tries to determine the next available version.
-     *
-     * @param array $versionData
-     */
-    protected function processVersionData(array $versionData): void
-    {
-        foreach ($versionData as $version) {
-            if (
-                version_compare(Kernel::VERSION, $version['version'], '<')
-                && (empty($this->newVersionData) || version_compare($this->newVersionData['version'], $version['version'], '<'))
-            ) {
-                $this->newVersionData = $version;
-            }
-        }
-
-        $this->updateAvailable = (!empty($this->newVersionData));
     }
 
     /**

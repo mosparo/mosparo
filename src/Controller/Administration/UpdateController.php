@@ -106,10 +106,10 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
-        $checkedForUpdates = $request->query->has('checkedForUpdates');
-        $session = $request->getSession();
-        $isUpdateAvailable = $session->get('isUpdateAvailable', false);
-        $availableUpdateData = $session->get('availableUpdateData', []);
+        $checkedForUpdates = $this->updateHelper->hasCachedData();
+        $checkedAt = $this->updateHelper->getCheckedAt();
+        $isUpdateAvailable = $this->updateHelper->isUpdateAvailable();
+        $availableUpdateData = $this->updateHelper->getAvailableUpdateData();
 
         $translatedChannels = array_flip($channels);
         return $this->render('administration/update/overview.html.twig', [
@@ -117,6 +117,7 @@ class UpdateController extends AbstractController
             'updateChannel' => $translatedChannels[$updateChannel],
             'settingsForm' => $settingsForm->createView(),
             'checkedForUpdates' => $checkedForUpdates,
+            'checkedAt' => $checkedAt,
             'isUpdateAvailable' => $isUpdateAvailable,
             'availableUpdateData' => $availableUpdateData,
             'updatesEnabled' => $this->updatesEnabled
@@ -128,10 +129,8 @@ class UpdateController extends AbstractController
      */
     public function check(Request $request): Response
     {
-        $session = $request->getSession();
-
         try {
-            $this->updateHelper->checkForUpdates();
+            $this->updateHelper->getCachedUpdateData(true);
         } catch (Exception $e) {
             $this->addFlash('error', $this->translator->trans(
                 'administration.update.check.message.errorCheckingForUpdates',
@@ -141,9 +140,6 @@ class UpdateController extends AbstractController
 
             return $this->redirectToRoute('administration_update_overview');
         }
-
-        $session->set('isUpdateAvailable', $this->updateHelper->isUpdateAvailable());
-        $session->set('availableUpdateData', $this->updateHelper->getAvailableUpdateData());
 
         return $this->redirectToRoute('administration_update_overview', ['checkedForUpdates' => 1]);
     }
@@ -155,14 +151,14 @@ class UpdateController extends AbstractController
     {
         $session = $request->getSession();
 
-        if (!$session->has('isUpdateAvailable') || !$this->updatesEnabled) {
+        if (!$this->updateHelper->isUpdateAvailable() || !$this->updatesEnabled) {
             return $this->redirectToRoute('administration_update_overview');
         }
 
         [$temporaryLogFilePath, $temporaryLogFileUrl] = $this->updateHelper->defineTemporaryLogFile();
         $session->set('temporaryLogFile', $temporaryLogFilePath);
 
-        $availableUpdateData = $session->get('availableUpdateData', []);
+        $availableUpdateData = $this->updateHelper->getAvailableUpdateData();
 
         // Abort, if this version is already installed.
         if ($availableUpdateData['version'] == Kernel::VERSION) {
@@ -182,12 +178,12 @@ class UpdateController extends AbstractController
     public function executeUpdate(Request $request)
     {
         $session = $request->getSession();
-        if (!$session->has('isUpdateAvailable') || !$this->updatesEnabled) {
+        if (!$this->updateHelper->isUpdateAvailable() || !$this->updatesEnabled) {
             $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_ERROR, 'No update data found.'));
             return new JsonResponse(['error' => true, 'errorMessage' => 'No update data found.']);
         }
 
-        $versionData = $session->get('availableUpdateData');
+        $versionData = $this->updateHelper->getAvailableUpdateData();
 
         $temporaryLogFile = $session->get('temporaryLogFile', null);
         if ($temporaryLogFile === null) {

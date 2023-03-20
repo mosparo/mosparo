@@ -146,7 +146,7 @@ rule:
 
     provider:
       title: Provider
-      shortIntro: Allows to filter by provider specific informations
+      shortIntro: Allows to filter by provider specific information
       intro: The provider rule type allows to filter for AS numbers and country codes.
       infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
       label: AS number/Country
@@ -681,6 +681,9 @@ administration:
     installedVersion: Installed version
     availableVersion: Available version
 
+    button:
+      updateAvailable: Update available
+
     check:
       title: Status
       intro: If you want to check for updates, please click on the button below.
@@ -693,9 +696,11 @@ administration:
       messageAvailable: A new update for mosparo is available. Please click on the install button below if you would like to install the update.
       warningUpdate: Please backup the mosparo files and the database before update. This automatic update process will not backup the files or the database. If something does not work correctly, it can destroy your mosparo installation.
       warningUpdatesDisabled: Updates are disabled for this mosparo installation. Please check the documentation to see other options to update your mosparo installation.
+      releaseNotes: Release notes
 
       titleNotAvailable: No update available
       messageNotAvailable: No new update for mosparo is available. Please check again later.
+      lastChecked: 'Last check:'
 
     execute:
       title: Update mosparo
@@ -725,8 +730,8 @@ administration:
       description: The needed changes for this update were executed. Your installation is up to date.
 
   system:
-    title: System Informations
-    description: Find all the informations about mosparo.
+    title: System Information
+    description: Find all the information about mosparo.
 
     general:
       title: General
@@ -1008,7 +1013,7 @@ setup:
       password: Password
 
   other:
-    title: Other informations
+    title: Other information
     introduction: We have some other values we need. Please fill out the fields below.
 
     form:

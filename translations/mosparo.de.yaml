@@ -680,6 +680,9 @@ administration:
     installedVersion: Installierte Version
     availableVersion: Verfügbare Version
 
+    button:
+      updateAvailable: Update verfügbar
+
     check:
       title: Status
       intro: Wenn Sie prüfen möchten, ob eine neue Version verfügbar ist, klicken Sie bitte auf die Schaltfläche unten.
@@ -692,9 +695,11 @@ administration:
       messageAvailable: Eine Update für mosparo ist verfügbar. Bitte klicken Sie auf die Installieren-Schaltfläche, wenn Sie dieses Update installieren möchten.
       warningUpdate: Bitte erstellen Sie eine Backup der Dateien und der Datenbank von mosparo. Dieser automatische Update-Prozess erstellt kein Backup der Dateien oder der Datenbank. Wenn beim Update etwas nicht korrekt funktioniert, kann Ihre mosparo-Installation zerstört werden.
       warningUpdatesDisabled: Updates sind für diese mosparo-Installation deaktiviert. Bitte schauen Sie in der Dokumentation nach, welche anderen Möglichkeiten es gibt, Ihre mosparo-Installation zu aktualisieren.
+      releaseNotes: Versionshinweise
 
       titleNotAvailable: Neuste Version
       messageNotAvailable: Kein neues Update verfügbar. Sie verwenden bereits die neuste Version von mosparo.
+      lastChecked: 'Letzte Überprüfung:'
 
     execute:
       title: mosparo aktualisieren

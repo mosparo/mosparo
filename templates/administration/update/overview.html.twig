@@ -37,6 +37,23 @@
                                 </div>
                             </div>
 
+                            {% if 'description' in availableUpdateData and 'detailsUrl' in availableUpdateData %}
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <h4 class="mb-1">
+                                            {{ 'administration.update.version.releaseNotes'|trans }}
+                                        </h4>
+                                        <pre class="mb-2">{{ (availableUpdateData.description ?? '')|trim }}</pre>
+                                        <div class="d-flex justify-content-end">
+                                            <a href="{{ availableUpdateData.detailsUrl ?? '' }}" class="btn btn-info">
+                                                <i class="ti ti-info-circle"></i>
+                                                {{ 'administration.update.version.releaseNotes'|trans }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
                             <div class="alert alert-danger">
                                 {% if updatesEnabled %}
                                     {{ 'administration.update.version.warningUpdate'|trans }}
@@ -51,9 +68,14 @@
                             <h3 class="card-title">{{ 'administration.update.version.titleNotAvailable'|trans }}</h3>
                         </div>
                         <div class="card-body">
-                            {{ 'administration.update.version.messageNotAvailable'|trans }}
+                            <p>
+                                {{ 'administration.update.version.messageNotAvailable'|trans }}
+                            </p>
                         </div>
                     {% endif %}
+                    <div class="card-footer text-muted">
+                        <strong>{{ 'administration.update.version.lastChecked'|trans }}</strong> {{ checkedAt|date }}
+                    </div>
                 </div>
 
                 {% if isUpdateAvailable and updatesEnabled %}
