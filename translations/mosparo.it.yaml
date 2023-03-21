@@ -83,6 +83,23 @@ rule:
         title: Sottorete
     provider:
       title: Provider
+      country:
+        intro: Immettere il codice ISO di un paese che non è autorizzato a inviare alcun messaggio. Tutti gli indirizzi IP registrati in questo paese saranno contrassegnati come spam.
+        infoCountryBlock: Se si aggiunge un Paese alla regola, significa che nessuno può inviare un modulo da questo Paese. Se da un lato questo suona bene, dall'altro potrebbe bloccare un utente reale dall'invio di un modulo. Fate attenzione a questa opzione. La corretta geolocalizzazione degli indirizzi IP non è mai garantita.
+        title: Paese
+      action:
+        configureGeoip2: Configurazione GeoIP2
+      asNumber:
+        title: Numero di AS
+        intro: Immettere un numero di AS che non è autorizzato a effettuare invii. Tutti gli indirizzi IP appartenenti a questo AS saranno bloccati.
+    unicodeBlock:
+      shortIntro: Filtra l'input in base ai caratteri usati.
+      block:
+        title: Blocco
+        intro: Selezionare uno dei blocchi che devono essere valutati durante l'inserimento. Inserire quindi la valutazione corrispondente.
+      intro: Il tipo di regola di blocco Unicode consente di valutare l'uso di determinati caratteri.
+      label: Blocco Unicode
+      title: Blocco Unicode
 dashboard:
   chart:
     spam: Spam
