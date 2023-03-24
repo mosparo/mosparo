@@ -4,6 +4,7 @@ namespace Mosparo\Controller\Administration;
 
 use Mosparo\Exception;
 use Mosparo\Helper\ConfigHelper;
+use Mosparo\Helper\ConnectionHelper;
 use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Helper\UpdateHelper;
@@ -33,6 +34,8 @@ class UpdateController extends AbstractController
 
     protected UpdateHelper $updateHelper;
 
+    protected ConnectionHelper $connectionHelper;
+
     protected ConfigHelper $configHelper;
 
     protected DesignHelper $designHelper;
@@ -45,6 +48,7 @@ class UpdateController extends AbstractController
         KernelInterface $kernel,
         SetupHelper $setupHelper,
         UpdateHelper $updateHelper,
+        ConnectionHelper $connectionHelper,
         ConfigHelper $configHelper,
         DesignHelper $designHelper,
         TranslatorInterface $translator,
@@ -53,6 +57,7 @@ class UpdateController extends AbstractController
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
         $this->updateHelper = $updateHelper;
+        $this->connectionHelper = $connectionHelper;
         $this->configHelper = $configHelper;
         $this->designHelper = $designHelper;
         $this->translator = $translator;
@@ -120,7 +125,8 @@ class UpdateController extends AbstractController
             'checkedAt' => $checkedAt,
             'isUpdateAvailable' => $isUpdateAvailable,
             'availableUpdateData' => $availableUpdateData,
-            'updatesEnabled' => $this->updatesEnabled
+            'updatesEnabled' => $this->updatesEnabled,
+            'downloadCheck' => $this->connectionHelper->checkIfDownloadIsPossible(),
         ]);
     }
 

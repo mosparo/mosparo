@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\Administration;
 
+use Mosparo\Helper\ConnectionHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Kernel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,13 +18,16 @@ class SystemController extends AbstractController
 {
     protected SetupHelper $setupHelper;
 
+    protected ConnectionHelper $connectionHelper;
+
     protected Filesystem $fileSystem;
 
     protected string $projectDirectory;
 
-    public function __construct(SetupHelper $setupHelper, Filesystem $fileSystem, string $projectDirectory)
+    public function __construct(SetupHelper $setupHelper, ConnectionHelper $connectionHelper, Filesystem $fileSystem, string $projectDirectory)
     {
         $this->setupHelper = $setupHelper;
+        $this->connectionHelper = $connectionHelper;
         $this->fileSystem = $fileSystem;
         $this->projectDirectory = $projectDirectory;
     }
@@ -38,6 +42,7 @@ class SystemController extends AbstractController
             'serverInfo' => php_uname(),
             'phpVersion' => phpversion(),
             'extensionsData' => $this->setupHelper->getExtensionsData(),
+            'downloadCheck' => $this->connectionHelper->checkIfDownloadIsPossible(),
             'licenseContent' => $this->getLicenseContent(),
         ]);
     }

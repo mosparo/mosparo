@@ -9,6 +9,7 @@ use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
 use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpClient\NativeHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -22,6 +23,8 @@ class UpdateHelper
      * @var \Mosparo\Helper\ConfigHelper
      */
     protected ConfigHelper $configHelper;
+
+    protected ConnectionHelper $connectionHelper;
 
     /**
      * @var \Symfony\Contracts\HttpClient\HttpClientInterface
@@ -84,9 +87,10 @@ class UpdateHelper
      * @param string $cacheDirectory
      * @param string $env
      */
-    public function __construct(ConfigHelper $configHelper, HttpClientInterface $client, Filesystem $fileSystem, CacheInterface $cache, string $projectDirectory, string $cacheDirectory, string $env)
+    public function __construct(ConfigHelper $configHelper, ConnectionHelper $connectionHelper, HttpClientInterface $client, Filesystem $fileSystem, CacheInterface $cache, string $projectDirectory, string $cacheDirectory, string $env)
     {
         $this->configHelper = $configHelper;
+        $this->connectionHelper = $connectionHelper;
         $this->client = $client;
         $this->fileSystem = $fileSystem;
         $this->cache = $cache;
@@ -377,12 +381,22 @@ class UpdateHelper
      * @param array $args
      * @return string
      *
+     * @throws \Mosparo\Exception Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.
      * @throws \Mosparo\Exception Cannot load the remote data for the given url "{URL}".
      */
     protected function loadRemoteData(string $url, array $args = []): string
     {
+        if (!$this->connectionHelper->isDownloadPossible()) {
+            throw new Exception('Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.');
+        }
+
+        $client = $this->client;
+        if ($this->connectionHelper->useNativeConnection()) {
+            $client = new NativeHttpClient();
+        }
+
         try {
-            $response = $this->client->request('GET', $url, $args);
+            $response = $client->request('GET', $url, $args);
         } catch (\Exception $e) {
             throw new Exception(sprintf('Cannot load the remote data for the given url "%s".', $url), 0, $e);
         }
@@ -401,12 +415,22 @@ class UpdateHelper
      * @param string $url
      * @param string $destinationFilePath
      *
+     * @throws \Mosparo\Exception Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.
      * @throws \Mosparo\Exception Cannot load the remote data for the given url "{URL}".
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     protected function streamRemoteData(string $url, string $destinationFilePath)
     {
-        $response = $this->client->request('GET', $url);
+        if (!$this->connectionHelper->isDownloadPossible()) {
+            throw new Exception('Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.');
+        }
+
+        $client = $this->client;
+        if ($this->connectionHelper->useNativeConnection()) {
+            $client = new NativeHttpClient();
+        }
+
+        $response = $client->request('GET', $url);
 
         if ($response->getStatusCode() !== 200) {
             throw new Exception(sprintf('Cannot load the remote data for the given url "%s".', $url));

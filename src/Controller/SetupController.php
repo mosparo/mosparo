@@ -10,6 +10,7 @@ use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Helper\ConfigHelper;
+use Mosparo\Helper\ConnectionHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Kernel;
 use PDO;
@@ -35,11 +36,14 @@ class SetupController extends AbstractController
 
     protected ConfigHelper $configHelper;
 
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper)
+    protected ConnectionHelper $connectionHelper;
+
+    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper, ConnectionHelper $connectionHelper)
     {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
         $this->configHelper = $configHelper;
+        $this->connectionHelper = $connectionHelper;
     }
 
     /**
@@ -59,7 +63,8 @@ class SetupController extends AbstractController
 
         return $this->render('setup/prerequisites.html.twig', [
             'meetPrerequisites' => $meetPrerequisites,
-            'prerequisites' => $prerequisites
+            'prerequisites' => $prerequisites,
+            'downloadCheck' => $this->connectionHelper->checkIfDownloadIsPossible(),
         ]);
     }
 

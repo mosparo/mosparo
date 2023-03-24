@@ -760,6 +760,15 @@ administration:
 
     website: Website
 
+# Download check
+downloadCheck:
+  cardTitle: Internet-Verbindung
+  intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
+  downloadIsPossible: Die PHP-Einstellungen ermöglichen das Herunterladen von Regel-Paketen und Updates. Eine Anpassung ist nicht erforderlich.
+  downloadIsNotPossible: Die PHP-Einstellungen lassen den Download von Updates oder Regel-Paketen nicht zu. Wenn Sie die Regel-Pakete- oder die Update-Funktionalität nutzen möchten, passen Sie bitte Ihre PHP-Konfiguration entsprechend an.
+  curlIsEnabledButFunctionsAreDisabled: Die Erweiterung %extensionName% ist aktiviert, aber die benötigten Funktionen (%functionNames%) sind deaktiviert. Wir empfehlen, die Erweiterung generell zu deaktivieren oder die benötigten Funktionen zu aktivieren.
+  moreInformation: Mehr Informationen
+
 # Account
 account:
   title: Account
@@ -984,6 +993,7 @@ setup:
     types:
       general: Allgemein
       phpExtensions: PHP-Erweiterungen
+      internetConnection: Internet-Verbindung
 
     subtypes:
       minPhpVersion: Mindest-PHP-Version

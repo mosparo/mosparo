@@ -35,6 +35,7 @@ class SetupHelper
             'posix' => false,
             'sodium' => false,
             'Zend OPcache' => false,
+            'curl' => false,
         ],
     ];
 

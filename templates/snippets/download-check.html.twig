@@ -1,0 +1,28 @@
+{% trans_default_domain 'mosparo' %}
+
+{% if downloadCheck.downloadPossible %}
+    <div class="alert alert-success">
+        {{ 'downloadCheck.downloadIsPossible'|trans }}
+    </div>
+{% else %}
+    <div class="alert alert-danger">
+        {{ 'downloadCheck.downloadIsNotPossible'|trans }}
+    </div>
+    {% set showInfoButton = true %}
+{% endif %}
+
+{% if downloadCheck.curlExtension and not downloadCheck.curlAvailable %}
+    <div class="alert alert-warning">
+        {{ 'downloadCheck.curlIsEnabledButFunctionsAreDisabled'|trans({'%extensionName%': '<code>curl</code>', '%functionNames%': '<code>curl_exec</code>, <code>curl_multi_exec</code>'})|raw }}
+    </div>
+    {% set showInfoButton = true %}
+{% endif %}
+
+{% if showInfoButton is defined and showInfoButton %}
+    <div class="d-flex justify-content-end">
+        <a href="https://documentation.mosparo.io/docs/installation/requirements#access-to-the-internet" class="btn btn-info">
+            <i class="ti ti-info-circle"></i>
+            {{ 'downloadCheck.moreInformation'|trans }}
+        </a>
+    </div>
+{% endif %}

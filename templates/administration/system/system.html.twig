@@ -56,12 +56,27 @@
                                         <strong>{{ extension }}</strong>
                                     </div>
                                     <div class="col">
-                                        {{ versionNumber }}
+                                        {% if versionNumber %}
+                                            {{ versionNumber }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'downloadCheck.cardTitle'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'downloadCheck.intro'|trans }}
+                    </p>
+                    {% include 'snippets/download-check.html.twig' %}
                 </div>
             </div>
             <div class="card mt-3">

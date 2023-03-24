@@ -78,7 +78,7 @@
                     </div>
                 </div>
 
-                {% if isUpdateAvailable and updatesEnabled %}
+                {% if isUpdateAvailable and updatesEnabled and downloadCheck.downloadPossible %}
                     <div class="row mt-3 mb-3">
                         <div class="col-12 col-md-auto ms-auto">
                             <a href="{{ path('administration_update_execute') }}" class="btn btn-danger w-100">
@@ -117,11 +117,17 @@
                             </div>
                         </div>
                     </div>
+
+                    {% if not downloadCheck.downloadPossible %}
+                        <div class="mt-3">
+                            {% include 'snippets/download-check.html.twig' %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-12 col-md-auto ms-auto">
-                    <a href="{{ path('administration_update_check') }}" class="btn btn-primary w-100">
+                    <a href="{{ path('administration_update_check') }}" class="btn btn-primary w-100 {% if not downloadCheck.downloadPossible %}disabled{% endif %}">
                         <i class="ti ti-refresh-dot"></i>
                         {{ 'action.checkForUpdate'|trans }}
                     </a>

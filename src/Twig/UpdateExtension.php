@@ -2,6 +2,7 @@
 
 namespace Mosparo\Twig;
 
+use Mosparo\Exception;
 use Mosparo\Helper\UpdateHelper;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
@@ -46,9 +47,16 @@ class UpdateExtension extends AbstractExtension implements GlobalsInterface
             $checkForUpdates = true;
         }
 
+        $isUpdateAvailable = false;
+        try {
+            $isUpdateAvailable = $this->updateHelper->isUpdateAvailable($checkForUpdates);
+        } catch (Exception $e) {
+            // Do nothing
+        }
+
         return [
             'updatesEnabled' => true,
-            'isUpdateAvailable' => $this->updateHelper->isUpdateAvailable($checkForUpdates),
+            'isUpdateAvailable' => $isUpdateAvailable,
         ];
     }
 }
