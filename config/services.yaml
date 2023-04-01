@@ -65,10 +65,10 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+    Mosparo\Session\DatabaseSessionHandler:
         arguments:
-            - !service { class: PDO, factory: [ '@database_connection', 'getWrappedConnection' ] }
-            - { lock_mode: 0 }
+            $connection: '@database_connection'
+            $options: { lock_mode: 0 }
 
     Mosparo\Subscriber\ApiSubscriber:
         class: Mosparo\Subscriber\ApiSubscriber
