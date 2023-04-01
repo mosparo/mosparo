@@ -497,12 +497,17 @@ settings:
     subtitles:
       dimensionSettings: Dimensions
       colorSettings: Colors
+      simpleDesign: Simple design
       colors:
         normal: Normal
         focus: On focus and hover
         loading: When loading
         success: Success
         failure: Failure
+
+    action:
+      switchToSimpleMode: Switch to simple mode
+      switchToAdvancedMode: Switch to advanced mode
 
     preview:
       background: Preview background
@@ -530,6 +535,15 @@ settings:
         textError: Text Error
         shadow: Shadow
         shadowInset: Shadow Inset
+        websiteBackground: Background color of the website
+        websiteForeground: Foreground color of the website
+        websiteAccent: Accent color of the website
+
+      help:
+        websiteBackground: Choose the background color of your website. This color is used to calculate the contrast ratio.
+        websiteForeground: Choose the foreground color of your website. This color is used to display the main elements of the mosparo box.
+        websiteAccent: Choose the accent color of your website. This color is used for different elements of the mosparo box.
+        boxSize: Choose the size of the box.
 
     choices:
       boxSize:
@@ -540,6 +554,10 @@ settings:
     message:
       successfullySaved: The design settings were saved successfully.
       boxRadiusTooLarge: The logo can only be displayed if the radius of the box is below a certain value.
+
+    simpleDesign:
+      introColors: Please choose the colors which your website has. The background color is required to calculate the correct contrast ratio, the foreground color represents your text color, and the accent color is used for the special elements of the mosparo box.
+      introPreview: On the right side, you'll see a preview of the mosparo box on your website. With the contrast ratio helper, you'll see if the contrast ratio of your selected colors is good.
 
 # Administration
 administration:

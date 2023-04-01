@@ -88,6 +88,7 @@ class Project
 
         'ipAllowList' => '',
 
+        'designMode' => 'simple',
         'boxSize' => 'medium',
         'boxRadius' => 11,
         'boxBorderWidth' => 3,
