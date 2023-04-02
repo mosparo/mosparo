@@ -44,3 +44,74 @@ rule:
     name: Nama
     type: Tipe
     status: Status
+    actions: Aksi
+  createChooseType:
+    title: Pilih tipe
+  create:
+    title: Buat peraturan
+    message:
+      successfullyCreated: Aturan baru berhasil dibuat.
+  form:
+    items:
+      type: Tipe
+      rating: Peringkat
+      title: item
+    addMultipleItems:
+      label: Label
+      items: Item
+      itemsHelp: Tambahkan satu item per baris.
+      rating: Peringkat
+      ratingHelp: Jika tidak disetel, peringkat defaultnya adalah 1,0. Jika peringkat diatur ke 0,0, item tidak akan dinilai sebagai item spam.
+    ruleType: Jenis aturan
+    rule:
+      title: Aturan
+      name: Nama
+      description: Deskripsi
+      status: Status
+      spamRatingFactor: Faktor peringkat spam
+      spamRatingFactorHelp: Dengan faktor peringkat spam Anda dapat menentukan faktor yang memperkuat atau melemahkan entri aturan ini. Jika nilainya lebih besar dari 1.0, entri-entri tersebut diperkuat, jika nilainya kurang dari 1.0, entri-entri tersebut dilemahkan.
+  delete:
+    confirm: Apakah Anda benar-benar ingin menghapus aturan %ruleName%?
+    title: Hapus aturan %ruleName%
+    message:
+      successfullyDeleted: Aturan %ruleName% berhasil dihapus.
+  type:
+    domain:
+      shortIntro: Memungkinkan untuk memfilter menurut domain tertentu
+      intro: Jenis aturan domain memungkinkan untuk memfilter domain.
+      domain:
+        title: domain
+        intro: Masukkan domain yang tidak diizinkan untuk mengirimkan kiriman. Jika Anda memasukkan domain, itu juga akan menangkap semua alamat email dengan domain ini.
+      label: domain
+      placeholder: example.com
+      title: domain
+    email:
+      title: Pesan
+      shortIntro: Memungkinkan untuk memfilter berdasarkan alamat email tertentu
+      placeholder: info@example.com
+      intro: Jenis aturan email memungkinkan untuk memfilter alamat email.
+      label: Alamat email
+      email:
+        title: Alamat email
+        intro: Masukkan alamat email yang tidak diperbolehkan untuk mengirimkan kiriman.
+    ipAddress:
+      label: Alamat IP/Subnet
+      subnet:
+        intro: Masukkan subnet dengan topeng yang tidak diizinkan untuk melakukan pengiriman apa pun.
+        title: subnet
+      title: Alamat IP
+      shortIntro: Memungkinkan untuk memfilter menurut alamat ip dan subnet
+      intro: Jenis aturan alamat IP memungkinkan untuk memfilter alamat IP atau subnet.
+      placeholder: 0.0.0.0
+      ipAddress:
+        intro: Masukkan alamat IP yang tidak diizinkan untuk melakukan pengiriman apa pun.
+        title: Alamat IP
+    provider:
+      title: Provider
+      intro: Jenis aturan penyedia memungkinkan untuk memfilter nomor AS dan kode negara.
+      infoGeoip2: Untuk menggunakan jenis penyedia, diperlukan untuk mengonfigurasi database MindMax GeoLite2, jika tidak, item penyedia tidak akan berpengaruh.
+      shortIntro: Memungkinkan untuk memfilter berdasarkan informasi spesifik penyedia
+  edit:
+    title: Edit aturan %aturanNama%
+    message:
+      successfullySaved: Aturan berhasil disimpan.
