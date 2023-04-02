@@ -70,6 +70,7 @@ class UpdateController extends AbstractController
         ];
         $channels = [
             'administration.update.settings.form.channelStable' => 'stable',
+            'administration.update.settings.form.channelBeta' => 'beta',
             'administration.update.settings.form.channelDevelop' => 'develop',
         ];
         $attr = [

@@ -705,10 +705,11 @@ administration:
 
       form:
         channelStable: Stabil
+        channelBeta: Beta
         channelDevelop: Entwicklung
 
       message:
-        infoDevelopChannel: Der Entwicklungs-Kanal enthält ungetestet und instabile Versionen von mosparo, welche nicht für den produktiven Einsatz gedacht sind. Bitte verwenden Sie den Entwicklungs-Kanal nicht in einer produktiven Umgebung.
+        infoDevelopChannel: Die Entwicklungs- und Beta-Kanäle enthalten ungetestet und instabile Versionen von mosparo, welche nicht für den produktiven Einsatz gedacht sind. Bitte verwenden Sie diese Kanäle nicht in einer produktiven Umgebung.
         savedSuccessfully: Der Update-Kanal wurde erfolgreich gespeichert.
 
     buttons:
