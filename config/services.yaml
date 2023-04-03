@@ -68,6 +68,7 @@ services:
     Mosparo\Session\DatabaseSessionHandler:
         arguments:
             $connection: '@database_connection'
+            $mosparoVersion: '%env(mosparo_installed_version)%'
             $options: { lock_mode: 0 }
 
     Mosparo\Subscriber\ApiSubscriber:
