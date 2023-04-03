@@ -41,6 +41,7 @@ class DatabaseSessionHandler extends \SessionHandler
         return $this->sessionHandler->destroy($sessionId);
     }
 
+    #[\ReturnTypeWillChange]
     public function gc($maxLifetime)
     {
         return $this->sessionHandler->gc($maxLifetime);
@@ -51,6 +52,7 @@ class DatabaseSessionHandler extends \SessionHandler
         return $this->sessionHandler->open($path, $name);
     }
 
+    #[\ReturnTypeWillChange]
     public function read($sessionId)
     {
         return $this->sessionHandler->read($sessionId);
