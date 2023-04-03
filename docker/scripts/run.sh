@@ -12,6 +12,8 @@ chown -R www-data: /mosparo-data/
 [ -L /mosparo/var ] || ln -s /mosparo-data/var/ /mosparo/var
 [ -L /mosparo/config/env.mosparo.php ] || ln -s /mosparo-data/env.mosparo.php /mosparo/config/env.mosparo.php
 
+rm -rf /mosparo-data/var/cache/prod
+
 if [ $MOSPARO_ENABLE_CRON -eq 1 ]; then
   if [ $MOSPARO_ENABLE_WEBSERVER -eq 1 ]; then
     cron -f &
