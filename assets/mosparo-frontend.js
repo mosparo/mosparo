@@ -321,7 +321,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             }
 
             if (_this.options.onCheckForm !== null) {
-                _this.options.onCheckForm();
+                _this.options.onCheckForm(response.valid);
             }
         }, function () {
             _this.checkboxFieldElement.checked = false;
