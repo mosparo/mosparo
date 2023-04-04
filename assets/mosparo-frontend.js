@@ -17,7 +17,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
         requestSubmitTokenOnInit: true,
 
         // Callbacks
-        onCheckForm: null
+        onCheckForm: null,
+        onResetState: null
     };
     this.options = {...this.defaultOptions, ...options};
 
@@ -436,6 +437,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
         }
 
         _this.formElement.dispatchEvent(new CustomEvent('state-reset'));
+
+        if (_this.options.onResetState !== null) {
+            _this.options.onResetState();
+        }
     }
 
     this.send = function (endpoint, data, callbackSuccess, callbackError) {
