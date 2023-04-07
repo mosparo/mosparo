@@ -1,4 +1,4 @@
-label: Souhlasím, aby byly položky formuláře kontrolovány na spam a uloženy šifrovaně po dobu 14 dnů.
+label: Souhlasím s tím, že položky formuláře jsou kontrolovány na spam a uloženy šifrovaně po dobu 14 dnů.
 accessibility:
   checkingData: Kontrolujeme vaše údaje. Počkejte prosím.
   dataValid: Vaše údaje jsou platné. Formulář můžete odeslat.
