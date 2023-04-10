@@ -361,6 +361,11 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 return;
             }
 
+            // Ignore HTML elements with a name but without a value, like <iframe>
+            if (typeof el.value === 'undefined') {
+                return;
+            }
+
             processedFields.push(name);
             let tagName = el.tagName.toLowerCase();
             let fieldPath = tagName;
