@@ -86,6 +86,7 @@ To install mosparo from the source, clone the repository and execute Composer an
 - git
 - Composer
 - Yarn
+- Node.js (18)
 
 #### Installation
 
