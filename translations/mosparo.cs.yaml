@@ -544,8 +544,9 @@ administration:
       form:
         channelStable: Stabilní
         channelDevelop: Vývojářská
+        channelBeta: Beta
       message:
-        infoDevelopChannel: Vývojový kanál obsahuje netestované a nestabilní verze, které nejsou připraveny pro produkční použití. Nepoužívejte jej prosím v produkčním prostředí.
+        infoDevelopChannel: Vývojový a beta kanál obsahuje netestované a nestabilní verze, které nejsou připraveny pro produkci. Nepoužívejte je prosím v produkčním prostředí.
         savedSuccessfully: Aktualizační kanál byl úspěšně uložen.
       title: Aktualizovat nastavení
     finalize:
