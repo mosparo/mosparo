@@ -230,7 +230,7 @@
                                                 {% endif %}
                                             {% endif %}
                                         </h4>
-                                        {% if field.value is iterable and not field.value is empty %}
+                                        {% if field.value is defined and field.value is iterable and not field.value is empty %}
                                             <ul>
                                                 {% for subValue in field.value %}
                                                     <li>
@@ -238,7 +238,7 @@
                                                     </li>
                                                 {% endfor %}
                                             </ul>
-                                        {% elseif not field.value is iterable and field.value|trim != '' %}
+                                        {% elseif field.value is defined and not field.value is iterable and field.value|trim != '' %}
                                             <code>{{ field.value|nl2br }}</code>
                                         {% else %}
                                             <em>{{ 'general.empty'|trans }}</em>

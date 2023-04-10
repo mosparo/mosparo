@@ -123,7 +123,7 @@ class RuleTesterHelper
 
             $ruleTester = $this->ruleTesters[$rule->getType()];
 
-            $value = $fieldData['value'];
+            $value = $fieldData['value'] ?? '';
             if (is_array($value)) {
                 $result = [];
                 foreach ($value as $key => $subValue) {
