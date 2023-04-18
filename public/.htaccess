@@ -10,3 +10,13 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
+
+<IfModule mod_headers.c>
+    # Content Security Policy - CSP-HEADER
+    Header set Content-Security-Policy "frame-ancestors 'self'; base-uri 'self'; default-src 'none'; connect-src 'self'; form-action 'self'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+    Header set X-Content-Security-Policy "frame-ancestors 'self'; base-uri 'self'; default-src 'none'; connect-src 'self'; form-action 'self'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+    Header set X-WebKit-CSP "frame-ancestors 'self'; base-uri 'self'; default-src 'none'; connect-src 'self';  form-action 'self'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+
+    # X-Xss-Protection
+    Header always set X-Xss-Protection "1; mode=block"
+</IfModule>
