@@ -12,15 +12,6 @@
                 border-color: var(--mosparo-focus-circle-border-color, #AAA);
                 box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
             }
-
-            &:after {
-                display: var(--mosparo-show-logo, block);
-
-                -webkit-mask: url('../../images/mosparo_text_logo.svg') no-repeat center;
-                mask: url('../../images/mosparo_text_logo.svg') no-repeat center;
-
-                background: var(--mosparo-text-color, #000);
-            }
         }
     }
 }

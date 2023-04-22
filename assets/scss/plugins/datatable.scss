@@ -79,9 +79,7 @@
 }
 
 .dataTables_length {
-    select {
-        @extend .form-select;
-
+    .form-select-container {
         display: inline-block;
         width: auto;
         margin: 0 0.2rem;
@@ -130,6 +128,32 @@
 
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+}
+
+.table-sort {
+    &:after,
+    &.asc:after,
+    &.desc:after {
+        @extend .ti;
+
+        content: '\eb1d';
+
+        background: transparent;
+
+        opacity: 1;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.asc:after {
+        content: '\ea62';
+    }
+
+    &.desc:after {
+        content: '\ea5f';
+    }
 }
 
 @media only screen and (max-width: 768px) {

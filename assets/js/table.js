@@ -2,6 +2,7 @@ const $ = require('jquery');
 
 $(document).ready(function () {
     $('body').on('init.dt', 'table', function () {
+        $(this).parents('.dataTables_wrapper').find('.dataTables_length select').wrap('<div class="form-select-container"></div>');
         $(this).find('th.sorting').each(function () {
             let button = $('<button></button>').addClass('table-sort').text($(this).text());
             $(this).html(button);

@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -46,7 +48,8 @@ class ProjectSubscriber implements EventSubscriberInterface
     {
         return [
             RequestEvent::class => 'onKernelRequest',
-            ConsoleEvents::COMMAND => 'onConsoleCommand'
+            ConsoleEvents::COMMAND => 'onConsoleCommand',
+            KernelEvents::RESPONSE => ['onKernelResponse', -4096], // Adjust the CSP header for the design settings page
         ];
     }
 
@@ -214,5 +217,45 @@ class ProjectSubscriber implements EventSubscriberInterface
             ->getFilters()
             ->enable('project_related_filter')
             ->setProjectHelper($this->projectHelper);
+    }
+
+    /**
+     * This special subscriber is only needed to adjust the CSP header for the design settings page.
+     * After fixing the inline styles and data: URIs, this adjustment is no longer required and will be removed.
+     *
+     * @param ResponseEvent $event
+     * @return void
+     * @deprecated Deprecated since v0.3.15, will be removed in v0.4
+     */
+    public function onKernelResponse(ResponseEvent $event): void
+    {
+        if (!$event->isMainRequest()) {
+            return;
+        }
+
+        $request = $event->getRequest();
+        if (!$request->attributes->has('_route') || $request->attributes->get('_route') !== 'settings_design') {
+            return;
+        }
+
+        $response = $event->getResponse();
+
+        if ($response->headers->get('Content-Security-Policy', false)) {
+            $this->fixCspHeaderForDesignSettings($response, 'Content-Security-Policy');
+        }
+
+        if ($response->headers->get('X-Content-Security-Policy', false)) {
+            $this->fixCspHeaderForDesignSettings($response, 'X-Content-Security-Policy');
+        }
+    }
+
+    protected function fixCspHeaderForDesignSettings(Response $response, $headerKey): void
+    {
+        $headerValue = $response->headers->get($headerKey);
+        if ($headerValue === false || strpos($headerValue, 'img-src') !== false || strpos($headerValue, 'style-src') !== false) {
+            return;
+        }
+
+        $response->headers->set($headerKey, $headerValue . "; img-src 'self' data:; style-src 'self' 'unsafe-inline';");
     }
 }

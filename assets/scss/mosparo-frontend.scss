@@ -140,7 +140,11 @@
     &:not(.mosparo__checked):not(.mosparo__invalid):hover {
         &:after {
             display: var(--mosparo-show-logo, block);
-            background: url('../images/mosparo_text_logo.svg') no-repeat center;
+
+            -webkit-mask: url('../images/mosparo_text_logo.svg') no-repeat center;
+            mask: url('../images/mosparo_text_logo.svg') no-repeat center;
+
+            background: var(--mosparo-text-color, rgb(0, 0, 0));
         }
     }
 

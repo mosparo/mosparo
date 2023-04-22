@@ -35,17 +35,19 @@
 
     <!-- Insert this at the end of your body element, but before the closing tag -->
     <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
-    <script>
-        $(function() {
-            $('#users').initDataTables({{ datatable_settings(datatable) }}, {
-                autoWidth: false,
-                searching: false,
-                info: false,
-                columnDefs: [
-                    { width: "40%", targets: 0 },
-                    { width: "1%", targets: 2 }
-                ]
+    {% cspscript %}
+        <script>
+            $(function() {
+                $('#users').initDataTables({{ datatable_settings(datatable) }}, {
+                    autoWidth: false,
+                    searching: false,
+                    info: false,
+                    columnDefs: [
+                        { width: "40%", targets: 0 },
+                        { width: "1%", targets: 2 }
+                    ]
+                });
             });
-        });
-    </script>
+        </script>
+    {% endcspscript %}
 {% endblock %}

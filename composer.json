@@ -17,10 +17,11 @@
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.8",
         "geoip2/geoip2": "~2.0",
-        "gracious/doctrine-encryption-bundle": "dev-bugfix-migrations",
+        "gracious/doctrine-encryption-bundle": "^3.0",
         "mlocati/ip-lib": "^1.16",
         "mosparo/php-api-client": "^1.0",
         "mosparo/specifications": "^1.1",
+        "nelmio/security-bundle": "^3.0",
         "omines/datatables-bundle": "^0.5.4",
         "opis/json-schema": "^2.2",
         "paragonie/sodium_compat": "^1.17",
@@ -131,11 +132,5 @@
             "allow-contrib": false,
             "require": "5.4.*"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:mosparo/doctrine-encryption-bundle.git"
-        }
-    ]
+    }
 }

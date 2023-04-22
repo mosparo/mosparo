@@ -146,6 +146,18 @@
     "myclabs/php-enum": {
         "version": "1.8.3"
     },
+    "nelmio/security-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.4",
+            "ref": "65726efb67ff51d89de38195bc0d230fa811f64d"
+        },
+        "files": [
+            "config/packages/nelmio_security.yaml"
+        ]
+    },
     "nikic/php-parser": {
         "version": "v4.10.4"
     },

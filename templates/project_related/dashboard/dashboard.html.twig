@@ -49,106 +49,114 @@
     </div>
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+
+    {{ encore_entry_link_tags('apexcharts', null, '', { 'id': 'apexcharts-css' }) }}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            let chartOptions = {
-                series: [
-                    {
-                        name: "{{ 'dashboard.chart.valid'|trans }}",
-                        data: {{ noSpamSubmissionsData|json_encode|raw }}
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                let chartOptions = {
+                    series: [
+                        {
+                            name: "{{ 'dashboard.chart.valid'|trans }}",
+                            data: {{ noSpamSubmissionsData|json_encode|raw }}
+                        },
+                        {
+                            name: "{{ 'dashboard.chart.spam'|trans }}",
+                            data: {{ spamSubmissionsData|json_encode|raw }}
+                        }
+                    ],
+                    chart: {
+                        type: "area",
+                        background: '#fff',
+                        fontFamily: 'inherit',
+                        height: 250,
+                        stacked: true,
+                        offsetY: -10,
+                        parentHeightOffset: 5,
+                        animations: {
+                            enabled: false
+                        },
+                        zoom: {
+                            enabled: false
+                        },
+                        toolbar: {
+                            show: false
+                        },
                     },
-                    {
-                        name: "{{ 'dashboard.chart.spam'|trans }}",
-                        data: {{ spamSubmissionsData|json_encode|raw }}
-                    }
-                ],
-                chart: {
-                    type: "area",
-                    background: '#fff',
-                    fontFamily: 'inherit',
-                    height: 250,
-                    stacked: true,
-                    offsetY: -10,
-                    parentHeightOffset: 5,
-                    animations: {
-                        enabled: false
+                    dataLabels: {
+                        enabled: false,
                     },
-                    zoom: {
-                        enabled: false
-                    },
-                    toolbar: {
-                        show: false
-                    },
-                },
-                dataLabels: {
-                    enabled: false,
-                },
-                fill: {
-                    colors: ['#EAF7EC', '#FBEBEB'],
-                    type: 'gradient',
-                    gradient: {
-                        inverseColors: false,
-                        shade: 'light',
-                        type: "vertical",
-                        opacityFrom: 0.9,
-                        opacityTo: 0.6,
-                        stops: [0, 100, 100, 100]
-                    }
-                },
-                tooltip: {
-                    x: {
-                        show: true,
-                        format: '{{ chartDateFormat }}',
-                        formatter: undefined,
-                    }
-                },
-                stroke: {
-                    width: 2,
-                    lineCap: "round",
-                    curve: "smooth",
-                },
-                colors: ['#56B344', '#D63939'],
-                grid: {
-                    show: true
-                },
-                legend: {
-                    show: false
-                },
-                point: {
-                    show: false
-                },
-                xaxis: {
-                    labels: {
-                        padding: 0,
-                        datetimeFormatter: {
-                            day: '{{ chartDateFormat }}'
+                    fill: {
+                        colors: ['#EAF7EC', '#FBEBEB'],
+                        type: 'gradient',
+                        gradient: {
+                            inverseColors: false,
+                            shade: 'light',
+                            type: "vertical",
+                            opacityFrom: 0.9,
+                            opacityTo: 0.6,
+                            stops: [0, 100, 100, 100]
                         }
                     },
                     tooltip: {
-                        enabled: false
+                        x: {
+                            show: true,
+                            format: '{{ chartDateFormat }}',
+                            formatter: undefined,
+                        }
                     },
-                    axisBorder: {
+                    stroke: {
+                        width: 2,
+                        lineCap: "round",
+                        curve: "smooth",
+                    },
+                    colors: ['#56B344', '#D63939'],
+                    grid: {
+                        show: true
+                    },
+                    legend: {
+                        show: false
+                    },
+                    point: {
+                        show: false
+                    },
+                    xaxis: {
+                        labels: {
+                            padding: 0,
+                            datetimeFormatter: {
+                                day: '{{ chartDateFormat }}'
+                            }
+                        },
+                        tooltip: {
+                            enabled: false
+                        },
+                        axisBorder: {
+                            show: true,
+                        },
+                        type: 'datetime',
+                    },
+                    yaxis: {
                         show: true,
+                        labels: {
+                            offsetX: 0,
+                            offsetY: 3,
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
                     },
-                    type: 'datetime',
-                },
-                yaxis: {
-                    show: true,
-                    labels: {
-                        offsetX: 0,
-                        offsetY: 3,
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                },
-            };
+                };
 
-            var submissionChart = new ApexCharts($('#submission_chart')[0], chartOptions);
-            submissionChart.render();
-        });
-    </script>
+                var submissionChart = new ApexCharts($('#submission_chart')[0], chartOptions);
+                submissionChart.render();
+            });
+        </script>
+    {% endcspscript %}
 {% endblock %}

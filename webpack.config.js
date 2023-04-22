@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('mosparo', './assets/mosparo.js')
     .addEntry('mosparo-frontend', './assets/mosparo-frontend.js')
+    .addEntry('apexcharts', './assets/apexcharts.js')
 
     .copyFiles({
         from: './assets/images',

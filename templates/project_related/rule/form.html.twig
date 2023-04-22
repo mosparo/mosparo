@@ -124,38 +124,40 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#btn-add-multiple-items').click(function () {
-                let modal = $('#add-multiple-items-modal');
-                let type = modal.find('select[name="rule_add_multiple_items[type]"]').val();
-                let items = modal.find('textarea[name="rule_add_multiple_items[items]"]').val().split("\n");
-                let rating = modal.find('input[name="rule_add_multiple_items[rating]"]').val();
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#btn-add-multiple-items').click(function () {
+                    let modal = $('#add-multiple-items-modal');
+                    let type = modal.find('select[name="rule_add_multiple_items[type]"]').val();
+                    let items = modal.find('textarea[name="rule_add_multiple_items[items]"]').val().split("\n");
+                    let rating = modal.find('input[name="rule_add_multiple_items[rating]"]').val();
 
-                let collectionObj = $('.collection-widget');
-                let list = collectionObj.find('.collection-list');
-                let newWidget = list.attr('data-prototype');
+                    let collectionObj = $('.collection-widget');
+                    let list = collectionObj.find('.collection-list');
+                    let newWidget = list.attr('data-prototype');
 
-                for (let itemIndex in items) {
-                    let item = items[itemIndex];
-                    if (item.trim() === '') {
-                        continue;
+                    for (let itemIndex in items) {
+                        let item = items[itemIndex];
+                        if (item.trim() === '') {
+                            continue;
+                        }
+
+                        let itemWidget = newWidget.replace(/__name__/g, collectionGetRandomHash());
+
+                        let newElem = $(list.attr('data-widget-tags'));
+                        newElem.find('.input-group').append(itemWidget);
+                        newElem.find('.input-group').append($('<button></button>').attr('type', 'button').addClass('btn btn-danger btn-icon-only remove-item-button').html('<i class="ti ti-circle-minus"></i>'));
+                        newElem.find('.rule-item-type').val(type);
+                        newElem.find('.rule-item-value').val(item);
+                        newElem.find('.rule-item-rating').val(rating);
+                        newElem.appendTo(list);
                     }
 
-                    let itemWidget = newWidget.replace(/__name__/g, collectionGetRandomHash());
-
-                    let newElem = $(list.attr('data-widget-tags'));
-                    newElem.find('.input-group').append(itemWidget);
-                    newElem.find('.input-group').append($('<button></button>').attr('type', 'button').addClass('btn btn-danger btn-icon-only remove-item-button').html('<i class="ti ti-circle-minus"></i>'));
-                    newElem.find('.rule-item-type').val(type);
-                    newElem.find('.rule-item-value').val(item);
-                    newElem.find('.rule-item-rating').val(rating);
-                    newElem.appendTo(list);
-                }
-
-                collectionToggleRemoveButton(list);
-                $('#add-multiple-items-modal').modal('hide');
+                    collectionToggleRemoveButton(list);
+                    $('#add-multiple-items-modal').modal('hide');
+                });
             });
-        });
-    </script>
+        </script>
+    {% endcspscript %}
 {% endblock %}

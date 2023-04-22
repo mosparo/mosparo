@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -60,12 +61,29 @@ class TwoFactorController extends AbstractController
             $qrCode = $qrCodeGenerator->getGoogleAuthenticatorQrCode($user);
             $form->get('secret')->setData($secret);
 
+            $request->getSession()->set('qrCode', $qrCode->writeString());
+
             return $this->render('account/two-factor-authentication/start.html.twig', [
                 'form' => $form->createView(),
                 'secret' => $secret,
-                'qrCode' => $qrCode->writeDataUri()
             ]);
         }
+    }
+
+    /**
+     * @Route("/qrcode", name="account_two_factor_qrcode")
+     */
+    public function qrcode(Request $request)
+    {
+        $response = new Response($request->getSession()->get('qrCode', ''));
+
+        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'qrcode.png');
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', 'image/png');
+
+        $request->getSession()->remove('qrCode');
+
+        return $response;
     }
 
     /**

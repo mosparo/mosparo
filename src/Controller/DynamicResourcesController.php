@@ -8,8 +8,9 @@ use Mosparo\Helper\DesignHelper;
 use Mosparo\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\EventListener\SessionListener;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -77,5 +78,24 @@ class DynamicResourcesController extends AbstractController
         }
 
         return new Response($redirectResponse->getTargetUrl());
+    }
+
+    /**
+     * @Route("/logo.svg", name="resources_frontend_logo", stateless=true)
+     */
+    public function returnTextLogo(Request $request): Response
+    {
+        $response = new Response($this->designHelper->getTextLogoContent());
+
+        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'logo.svg');
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', 'image/svg+xml');
+
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        $response->setMaxAge(365 * 86400); // Cache for one year
+        $response->setPublic();
+
+        return $response;
     }
 }
