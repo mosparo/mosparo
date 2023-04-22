@@ -130,7 +130,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sendPasswordResetEmail = ($form->get('sendPasswordResetEmail')->getData());
-            if ($sendPasswordResetEmail) {
+            if ($isNewUser && $sendPasswordResetEmail) {
                 $user->setPassword($this->userPasswordHasher->hashPassword(
                     $user,
                     $tokenGenerator->generateToken()
