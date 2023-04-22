@@ -105,9 +105,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
                 </div>
                 <div class="modal-body">
-                    {{ form_row(addMultipleForm.type) }}
-                    {{ form_row(addMultipleForm.items) }}
-                    {{ form_row(addMultipleForm.rating) }}
+                    <form>
+                        {{ form_row(addMultipleForm.type) }}
+                        {{ form_row(addMultipleForm.items) }}
+                        {{ form_row(addMultipleForm.rating) }}
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
@@ -146,8 +148,8 @@
                         let itemWidget = newWidget.replace(/__name__/g, collectionGetRandomHash());
 
                         let newElem = $(list.attr('data-widget-tags'));
-                        newElem.find('.input-group').append(itemWidget);
-                        newElem.find('.input-group').append($('<button></button>').attr('type', 'button').addClass('btn btn-danger btn-icon-only remove-item-button').html('<i class="ti ti-circle-minus"></i>'));
+                        newElem.append(itemWidget);
+                        newElem.append($('<button></button>').attr('type', 'button').addClass('btn btn-danger btn-icon-only remove-item-button').html('<i class="ti ti-circle-minus"></i>'));
                         newElem.find('.rule-item-type').val(type);
                         newElem.find('.rule-item-value').val(item);
                         newElem.find('.rule-item-rating').val(rating);
@@ -156,6 +158,7 @@
 
                     collectionToggleRemoveButton(list);
                     $('#add-multiple-items-modal').modal('hide');
+                    $('#add-multiple-items-modal').find('.modal-body form')[0].reset();
                 });
             });
         </script>
