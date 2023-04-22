@@ -252,10 +252,13 @@ class ProjectSubscriber implements EventSubscriberInterface
     protected function fixCspHeaderForDesignSettings(Response $response, $headerKey): void
     {
         $headerValue = $response->headers->get($headerKey);
-        if ($headerValue === false || strpos($headerValue, 'img-src') !== false || strpos($headerValue, 'style-src') !== false) {
+        if ($headerValue === false) {
             return;
         }
 
-        $response->headers->set($headerKey, $headerValue . "; img-src 'self' data:; style-src 'self' 'unsafe-inline';");
+        $headerValue = str_replace('img-src \'self\'', 'img-src \'self\' data:', $headerValue);
+        $headerValue = str_replace('style-src \'self\'', 'style-src \'self\' \'unsafe-inline\'', $headerValue);
+
+        $response->headers->set($headerKey, $headerValue);
     }
 }

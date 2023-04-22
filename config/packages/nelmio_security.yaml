@@ -3,11 +3,17 @@ nelmio_security:
         enabled: true
         enforce:
             level1_fallback: false
-            default-src: [ 'self' ]
-            frame-src: [ 'self' ]
+            default-src: [ 'none' ]
+            frame-src: [ 'none' ]
+            frame-ancestors: [ 'self' ]
+            base-uri: [ 'self']
+            connect-src: [ 'self' ]
+            form-action: [ 'self' ]
             script-src: [ 'self' ]
             img-src: [ 'self' ]
             style-src: [ 'self' ]
+            font-src: [ 'self' ]
+            object-src: [ 'none' ]
             block-all-mixed-content: true
 
     # prevents framing of the entire site
