@@ -1,1 +1,17 @@
-{}
+header:
+  pleaseChoose: Veuillez choisir…
+project:
+  backToList: Revenir aux projets
+  delete:
+    message:
+      successfullyDeleted: Le projet %projectName% a été détruit avec succès.
+  title: Projets
+  action:
+    manage: Gérer le projet
+  create:
+    title: Créer un projet
+dashboard:
+  title: Tableau de bord
+rule:
+  list:
+    name: Nom
