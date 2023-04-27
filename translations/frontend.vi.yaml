@@ -1,1 +1,13 @@
-{}
+accessibility:
+  dataValid: Dữ liệu của bạn hợp lệ. Bạn có thể gửi biểu mẫu.
+  checkingData: Chúng tôi đang kiểm tra dữ liệu của bạn. Vui lòng đợi.
+error:
+  noSubmitTokenAvailable: Không có submit token khả dụng. Không thể xác thực biểu mẫu này.
+  spamDetected: Dữ liệu của bạn đã bị phát hiện bởi tính năng chống spam.
+  gotNoToken: mosparo không trả về submit token.
+  internalError: Đã có lỗi xảy ra. Vui lòng thử lại.
+  lockedOut: Bạn đã bị khóa. Vui lòng thử lại sau %datetime%.
+  delay: Yêu cầu của bạn đã bị trì hoãn. Vui lòng đợi %seconds% giây.
+label: Tôi đồng ý rằng các form entry sẽ được kiểm tra spam và được lưu trữ mã hoá trong 14 ngày.
+hp:
+  fieldTitle: Bỏ trống trường này
