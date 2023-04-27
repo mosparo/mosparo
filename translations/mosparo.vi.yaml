@@ -1,1 +1,134 @@
-{}
+rule:
+  backToList: Quay lại quy tắc
+  list:
+    name: Tên
+    type: Loại
+    status: Trạng thái
+    actions: Hành động
+  title: Quy tắc/Rules
+  createChooseType:
+    title: Chọn loại
+  create:
+    message:
+      successfullyCreated: Quy tắc mới đã được tạo thành công.
+    title: Tạo quy tắc
+  edit:
+    message:
+      successfullySaved: Quy tắc đã được lưu thành công.
+    title: Chỉnh sửa quy tắc %ruleName%
+  form:
+    ruleType: Loại quy tắc
+    rule:
+      title: Quy tắc
+      name: Tên
+      description: Mô tả
+      status: Trạng thái
+      spamRatingFactor: Yếu tố đánh giá spam
+      spamRatingFactorHelp: Với yếu tố đánh giá spam, bạn có thể định nghĩa một yếu tố sẽ củng cố hay làm suy yếu các entry của quy tắc này. Nếu giá trị lớn hơn 1, các entry được tăng cường, nếu giá trị nhỏ hơn 1, các entry sẽ bị suy yếu.
+    items:
+      type: Loại
+      title: Items
+      rating: Đánh giá
+    addMultipleItems:
+      label: Nhãn
+      items: Items
+      itemsHelp: Thêm một item trên mỗi dòng.
+      rating: Đánh giá
+      ratingHelp: Nếu không được đặt, đánh giá mặc định là 1.0. Nếu đánh giá được đặt thành 0,0, các item sẽ không được đánh giá là spam item.
+  delete:
+    confirm: Bạn có thực sự muốn xóa quy tắc %ruleName% không?
+    title: Xóa quy tắc %ruleName%
+    message:
+      successfullyDeleted: Quy tắc %ruleName% đã bị xóa thành công.
+  type:
+    domain:
+      placeholder: example.com
+      title: Tên miền/Domain
+      shortIntro: Cho phép lọc theo tên miền cụ thể
+      label: Tên miền
+      domain:
+        title: Tên miền
+        intro: Nhập một tên miền không cho phép submit. Nếu bạn nhập tên miền nó cũng sẽ hạn chế tất cả địa chỉ email có cùng tên miền này.
+      intro: Loại quy tắc tên miền cho phép lọc tên miền.
+    email:
+      label: Địa chỉ email
+      placeholder: info@example.com
+      email:
+        title: Địa chỉ email
+        intro: Nhập địa chỉ email không được phép submit.
+      shortIntro: Cho phép lọc theo địa chỉ email cụ thể
+      title: Email
+      intro: Loại quy tắc email cho phép lọc địa chỉ email.
+    ipAddress:
+      title: Địa chỉ IP
+      ipAddress:
+        title: Địa chỉ IP
+        intro: Nhập địa chỉ IP không được phép submit bất kỳ nội dung nào.
+      label: Địa chỉ IP/Mạng con
+      subnet:
+        intro: Nhập mạng con với mặt nạ mạng không được phép submit bất kỳ nội dung nào.
+        title: Mạng con
+      placeholder: 0.0.0.0
+      intro: Loại quy tắc địa chỉ IP cho phép lọc các địa chỉ IP hoặc mạng con.
+      shortIntro: Cho phép lọc theo địa chỉ IP và mạng con/subnet
+    provider:
+      shortIntro: Cho phép lọc theo thông tin cụ thể của nhà cung cấp
+      intro: Loại quy tắc nhà cung cấp cho phép lọc AS number và mã quốc gia.
+      country:
+        intro: Nhập một mã quốc gia ISO không được thực hiện submit. Tất cả địa chỉ IP được đăng ký trong quốc gia này sẽ được đánh dấu là spam.
+        title: Quốc gia
+      infoGeoip2: Để sử dụng loại nhà cung cấp, cần phải cấu hình cơ sở dữ liệu MindMax GeoLite2, nếu không, các mục nhà cung cấp sẽ không có bất kỳ tác dụng nào.
+      title: Provider/Nhà cung cấp dịch vụ
+      label: AS number/Quốc gia
+      action:
+        configureGeoip2: Cấu hình GeoIP2
+      asNumber:
+        title: AS number
+        intro: Nhập một AS number không cho phép submit. Tất cả địa chỉ IP thuộc về AS number này cũng sẽ bị chặn.
+    unicodeBlock:
+      title: Khối Unicode
+      intro: Loại quy tắc khối Unicode cho phép đánh giá việc sử dụng một số ký tự nhất định.
+      label: Khối Unicode
+      block:
+        title: Khối
+        intro: Vui lòng chọn một trong các khối cần được đánh giá phù hợp trong quá trình nhập. Sau đó nhập xếp hạng tương ứng.
+      shortIntro: Lọc đầu vào dựa trên các ký tự được sử dụng.
+header:
+  pleaseChoose: Vui lòng chọn…
+  account: Tài khoản
+project:
+  title: Dự án
+  infoNoProjectAvailable: Không có dự án nào
+  infoCreateProjectOrRequestAccess: Tạo một dự án mới hoặc yêu cầu quyền truy cập vào một dự án khác.
+  action:
+    delete: Xóa dự án
+    manage: Quản lý dự án
+    goto: Đi tới dự án
+  create:
+    message:
+      successfullyCreated: Dự án mới đã được tạo thành công.
+    title: Tạo dự án
+  form:
+    name: Tên
+    description: Mô tả
+    hostsHelp: Vui lòng nhập tất cả các host mà dự án này sẽ bao gồm.
+    status: Trạng thái
+    spamScore: Điểm spam
+    hosts: Host/Máy chủ
+    statusHelp: Kích hoạt hoặc vô hiệu hóa tính năng phát hiện spam. Nếu vô hiệu hoá, hệ thống sẽ ghi lại tất cả các bài gửi nhưng sẽ không ngăn chặn bất kỳ bài gửi nào.
+    spamScoreHelp: Xác định số lượng lần submit sẽ được đánh dấu là spam. Nếu số lần submit của một bài gửi cao hơn số này, bài gửi được đánh giá là spam.
+  delete:
+    title: Xóa dự án %projectName%
+    confirm: Bạn có chắc chắn muốn xóa dự án %projectName% không?
+    message:
+      successfullyDeleted: Dự án %projectName% đã được xóa thành công.
+  roles:
+    reader: Người đọc/Reader
+    owner: Chủ sở hữu/Owner
+    editor: Biên tập viên/Editor
+  backToList: Quay lại dự án
+dashboard:
+  chart:
+    valid: Hợp lệ
+    spam: Spam
+  title: Bảng điều khiển/Dashboard
