@@ -1,17 +1,719 @@
 header:
-  pleaseChoose: Veuillez choisir…
+  pleaseChoose: Veuillez sélectionner…
+  account: Compte
 project:
   backToList: Revenir aux projets
   delete:
     message:
-      successfullyDeleted: Le projet %projectName% a été détruit avec succès.
+      successfullyDeleted: Le projet %projectName% a bien été supprimé.
+    title: Supprimer le projet %projectName%
+    confirm: Voulez-vous vraiment supprimer le projet %projectName% ?
   title: Projets
   action:
     manage: Gérer le projet
+    delete: Supprimer le projet
+    goto: Aller au projet
   create:
     title: Créer un projet
+    message:
+      successfullyCreated: Le nouveau projet a bien été créé.
+  form:
+    status: État
+    name: Nom
+    description: Description
+    hosts: Hôtes
+    hostsHelp: Veuillez indiquer tous les hôtes que ce projet inclura.
+    statusHelp: Activer ou désactiver la détection des spams. Si désactivé, le système enregistrera toutes les soumissions mais n'en empêchera aucune.
+    spamScore: Score de spam
+    spamScoreHelp: Définit le nombre à partir duquel une soumission sera classée comme spam. Si l'évaluation d'une soumission est supérieure à ce nombre, la soumission est considérée comme du spam.
+  infoNoProjectAvailable: Aucun projet disponible
+  infoCreateProjectOrRequestAccess: Créez un nouveau projet ou demandez l'accès à un autre projet.
+  roles:
+    reader: Lecteur
+    editor: Éditeur
+    owner: Propriétaire
 dashboard:
   title: Tableau de bord
+  chart:
+    spam: Spam
+    valid: Valide
 rule:
   list:
     name: Nom
+    type: Type
+    status: État
+    actions: Actions
+  type:
+    email:
+      label: Adresse e-mail
+      title: Adresse e-mail
+      shortIntro: Permet de filtrer par adresses e-mail spécifiques
+      intro: Le type de règle d'adresse e-mail permet de filtrer les adresses e-mail.
+      placeholder: info@exemple.com
+      email:
+        title: Adresse e-mail
+    unicodeBlock:
+      label: Bloc unicode
+      title: Bloc unicode
+      shortIntro: Filtre l'entrée en fonction des caractères utilisées.
+      block:
+        title: Bloc
+    website:
+      label: URL/Domaine
+      title: Site Web
+      placeholder: https://exemple.com
+      url:
+        title: URL
+    rating:
+      title: Évaluation
+      placeholder: Évaluation
+    domain:
+      title: Domaine
+      shortIntro: Permet de filtrer par domaines spécifiques
+      intro: Le type de règle de domaine permet de filtrer les domaines.
+      label: Domaine
+      placeholder: exemple.com
+      domain:
+        title: Domaine
+    ipAddress:
+      title: Adresse IP
+      shortIntro: Permet de filtrer par adresses IP et sous-réseaux
+      intro: Le type de règle relative à l'adresse IP permet de filtrer les adresses IP ou les sous-réseaux.
+      label: Adresse IP/ Sous-réseau
+      placeholder: 0.0.0.0
+      ipAddress:
+        title: Adresse IP
+      subnet:
+        title: Sous-réseau
+    provider:
+      title: Fournisseur
+      action:
+        configureGeoip2: Configuration de GeoIP2
+      country:
+        title: Pays
+    userAgent:
+      title: Agent utilisateur
+      text:
+        title: Texte
+      regex:
+        title: Expression régulière
+        validation:
+          invalidRegexPattern: 'Le modèle saisi est invalide. Erreur : %error%'
+    word:
+      title: Mot
+      label: Mot/Modèle
+      text:
+        title: Texte
+      regex:
+        title: Expression régulière
+        validation:
+          invalidRegexPattern: 'Le modèle saisi est invalide. Erreur : %error%'
+  form:
+    rule:
+      title: Règle
+      description: Description
+      name: Nom
+      status: État
+      spamRatingFactor: Facteur d'évaluation des spams
+    ruleType: Type de règle
+    items:
+      title: Éléments
+      type: Type
+      rating: Évaluation
+    addMultipleItems:
+      label: Étiquette
+      items: Éléments
+      itemsHelp: Ajoutez un élément par ligne.
+      rating: Évaluation
+      ratingHelp: Si elle n'est pas définie, l'évaluation par défaut est de 1,0. Si l'évaluation est fixée à 0,0, les éléments ne seront pas considérés comme des spams.
+  title: Règles
+  backToList: Revenir aux règles
+  createChooseType:
+    title: Sélectionner un type
+  create:
+    title: Créer une règle
+    message:
+      successfullyCreated: La nouvelle règle a bien été créée.
+  edit:
+    title: Modifier la règle %ruleName%
+    message:
+      successfullySaved: La règle a bien été enregistrée.
+  delete:
+    title: Supprimer la règle %ruleName%
+    confirm: Voulez-vous vraiment supprimer la règle %ruleName% ?
+    message:
+      successfullyDeleted: La règle %ruleName% a bien été supprimée.
+submission:
+  view:
+    verification:
+      minimumTime:
+        timeDifferenceInSeconds: '%seconds% secondes'
+      verifiedAt: Vérifié le
+      title: Vérification
+      isValid: Est valide
+    source:
+      pageTitle: Titre de la page
+      title: Source
+      pageUrl: URL de la page
+      requestedAt: Requête envoyée le
+    data:
+      points: '%totalPoints% points'
+      formData:
+        title: Données du formulaire
+        valid: Vérification réussie
+        invalid: Échec de la vérification
+        notVerified: Non vérifié
+        hasPoints: Points
+      value: Valeur
+      rating: Évaluation
+      fieldMustBeEmpty: Le champ doit être vierge
+      client:
+        title: Client
+        ipAddress: Adresse IP
+        userAgent: Agent utilisateur
+        country: Pays
+    title: Envoi %submissionId%
+    spam:
+      title: Spam
+      isSpam: C'est un spam
+      spamRating: Évaluation du spam
+      submittedAt: Envoyé le
+    ignoredFields:
+      title: Champs ignorés
+    generalVerifications:
+      minimumTime:
+        title: Envoi trop rapide
+  list:
+    valid: Valide
+    submittedAt: Envoyé le
+    actions: Actions
+    spamRating: Évaluation du spam
+    id: Identifiant
+    page: Page
+    spam: Spam
+    verification: Vérification
+    ipAddress: Adresse IP
+    verifiedAt: Vérifié le
+  title: Envois
+  backToList: Revenir aux envois
+ruleset:
+  view:
+    title: Voir l'ensemble de règles %rulesetName%
+    details:
+      title: Informations sur l'ensemble de règles
+      url: URL
+      status: État
+      spamRatingFactor: Facteur d'évaluation des spams
+      lastRefreshedAt: Dernière actualisation le
+      lastUpdatedAt: Dernière mise à jour le
+      numberOfIncludedRules: Nombre de règles incluses
+    includedRules:
+      title: Règles incluses
+      ruleDetails: Informations sur la règle
+      name: Nom
+      description: Description
+      spamRatingFactor: Facteur d'évaluation des spams
+      items: Éléments
+      type: Type
+      value: Valeur
+      rating: Évaluation
+  title: Ensembles de règles
+  backToList: Revenir aux ensembles de règles
+  message:
+    errorWhileUpdating: "Une erreur s'est produite lors de la mise à jour de l'ensemble de règle :"
+  list:
+    name: Nom
+    status: État
+    refreshedAt: Actualisé le
+    updatedAt: Mis à jour le
+    actions: Actions
+  add:
+    title: Ajouter un ensemble de règles
+  edit:
+    title: Modifier l'ensemble de règles %rulesetName%
+  form:
+    name: Nom
+    url: URL
+    status: État
+    spamRatingFactor: Facteur d'évaluation des spams
+    message:
+      successfullySaved: L'ensemble de règles a bien été enregistré.
+  delete:
+    title: Supprimer l'ensemble de règles %rulesetName%
+    confirm: Voulez-vous vraiment supprimer l'ensemble de règles %rulesetName% ?
+    message:
+      successfullyDeleted: L'ensemble de règles %rulesetName% a bien été supprimé.
+settings:
+  design:
+    form:
+      color:
+        checkbox: Case à cocher
+        border: Bordure
+        checkboxShadow: Ombre de la case à cocher
+        background: Arrière-plan
+        checkboxAnimatedCircle: Partie animée
+        text: Texte
+        textError: Texte d'erreur
+        shadow: Ombre
+        shadowInset: Insertion de l'ombre
+      boxSize: Taille de la boîte
+      boxRadius: Arrondi de la boîte
+      boxBorderWidth: Largeur de bordure
+      showMosparoLogo: Afficher le logo de mosparo sous la case à cocher
+      showPingAnimation: Afficher une animation pour mettre en évidence la case à cocher
+    subtitles:
+      colors:
+        success: Succès
+        loading: Lors du chargement
+        failure: Échec
+        normal: Normal
+        focus: À la sélection et au survol
+      dimensionSettings: Dimensions
+      colorSettings: Couleurs
+    title: Apparence
+    cr:
+      title: Taux de contraste
+      value: Valeur
+      text: Texte
+      textError: Texte d'erreur
+    choices:
+      boxSize:
+        small: Petite
+        medium: Moyenne
+        large: Grande
+    message:
+      successfullySaved: Les paramètres d'apparence ont bien été enregistrés.
+      boxRadiusTooLarge: Le logo ne peut être affiché que si l'arrondi de la boîte est en dessous d'une certaine valeur.
+  general:
+    apiKeys:
+      reissueApiKeys:
+        title: Renouveler les clés d'API
+        confirm: Voulez-vous vraiment renouveler les clés d'API pour le projet %projectName% ?
+        message:
+          successfullyReissued: Les clés d'API ont bien été renouvelées.
+          errorOnlyOwner: Seul le propriétaire d'un projet peut renouveler les clés d'API.
+      title: Clés d'API
+      publicKey: Clé publique
+      privateKey: Clé privée
+    title: Paramètres généraux
+    message:
+      successfullySaved: Les paramètres ont bien été enregistrés.
+    action:
+      reissueApiKeys: Renouveler les clés d'API
+      reissue: Renouveler
+    help:
+      integrateMosparo: Intégrer mosparo
+    connectionDetails:
+      title: Informations de connexion
+      host: Hôte
+      uuid: Numéro d'identification unique
+  security:
+    form:
+      delayNumberOfAllowedRequests: Nombre de requêtes autorisées
+      delayNumberOfAllowedRequestsHelp: Nombre de requêtes autorisées avant l'apparition du délai.
+      delayDetectionTimeFrameHelp: En secondes
+      minimumTimeActive: Temps d'activité minimal
+      minimumTimeSeconds: Temps minimal
+      minimumTimeSecondsHelp: En secondes
+      honeypotFieldName: Nom du champ
+      delayTimeHelp: En secondes
+      delayMultiplicator: Multiplicateur
+      lockoutActive: Verrouillage automatique actif
+      lockoutNumberOfAllowedRequests: Nombre de requêtes autorisées
+      delayMultiplicatorHelp: Le délai par défaut sera augmenté à chaque nouvelle requête.
+      lockoutNumberOfAllowedRequestsHelp: Le nombre de requêtes autorisées avant le verrouillage.
+      lockoutDetectionTimeFrameHelp: En secondes
+      lockoutTime: Délai de verrouillage par défaut
+      lockoutTimeHelp: En secondes
+      lockoutMultiplicator: Multiplicateur
+      lockoutMultiplicatorHelp: Le délai de verrouillage par défaut sera augmenté à chaque nouvelle requête.
+      ipAllowList: Adresses IP et sous-réseaux autorisés en permanence
+      ipAllowListHelp: 'Spécifiez une adresse IP ou sous-réseau par ligne. Par exemple : 19.168.1.13 ou 192.168.1.0/24'
+    title: Sécurité
+    ipLockout:
+      title: Verrouillage d'IP
+    ipAllowList:
+      title: Liste blanche d'IP
+    message:
+      successfullySaved: Les paramètres de sécurité ont bien été enregistrés.
+    validation:
+      honeypotFieldNameInvalidCharacter: Veuillez n'utiliser que des lettres, des chiffres et le tiret (-).
+  title: Paramètres du projet
+  backToSettings: Revenir aux paramètres
+  projectMember:
+    title: Membres du projet
+    backToList: Revenir aux membres du projet
+    list:
+      user: Utilisateur
+      role: Rôle
+      actions: Actions
+    add:
+      title: Ajouter un membre au projet
+    edit:
+      title: Modifier le membre du projet %projectMemberName%
+    form:
+      email: Adresse e-mail
+      role: Rôle
+      message:
+        successfullySaved: Le membre du projet a bien été enregistré.
+        errorUserNotFound: L'utilisateur n'a pas été trouvé.
+        errorNeedsOwner: Le projet doit comporter au moins un propriétaire.
+    delete:
+      title: Retirer le membre du projet %projectMemberName%
+      confirm: Voulez-vous vraiment retirer le membre du projet %projectMemberName% ?
+      message:
+        successfullyRemoved: Le membre %projectMemberName% a bien été retiré du projet.
+administration:
+  title: Administration
+  settings:
+    mailSettings:
+      form:
+        useSmtp: Utiliser un serveur SMTP pour envoyer des e-mails
+        host: Hôte
+        port: Port
+        user: Utilisateur
+        password: Mot de passe
+        fromAddress: Adresse e-mail de l'expéditeur
+        fromName: Nom de l'expéditeur
+      title: Paramètres d'e-mail
+      help:
+        password: Si vous saisissez quelque chose dans ce champ, la valeur existante sera écrasée.
+    title: Paramètres du système
+    description: Configurez les différents paramètres qui s'appliquent à votre installation de mosparo.
+    mainSettings:
+      title: Paramètres généraux
+      form:
+        mosparoName: Nom de l'installation de mosparo
+    localeSettings:
+      title: Paramètres de langue
+      form:
+        defaultLocale: Langue par défaut
+        defaultDateFormat: Format de date par défaut
+        defaultTimeFormat: Format d'heure par défaut
+        defaultTimezone: Fuseau horaire par défaut
+    message:
+      savedSuccessfully: Les paramètres ont bien été enregistrés.
+  geoip2:
+    downloadAndUpdate:
+      web:
+        message:
+          specifyLicenseKey: Veuillez saisir une clé de licence avant d'essayer de télécharger la base de données.
+          errorDownload: Une erreur s'est produite lorsque mosparo a tenté de télécharger la base de données. %error%
+          successfullyDownloaded: La base de données a bien été téléchargée.
+        intro: 'Utilisez le bouton suivant pour permettre à mosparo de télécharger la base de données :'
+        title: Web
+        action: Télécharger la base de données
+      title: Téléchargement et mise à jour automatique
+      update:
+        title: Mise à jour automatique
+    settings:
+      title: Paramètres
+      getLicenseKey: 'Pour obtenir une clé de licence, vous devez posséder un compte MaxMind. Veuillez consulter le site suivant :'
+      useGeoip2Field: Utiliser la localisation automatique de l'adresse IP
+      licenseKeyField: Clé de licence
+      message:
+        savedSuccessfully: Les paramètres ont bien été enregistrés.
+        infoActivationTime: Si vous venez de demander votre clé de licence, il faudra un certain temps pour qu'elle devienne active.
+    title: GeoIP2
+    description: Configurer l'intégration de GeoIP2.
+    version:
+      titleAvailable: GeoIP2 disponible
+      messageAvailable: 'La base de données GeoIP2 a été téléchargée avec succès et est active. Les versions suivantes sont actives :'
+      typeCountry: 'Pays :'
+      titleNotAvailable: GeoIP2 non disponible
+      messageDatabaseNotAvailable: La base de données de GeoIP2 n'a pas encore été téléchargée ou une erreur s'est produite pendant le téléchargement.
+  user:
+    list:
+      roles: Rôles
+      user: Utilisateur
+      actions: Actions
+    delete:
+      infoCantSelfDelete: Vous ne pouvez pas vous supprimer vous-même.
+      title: Supprimer l'utilisateur %email%
+      confirm: Voulez-vous vraiment supprimer l'utilisateur %email% ?
+      message:
+        successfullyDeleted: L'utilisateur %email% a bien été supprimé.
+        errorUserIsOwner: L'utilisateur est propriétaire d'au moins un projet. Vous ne pouvez pas supprimer le propriétaire d'un projet.
+    title: Utilisateurs
+    description: Gérez tous les utilisateurs de cette instance de mosparo.
+    backToOverview: Revenir aux utilisateurs
+    roles: Rôles
+    create:
+      title: Créer un utilisateur
+    modify:
+      title: Modifier l'utilisateur %email%
+    form:
+      email: Adresse e-mail
+      password: Mot de passe
+      isActiveUser: Utilisateur actif
+      isAdministrator: Administrateur
+      sendPasswordResetEmail: Envoyer un e-mail à l'utilisateur pour définir le mot de passe
+      message:
+        successfullySaved: L'utilisateur a bien été enregistré.
+        errorCreatingResetToken: "Une erreur technique s'est produite lors de la création de l'adresse e-mail. Erreur : %errorMessage%"
+        errorSendingResetEmail: "L'e-mail avec le lien n'a pas pu être envoyé correctement. Erreur : %errorMessage%"
+    help:
+      password: Laissez ces champs vierges si aucun changement de mot de passe n'est requis.
+  update:
+    updateChannel: Canal de mise à jour
+    title: Mettre à jour
+    description: Vérifier les nouvelles versions et mettre à jour votre installation de mosparo.
+    installedVersion: Version installée
+    availableVersion: Version disponible
+    check:
+      title: État
+      intro: Pour vérifier les mises à jour, veuillez cliquer sur le bouton ci-dessous.
+      message:
+        errorCheckingForUpdates: "Une erreur s'est produite lors de la vérification des mises à jour. Erreur : %errorMessage%"
+    version:
+      titleAvailable: Mise à jour disponible
+      messageAvailable: Une nouvelle version de mosparo est disponible. Veuillez cliquer sur le bouton d'installation ci-dessous si vous souhaitez installer la mise à jour.
+      warningUpdatesDisabled: Les mises à jour sont désactivées pour cette installation de mosparo. Veuillez consulter la documentation pour voir les autres options de mise à jour de votre installation de mosparo.
+      titleNotAvailable: Aucune mise à jour disponible
+      messageNotAvailable: Aucune nouvelle version de mosparo n'est disponible. Veuillez revenir plus tard.
+    execute:
+      title: Mettre à jour mosparo
+      description: Veuillez patienter et ne pas quitter cette page. Mise à jour démarrée…
+      log: Continuer
+      message:
+        successfullyUpdated: mosparo a bien été mis à jour. Veuillez vous rendre sur le tableau de bord.
+        updateError: Une erreur s'est produite lors de la mise à jour de mosparo. Veuillez consulter le message d'erreur ci-dessous.
+    settings:
+      title: Paramètres de mise à jour
+      form:
+        channelStable: Stable
+        channelBeta: Beta
+        channelDevelop: Développement
+      message:
+        infoDevelopChannel: Les canaux « Développement » et «  Beta » contiennent des versions non testées et instables qui ne sont pas prêtes à être utilisées en production. Veuillez ne pas les utiliser dans un environnement de production.
+        savedSuccessfully: Le canal de mise à jour a bien été enregistré.
+    buttons:
+      continue: Continuer
+    finalize:
+      title: Mise à jour effectuée
+      description: Les modifications requises pour cette mise à jour ont été effectuées. Votre installation est à jour.
+  system:
+    title: Informations du système
+    description: Retrouvez toutes les informations à propos de mosparo.
+    general:
+      title: Général
+      mosparoVersion: Version de mosparo
+      serverInfo: Serveur
+      phpVersion: Version de PHP
+      extensions: Extensions
+    logo:
+      title: Logo
+      intro: Le logo a été conçu par Jan Kosa.
+      license: Le logo est sous licence %linkStart%Creative Commons Attribution - Pas de Modification 4.0 International%linkEnd%.
+    license:
+      title: Licence de mosparo
+    projectMembers:
+      title: Membres du projet
+      intro: Ces personnes ont fait de mosparo ce qu'il est - un logiciel installé sur votre hébergement web.
+    usedLibrariesAndResources:
+      title: Bibliothèques et ressources utilisées
+      intro: Nous tenons à remercier tous les développeurs de logiciels libres pour leur incroyable travail.
+      frontend: Front-end / Visuels
+      backend: Back-end / Bibliothèques PHP
+      license: Licence
+    website: Site Web
+account:
+  twoFactor:
+    status:
+      intro: Votre compte est protégé par l'authentification à deux facteurs.
+    start:
+      title: Mettre en place l'authentification à deux facteurs
+      intro: Veuillez scanner ce code QR avec votre application d'authentification sur votre smartphone. Vous pouvez utiliser Google Authenticator, Microsoft Authenticator ou une application similaire.
+      textManually: Plutôt que de scanner le code QR, vous pouvez saisir le code suivant manuellement dans l'application d'authentification.
+      qrCodeAlt: Cette image affiche le code QR, que vous avez à scanner avec votre application d'authentification sur votre smartphone.
+    backupCodes:
+      intro: Veuillez enregistrer ces codes dans un endroit sûr. Si vous avez perdu l'accès à votre appareil, vous pourrez vous connecter avec ces codes de récupération.
+      infoResetBackupCodes: Vous ne pouvez utiliser chaque code de récupération qu'une seule fois. Vous devriez réinitialiser les codes de récupération dès que possible après en avoir utilisé un.
+      title: Codes de récupération
+    title: Authentification à deux facteurs
+    description: Configurer l'authentification à deux facteurs pour votre compte.
+    action:
+      configure: Configurer
+      reconfigure: Reconfigurer
+      resetBackupCodes: Réinitialiser les codes de sauvegarde
+      disable: Désactiver
+      continue: Continuer
+      verify: Vérifier
+    verify:
+      title: Vérifier l'authentification à deux facteurs
+      intro: Veuillez saisir le code visible dans votre application d'authentification ci-dessous pour vérifier la configuration.
+    message:
+      successfullyDisabled: L'authentification à deux facteurs a bien été désactivée sur votre compte.
+    error:
+      verificationFailed: La vérification de l'authentification à deux facteurs à échoué. Veuillez recommencer.
+  title: Compte
+  backToOverview: Revenir à la vue d'ensemble
+  settings:
+    title: Paramètres utilisateur
+    description: Modifiez les paramètres généraux de votre compte.
+    form:
+      locale: Langue
+      dateFormat: Format de date
+      timeFormat: Format de l'heure
+      timezone: Fuseau horaire
+    message:
+      successfullySaved: Vos paramètres ont bien été enregistrés.
+  changePassword:
+    title: Modifier le mot de passe
+    description: Modifier le mot de passe de votre compte.
+    form:
+      oldPassword: Mot de passe actuel
+    message:
+      successfullyChanged: Votre mot de passe a bien été modifié.
+datatable:
+  datatable:
+    loadingRecords: Chargement…
+    paginate:
+      first: Premier
+      previous: Précédent
+      next: Suivant
+      last: Dernier
+    processing: Traitement en cours…
+    search: 'Recherche :'
+    lengthMenu: Afficher les _MENU_ entrées
+    info: Affichage de _START_ à _END_ sur _TOTAL_ entrées
+    infoEmpty: Affichage de 0 à 0 sur 0 entrées
+    infoFiltered: (filtrées sur _MAX_ entrées au total)
+    zeroRecords: Aucune correspondance trouvée
+    emptyTable: Aucune donnée disponible dans le tableau
+    searchPlaceholder: Rechercher
+    aria:
+      sortAscending: ": activez pour trier la colonne dans l'ordre ascendant"
+      sortDescending: ": activez pour trier la colonne dans l'ordre descendant"
+password:
+  email:
+    help: Si vous rencontrez des problèmes avec le bouton ci-dessus, copiez-collez l'URL ci-dessous dans votre navigateur.
+    subject: Votre demande de réinitialisation de mot de passe
+    greeting: Bonjour !
+    infoClickButton: Pour réinitialiser votre mot de passe, cliquez sur le bouton ci-dessous et suivez les instructions.
+    resetPasswordButton: Réinitialiser le mot de passe
+    infoLinkExpiration: Ce lien expirera dans %time%.
+    goodbye: Merci,
+  reset:
+    error:
+      tokenNotFound: Aucun jeton de réinitialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
+      errorOccurred: Une erreur s'est produite lors de la validation de votre requête de réinitialisation. %error%
+    title: Réinitialiser votre mot de passe
+    action: Réinitialiser le mot de passe
+    message:
+      successfullyReset: Votre mot de passe a bien été réinitialisé.
+  backToLogin: Revenir à la connexion
+  request:
+    title: Réinitialiser votre mot de passe
+    intro: Veuillez saisir votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+    action: Envoyer l'e-mail de réinitialisation du mot de passe
+    form:
+      email: Adresse e-mail
+    message:
+      failedToSendEmail: "En raison d'un problème technique, l'e-mail n'a pas pu être envoyé. Veuillez réessayer plus tard. Message d'erreur : %errorMessage%"
+  emailSent:
+    title: E-mail de réinitialisation du mot de passe envoyé
+    infoEmailWithLink: Si un compte existant correspond à votre adresse e-mail, nous venons de vous envoyer un e-mail contenant un lien vous permettant de réinitialiser votre mot de passe. Ce lien expirera dans %time%.
+    infoSpamFolder: Si vous n'avez pas reçu d'e-mail veuillez vérifier dans vos indésirables ou %linkStart%réessayer%linkEnd%.
+  form:
+    password: Mot de passe
+    newPassword: Nouveau mot de passe
+    repeatPassword: Répéter le mot de passe
+setup:
+  buttons:
+    goToLogin: Aller à la connexion
+    continue: Continuer
+    install: Installer
+    recheck: Vérifier à nouveau
+  start:
+    title: Configuration
+    introduction: Cet assistant vous guidera tout au long du processus d'installation de mosparo.
+  prerequisites:
+    title: Prérequis
+    introduction: mosparo nécessite certains prérequis pour pouvoir fonctionner correctement. Avant de pouvoir installer mosparo, ces prérequis doivent être acceptés.
+    meetPrerequisites: Tous les prérequis sont remplis. Vous pouvez procéder à l'installation.
+    missingPrerequisites: Certains prérequis sont manquants. Veuillez consulter le résumé ci-dessous.
+    installOptionalExtensions: Certaines extensions facultatives ne sont pas installées. Nous vous recommandons d'installer ces extensions avant de continuer.
+    types:
+      general: Général
+      phpExtensions: Extensions PHP
+    subtypes:
+      minPhpVersion: Version minimale de PHP
+    results:
+      available: Disponible
+      missing: Manquant
+      okay: Valide
+      notOkay: Invalide
+    optional: facultatif
+  database:
+    title: Base de données
+    introduction: Veuillez saisir les informations de votre base de données MySQL.
+    useEmptyDatabase: Veuillez utiliser une base de données vierge ou bien une base données sans aucune table de mosparo.
+    mosparoTablesExistInDatabase: Des tables de mosparo ont été trouvées dans la base de données spécifiée. Veuillez utiliser une autre base de données ou supprimer les tables.
+    connectionDataInvalid: Échec de la connexion à la base de données. Veuillez vérifier les paramètres ci-dessous et réessayer.
+    form:
+      host: Hôte
+      port: Port
+      database: Base de données
+      user: Utilisateur
+      password: Mot de passe
+  other:
+    title: Autres informations
+    introduction: Nous avons besoin de certaines autres informations. Veuillez compléter les champs ci-dessous.
+    form:
+      name: Nom de mosparo
+      subtitleCreateYourUser: Créer votre utilisateur
+      emailAddress: Adresse e-mail
+      password: Mot de passe
+  install:
+    title: Installation terminée
+    description: L'installation est terminée. Vous pouvez désormais vous connecter avec votre compte utilisateur.
+security:
+  login:
+    title: Se connecter
+    youAreLoggedIn: Vous êtes connecté en temps que %username%.
+    emailLabel: Adresse e-mail
+    passwordLabel: Mot de passe
+  logout:
+    title: Se déconnecter
+  forgotPassword:
+    title: Mot de passe oublié
+  twoFactor:
+    title: Authentification à deux facteurs
+    intro: Veuillez saisir le code de votre application d'authentification à deux facteurs.
+  noAccess:
+    title: Aucun accès
+action:
+  add: Ajouter
+  remove: Supprimer
+  save: Enregistrer
+  view: Voir
+  edit: Modifier
+  delete: Supprimer
+  actions: Actions
+  help: Aide
+  close: Fermer
+  manage: Gérer
+  configure: Configurer
+  checkForUpdate: Vérifier les mises à jour
+  installUpdate: Installer la mise à jour
+general:
+  infoUndo: Vous ne pouvez pas annuler cette opération.
+  example: Exemple
+  empty: Vide
+  unlimited: Illimité
+state:
+  inactive: Désactivé
+  ignored: Ignoré
+  yes: Oui
+  no: Non
+  active: Actif
+roles:
+  administrator: Administrateur
+  user: Utilisateur
+  inactive: Inactif
+form:
+  addMultipleItems: Ajouter plusieurs éléments
+  choices:
+    systemDefault: Paramètre par défaut
+    browserLanguage: Langue du navigateur
