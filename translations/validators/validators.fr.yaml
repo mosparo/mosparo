@@ -1,1 +1,10 @@
-{}
+password:
+  form:
+    constraint:
+      notBlank: Veuillez saisir un mot de passe.
+      length: Votre mot de passe doit comporter au moins {{ limit }} caractères.
+      passwordMustMatch: Les mots de passe doivent correspondre.
+  request:
+    form:
+      constraint:
+        notBlank: Veuillez saisir votre adresse e-mail.
