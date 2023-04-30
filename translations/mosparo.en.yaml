@@ -303,7 +303,7 @@ submission:
     id: ID
     page: Page
     spam: Spam
-    verification: Verfication
+    verification: Verification
     ipAddress: IP Address
     spamRating: Spam rating
     submittedAt: Submitted at
