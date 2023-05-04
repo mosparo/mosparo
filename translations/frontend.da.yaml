@@ -1,1 +1,13 @@
-{}
+hp:
+  fieldTitle: Dette felt skal være tomt
+label: Jeg accepterer, at de indtastede oplysninger i formularen bliver tjekket for spam og gemt i 14 dage i krypteret form.
+accessibility:
+  checkingData: Vi kontrollerer dine data. Vent venligst.
+  dataValid: Dine data indeholder ingen spam. Du kan nu indsende formularen.
+error:
+  gotNoToken: ''
+  internalError: Der opstod en fejl. Gentag venligst processen.
+  noSubmitTokenAvailable: Ingen afsender-token tilgængelig. Dine data kan ikke valideres.
+  spamDetected: Dine data indeholder spam.
+  lockedOut: Du er blevet midlertidigt blokeret. Forsøg venligst igen efter %datetime%.
+  delay: Din forespørgsel er forsinket. Vent venligst %seconds% sekunder.
