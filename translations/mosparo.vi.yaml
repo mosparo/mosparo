@@ -77,6 +77,7 @@ rule:
       country:
         intro: Nhập một mã quốc gia ISO không được thực hiện submit. Tất cả địa chỉ IP được đăng ký trong quốc gia này sẽ được đánh dấu là spam.
         title: Quốc gia
+        infoCountryBlock: Nếu bạn thêm một quốc gia vào quy tắc này, những người đến từ quốc gia này sẽ không thể submit. Điều này nghe có vẻ tốt ở một mặt, nhưng mặt khác nó có thể chặn những người dùng thật submit biểu mẫu. Hãy sử dụng lựa chọn này cẩn trọng. Vị trí chính xác của địa chỉ IP sẽ không được đảm bảo chắc chắn.
       infoGeoip2: Để sử dụng loại nhà cung cấp, cần phải cấu hình cơ sở dữ liệu MindMax GeoLite2, nếu không, các mục nhà cung cấp sẽ không có bất kỳ tác dụng nào.
       title: Provider/Nhà cung cấp dịch vụ
       label: AS number/Quốc gia
@@ -92,7 +93,13 @@ rule:
       block:
         title: Khối
         intro: Vui lòng chọn một trong các khối cần được đánh giá phù hợp trong quá trình nhập. Sau đó nhập xếp hạng tương ứng.
+        hintExtended: Xin lưu ý rằng có các phần mở rộng và bổ sung cho một số khối, những phần này cũng phải được thêm vào dưới dạng một quy tắc của mục nhập.
+        explanationCounting: Trong quá trình xác thực, mỗi khối chỉ được tính một lần, ngay cả khi một số ký tự từ một khối đã được sử dụng.
+        exampleCounting: Giả sử bạn nhập một mục nhập quy tắc với khối "Smileys" với xếp hạng 3 điểm. Trong một bài gửi, người dùng sử dụng 5 biểu tượng mặt cười. Bài dự thi hiện được đánh giá với 3 điểm vì một mặt cười đã được sử dụng.
       shortIntro: Lọc đầu vào dựa trên các ký tự được sử dụng.
+    userAgent:
+      title: User agent
+      shortIntro: Cho phép lọc theo các từ hoặc mẫu cụ thể trong user agent
 header:
   pleaseChoose: Vui lòng chọn…
   account: Tài khoản
