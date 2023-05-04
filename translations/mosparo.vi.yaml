@@ -100,6 +100,10 @@ rule:
     userAgent:
       title: User agent
       shortIntro: Cho phép lọc theo các từ hoặc mẫu cụ thể trong user agent
+      intro: Quy tắc user agent cho phép lọc các từ khoá và các mẫu biểu thức chính quy trong user agent của người dùng.
+      label: User agent (Word/Pattern)
+      text:
+        title: Text
 header:
   pleaseChoose: Vui lòng chọn…
   account: Tài khoản
