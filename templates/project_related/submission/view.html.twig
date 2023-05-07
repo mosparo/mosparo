@@ -22,16 +22,20 @@
                             <h4 class="mb-0">{{ 'submission.view.spam.isSpam'|trans }}</h4>
                             <div>
                                 {% if submission.spam %}
-                                    <span class="text-danger">{{ 'state.yes'|trans }}</span>
+                                    <span class="text-danger"><strong>{{ 'state.yes'|trans }}</strong></span>
                                 {% else %}
-                                    <span class="text-success">{{ 'state.no'|trans }}</span>
+                                    {% if not submission.spam and submission.spamRating > submission.spamDetectionRating %}
+                                        <span class="text-blue"><strong>{{ 'state.ignored'|trans }}</strong></span>
+                                    {% else %}
+                                        <span class="text-success"><strong>{{ 'state.no'|trans }}</strong></span>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
                         <div class="mb-3">
                             <h4 class="mb-0">{{ 'submission.view.spam.spamRating'|trans }}</h4>
                             <div>
-                                {% if submission.spam %}
+                                {% if submission.spam or submission.spamRating > submission.spamDetectionRating %}
                                     <span class="text-danger">
                                 {% else %}
                                     <span class="text-success">
