@@ -22,6 +22,11 @@ framework:
     php_errors:
         log: true
 
+    http_client:
+        default_options:
+            headers:
+                'User-Agent': 'mosparo HTTP client'
+
     mailer:
         dsn: '%env(mailer_dsn)%'
 
