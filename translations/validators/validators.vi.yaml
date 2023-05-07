@@ -1,0 +1,10 @@
+password:
+  form:
+    constraint:
+      notBlank: Vui lòng nhập mật khẩu.
+      length: Mật khẩu của bạn phải có ít nhất {{ limit }} ký tự.
+      passwordMustMatch: Mật khẩu phải khớp.
+  request:
+    form:
+      constraint:
+        notBlank: Vui lòng nhập email của bạn.
