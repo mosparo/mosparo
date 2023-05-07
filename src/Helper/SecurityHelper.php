@@ -56,13 +56,17 @@ class SecurityHelper
 
     protected function isIpOnAllowList($ipAddress, $ipAllowList): bool
     {
-        $items = explode(PHP_EOL, $ipAllowList);
+        $items = preg_split('/\r\n|\r|\n/', $ipAllowList);
         foreach ($items as $item) {
             if (strpos($item, '/') !== false) {
                 $address = Factory::parseAddressString($ipAddress);
                 $subnet = Subnet::parseString($item);
 
-                if ($address->getAddressType() == $subnet->getAddressType() && $subnet->contains($address)) {
+                if ($address !== null &&
+                    $subnet !== null &&
+                    $address->getAddressType() == $subnet->getAddressType() &&
+                    $subnet->contains($address)
+                ) {
                     return true;
                 }
             } else if ($item === $ipAddress) {
