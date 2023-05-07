@@ -138,7 +138,7 @@ rule:
       label: Agen pengguna (Kata/Pola)
       text:
         title: Kata
-        intro: Masukkan kata yang harus dinilai sebagai spam. Anda dapat menggunakan bintang %star% sebagai wildcard. Fungsi pencocokan akan mencari %nilai%, jadi Anda tidak perlu menambahkan karakter wildcard di awal atau di akhir nilai.
+        intro: Masukkan kata yang harus dinilai sebagai spam. Anda dapat menggunakan bintang %star% sebagai wildcard. Fungsi pencocokan akan mencari %value%, jadi Anda tidak perlu menambahkan karakter wildcard di awal atau di akhir nilai.
       regex:
         title: Ekspresi Reguler
         intro: Masukkan pola Ekspresi Reguler yang akan cocok dengan kata yang tidak diizinkan. Polanya harus mengikuti persyaratan PHP Regular Expression.
@@ -176,7 +176,7 @@ rule:
       infoDefaultAndDataType: Peringkat adalah angka mengambang dari %zero% hingga %unlimited%. Jika tidak ada peringkat yang ditentukan, peringkat standarnya adalah %one%.
       infoValueEqualZero: Jika rating disetel ke %zero%, item tidak akan terdeteksi sebagai spam karena nilai rating spam akan menjadi %zero%.
   edit:
-    title: Edit aturan %aturanNama%
+    title: Edit aturan %ruleName%
     message:
       successfullySaved: Aturan berhasil disimpan.
 ruleset:
