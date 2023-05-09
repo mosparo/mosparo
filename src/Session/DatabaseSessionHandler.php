@@ -5,6 +5,7 @@ namespace Mosparo\Session;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
 
 /**
  * This session handler is only needed to get the native PDO connection. There are other options to do the same
@@ -27,7 +28,7 @@ class DatabaseSessionHandler extends \SessionHandler
         if ($mosparoInstalled && version_compare($mosparoVersion, '0.3.9', 'gt')) {
             $this->sessionHandler = new PdoSessionHandler($connection->getNativeConnection(), $options);
         } else {
-            $this->sessionHandler = new NativeFileSessionHandler();
+            $this->sessionHandler = new StrictSessionHandler(new \SessionHandler());
         }
     }
 
