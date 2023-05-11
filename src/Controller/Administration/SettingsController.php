@@ -43,7 +43,7 @@ class SettingsController extends AbstractController
         $config = [
             'mosparoName' => $environmentConfig['mosparo_name'] ?? '',
 
-            'defaultLocale' => $environmentConfig['default_locale'] ?? 'en_US',
+            'defaultLocale' => $environmentConfig['default_locale'] ?? 'en',
             'defaultDateFormat' => $environmentConfig['default_date_format'] ?? 'Y-m-d',
             'defaultTimeFormat' => $environmentConfig['default_time_format'] ?? 'H:i:s',
             'defaultTimezone' => $environmentConfig['default_timezone'] ?? 'UTC',
