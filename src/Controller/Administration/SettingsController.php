@@ -66,7 +66,7 @@ class SettingsController extends AbstractController
             ->add('mailerHost', TextType::class, ['label' => 'administration.settings.mailSettings.form.host', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->add('mailerPort', TextType::class, ['label' => 'administration.settings.mailSettings.form.port', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->add('mailerUser', TextType::class, ['label' => 'administration.settings.mailSettings.form.user', 'required' => false, 'attr' => ['disabled' => true, 'class' => 'mail-option']])
-            ->add('mailerPassword', PasswordType::class, ['label' => 'administration.settings.mailSettings.form.password', 'help' => 'administration.settings.mailSettings.help.password', 'required' => false, 'attr' => ['disabled' => true, 'class' => 'mail-option']])
+            ->add('mailerPassword', PasswordType::class, ['label' => 'administration.settings.mailSettings.form.password', 'help' => 'administration.settings.mailSettings.help.password', 'required' => false, 'attr' => ['disabled' => true, 'class' => 'mail-option', 'autocomplete' => 'off']])
             ->add('mailerFromAddress', EmailType::class, ['label' => 'administration.settings.mailSettings.form.fromAddress', 'required' => false])
             ->add('mailerFromName', TextType::class, ['label' => 'administration.settings.mailSettings.form.fromName', 'required' => false])
             ->getForm();
