@@ -21,7 +21,7 @@ class SetupHelper
 
     protected array $prerequisites = [
         'general' => [
-            'minPhpVersion' => '7.4.0',
+            'minPhpVersion' => '8.1.10',
         ],
         'phpExtensions' => [
             'ctype' => true,
@@ -63,12 +63,6 @@ class SetupHelper
                     if ($subtype === 'minPhpVersion') {
                         $result = true;
                         if (!version_compare($prerequisite, PHP_VERSION, '<=')) {
-                            $result = false;
-                            $meetPrerequisites = false;
-                        }
-
-                        // Special check for the calculation bug with the method DateInterval::diff in PHP 8.1.0 - 8.1.9, fixed in 8.1.10
-                        if (version_compare('8.1.0', PHP_VERSION, '<=') && version_compare('8.1.10', PHP_VERSION, '>')) {
                             $result = false;
                             $meetPrerequisites = false;
                         }

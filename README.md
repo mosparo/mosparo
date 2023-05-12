@@ -46,7 +46,7 @@ We have therefore defined our main objective: to collect only data that is neces
 
 ## Requirements
 
-- PHP 7.4 or newer (Important: If you have PHP 8.1, you need at least 8.1.10)
+- PHP 8.1.10 or newer
 - PHP extensions
   - ctype
   - gd
