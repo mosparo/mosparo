@@ -78,120 +78,122 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script type="text/javascript">
-        var lastResponseText = '';
-        var lastMessageTimestamp = 0;
-        var isRunning = true;
+    {% cspscript %}
+        <script>
+            var lastResponseText = '';
+            var lastMessageTimestamp = 0;
+            var isRunning = true;
 
-        function calculateCheckInterval()
-        {
-            let timestampNow = (new Date()).getTime() / 1000;
-            let diff = timestampNow - lastMessageTimestamp;
+            function calculateCheckInterval()
+            {
+                let timestampNow = (new Date()).getTime() / 1000;
+                let diff = timestampNow - lastMessageTimestamp;
 
-            if (diff < 1) {
-                return 250;
-            } else if (diff < 2) {
-                return 500;
-            } else if (diff < 5) {
-                return 1000;
-            } else {
-                return 2000;
+                if (diff < 1) {
+                    return 250;
+                } else if (diff < 2) {
+                    return 500;
+                } else if (diff < 5) {
+                    return 1000;
+                } else {
+                    return 2000;
+                }
             }
-        }
 
-        function extractNewMessage(responseText)
-        {
-            let newData = responseText.substring(lastResponseText.length).trim();
+            function extractNewMessage(responseText)
+            {
+                let newData = responseText.substring(lastResponseText.length).trim();
 
-            lastResponseText = responseText;
+                lastResponseText = responseText;
 
-            return newData.split("\n");
-        }
-
-        function markRunningAsCompleted(type)
-        {
-            let runningEl = $('.update-log-list .running');
-            let iconEl = runningEl.find('.update-loader');
-
-            runningEl.removeClass('running');
-            iconEl.removeClass('update-loader');
-
-            if (type === 'completed') {
-                runningEl.addClass('completed');
-                iconEl.addClass('ti ti-check');
-            } else if (type === 'error') {
-                runningEl.addClass('error');
-                iconEl.addClass('ti ti-x');
+                return newData.split("\n");
             }
-        }
 
-        function processMessage(message)
-        {
-            if (message.trim() === '') {
-                return;
+            function markRunningAsCompleted(type)
+            {
+                let runningEl = $('.update-log-list .running');
+                let iconEl = runningEl.find('.update-loader');
+
+                runningEl.removeClass('running');
+                iconEl.removeClass('update-loader');
+
+                if (type === 'completed') {
+                    runningEl.addClass('completed');
+                    iconEl.addClass('ti ti-check');
+                } else if (type === 'error') {
+                    runningEl.addClass('error');
+                    iconEl.addClass('ti ti-x');
+                }
             }
-            message = JSON.parse(message);
 
-            lastMessageTimestamp = message.timestamp;
+            function processMessage(message)
+            {
+                if (message.trim() === '') {
+                    return;
+                }
+                message = JSON.parse(message);
 
-            if (message.inProgress) {
-                markRunningAsCompleted('completed');
-                let statusItem = $('<li></li>').addClass('running');
+                lastMessageTimestamp = message.timestamp;
 
-                $('<i></i>').addClass('update-loader').appendTo(statusItem);
-                $('<div></div>').text(message.message).appendTo(statusItem);
+                if (message.inProgress) {
+                    markRunningAsCompleted('completed');
+                    let statusItem = $('<li></li>').addClass('running');
 
-                $('.update-log-list').append(statusItem);
-            } else {
-                isRunning = false;
+                    $('<i></i>').addClass('update-loader').appendTo(statusItem);
+                    $('<div></div>').text(message.message).appendTo(statusItem);
 
-                if (message.error) {
+                    $('.update-log-list').append(statusItem);
+                } else {
+                    isRunning = false;
+
+                    if (message.error) {
+                        markRunningAsCompleted('error');
+
+                        let statusItem = $('<li></li>').addClass('error').text(message.message);
+                        $('.update-log-list').append(statusItem);
+
+                        $('.alert-in-progress').addClass('d-none');
+                        $('.alert-update-error').removeClass('d-none');
+                    } else {
+                        markRunningAsCompleted('completed');
+                        $('.form-footer').removeClass('d-none');
+
+                        $('.alert-in-progress').addClass('d-none');
+                        $('.alert-update-completed').removeClass('d-none');
+                    }
+                }
+            }
+
+            function checkLogFile()
+            {
+                $.get('{{ temporaryLogFileUrl }}', function (responseText) {
+                    let newMessages = extractNewMessage(responseText);
+
+                    for (let index in newMessages) {
+                        processMessage(newMessages[index]);
+                    }
+
+                    if (isRunning) {
+                        setTimeout(checkLogFile, calculateCheckInterval());
+                    }
+                });
+            }
+
+            setTimeout(checkLogFile, 250);
+
+            $.get('{{ path('administration_update_execute_update') }}', function (response) {
+                if (typeof response.error !== 'undefined' && response.error) {
+                    isRunning = false;
+
                     markRunningAsCompleted('error');
 
-                    let statusItem = $('<li></li>').addClass('error').text(message.message);
+                    let statusItem = $('<li></li>').addClass('error').text(response.errorMessage);
                     $('.update-log-list').append(statusItem);
 
                     $('.alert-in-progress').addClass('d-none');
                     $('.alert-update-error').removeClass('d-none');
-                } else {
-                    markRunningAsCompleted('completed');
-                    $('.form-footer').removeClass('d-none');
-
-                    $('.alert-in-progress').addClass('d-none');
-                    $('.alert-update-completed').removeClass('d-none');
-                }
-            }
-        }
-
-        function checkLogFile()
-        {
-            $.get('{{ temporaryLogFileUrl }}', function (responseText) {
-                let newMessages = extractNewMessage(responseText);
-
-                for (let index in newMessages) {
-                    processMessage(newMessages[index]);
-                }
-
-                if (isRunning) {
-                    setTimeout(checkLogFile, calculateCheckInterval());
                 }
             });
-        }
-
-        setTimeout(checkLogFile, 250);
-
-        $.get('{{ path('administration_update_execute_update') }}', function (response) {
-            if (typeof response.error !== 'undefined' && response.error) {
-                isRunning = false;
-
-                markRunningAsCompleted('error');
-
-                let statusItem = $('<li></li>').addClass('error').text(response.errorMessage);
-                $('.update-log-list').append(statusItem);
-
-                $('.alert-in-progress').addClass('d-none');
-                $('.alert-update-error').removeClass('d-none');
-            }
-        });
-    </script>
+        </script>
+    {% endcspscript %}
 {% endblock %}

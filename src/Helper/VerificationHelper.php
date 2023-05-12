@@ -32,7 +32,7 @@ class VerificationHelper
             }
 
             $sKey = $sFieldData['name'];
-            $sValue = $sFieldData['value'];
+            $sValue = $sFieldData['value'] ?? '';
 
             if (!isset($formData[$sKey])) {
                 $issues[] = ['name' => $sKey, 'message' => 'Missing in form data, verification not possible.'];

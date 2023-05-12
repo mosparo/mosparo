@@ -772,14 +772,11 @@ class UpdateHelper
             }
         }
 
-        $ignoredFiles = [
-            '/.env.local',
-            '/.env.prod.local',
-        ];
-        foreach ($ignoredFiles as $ignoredFile) {
-            if ($ignoredFile === $filePath) {
-                return true;
-            }
+        // Ignore all dot files and directories in the root directory. If another softwar creates a
+        // dot file or directory, an update would otherwise remove the file or directory.
+        $firstTwoChars = substr($filePath, 0, 2);
+        if ($firstTwoChars == '/.') {
+            return true;
         }
 
         return false;

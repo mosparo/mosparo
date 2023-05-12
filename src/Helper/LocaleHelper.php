@@ -159,6 +159,8 @@ class LocaleHelper
             }
         }
 
+        ksort($languages);
+
         return $languages;
     }
 

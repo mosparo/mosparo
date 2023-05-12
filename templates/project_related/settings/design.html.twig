@@ -381,89 +381,91 @@
 
     <link href="{{ asset('/build/mosparo-frontend.css') }}" rel="stylesheet">
     <script src="{{ asset('/build/mosparo-frontend.js') }}"></script>
-    <script>
-        var sizeVariables = {{ sizeVariables|json_encode()|raw }};
-        var maxRadiusForLogo = {{ maxRadiusForLogo|json_encode()|raw }};
-        var initialTrigger = false;
+    {% cspscript %}
+        <script>
+            var sizeVariables = {{ sizeVariables|json_encode()|raw }};
+            var maxRadiusForLogo = {{ maxRadiusForLogo|json_encode()|raw }};
+            var initialTrigger = false;
 
-        function checkLogoAvailability()
-        {
-            let radius = $('input[name="design_settings_form[boxRadius]"]').val();
-            let size = $('input[name="design_settings_form[boxSize]"]:checked').val();
-            let logoCheckbox = $('input[name="design_settings_form[showMosparoLogo]"]');
-            let logoContainer = $('.logo-container');
-            if (!(size in maxRadiusForLogo)) {
-                return;
-            }
-
-            let maxRadius = maxRadiusForLogo[size];
-
-            if (radius > maxRadius) {
-                logoCheckbox.prop('readonly', true);
-                logoContainer
-                    .find('.form-group').addClass('d-none').end()
-                    .find('.message-box').removeClass('d-none').end();
-            } else {
-                logoCheckbox.prop('readonly', false);
-                logoContainer
-                    .find('.form-group').removeClass('d-none').end()
-                    .find('.message-box').addClass('d-none').end();
-            }
-
-            logoCheckbox.trigger('change');
-        }
-
-        $(document).ready(function () {
-            $('.mosparo-box').each(function () {
-                new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
-
-                $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend') }}');
-                let type = $(this).data('type');
-                switch (type) {
-                    case 'focus':
-                        $(this).addClass('mosparo__focus');
-                        break;
-                    case 'loading':
-                        $(this).addClass('mosparo__loading');
-                        break;
-                    case 'success':
-                        $(this).addClass('mosparo__checked');
-                        break;
-                    case 'failure':
-                        $(this).addClass('mosparo__invalid');
-                        $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend') }}');
-                        break;
-                }
-            });
-
-            $('input[name="design_settings_form[boxRadius]"]').change(function () {
-                checkLogoAvailability();
-            });
-
-            $('input[name="design_settings_form[boxSize]"]').change(function () {
-                let size = $(this).val();
-                if (!(size in sizeVariables)) {
+            function checkLogoAvailability()
+            {
+                let radius = $('input[name="design_settings_form[boxRadius]"]').val();
+                let size = $('input[name="design_settings_form[boxSize]"]:checked').val();
+                let logoCheckbox = $('input[name="design_settings_form[showMosparoLogo]"]');
+                let logoContainer = $('.logo-container');
+                if (!(size in maxRadiusForLogo)) {
                     return;
                 }
 
-                let variables = sizeVariables[size];
-                for (let variableName in variables) {
-                    let fieldForVariable = $('input[data-variable="' + variableName + '"]');
-                    if (fieldForVariable.length > 0 && initialTrigger) {
-                        continue;
-                    } else if (fieldForVariable.length > 0) {
-                        fieldForVariable.val(variables[variableName]);
-                    }
+                let maxRadius = maxRadiusForLogo[size];
 
-                    updateCssVariable(variableName, variables[variableName], 'number');
+                if (radius > maxRadius) {
+                    logoCheckbox.prop('readonly', true);
+                    logoContainer
+                        .find('.form-group').addClass('d-none').end()
+                        .find('.message-box').removeClass('d-none').end();
+                } else {
+                    logoCheckbox.prop('readonly', false);
+                    logoContainer
+                        .find('.form-group').removeClass('d-none').end()
+                        .find('.message-box').addClass('d-none').end();
                 }
 
-                checkLogoAvailability();
-            });
+                logoCheckbox.trigger('change');
+            }
 
-            initialTrigger = true;
-            $('input[name="design_settings_form[boxSize]"]:checked').trigger('change');
-            initialTrigger = false;
-        });
-    </script>
+            $(document).ready(function () {
+                $('.mosparo-box').each(function () {
+                    new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
+
+                    $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend') }}');
+                    let type = $(this).data('type');
+                    switch (type) {
+                        case 'focus':
+                            $(this).addClass('mosparo__focus');
+                            break;
+                        case 'loading':
+                            $(this).addClass('mosparo__loading');
+                            break;
+                        case 'success':
+                            $(this).addClass('mosparo__checked');
+                            break;
+                        case 'failure':
+                            $(this).addClass('mosparo__invalid');
+                            $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend') }}');
+                            break;
+                    }
+                });
+
+                $('input[name="design_settings_form[boxRadius]"]').change(function () {
+                    checkLogoAvailability();
+                });
+
+                $('input[name="design_settings_form[boxSize]"]').change(function () {
+                    let size = $(this).val();
+                    if (!(size in sizeVariables)) {
+                        return;
+                    }
+
+                    let variables = sizeVariables[size];
+                    for (let variableName in variables) {
+                        let fieldForVariable = $('input[data-variable="' + variableName + '"]');
+                        if (fieldForVariable.length > 0 && initialTrigger) {
+                            continue;
+                        } else if (fieldForVariable.length > 0) {
+                            fieldForVariable.val(variables[variableName]);
+                        }
+
+                        updateCssVariable(variableName, variables[variableName], 'number');
+                    }
+
+                    checkLogoAvailability();
+                });
+
+                initialTrigger = true;
+                $('input[name="design_settings_form[boxSize]"]:checked').trigger('change');
+                initialTrigger = false;
+            });
+        </script>
+    {% endcspscript %}
 {% endblock %}

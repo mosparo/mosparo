@@ -186,6 +186,16 @@ class DesignHelper
         $this->projectDirectory = $projectDirectory;
     }
 
+    public function getTextLogoContent()
+    {
+        $path = $this->getBuildFilePath('/build/images/mosparo_text_logo.svg');
+        if (!$this->filesystem->exists($path)) {
+            return '';
+        }
+
+        return file_get_contents($path);
+    }
+
     public function refreshFrontendResourcesForAllProjects()
     {
         // Get the originally active project to set it again after the refresh.
@@ -488,7 +498,7 @@ class DesignHelper
                 continue;
             }
 
-            $filePath = $this->getBuildFilePath($result[2]);
+            /*$filePath = $this->getBuildFilePath($result[2]);
             if (!file_exists($filePath)) {
                 continue;
             }
@@ -505,9 +515,10 @@ class DesignHelper
                 $mimeType = 'image/svg+xml';
             } else {
                 $encodedFileContent = ';base64,' . base64_encode($fileContent);
-            }
+            }*/
 
-            $content = str_replace($result[2], '\'data:' . $mimeType . $encodedFileContent . '\'', $content);
+            //$content = str_replace($result[2], '\'data:' . $mimeType . $encodedFileContent . '\'', $content);
+            $content = str_replace($result[2], '/resources/logo.svg', $content);
         }
 
         return $content;

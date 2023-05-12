@@ -266,7 +266,7 @@ class FrontendApiController extends AbstractController
                 continue;
             }
 
-            $formData[$field['name']] = $field['value'];
+            $formData[$field['name']] = $field['value'] ?? '';
         }
 
         return $formData;

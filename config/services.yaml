@@ -67,6 +67,13 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    Mosparo\Session\DatabaseSessionHandler:
+        arguments:
+            $connection: '@database_connection'
+            $mosparoInstalled: '%env(mosparo_installed)%'
+            $mosparoVersion: '%env(mosparo_installed_version)%'
+            $options: { lock_mode: 0 }
+
     Mosparo\Subscriber\ApiSubscriber:
         class: Mosparo\Subscriber\ApiSubscriber
         tags:

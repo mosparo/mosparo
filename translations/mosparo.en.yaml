@@ -303,7 +303,7 @@ submission:
     id: ID
     page: Page
     spam: Spam
-    verification: Verfication
+    verification: Verification
     ipAddress: IP Address
     spamRating: Spam rating
     submittedAt: Submitted at
@@ -734,10 +734,11 @@ administration:
 
       form:
         channelStable: Stable
+        channelBeta: Beta
         channelDevelop: Develop
 
       message:
-        infoDevelopChannel: The develop channel contains untested and unstable versions which are not ready for production use. Please use it not in a production environment.
+        infoDevelopChannel: The develop and beta channels contain untested and unstable versions which are not ready for production use. Please do not use them in a production environment.
         savedSuccessfully: The update channel was saved successfully.
 
     buttons:

@@ -49,125 +49,133 @@
     </div>
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+
+    {{ encore_entry_link_tags('apexcharts', null, '', { 'id': 'apexcharts-css' }) }}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            let colors = {
-                background: '#FFFFFF',
-                fill: ['#EAF7EC', '#FBEBEB'],
-                colors: ['#56B344', '#D63939'],
-                shade: 'light',
-                tooltipTheme: 'light',
-            };
-
-            if ($('body').hasClass('theme-dark')) {
-                colors = {
-                    background: '#1d273b',
-                    fill: ['#1d3b21', '#3b1d1d'],
+    {% cspscript %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                let colors = {
+                    background: '#FFFFFF',
+                    fill: ['#EAF7EC', '#FBEBEB'],
                     colors: ['#56B344', '#D63939'],
-                    shade: 'dark',
-                    tooltipTheme: 'dark',
+                    shade: 'light',
+                    tooltipTheme: 'light',
                 };
-            }
 
-            let chartOptions = {
-                series: [
-                    {
-                        name: "{{ 'dashboard.chart.valid'|trans }}",
-                        data: {{ noSpamSubmissionsData|json_encode|raw }}
+                if ($('body').hasClass('theme-dark')) {
+                    colors = {
+                        background: '#1d273b',
+                        fill: ['#1d3b21', '#3b1d1d'],
+                        colors: ['#56B344', '#D63939'],
+                        shade: 'dark',
+                        tooltipTheme: 'dark',
+                    };
+                }
+
+                let chartOptions = {
+                    series: [
+                        {
+                            name: "{{ 'dashboard.chart.valid'|trans }}",
+                            data: {{ noSpamSubmissionsData|json_encode|raw }}
+                        },
+                        {
+                            name: "{{ 'dashboard.chart.spam'|trans }}",
+                            data: {{ spamSubmissionsData|json_encode|raw }}
+                        }
+                    ],
+                    chart: {
+                        type: "area",
+                        background: colors.background,
+                        fontFamily: 'inherit',
+                        height: 250,
+                        stacked: true,
+                        offsetY: -10,
+                        parentHeightOffset: 5,
+                        animations: {
+                            enabled: false
+                        },
+                        zoom: {
+                            enabled: false
+                        },
+                        toolbar: {
+                            show: false
+                        },
                     },
-                    {
-                        name: "{{ 'dashboard.chart.spam'|trans }}",
-                        data: {{ spamSubmissionsData|json_encode|raw }}
-                    }
-                ],
-                chart: {
-                    type: "area",
-                    background: colors.background,
-                    fontFamily: 'inherit',
-                    height: 250,
-                    stacked: true,
-                    offsetY: -10,
-                    parentHeightOffset: 5,
-                    animations: {
-                        enabled: false
+                    dataLabels: {
+                        enabled: false,
                     },
-                    zoom: {
-                        enabled: false
-                    },
-                    toolbar: {
-                        show: false
-                    },
-                },
-                dataLabels: {
-                    enabled: false,
-                },
-                fill: {
-                    colors: colors.fill,
-                    type: 'gradient',
-                    gradient: {
-                        inverseColors: false,
-                        shade: colors.shade,
-                        type: "vertical",
-                        opacityFrom: 0.9,
-                        opacityTo: 0.6,
-                        stops: [0, 100, 100, 100]
-                    }
-                },
-                tooltip: {
-                    theme: colors.tooltipTheme,
-                    x: {
-                        show: true,
-                        format: '{{ chartDateFormat }}',
-                        formatter: undefined,
-                    }
-                },
-                stroke: {
-                    width: 2,
-                    lineCap: "round",
-                    curve: "smooth",
-                },
-                colors: colors.colors,
-                grid: {
-                    show: true
-                },
-                legend: {
-                    show: false
-                },
-                point: {
-                    show: false
-                },
-                xaxis: {
-                    labels: {
-                        padding: 0,
-                        datetimeFormatter: {
-                            day: '{{ chartDateFormat }}'
+                    fill: {
+                        colors: colors.fill,
+                        type: 'gradient',
+                        gradient: {
+                            inverseColors: false,
+                            shade: colors.shade,
+                            type: "vertical",
+                            opacityFrom: 0.9,
+                            opacityTo: 0.6,
+                            stops: [0, 100, 100, 100]
                         }
                     },
                     tooltip: {
-                        enabled: false
+                        theme: colors.tooltipTheme,
+                        x: {
+                            show: true,
+                            format: '{{ chartDateFormat }}',
+                            formatter: undefined,
+                        }
                     },
-                    axisBorder: {
+                    stroke: {
+                        width: 2,
+                        lineCap: "round",
+                        curve: "smooth",
+                    },
+                    colors: colors.colors,
+                    grid: {
+                        show: true
+                    },
+                    legend: {
+                        show: false
+                    },
+                    point: {
+                        show: false
+                    },
+                    xaxis: {
+                        labels: {
+                            padding: 0,
+                            datetimeFormatter: {
+                                day: '{{ chartDateFormat }}'
+                            }
+                        },
+                        tooltip: {
+                            enabled: false
+                        },
+                        axisBorder: {
+                            show: true,
+                        },
+                        type: 'datetime',
+                    },
+                    yaxis: {
                         show: true,
+                        labels: {
+                            offsetX: 0,
+                            offsetY: 3,
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
                     },
-                    type: 'datetime',
-                },
-                yaxis: {
-                    show: true,
-                    labels: {
-                        offsetX: 0,
-                        offsetY: 3,
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                },
-            };
+                };
 
-            var submissionChart = new ApexCharts($('#submission_chart')[0], chartOptions);
-            submissionChart.render();
-        });
-    </script>
+                var submissionChart = new ApexCharts($('#submission_chart')[0], chartOptions);
+                submissionChart.render();
+            });
+        </script>
+    {% endcspscript %}
 {% endblock %}

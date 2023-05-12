@@ -12,6 +12,8 @@ doctrine:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
 
+        schema_filter: ~^(?!sessions)~
+
         types:
             encrypted: 'Gracious\DoctrineEncryptionBundle\Type\Encrypted'
             encryptedJson: 'Mosparo\Doctrine\Type\EncryptedJson'

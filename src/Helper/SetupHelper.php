@@ -25,6 +25,7 @@ class SetupHelper
         ],
         'phpExtensions' => [
             'ctype' => true,
+            'gd' => true,
             'iconv' => true,
             'intl' => true,
             'json' => true,

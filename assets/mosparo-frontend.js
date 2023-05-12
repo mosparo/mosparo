@@ -17,7 +17,9 @@ function mosparo(containerId, url, uuid, publicKey, options)
         requestSubmitTokenOnInit: true,
 
         // Callbacks
-        onCheckForm: null
+        onCheckForm: null,
+        onResetState: null,
+        onAbortSubmit: null,
     };
     this.options = {...this.defaultOptions, ...options};
 
@@ -36,6 +38,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.countdownSeconds = 0;
     this.isLocked = false;
     this.checkedFormData = null;
+    this.stateResetted = true;
 
     this.messages = {
         label: 'I accept that the form entries are checked for spam and stored encrypted for 14 days.',
@@ -179,6 +182,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
                     _this.formElement.dispatchEvent(new CustomEvent('submit-aborted', { bubbles: true }));
 
+                    if (_this.options.onAbortSubmit !== null) {
+                        _this.options.onAbortSubmit();
+                    }
+
                     _this.resetState();
                 }
             });
@@ -278,6 +285,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
             return;
         }
 
+        this.stateResetted = false;
+
         this.containerElement.classList.remove('mosparo__invalid');
         this.containerElement.classList.remove('mosparo__checked');
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
@@ -320,8 +329,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 _this.showError(_this.messages.errorSpamDetected);
             }
 
+            _this.formElement.dispatchEvent(new CustomEvent('form-checked', { bubbles: true, detail: { valid: response.valid } }));
+
             if (_this.options.onCheckForm !== null) {
-                _this.options.onCheckForm();
+                _this.options.onCheckForm(response.valid);
             }
         }, function () {
             _this.checkboxFieldElement.checked = false;
@@ -347,6 +358,11 @@ function mosparo(containerId, url, uuid, publicKey, options)
             let name = el.getAttribute('name');
             // Ignore mosparo fields
             if (name.indexOf('_mosparo_') === 0) {
+                return;
+            }
+
+            // Ignore HTML elements with a name but without a value, like <iframe>
+            if (typeof el.value === 'undefined') {
                 return;
             }
 
@@ -425,17 +441,26 @@ function mosparo(containerId, url, uuid, publicKey, options)
     }
 
     this.resetState = function () {
+        if (this.stateResetted) {
+            return;
+        }
+
         this.checkboxFieldElement.removeAttribute('checked');
         this.setHpFieldElementDisabled(false);
         this.containerElement.classList.remove('mosparo__checked');
         this.validationTokenElement.value = '';
+        this.stateResetted = true;
 
         if (!this.isLocked) {
             this.containerElement.classList.remove('mosparo__invalid');
             this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         }
 
-        _this.formElement.dispatchEvent(new CustomEvent('state-reset'));
+        _this.formElement.dispatchEvent(new CustomEvent('state-reseted'));
+
+        if (_this.options.onResetState !== null) {
+            _this.options.onResetState();
+        }
     }
 
     this.send = function (endpoint, data, callbackSuccess, callbackError) {

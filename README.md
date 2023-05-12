@@ -49,6 +49,7 @@ We have therefore defined our main objective: to collect only data that is neces
 - PHP 7.4 or newer (Important: If you have PHP 8.1, you need at least 8.1.10)
 - PHP extensions
   - ctype
+  - gd
   - iconv
   - intl
   - json
@@ -86,6 +87,7 @@ To install mosparo from the source, clone the repository and execute Composer an
 - git
 - Composer
 - Yarn
+- Node.js (18)
 
 #### Installation
 

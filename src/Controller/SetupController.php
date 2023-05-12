@@ -78,7 +78,7 @@ class SetupController extends AbstractController
             ->add('port', TextType::class, ['label' => 'setup.database.form.port', 'required' => false, 'data' => 3306])
             ->add('database', TextType::class, ['label' => 'setup.database.form.database'])
             ->add('user', TextType::class, ['label' => 'setup.database.form.user'])
-            ->add('password', PasswordType::class, ['label' => 'setup.database.form.password'])
+            ->add('password', PasswordType::class, ['label' => 'setup.database.form.password', 'attr' => ['autocomplete' => 'off']])
             ->getForm();
 
         $form->handleRequest($request);

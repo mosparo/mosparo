@@ -70,15 +70,17 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script>
-        $(document).ready(function () {
-            $('#form_mailerUseSmtp').change(function () {
-                if ($(this).is(':checked')) {
-                    $('.mail-option').prop('disabled', false);
-                } else {
-                    $('.mail-option').prop('disabled', 'disabled');
-                }
-            }).trigger('change');
-        });
-    </script>
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#form_mailerUseSmtp').change(function () {
+                    if ($(this).is(':checked')) {
+                        $('.mail-option').prop('disabled', false);
+                    } else {
+                        $('.mail-option').prop('disabled', 'disabled');
+                    }
+                }).trigger('change');
+            });
+        </script>
+    {% endcspscript %}
 {% endblock %}

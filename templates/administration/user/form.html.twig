@@ -69,25 +69,27 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script>
-        $(document).ready(function () {
-            $('#form_sendPasswordResetEmail').change(function () {
-                let isActive = $(this).is(':checked');
-                let passwordFields = $('#form_password_plainPassword_first, #form_password_plainPassword_second');
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#form_sendPasswordResetEmail').change(function () {
+                    let isActive = $(this).is(':checked');
+                    let passwordFields = $('#form_password_plainPassword_first, #form_password_plainPassword_second');
 
-                passwordFields.prop('disabled', isActive);
+                    passwordFields.prop('disabled', isActive);
 
-                let isNewUser = {{ isNewUser|json_encode }};
-                if (isNewUser) {
-                    if (isActive) {
-                        passwordFields.prop('required', false);
-                        passwordFields.prev('label').removeClass('required');
-                    } else {
-                        passwordFields.prop('required', true);
-                        passwordFields.prev('label').addClass('required');
+                    let isNewUser = {{ isNewUser|json_encode }};
+                    if (isNewUser) {
+                        if (isActive) {
+                            passwordFields.prop('required', false);
+                            passwordFields.prev('label').removeClass('required');
+                        } else {
+                            passwordFields.prop('required', true);
+                            passwordFields.prev('label').addClass('required');
+                        }
                     }
-                }
+                });
             });
-        });
-    </script>
+        </script>
+    {% endcspscript %}
 {% endblock %}

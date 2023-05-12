@@ -17,8 +17,10 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Chinese (Traditional) | zh_Hant       | Célia (via [mahonebay](https://hosted.weblate.org/user/mahonebay))                                           |
 | Croatian              | hr            | DMI (via [fim](https://hosted.weblate.org/user/fim/)), [milotype](https://hosted.weblate.org/user/milotype/) |
 | Czech                 | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                          |
+| Danish                | da            | [Digi92](https://hosted.weblate.org/user/Digi92/)                                                            |
+| Dutch                 | nl            | [Digi92](https://hosted.weblate.org/user/Digi92/)                                                            |
 | English               | en            | mosparo Core Developers                                                                                      |
-| French                | fr            | mosparo Core Developers                                                                                      |
+| French                | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), mosparo Core Developers                             |
 | German                | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/)                                   |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                                                            |
 | Italian               | it            | mosparo Core Developers                                                                                      |
@@ -33,24 +35,28 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Spanish               | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)                                              |
 | Swedish               | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                            |
 | Ukrainian             | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                      |
+| Vietnamese            | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                      |
 
 ## Backend
-| Language             | Language Code | Contributors                                                            |
-|----------------------|---------------|-------------------------------------------------------------------------|
-| Chinese (Simplified) | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                   |
-| Czech                | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                     |
-| English              | en            | mosparo Core Developers                                                 |
-| German               | de            | mosparo Core Developers                                                 |
-| Indonesian           | id            | [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/)             |
-| Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/) |
-| Russian              | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                     |
-| Ukrainian            | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                 |
+| Language             | Language Code | Contributors                                                                                                                 |
+|----------------------|---------------|------------------------------------------------------------------------------------------------------------------------------|
+| Chinese (Simplified) | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                                                                        |
+| Czech                | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                                          |
+| English              | en            | mosparo Core Developers                                                                                                      |
+| French               | fr            | [baudouin](https://hosted.weblate.org/user/baudouin/), [NathanBnm](https://hosted.weblate.org/user/NathanBnm/)               |
+| German               | de            | mosparo Core Developers                                                                                                      |
+| Indonesian           | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/)               |
+| Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/), [rglauco](https://hosted.weblate.org/user/rglauco/) |
+| Russian              | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                                                                          |
+| Ukrainian            | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                                      |
+| Vietnamese           | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                                      |
 
 ## Validators
 | Language   | Language Code | Contributors                                                |
 |------------|---------------|-------------------------------------------------------------|
 | Czech      | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)         |
 | English    | en            | mosparo Core Developers                                     |
+| French     | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/)     |
 | German     | de            | mosparo Core Developers                                     |
 | Indonesian | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)           |
 | Korean     | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/) |
@@ -58,3 +64,4 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Russian    | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)         |
 | Swedish    | sv            | [bittin](https://hosted.weblate.org/user/bittin/)           |
 | Ukrainian  | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)     |
+| Vietnamese | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)     |

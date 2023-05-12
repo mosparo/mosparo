@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="tabler" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="16" height="16" viewBox="0 0 16 16" enable-background="new 0 0 16 64"
+     xml:space="preserve">
+    <view id="checkbox-light" viewBox="0 0 16 16" />
+    <view id="checkbox-dark" viewBox="0 16 32 16" />
+    <view id="radio" viewBox="0 32 16 16" />
+    <view id="close" viewBox="0 48 16 16" />
+
+    <g>
+        <path fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 8.5l2.5 2.5l5.5 -5.5" />
+    </g>
+    <g>
+        <path fill="none" stroke="#1d273b" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 24.55l2.5 2.5l5.5 -5.5" />
+    </g>
+    <g>
+        <circle r="3" fill="#ffffff" cx="8" cy="40" />
+    </g>
+    <g>
+        <path fill="#000000"
+              d="M0.2867571161426606,48.30526043701172 a1,1 0 0 1 1.4140000000000001,0 L7.9937571161426595,54.59826043701172 L14.28675711614266,48.30526043701172 a1,1 0 1 1 1.4140000000000001,1.4140000000000001 L9.40775711614266,56.01226043701172 l6.293,6.293 a1,1 0 0 1 -1.4140000000000001,1.4140000000000001 L7.9937571161426595,57.42626043701172 l-6.293,6.293 a1,1 0 0 1 -1.4140000000000001,-1.4140000000000001 L6.579757116142661,56.01226043701172 L0.2867571161426606,49.71926043701172 a1,1 0 0 1 0,-1.4140000000000001 z" />
+    </g>
+</svg>

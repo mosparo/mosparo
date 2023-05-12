@@ -96,10 +96,38 @@ class CleanupHelper
 
     public function cleanupProjectEntities($project)
     {
+        // Delete all rule items
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\RuleItem', 'ri')
+            ->where('ri.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+
         // Delete all rules
         $qb = $this->entityManager->createQueryBuilder();
         $qb->delete('Mosparo\Entity\Rule', 'r')
             ->where('r.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+
+        // Delete all rulesets rule item cache
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\RulesetRuleItemCache', 'rsric')
+            ->where('rsric.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+
+        // Delete all rulesets rule cache
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\RulesetRuleCache', 'rsrc')
+            ->where('rsrc.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+
+        // Delete all rulesets cache
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\RulesetCache', 'rsc')
+            ->where('rsc.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
 

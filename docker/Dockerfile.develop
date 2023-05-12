@@ -29,12 +29,13 @@ RUN apt-get update && \
         locales \
         zip \
         libzip-dev \
+        libpng-dev \
         unzip \
         autoconf \
         cron \
         wget \
         nginx  && \
-    docker-php-ext-install -j$(nproc) intl pdo_mysql zip opcache && \
+    docker-php-ext-install -j$(nproc) intl pdo_mysql zip opcache gd && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \

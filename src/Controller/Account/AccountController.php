@@ -123,7 +123,15 @@ class AccountController extends AbstractController
     public function changePassword(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
-            ->add('oldPassword', PasswordType::class, ['label' => 'account.changePassword.form.oldPassword', 'constraints' => [new UserPassword()]])
+            ->add('oldPassword', PasswordType::class, [
+                'label' => 'account.changePassword.form.oldPassword',
+                'constraints' => [
+                    new UserPassword()
+                ],
+                'attr' => [
+                    'autocomplete' => 'off'
+                ]
+            ])
             ->add('newPassword', PasswordFormType::class, [
                 'mapped' => false,
                 'is_new_password' => true,

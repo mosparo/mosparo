@@ -364,6 +364,10 @@ p {
     height: 75px;
 }
 
+.table-spacer {
+    margin: .4em 0 1.1875em;
+}
+
 /*Media Queries ------------------------------ */
 
 @media only screen and (max-width: 600px) {

@@ -2,6 +2,11 @@
 $google-font: false;
 $font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
 
+$form-check-input-checked-bg-image: url('/assets/images/ui/tabler.svg#checkbox-light');
+$form-check-input-checked-bg-image-dark: url('/assets/images/ui/tabler.svg#checkbox-dark');
+$form-check-radio-checked-bg-image: url('/assets/images/ui/tabler.svg#radio');
+$btn-close-bg: url('/assets/images/ui/tabler.svg#close');
+
 @import '~@tabler/core';
 @import 'node_modules/@tabler/icons/iconfont/tabler-icons.scss';
 
