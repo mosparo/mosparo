@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.5.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="tabler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
 <style type="text/css">
@@ -7,25 +6,33 @@
 	.st1{fill:none;stroke:#1D273B;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 	.st2{fill:#FFFFFF;}
 	.st3{fill:none;stroke:#A5A9B1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+	.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#4C4C4C;}
+	.st5{fill-rule:evenodd;clip-rule:evenodd;}
 </style>
-<view  id="checkbox-light"  viewBox="0 0 16 16" />
-<view  id="checkbox-dark"  viewBox="0 16 32 16" />
-<view  id="radio"  viewBox="0 32 16 16" />
-<view  id="close"  viewBox="0 48 16 16" />
-<view  id="select"  viewBox="0 64 16 16" />
-<g>
+	<view  id="checkbox-light" viewBox="0 0 16 16"/>
+	<view  id="checkbox-dark" viewBox="0 16 32 16"/>
+	<view  id="radio" viewBox="0 32 16 16"/>
+	<view  id="close" viewBox="0 48 16 16"/>
+	<view  id="select" viewBox="0 64 16 16"/>
+	<view  id="accordion-normal" viewBox="0 80 16 16"/>
+	<view  id="accordion-active" viewBox="0 96 16 16"/>
+	<g>
 	<path class="st0" d="M4,8.5L6.5,11L12,5.5"/>
 </g>
-<g>
+	<g>
 	<path class="st1" d="M4,24.5L6.5,27l5.5-5.5"/>
 </g>
-<g>
+	<g>
 	<circle class="st2" cx="8" cy="40" r="3"/>
 </g>
-<g>
+	<g>
 	<path d="M0.3,48.3c0.4-0.4,1-0.4,1.4,0L8,54.6l6.3-6.3c0.4-0.4,1-0.4,1.4,0c0.4,0.4,0.4,1,0,1.4c0,0,0,0,0,0L9.4,56l6.3,6.3
 		c0.4,0.4,0.4,1,0,1.4c-0.4,0.4-1,0.4-1.4,0L8,57.4l-6.3,6.3c-0.4,0.4-1,0.4-1.4,0c-0.4-0.4-0.4-1,0-1.4L6.6,56l-6.3-6.3
 		C-0.1,49.3-0.1,48.7,0.3,48.3z"/>
 </g>
-<path class="st3" d="M2,69l6,6l6-6"/>
+	<path class="st3" d="M2,69l6,6l6-6"/>
+	<path class="st4" d="M1.6,84.6c0.2-0.2,0.5-0.2,0.7,0c0,0,0,0,0,0L8,90.3l5.6-5.6c0.2-0.2,0.5-0.2,0.7,0c0.2,0.2,0.2,0.5,0,0.7l-6,6
+	c-0.2,0.2-0.5,0.2-0.7,0c0,0,0,0,0,0l-6-6C1.5,85.2,1.5,84.8,1.6,84.6C1.6,84.6,1.6,84.6,1.6,84.6z"/>
+	<path class="st5" d="M1.6,100.6c0.2-0.2,0.5-0.2,0.7,0c0,0,0,0,0,0l5.6,5.6l5.6-5.6c0.2-0.2,0.5-0.2,0.7,0c0.2,0.2,0.2,0.5,0,0.7
+	l-6,6c-0.2,0.2-0.5,0.2-0.7,0c0,0,0,0,0,0l-6-6C1.5,101.2,1.5,100.8,1.6,100.6C1.6,100.6,1.6,100.6,1.6,100.6z"/>
 </svg>

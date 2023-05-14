@@ -7,6 +7,8 @@ $form-check-input-checked-bg-image-dark: url('/assets/images/ui/tabler.svg#check
 $form-check-radio-checked-bg-image: url('/assets/images/ui/tabler.svg#radio');
 $form-select-indicator: url('/assets/images/ui/tabler.svg#select');
 $btn-close-bg: url('/assets/images/ui/tabler.svg#close');
+$accordion-button-icon: url('/assets/images/ui/tabler.svg#accordion-normal');
+$accordion-button-active-icon: url('/assets/images/ui/tabler.svg#accordion-active');
 
 @import '~@tabler/core';
 @import 'node_modules/@tabler/icons/iconfont/tabler-icons.scss';
