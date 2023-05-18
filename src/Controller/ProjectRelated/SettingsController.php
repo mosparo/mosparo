@@ -382,7 +382,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             'project' => $project,
             'sizeVariables' => $designHelper->getBoxSizeVariables(),
             'maxRadiusForLogo' => $designHelper->getMaxRadiusForLogo(),
-            'mode' => $config['designMode'] ?? 'simple',
+            'mode' => $project->getDesignMode(),
         ]);
     }
 

@@ -13,6 +13,33 @@
     }
 }
 
+.nav-tabs {
+    .nav-item {
+        &.only-icon {
+            .ti {
+                margin-right: 0;
+                line-height: 1.1;
+            }
+
+            .visible-when-active {
+                margin-left: 0.5rem;
+            }
+        }
+
+        .visible-when-active {
+            display: none;
+        }
+
+        .nav-link.active {
+            @include media-breakpoint-up(sm) {
+                .visible-when-active {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
 .avatar {
     .ti {
         font-size: 1.25rem;

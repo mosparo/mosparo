@@ -1,25 +1,3 @@
-.design-mode-page-container {
-    background: var(--page-body-background, #FFFFFF);
-    border-radius: 5px;
-
-    padding: 1.75rem;
-
-    @media only screen and (max-width: 991px) {
-        & {
-            display: flex;
-            justify-content: center;
-        }
-    }
-
-    @media only screen and (max-width: 500px) {
-        & {
-            padding: 1.75rem 1rem;
-            margin: 0 -1.25rem;
-            border-radius: 0;
-        }
-    }
-}
-
 .card-header-with-actions {
     @media only screen and (max-width: 500px) {
         & {

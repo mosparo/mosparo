@@ -88,8 +88,18 @@ class Project
 
         'ipAllowList' => '',
 
-        'designMode' => 'simple',
+        'designMode' => '',
         'boxSize' => 'medium',
+
+        // Simple
+        'colorWebsiteBackground' => 'rgb(255, 255, 255)',
+        'colorWebsiteForeground' => 'rgb(0, 0, 0)',
+        'colorWebsiteAccent' => 'rgb(32, 107, 196)',
+        'colorHover' => 'rgb(32, 107, 196, 0.5)',
+        'colorSuccess' => 'rgb(0, 255, 0)',
+        'colorFailure' => 'rgb(255, 0, 0)',
+
+        // Advanced
         'boxRadius' => 11,
         'boxBorderWidth' => 3,
         'colorBackground' => 'rgb(255, 255, 255)',
@@ -292,6 +302,16 @@ class Project
     public function getDefaultConfigValues(): ?array
     {
         return $this->defaultConfigValues;
+    }
+
+    public function getDesignMode(): string
+    {
+        $designMode = $this->findConfigValue('designMode');
+        if ($designMode) {
+            return $designMode->getValue();
+        }
+
+        return 'simple';
     }
 
     /**

@@ -498,6 +498,8 @@ settings:
       dimensionSettings: Dimensions
       colorSettings: Colors
       simpleDesign: Simple design
+      colorAndDimensionSettings: Colors and Dimension
+      preview: Preview
       colors:
         normal: Normal
         focus: On focus and hover
