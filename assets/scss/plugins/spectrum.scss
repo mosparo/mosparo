@@ -7,8 +7,8 @@
         display: block !important;
         flex: 1;
 
-        border-radius: 3px 0 0 3px;
-        border-right-width: 0;
+        border-radius: 0 3px 3px 0;
+        border-left-width: 0;
     }
 
     .sp-replacer {
@@ -32,6 +32,13 @@
 
         .sp-dd {
             padding: 0 2px;
+        }
+    }
+
+    .sp-original-input-container {
+        .sp-add-on {
+            border-radius: 3px 0 0 3px !important;
+            border: 1px solid var(--tblr-border-color);
         }
     }
 }

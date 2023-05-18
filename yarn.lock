@@ -3952,10 +3952,10 @@ spdy@^4.0.2:
     select-hose "^2.0.0"
     spdy-transport "^3.0.0"
 
-spectrum-colorpicker@^1.8.1:
-  version "1.8.1"
-  resolved "https://registry.npmjs.org/spectrum-colorpicker/-/spectrum-colorpicker-1.8.1.tgz"
-  integrity sha512-x1picQ5giVso71ESII7jZ3+ZFdit8WthNkzwJqLNdPDPzrltKUQGpTohWyPfSAID+bK1zGdO6bDbSh1S6GoLYA==
+"spectrum-colorpicker2@https://github.com/zepi/spectrum/tarball/93e4fb101676c8fc9c7a302e65128b7387484ac4":
+  version "2.0.10"
+  resolved "https://github.com/zepi/spectrum/tarball/93e4fb101676c8fc9c7a302e65128b7387484ac4"
+  integrity sha512-qIpTTgFBP3DVRjylIhnunA/1WlxHRq77LvBIG79cnWS35hlFpGX9yCneUNkpnd6zNRB4bAg8YJ4ro/3UsLI2ZQ==
 
 stable@^0.1.8:
   version "0.1.8"
