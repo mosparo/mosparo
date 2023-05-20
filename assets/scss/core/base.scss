@@ -36,25 +36,17 @@
     }
 }
 
-.illustration-light {
-    display: inline-block;
+.illustration-list {
+    height: 128px;
 }
 
-.illustration-dark {
-    display: none;
+.illustration-detail {
+    height: 192px;
 }
 
 .theme-dark {
     .mosparo-logo-container {
         filter: brightness(0) invert(1);
-    }
-
-    .illustration-light {
-        display: none;
-    }
-
-    .illustration-dark {
-        display: inline-block;
     }
 }
 

@@ -29,11 +29,10 @@
             <div class="row">
                 {% for project in projects %}
                     <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
-                        <div class="card card-md mb-3">
+                        <div class="card card-md mb-3 w-100">
                             <div class="card-body d-flex flex-column">
                                 <div class="text-center">
-                                    <img src="{{ asset('build/images/icons/project_light.svg') }}" class="mb-4 illustration-light" alt="" />
-                                    <img src="{{ asset('build/images/icons/project_dark.svg') }}" class="mb-4 illustration-dark" alt="" />
+                                    <img src="{{ asset('build/images/icons/project_full.svg') }}" class="mb-4 illustration-list" alt="" />
                                 </div>
 
                                 <h2 class="card-title text-center mb-2">{{ project.name }}</h2>
@@ -73,8 +72,7 @@
         <div class="container-xl d-flex flex-column justify-content-center">
             <div class="empty">
                 <div class="empty-img">
-                    <img src="{{ asset('build/images/icons/project_light.svg') }}" height="128" alt="" class="illustration-light" />
-                    <img src="{{ asset('build/images/icons/project_dark.svg') }}" height="128" alt="" class="illustration-dark" />
+                    <img src="{{ asset('build/images/icons/project_empty.svg') }}" alt="" class="illustration-list" />
                 </div>
                 <p class="empty-title">{{ 'project.infoNoProjectAvailable'|trans }}</p>
                 <p class="empty-subtitle text-muted">{{ 'project.infoCreateProjectOrRequestAccess'|trans }}</p>
