@@ -2,3 +2,22 @@
     font-size: 3rem;
     line-height: 1;
 }
+
+.dashboard-submission-chart {
+    height: 255px;
+}
+
+.dashboard-link {
+    &:hover {
+        text-decoration: none;
+        background-color: rgb(246, 246, 246);
+    }
+}
+
+.theme-dark {
+    .dashboard-link {
+        &:hover {
+            background-color: rgb(36, 49, 74);
+        }
+    }
+}
