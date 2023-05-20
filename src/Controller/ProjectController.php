@@ -4,6 +4,7 @@ namespace Mosparo\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
+use Mosparo\Entity\Submission;
 use Mosparo\Form\ProjectFormType;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\DesignHelper;
@@ -21,12 +22,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ProjectController extends AbstractController
 {
+    protected EntityManagerInterface $entityManager;
+
     protected CleanupHelper $cleanupHelper;
 
     protected TranslatorInterface $translator;
 
-    public function __construct(CleanupHelper $cleanupHelper, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface $entityManager, CleanupHelper $cleanupHelper, TranslatorInterface $translator)
     {
+        $this->entityManager = $entityManager;
         $this->cleanupHelper = $cleanupHelper;
         $this->translator = $translator;
     }
@@ -36,7 +40,22 @@ class ProjectController extends AbstractController
      */
     public function list(): Response
     {
-        return $this->render('project/list.html.twig');
+        $numberOfSubmissions = $this->entityManager->createQueryBuilder()
+            ->select('IDENTITY(s.project) AS project_id', 'COUNT(s) AS count')
+            ->from(Submission::class, 's')
+            ->where('s.spam = 1')
+            ->orWhere('s.valid IS NOT NULL')
+            ->groupBy('s.project')
+            ->getQuery();
+
+        $numberOfSubmissionsByProject = [];
+        foreach ($numberOfSubmissions->getResult() as $row) {
+            $numberOfSubmissionsByProject[$row['project_id']] = $row['count'];
+        }
+
+        return $this->render('project/list.html.twig', [
+            'numberOfSubmissionsByProject' => $numberOfSubmissionsByProject
+        ]);
     }
 
     /**

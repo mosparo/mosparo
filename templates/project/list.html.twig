@@ -32,7 +32,11 @@
                         <div class="card card-md mb-3 w-100">
                             <div class="card-body d-flex flex-column">
                                 <div class="text-center">
-                                    <img src="{{ asset('build/images/icons/project_full.svg') }}" class="mb-4 illustration-list" alt="" />
+                                    {% if numberOfSubmissionsByProject[project.id] is defined and numberOfSubmissionsByProject[project.id] %}
+                                        <img src="{{ asset('build/images/icons/project_full.svg') }}" class="mb-4 illustration-list" alt="" />
+                                    {% else %}
+                                        <img src="{{ asset('build/images/icons/project_empty.svg') }}" class="mb-4 illustration-list" alt="" />
+                                    {% endif %}
                                 </div>
 
                                 <h2 class="card-title text-center mb-2">{{ project.name }}</h2>
