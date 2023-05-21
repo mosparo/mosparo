@@ -40,9 +40,12 @@ class ProjectController extends AbstractController
      */
     public function list(): Response
     {
-        $this->entityManager
-            ->getFilters()
-            ->disable('project_related_filter');
+        $filters = $this->entityManager->getFilters();
+        $filterEnabled = false;
+        if ($filters->isEnabled('project_related_filter')) {
+            $filters->disable('project_related_filter');
+            $filterEnabled = true;
+        }
 
         $numberOfSubmissions = $this->entityManager->createQueryBuilder()
             ->select('IDENTITY(s.project) AS project_id', 'COUNT(s) AS count')
@@ -57,9 +60,9 @@ class ProjectController extends AbstractController
             $numberOfSubmissionsByProject[$row['project_id']] = $row['count'];
         }
 
-        $this->entityManager
-            ->getFilters()
-            ->enable('project_related_filter');
+        if ($filterEnabled) {
+            $filters->enable('project_related_filter');
+        }
 
         return $this->render('project/list.html.twig', [
             'numberOfSubmissionsByProject' => $numberOfSubmissionsByProject
