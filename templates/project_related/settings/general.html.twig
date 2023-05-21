@@ -43,24 +43,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label class="form-label" for="host">{{ 'settings.general.connectionDetails.host'|trans }}</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="host" value="{{ app.request.getSchemeAndHttpHost() }}" readonly>
-                            <button class="btn btn-icon-only btn-copy-input-value" type="button">
-                                <i class="ti ti-copy"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="projectUuid">{{ 'settings.general.connectionDetails.uuid'|trans }}</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="projectUuid" value="{{ activeProject.uuid }}" readonly>
-                            <button class="btn btn-icon-only btn-copy-input-value" type="button">
-                                <i class="ti ti-copy"></i>
-                            </button>
-                        </div>
-                    </div>
+                    {% include 'project/snippets/host.html.twig' %}
+                    {% include 'project/snippets/uuid.html.twig' %}
                 </div>
             </div>
             <div class="card">
@@ -75,24 +59,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label class="form-label" for="projectPublicKey">{{ 'settings.general.apiKeys.publicKey'|trans }}</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="projectPublicKey" value="{{ activeProject.publicKey }}" readonly>
-                            <button class="btn btn-icon-only btn-copy-input-value" type="button">
-                                <i class="ti ti-copy"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="projectPrivateKey">{{ 'settings.general.apiKeys.privateKey'|trans }}</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="projectPrivateKey" value="{{ activeProject.privateKey }}" readonly>
-                            <button class="btn btn-icon-only btn-copy-input-value" type="button">
-                                <i class="ti ti-copy"></i>
-                            </button>
-                        </div>
-                    </div>
+                    {% include 'project/snippets/public_key.html.twig' %}
+                    {% include 'project/snippets/private_key.html.twig' %}
                 </div>
             </div>
         </div>

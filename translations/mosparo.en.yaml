@@ -19,7 +19,24 @@ project:
     title: Create project
 
     message:
-      successfullyCreated: The new project was successfully created.
+      successfullyCreatedAndConfigured: The new project was successfully created and configured.
+
+  createWizard:
+    design:
+      title: Select design
+      introStartWizard: Your project was created successfully. To start using it, please select the design and continue.
+      infoAdvancedMode: You can switch to the advanced mode in the design settings after the wizard, which allows you to adjust the design precisely to your website.
+
+    security:
+      title: Enable security features
+      introSecurity: Please choose the security features you would like to enable.
+      infoSettings: You can enable, disable, or tune these security features in the security settings after the wizard.
+
+    connection:
+      title: Connection details
+      savedSuccessfully: The design and security settings were saved successfully. The project is now ready to be used on a website.
+      introConnection: To use mosparo in a website, you have to add the integration to the website and then connect the website with this mosparo project. For this step, please copy and paste the following information into the correct field in the integration.
+      infoSettings: After this wizard, you can find these connection details in the project settings.
 
   form:
     name: Name
@@ -458,13 +475,13 @@ settings:
       intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above (Request delaying and IP lockout).
 
     form:
-      minimumTimeActive: Minimum time active
+      minimumTimeActive: Enable minimum time
       minimumTimeSeconds: Minimum time
       minimumTimeSecondsHelp: In seconds
-      honeypotFieldActive: Honeypot field active
+      honeypotFieldActive: Enable honeypot field
       honeypotFieldName: Field name
       honeypotFieldNameHelp: It has to be a field name which is not already in your form and which is a normal field name like "url" or "address-line-2". Please use only letters, numbers and the dash sign (-). If empty, no honeypot field will be added to the form.
-      delayActive: Request delay active
+      delayActive: Enable request delay
       delayNumberOfAllowedRequests: Number of allowed requests
       delayNumberOfAllowedRequestsHelp: The number of allowed requests before the delay come into place.
       delayDetectionTimeFrame: Detection time frame
@@ -473,7 +490,7 @@ settings:
       delayTimeHelp: In seconds
       delayMultiplicator: Multiplicator
       delayMultiplicatorHelp: The base delay time will be increased with every additional request.
-      lockoutActive: Automatic lockout active
+      lockoutActive: Enable automatic lockout
       lockoutNumberOfAllowedRequests: Number of allowed requests
       lockoutNumberOfAllowedRequestsHelp: The number of allowed requests before the lockout come into place.
       lockoutDetectionTimeFrame: Detection time frame
@@ -928,6 +945,8 @@ action:
   add: Add
   remove: Remove
   save: Save
+  saveAndContinue: Save and continue
+  skipWizard: Skip wizard
   view: View
   edit: Edit
   delete: Delete
@@ -938,6 +957,7 @@ action:
   configure: Configure
   checkForUpdate: Check for update
   installUpdate: Install update
+  goToTheDashboard: Go to the dashboard
 
 # General values
 general:

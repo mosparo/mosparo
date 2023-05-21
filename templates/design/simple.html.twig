@@ -1,0 +1,119 @@
+{% trans_default_domain 'mosparo' %}
+
+<p>
+    {{ 'settings.design.simpleDesign.introColors'|trans }}
+</p>
+<p>
+    {{ 'settings.design.simpleDesign.introPreview'|trans }}
+</p>
+<div class="row contrast-ratio-group">
+    <div class="col-12 col-xl-6">
+        <h3>{{ 'settings.design.subtitles.colorAndDimensionSettings'|trans }}</h3>
+        <div class="row">
+            <div class="col-12 mb-3">
+                {{ form_row(form.colorWebsiteBackground) }}
+            </div>
+            <div class="col-12 mb-3">
+                {{ form_row(form.colorWebsiteForeground) }}
+            </div>
+            <div class="col-12 mb-3">
+                {{ form_row(form.colorWebsiteAccent) }}
+            </div>
+            <div class="col-12 mb-3">
+                {{ form_row(form.boxSize) }}
+            </div>
+        </div>
+
+        {{ form_row(form.colorHover) }}
+        {{ form_row(form.colorSuccess) }}
+        {{ form_row(form.colorFailure) }}
+    </div>
+    <div class="col-12 col-xl-6">
+        <h3>{{ 'settings.design.subtitles.preview'|trans }}</h3>
+        <div class="card mb-3">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                    <li class="nav-item only-icon">
+                        <a href="#tabs-preview-normal" class="nav-link active" data-bs-toggle="tab">
+                            <i class="ti ti-checkbox"></i>
+                            <span class="visible-when-active">
+                                {{ 'settings.design.subtitles.colors.normal'|trans }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item only-icon">
+                        <a href="#tabs-preview-focus" class="nav-link" data-bs-toggle="tab">
+                            <i class="ti ti-focus"></i>
+                            <span class="visible-when-active">
+                                {{ 'settings.design.subtitles.colors.focus'|trans }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item only-icon">
+                        <a href="#tabs-preview-loading" class="nav-link" data-bs-toggle="tab">
+                            <i class="ti ti-loader"></i>
+                            <span class="visible-when-active">
+                                {{ 'settings.design.subtitles.colors.loading'|trans }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item only-icon">
+                        <a href="#tabs-preview-success" class="nav-link" data-bs-toggle="tab">
+                            <i class="ti ti-check"></i>
+                            <span class="visible-when-active">
+                                {{ 'settings.design.subtitles.colors.success'|trans }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item only-icon">
+                        <a href="#tabs-preview-error" class="nav-link" data-bs-toggle="tab">
+                            <i class="ti ti-exclamation-circle"></i>
+                            <span class="visible-when-active">
+                                {{ 'settings.design.subtitles.colors.failure'|trans }}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane active show" id="tabs-preview-normal">
+                        <div class="design-mode-page-container simple-design-mode">
+                            <div class="design-mode-inner-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="normal"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabs-preview-focus">
+                        <div class="design-mode-page-container simple-design-mode">
+                            <div class="design-mode-inner-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="focus"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabs-preview-loading">
+                        <div class="design-mode-page-container simple-design-mode">
+                            <div class="design-mode-inner-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="loading"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabs-preview-success">
+                        <div class="design-mode-page-container simple-design-mode">
+                            <div class="design-mode-inner-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="success"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabs-preview-error">
+                        <div class="design-mode-page-container simple-design-mode">
+                            <div class="design-mode-inner-page-container">
+                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="failure"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

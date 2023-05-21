@@ -1,0 +1,11 @@
+{% trans_default_domain 'mosparo' %}
+
+<div class="form-group">
+    <label class="form-label" for="projectPublicKey">{{ 'settings.general.apiKeys.publicKey'|trans }}</label>
+    <div class="input-group">
+        <input type="text" class="form-control" id="projectPublicKey" value="{{ activeProject.publicKey }}" readonly>
+        <button class="btn btn-icon-only btn-copy-input-value" type="button">
+            <i class="ti ti-copy"></i>
+        </button>
+    </div>
+</div>
