@@ -249,7 +249,7 @@ class ProjectController extends AbstractController
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'error',
+                    'success',
                     $this->translator->trans(
                         'project.delete.message.successfullyDeleted',
                         ['%projectName%' => $project->getName()],

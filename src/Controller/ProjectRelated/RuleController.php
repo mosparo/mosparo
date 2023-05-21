@@ -170,7 +170,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'error',
+                    'success',
                     $this->translator->trans(
                         'rule.delete.message.successfullyDeleted',
                         ['%ruleName%' => $rule->getName()],

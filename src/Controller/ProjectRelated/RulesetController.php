@@ -144,7 +144,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'error',
+                    'success',
                     $this->translator->trans(
                         'ruleset.delete.message.successfullyDeleted',
                         ['%rulesetName%' => $ruleset->getName()],
