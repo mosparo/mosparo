@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 
@@ -74,17 +76,13 @@ class UserController extends AbstractController
      */
     public function modifyUser(Request $request, EntityManagerInterface $entityManager, TokenGenerator $tokenGenerator, PasswordHelper $passwordHelper, User $user = null): Response
     {
-        $sendPasswordAttributes = [];
         $passwordHelp = 'administration.user.help.password';
         $isNewUser = false;
-        $passwordDisabled = false;
         if ($user === null) {
             $user = new User();
             $isNewUser = true;
 
             $passwordHelp = '';
-            $passwordDisabled = true;
-            $sendPasswordAttributes['checked'] = 'checked';
         }
 
         $isActiveUserAttributes = [];
@@ -103,9 +101,12 @@ class UserController extends AbstractController
                 'label' => 'administration.user.form.password',
                 'mapped' => false,
                 'required' => false,
+                'is_new_user' => $isNewUser,
                 'is_new_password' => (!$isNewUser),
                 'help' => $passwordHelp,
-                'disabled' => $passwordDisabled,
+                'constraints' => [
+                    new Callback([$this, 'validatePasswordField'])
+                ]
             ])
             ->add('isActiveUser', CheckboxType::class, [
                 'label' => 'administration.user.form.isActiveUser',
@@ -123,7 +124,7 @@ class UserController extends AbstractController
                 'label' => 'administration.user.form.sendPasswordResetEmail',
                 'mapped' => false,
                 'required' => false,
-                'attr' => $sendPasswordAttributes,
+                'data' => ($isNewUser),
             ])
             ->getForm();
 
@@ -131,6 +132,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $sendPasswordResetEmail = ($form->get('sendPasswordResetEmail')->getData());
             if ($isNewUser && $sendPasswordResetEmail) {
+                // Set a random password for the user
                 $user->setPassword($this->userPasswordHasher->hashPassword(
                     $user,
                     $tokenGenerator->generateToken()
@@ -252,5 +254,31 @@ class UserController extends AbstractController
         return $this->render('administration/user/delete.html.twig', [
             'user' => $user,
         ]);
+    }
+
+    public function validatePasswordField($userData, ExecutionContextInterface $context)
+    {
+        $form = $context->getRoot();
+        $field = $form->get('password');
+        $isNewUser = $field->getConfig()->getOption('is_new_user', false);
+
+        // This constraint is only relevant to new users
+        if (!$isNewUser) {
+            return;
+        }
+
+        // If we send an email, this constraint is not relevant
+        $sendPasswordResetEmail = ($form->get('sendPasswordResetEmail')->getData());
+        if (!$sendPasswordResetEmail) {
+            $passwordField = $form->get('password');
+
+            // If the password field is empty, we cannot save the user, so we have to show the violation
+            if (empty($passwordField->get('plainPassword')->getData())) {
+                $context
+                    ->buildViolation('password.form.constraint.notBlank')
+                    ->atPath('children[password][plainPassword][first].data')
+                    ->addViolation();
+            }
+        }
     }
 }

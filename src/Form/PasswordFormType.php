@@ -15,13 +15,11 @@ class PasswordFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $firstFieldLabel = 'password.form.password';
-        $constraints = [];
+        $constraints = $options['constraints'] ?? [];
         if ($options['required']) {
-            $constraints = [
-                new NotBlank([
-                    'message' => 'password.form.constraint.notBlank',
-                ]),
-            ];
+            $constraints[] = new NotBlank([
+                'message' => 'password.form.constraint.notBlank',
+            ]);
         }
 
         $constraints[] = new Length([
@@ -62,6 +60,7 @@ class PasswordFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'is_new_user' => false,
             'is_new_password' => false,
             'translation_domain' => 'mosparo',
         ]);
