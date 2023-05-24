@@ -123,7 +123,8 @@ services:
             $downloadDirectory: '%kernel.project_dir%/var/data/geoip2'
 
     Mosparo\Helper\SetupHelper:
-        class: Mosparo\Helper\SetupHelper
+        arguments:
+            $projectDirectory: '%kernel.project_dir%'
 
     Mosparo\Helper\ConfigHelper:
         arguments:

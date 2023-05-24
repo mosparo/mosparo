@@ -971,6 +971,7 @@ setup:
     types:
       general: General
       phpExtensions: PHP extensions
+      writeAccess: Write access
 
     subtypes:
       minPhpVersion: Minimum PHP version
@@ -980,6 +981,8 @@ setup:
       missing: Missing
       okay: Okay
       notOkay: Not okay
+      writable: Writable
+      notWritable: Not writable
 
     optional: optional
 
