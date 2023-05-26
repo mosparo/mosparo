@@ -245,5 +245,13 @@ submission:
       title: Spam
       isSpam: Adalah spam
       spamRating: Peringkat spam
+      submittedAt: Dikirim pada
+    verification:
+      verifiedAt: Diverifikasi di
+      minimumTime:
+        timeDifferenceInSeconds: '%seconds% detik'
+        requiredTime: Waktu yang dibutuhkan
+      title: Verifikasi
+      isValid: Adalah benar
   title: Pengajuan
   backToList: Kembali ke kiriman
