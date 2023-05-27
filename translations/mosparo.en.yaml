@@ -1009,6 +1009,7 @@ form:
   choices:
     systemDefault: Default setting
     browserLanguage: Browser language
+  clearField: Clear field
 
 interface:
   colorModes:

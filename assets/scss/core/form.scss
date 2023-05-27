@@ -74,3 +74,10 @@ form .colorpicker-container {
 .form-text {
     display: block;
 }
+
+.input-group-text {
+    .link-secondary:hover,
+    .link-secondary:focus {
+        text-decoration: none;
+    }
+}

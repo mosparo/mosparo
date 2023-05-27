@@ -270,4 +270,21 @@ $(document).ready(function () {
         ev.preventDefault();
         return false;
     }).attr("autocomplete", "off");
+
+    $('.input-with-clear-button').each(function () {
+        let container = $(this);
+        let input = container.find('input');
+        let link = container.find('a');
+        input.on('keyup change', function () {
+            if ($(this).val() === '') {
+                link.hide();
+            } else {
+                link.show();
+            }
+        }).trigger('change');
+
+        link.click(function () {
+            input.val('').trigger('change');
+        });
+    });
 });
