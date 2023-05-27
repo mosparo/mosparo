@@ -19,33 +19,49 @@ class SetupHelper
 
     protected TranslatorInterface $translator;
 
+    protected string $projectDirectory;
+
     protected array $prerequisites = [
         'general' => [
             'minPhpVersion' => '8.1.10',
         ],
         'phpExtensions' => [
             'ctype' => true,
+            'curl' => true,
+            'dom' => true,
+            'filter' => true,
             'gd' => true,
             'iconv' => true,
             'intl' => true,
             'json' => true,
+            'libxml' => true,
+            'openssl' => true,
+            'pcre' => true,
             'pdo' => true,
             'pdo_mysql' => true,
-            'openssl' => true,
+            'simplexml' => true,
+            'tokenizer' => true,
+            'xml' => true,
             'zip' => true,
             'posix' => false,
             'sodium' => false,
             'Zend OPcache' => false,
             'curl' => false,
         ],
+        'writeAccess' => [
+            '/config/env.mosparo.php' => true,
+            '/public/resources/' => true,
+            '/var/' => true,
+        ]
     ];
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, ConfigHelper $configHelper, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, ConfigHelper $configHelper, TranslatorInterface $translator, string $projectDirectory)
     {
         $this->entityManager = $entityManager;
         $this->userPasswordHasher = $userPasswordHasher;
         $this->configHelper = $configHelper;
         $this->translator = $translator;
+        $this->projectDirectory = $projectDirectory;
     }
 
     public function checkPrerequisites(): array
@@ -85,6 +101,26 @@ class SetupHelper
                         'required' => $isRequired,
                         'available' => ($version != ''),
                         'pass' => ($version != ''),
+                    ];
+                }
+            } else if ($type === 'writeAccess') {
+                foreach ($prerequisites as $path => $isRequired) {
+                    $fullPath = $this->projectDirectory . $path;
+                    if (file_exists($fullPath)) {
+                        $isWritable = is_writable($fullPath);
+                    } else {
+                        $parentPath = dirname($fullPath);
+                        $isWritable = is_writable($parentPath);
+                    }
+
+                    if (!$isWritable) {
+                        $meetPrerequisites = false;
+                    }
+
+                    $checkedPrerequisites[$type][$path] = [
+                        'required' => $isRequired,
+                        'available' => $path,
+                        'pass' => $isWritable,
                     ];
                 }
             }

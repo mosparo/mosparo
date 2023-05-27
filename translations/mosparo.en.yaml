@@ -1068,6 +1068,7 @@ setup:
       general: General
       phpExtensions: PHP extensions
       internetConnection: Internet connection
+      writeAccess: Write access
 
     subtypes:
       minPhpVersion: Minimum PHP version
@@ -1077,6 +1078,8 @@ setup:
       missing: Missing
       okay: Okay
       notOkay: Not okay
+      writable: Writable
+      notWritable: Not writable
 
     optional: optional
 
@@ -1095,7 +1098,7 @@ setup:
       password: Password
 
   other:
-    title: Other information
+    title: Other informations
     introduction: We have some other values we need. Please fill out the fields below.
 
     form:

@@ -995,6 +995,7 @@ setup:
       general: Allgemein
       phpExtensions: PHP-Erweiterungen
       internetConnection: Internet-Verbindung
+      writeAccess: Schreibzugriff
 
     subtypes:
       minPhpVersion: Mindest-PHP-Version
@@ -1004,6 +1005,8 @@ setup:
       missing: Fehlt
       okay: In Ordnung
       notOkay: Nicht in Ordnung
+      writable: Beschreibbar
+      notWritable: Nicht beschreibbar
 
     optional: optional
 

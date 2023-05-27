@@ -49,13 +49,21 @@ We have therefore defined our main objective: to collect only data that is neces
 - PHP 8.1.10 or newer
 - PHP extensions
   - ctype
+  - curl
+  - dom
+  - filter
   - gd
   - iconv
   - intl
   - json
+  - libxml
+  - openssl
+  - pcre
   - pdo
   - pdo_mysql
-  - openssl
+  - simplexml
+  - tokenizer
+  - xml
   - zip
   - posix (optional)
   - sodium (optional)

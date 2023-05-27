@@ -29,6 +29,8 @@
                     {{ 'setup.prerequisites.types.general'|trans }}
                 {% elseif type == 'phpExtensions' %}
                     {{ 'setup.prerequisites.types.phpExtensions'|trans }}
+                {% elseif type == 'writeAccess' %}
+                    {{ 'setup.prerequisites.types.writeAccess'|trans }}
                 {% endif %}
             </h3>
 
@@ -40,6 +42,8 @@
                             {% if type == 'general' %}
                                 {{ ('setup.prerequisites.subtypes.' ~ subtype)|trans }}
                             {% elseif type == 'phpExtensions' %}
+                                {{ subtype }}
+                            {% elseif type == 'writeAccess' %}
                                 {{ subtype }}
                             {% endif %}
                         </strong>
@@ -53,6 +57,8 @@
                             <span class="text-success">
                                 {% if type == 'phpExtensions' %}
                                     {{ 'setup.prerequisites.results.available'|trans }}
+                                {% elseif type == 'writeAccess' %}
+                                    {{ 'setup.prerequisites.results.writable'|trans }}
                                 {% else %}
                                     {{ 'setup.prerequisites.results.okay'|trans }}
                                 {% endif %}
@@ -65,6 +71,8 @@
                                     {% if not prerequisite.required %}
                                         {% set showOptionalExtensionsAlert = true %}
                                     {% endif %}
+                                {% elseif type == 'writeAccess' %}
+                                    {{ 'setup.prerequisites.results.notWritable'|trans }}
                                 {% else %}
                                     {{ 'setup.prerequisites.results.notOkay'|trans }}
                                 {% endif %}
