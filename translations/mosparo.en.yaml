@@ -328,6 +328,12 @@ submission:
     verifiedAt: Verified at
     actions: Actions
 
+  filter:
+    options:
+      all: All submissions
+      spam: Spam submissions
+      valid: Valid submissions
+
   view:
     title: Submission %submissionId%
 
