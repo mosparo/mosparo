@@ -621,6 +621,30 @@ administration:
     message:
       savedSuccessfully: The settings were saved successfully.
 
+  security:
+    title: Security settings
+    description: Configure various security related settings which apply to your mosparo installation.
+
+    reverseProxy:
+      title: Reverse proxy
+      providerPresets: Provider presets
+      intro: In case you're using a reverse proxy to serve mosparo, you have to configure these settings so mosparo knows how to detect the client's IP address correctly.
+
+      modifyNotAllowed: These settings are overwritten in the environment file of mosparo. You cannot change any settings here.
+
+      form:
+        trustedProxies: List of trusted proxies
+        trustedProxiesHelp: Define all trusted proxies. These can be defined as simple IP address or as a subnet of IP addresses. The localhost (127.0.0.1) is always added to the list automatically.
+        trustedProxiesIncludeRemoteAddr: Include REMOTE_ADDR in trusted proxies
+        trustedProxiesIncludeRemoteAddrHelp: This option will add REMOTE_ADDR to the list of trusted proxies. This can be dangerous since it accepts the Forwarded headers from all possible clients.
+        replaceForwardedForHeader: Name of the custom remote address header
+        replaceForwardedForHeaderHelp: If required, specify the header's name in which the reverse proxy sends the IP address of the client.
+        replaceForwardedProtoHeader: Name of the custom protocol header
+        replaceForwardedProtoHeaderHelp: If required, specify the header's name in which the reverse proxy sends the request protocol.
+
+    message:
+      savedSuccessfully: The security settings were saved successfully.
+
   user:
     title: Users
     description: Manage all users of this mosparo instance.

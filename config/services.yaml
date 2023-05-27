@@ -34,6 +34,9 @@ parameters:
 
     env(secret): 'SecretMosparoToken'
 
+    env(trusted_proxies): '127.0.0.1'
+    default_trusted_proxies: '%env(trusted_proxies)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -186,3 +189,7 @@ services:
     Mosparo\Controller\Administration\SystemController:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+
+    Mosparo\Controller\Administration\SecurityController:
+        arguments:
+            $trustedProxies: '%kernel.trusted_proxies%'

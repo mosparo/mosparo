@@ -1,0 +1,124 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.settings.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.settings.title'|trans }}{% endblock %}
+
+{% block administrationPageBody %}
+    {{ form_start(form) }}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">{{ 'administration.security.reverseProxy.title'|trans }}</h3>
+
+                <div class="card-actions">
+                    <div class="dropdown">
+                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" {% if not modifyTrustedSettingsAllowed %}disabled{% endif %}>
+                            <i class="ti ti-cloud-computing"></i>
+                            {{ 'administration.security.reverseProxy.providerPresets'|trans }}
+                        </button>
+                        <div class="dropdown-menu">
+                            {% for provider in providers %}
+                                <a href="#" class="dropdown-item provider-preset" data-settings="{{ provider.settings|json_encode }}">
+                                    {{ provider.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p>
+                    {{ 'administration.security.reverseProxy.intro'|trans }}
+                </p>
+                {% if not modifyTrustedSettingsAllowed %}
+                    <div class="alert alert-info">
+                        {{ 'administration.security.reverseProxy.modifyNotAllowed'|trans }}
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 mb-3 trusted-proxies-container">
+                        {{ form_row(form.trustedProxies) }}
+                        {{ form_row(form.trustedProxiesIncludeRemoteAddr) }}
+                    </div>
+                    <div class="col-sm-12 col-lg-6 mb-3">
+                        <div class="form-group">
+                            {{ form_label(form.replaceForwardedForHeader) }}
+                            <div class="input-group input-group-flat input-with-clear-button">
+                                {{ form_widget(form.replaceForwardedForHeader) }}
+                                <span class="input-group-text">
+                                    <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="{{ 'form.clearField'|trans }}" data-bs-original-title="{{ 'form.clearField'|trans }}">
+                                        <i class="ti ti-x"></i>
+                                    </a>
+                                </span>
+                            </div>
+                            {{ form_help(form.replaceForwardedForHeader) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.replaceForwardedProtoHeader) }}
+                            <div class="input-group input-group-flat input-with-clear-button">
+                                {{ form_widget(form.replaceForwardedProtoHeader) }}
+                                <span class="input-group-text">
+                                    <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="{{ 'form.clearField'|trans }}" data-bs-original-title="{{ 'form.clearField'|trans }}">
+                                        <i class="ti ti-x"></i>
+                                    </a>
+                                </span>
+                            </div>
+                            {{ form_help(form.replaceForwardedProtoHeader) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 mb-3 mb-lg-0">
+                    </div>
+                    <div class="col-sm-12 col-lg-6">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto ms-auto">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-device-floppy"></i>
+                    {{ 'action.save'|trans }}
+                </button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('.provider-preset').click(function () {
+                    let settings = $(this).data('settings');
+                    if (typeof settings !== 'object') {
+                        return;
+                    }
+
+                    let collectionWidget = $('.trusted-proxies-container .collection-widget');
+                    collectionWidget.find('li').remove();
+                    if (settings.trusted_proxies.length > 0) {
+                        for (let idx in settings.trusted_proxies) {
+                            let proxy = settings.trusted_proxies[idx];
+
+                            collectionWidget.find('.add-item-button').trigger('click');
+                            collectionWidget.find('li:last-child').find('input[type="text"]').val(proxy);
+                        }
+                    } else {
+                        collectionWidget.find('.add-item-button').trigger('click');
+                    }
+
+                    $('input[name="form[trustedProxiesIncludeRemoteAddr]"]').prop('checked', settings.trusted_proxies_include_remote_addr);
+
+                    $('input[name="form[replaceForwardedForHeader]"]').val(settings.replace_forwarded_for_header).trigger('change');
+                    $('input[name="form[replaceForwardedProtoHeader]"]').val(settings.replace_forwarded_proto_header).trigger('change');
+                });
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}
