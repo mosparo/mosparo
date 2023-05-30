@@ -1,6 +1,7 @@
 project:
   backToList: Kembali ke proyek
-  infoCreateProjectOrRequestAccess: Membuat proyek baru atau meminta akses ke proyek lain.
+  infoCreateProjectOrRequestAccess: Membuat proyek baru atau meminta akses ke proyek
+    lain.
   title: Proyek
   infoNoProjectAvailable: Tidak ada proyek yang tersedia
   action:
@@ -9,16 +10,17 @@ project:
     goto: Pergi ke proyek
   create:
     title: Buat proyek
-    message:
-      successfullyCreated: Proyek baru berhasil dibuat.
   form:
     name: Nama
     description: Deskripsi
     hosts: Pemilik
-    statusHelp: Aktifkan atau nonaktifkan deteksi spam. Jika tidak aktif, sistem akan mencatat semua kiriman tetapi tidak akan mencegah kiriman apa pun.
+    statusHelp: Aktifkan atau nonaktifkan deteksi spam. Jika tidak aktif, sistem akan
+      mencatat semua kiriman tetapi tidak akan mencegah kiriman apa pun.
     spamScore: Skor spam
     hostsHelp: Masukkan semua host yang akan disertakan dalam proyek ini.
-    spamScoreHelp: Tentukan angka dari mana sebuah kiriman akan dinilai sebagai spam. Jika peringkat suatu kiriman berada di atas angka ini, maka kiriman tersebut akan dinilai sebagai spam.
+    spamScoreHelp: Tentukan angka dari mana sebuah kiriman akan dinilai sebagai spam.
+      Jika peringkat suatu kiriman berada di atas angka ini, maka kiriman tersebut
+      akan dinilai sebagai spam.
     status: Status
   delete:
     confirm: Apakah Anda benar-benar ingin menghapus proyek %projectName%?
@@ -61,7 +63,8 @@ rule:
       items: Item
       itemsHelp: Tambahkan satu item per baris.
       rating: Peringkat
-      ratingHelp: Jika tidak disetel, peringkat defaultnya adalah 1,0. Jika peringkat diatur ke 0,0, item tidak akan dinilai sebagai item spam.
+      ratingHelp: Jika tidak disetel, peringkat defaultnya adalah 1,0. Jika peringkat
+        diatur ke 0,0, item tidak akan dinilai sebagai item spam.
     ruleType: Jenis aturan
     rule:
       title: Aturan
@@ -69,7 +72,10 @@ rule:
       description: Deskripsi
       status: Status
       spamRatingFactor: Faktor peringkat spam
-      spamRatingFactorHelp: Dengan faktor peringkat spam Anda dapat menentukan faktor yang memperkuat atau melemahkan entri aturan ini. Jika nilainya lebih besar dari 1.0, entri-entri tersebut diperkuat, jika nilainya kurang dari 1.0, entri-entri tersebut dilemahkan.
+      spamRatingFactorHelp: Dengan faktor peringkat spam Anda dapat menentukan faktor
+        yang memperkuat atau melemahkan entri aturan ini. Jika nilainya lebih besar
+        dari 1.0, entri-entri tersebut diperkuat, jika nilainya kurang dari 1.0, entri-entri
+        tersebut dilemahkan.
   delete:
     confirm: Apakah Anda benar-benar ingin menghapus aturan %ruleName%?
     title: Hapus aturan %ruleName%
@@ -81,7 +87,9 @@ rule:
       intro: Jenis aturan domain memungkinkan untuk memfilter domain.
       domain:
         title: domain
-        intro: Masukkan domain yang tidak diizinkan untuk mengirimkan kiriman. Jika Anda memasukkan domain, itu juga akan menangkap semua alamat email dengan domain ini.
+        intro: Masukkan domain yang tidak diizinkan untuk mengirimkan kiriman. Jika
+          Anda memasukkan domain, itu juga akan menangkap semua alamat email dengan
+          domain ini.
       label: domain
       placeholder: example.com
       title: domain
@@ -97,54 +105,77 @@ rule:
     ipAddress:
       label: Alamat IP/Subnet
       subnet:
-        intro: Masukkan subnet dengan topeng yang tidak diizinkan untuk melakukan pengiriman apa pun.
+        intro: Masukkan subnet dengan topeng yang tidak diizinkan untuk melakukan
+          pengiriman apa pun.
         title: subnet
       title: Alamat IP
       shortIntro: Memungkinkan untuk memfilter menurut alamat ip dan subnet
       intro: Jenis aturan alamat IP memungkinkan untuk memfilter alamat IP atau subnet.
       placeholder: 0.0.0.0
       ipAddress:
-        intro: Masukkan alamat IP yang tidak diizinkan untuk melakukan pengiriman apa pun.
+        intro: Masukkan alamat IP yang tidak diizinkan untuk melakukan pengiriman
+          apa pun.
         title: Alamat IP
     provider:
       title: Provider
-      intro: Jenis aturan penyedia memungkinkan untuk memfilter nomor AS dan kode negara.
-      infoGeoip2: Untuk menggunakan jenis penyedia, diperlukan untuk mengonfigurasi database MindMax GeoLite2, jika tidak, item penyedia tidak akan berpengaruh.
+      intro: Jenis aturan penyedia memungkinkan untuk memfilter nomor AS dan kode
+        negara.
+      infoGeoip2: Untuk menggunakan jenis penyedia, diperlukan untuk mengonfigurasi
+        database MindMax GeoLite2, jika tidak, item penyedia tidak akan berpengaruh.
       shortIntro: Memungkinkan untuk memfilter berdasarkan informasi spesifik penyedia
       label: Nomor/Negara
       asNumber:
         title: nomor AS
-        intro: Masukkan nomor AS yang tidak diizinkan untuk melakukan pengiriman apa pun. Semua alamat IP yang termasuk dalam nomor AS ini akan diblokir.
+        intro: Masukkan nomor AS yang tidak diizinkan untuk melakukan pengiriman apa
+          pun. Semua alamat IP yang termasuk dalam nomor AS ini akan diblokir.
       country:
-        infoCountryBlock: Jika Anda menambahkan negara ke aturan, itu berarti tidak ada seorang pun dari negara ini yang dapat mengajukan kiriman. Meskipun ini terdengar bagus di satu sisi, ini bisa berarti bahwa ini akan memblokir pengguna sebenarnya untuk mengirimkan formulir. Harap berhati-hati dengan opsi ini. Lokalisasi alamat IP yang benar tidak pernah dijamin.
+        infoCountryBlock: Jika Anda menambahkan negara ke aturan, itu berarti tidak
+          ada seorang pun dari negara ini yang dapat mengajukan kiriman. Meskipun
+          ini terdengar bagus di satu sisi, ini bisa berarti bahwa ini akan memblokir
+          pengguna sebenarnya untuk mengirimkan formulir. Harap berhati-hati dengan
+          opsi ini. Lokalisasi alamat IP yang benar tidak pernah dijamin.
         title: Negara
-        intro: Masukkan kode negara ISO yang tidak diperbolehkan untuk melakukan pengiriman apa pun. Semua alamat IP yang terdaftar di negara ini akan ditandai sebagai spam.
+        intro: Masukkan kode negara ISO yang tidak diperbolehkan untuk melakukan pengiriman
+          apa pun. Semua alamat IP yang terdaftar di negara ini akan ditandai sebagai
+          spam.
       action:
         configureGeoip2: Konfigurasi GeoIP2
     unicodeBlock:
       title: Blok Unicode
       shortIntro: Memfilter input berdasarkan karakter yang digunakan.
-      intro: Jenis aturan blok Unicode memungkinkan untuk mengevaluasi penggunaan karakter tertentu.
+      intro: Jenis aturan blok Unicode memungkinkan untuk mengevaluasi penggunaan
+        karakter tertentu.
       block:
-        explanationCounting: Dalam validasi, setiap blok hanya dihitung satu kali, meskipun beberapa karakter dari satu blok digunakan.
+        explanationCounting: Dalam validasi, setiap blok hanya dihitung satu kali,
+          meskipun beberapa karakter dari satu blok digunakan.
         title: Blok
-        intro: Silakan pilih salah satu blok yang harus diberi peringkat yang sesuai selama input. Kemudian masukkan peringkat yang sesuai.
-        hintExtended: Harap dicatat bahwa ada ekstensi dan penambahan beberapa blok, yang juga harus ditambahkan sebagai entri aturan.
-        exampleCounting: Misalkan Anda memasukkan entri aturan dengan blok "Smileys" dengan peringkat 3 poin. Dalam pengiriman, pengguna menggunakan 5 smiley. Pengajuan sekarang dinilai dengan 3 poin karena smiley digunakan.
+        intro: Silakan pilih salah satu blok yang harus diberi peringkat yang sesuai
+          selama input. Kemudian masukkan peringkat yang sesuai.
+        hintExtended: Harap dicatat bahwa ada ekstensi dan penambahan beberapa blok,
+          yang juga harus ditambahkan sebagai entri aturan.
+        exampleCounting: Misalkan Anda memasukkan entri aturan dengan blok "Smileys"
+          dengan peringkat 3 poin. Dalam pengiriman, pengguna menggunakan 5 smiley.
+          Pengajuan sekarang dinilai dengan 3 poin karena smiley digunakan.
       label: Blok Unicode
     userAgent:
       title: Agen pengguna
-      shortIntro: Memungkinkan untuk memfilter menurut kata atau pola tertentu di agen pengguna
+      shortIntro: Memungkinkan untuk memfilter menurut kata atau pola tertentu di
+        agen pengguna
       label: Agen pengguna (Kata/Pola)
       text:
         title: Kata
-        intro: Masukkan kata yang harus dinilai sebagai spam. Anda dapat menggunakan bintang %star% sebagai wildcard. Fungsi pencocokan akan mencari %value%, jadi Anda tidak perlu menambahkan karakter wildcard di awal atau di akhir nilai.
+        intro: Masukkan kata yang harus dinilai sebagai spam. Anda dapat menggunakan
+          bintang %star% sebagai wildcard. Fungsi pencocokan akan mencari %value%,
+          jadi Anda tidak perlu menambahkan karakter wildcard di awal atau di akhir
+          nilai.
       regex:
         title: Ekspresi Reguler
-        intro: Masukkan pola Ekspresi Reguler yang akan cocok dengan kata yang tidak diizinkan. Polanya harus mengikuti persyaratan PHP Regular Expression.
+        intro: Masukkan pola Ekspresi Reguler yang akan cocok dengan kata yang tidak
+          diizinkan. Polanya harus mengikuti persyaratan PHP Regular Expression.
         validation:
           invalidRegexPattern: 'Pola yang dimasukkan tidak valid. Kesalahan: %error%'
-      intro: Jenis aturan agen pengguna memungkinkan untuk memfilter kata dan pola Ekspresi Reguler di agen pengguna pengguna.
+      intro: Jenis aturan agen pengguna memungkinkan untuk memfilter kata dan pola
+        Ekspresi Reguler di agen pengguna pengguna.
     website:
       title: Situs web
       shortIntro: Memungkinkan untuk memfilter berdasarkan situs web tertentu
@@ -153,28 +184,40 @@ rule:
       url:
         intro: Masukkan URL yang tidak diizinkan untuk mengirimkan kiriman.
         title: URL
-        infoProtocol: Disarankan untuk memulai URL dengan protokol atau dengan dua garis miring untuk URL yang tidak bergantung protokol. Jika nilai tidak dimulai dengan protokol, aturan dapat cocok dengan URL yang salah.
+        infoProtocol: Disarankan untuk memulai URL dengan protokol atau dengan dua
+          garis miring untuk URL yang tidak bergantung protokol. Jika nilai tidak
+          dimulai dengan protokol, aturan dapat cocok dengan URL yang salah.
       intro: Jenis aturan situs web memungkinkan untuk memfilter URL.
     word:
       title: Kata
       shortIntro: Memungkinkan untuk memfilter menurut kata atau pola tertentu
-      intro: Jenis aturan kata memungkinkan untuk memfilter kata dan pola Ekspresi Reguler.
+      intro: Jenis aturan kata memungkinkan untuk memfilter kata dan pola Ekspresi
+        Reguler.
       label: Kata/Pola
       text:
         title: Teks
-        intro: Masukkan kata yang harus dinilai sebagai spam. Anda dapat menggunakan bintang %star% sebagai wildcard. Fungsi pencocokan akan mencari %value%, jadi Anda tidak perlu menambahkan karakter wildcard di awal atau di akhir nilai.
+        intro: Masukkan kata yang harus dinilai sebagai spam. Anda dapat menggunakan
+          bintang %star% sebagai wildcard. Fungsi pencocokan akan mencari %value%,
+          jadi Anda tidak perlu menambahkan karakter wildcard di awal atau di akhir
+          nilai.
       regex:
         title: Ekspresi Reguler
         validation:
           invalidRegexPattern: 'Pola yang dimasukkan tidak valid. Kesalahan: %error%'
-        intro: Masukkan pola Ekspresi Reguler yang akan cocok dengan kata yang tidak diizinkan. Polanya harus mengikuti persyaratan PHP Regular Expression.
+        intro: Masukkan pola Ekspresi Reguler yang akan cocok dengan kata yang tidak
+          diizinkan. Polanya harus mengikuti persyaratan PHP Regular Expression.
     rating:
       title: Nilai
-      infoCalculationMethod: Nilai peringkat spam akan dihitung dengan mengalikan peringkat item dan faktor peringkat spam yang ditentukan dalam aturan.
+      infoCalculationMethod: Nilai peringkat spam akan dihitung dengan mengalikan
+        peringkat item dan faktor peringkat spam yang ditentukan dalam aturan.
       placeholder: Peringkat
-      intro: Jika suatu item mendapatkan peringkat spam yang lebih tinggi, Anda dapat menetapkan peringkat spam tambahan untuk item tersebut.
-      infoDefaultAndDataType: Peringkat adalah angka mengambang dari %zero% hingga %unlimited%. Jika tidak ada peringkat yang ditentukan, peringkat standarnya adalah %one%.
-      infoValueEqualZero: Jika rating disetel ke %zero%, item tidak akan terdeteksi sebagai spam karena nilai rating spam akan menjadi %zero%.
+      intro: Jika suatu item mendapatkan peringkat spam yang lebih tinggi, Anda dapat
+        menetapkan peringkat spam tambahan untuk item tersebut.
+      infoDefaultAndDataType: Peringkat adalah angka mengambang dari %zero% hingga
+        %unlimited%. Jika tidak ada peringkat yang ditentukan, peringkat standarnya
+        adalah %one%.
+      infoValueEqualZero: Jika rating disetel ke %zero%, item tidak akan terdeteksi
+        sebagai spam karena nilai rating spam akan menjadi %zero%.
   edit:
     title: Edit aturan %ruleName%
     message:
@@ -197,7 +240,10 @@ ruleset:
     message:
       successfullySaved: Kumpulan aturan berhasil disimpan.
     spamRatingFactor: Faktor peringkat spam
-    spamRatingFactorHelp: Dengan faktor peringkat spam Anda dapat menentukan faktor yang memperkuat atau melemahkan semua aturan dari kumpulan aturan ini. Jika nilainya lebih besar dari 1,0 maka aturan akan diperkuat, jika nilainya kurang dari 1,0 maka aturan akan diperlemah.
+    spamRatingFactorHelp: Dengan faktor peringkat spam Anda dapat menentukan faktor
+      yang memperkuat atau melemahkan semua aturan dari kumpulan aturan ini. Jika
+      nilainya lebih besar dari 1,0 maka aturan akan diperkuat, jika nilainya kurang
+      dari 1,0 maka aturan akan diperlemah.
   view:
     title: Lihat kumpulan aturan %rulesetName%
     details:

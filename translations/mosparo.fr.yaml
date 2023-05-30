@@ -15,19 +15,21 @@ project:
     goto: Aller au projet
   create:
     title: Créer un projet
-    message:
-      successfullyCreated: Le nouveau projet a bien été créé.
   form:
     status: État
     name: Nom
     description: Description
     hosts: Hôtes
     hostsHelp: Veuillez indiquer tous les hôtes que ce projet inclura.
-    statusHelp: Activer ou désactiver la détection des spams. Si désactivé, le système enregistrera toutes les soumissions mais n'en empêchera aucune.
+    statusHelp: Activer ou désactiver la détection des spams. Si désactivé, le système
+      enregistrera toutes les soumissions mais n'en empêchera aucune.
     spamScore: Score de spam
-    spamScoreHelp: Définit le nombre à partir duquel une soumission sera classée comme spam. Si l'évaluation d'une soumission est supérieure à ce nombre, la soumission est considérée comme du spam.
+    spamScoreHelp: Définit le nombre à partir duquel une soumission sera classée comme
+      spam. Si l'évaluation d'une soumission est supérieure à ce nombre, la soumission
+      est considérée comme du spam.
   infoNoProjectAvailable: Aucun projet disponible
-  infoCreateProjectOrRequestAccess: Créez un nouveau projet ou demandez l'accès à un autre projet.
+  infoCreateProjectOrRequestAccess: Créez un nouveau projet ou demandez l'accès à
+    un autre projet.
   roles:
     reader: Lecteur
     editor: Éditeur
@@ -78,7 +80,8 @@ rule:
     ipAddress:
       title: Adresse IP
       shortIntro: Permet de filtrer par adresses IP et sous-réseaux
-      intro: Le type de règle relative à l'adresse IP permet de filtrer les adresses IP ou les sous-réseaux.
+      intro: Le type de règle relative à l'adresse IP permet de filtrer les adresses
+        IP ou les sous-réseaux.
       label: Adresse IP/ Sous-réseau
       placeholder: 0.0.0.0
       ipAddress:
@@ -125,7 +128,9 @@ rule:
       items: Éléments
       itemsHelp: Ajoutez un élément par ligne.
       rating: Évaluation
-      ratingHelp: Si elle n'est pas définie, l'évaluation par défaut est de 1,0. Si l'évaluation est fixée à 0,0, les éléments ne seront pas considérés comme des spams.
+      ratingHelp: Si elle n'est pas définie, l'évaluation par défaut est de 1,0. Si
+        l'évaluation est fixée à 0,0, les éléments ne seront pas considérés comme
+        des spams.
   title: Règles
   backToList: Revenir aux règles
   createChooseType:
@@ -220,7 +225,8 @@ ruleset:
   title: Ensembles de règles
   backToList: Revenir aux ensembles de règles
   message:
-    errorWhileUpdating: "Une erreur s'est produite lors de la mise à jour de l'ensemble de règle :"
+    errorWhileUpdating: "Une erreur s'est produite lors de la mise à jour de l'ensemble
+      de règle :"
   list:
     name: Nom
     status: État
@@ -260,7 +266,8 @@ settings:
       boxRadius: Arrondi de la boîte
       boxBorderWidth: Largeur de bordure
       showMosparoLogo: Afficher le logo de mosparo sous la case à cocher
-      showPingAnimation: Afficher une animation pour mettre en évidence la case à cocher
+      showPingAnimation: Afficher une animation pour mettre en évidence la case à
+        cocher
     subtitles:
       colors:
         success: Succès
@@ -283,7 +290,8 @@ settings:
         large: Grande
     message:
       successfullySaved: Les paramètres d'apparence ont bien été enregistrés.
-      boxRadiusTooLarge: Le logo ne peut être affiché que si l'arrondi de la boîte est en dessous d'une certaine valeur.
+      boxRadiusTooLarge: Le logo ne peut être affiché que si l'arrondi de la boîte
+        est en dessous d'une certaine valeur.
   general:
     apiKeys:
       reissueApiKeys:
@@ -291,7 +299,8 @@ settings:
         confirm: Voulez-vous vraiment renouveler les clés d'API pour le projet %projectName% ?
         message:
           successfullyReissued: Les clés d'API ont bien été renouvelées.
-          errorOnlyOwner: Seul le propriétaire d'un projet peut renouveler les clés d'API.
+          errorOnlyOwner: Seul le propriétaire d'un projet peut renouveler les clés
+            d'API.
       title: Clés d'API
       publicKey: Clé publique
       privateKey: Clé privée
@@ -310,7 +319,8 @@ settings:
   security:
     form:
       delayNumberOfAllowedRequests: Nombre de requêtes autorisées
-      delayNumberOfAllowedRequestsHelp: Nombre de requêtes autorisées avant l'apparition du délai.
+      delayNumberOfAllowedRequestsHelp: Nombre de requêtes autorisées avant l'apparition
+        du délai.
       delayDetectionTimeFrameHelp: En secondes
       minimumTimeActive: Temps d'activité minimal
       minimumTimeSeconds: Temps minimal
@@ -320,15 +330,19 @@ settings:
       delayMultiplicator: Multiplicateur
       lockoutActive: Verrouillage automatique actif
       lockoutNumberOfAllowedRequests: Nombre de requêtes autorisées
-      delayMultiplicatorHelp: Le délai par défaut sera augmenté à chaque nouvelle requête.
-      lockoutNumberOfAllowedRequestsHelp: Le nombre de requêtes autorisées avant le verrouillage.
+      delayMultiplicatorHelp: Le délai par défaut sera augmenté à chaque nouvelle
+        requête.
+      lockoutNumberOfAllowedRequestsHelp: Le nombre de requêtes autorisées avant le
+        verrouillage.
       lockoutDetectionTimeFrameHelp: En secondes
       lockoutTime: Délai de verrouillage par défaut
       lockoutTimeHelp: En secondes
       lockoutMultiplicator: Multiplicateur
-      lockoutMultiplicatorHelp: Le délai de verrouillage par défaut sera augmenté à chaque nouvelle requête.
+      lockoutMultiplicatorHelp: Le délai de verrouillage par défaut sera augmenté
+        à chaque nouvelle requête.
       ipAllowList: Adresses IP et sous-réseaux autorisés en permanence
-      ipAllowListHelp: 'Spécifiez une adresse IP ou sous-réseau par ligne. Par exemple : 19.168.1.13 ou 192.168.1.0/24'
+      ipAllowListHelp: 'Spécifiez une adresse IP ou sous-réseau par ligne. Par exemple :
+        19.168.1.13 ou 192.168.1.0/24'
     title: Sécurité
     ipLockout:
       title: Verrouillage d'IP
@@ -337,7 +351,8 @@ settings:
     message:
       successfullySaved: Les paramètres de sécurité ont bien été enregistrés.
     validation:
-      honeypotFieldNameInvalidCharacter: Veuillez n'utiliser que des lettres, des chiffres et le tiret (-).
+      honeypotFieldNameInvalidCharacter: Veuillez n'utiliser que des lettres, des
+        chiffres et le tiret (-).
   title: Paramètres du projet
   backToSettings: Revenir aux paramètres
   projectMember:
@@ -377,9 +392,11 @@ administration:
         fromName: Nom de l'expéditeur
       title: Paramètres d'e-mail
       help:
-        password: Si vous saisissez quelque chose dans ce champ, la valeur existante sera écrasée.
+        password: Si vous saisissez quelque chose dans ce champ, la valeur existante
+          sera écrasée.
     title: Paramètres du système
-    description: Configurez les différents paramètres qui s'appliquent à votre installation de mosparo.
+    description: Configurez les différents paramètres qui s'appliquent à votre installation
+      de mosparo.
     mainSettings:
       title: Paramètres généraux
       form:
@@ -397,10 +414,13 @@ administration:
     downloadAndUpdate:
       web:
         message:
-          specifyLicenseKey: Veuillez saisir une clé de licence avant d'essayer de télécharger la base de données.
-          errorDownload: Une erreur s'est produite lorsque mosparo a tenté de télécharger la base de données. %error%
+          specifyLicenseKey: Veuillez saisir une clé de licence avant d'essayer de
+            télécharger la base de données.
+          errorDownload: Une erreur s'est produite lorsque mosparo a tenté de télécharger
+            la base de données. %error%
           successfullyDownloaded: La base de données a bien été téléchargée.
-        intro: 'Utilisez le bouton suivant pour permettre à mosparo de télécharger la base de données :'
+        intro: 'Utilisez le bouton suivant pour permettre à mosparo de télécharger
+          la base de données :'
         title: Web
         action: Télécharger la base de données
       title: Téléchargement et mise à jour automatique
@@ -408,20 +428,24 @@ administration:
         title: Mise à jour automatique
     settings:
       title: Paramètres
-      getLicenseKey: 'Pour obtenir une clé de licence, vous devez posséder un compte MaxMind. Veuillez consulter le site suivant :'
+      getLicenseKey: 'Pour obtenir une clé de licence, vous devez posséder un compte
+        MaxMind. Veuillez consulter le site suivant :'
       useGeoip2Field: Utiliser la localisation automatique de l'adresse IP
       licenseKeyField: Clé de licence
       message:
         savedSuccessfully: Les paramètres ont bien été enregistrés.
-        infoActivationTime: Si vous venez de demander votre clé de licence, il faudra un certain temps pour qu'elle devienne active.
+        infoActivationTime: Si vous venez de demander votre clé de licence, il faudra
+          un certain temps pour qu'elle devienne active.
     title: GeoIP2
     description: Configurer l'intégration de GeoIP2.
     version:
       titleAvailable: GeoIP2 disponible
-      messageAvailable: 'La base de données GeoIP2 a été téléchargée avec succès et est active. Les versions suivantes sont actives :'
+      messageAvailable: 'La base de données GeoIP2 a été téléchargée avec succès et
+        est active. Les versions suivantes sont actives :'
       typeCountry: 'Pays :'
       titleNotAvailable: GeoIP2 non disponible
-      messageDatabaseNotAvailable: La base de données de GeoIP2 n'a pas encore été téléchargée ou une erreur s'est produite pendant le téléchargement.
+      messageDatabaseNotAvailable: La base de données de GeoIP2 n'a pas encore été
+        téléchargée ou une erreur s'est produite pendant le téléchargement.
   user:
     list:
       roles: Rôles
@@ -433,7 +457,8 @@ administration:
       confirm: Voulez-vous vraiment supprimer l'utilisateur %email% ?
       message:
         successfullyDeleted: L'utilisateur %email% a bien été supprimé.
-        errorUserIsOwner: L'utilisateur est propriétaire d'au moins un projet. Vous ne pouvez pas supprimer le propriétaire d'un projet.
+        errorUserIsOwner: L'utilisateur est propriétaire d'au moins un projet. Vous
+          ne pouvez pas supprimer le propriétaire d'un projet.
     title: Utilisateurs
     description: Gérez tous les utilisateurs de cette instance de mosparo.
     backToOverview: Revenir aux utilisateurs
@@ -447,37 +472,50 @@ administration:
       password: Mot de passe
       isActiveUser: Utilisateur actif
       isAdministrator: Administrateur
-      sendPasswordResetEmail: Envoyer un e-mail à l'utilisateur pour définir le mot de passe
+      sendPasswordResetEmail: Envoyer un e-mail à l'utilisateur pour définir le mot
+        de passe
       message:
         successfullySaved: L'utilisateur a bien été enregistré.
-        errorCreatingResetToken: "Une erreur technique s'est produite lors de la création de l'adresse e-mail. Erreur : %errorMessage%"
-        errorSendingResetEmail: "L'e-mail avec le lien n'a pas pu être envoyé correctement. Erreur : %errorMessage%"
+        errorCreatingResetToken: "Une erreur technique s'est produite lors de la création
+          de l'adresse e-mail. Erreur : %errorMessage%"
+        errorSendingResetEmail: "L'e-mail avec le lien n'a pas pu être envoyé correctement.
+          Erreur : %errorMessage%"
     help:
-      password: Laissez ces champs vierges si aucun changement de mot de passe n'est requis.
+      password: Laissez ces champs vierges si aucun changement de mot de passe n'est
+        requis.
   update:
     updateChannel: Canal de mise à jour
     title: Mettre à jour
-    description: Vérifier les nouvelles versions et mettre à jour votre installation de mosparo.
+    description: Vérifier les nouvelles versions et mettre à jour votre installation
+      de mosparo.
     installedVersion: Version installée
     availableVersion: Version disponible
     check:
       title: État
       intro: Pour vérifier les mises à jour, veuillez cliquer sur le bouton ci-dessous.
       message:
-        errorCheckingForUpdates: "Une erreur s'est produite lors de la vérification des mises à jour. Erreur : %errorMessage%"
+        errorCheckingForUpdates: "Une erreur s'est produite lors de la vérification
+          des mises à jour. Erreur : %errorMessage%"
     version:
       titleAvailable: Mise à jour disponible
-      messageAvailable: Une nouvelle version de mosparo est disponible. Veuillez cliquer sur le bouton d'installation ci-dessous si vous souhaitez installer la mise à jour.
-      warningUpdatesDisabled: Les mises à jour sont désactivées pour cette installation de mosparo. Veuillez consulter la documentation pour voir les autres options de mise à jour de votre installation de mosparo.
+      messageAvailable: Une nouvelle version de mosparo est disponible. Veuillez cliquer
+        sur le bouton d'installation ci-dessous si vous souhaitez installer la mise
+        à jour.
+      warningUpdatesDisabled: Les mises à jour sont désactivées pour cette installation
+        de mosparo. Veuillez consulter la documentation pour voir les autres options
+        de mise à jour de votre installation de mosparo.
       titleNotAvailable: Aucune mise à jour disponible
-      messageNotAvailable: Aucune nouvelle version de mosparo n'est disponible. Veuillez revenir plus tard.
+      messageNotAvailable: Aucune nouvelle version de mosparo n'est disponible. Veuillez
+        revenir plus tard.
     execute:
       title: Mettre à jour mosparo
       description: Veuillez patienter et ne pas quitter cette page. Mise à jour démarrée…
       log: Continuer
       message:
-        successfullyUpdated: mosparo a bien été mis à jour. Veuillez vous rendre sur le tableau de bord.
-        updateError: Une erreur s'est produite lors de la mise à jour de mosparo. Veuillez consulter le message d'erreur ci-dessous.
+        successfullyUpdated: mosparo a bien été mis à jour. Veuillez vous rendre sur
+          le tableau de bord.
+        updateError: Une erreur s'est produite lors de la mise à jour de mosparo.
+          Veuillez consulter le message d'erreur ci-dessous.
     settings:
       title: Paramètres de mise à jour
       form:
@@ -485,13 +523,16 @@ administration:
         channelBeta: Beta
         channelDevelop: Développement
       message:
-        infoDevelopChannel: Les canaux « Développement » et «  Beta » contiennent des versions non testées et instables qui ne sont pas prêtes à être utilisées en production. Veuillez ne pas les utiliser dans un environnement de production.
+        infoDevelopChannel: Les canaux « Développement » et «  Beta » contiennent
+          des versions non testées et instables qui ne sont pas prêtes à être utilisées
+          en production. Veuillez ne pas les utiliser dans un environnement de production.
         savedSuccessfully: Le canal de mise à jour a bien été enregistré.
     buttons:
       continue: Continuer
     finalize:
       title: Mise à jour effectuée
-      description: Les modifications requises pour cette mise à jour ont été effectuées. Votre installation est à jour.
+      description: Les modifications requises pour cette mise à jour ont été effectuées.
+        Votre installation est à jour.
   system:
     title: Informations du système
     description: Retrouvez toutes les informations à propos de mosparo.
@@ -504,15 +545,18 @@ administration:
     logo:
       title: Logo
       intro: Le logo a été conçu par Jan Kosa.
-      license: Le logo est sous licence %linkStart%Creative Commons Attribution - Pas de Modification 4.0 International%linkEnd%.
+      license: Le logo est sous licence %linkStart%Creative Commons Attribution -
+        Pas de Modification 4.0 International%linkEnd%.
     license:
       title: Licence de mosparo
     projectMembers:
       title: Membres du projet
-      intro: Ces personnes ont fait de mosparo ce qu'il est - un logiciel installé sur votre hébergement web.
+      intro: Ces personnes ont fait de mosparo ce qu'il est - un logiciel installé
+        sur votre hébergement web.
     usedLibrariesAndResources:
       title: Bibliothèques et ressources utilisées
-      intro: Nous tenons à remercier tous les développeurs de logiciels libres pour leur incroyable travail.
+      intro: Nous tenons à remercier tous les développeurs de logiciels libres pour
+        leur incroyable travail.
       frontend: Front-end / Visuels
       backend: Back-end / Bibliothèques PHP
       license: Licence
@@ -523,12 +567,19 @@ account:
       intro: Votre compte est protégé par l'authentification à deux facteurs.
     start:
       title: Mettre en place l'authentification à deux facteurs
-      intro: Veuillez scanner ce code QR avec votre application d'authentification sur votre smartphone. Vous pouvez utiliser Google Authenticator, Microsoft Authenticator ou une application similaire.
-      textManually: Plutôt que de scanner le code QR, vous pouvez saisir le code suivant manuellement dans l'application d'authentification.
-      qrCodeAlt: Cette image affiche le code QR, que vous avez à scanner avec votre application d'authentification sur votre smartphone.
+      intro: Veuillez scanner ce code QR avec votre application d'authentification
+        sur votre smartphone. Vous pouvez utiliser Google Authenticator, Microsoft
+        Authenticator ou une application similaire.
+      textManually: Plutôt que de scanner le code QR, vous pouvez saisir le code suivant
+        manuellement dans l'application d'authentification.
+      qrCodeAlt: Cette image affiche le code QR, que vous avez à scanner avec votre
+        application d'authentification sur votre smartphone.
     backupCodes:
-      intro: Veuillez enregistrer ces codes dans un endroit sûr. Si vous avez perdu l'accès à votre appareil, vous pourrez vous connecter avec ces codes de récupération.
-      infoResetBackupCodes: Vous ne pouvez utiliser chaque code de récupération qu'une seule fois. Vous devriez réinitialiser les codes de récupération dès que possible après en avoir utilisé un.
+      intro: Veuillez enregistrer ces codes dans un endroit sûr. Si vous avez perdu
+        l'accès à votre appareil, vous pourrez vous connecter avec ces codes de récupération.
+      infoResetBackupCodes: Vous ne pouvez utiliser chaque code de récupération qu'une
+        seule fois. Vous devriez réinitialiser les codes de récupération dès que possible
+        après en avoir utilisé un.
       title: Codes de récupération
     title: Authentification à deux facteurs
     description: Configurer l'authentification à deux facteurs pour votre compte.
@@ -541,11 +592,14 @@ account:
       verify: Vérifier
     verify:
       title: Vérifier l'authentification à deux facteurs
-      intro: Veuillez saisir le code visible dans votre application d'authentification ci-dessous pour vérifier la configuration.
+      intro: Veuillez saisir le code visible dans votre application d'authentification
+        ci-dessous pour vérifier la configuration.
     message:
-      successfullyDisabled: L'authentification à deux facteurs a bien été désactivée sur votre compte.
+      successfullyDisabled: L'authentification à deux facteurs a bien été désactivée
+        sur votre compte.
     error:
-      verificationFailed: La vérification de l'authentification à deux facteurs à échoué. Veuillez recommencer.
+      verificationFailed: La vérification de l'authentification à deux facteurs à
+        échoué. Veuillez recommencer.
   title: Compte
   backToOverview: Revenir à la vue d'ensemble
   settings:
@@ -587,17 +641,21 @@ datatable:
       sortDescending: ": activez pour trier la colonne dans l'ordre descendant"
 password:
   email:
-    help: Si vous rencontrez des problèmes avec le bouton ci-dessus, copiez-collez l'URL ci-dessous dans votre navigateur.
+    help: Si vous rencontrez des problèmes avec le bouton ci-dessus, copiez-collez
+      l'URL ci-dessous dans votre navigateur.
     subject: Votre demande de réinitialisation de mot de passe
     greeting: Bonjour !
-    infoClickButton: Pour réinitialiser votre mot de passe, cliquez sur le bouton ci-dessous et suivez les instructions.
+    infoClickButton: Pour réinitialiser votre mot de passe, cliquez sur le bouton
+      ci-dessous et suivez les instructions.
     resetPasswordButton: Réinitialiser le mot de passe
     infoLinkExpiration: Ce lien expirera dans %time%.
     goodbye: Merci,
   reset:
     error:
-      tokenNotFound: Aucun jeton de réinitialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
-      errorOccurred: Une erreur s'est produite lors de la validation de votre requête de réinitialisation. %error%
+      tokenNotFound: Aucun jeton de réinitialisation du mot de passe n'a été trouvé
+        dans l'URL ou dans la session.
+      errorOccurred: Une erreur s'est produite lors de la validation de votre requête
+        de réinitialisation. %error%
     title: Réinitialiser votre mot de passe
     action: Réinitialiser le mot de passe
     message:
@@ -605,16 +663,21 @@ password:
   backToLogin: Revenir à la connexion
   request:
     title: Réinitialiser votre mot de passe
-    intro: Veuillez saisir votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+    intro: Veuillez saisir votre adresse e-mail et nous vous enverrons un lien pour
+      réinitialiser votre mot de passe.
     action: Envoyer l'e-mail de réinitialisation du mot de passe
     form:
       email: Adresse e-mail
     message:
-      failedToSendEmail: "En raison d'un problème technique, l'e-mail n'a pas pu être envoyé. Veuillez réessayer plus tard. Message d'erreur : %errorMessage%"
+      failedToSendEmail: "En raison d'un problème technique, l'e-mail n'a pas pu être
+        envoyé. Veuillez réessayer plus tard. Message d'erreur : %errorMessage%"
   emailSent:
     title: E-mail de réinitialisation du mot de passe envoyé
-    infoEmailWithLink: Si un compte existant correspond à votre adresse e-mail, nous venons de vous envoyer un e-mail contenant un lien vous permettant de réinitialiser votre mot de passe. Ce lien expirera dans %time%.
-    infoSpamFolder: Si vous n'avez pas reçu d'e-mail veuillez vérifier dans vos indésirables ou %linkStart%réessayer%linkEnd%.
+    infoEmailWithLink: Si un compte existant correspond à votre adresse e-mail, nous
+      venons de vous envoyer un e-mail contenant un lien vous permettant de réinitialiser
+      votre mot de passe. Ce lien expirera dans %time%.
+    infoSpamFolder: Si vous n'avez pas reçu d'e-mail veuillez vérifier dans vos indésirables
+      ou %linkStart%réessayer%linkEnd%.
   form:
     password: Mot de passe
     newPassword: Nouveau mot de passe
@@ -627,13 +690,17 @@ setup:
     recheck: Vérifier à nouveau
   start:
     title: Configuration
-    introduction: Cet assistant vous guidera tout au long du processus d'installation de mosparo.
+    introduction: Cet assistant vous guidera tout au long du processus d'installation
+      de mosparo.
   prerequisites:
     title: Prérequis
-    introduction: mosparo nécessite certains prérequis pour pouvoir fonctionner correctement. Avant de pouvoir installer mosparo, ces prérequis doivent être acceptés.
+    introduction: mosparo nécessite certains prérequis pour pouvoir fonctionner correctement.
+      Avant de pouvoir installer mosparo, ces prérequis doivent être acceptés.
     meetPrerequisites: Tous les prérequis sont remplis. Vous pouvez procéder à l'installation.
-    missingPrerequisites: Certains prérequis sont manquants. Veuillez consulter le résumé ci-dessous.
-    installOptionalExtensions: Certaines extensions facultatives ne sont pas installées. Nous vous recommandons d'installer ces extensions avant de continuer.
+    missingPrerequisites: Certains prérequis sont manquants. Veuillez consulter le
+      résumé ci-dessous.
+    installOptionalExtensions: Certaines extensions facultatives ne sont pas installées.
+      Nous vous recommandons d'installer ces extensions avant de continuer.
     types:
       general: Général
       phpExtensions: Extensions PHP
@@ -648,9 +715,13 @@ setup:
   database:
     title: Base de données
     introduction: Veuillez saisir les informations de votre base de données MySQL.
-    useEmptyDatabase: Veuillez utiliser une base de données vierge ou bien une base données sans aucune table de mosparo.
-    mosparoTablesExistInDatabase: Des tables de mosparo ont été trouvées dans la base de données spécifiée. Veuillez utiliser une autre base de données ou supprimer les tables.
-    connectionDataInvalid: Échec de la connexion à la base de données. Veuillez vérifier les paramètres ci-dessous et réessayer.
+    useEmptyDatabase: Veuillez utiliser une base de données vierge ou bien une base
+      données sans aucune table de mosparo.
+    mosparoTablesExistInDatabase: Des tables de mosparo ont été trouvées dans la base
+      de données spécifiée. Veuillez utiliser une autre base de données ou supprimer
+      les tables.
+    connectionDataInvalid: Échec de la connexion à la base de données. Veuillez vérifier
+      les paramètres ci-dessous et réessayer.
     form:
       host: Hôte
       port: Port
@@ -659,7 +730,8 @@ setup:
       password: Mot de passe
   other:
     title: Autres informations
-    introduction: Nous avons besoin de certaines autres informations. Veuillez compléter les champs ci-dessous.
+    introduction: Nous avons besoin de certaines autres informations. Veuillez compléter
+      les champs ci-dessous.
     form:
       name: Nom de mosparo
       subtitleCreateYourUser: Créer votre utilisateur
@@ -667,7 +739,8 @@ setup:
       password: Mot de passe
   install:
     title: Installation terminée
-    description: L'installation est terminée. Vous pouvez désormais vous connecter avec votre compte utilisateur.
+    description: L'installation est terminée. Vous pouvez désormais vous connecter
+      avec votre compte utilisateur.
 security:
   login:
     title: Se connecter
@@ -680,7 +753,8 @@ security:
     title: Mot de passe oublié
   twoFactor:
     title: Authentification à deux facteurs
-    intro: Veuillez saisir le code de votre application d'authentification à deux facteurs.
+    intro: Veuillez saisir le code de votre application d'authentification à deux
+      facteurs.
   noAccess:
     title: Aucun accès
 action:

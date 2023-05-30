@@ -9,8 +9,6 @@ project:
     delete: 删除项目
   create:
     title: 创建项目
-    message:
-      successfullyCreated: 新项目已创建成功。
   form:
     name: 名字
     hostsHelp: 请输入这个项目包括的所有主机。

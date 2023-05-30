@@ -8,7 +8,8 @@ project:
   title: Projekte
   backToList: Zu den Projekten
   infoNoProjectAvailable: Kein Projekt verfügbar
-  infoCreateProjectOrRequestAccess: Erstellen Sie ein neues Projekt oder beantragen Sie Zugriff zu einem.
+  infoCreateProjectOrRequestAccess: Erstellen Sie ein neues Projekt oder beantragen
+    Sie Zugriff zu einem.
 
   action:
     manage: Projekte verwalten
@@ -18,18 +19,18 @@ project:
   create:
     title: Projekt erstellen
 
-    message:
-      successfullyCreated: Das neue Projekt wurde erfolgreich erstellt.
-
   form:
     name: Name
     description: Beschreibung
     hosts: Hosts
     hostsHelp: Bitte tragen Sie alle Hosts ein, welche dieses Projekt beinhaltet.
     status: Status
-    statusHelp: Aktiviert oder deaktiviert die Spam-Erkennung. Wenn deaktiviert, das System wird alle Einsendungen speichern jedoch nicht vom Versand abhalten.
+    statusHelp: Aktiviert oder deaktiviert die Spam-Erkennung. Wenn deaktiviert, das
+      System wird alle Einsendungen speichern jedoch nicht vom Versand abhalten.
     spamScore: Spam-Grenzwert
-    spamScoreHelp: Definiert die Grenze, ab welcher eine Einsendung als Spam erkannt wird. Wenn die Bewertung einer Einsendung über diesem Wert liegt, wird die Einsendung als Spam erkannt.
+    spamScoreHelp: Definiert die Grenze, ab welcher eine Einsendung als Spam erkannt
+      wird. Wenn die Bewertung einer Einsendung über diesem Wert liegt, wird die Einsendung
+      als Spam erkannt.
 
   delete:
     title: Projekt %projectName% löschen
@@ -85,7 +86,10 @@ rule:
       description: Beschreibung
       status: Status
       spamRatingFactor: Spam-Bewertungsfaktor
-      spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher die Einträge dieser Regel verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Einträge verstärkt, ist der Wert kleiner als 1.0, werden die Einträge abgeschwächt.
+      spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor
+        definieren, welcher die Einträge dieser Regel verstärkt oder abschwächt. Ist
+        der Wert grösser als 1.0 werden die Einträge verstärkt, ist der Wert kleiner
+        als 1.0, werden die Einträge abgeschwächt.
 
     items:
       title: Einträge
@@ -97,7 +101,8 @@ rule:
       items: Einträge
       itemsHelp: Geben Sie ein Element pro Zeile ein.
       rating: Bewertung
-      ratingHelp: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt wird, werden die Einträge werden nicht als Spam erkannt.
+      ratingHelp: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt
+        wird, werden die Einträge werden nicht als Spam erkannt.
 
   delete:
     title: Regel %ruleName% löschen
@@ -116,7 +121,9 @@ rule:
 
       domain:
         title: Domain
-        intro: Geben Sie eine Domain ein, welche in einer Einsendung nicht erlaubt ist. Wenn Sie eine Domain eintragen werden auch alle E-Mail-Adressen mit dieser Domain gefiltert.
+        intro: Geben Sie eine Domain ein, welche in einer Einsendung nicht erlaubt
+          ist. Wenn Sie eine Domain eintragen werden auch alle E-Mail-Adressen mit
+          dieser Domain gefiltert.
 
     email:
       title: E-Mail
@@ -127,7 +134,8 @@ rule:
 
       email:
         title: E-Mail-Adresse
-        intro: Geben Sie eine E-Mail-Adresse ein, welche in einer Einsendung als Spam erkannt werden soll.
+        intro: Geben Sie eine E-Mail-Adresse ein, welche in einer Einsendung als Spam
+          erkannt werden soll.
 
     ipAddress:
       title: IP-Adresse
@@ -138,17 +146,21 @@ rule:
 
       ipAddress:
         title: IP-Adresse
-        intro: Geben Sie eine IP-Adresse ein, welche nicht berechtigt ist, eine Einsendung vorzunehmen.
+        intro: Geben Sie eine IP-Adresse ein, welche nicht berechtigt ist, eine Einsendung
+          vorzunehmen.
 
       subnet:
         title: Subnetz
-        intro: Geben Sie ein Subnetz ein, welches nicht berechtigt ist, eine Einsendung vorzunehmen.
+        intro: Geben Sie ein Subnetz ein, welches nicht berechtigt ist, eine Einsendung
+          vorzunehmen.
 
     provider:
       title: Anbieter
       shortIntro: Filtert nach AS-Nummer und Land
       intro: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
-      infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
+      infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich,
+        dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp
+        keinen Einfluss.
       label: AS Nummer/Land
       placeholder: ''
 
@@ -157,40 +169,63 @@ rule:
 
       asNumber:
         title: AS Nummer
-        intro: Geben Sie eine AS Nummer ein, welche nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche zu dieser AS Nummer gehören, werden blockiert.
+        intro: Geben Sie eine AS Nummer ein, welche nicht berechtigt ist, eine Einsendung
+          vorzunehmen. Alle IP-Adressen, welche zu dieser AS Nummer gehören, werden
+          blockiert.
 
       country:
         title: Land
-        intro: Geben Sie ein ISO-Ländercode ein, welcher nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche diesem Ländercode zugeordnet werden, werden blockiert.
-        infoCountryBlock: Wenn Sie ein Land zur Regel hinzufügen, bedeutet dass, dass niemand aus diesem Land eine Einsendung machen kann. Auf der einen Seite klingt das gut, auf der anderen Seite könnte diese Regel reale Benutzer davon abhalten, Einsendungen vorzunehmen. Bitte benutzen Sie diese Option vorsichtig. Die genaue Lokalisierung einer IP-Adresse ist nie garantiert.
+        intro: Geben Sie ein ISO-Ländercode ein, welcher nicht berechtigt ist, eine
+          Einsendung vorzunehmen. Alle IP-Adressen, welche diesem Ländercode zugeordnet
+          werden, werden blockiert.
+        infoCountryBlock: Wenn Sie ein Land zur Regel hinzufügen, bedeutet dass, dass
+          niemand aus diesem Land eine Einsendung machen kann. Auf der einen Seite
+          klingt das gut, auf der anderen Seite könnte diese Regel reale Benutzer
+          davon abhalten, Einsendungen vorzunehmen. Bitte benutzen Sie diese Option
+          vorsichtig. Die genaue Lokalisierung einer IP-Adresse ist nie garantiert.
 
     unicodeBlock:
       title: Unicode-Block
       shortIntro: Filtert die Eingaben aufgrund der verwendeten Zeichen.
-      intro: Der Unicode-Block-Regeltyp erlaubt die Verwendung von bestimmten Zeichen zu bewerten.
+      intro: Der Unicode-Block-Regeltyp erlaubt die Verwendung von bestimmten Zeichen
+        zu bewerten.
       label: Unicode-Block
 
       block:
         title: Block
-        intro: Bitte wählen Sie einen der Blöcke aus, welcher bei der Eingabe entsprechend bewertet werden soll. Geben Sie anschliessend eine entsprechende Bewertung ein.
-        hintExtended: Bitte beachten Sie, dass es bei einigen Blöcken Erweiterungen und Ergänzungen gibt, welche ebenfalls als Regel-Eintrag erfasst werden müssen.
-        explanationCounting: Bei der Auswertung wird jeder Block nur einmal gezählt, auch wenn mehrere Charakter aus einem Block verwendet wurden.
-        exampleCounting: Angenommen, Sie erfassen einen Regeleintrag mit dem Block "Smileys" mit einer Bewertung von 3 Punkten. In einer Einsendung werden nun 5 Smileys verwendet. Die Einsendung wird nun mit 3 Punkten bewertet weil ein Smiley verwendet wurde.
+        intro: Bitte wählen Sie einen der Blöcke aus, welcher bei der Eingabe entsprechend
+          bewertet werden soll. Geben Sie anschliessend eine entsprechende Bewertung
+          ein.
+        hintExtended: Bitte beachten Sie, dass es bei einigen Blöcken Erweiterungen
+          und Ergänzungen gibt, welche ebenfalls als Regel-Eintrag erfasst werden
+          müssen.
+        explanationCounting: Bei der Auswertung wird jeder Block nur einmal gezählt,
+          auch wenn mehrere Charakter aus einem Block verwendet wurden.
+        exampleCounting: Angenommen, Sie erfassen einen Regeleintrag mit dem Block
+          "Smileys" mit einer Bewertung von 3 Punkten. In einer Einsendung werden
+          nun 5 Smileys verwendet. Die Einsendung wird nun mit 3 Punkten bewertet
+          weil ein Smiley verwendet wurde.
 
     userAgent:
       title: User-Agent
       shortIntro: Filtert nach Wörter und RegEx-Muster im User-Agent
-      intro: Der User-Agent-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular Expression Pattern zu filtern.
+      intro: Der User-Agent-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular
+        Expression Pattern zu filtern.
       label: User-Agent (Wort/Muster)
       placeholder: ''
 
       text:
         title: Text
-        intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
+        intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können
+          den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch
+          nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und
+          nach dem gesuchten Wort nicht einfügen.
 
       regex:
         title: Regular Expression
-        intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
+        intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes
+          Pattern findet. Das Pattern muss den Regular Expression Anforderungen von
+          PHP entsprechen.
 
         validation:
           invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
@@ -205,32 +240,46 @@ rule:
       url:
         title: URL
         intro: Geben Sie eine URL ein, welche als Spam erkannt werden soll.
-        infoProtocol: Es wird empfohlen, Ihre Eingabe mit dem Protokoll oder zwei Slashes für eine Protokoll-unabhängige URL zu starten. Wenn die Eingabe nicht mit dem Protokoll startet könnte die Regel falsche Domains als Spam erkennen.
+        infoProtocol: Es wird empfohlen, Ihre Eingabe mit dem Protokoll oder zwei
+          Slashes für eine Protokoll-unabhängige URL zu starten. Wenn die Eingabe
+          nicht mit dem Protokoll startet könnte die Regel falsche Domains als Spam
+          erkennen.
 
     word:
       title: Wort
       shortIntro: Filtert nach Wörter und RegEx-Muster
-      intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
+      intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern
+        zu filtern.
       label: Wort/Muster
       placeholder: ''
 
       text:
         title: Text
-        intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
+        intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können
+          den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch
+          nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und
+          nach dem gesuchten Wort nicht einfügen.
 
       regex:
         title: Regular Expression
-        intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
+        intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes
+          Pattern findet. Das Pattern muss den Regular Expression Anforderungen von
+          PHP entsprechen.
 
         validation:
           invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
 
     rating:
       title: Bewertung
-      intro: Wenn ein Eintrag eine stärkere Bewertung erhalten soll, können Sie die Spambewertung pro Eintrag spezifizieren.
-      infoCalculationMethod: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
-      infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %zero% bis %unlimited%. Wenn keine Bewertung gesetzt ist, wird die Standard-Bewertung %one% verwendet.
-      infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
+      intro: Wenn ein Eintrag eine stärkere Bewertung erhalten soll, können Sie die
+        Spambewertung pro Eintrag spezifizieren.
+      infoCalculationMethod: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung
+        mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
+      infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %zero% bis
+        %unlimited%. Wenn keine Bewertung gesetzt ist, wird die Standard-Bewertung
+        %one% verwendet.
+      infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag
+        nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
       placeholder: Bewertung
 
 # Ruleset
@@ -259,7 +308,10 @@ ruleset:
     url: URL
     status: Status
     spamRatingFactor: Spam-Bewertungsfaktor
-    spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher alle Regel dieses Regel-Paketes verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Regeln verstärkt, ist der Wert kleiner als 1.0, werden die Regeln abgeschwächt.
+    spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren,
+      welcher alle Regel dieses Regel-Paketes verstärkt oder abschwächt. Ist der Wert
+      grösser als 1.0 werden die Regeln verstärkt, ist der Wert kleiner als 1.0, werden
+      die Regeln abgeschwächt.
 
     message:
       successfullySaved: Das Regel-Paket wurde erfolgreich gespeichert.
@@ -337,7 +389,8 @@ submission:
 
     ignoredFields:
       title: Ignorierte Felder
-      intro: Die folgenden Felder wurden aufgrund des Feld-Types nicht übermittelt (zum Beispiel Passwort- oder Datei-Upload-Felder).
+      intro: Die folgenden Felder wurden aufgrund des Feld-Types nicht übermittelt
+        (zum Beispiel Passwort- oder Datei-Upload-Felder).
 
     data:
       value: Wert
@@ -364,7 +417,9 @@ submission:
     generalVerifications:
       minimumTime:
         title: Einsendung zu schnell
-        text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit beträgt %minimumTimeSeconds% Sekunden.
+        text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb
+          %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit
+          beträgt %minimumTimeSeconds% Sekunden.
 
 # Settings
 settings:
@@ -396,11 +451,13 @@ settings:
 
       reissueApiKeys:
         title: API-Zugangsdaten neu ausstellen
-        confirm: Wollen Sie die API-Zugangsdaten für das Projekt %projectName% wirklich neu ausstellen lassen?
+        confirm: Wollen Sie die API-Zugangsdaten für das Projekt %projectName% wirklich
+          neu ausstellen lassen?
 
         message:
           successfullyReissued: Die API-Zugangsdaten wurden erfolgreich neu ausgestellt.
-          errorOnlyOwner: Nur ein Besitzer des Projektes kann die API-Zugangsdaten neu ausstellen lassen.
+          errorOnlyOwner: Nur ein Besitzer des Projektes kann die API-Zugangsdaten
+            neu ausstellen lassen.
 
   projectMember:
     title: Projekt-Mitglieder
@@ -428,34 +485,54 @@ settings:
 
     delete:
       title: Projekt-Mitglied %projectMemberName% entfernen
-      confirm: Wollen Sie das Projekt-Mitglied %projectMemberName% wirklich vom Projekt entfernen?
+      confirm: Wollen Sie das Projekt-Mitglied %projectMemberName% wirklich vom Projekt
+        entfernen?
 
       message:
-        successfullyRemoved: Das Projekt-Mitglied %projectMemberName% wurde erfolgreich vom Projekt entfernt.
+        successfullyRemoved: Das Projekt-Mitglied %projectMemberName% wurde erfolgreich
+          vom Projekt entfernt.
 
   security:
     title: Sicherheit
 
     minimumTime:
       title: Mindestzeit
-      intro: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung der Einsendung (nach dem das Formular abgesendet wurde). Wenn die Zeit kleiner ist also die definierte Zeit unten, wird die Einsendung abgewiesen. Wenn Sie ein kurzes Formular haben, sollte diese Funktion deaktiviert sein oder Sie sollten eine sehr kurze Zeit verwenden.
+      intro: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung
+        der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung
+        der Einsendung (nach dem das Formular abgesendet wurde). Wenn die Zeit kleiner
+        ist also die definierte Zeit unten, wird die Einsendung abgewiesen. Wenn Sie
+        ein kurzes Formular haben, sollte diese Funktion deaktiviert sein oder Sie
+        sollten eine sehr kurze Zeit verwenden.
 
     honeypot:
       title: Honeypot-Feld
-      intro: Ein Honeypot-Feld ist ein verstecktes Feld innerhalb des Formulars. Menschen sehen das Feld nicht - aber Spam-Bots werden möglicherweise Spam-Inhalt in das Feld einfügen. Wenn das passiert, wissen wir, dass es kein Mensch gewesen sein kann und blockieren die Einsendung.
+      intro: Ein Honeypot-Feld ist ein verstecktes Feld innerhalb des Formulars. Menschen
+        sehen das Feld nicht - aber Spam-Bots werden möglicherweise Spam-Inhalt in
+        das Feld einfügen. Wenn das passiert, wissen wir, dass es kein Mensch gewesen
+        sein kann und blockieren die Einsendung.
 
     requestDelaying:
       title: Anfrageverzögerung
-      intro: Um es einem Bot schwieriger zu machen, kann mosparo die Erstellung von Absende-Tokens verzögern. Ohne Absende-Token kann ein Formular nicht abgesendet werden. Falls ein Mensch diese Mitteilung sieht, wird angezeigt, wie lange der Mensch warten muss, bevor das Formular absendbar ist.
-      infoIpAddress: In welchen Fällen die Ausstellung eines Absende-Tokens verzögert werden muss, wird aufgrund der Anzahl Anfragen, welche eine IP-Adresse gemacht hat, entschieden. Mit jeder zusätzlichen Anfrage wird die Verzögerung erhöht.
+      intro: Um es einem Bot schwieriger zu machen, kann mosparo die Erstellung von
+        Absende-Tokens verzögern. Ohne Absende-Token kann ein Formular nicht abgesendet
+        werden. Falls ein Mensch diese Mitteilung sieht, wird angezeigt, wie lange
+        der Mensch warten muss, bevor das Formular absendbar ist.
+      infoIpAddress: In welchen Fällen die Ausstellung eines Absende-Tokens verzögert
+        werden muss, wird aufgrund der Anzahl Anfragen, welche eine IP-Adresse gemacht
+        hat, entschieden. Mit jeder zusätzlichen Anfrage wird die Verzögerung erhöht.
 
     ipLockout:
       title: IP-Sperre
-      intro: Um es einem Bot noch schwieriger zu machen, kann mosparo automatisch eine IP-Adresse temporär blockieren. Wenn eine IP-Adresse eine hohe Anzahl von Tokens beantragt, kann mosparo diese automatisch zählen und wenn eine bestimmte Anzahl erreicht ist, die IP-Adresse blockieren.
+      intro: Um es einem Bot noch schwieriger zu machen, kann mosparo automatisch
+        eine IP-Adresse temporär blockieren. Wenn eine IP-Adresse eine hohe Anzahl
+        von Tokens beantragt, kann mosparo diese automatisch zählen und wenn eine
+        bestimmte Anzahl erreicht ist, die IP-Adresse blockieren.
 
     ipAllowList:
       title: Liste der erlaubten IP-Adressen
-      intro: Tragen Sie die IP-Adressen und Subnetze ein, welche von den oben konfigurierten Sicherheitsmassnahmen (Anfrageverzögerung und IP-Sperre) ausgenommen werden sollen.
+      intro: Tragen Sie die IP-Adressen und Subnetze ein, welche von den oben konfigurierten
+        Sicherheitsmassnahmen (Anfrageverzögerung und IP-Sperre) ausgenommen werden
+        sollen.
 
     form:
       minimumTimeActive: Mindestzeit aktiv
@@ -463,33 +540,43 @@ settings:
       minimumTimeSecondsHelp: In Sekunden
       honeypotFieldActive: Honeypot-Feld aktiv
       honeypotFieldName: Feldname
-      honeypotFieldNameHelp: Es muss ein Feldname sein, welchen Sie nicht bereits in Ihrem Formular verwenden und welcher ein normales Feld sein könnte, wie zum Beispiel "url" oder "adress-zeile-2". Bitte verwenden Sie nur Buchstaben, Zahlen und den Bindestrich (-). Wenn Sie dieses Feld leer lassen wird die Funktion nicht verwendet.
+      honeypotFieldNameHelp: Es muss ein Feldname sein, welchen Sie nicht bereits
+        in Ihrem Formular verwenden und welcher ein normales Feld sein könnte, wie
+        zum Beispiel "url" oder "adress-zeile-2". Bitte verwenden Sie nur Buchstaben,
+        Zahlen und den Bindestrich (-). Wenn Sie dieses Feld leer lassen wird die
+        Funktion nicht verwendet.
       delayActive: Anfrageverzögerung aktiv
       delayNumberOfAllowedRequests: Anzahl erlaubter Anfragen
-      delayNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Anfrageverzögerung aktiv wird.
+      delayNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die
+        Anfrageverzögerung aktiv wird.
       delayDetectionTimeFrame: Erkennungszeitraum
       delayDetectionTimeFrameHelp: In Sekunden
       delayTime: Anfangsverzögerungszeit
       delayTimeHelp: In Sekunden
       delayMultiplicator: Multiplikator
-      delayMultiplicatorHelp: Die Anfagsverzögerungszeit wird mit jeder weiteren Anfrage erhöht.
+      delayMultiplicatorHelp: Die Anfagsverzögerungszeit wird mit jeder weiteren Anfrage
+        erhöht.
       lockoutActive: Automatische Sperre aktiv
       lockoutNumberOfAllowedRequests: Anzahl erlaubter Anfragen
-      lockoutNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Sperre aktiv wird.
+      lockoutNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor
+        die Sperre aktiv wird.
       lockoutDetectionTimeFrame: Erkennungszeitraum
       lockoutDetectionTimeFrameHelp: In Sekunden
       lockoutTime: Anfangssperrzeit
       lockoutTimeHelp: In Sekunden
       lockoutMultiplicator: Multiplikator
-      lockoutMultiplicatorHelp: Die Anfangssperrzeit wird mit jeder zusätzlichen Anfrage mit diesem Multiplikator erhöht.
+      lockoutMultiplicatorHelp: Die Anfangssperrzeit wird mit jeder zusätzlichen Anfrage
+        mit diesem Multiplikator erhöht.
       ipAllowList: Erlaubte IP-Adressen und Subnetze
-      ipAllowListHelp: "Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24"
+      ipAllowListHelp: "Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel:
+        192.168.1.13 oder 192.168.1.0/24"
 
     message:
       successfullySaved: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
 
     validation:
-      honeypotFieldNameInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich (-).
+      honeypotFieldNameInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen
+        und den Bindestrich (-).
 
   design:
     title: Darstellung
@@ -512,7 +599,9 @@ settings:
       value: Wert
       text: Text
       textError: Text, Fehler
-      description: Der oben angezeigte Wert beschreibt das Verhältnis zwischen der Hintergrundfarbe und der Textfarbe. Die zwei Spalten daneben geben an, ob die Mindestanforderung für die WCAG-Richtlinien erfüllt werden.
+      description: Der oben angezeigte Wert beschreibt das Verhältnis zwischen der
+        Hintergrundfarbe und der Textfarbe. Die zwei Spalten daneben geben an, ob
+        die Mindestanforderung für die WCAG-Richtlinien erfüllt werden.
 
     form:
       boxSize: Grösse der Box
@@ -539,7 +628,8 @@ settings:
 
     message:
       successfullySaved: Die Darstellungs-Einstellungen wurden erfolgreich gespeichert.
-      boxRadiusTooLarge: Das Logo kann nur angezeigt werden, wenn der Radius der Box unterhalb eines gewissen Wertes liegt.
+      boxRadiusTooLarge: Das Logo kann nur angezeigt werden, wenn der Radius der Box
+        unterhalb eines gewissen Wertes liegt.
 
 # Administration
 administration:
@@ -547,7 +637,8 @@ administration:
 
   settings:
     title: System-Einstellungen
-    description: Konfigurieren Sie verschiedene Einstellungen, welche für Ihre mosparo-Installation gelten.
+    description: Konfigurieren Sie verschiedene Einstellungen, welche für Ihre mosparo-Installation
+      gelten.
 
     mainSettings:
       title: Haupteinstellungen
@@ -579,7 +670,8 @@ administration:
         fromName: Absender-Name
 
       help:
-        password: Wenn Sie dieses Feld ausfüllen, wird das bereits gespeicherte Passwort überschrieben.
+        password: Wenn Sie dieses Feld ausfüllen, wird das bereits gespeicherte Passwort
+          überschrieben.
 
     message:
       savedSuccessfully: Die Einstellungen wurden erfolgreich gespeichert.
@@ -610,10 +702,13 @@ administration:
 
       message:
         successfullySaved: Der Benutzer wurde erfolgreich gespeichert.
-        errorCreatingResetToken: 'Beim Erstellen des E-Mails gab es einen technischen Fehler. Fehler: %errorMessage%'
-        errorSendingResetEmail: 'Das E-Mail mit dem Link konnte nicht korrekt versendet werden. Fehler: %errorMessage%'
+        errorCreatingResetToken: 'Beim Erstellen des E-Mails gab es einen technischen
+          Fehler. Fehler: %errorMessage%'
+        errorSendingResetEmail: 'Das E-Mail mit dem Link konnte nicht korrekt versendet
+          werden. Fehler: %errorMessage%'
     help:
-      password: Lassen Sie das Feld leer wenn kein neues Passwort gespeichert werden soll.
+      password: Lassen Sie das Feld leer wenn kein neues Passwort gespeichert werden
+        soll.
 
 
     delete:
@@ -623,7 +718,8 @@ administration:
 
       message:
         successfullyDeleted: Der Benutzer %email% wurde erfolgreich gelöscht.
-        errorUserIsOwner: Der Benutzer ist Besitzer von mindestens einem Projekt. Ein Besitzer eines Projektes kann nicht gelöscht werden.
+        errorUserIsOwner: Der Benutzer ist Besitzer von mindestens einem Projekt.
+          Ein Besitzer eines Projektes kann nicht gelöscht werden.
 
   geoip2:
     title: GeoIP2
@@ -631,36 +727,45 @@ administration:
 
     settings:
       title: Einstellungen
-      getLicenseKey: "Sie brauchen einen MaxMind-Account um einen Lizenz-Schlüssel zu erhalten. Besuchen Sie bitte folgende Website:"
+      getLicenseKey: "Sie brauchen einen MaxMind-Account um einen Lizenz-Schlüssel
+        zu erhalten. Besuchen Sie bitte folgende Website:"
       useGeoip2Field: Die automatische IP-Adressen-Lokalisierung verwenden
       licenseKeyField: Lizenz-Schlüssel
 
       message:
         savedSuccessfully: Die Einstellungen wurden erfolgreich gespeichert.
-        infoActivationTime: Falls Sie Ihren Lizenz-Schlüssel gerade angefordert haben, dauert es eine gewisse Zeit, bis der Lizenz-Schlüssel aktiv ist.
+        infoActivationTime: Falls Sie Ihren Lizenz-Schlüssel gerade angefordert haben,
+          dauert es eine gewisse Zeit, bis der Lizenz-Schlüssel aktiv ist.
 
     version:
       titleAvailable: GeoIP2 verfügbar
-      messageAvailable: 'Die GeoIP2-Datenbank wurde erfolgreich heruntergeladen und ist aktiv. Folgende Versionen sind aktiv:'
+      messageAvailable: 'Die GeoIP2-Datenbank wurde erfolgreich heruntergeladen und
+        ist aktiv. Folgende Versionen sind aktiv:'
       typeAsn: 'AS-Nummer:'
       typeCountry: 'Land:'
 
       titleNotAvailable: GeoIP2 nicht verfügbar
-      messageDatabaseNotAvailable: Die GeoIP2-Datenbank wurde noch nicht heruntergeladen oder es trat ein Fehler beim Herunterladen auf.
+      messageDatabaseNotAvailable: Die GeoIP2-Datenbank wurde noch nicht heruntergeladen
+        oder es trat ein Fehler beim Herunterladen auf.
 
     downloadAndUpdate:
       title: Herunterladen & automatische Upates
-      intro: Nach dem Sie den Lizenz-Schlüssel gespeichert haben, muss mosparo die Datenbank herunterladen. Sie können dies direkt hier tun oder Sie können über eine SSH-Verbindung den notwendigen Befehl ausführen.
+      intro: Nach dem Sie den Lizenz-Schlüssel gespeichert haben, muss mosparo die
+        Datenbank herunterladen. Sie können dies direkt hier tun oder Sie können über
+        eine SSH-Verbindung den notwendigen Befehl ausführen.
 
       web:
         title: Web
-        intro: "Benützen Sie den folgenden Button um mosparo die Datenbank herunterladen zu lassen:"
+        intro: "Benützen Sie den folgenden Button um mosparo die Datenbank herunterladen
+          zu lassen:"
         action: Datenbank herunterladen
 
         message:
           successfullyDownloaded: Die Datenbank wurde erfolgreich heruntergeladen.
-          errorDownload: Während mosparo versucht hat, die Datenbank herunterzuladen, trat ein Fehler auf. %error%
-          specifyLicenseKey: Bitte geben Sie einen Lizenz-Schlüssel ein, bevor Sie versuchen die Datenbank herunterzuladen.
+          errorDownload: Während mosparo versucht hat, die Datenbank herunterzuladen,
+            trat ein Fehler auf. %error%
+          specifyLicenseKey: Bitte geben Sie einen Lizenz-Schlüssel ein, bevor Sie
+            versuchen die Datenbank herunterzuladen.
 
       cli:
         title: CLI
@@ -668,13 +773,20 @@ administration:
 
       update:
         title: Automatische Updates
-        intro: "Um automatische Updates zu aktivieren, ist es erforderlich einen Cronjob einzurichten, welcher die Datenbank automatisch herunterlädt. Um das automatische Update zu verwenden, richten Sie bitte einen Cronjob mit folgender Konfiguration ein:"
-        infoAbsolutePath: Sie müssen möglicherweise den Pfad zur Datei %pathToBinConsole% anpassen. Es ist möglich, dass Sie den absoluten Pfad eingeben müssen.
-        infoRateLimit: Bitte denken Sie dran, dass die Anzahl Downloads, welche ein Lizenz-Schlüssel machen kann, limitiert ist. Bitte benützen Sie die Download-Funktion nicht zu oft.
+        intro: "Um automatische Updates zu aktivieren, ist es erforderlich einen Cronjob
+          einzurichten, welcher die Datenbank automatisch herunterlädt. Um das automatische
+          Update zu verwenden, richten Sie bitte einen Cronjob mit folgender Konfiguration
+          ein:"
+        infoAbsolutePath: Sie müssen möglicherweise den Pfad zur Datei %pathToBinConsole%
+          anpassen. Es ist möglich, dass Sie den absoluten Pfad eingeben müssen.
+        infoRateLimit: Bitte denken Sie dran, dass die Anzahl Downloads, welche ein
+          Lizenz-Schlüssel machen kann, limitiert ist. Bitte benützen Sie die Download-Funktion
+          nicht zu oft.
 
   update:
     title: Update
-    description: Prüfen Sie, ob neue mosparo-Versionen verfügbar sind und Aktualisieren Sie Ihre mosparo-Installation.
+    description: Prüfen Sie, ob neue mosparo-Versionen verfügbar sind und Aktualisieren
+      Sie Ihre mosparo-Installation.
 
     updateChannel: Update-Kanal
     installedVersion: Installierte Version
@@ -685,30 +797,42 @@ administration:
 
     check:
       title: Status
-      intro: Wenn Sie prüfen möchten, ob eine neue Version verfügbar ist, klicken Sie bitte auf die Schaltfläche unten.
+      intro: Wenn Sie prüfen möchten, ob eine neue Version verfügbar ist, klicken
+        Sie bitte auf die Schaltfläche unten.
 
       message:
-        errorCheckingForUpdates: 'Beim Suchen nach Updates trat ein Fehler auf. Fehler: %errorMessage%'
+        errorCheckingForUpdates: 'Beim Suchen nach Updates trat ein Fehler auf. Fehler:
+          %errorMessage%'
 
     version:
       titleAvailable: Update verfügbar
-      messageAvailable: Eine Update für mosparo ist verfügbar. Bitte klicken Sie auf die Installieren-Schaltfläche, wenn Sie dieses Update installieren möchten.
-      warningUpdate: Bitte erstellen Sie eine Backup der Dateien und der Datenbank von mosparo. Dieser automatische Update-Prozess erstellt kein Backup der Dateien oder der Datenbank. Wenn beim Update etwas nicht korrekt funktioniert, kann Ihre mosparo-Installation zerstört werden.
-      warningUpdatesDisabled: Updates sind für diese mosparo-Installation deaktiviert. Bitte schauen Sie in der Dokumentation nach, welche anderen Möglichkeiten es gibt, Ihre mosparo-Installation zu aktualisieren.
+      messageAvailable: Eine Update für mosparo ist verfügbar. Bitte klicken Sie auf
+        die Installieren-Schaltfläche, wenn Sie dieses Update installieren möchten.
+      warningUpdate: Bitte erstellen Sie eine Backup der Dateien und der Datenbank
+        von mosparo. Dieser automatische Update-Prozess erstellt kein Backup der Dateien
+        oder der Datenbank. Wenn beim Update etwas nicht korrekt funktioniert, kann
+        Ihre mosparo-Installation zerstört werden.
+      warningUpdatesDisabled: Updates sind für diese mosparo-Installation deaktiviert.
+        Bitte schauen Sie in der Dokumentation nach, welche anderen Möglichkeiten
+        es gibt, Ihre mosparo-Installation zu aktualisieren.
       releaseNotes: Versionshinweise
 
       titleNotAvailable: Neuste Version
-      messageNotAvailable: Kein neues Update verfügbar. Sie verwenden bereits die neuste Version von mosparo.
+      messageNotAvailable: Kein neues Update verfügbar. Sie verwenden bereits die
+        neuste Version von mosparo.
       lastChecked: 'Letzte Überprüfung:'
 
     execute:
       title: mosparo aktualisieren
-      description: Bitte warten Sie und verlassen Sie diese Seite nicht. Der Update-Prozess wurde gestartet…
+      description: Bitte warten Sie und verlassen Sie diese Seite nicht. Der Update-Prozess
+        wurde gestartet…
       log: Fortschritt
 
       message:
-        successfullyUpdated: mosparo wurde erfolgreich aktualisiert. Klicken Sie auf die Schaltfläche unten um fortzufahren.
-        updateError: Beim Aktualisieren von mosparo trat ein Fehler auf. Bitte prüfen Sie die Fehlermeldung unterhalb.
+        successfullyUpdated: mosparo wurde erfolgreich aktualisiert. Klicken Sie auf
+          die Schaltfläche unten um fortzufahren.
+        updateError: Beim Aktualisieren von mosparo trat ein Fehler auf. Bitte prüfen
+          Sie die Fehlermeldung unterhalb.
 
     settings:
       title: Update-Einstellungen
@@ -719,7 +843,10 @@ administration:
         channelDevelop: Entwicklung
 
       message:
-        infoDevelopChannel: Die Entwicklungs- und Beta-Kanäle enthalten ungetestet und instabile Versionen von mosparo, welche nicht für den produktiven Einsatz gedacht sind. Bitte verwenden Sie diese Kanäle nicht in einer produktiven Umgebung.
+        infoDevelopChannel: Die Entwicklungs- und Beta-Kanäle enthalten ungetestet
+          und instabile Versionen von mosparo, welche nicht für den produktiven Einsatz
+          gedacht sind. Bitte verwenden Sie diese Kanäle nicht in einer produktiven
+          Umgebung.
         savedSuccessfully: Der Update-Kanal wurde erfolgreich gespeichert.
 
     buttons:
@@ -727,7 +854,8 @@ administration:
 
     finalize:
       title: Update ausgeführt
-      description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
+      description: Die notwendigen Änderungen für dieses Update wurden ausgeführt.
+        Ihre Installation ist aktuell.
 
   system:
     title: System-Informationen
@@ -743,18 +871,21 @@ administration:
     logo:
       title: Logo
       intro: Das Logo wurde von Jan Kosa gestaltet.
-      license: Das Logo ist lizenziert unter einer %linkStart%Creative Commons Namensnennung - Keine Bearbeitung 4.0 International Lizenz%linkEnd%.
+      license: Das Logo ist lizenziert unter einer %linkStart%Creative Commons Namensnennung
+        - Keine Bearbeitung 4.0 International Lizenz%linkEnd%.
 
     license:
       title: Lizenz mosparo
 
     projectMembers:
       title: Projekt-Mitglieder
-      intro: Diese Personen haben mosparo zu dem gemacht, was es ist - eine installierte Software auf Ihrem Web-Hosting.
+      intro: Diese Personen haben mosparo zu dem gemacht, was es ist - eine installierte
+        Software auf Ihrem Web-Hosting.
 
     usedLibrariesAndResources:
       title: Verwendete Libraries und Ressourcen
-      intro: Wir möchten allen Open Source Entwickler:in für ihre unglaubliche Arbeit danken.
+      intro: Wir möchten allen Open Source Entwickler:in für ihre unglaubliche Arbeit
+        danken.
       frontend: Frontend / Visuell
       backend: Backend / PHP-Libraries
       license: Lizenz
@@ -764,10 +895,17 @@ administration:
 # Download check
 downloadCheck:
   cardTitle: Internet-Verbindung
-  intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
-  downloadIsPossible: Die PHP-Einstellungen ermöglichen das Herunterladen von Regel-Paketen und Updates. Eine Anpassung ist nicht erforderlich.
-  downloadIsNotPossible: Die PHP-Einstellungen lassen den Download von Updates oder Regel-Paketen nicht zu. Wenn Sie die Regel-Pakete- oder die Update-Funktionalität nutzen möchten, passen Sie bitte Ihre PHP-Konfiguration entsprechend an.
-  curlIsEnabledButFunctionsAreDisabled: Die Erweiterung %extensionName% ist aktiviert, aber die benötigten Funktionen (%functionNames%) sind deaktiviert. Wir empfehlen, die Erweiterung generell zu deaktivieren oder die benötigten Funktionen zu aktivieren.
+  intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo
+    verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine
+    aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
+  downloadIsPossible: Die PHP-Einstellungen ermöglichen das Herunterladen von Regel-Paketen
+    und Updates. Eine Anpassung ist nicht erforderlich.
+  downloadIsNotPossible: Die PHP-Einstellungen lassen den Download von Updates oder
+    Regel-Paketen nicht zu. Wenn Sie die Regel-Pakete- oder die Update-Funktionalität
+    nutzen möchten, passen Sie bitte Ihre PHP-Konfiguration entsprechend an.
+  curlIsEnabledButFunctionsAreDisabled: Die Erweiterung %extensionName% ist aktiviert,
+    aber die benötigten Funktionen (%functionNames%) sind deaktiviert. Wir empfehlen,
+    die Erweiterung generell zu deaktivieren oder die benötigten Funktionen zu aktivieren.
   moreInformation: Mehr Informationen
 
 # Account
@@ -816,24 +954,35 @@ account:
 
     start:
       title: Zwei-Faktor-Authentifizierung einrichten
-      intro: Bitte scannen Sie diesen QR-Code mit Ihrer Authentifizierungs-App auf Ihrem Smartphone. Sie können Google Authenticator, Microsoft Authenticator oder ähnliche Apps verwenden.
-      textManually: Statt den QR-Code zu scannen, können Sie auch den folgenden Code manuell in der Authentifizierungs-App eingeben.
-      qrCodeAlt: Dieses Bild zeigt den QR-Code, welchen Sie mit Ihrer Authentifizierungs-App auf Ihrem Smartphone scannen müssen.
+      intro: Bitte scannen Sie diesen QR-Code mit Ihrer Authentifizierungs-App auf
+        Ihrem Smartphone. Sie können Google Authenticator, Microsoft Authenticator
+        oder ähnliche Apps verwenden.
+      textManually: Statt den QR-Code zu scannen, können Sie auch den folgenden Code
+        manuell in der Authentifizierungs-App eingeben.
+      qrCodeAlt: Dieses Bild zeigt den QR-Code, welchen Sie mit Ihrer Authentifizierungs-App
+        auf Ihrem Smartphone scannen müssen.
 
     verify:
       title: Zwei-Faktor-Authentifizierung bestätigen
-      intro: Bitte geben Sie den Code ein, welcher in der Authentifizierungs-App sichtbar ist, im Feld unten ein, um die Einrichtung zu bestätigen.
+      intro: Bitte geben Sie den Code ein, welcher in der Authentifizierungs-App sichtbar
+        ist, im Feld unten ein, um die Einrichtung zu bestätigen.
 
     backupCodes:
       title: Wiederherstellungscodes
-      intro: Bitte speichern Sie dieses Codes an einem sicheren Ort. Wenn Sie den Zugriff auf Ihr Gerät verloren haben, können Sie sich mit diesen Wiederherstellungscodes erneut einloggen.
-      infoResetBackupCodes: Jeder Wiederherstellungscode kann nur einmal verwendet werden. Falls Sie einen Wiederherstellungscode verwendet haben, sollten Sie die Wiederherstellungscodes zurücksetzen.
+      intro: Bitte speichern Sie dieses Codes an einem sicheren Ort. Wenn Sie den
+        Zugriff auf Ihr Gerät verloren haben, können Sie sich mit diesen Wiederherstellungscodes
+        erneut einloggen.
+      infoResetBackupCodes: Jeder Wiederherstellungscode kann nur einmal verwendet
+        werden. Falls Sie einen Wiederherstellungscode verwendet haben, sollten Sie
+        die Wiederherstellungscodes zurücksetzen.
 
     message:
-      successfullyDisabled: Zwei-Faktor-Authentifizierung wurde für Ihren Account erfolgreich deaktiviert.
+      successfullyDisabled: Zwei-Faktor-Authentifizierung wurde für Ihren Account
+        erfolgreich deaktiviert.
 
     error:
-      verificationFailed: Die Verifizierung der Zwei-Faktor-Authentifizierung ist fehlgeschlagen. Bitte wiederholen Sie den Prozess.
+      verificationFailed: Die Verifizierung der Zwei-Faktor-Authentifizierung ist
+        fehlgeschlagen. Bitte wiederholen Sie den Prozess.
 
 # Security
 security:
@@ -862,28 +1011,35 @@ password:
 
   request:
     title: Ihr Passwort zurücksetzen
-    intro: Geben Sie Ihre E-Mail-Adresse ein und wir werden Ihnen einen Link zum Zurücksetzen Ihres Passworts zusenden.
+    intro: Geben Sie Ihre E-Mail-Adresse ein und wir werden Ihnen einen Link zum Zurücksetzen
+      Ihres Passworts zusenden.
     action: Passwort-E-Mail senden
 
     form:
       email: E-Mail-Adresse
 
     message:
-      failedToSendEmail: 'Aufgrund eines technischen Fehlers konnte das E-Mail nicht versendet werden. Bitte versuchen Sie es später erneut. Fehlermeldung: %errorMessage%'
+      failedToSendEmail: 'Aufgrund eines technischen Fehlers konnte das E-Mail nicht
+        versendet werden. Bitte versuchen Sie es später erneut. Fehlermeldung: %errorMessage%'
 
   email:
     subject: Ihr Passwort zurücksetzen
     greeting: Guten Tag
-    infoClickButton: Um Ihr Passwort zurückzusetzen, klicken Sie bitte auf die untenstehende Schaltfläche und folgen Sie den Anweisungen.
+    infoClickButton: Um Ihr Passwort zurückzusetzen, klicken Sie bitte auf die untenstehende
+      Schaltfläche und folgen Sie den Anweisungen.
     resetPasswordButton: Passwort zurücksetzen
     infoLinkExpiration: Dieser Link ist für %time% gültig.
     goodbye: Mit freundlichen Grüssen
-    help: Wenn Sie Probleme mit der Schaltfläche haben, kopieren Sie den untenstehenden Link und fügen Sie ihn in Ihrem Browser ein.
+    help: Wenn Sie Probleme mit der Schaltfläche haben, kopieren Sie den untenstehenden
+      Link und fügen Sie ihn in Ihrem Browser ein.
 
   emailSent:
     title: Passwort-E-Mail versendet
-    infoEmailWithLink: Wenn ein Account für die von Ihnen eingegebene E-Mail-Adresse existiert, wurde soeben ein E-Mail mit einem Link zum Zurücksetzen des Passworts an diese E-Mail adresse versendet. Der Link wird in %time% ablaufen.
-    infoSpamFolder: Falls Sie kein E-Mail erhalten haben, prüfen Sie bitte Ihren Spam-Ordner oder %linkStart%versuchen Sie es erneut%linkEnd%.
+    infoEmailWithLink: Wenn ein Account für die von Ihnen eingegebene E-Mail-Adresse
+      existiert, wurde soeben ein E-Mail mit einem Link zum Zurücksetzen des Passworts
+      an diese E-Mail adresse versendet. Der Link wird in %time% ablaufen.
+    infoSpamFolder: Falls Sie kein E-Mail erhalten haben, prüfen Sie bitte Ihren Spam-Ordner
+      oder %linkStart%versuchen Sie es erneut%linkEnd%.
 
   reset:
     title: Ihr Passwort zurücksetzen
@@ -893,7 +1049,8 @@ password:
       successfullyReset: Ihr Passwort wurde erfolgreich zurückgesetzt.
 
     error:
-      tokenNotFound: Es wurde kein Passwort-Token in der Adresse oder in der Session gefunden.
+      tokenNotFound: Es wurde kein Passwort-Token in der Adresse oder in der Session
+        gefunden.
       errorOccurred: Mit der Passwort-zurücksetzen-Anfrage gab es ein Problem. %error%
 
   form:
@@ -985,11 +1142,16 @@ setup:
 
   prerequisites:
     title: Voraussetzungen
-    introduction: mosparo benötigt einige Voraussetzungen, um korrekt funktionieren zu können. Bevor wir mosparo einrichten können, müssen diese Voraussetzungen erfüllt sein.
+    introduction: mosparo benötigt einige Voraussetzungen, um korrekt funktionieren
+      zu können. Bevor wir mosparo einrichten können, müssen diese Voraussetzungen
+      erfüllt sein.
 
-    meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit der Einrichtung fortfahren.
-    missingPrerequisites: Einige Voraussetzungen fehlen. Bitte prüfen Sie die Zusammenfassung unten.
-    installOptionalExtensions: Einige optionale Erweiterungen sind nicht installiert. Wir empfehlen Ihnen, diese Erweiterungen zu installieren, bevor Sie fortfahren.
+    meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit der Einrichtung
+      fortfahren.
+    missingPrerequisites: Einige Voraussetzungen fehlen. Bitte prüfen Sie die Zusammenfassung
+      unten.
+    installOptionalExtensions: Einige optionale Erweiterungen sind nicht installiert.
+      Wir empfehlen Ihnen, diese Erweiterungen zu installieren, bevor Sie fortfahren.
 
     types:
       general: Allgemein
@@ -1010,9 +1172,13 @@ setup:
   database:
     title: Datenbank
     introduction: Bitte geben Sie die Verbindungsdaten zu Ihrer MySQL-Datebank ein.
-    useEmptyDatabase: Bitte verwenden Sie eine leere Datenbank bzw. eine Datenbank, in welcher keine Tabellen von mosparo existieren.
-    mosparoTablesExistInDatabase: In der angegebenen Datenbank wurden Tabellen von mosparo gefunden. Bitte verwenden Sie eine andere Datenbank oder löschen Sie die Tabellen.
-    connectionDataInvalid: Es war nicht möglich, eine Verbindung mit der Datenbank herzustellen. Bitte prüfen Sie Ihre Einstellungen und versuchen Sie es erneut.
+    useEmptyDatabase: Bitte verwenden Sie eine leere Datenbank bzw. eine Datenbank,
+      in welcher keine Tabellen von mosparo existieren.
+    mosparoTablesExistInDatabase: In der angegebenen Datenbank wurden Tabellen von
+      mosparo gefunden. Bitte verwenden Sie eine andere Datenbank oder löschen Sie
+      die Tabellen.
+    connectionDataInvalid: Es war nicht möglich, eine Verbindung mit der Datenbank
+      herzustellen. Bitte prüfen Sie Ihre Einstellungen und versuchen Sie es erneut.
 
     form:
       host: Host
@@ -1023,7 +1189,8 @@ setup:
 
   other:
     title: Weitere Informationen
-    introduction: Wir brauchen noch ein paar weitere Daten. Bitte füllen Sie die Felder unten aus.
+    introduction: Wir brauchen noch ein paar weitere Daten. Bitte füllen Sie die Felder
+      unten aus.
 
     form:
       name: Name von Ihrer mosparo-Installation
@@ -1033,5 +1200,6 @@ setup:
 
   install:
     title: Installation abgeschlossen
-    description: Die Installation wurde erfolgreich abgeschlossen. Sie können sich nun mit Ihrem Benutzer einloggen.
+    description: Die Installation wurde erfolgreich abgeschlossen. Sie können sich
+      nun mit Ihrem Benutzer einloggen.
 
