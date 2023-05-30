@@ -9,8 +9,6 @@ project:
     manage: Gestisci progetto
   create:
     title: Crea progetto
-    message:
-      successfullyCreated: Il nuovo progetto è stato creato con successo.
   form:
     status: Stato
     name: Nome

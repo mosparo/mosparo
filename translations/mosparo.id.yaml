@@ -9,8 +9,6 @@ project:
     goto: Pergi ke proyek
   create:
     title: Buat proyek
-    message:
-      successfullyCreated: Proyek baru berhasil dibuat.
   form:
     name: Nama
     description: Deskripsi

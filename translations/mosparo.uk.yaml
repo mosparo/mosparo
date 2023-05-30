@@ -13,8 +13,6 @@ project:
   infoNoProjectAvailable: Немає доступних проєктів
   create:
     title: Створити проєкт
-    message:
-      successfullyCreated: Новий проєкт успішно створено.
   backToList: Назад до проєктів
   action:
     manage: Керування проєктом

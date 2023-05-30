@@ -18,9 +18,6 @@ project:
   create:
     title: Projekt erstellen
 
-    message:
-      successfullyCreated: Das neue Projekt wurde erfolgreich erstellt.
-
   form:
     name: Name
     description: Beschreibung
