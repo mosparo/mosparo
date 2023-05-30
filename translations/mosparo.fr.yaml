@@ -15,8 +15,6 @@ project:
     goto: Aller au projet
   create:
     title: Créer un projet
-    message:
-      successfullyCreated: Le nouveau projet a bien été créé.
   form:
     status: État
     name: Nom

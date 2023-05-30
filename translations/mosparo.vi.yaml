@@ -116,8 +116,6 @@ project:
     manage: Quản lý dự án
     goto: Đi tới dự án
   create:
-    message:
-      successfullyCreated: Dự án mới đã được tạo thành công.
     title: Tạo dự án
   form:
     name: Tên
