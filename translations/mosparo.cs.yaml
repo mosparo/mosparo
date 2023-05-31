@@ -667,7 +667,6 @@ setup:
     types:
       general: Obecné
       phpExtension: PHP rozšíření
-      phpExtensions: PHP rozšíření
       writeAccess: Povolení zápisu
     title: Předpoklady
     meetPrerequisites: Všechny předpoklady jsou v pořádku. Můžete pokračovat v nastavení.
