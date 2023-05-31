@@ -41,6 +41,17 @@ project:
     owner: Besitzer
 
 # Dashboard
+  createWizard:
+    security:
+      title: Sicherheits-Funktionen aktivieren
+      introSecurity: Bitte wählen Sie die Sicherheits-Funktionen, die Sie aktivieren möchten.
+      infoSettings: Sie können diese Sicherheits-Funktionen nach dem Assistenten in den Sicherheits-Einstellungen aktivieren, deaktivieren und anpassen.
+    connection:
+      title: Verbindungsdetails
+      savedSuccessfully: Die Darstellungs- und Sicherheits-Einstellungen wurden erfolgreich gespeichert. Das Projekt ist nun für den Einsatz auf Ihre Website vorbereitet.
+      infoSettings: Diese Verbindungsdetails können Sie nach dem Assistenten in den Einstellungen des Projektes finden.
+    design:
+      title: Darstellung wählen
 dashboard:
   title: Übersicht
   chart:
@@ -364,6 +375,11 @@ submission:
         text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit beträgt %minimumTimeSeconds% Sekunden.
 
 # Settings
+  filter:
+    options:
+      spam: Spam-Einsendungen
+      all: Alle Einsendungen
+      valid: Gültige Einsendungen
 settings:
   title: Projekt-Einstellungen
   backToSettings: Zu den Einstellungen
@@ -501,6 +517,9 @@ settings:
         success: Erfolg
         failure: Fehler
 
+      simpleDesign: Einfache Darstellung
+      preview: Vorschau
+      colorAndDimensionSettings: Farben und Grösse
     preview:
       background: Hintergrund der Vorschau
 
@@ -528,6 +547,11 @@ settings:
         shadow: Schatten
         shadowInset: Schatten, Innen
 
+        websiteForeground: Vordergrundfarbe der Website
+        websiteBackground: Hintergrundfarbe der Website
+        websiteAccent: Akzentfarbe der Website
+      help:
+        boxSize: Wählen Sie die Grösse der Box.
     choices:
       boxSize:
         small: Klein
@@ -539,6 +563,9 @@ settings:
       boxRadiusTooLarge: Das Logo kann nur angezeigt werden, wenn der Radius der Box unterhalb eines gewissen Wertes liegt.
 
 # Administration
+    action:
+      switchToSimpleMode: Zum einfachen Modus wechseln
+      switchToAdvancedMode: Zum erweiterten Modus wechseln
 administration:
   title: Administration
 
@@ -759,6 +786,13 @@ administration:
     website: Website
 
 # Download check
+  security:
+    title: Sicherheits-Einstellungen
+    reverseProxy:
+      form:
+        trustedProxies: Liste der vertrauenswürdigen Proxies
+      title: Reverse Proxy
+      providerPresets: Provider-Vorlagen
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
@@ -915,6 +949,9 @@ action:
   installUpdate: Update installieren
 
 # General values
+  goToTheDashboard: Zur Übersicht
+  saveAndContinue: Speichern und Weiter
+  skipWizard: Assistent überspringen
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
@@ -941,6 +978,7 @@ form:
     systemDefault: Standard-Einstellung
     browserLanguage: Sprache des Browsers
 
+  clearField: Feld leeren
 interface:
   colorModes:
     light: Hell
