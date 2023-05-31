@@ -30,6 +30,6 @@ class RefreshRulesetsCommand extends Command
     {
         $this->rulesetHelper->downloadAll();
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

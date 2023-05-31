@@ -31,11 +31,11 @@ class GeoIp2DownloadDatabaseCommand extends Command
         $result = $this->geoIp2Helper->downloadDatabase();
 
         if ($result === true) {
-            return 0;
+            return Command::SUCCESS;
         }
 
         $output->write($result);
 
-        return 1;
+        return Command::FAILURE;
     }
 }

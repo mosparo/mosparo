@@ -30,6 +30,6 @@ class CleanupDatabaseCommand extends Command
     {
         $this->cleanupHelper->cleanup(true);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -158,6 +158,6 @@ class UpdateMosparoCommand extends Command
         $output->writeln('  php bin/console cache:clear');
         $output->writeln('');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
