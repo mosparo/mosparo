@@ -146,7 +146,7 @@ rule:
 
     provider:
       title: Provider
-      shortIntro: Allows to filter by provider specific informations
+      shortIntro: Allows to filter by provider specific information
       intro: The provider rule type allows to filter for AS numbers and country codes.
       infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
       label: AS number/Country
@@ -737,7 +737,7 @@ administration:
 
   system:
     title: System Informations
-    description: Find all the informations about mosparo.
+    description: Find all the information about mosparo.
 
     general:
       title: General
@@ -1021,7 +1021,7 @@ setup:
       password: Password
 
   other:
-    title: Other informations
+    title: Other information
     introduction: We have some other values we need. Please fill out the fields below.
 
     form:
