@@ -667,6 +667,8 @@ setup:
     types:
       general: Obecné
       phpExtension: PHP rozšíření
+      phpExtensions: PHP rozšíření
+      writeAccess: Povolení zápisu
     title: Předpoklady
     meetPrerequisites: Všechny předpoklady jsou v pořádku. Můžete pokračovat v nastavení.
     subtypes:
@@ -676,6 +678,8 @@ setup:
       missing: Chybějící
       okay: Dobře
       notOkay: Není v pořádku
+      writable: Zapisovatelné
+      notWritable: Nelze zapisovat
     optional: volitelný
     introduction: mosparo potřebuje ke správnému spuštění některé předpoklady. Než budeme moci mosparo nastavit, musí být tyto předpoklady v pořádku.
     missingPrerequisites: Chybí některé předpoklady. Podívejte se na níže uvedený přehled.
