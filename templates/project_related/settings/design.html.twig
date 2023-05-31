@@ -367,7 +367,7 @@
                 $('.mosparo-box').each(function () {
                     new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
 
-                    $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend') }}');
+                    $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend')|escape('js') }}');
                     let type = $(this).data('type');
                     switch (type) {
                         case 'focus':
@@ -381,7 +381,7 @@
                             break;
                         case 'failure':
                             $(this).addClass('mosparo__invalid');
-                            $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend') }}');
+                            $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend')|escape('js') }}');
                             break;
                     }
                 });
