@@ -692,6 +692,24 @@ administration:
       titleNotAvailable: No update available
       messageNotAvailable: No new update for mosparo is available. Please check again later.
 
+    upgrade:
+      titleAvailable: Upgrade available
+      updateFirst: Please update to the latest minor version before upgrading to the next major version.
+      introAvailable: A new major version is available. You can use the update tool to upgrade to the latest major version.
+      installedVersion: Installed major version
+      availableVersion: Available major version
+
+    checkRequirements:
+      title: Check requirements
+      introduction: Before you upgrade, make sure that you meet all requirements. With a new major version, the requirements can change and must be met before the upgrade can be executed.
+
+      meetPrerequisites: All requirements are met. You can proceed with the upgrade.
+      missingPrerequisites: Some requirements are missing. Please check the summary below.
+
+      action:
+        upgrade: Upgrade to %newMajorVersion%
+        recheck: Recheck
+
     execute:
       title: Update mosparo
       description: Please wait and don't leave this page. Update progress started…
@@ -898,6 +916,7 @@ action:
   configure: Configure
   checkForUpdate: Check for update
   installUpdate: Install update
+  checkRequirements: Check requirements
 
 # General values
 general:
@@ -961,16 +980,16 @@ setup:
     introduction: This setup will guide you throught the mosparo setup process.
 
   prerequisites:
-    title: Prerequisites
-    introduction: mosparo needs some prerequisites to be able to run correctly. Before we can set up mosparo, these prerequisites have to be okay.
+    title: Requirements
+    introduction: mosparo has some requirements to be able to run correctly. Before we can set up mosparo, these requirements have to be met.
 
-    meetPrerequisites: All prerequisites are okay. You can proceed with the setup.
-    missingPrerequisites: Some prerequisites are missing. Please check the summary below.
+    meetPrerequisites: All requirements are met. You can proceed with the setup.
+    missingPrerequisites: Some requirements are missing. Please check the summary below.
     installOptionalExtensions: Some optional extensions are not installed. We recommend you to install these extensions before you proceed.
 
     types:
       general: General
-      phpExtensions: PHP extensions
+      phpExtension: PHP extensions
       writeAccess: Write access
 
     subtypes:
@@ -983,6 +1002,10 @@ setup:
       notOkay: Not okay
       writable: Writable
       notWritable: Not writable
+
+      minPhpVersion:
+        required: 'Required:'
+        available: 'Available:'
 
     optional: optional
 

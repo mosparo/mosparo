@@ -1,0 +1,81 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.update.checkRequirements.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body_card_stamp %}
+    <div class="card-stamp">
+        <div class="card-stamp-icon bg-green">
+            <i class="ti ti-package"></i>
+        </div>
+    </div>
+{% endblock %}
+
+{% block small_body %}
+    <h2 class="card-title text-center mb-4">{{ 'administration.update.checkRequirements.title'|trans }}</h2>
+
+    <p>
+        {{ 'administration.update.upgrade.introAvailable'|trans }}
+    </p>
+    <div class="row mb-3">
+        <div class="col-6">
+            <h4 class="mb-0">
+                {{ 'administration.update.upgrade.installedVersion'|trans }}
+            </h4>
+            <div>
+                {{ mosparoMajorVersion }}
+            </div>
+        </div>
+        <div class="col-6">
+            <h4 class="mb-0">
+                {{ 'administration.update.upgrade.availableVersion'|trans }}
+            </h4>
+            <div>
+                {{ availableUpgradeData.majorVersionData.number }}
+            </div>
+        </div>
+    </div>
+
+    <p>
+        {{ 'administration.update.checkRequirements.introduction'|trans }}
+    </p>
+
+    {% if meetPrerequisites %}
+        <div class="alert alert-success">
+            {{ 'administration.update.checkRequirements.meetPrerequisites'|trans }}
+        </div>
+    {% else %}
+        <div class="alert alert-danger">
+            {{ 'administration.update.checkRequirements.missingPrerequisites'|trans }}
+        </div>
+    {% endif %}
+
+    {% include 'snippets/prerequisites.html.twig' %}
+
+    {% if meetPrerequisites %}
+        {% if updatesEnabled %}
+            <div class="form-footer">
+                <div class="alert alert-danger">
+                    {{ 'administration.update.version.warningUpdate'|trans }}
+                </div>
+
+                <a href="{{ path('administration_upgrade_execute') }}" class="btn btn-warning w-100">
+                    <i class="ti ti-package"></i>
+                    {{ 'administration.update.checkRequirements.action.upgrade'|trans({ '%newMajorVersion%': availableUpgradeData.majorVersionData.number }) }}
+                </a>
+            </div>
+        {% else %}
+            <div class="alert alert-danger">
+                {{ 'administration.update.version.warningUpdatesDisabled'|trans }}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="form-footer">
+            <a href="{{ path('administration_upgrade_check_requirements') }}" class="btn btn-secondary w-100">
+                <i class="ti ti-refresh"></i>
+                {{ 'administration.update.checkRequirements.action.recheck'|trans }}
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}

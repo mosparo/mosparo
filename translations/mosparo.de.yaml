@@ -968,7 +968,7 @@ setup:
 
     types:
       general: Allgemein
-      phpExtensions: PHP-Erweiterungen
+      phpExtension: PHP-Erweiterungen
       writeAccess: Schreibzugriff
 
     subtypes:

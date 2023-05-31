@@ -85,10 +85,10 @@ class UpdateMosparoCommand extends Command
         $output->writeln('<question> Update for mosparo available! </>');
         $output->writeln('');
         $output->writeln(sprintf("<fg=red>Installed version:</>\t<comment>%s</>", Kernel::VERSION));
-        $output->writeln(sprintf("<fg=green>New version:</>\t\t<comment>%s</>", $versionData['version']));
+        $output->writeln(sprintf("<fg=green>New version:</>\t\t<comment>%s</>", $versionData['number']));
         $output->writeln('');
 
-        $question = new ConfirmationQuestion(sprintf('Do you want to update mosparo to version %s? (n) ', $versionData['version']), false);
+        $question = new ConfirmationQuestion(sprintf('Do you want to update mosparo to version %s? (n) ', $versionData['number']), false);
 
         // Abort if the user didn't want to continue
         if (!$helper->ask($input, $output, $question)) {

@@ -1,0 +1,91 @@
+{% trans_default_domain 'mosparo' %}
+
+{% set showOptionalExtensionsAlert = false %}
+{% for type in prerequisites|keys %}
+    <div class="mb-3">
+        <h3 class="mb-0">
+            {% if type == 'general' %}
+                {{ 'setup.prerequisites.types.general'|trans }}
+            {% elseif type == 'phpExtension' %}
+                {{ 'setup.prerequisites.types.phpExtension'|trans }}
+            {% elseif type == 'writeAccess' %}
+                {{ 'setup.prerequisites.types.writeAccess'|trans }}
+            {% endif %}
+        </h3>
+
+        {% for subtype in prerequisites[type]|keys %}
+            {% set prerequisite = prerequisites[type][subtype] %}
+            <div class="d-flex">
+                <div>
+                    <strong>
+                        {% if type == 'general' %}
+                            {{ ('setup.prerequisites.subtypes.' ~ subtype)|trans }}
+                        {% elseif type == 'phpExtension' %}
+                            {{ subtype }}
+                        {% elseif type == 'writeAccess' %}
+                            {{ subtype }}
+                        {% endif %}
+                    </strong>
+
+                    {% if not prerequisite.required %}
+                        <span class="text-info">({{ 'setup.prerequisites.optional'|trans }})</span>
+                    {% endif %}
+                </div>
+                <div class="flex-fill d-flex justify-content-end">
+                    {% if prerequisite.pass %}
+                        <span class="text-success">
+                            {% if type == 'phpExtension' %}
+                                {{ 'setup.prerequisites.results.available'|trans }}
+                            {% elseif type == 'writeAccess' %}
+                                {{ 'setup.prerequisites.results.writable'|trans }}
+                            {% else %}
+                                {{ 'setup.prerequisites.results.okay'|trans }}
+                            {% endif %}
+                        </span>
+                    {% else %}
+                        <div class="text-danger text-end">
+                            {% if type == 'phpExtension' %}
+                                {{ 'setup.prerequisites.results.missing'|trans }}
+
+                                {% if not prerequisite.required %}
+                                    {% set showOptionalExtensionsAlert = true %}
+                                {% endif %}
+                            {% elseif type == 'writeAccess' %}
+                                {{ 'setup.prerequisites.results.notWritable'|trans }}
+                            {% else %}
+                                {{ 'setup.prerequisites.results.notOkay'|trans }}
+
+                                {% if subtype == 'minPhpVersion' %}
+                                    <div class="text-nowrap border border-danger py-1 px-2 mt-2">
+                                        <div class="row">
+                                            <div class="col text-start">
+                                                {{ 'setup.prerequisites.results.minPhpVersion.required'|trans }}
+                                            </div>
+                                            <div class="col text-end">
+                                                {{ prerequisite.required }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col text-start">
+                                                {{ 'setup.prerequisites.results.minPhpVersion.available'|trans }}
+                                            </div>
+                                            <div class="col text-end">
+                                                <strong>{{ prerequisite.available }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+{% if showOptionalExtensionsAlert %}
+    <div class="alert alert-info">
+        {{ 'setup.prerequisites.installOptionalExtensions'|trans }}
+    </div>
+{% endif %}

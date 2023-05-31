@@ -666,7 +666,7 @@ setup:
   prerequisites:
     types:
       general: Obecné
-      phpExtensions: PHP rozšíření
+      phpExtension: PHP rozšíření
     title: Předpoklady
     meetPrerequisites: Všechny předpoklady jsou v pořádku. Můžete pokračovat v nastavení.
     subtypes:

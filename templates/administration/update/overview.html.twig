@@ -9,52 +9,105 @@
     <div class="row">
         <div class="col-12 col-lg-6 mb-3">
             {% if checkedForUpdates %}
-                <div class="card mb-3">
-                    {% if isUpdateAvailable %}
-                        <div class="card-status-start bg-info"></div>
-                        <div class="card-header">
-                            <h3 class="card-title">{{ 'administration.update.version.titleAvailable'|trans }}</h3>
+                {% if isUpgradeAvailable %}
+                    <div class="card mb-3">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-green">
+                                <i class="ti ti-package"></i>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <p>{{ 'administration.update.version.messageAvailable'|trans }}</p>
-
-                            <div class="row mb-3">
-                                <div class="col-6">
-                                    <h4 class="mb-0">
-                                        {{ 'administration.update.installedVersion'|trans }}
-                                    </h4>
-                                    <div>
-                                        {{ mosparoVersion }}
+                            <h3 class="card-title">{{ 'administration.update.upgrade.titleAvailable'|trans }}</h3>
+                            {% if isUpdateAvailable %}
+                                <p>
+                                    {{ 'administration.update.upgrade.updateFirst'|trans }}
+                                </p>
+                            {% else %}
+                                <p>
+                                    {{ 'administration.update.upgrade.introAvailable'|trans }}
+                                </p>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <h4 class="mb-0">
+                                            {{ 'administration.update.upgrade.installedVersion'|trans }}
+                                        </h4>
+                                        <div>
+                                            {{ mosparoMajorVersion }}
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <h4 class="mb-0">
+                                            {{ 'administration.update.upgrade.availableVersion'|trans }}
+                                        </h4>
+                                        <div>
+                                            {{ availableUpgradeData.majorVersionData.number }}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <h4 class="mb-0">
-                                        {{ 'administration.update.availableVersion'|trans }}
-                                    </h4>
-                                    <div>
-                                        {{ availableUpdateData.version }}
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="alert alert-danger">
                                 {% if updatesEnabled %}
-                                    {{ 'administration.update.version.warningUpdate'|trans }}
-                                {% else %}
-                                    {{ 'administration.update.version.warningUpdatesDisabled'|trans }}
+                                    <div class="row mt-3">
+                                        <div class="col-12 col-md-auto ms-auto">
+                                            <a href="{{ path('administration_upgrade_check_requirements') }}" class="btn btn-green w-100">
+                                                <i class="ti ti-package"></i>
+                                                {{ 'action.checkRequirements'|trans }}
+                                            </a>
+                                        </div>
+                                    </div>
                                 {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if isUpdateAvailable or not isUpgradeAvailable %}
+                    <div class="card mb-3">
+                        {% if isUpdateAvailable %}
+                            <div class="card-status-start bg-info"></div>
+                            <div class="card-header">
+                                <h3 class="card-title">{{ 'administration.update.version.titleAvailable'|trans }}</h3>
                             </div>
-                        </div>
-                    {% else %}
-                        <div class="card-status-start bg-success"></div>
-                        <div class="card-header">
-                            <h3 class="card-title">{{ 'administration.update.version.titleNotAvailable'|trans }}</h3>
-                        </div>
-                        <div class="card-body">
-                            {{ 'administration.update.version.messageNotAvailable'|trans }}
-                        </div>
-                    {% endif %}
-                </div>
+                            <div class="card-body">
+                                <p>{{ 'administration.update.version.messageAvailable'|trans }}</p>
+
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <h4 class="mb-0">
+                                            {{ 'administration.update.installedVersion'|trans }}
+                                        </h4>
+                                        <div>
+                                            {{ mosparoVersion }}
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <h4 class="mb-0">
+                                            {{ 'administration.update.availableVersion'|trans }}
+                                        </h4>
+                                        <div>
+                                            {{ availableUpdateData.number }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-danger">
+                                    {% if updatesEnabled %}
+                                        {{ 'administration.update.version.warningUpdate'|trans }}
+                                    {% else %}
+                                        {{ 'administration.update.version.warningUpdatesDisabled'|trans }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card-status-start bg-success"></div>
+                            <div class="card-header">
+                                <h3 class="card-title">{{ 'administration.update.version.titleNotAvailable'|trans }}</h3>
+                            </div>
+                            <div class="card-body">
+                                {{ 'administration.update.version.messageNotAvailable'|trans }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
 
                 {% if isUpdateAvailable and updatesEnabled %}
                     <div class="row mt-3 mb-3">
