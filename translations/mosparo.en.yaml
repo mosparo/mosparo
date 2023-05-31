@@ -150,7 +150,6 @@ rule:
       intro: The provider rule type allows to filter for AS numbers and country codes.
       infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
       label: AS number/Country
-      placeholder: ''
 
       action:
         configureGeoip2: GeoIP2 Configuration
@@ -182,7 +181,6 @@ rule:
       shortIntro: Allows to filter by specific words or patterns in the user agent
       intro: The user agent rule type allows to filter for words and Regular Expression patterns in the user agent of the user.
       label: User agent (Word/Pattern)
-      placeholder: ''
 
       text:
         title: Text
@@ -212,7 +210,6 @@ rule:
       shortIntro: Allows to filter by specific words or patterns
       intro: The word rule type allows to filter for words and Regular Expression patterns.
       label: Word/Pattern
-      placeholder: ''
 
       text:
         title: Text
