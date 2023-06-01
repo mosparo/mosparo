@@ -1057,11 +1057,11 @@ setup:
     introduction: This setup will guide you throught the mosparo setup process.
 
   prerequisites:
-    title: Prerequisites
-    introduction: mosparo needs some prerequisites to be able to run correctly. Before we can set up mosparo, these prerequisites have to be okay.
+    title: Requirements
+    introduction: mosparo has some requirements to be able to run correctly. Before we can set up mosparo, these requirements have to be met.
 
-    meetPrerequisites: All prerequisites are okay. You can proceed with the setup.
-    missingPrerequisites: Some prerequisites are missing. Please check the summary below.
+    meetPrerequisites: All requirements are met. You can proceed with the setup.
+    missingPrerequisites: Some requirements are missing. Please check the summary below.
     installOptionalExtensions: Some optional extensions are not installed. We recommend you to install these extensions before you proceed.
 
     types:
@@ -1098,7 +1098,7 @@ setup:
       password: Password
 
   other:
-    title: Other informations
+    title: Other information
     introduction: We have some other values we need. Please fill out the fields below.
 
     form:
