@@ -736,7 +736,7 @@ administration:
       description: The needed changes for this update were executed. Your installation is up to date.
 
   system:
-    title: System Informations
+    title: System Information
     description: Find all the information about mosparo.
 
     general:

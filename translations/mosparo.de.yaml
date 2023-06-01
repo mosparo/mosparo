@@ -150,8 +150,6 @@ rule:
       intro: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
       infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
       label: AS Nummer/Land
-      placeholder: ''
-
       action:
         configureGeoip2: GeoIP2 Konfiguration
 
@@ -182,8 +180,6 @@ rule:
       shortIntro: Filtert nach Wörter und RegEx-Muster im User-Agent
       intro: Der User-Agent-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular Expression Pattern zu filtern.
       label: User-Agent (Wort/Muster)
-      placeholder: ''
-
       text:
         title: Text
         intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
@@ -212,8 +208,6 @@ rule:
       shortIntro: Filtert nach Wörter und RegEx-Muster
       intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
       label: Wort/Muster
-      placeholder: ''
-
       text:
         title: Text
         intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
@@ -719,6 +713,20 @@ administration:
       title: Update ausgeführt
       description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
 
+    upgrade:
+      updateFirst: Bevor Sie auf die nächste Hauptversion upgraden können, müssen Sie die neuste Version Ihrer bisherigen Hauptversion installieren.
+      introAvailable: Eine neue Hauptversion ist verfügbar. Sie können das Update-Tool verwenden, um auf die neuste Hauptversion zu aktualisieren.
+      availableVersion: Verfügbare Hauptversion
+      titleAvailable: Upgrade verfügbar
+      installedVersion: Installierte Hauptversion
+    checkRequirements:
+      title: Voraussetzungen überprüfen
+      introduction: Stellen Sie bitte Sicher, dass Ihr Webhosting alle Voraussetzungen erfüllt, bevor Sie mit dem Upgrade fortfahren. Mit einer neuen Hauptversion können die Voraussetzungen ändern und müssen daher zwingend erfüllt werden.
+      missingPrerequisites: Einige der Voraussetzungen sind nicht erfüllt. Bitte prüfen Sie die Auswertung unten.
+      action:
+        upgrade: Upgrade zu %newMajorVersion%
+        recheck: Erneut prüfen
+      meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit dem Upgrade fortfahren.
   system:
     title: System-Informationen
     description: Alle Informationen über mosparo.
@@ -898,6 +906,7 @@ action:
   installUpdate: Update installieren
 
 # General values
+  checkRequirements: Voraussetzungen prüfen
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
@@ -982,6 +991,9 @@ setup:
       writable: Beschreibbar
       notWritable: Nicht beschreibbar
 
+      minPhpVersion:
+        required: 'Erforderlich:'
+        available: 'Verfügbar:'
     optional: optional
 
   database:

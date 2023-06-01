@@ -270,7 +270,7 @@ submission:
       client:
         country: Země
         asOrganization: Organizace AS
-        ipAddress: IP adresse
+        ipAddress: IP adresa
         asNumber: Číslo AS
         title: Klient
         userAgent: Uživatelský agent
@@ -318,8 +318,8 @@ settings:
     form:
       minimumTimeActive: Minimální aktivní čas
       delayTimeHelp: V sekundách
-      delayMultiplicator: Multiplikátor
-      delayMultiplicatorHelp: Základní doba zpoždění se s každým dalším požadavkem prodlužuje.
+      delayMultiplicator: Násobitel
+      delayMultiplicatorHelp: Základní doba odložení se s každým dalším požadavkem prodlužuje.
       lockoutActive: Automatické uzamčení aktivní
       lockoutMultiplicatorHelp: S každým dalším požadavkem se základní doba uzamčení prodlužuje.
       ipAllowList: Vždy povolené IP adresy a podsítě
@@ -336,9 +336,9 @@ settings:
       honeypotFieldNameHelp: Musí to být název pole, který se ve formuláři ještě nenachází a který je normálním názvem pole, například "url" nebo "address-line-2". Používejte pouze písmena, číslice a znak pomlčky (-). Pokud je prázdné, nebude do formuláře přidáno žádné pole honeypot.
       delayActive: Zpoždění požadavku je aktivní
       lockoutNumberOfAllowedRequests: Počet povolených požadavků
-      delayNumberOfAllowedRequestsHelp: Počet povolených požadavků předtím, než dojde ke zpoždění.
+      delayNumberOfAllowedRequestsHelp: Počet povolených požadavků předtím, než dojde k odložení.
       lockoutDetectionTimeFrame: Časový rámec detekce
-      delayTime: Základní doba zpoždění
+      delayTime: Základ doby odložení
       lockoutMultiplicator: Multiplikátor
       lockoutNumberOfAllowedRequestsHelp: Počet povolených požadavků před uzamčením.
       lockoutTime: Základní doba uzamčení
@@ -353,7 +353,7 @@ settings:
       title: Minimální čas
       intro: Funkce minimálního času měří čas mezi inicializací zaškrtávacího políčka mosparo (při načtení stránky) a validací odeslání (po odeslání formuláře). Pokud je tento čas nižší než níže zadané číslo, je validace neplatná. Pokud máte krátký formulář, měla by být tato kontrola vypnuta nebo byste měli použít velmi nízké číslo.
     requestDelaying:
-      title: Žádost o odložení
+      title: Odložení požadavku
       intro: Pro ztížení botům, může mosparo tvorbu odesílaných tokenů odložit. Bez odesílacího tokenu nelze formulář odeslat. Uživatel uvidí, jak dlouho musí čekat, než bude možné formulář odeslat.
       infoIpAddress: V případě, že je třeba vytvoření tokenu odložit, bude rozhodnuto na základě počtu požadavků, které IP adresa učinila. S každým dalším požadavkem na zpoždění prodlouží.
     message:
@@ -667,7 +667,7 @@ setup:
     types:
       general: Obecné
       phpExtension: PHP rozšíření
-      writeAccess: Zápis povolen
+      writeAccess: Povolení zápisu
     title: Předpoklady
     meetPrerequisites: Všechny předpoklady jsou v pořádku. Můžete pokračovat v nastavení.
     subtypes:
