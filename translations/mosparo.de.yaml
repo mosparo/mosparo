@@ -216,8 +216,6 @@ rule:
       shortIntro: Filtert nach Wörter und RegEx-Muster
       intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
       label: Wort/Muster
-      placeholder: ''
-
       text:
         title: Text
         intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
