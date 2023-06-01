@@ -225,8 +225,6 @@ rule:
       shortIntro: Allows to filter by specific words or patterns
       intro: The word rule type allows to filter for words and Regular Expression patterns.
       label: Word/Pattern
-      placeholder: ''
-
       text:
         title: Text
         intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
