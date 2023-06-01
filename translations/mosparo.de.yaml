@@ -18,6 +18,8 @@ project:
   create:
     title: Projekt erstellen
 
+    message:
+      successfullyCreatedAndConfigured: Das neue Projekt wurde erfolgreich erstellt und konfiguriert.
   form:
     name: Name
     description: Beschreibung
@@ -50,8 +52,11 @@ project:
       title: Verbindungsdetails
       savedSuccessfully: Die Darstellungs- und Sicherheits-Einstellungen wurden erfolgreich gespeichert. Das Projekt ist nun für den Einsatz auf Ihre Website vorbereitet.
       infoSettings: Diese Verbindungsdetails können Sie nach dem Assistenten in den Einstellungen des Projektes finden.
+      introConnection: Um mosparo auf Ihrer Website verwenden zu können, müssen Sie die entsprechende Integration Ihrer Website hinzufügen, um Ihre Website mit mosparo zu verbinden. Für die Konfiguration der Integration kopieren Sie bitte die folgenden Informationen in die dafür vorgesehenen Felder in Ihrer Website.
     design:
       title: Darstellung wählen
+      infoAdvancedMode: Nach dem Assistenten können Sie in den Erweiterten Modus wechseln, welcher Ihnen weitere Anpassungsmöglichkeiten bietet.
+      introStartWizard: Ihr Projekt wurde erfolgreich erstellt. Damit Sie auf Ihrer Website benutzen können, wählen Sie bitte die gewünschte Darstellung und fahren Sie fort.
 dashboard:
   title: Übersicht
   chart:
@@ -546,6 +551,9 @@ settings:
         websiteAccent: Akzentfarbe der Website
       help:
         boxSize: Wählen Sie die Grösse der Box.
+        websiteForeground: Wählen Sie die Vordergrundfarbe Ihrer Website. Die Farbe wird für die Hauptelemente der mosparo Box verwendet.
+        websiteBackground: Wählen Sie die Hintergrundfarbe Ihrer Website. Die Farbe wird für die Berechnung des Kontrastverhältnis verwendet.
+        websiteAccent: Wählen Sie die Akzentfarbe Ihrer Website. Die Farbe wird für verschiedene Elemente der mosparo box verwendet.
     choices:
       boxSize:
         small: Klein
@@ -560,6 +568,9 @@ settings:
     action:
       switchToSimpleMode: Zum einfachen Modus wechseln
       switchToAdvancedMode: Zum erweiterten Modus wechseln
+    simpleDesign:
+      introPreview: Auf der rechten Seite sehen Sie eine Vorschau der mosparo Box auf Ihrer Website. Mit der Kontrastverhältnis-Anzeige sehen Sie, wie gut das Kontrastverhältnis Ihrer Farben ist.
+      introColors: Bitte wählen Sie die Farben Ihrer Website aus. Die Hintergrundfarbe ist für die Berechnung des Kontrastverhältnisses erforderlich. Die Vordergrundfarbe repräsentiert die Textfarbe, während die Akzentfarbe für die Spezialelemente der mosparo Box verwendet wird.
 administration:
   title: Administration
 
@@ -785,8 +796,20 @@ administration:
     reverseProxy:
       form:
         trustedProxies: Liste der vertrauenswürdigen Proxies
+        trustedProxiesIncludeRemoteAddr: REMOTE_ADDR in die Liste der vertrauenswürdigen Proxies einfügen
+        replaceForwardedForHeader: Name der benutzerdefinierten Adress-Kopfzeile
+        replaceForwardedForHeaderHelp: Falls erforderlich, geben Sie den Namen der Kopfzeile an, in welcher Ihr Reverse Proxy die IP-Adresse des Benutzers sendet.
+        trustedProxiesHelp: Definieren Sie alle vertrauenswürdige Proxies. Sie können eine einfache IP-Adresse oder ein Subnetz eingeben. Die lokale IP-Adresse (127.0.0.1) wird immer automatisch zur Liste hinzugefügt.
+        trustedProxiesIncludeRemoteAddrHelp: Diese Option wird REMOTE_ADDR zur Liste der vertrauenswürdigen Proxies hinzufügen. Diese Einstellung kann gefährlich sein, da mosparo damit alle Forwarded Kopfzeilen von allen möglichen Benutzer akzeptiert.
+        replaceForwardedProtoHeader: Name der benutzerdefinierten Protokoll-Kopfzeile
+        replaceForwardedProtoHeaderHelp: Falls erforderlich, geben Sie den Namen der Kopfzeile an, in welcher Ihr Reverse Proxy das Protokoll der Anfrage sendet.
       title: Reverse Proxy
       providerPresets: Provider-Vorlagen
+      intro: Konfigurerien Sie bitte die folgenden Einstellungen, falls Sie einen Reverse Proxy verwenden. mosparo benötigt diese Informationen um die IP-Adresse des Benutzers korrekt zu erkennen.
+      modifyNotAllowed: Diese Einstellungen werden in den Umgebungseinstellungen von mosparo überschrieben. Sie können die Einstellungen hier nicht ändern.
+    message:
+      savedSuccessfully: Die Sicherheitseinstellungen wurden erfolgreich gespeichert.
+    description: Konfigurieren Sie verschiedene sicherheitsrelevante Einstellungen Ihrer mosparo Installation.
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
