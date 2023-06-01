@@ -253,5 +253,40 @@ submission:
         requiredTime: Waktu yang dibutuhkan
       title: Verifikasi
       isValid: Adalah benar
+    data:
+      client:
+        asOrganization: Dengan organisasi
+        ipAddress: Alamat IP
+        asNumber: Dengan nomor
+        country: Negara
+        title: Klien
+      value: Nilai
+      rating: Peringkat
+      formData:
+        title: Data formulir
+        valid: Verifikasi sukses
+        invalid: Verifikasi gagal
+        notVerified: Tidak terverifikasi
+        hasPoints: poin
+      fieldMustBeEmpty: Kolom harus kosong
+      points: '%totalPoints% poin'
+    source:
+      title: Sumber
+      pageTitle: Judul halaman
+      pageUrl: Halaman URL
+      requestedAt: Meminta ke
+    ignoredFields:
+      intro: Kolom berikut tidak dikirim karena jenis kolomnya (misalnya kolom kata sandi atau upload file).
+      title: Kolom diabaikan
+    generalVerifications:
+      minimumTime:
+        title: Penyampaian terlalu cepat
   title: Pengajuan
   backToList: Kembali ke kiriman
+settings:
+  title: Pengaturan proyek
+  backToSettings: Kembali ke pengaturan
+  general:
+    title: Pengaturan Umum
+    message:
+      successfullySaved: Pengaturan berhasil disimpan.
