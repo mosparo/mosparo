@@ -25,11 +25,27 @@ project:
     goto: Přejít na projekt
   create:
     title: Vytvořit projekt
+    message:
+      successfullyCreatedAndConfigured: Nový projekt byl úspěšně vytvořen a nakonfigurován.
   delete:
     title: Odstranit projekt %projectName%
     confirm: Opravdu chcete odstranit projekt %projectName%?
     message:
       successfullyDeleted: Projekt %projectName% byl úspěšně odstraněn.
+  createWizard:
+    design:
+      title: Zvolte design
+      introStartWizard: Váš projekt byl úspěšně vytvořen. Chcete-li jej začít používat, vyberte design a pokračujte.
+      infoAdvancedMode: Po dokončení průvodce můžete v nastavení designu přepnout do pokročilého režimu, který Vám umožní přizpůsobit návrh na míru Vašim webovým stránkám.
+    security:
+      introSecurity: Vyberte bezpečnostní funkce, které chcete povolit.
+      title: Povolit bezpečnostní funkce
+      infoSettings: Tyto funkce zabezpečení můžete povolit, zakázat nebo doladit v nastavení zabezpečení po ukončení průvodce.
+    connection:
+      title: Detaily připojení
+      savedSuccessfully: Nastavení designu a zabezpečení bylo úspěšně uloženo. Projekt je nyní připraven k použití na webových stránkách.
+      infoSettings: Po ukončení průvodce, najdete detaily připojení v nastavení projektu.
+      introConnection: Chcete-li použít mosparo ve Vašem webu, musíte přidat integraci a webovou stránku propojit s tímto projektem mosparo. Pro tento krok, zkopírujte a vložte následující informace do správných polí v integraci na webu.
 dashboard:
   chart:
     valid: Platné
@@ -268,7 +284,7 @@ submission:
       client:
         country: Země
         asOrganization: Organizace AS
-        ipAddress: IP adresse
+        ipAddress: IP adresa
         asNumber: Číslo AS
         title: Klient
         userAgent: Uživatelský agent
@@ -284,6 +300,11 @@ submission:
         title: Záznam odeslán příliš rychle
         text: Formulář byl odeslán příliš rychle. Zadavatel požadoval pouze %seconds% sekund, což je méně než minimální čas %minimumTimeSeconds% sekund.
   backToList: Zpět k záznamům
+  filter:
+    options:
+      all: Všechny záznamy
+      valid: Platné záznamy
+      spam: Spam záznamy
 settings:
   title: Nastavení projektu
   general:
@@ -316,8 +337,8 @@ settings:
     form:
       minimumTimeActive: Minimální aktivní čas
       delayTimeHelp: V sekundách
-      delayMultiplicator: Multiplikátor
-      delayMultiplicatorHelp: Základní doba zpoždění se s každým dalším požadavkem prodlužuje.
+      delayMultiplicator: Násobitel
+      delayMultiplicatorHelp: Základní doba odložení se s každým dalším požadavkem prodlužuje.
       lockoutActive: Automatické uzamčení aktivní
       lockoutMultiplicatorHelp: S každým dalším požadavkem se základní doba uzamčení prodlužuje.
       ipAllowList: Vždy povolené IP adresy a podsítě
@@ -332,11 +353,11 @@ settings:
       delayDetectionTimeFrameHelp: V sekundách
       lockoutDetectionTimeFrameHelp: V sekundách
       honeypotFieldNameHelp: Musí to být název pole, který se ve formuláři ještě nenachází a který je normálním názvem pole, například "url" nebo "address-line-2". Používejte pouze písmena, číslice a znak pomlčky (-). Pokud je prázdné, nebude do formuláře přidáno žádné pole honeypot.
-      delayActive: Zpoždění požadavku je aktivní
+      delayActive: Aktivovat odložení požadavku
       lockoutNumberOfAllowedRequests: Počet povolených požadavků
-      delayNumberOfAllowedRequestsHelp: Počet povolených požadavků předtím, než dojde ke zpoždění.
+      delayNumberOfAllowedRequestsHelp: Počet povolených požadavků předtím, než dojde k odložení.
       lockoutDetectionTimeFrame: Časový rámec detekce
-      delayTime: Základní doba zpoždění
+      delayTime: Základ doby odložení
       lockoutMultiplicator: Multiplikátor
       lockoutNumberOfAllowedRequestsHelp: Počet povolených požadavků před uzamčením.
       lockoutTime: Základní doba uzamčení
@@ -351,7 +372,7 @@ settings:
       title: Minimální čas
       intro: Funkce minimálního času měří čas mezi inicializací zaškrtávacího políčka mosparo (při načtení stránky) a validací odeslání (po odeslání formuláře). Pokud je tento čas nižší než níže zadané číslo, je validace neplatná. Pokud máte krátký formulář, měla by být tato kontrola vypnuta nebo byste měli použít velmi nízké číslo.
     requestDelaying:
-      title: Žádost o odložení
+      title: Odložení požadavku
       intro: Pro ztížení botům, může mosparo tvorbu odesílaných tokenů odložit. Bez odesílacího tokenu nelze formulář odeslat. Uživatel uvidí, jak dlouho musí čekat, než bude možné formulář odeslat.
       infoIpAddress: V případě, že je třeba vytvoření tokenu odložit, bude rozhodnuto na základě počtu požadavků, které IP adresa učinila. S každým dalším požadavkem na zpoždění prodlouží.
     message:
@@ -377,10 +398,18 @@ settings:
         checkbox: Zaškrtávací pole
         checkboxShadow: Stín zaškrtávacího políčka
         shadowInset: Vnitřní stín
+        websiteBackground: Barva pozadí webové stránky
+        websiteForeground: Barva popředí webové stránky
+        websiteAccent: Barva akcentu webové stránky
       boxRadius: Poloměr rámečku
       boxBorderWidth: Šířka okraje
       showMosparoLogo: Zobrazit logo mosparo pod zaškrtávacím políčkem
       showPingAnimation: Zobrazit animaci pro zvýraznění zaškrtávacího políčka
+      help:
+        websiteAccent: Zvolte barvu akcentu svých webových stránek. Tato barva se používá pro různé prvky mosparo.
+        websiteBackground: Zvolte barvu pozadí svých webových stránek. Tato barva se používá k výpočtu kontrastního poměru.
+        websiteForeground: Zvolte barvu popředí svých webových stránek. Tato barva se používá k zobrazení hlavních prvků mosparo.
+        boxSize: Zvolte velikost rámečku.
     title: Vzhled
     subtitles:
       dimensionSettings: Rozměry
@@ -391,6 +420,9 @@ settings:
         loading: Při načítání
         success: Úspěch
         failure: Selhání
+      preview: Náhled
+      simpleDesign: Jednoduchý design
+      colorAndDimensionSettings: Barvy a rozměry
     preview:
       background: Pozadí náhledu
     choices:
@@ -401,6 +433,12 @@ settings:
     message:
       successfullySaved: Nastavení návrhu byla úspěšně uložena.
       boxRadiusTooLarge: Logo lze zobrazit pouze tehdy, pokud je poloměr rámečku menší než určitá hodnota.
+    simpleDesign:
+      introColors: Vyberte si prosím barvy Vašich webových stránek. Barva pozadí je nutná pro výpočet správného kontrastního poměru, barva popředí představuje barvu textu a barva akcentu se používá pro speciální prvky rámečku mosparo.
+      introPreview: Na pravé straně se zobrazí náhled rámečku mosparo na Vašich webových stránkách. Díky pomocné funkce výpočtu kontrastního poměru zjistíte, zda je kontrastní poměr vybraných barev v pořádku.
+    action:
+      switchToSimpleMode: Přepnout do jednoduchého režimu
+      switchToAdvancedMode: Přepnout do pokročilého režimu
   projectMember:
     title: Členové projektu
     list:
@@ -454,6 +492,10 @@ administration:
         defaultDateFormat: Výchozí formát data
         defaultTimeFormat: Výchozí formát času
         defaultTimezone: Výchozí časové pásmo
+    interfaceSettings:
+      title: Nastavení rozhraní
+      form:
+        defaultColorMode: Výchozí režim barev
   user:
     help:
       password: Pokud není vyžadována změna hesla, ponechte tato pole prázdná.
@@ -538,6 +580,8 @@ administration:
       messageAvailable: K dispozici je nová aktualizace aplikace mosparo. Pokud chcete aktualizaci nainstalovat, klikněte prosím na tlačítko instalace níže.
       warningUpdatesDisabled: Aktualizace jsou pro tuto instalaci mosparo zakázány. Další možnosti aktualizace instalace mosparo naleznete v dokumentaci.
       messageNotAvailable: Žádná nová aktualizace pro mosparo není k dispozici. Zkontrolujte ji prosím později.
+      releaseNotes: Poznámky k vydání
+      lastChecked: 'Poslední kontrola:'
     settings:
       form:
         channelStable: Stabilní
@@ -562,6 +606,8 @@ administration:
       message:
         successfullyUpdated: mosparo byl úspěšně aktualizován. Pokračujte prosím na ovládací panel.
         updateError: Při aktualizaci systému mosparo došlo k chybě. Zkontrolujte prosím níže uvedené chybové hlášení.
+    button:
+      updateAvailable: Aktualizace k dispozici
   system:
     general:
       title: Obecné
@@ -588,6 +634,25 @@ administration:
       backend: Backend / Knihovny PHP
       license: Licence
   title: Správa
+  security:
+    reverseProxy:
+      title: Reverzní proxy
+      providerPresets: Předvolby poskytovatele
+      intro: V případě, že používáte reverzní proxy server k zobrazování mosparo, musíte tato nastavení nakonfigurovat tak, aby mosparo umělo správně detekovat IP adresu klienta.
+      modifyNotAllowed: Tato nastavení jsou přepsána v souboru prostředí mosparo. Tato nastavení zde nelze měnit.
+      form:
+        trustedProxies: Seznam důvěryhodných proxy serverů
+        replaceForwardedForHeader: Název hlavičky vlastní vzdálené adresy
+        replaceForwardedForHeaderHelp: V případě potřeby zadejte název hlavičky, ve které reverzní proxy server odešle IP adresu klienta.
+        replaceForwardedProtoHeader: Název hlavičky vlastního protokolu
+        replaceForwardedProtoHeaderHelp: V případě potřeby zadejte název hlavičky, ve které reverzní proxy server odešle protokol požadavku.
+        trustedProxiesHelp: Definujte všechny důvěryhodné proxy servery. Ty lze definovat jako prostou IP adresu nebo jako podsíť IP adres. Localhost (127.0.0.1) se do seznamu přidává vždy automaticky.
+        trustedProxiesIncludeRemoteAddr: Zahrnout adresu REMOTE_ADDR do důvěryhodných proxy serverů
+        trustedProxiesIncludeRemoteAddrHelp: Tato možnost přidá adresu REMOTE_ADDR do seznamu důvěryhodných proxy serverů. To může být nebezpečné, protože přijímá hlavičky Forwarded od všech klientů.
+    message:
+      savedSuccessfully: Nastavení zabezpečení bylo úspěšně uloženo.
+    title: Nastavení zabezpečení
+    description: Konfigurace různých nastavení souvisejících se zabezpečením, která se vztahují na Vaši instalaci mosparo.
 account:
   settings:
     form:
@@ -595,6 +660,7 @@ account:
       dateFormat: Formát data
       timeFormat: Formát času
       timezone: Časové pásmo
+      colorMode: Režim barev
     title: Uživatelská nastavení
     description: Změňte obecná nastavení svého účtu.
     message:
@@ -665,6 +731,8 @@ setup:
     types:
       general: Obecné
       phpExtensions: PHP rozšíření
+      internetConnection: Internetové připojení
+      writeAccess: Povolení zápisu
     title: Předpoklady
     meetPrerequisites: Všechny předpoklady jsou v pořádku. Můžete pokračovat v nastavení.
     subtypes:
@@ -674,6 +742,8 @@ setup:
       missing: Chybějící
       okay: Dobře
       notOkay: Není v pořádku
+      writable: Zapisovatelné
+      notWritable: Nelze zapisovat
     optional: volitelný
     introduction: mosparo potřebuje ke správnému spuštění některé předpoklady. Než budeme moci mosparo nastavit, musí být tyto předpoklady v pořádku.
     missingPrerequisites: Chybí některé předpoklady. Podívejte se na níže uvedený přehled.
@@ -752,6 +822,9 @@ action:
   delete: Smazat
   help: Pomoc
   close: Zavřít
+  skipWizard: Přeskočit průvodce
+  saveAndContinue: Uložit a pokračovat
+  goToTheDashboard: Přejít na nástěnku
 general:
   infoUndo: Tento proces nelze vrátit zpět.
   example: Příklad
@@ -788,3 +861,15 @@ form:
   choices:
     systemDefault: Výchozí nastavení
     browserLanguage: Jazyk prohlížeče
+  clearField: Vymazat pole
+downloadCheck:
+  cardTitle: Internetové připojení
+  intro: Odchozí připojení k internetu není pro mosparo podmínkou. mosparo se připojuje k internetu pouze s Vaší interakcí. Ke stahování aktualizací a sad pravidel potřebujete aktivní připojení k internetu.
+  downloadIsPossible: Nastavení PHP umožňuje stahování sad pravidel a aktualizací. Není nutné žádné další nastavení.
+  curlIsEnabledButFunctionsAreDisabled: Rozšíření %extensionName% je povoleno, ale požadované funkce (%functionNames%) jsou zakázány. Doporučujeme rozšíření zakázat nebo povolit potřebné funkce.
+  moreInformation: Více informací
+  downloadIsNotPossible: Nastavení PHP neumožňuje stahování aktualizací nebo sad pravidel. Pokud chcete používat sady pravidel nebo funkce automatických aktualizací, upravte odpovídajícím způsobem konfiguraci PHP.
+interface:
+  colorModes:
+    light: Světlý
+    dark: Tmavý

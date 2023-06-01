@@ -243,5 +243,40 @@ submission:
       title: Spam
       isSpam: Adalah spam
       spamRating: Peringkat spam
+    data:
+      value: Nilai
+      rating: Peringkat
+      points: '%totalPoints% poin'
+      fieldMustBeEmpty: Kolom harus kosong
+      formData:
+        title: Data formulir
+        valid: Verifikasi sukses
+        invalid: Verifikasi gagal
+        hasPoints: poin
+        notVerified: Tidak terverifikasi
+      client:
+        country: Negara
+        asOrganization: Dengan organisasi
+        title: Klien
+        ipAddress: Alamat IP
+        asNumber: Dengan nomor
+    source:
+      requestedAt: Meminta ke
+      title: Sumber
+      pageTitle: Judul halaman
+      pageUrl: Halaman URL
+    ignoredFields:
+      intro: Kolom berikut tidak dikirim karena jenis kolomnya (misalnya kolom kata sandi atau upload file).
+      title: Kolom diabaikan
+    generalVerifications:
+      minimumTime:
+        title: Penyampaian terlalu cepat
   title: Pengajuan
   backToList: Kembali ke kiriman
+settings:
+  title: Pengaturan proyek
+  backToSettings: Kembali ke pengaturan
+  general:
+    title: Pengaturan Umum
+    message:
+      successfullySaved: Pengaturan berhasil disimpan.
