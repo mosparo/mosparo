@@ -110,7 +110,7 @@ rule:
       intro: Typ pravidla IP adresy umožňuje filtrovat IP adresy nebo podsítě.
     provider:
       title: Poskytovatel
-      shortIntro: Umožňuje filtrovat podle informací o konkrétním poskytovateli
+      shortIntro: Umožnuje filtrovat dle informací konkrétního poskytovatele
       intro: Typ pravidla pro poskytovatele umožňuje filtrovat čísla AS a kódy zemí.
       label: Číslo AS/země
       action:
@@ -564,6 +564,20 @@ administration:
       message:
         successfullyUpdated: mosparo byl úspěšně aktualizován. Pokračujte prosím na ovládací panel.
         updateError: Při aktualizaci systému mosparo došlo k chybě. Zkontrolujte prosím níže uvedené chybové hlášení.
+    checkRequirements:
+      action:
+        upgrade: Aktualizovat na %newMajorVersion%
+        recheck: Překontrolovat
+      meetPrerequisites: Všechny požadavky splněny. Můžete pokračovat v aktualizaci.
+      missingPrerequisites: Některé požadavky nejsou splněny. Zkontrolujte níže uvedený přehled.
+      title: Kontrola požadavků
+      introduction: Před upgradem se ujistěte, že splňujete všechny požadavky. S každou novou hlavní verzí se mohou požadavky měnit a musí být splněny před provedením aktualizace.
+    upgrade:
+      titleAvailable: Dostupná aktualizace
+      introAvailable: K dispozici je nová hlavní verze. K aktualizaci na nejnovější hlavní verzi můžete použít aktualizační nástroj.
+      installedVersion: Instalovaná hlavní verze
+      availableVersion: Dostupná hlavní verze
+      updateFirst: Před upgradem na hlavní verzi proveďte aktualizaci na nejnovější menší verzi.
   system:
     general:
       title: Obecné
@@ -575,8 +589,8 @@ administration:
     projectMembers:
       title: Členové projektu
       intro: Díky těmto osobám je mosparo tím, čím je - nainstalovaným softwarem na vašem webhostingu.
-    title: Systémové informace
-    description: Najděte všechny informace o mosparo.
+    title: Informace o systému
+    description: Vyhledejte veškeré informace o mosparo.
     logo:
       title: Logo
       intro: Logo navrhl Jan Kosa.
@@ -668,8 +682,8 @@ setup:
       general: Obecné
       phpExtension: PHP rozšíření
       writeAccess: Povolení zápisu
-    title: Předpoklady
-    meetPrerequisites: Všechny předpoklady jsou v pořádku. Můžete pokračovat v nastavení.
+    title: Požadavky
+    meetPrerequisites: Všechny požadavky splněny. Můžete pokračovat v nastavení.
     subtypes:
       minPhpVersion: Minimální verze PHP
     results:
@@ -679,9 +693,12 @@ setup:
       notOkay: Není v pořádku
       writable: Zapisovatelné
       notWritable: Nelze zapisovat
+      minPhpVersion:
+        required: 'Požadováno:'
+        available: 'Dostupné:'
     optional: volitelný
-    introduction: mosparo potřebuje ke správnému spuštění některé předpoklady. Než budeme moci mosparo nastavit, musí být tyto předpoklady v pořádku.
-    missingPrerequisites: Chybí některé předpoklady. Podívejte se na níže uvedený přehled.
+    introduction: mosparo má určité požadavky ke správnému chodu. Než budeme moci mosparo nastavit, je třeba tyto požadavky splnit.
+    missingPrerequisites: Chybí některé požadavky. Podívejte se na níže uvedený přehled.
     installOptionalExtensions: Některá volitelná rozšíření nejsou nainstalována. Doporučujeme vám, abyste si tato rozšíření nainstalovali dříve, než budete pokračovat.
   start:
     title: Nastavení
@@ -757,6 +774,7 @@ action:
   delete: Smazat
   help: Pomoc
   close: Zavřít
+  checkRequirements: Kontrola požadavků
 general:
   infoUndo: Tento proces nelze vrátit zpět.
   example: Příklad
