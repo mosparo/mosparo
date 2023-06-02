@@ -281,6 +281,7 @@ submission:
     generalVerifications:
       minimumTime:
         title: Penyampaian terlalu cepat
+        text: Formulir dikirimkan terlalu cepat. Pengirim hanya memerlukan %seconds% detik, yang kurang dari waktu minimum %minimumTimeSeconds% detik.
   title: Pengajuan
   backToList: Kembali ke kiriman
 settings:
@@ -290,3 +291,150 @@ settings:
     title: Pengaturan Umum
     message:
       successfullySaved: Pengaturan berhasil disimpan.
+    apiKeys:
+      reissueApiKeys:
+        confirm: Apakah Anda benar-benar ingin menerbitkan ulang kunci API untuk proyek %projectName%?
+        message:
+          errorOnlyOwner: Hanya pemilik proyek yang dapat menerbitkan ulang kunci API.
+          successfullyReissued: Kunci API berhasil diterbitkan ulang.
+      publicKey: Kunci publik
+      privateKey: Kunci pribadi
+    connectionDetails:
+      title: Detail koneksi
+      host: Host
+      uuid: Nomor identifikasi unik
+    help:
+      integrateMosparo: Integrasikan mosparo
+  projectMember:
+    form:
+      message:
+        errorUserNotFound: Pengguna tidak ditemukan.
+        successfullySaved: Anggota proyek berhasil disimpan.
+        errorNeedsOwner: Proyek membutuhkan setidaknya satu pemilik.
+      email: Alamat email
+      role: Peran
+    title: Anggota proyek
+    list:
+      user: Pengguna
+      role: Peran
+      actions: Tindakan
+    add:
+      title: Tambahkan anggota proyek
+    edit:
+      title: Edit anggota proyek %projectMemberName%
+    backToList: Kembali ke anggota proyek
+    delete:
+      message:
+        successfullyRemoved: Anggota proyek %projectMemberName% berhasil dihapus dari proyek.
+      confirm: Apakah Anda benar-benar ingin menghapus anggota proyek %projectMemberName%?
+      title: Hapus anggota proyek %projectMemberName%
+  security:
+    requestDelaying:
+      title: Permintaan menunda
+      infoIpAddress: Dalam hal pembuatan token perlu ditunda, akan diputuskan karena jumlah permintaan yang dibuat oleh alamat IP. Dengan setiap permintaan token tambahan, penundaan akan diperpanjang.
+      intro: Untuk mempersulit bot, mosparo dapat menunda pembuatan token pengiriman. Tanpa token kirim, formulir tidak dapat dikirimkan. Pengguna akan melihat, berapa lama dia harus menunggu, hingga formulir dikirimkan.
+    form:
+      delayActive: Permintaan penundaan aktif
+      delayNumberOfAllowedRequests: Jumlah permintaan yang diizinkan
+      delayMultiplicator: Pengganda
+      lockoutMultiplicatorHelp: Waktu penguncian dasar akan ditingkatkan dengan setiap permintaan tambahan.
+      minimumTimeSeconds: Waktu minimal
+      minimumTimeSecondsHelp: Dalam hitungan detik
+      honeypotFieldActive: Kolom honeypot aktif
+      honeypotFieldName: Nama kolom
+      delayDetectionTimeFrame: Kerangka waktu deteksi
+      delayDetectionTimeFrameHelp: Dalam hitungan detik
+      delayMultiplicatorHelp: Waktu tunda dasar akan ditingkatkan dengan setiap permintaan tambahan.
+      lockoutDetectionTimeFrame: Kerangka waktu deteksi
+      lockoutDetectionTimeFrameHelp: Dalam hitungan detik
+      ipAllowList: Selalu izinkan alamat IP dan subnet
+      ipAllowListHelp: 'Tentukan satu alamat ip atau subnet per baris. Contoh: 192.168.1.13 atau 192.168.1.0/24'
+      minimumTimeActive: Minimal waktu aktif
+      delayNumberOfAllowedRequestsHelp: Jumlah permintaan yang diizinkan sebelum penundaan diterapkan.
+      honeypotFieldNameHelp: Itu harus nama kolom yang belum ada dalam formulir Anda dan yang merupakan nama kolom normal seperti "url" atau "address-line-2". Gunakan hanya huruf, angka dan tanda strip (-). Jika kosong, tidak ada kolom honeypot yang akan ditambahkan ke formulir.
+      delayTime: Waktu tunda dasar
+      delayTimeHelp: Dalam hitungan detik
+      lockoutNumberOfAllowedRequests: Jumlah permintaan yang diizinkan
+      lockoutNumberOfAllowedRequestsHelp: Jumlah permintaan yang diizinkan sebelum penguncian diberlakukan.
+      lockoutMultiplicator: Pengganda
+      lockoutActive: Penguncian otomatis aktif
+      lockoutTime: Waktu penguncian dasar
+      lockoutTimeHelp: Dalam hitungan detik
+    title: Pengaman
+    honeypot:
+      title: Honeypot
+      intro: Bidang honeypot adalah bidang tersembunyi dalam formulir. Manusia tidak akan dapat melihatnya - tetapi bot spam mungkin akan mengisi beberapa konten di bidang ini. Jika itu terjadi, kami tahu bahwa itu bukan manusia sehingga kami dapat memblokir pengirimannya.
+    ipLockout:
+      intro: Untuk mempersulit bot, mosparo dapat secara otomatis memblokir alamat IP sementara. Jika alamat IP meminta banyak token, mosparo dapat menghitung permintaan secara otomatis dan memblokir alamat IP jika nomor tertentu tercapai.
+      title: Penguncian IP
+    minimumTime:
+      title: Waktu Minimal
+      intro: Fungsionalitas waktu minimum akan mengukur waktu antara inisialisasi kotak centang mosparo (saat halaman dimuat) dan validasi pengiriman (setelah formulir dikirimkan). Jika kali ini lebih rendah dari angka yang dimasukkan di bawah, validasi tidak valid. Jika Anda memiliki formulir pendek, pemeriksaan ini harus dinonaktifkan atau Anda harus memberi kami jumlah yang sangat rendah.
+    ipAllowList:
+      title: daftar yang diizinkan IP
+      intro: Masukkan alamat IP dan subnet yang harus dikecualikan dari tindakan keamanan yang dikonfigurasi di atas (Permintaan penundaan dan penguncian IP).
+    message:
+      successfullySaved: Pengaturan keamanan berhasil disimpan.
+    validation:
+      honeypotFieldNameInvalidCharacter: Gunakan hanya huruf, angka dan tanda strip (-).
+  design:
+    subtitles:
+      colors:
+        focus: Pada fokus dan hover
+        loading: Saat memuat
+        normal: Normal
+        success: Sukses
+        failure: Gagal
+      dimensionSettings: Dimensi
+      colorSettings: Warna
+    form:
+      color:
+        textError: Huruf Error
+        text: Huruf
+        background: Latar belakang
+        checkboxAnimatedCircle: Bagian Animasi
+        border: Berbatasan
+        checkbox: Kotak centang
+        checkboxShadow: Kotak centang Bayangan
+        shadow: Bayangan
+        shadowInset: Sisipan Bayangan
+      boxBorderWidth: Lebar batas
+      boxSize: Ukuran kotak
+      boxRadius: Jari-jari kotak
+      showMosparoLogo: Tampilkan logo mosparo di bawah kotak centang
+      showPingAnimation: Tampilkan animasi ping untuk menyorot kotak centang
+    cr:
+      value: Nilai
+      description: Nilai yang ditampilkan di atas menjelaskan rasio antara warna latar belakang dan warna teks. Dua kolom di sebelahnya menunjukkan apakah persyaratan minimum untuk pedoman WCAG terpenuhi.
+      title: Rasio kontras
+      text: Huruf
+      textError: Huruf Error
+    choices:
+      boxSize:
+        large: Besar
+        small: Kecil
+        medium: Sedang
+    message:
+      successfullySaved: Pengaturan desain berhasil disimpan.
+      boxRadiusTooLarge: Logo hanya dapat ditampilkan jika radius kotak berada di bawah nilai tertentu.
+    title: Desain
+    preview:
+      background: Pratinjau latar belakang
+administration:
+  settings:
+    mainSettings:
+      title: Pengaturan utama
+      form:
+        mosparoName: Nama instalasi mosparo
+    localeSettings:
+      title: Pengaturan lokal
+      form:
+        defaultLocale: Bahasa bawaan
+        defaultDateFormat: Format tanggal default
+        defaultTimeFormat: Format waktu default
+        defaultTimezone: Zona waktu default
+    title: Pengaturan sistem
+    mailSettings:
+      title: Pengaturan pesan
+    description: Konfigurasikan berbagai pengaturan yang berlaku untuk instalasi mosparo Anda.
+  title: Administrasi
