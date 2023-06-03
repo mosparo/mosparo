@@ -254,12 +254,14 @@ submission:
         invalid: Verifikasi gagal
         hasPoints: poin
         notVerified: Tidak terverifikasi
+        honeypot: Honeypot
       client:
         country: Negara
         asOrganization: Dengan organisasi
         title: Klien
         ipAddress: Alamat IP
         asNumber: Dengan nomor
+        userAgent: User-Agent
     source:
       requestedAt: Meminta ke
       title: Sumber
@@ -293,8 +295,13 @@ settings:
           errorOnlyOwner: Hanya pemilik proyek yang dapat menerbitkan ulang kunci API.
           successfullyReissued: Kunci API berhasil diterbitkan ulang.
         confirm: Apakah Anda benar-benar ingin menerbitkan ulang kunci API untuk proyek %projectName%?
+        title: Memperbarui kunci API
       privateKey: Kunci pribadi
       publicKey: Kunci publik
+      title: Kunci API
+    action:
+      reissue: Memperbarui
+      reissueApiKeys: Memperbarui kunci API
   design:
     message:
       successfullySaved: Pengaturan desain berhasil disimpan.
@@ -421,6 +428,156 @@ administration:
       title: Pengaturan lokal
     mailSettings:
       title: Pengaturan pesan
+      form:
+        useSmtp: Gunakan server SMTP untuk mengirim pesan
+        port: Port
+        user: Pengguna
+        host: Host
+        password: Kata Sandi
+        fromAddress: Dari alamat email
+        fromName: Dari nama
+      help:
+        password: Jika anda memasukkan sesuatu di dalam kolom ini, nilai yang sudah ada akan ditimpa.
     title: Pengaturan sistem
     description: Konfigurasikan berbagai pengaturan yang berlaku untuk instalasi mosparo Anda.
+    message:
+      savedSuccessfully: Pengaturan berhasil disimpan.
   title: Administrasi
+  user:
+    delete:
+      message:
+        errorUserIsOwner: Pengguna adalah pemilik setidaknya satu proyek. Anda tidak dapat menghapus pemilik proyek.
+        successfullyDeleted: Pengguna %email% berhasil di hapus.
+      title: Hapus pengguna %email%
+      confirm: Apa kamu yakin akan menghapus pengguna %email%?
+      infoCantSelfDelete: Anda tidak dapat menghapus diri sendiri.
+    title: Pengguna
+    description: Mengelola semua pengguna dari instansi mosparo ini.
+    form:
+      password: Kata Sandi
+      email: Pesan
+      isActiveUser: Pengguna aktif
+      isAdministrator: Administrator
+      sendPasswordResetEmail: Kirim email kepada pengguna untuk mengatur kata sandi
+      message:
+        successfullySaved: Pengguna berhasil disimpan.
+        errorCreatingResetToken: 'Terjadi kesalahan teknis saat membuat email. Error: %errorMessage%'
+        errorSendingResetEmail: 'Email dengan tautan tidak dapat dikirim dengan benar. Error: %errorMessage%'
+    help:
+      password: Biarkan kolom ini kosong jika tidak ada perubahan kata sandi yang diperlukan.
+    roles: Peran
+    list:
+      roles: Peran
+      user: Pengguna
+      actions: Aksi
+    backToOverview: Kembali ke pengguna
+    create:
+      title: Membuat pengguna
+    modify:
+      title: Memodifikasi pengguna %email%
+  geoip2:
+    settings:
+      useGeoip2Field: Gunakan lokalisasi alamat IP otomatis
+      title: Pengaturan
+      getLicenseKey: 'Untuk mendapatkan kunci lisensi, Anda memerlukan akun MaxMind. Silakan kunjungi situs berikut:'
+      licenseKeyField: Kunci lisensi
+      message:
+        savedSuccessfully: Pengaturan berhasil disimpan.
+        infoActivationTime: Jika Anda baru saja meminta kunci lisensi, perlu beberapa saat agar kunci lisensi menjadi aktif.
+    version:
+      messageAvailable: 'Database GeoIP2 telah berhasil diunduh dan aktif. Versi berikut aktif:'
+      typeAsn: 'AS nomor:'
+      titleAvailable: GeoIP2 tersedia
+      typeCountry: 'Negara:'
+      titleNotAvailable: GeoIP2 tidak tersedia
+      messageDatabaseNotAvailable: Basis data GeoIP2 belum diunduh atau terjadi kesalahan saat mengunduh.
+    downloadAndUpdate:
+      intro: Setelah Anda menyimpan kunci lisensi, mosparo perlu mengunduh database. Anda dapat melakukannya di sini secara langsung atau menggunakan koneksi SSH untuk menjalankan perintah.
+      update:
+        infoAbsolutePath: Anda mungkin harus menyesuaikan jalur file %pathToBinConsole%. Bisa jadi Anda harus mengisi jalur absolut.
+        infoRateLimit: Harap diingat bahwa jumlah unduhan yang dapat dilakukan oleh kunci lisensi terbatas. Harap jangan terlalu sering menggunakan fungsi unduhan.
+        title: Pembaruan otomatis
+        intro: 'Untuk me-refresh database secara otomatis, disarankan untuk menyiapkan cronjob yang akan mendownload database secara otomatis. Untuk menggunakan pembaruan otomatis, silakan atur cronjob seperti berikut:'
+      title: Unduh & perbarui otomatis
+      web:
+        message:
+          successfullyDownloaded: Database berhasil diunduh.
+          errorDownload: Terjadi kesalahan saat mosparo mencoba mengunduh database. %error%
+          specifyLicenseKey: Harap masukkan kunci lisensi sebelum Anda mencoba mengunduh database.
+        title: Web
+        intro: 'Gunakan tombol berikut untuk membiarkan mosparo mengunduh database:'
+        action: Unduh basis data
+      cli:
+        title: CLI
+        intro: 'Gunakan perintah berikut untuk mengunduh database melalui CLI:'
+    description: Konfigurasi itegrasi GeoIP2.
+    title: GeoIP2
+  update:
+    check:
+      message:
+        errorCheckingForUpdates: 'Terjadi kesalahan saat memeriksa pembaruan. Error: %errorMessage%'
+      title: Status
+      intro: Jika Anda ingin memeriksa pembaruan, silakan klik tombol di bawah ini.
+    version:
+      warningUpdate: Harap buat cadangan file mosparo dan database sebelum memperbarui. Proses pembaruan otomatis ini tidak akan mencadangkan file atau database. Jika sesuatu tidak berfungsi dengan benar, itu dapat merusak instalasi mosparo Anda.
+      titleAvailable: Pembaruan tersedia
+      messageAvailable: Pembaruan baru untuk mosparo tersedia. Silakan klik tombol instal di bawah ini jika Anda ingin menginstal pembaruan.
+      warningUpdatesDisabled: Pembaruan dinonaktifkan untuk penginstalan mosparo ini. Silakan periksa dokumentasi untuk melihat opsi lain untuk memperbarui instalasi mosparo Anda.
+      titleNotAvailable: Tidak ada pembaruan yang tersedia
+      messageNotAvailable: Tidak ada pembaruan baru untuk mosparo yang tersedia. Silakan periksa lagi nanti.
+    settings:
+      message:
+        savedSuccessfully: Saluran pembaruan berhasil disimpan.
+        infoDevelopChannel: Saluran pengembangan dan beta berisi versi yang belum teruji dan tidak stabil yang belum siap digunakan untuk produksi. Harap jangan menggunakannya di lingkungan produksi.
+      title: Perbarui pengaturan
+      form:
+        channelStable: Stabil
+        channelBeta: Beta
+        channelDevelop: Pengembangkan
+    availableVersion: Versi yang tersedia
+    buttons:
+      continue: Melanjutkan
+    execute:
+      description: Harap tunggu dan jangan tinggalkan halaman ini. Progres pembaruan dimulai…
+      title: Perbarui mosparo
+      log: Proses
+      message:
+        successfullyUpdated: mosparo berhasil diperbarui. Silakan lanjutkan ke dasbor.
+        updateError: Terjadi kesalahan saat memperbarui mosparo. Silakan periksa pesan kesalahan di bawah ini.
+    title: Memperbarui
+    description: Periksa versi baru dan perbarui instalasi mosparo Anda.
+    updateChannel: Perbarui saluran
+    installedVersion: Versi terpasang
+    finalize:
+      title: Pembaruan dieksekusi
+      description: Perubahan yang diperlukan untuk pembaruan ini dijalankan. Instalasi Anda mutakhir.
+  system:
+    general:
+      extensions: Ekstensi
+      title: Jeneral
+      mosparoVersion: Versi mosparo
+      serverInfo: Server
+      phpVersion: Versi PHP
+    logo:
+      intro: Logo ini dirancang oleh Jan Kosa.
+      title: Logo
+      license: Logo dilisensikan di bawah %linkStart%Creative Commons Attribution-NoDerivatives 4.0 International License%linkEnd%.
+    projectMembers:
+      intro: Orang-orang ini membuat mosparo apa adanya - perangkat lunak yang diinstal di hosting web Anda.
+      title: Anggota proyek
+    title: Sistem Informasi
+    description: Temukan semua informasi tentang mosparo.
+    license:
+      title: Lisenso mosparo
+    usedLibrariesAndResources:
+      title: Pustaka dan sumber daya yang digunakan
+      intro: Kami ingin berterima kasih kepada semua pengembang open source atas kerja luar biasa mereka.
+      frontend: Tampilan depan / Visual
+      license: Lisensi
+      backend: Backend / PHP Librari
+    website: Situs Web
+account:
+  backToOverview: Kembali ke gambaran umum
+  title: Akun
+  settings:
+    title: Pengaturan pengguna
