@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
 
-                                {% if 'description' in availableUpdateData and 'detailsUrl' in availableUpdateData %}
+                                {% if availableUpdateData.description is defined and availableUpdateData.detailsUrl is defined %}
                                     <div class="row mb-3">
                                         <div class="col-12">
                                             <h4 class="mb-1">
@@ -97,7 +97,7 @@
                                             </h4>
                                             <pre class="mb-2">{{ (availableUpdateData.description ?? '')|trim }}</pre>
                                             <div class="d-flex justify-content-end">
-                                                <a href="{{ availableUpdateData.detailsUrl ?? '' }}" class="btn btn-info">
+                                                <a href="{{ availableUpdateData.detailsUrl ?? '' }}" class="btn btn-info" target="_blank">
                                                     <i class="ti ti-info-circle"></i>
                                                     {{ 'administration.update.version.releaseNotes'|trans }}
                                                 </a>
@@ -125,9 +125,6 @@
                                 </p>
                             </div>
                         {% endif %}
-                        <div class="card-footer text-muted">
-                            <strong>{{ 'administration.update.version.lastChecked'|trans }}</strong> {{ checkedAt|date }}
-                        </div>
                     </div>
                 {% endif %}
 
@@ -176,6 +173,10 @@
                             {% include 'snippets/download-check.html.twig' %}
                         </div>
                     {% endif %}
+                </div>
+
+                <div class="card-footer text-muted">
+                    <strong>{{ 'administration.update.version.lastChecked'|trans }}</strong> {{ checkedAt|date }}
                 </div>
             </div>
             <div class="row mt-3">

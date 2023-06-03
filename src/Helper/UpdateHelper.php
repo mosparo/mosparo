@@ -67,19 +67,9 @@ class UpdateHelper
     protected array $newVersionData = [];
 
     /**
-     * @var bool
-     */
-    protected bool $updateAvailable = false;
-
-    /**
      * @var array
      */
     protected array $upgradeData = [];
-
-    /**
-     * @var bool
-     */
-    protected bool $upgradeAvailable = false;
 
     /**
      * @var array
@@ -168,21 +158,23 @@ class UpdateHelper
     /**
      * Returns true if there is an upgrade available
      *
+     * @param bool $checkForUpdates
      * @return bool
      */
-    public function isUpgradeAvailable(): bool
+    public function isUpgradeAvailable(bool $checkForUpdates = false): bool
     {
-        return ($this->upgradeAvailable); // @TODO
+        return $this->getCachedUpdateData($checkForUpdates)['isUpgradeAvailable'] ?? false;
     }
 
     /**
      * Returns the data for the available upgrade
      *
+     * @param bool $checkForUpdates
      * @return array
      */
-    public function getAvailableUpgradeData(): array
+    public function getAvailableUpgradeData(bool $checkForUpdates = false): array
     {
-        return $this->upgradeData; // @TODO
+        return $this->getCachedUpdateData($checkForUpdates)['availableUpgrade'] ?? [];
     }
 
     /**
@@ -251,6 +243,8 @@ class UpdateHelper
                 $data = [
                     'isUpdateAvailable' => !empty($this->newVersionData),
                     'availableUpdate' => $this->newVersionData,
+                    'isUpgradeAvailable' => !empty($this->upgradeData),
+                    'availableUpgrade' => $this->upgradeData,
                     'checkedAt' => new \DateTime(),
                 ];
 
@@ -557,7 +551,6 @@ class UpdateHelper
 
         if (version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
             $this->newVersionData = $this->loadVersionChannelVersions($channelData['versionsUrl']);
-            $this->updateAvailable = (!empty($this->newVersionData));
         }
 
         $recommendUpgrade = $channelData['recommendNextMajorVersion'] ?? false;
@@ -638,7 +631,6 @@ class UpdateHelper
         if (version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
             $this->upgradeData['majorVersionData'] = $updateData;
             $this->upgradeData['versionData'] = $this->loadVersionChannelVersions($channelData['versionsUrl']);
-            $this->upgradeAvailable = (!empty($this->upgradeData));
         }
     }
 

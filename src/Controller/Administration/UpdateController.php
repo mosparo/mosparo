@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -117,8 +118,8 @@ class UpdateController extends AbstractController
         $isUpdateAvailable = $this->updateHelper->isUpdateAvailable();
         $availableUpdateData = $this->updateHelper->getAvailableUpdateData();
 
-        $isUpgradeAvailable = $session->get('isUpgradeAvailable', false); // @TODO
-        $availableUpgradeData = $session->get('availableUpgradeData', []); // @TODO
+        $isUpgradeAvailable = $this->updateHelper->isUpgradeAvailable();
+        $availableUpgradeData = $this->updateHelper->getAvailableUpgradeData();
 
         $translatedChannels = array_flip($channels);
         return $this->render('administration/update/overview.html.twig', [
@@ -158,15 +159,6 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
-        // @TODO below
-        if ($this->updateHelper->isUpgradeAvailable()) {
-            $session->set('isUpgradeAvailable', $this->updateHelper->isUpgradeAvailable());
-            $session->set('availableUpgradeData', $this->updateHelper->getAvailableUpgradeData());
-        } else {
-            $session->remove('isUpgradeAvailable');
-            $session->remove('availableUpgradeData');
-        }
-
         return $this->redirectToRoute('administration_update_overview', ['checkedForUpdates' => 1]);
     }
 
@@ -175,11 +167,8 @@ class UpdateController extends AbstractController
      */
     public function upgradeCheckRequirements(Request $request): Response
     {
-        $session = $request->getSession();
-
-        // @TODO
-        $isUpgradeAvailable = $session->get('isUpgradeAvailable', false);
-        $availableUpgradeData = $session->get('availableUpgradeData', []);
+        $isUpgradeAvailable = $this->updateHelper->isUpgradeAvailable();
+        $availableUpgradeData = $this->updateHelper->getAvailableUpgradeData();
 
         if (!$isUpgradeAvailable || !$this->updatesEnabled) {
             return $this->redirectToRoute('administration_update_overview');
@@ -207,8 +196,8 @@ class UpdateController extends AbstractController
     {
         $session = $request->getSession();
 
-        $isUpgradeAvailable = $session->get('isUpgradeAvailable', false);
-        $availableUpgradeData = $session->get('availableUpgradeData', []);
+        $isUpgradeAvailable = $this->updateHelper->isUpgradeAvailable();
+        $availableUpgradeData = $this->updateHelper->getAvailableUpgradeData();
 
         $availableUpdateData = $availableUpgradeData['versionData'] ?? false;
 
@@ -216,9 +205,7 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
-        // @TODO
-        $session->set('isUpdateAvailable', true);
-        $session->set('availableUpdateData', $availableUpgradeData['versionData']);
+        $session->set('upgradeMosparo', true);
 
         return $this->redirectToRoute('administration_update_execute');
     }
@@ -230,14 +217,13 @@ class UpdateController extends AbstractController
     {
         $session = $request->getSession();
 
-        if (!$this->updateHelper->isUpdateAvailable() || !$this->updatesEnabled) {
+        [$isUpdateAvailable, $availableUpdateData] = $this->getAvailableUpdateData($session);
+        if (!$isUpdateAvailable || !$this->updatesEnabled) {
             return $this->redirectToRoute('administration_update_overview');
         }
 
         [$temporaryLogFilePath, $temporaryLogFileUrl] = $this->updateHelper->defineTemporaryLogFile();
         $session->set('temporaryLogFile', $temporaryLogFilePath);
-
-        $availableUpdateData = $this->updateHelper->getAvailableUpdateData();
 
         // Abort, if this version is already installed.
         if ($availableUpdateData['number'] == Kernel::VERSION) {
@@ -257,12 +243,11 @@ class UpdateController extends AbstractController
     public function executeUpdate(Request $request)
     {
         $session = $request->getSession();
-        if (!$this->updateHelper->isUpdateAvailable() || !$this->updatesEnabled) {
+        [$isUpdateAvailable, $versionData] = $this->getAvailableUpdateData($session);
+        if (!$isUpdateAvailable || !$this->updatesEnabled) {
             $this->updateHelper->output(new UpdateMessage('general', UpdateMessage::STATUS_ERROR, 'No update data found.'));
             return new JsonResponse(['error' => true, 'errorMessage' => 'No update data found.']);
         }
-
-        $versionData = $this->updateHelper->getAvailableUpdateData();
 
         $temporaryLogFile = $session->get('temporaryLogFile', null);
         if ($temporaryLogFile === null) {
@@ -345,6 +330,22 @@ class UpdateController extends AbstractController
             $filesystem->remove($session->get('temporaryLogFile'));
         }
 
+        if ($session->has('upgradeMosparo')) {
+            $session->remove('upgradeMosparo');
+        }
+
         return $this->render('administration/update/finalize.html.twig');
+    }
+
+    protected function getAvailableUpdateData(Session $session)
+    {
+        $isUpdateAvailable = $this->updateHelper->isUpdateAvailable();
+        $availableUpdateData = $this->updateHelper->getAvailableUpdateData();
+        if ($session->has('upgradeMosparo') && $session->get('upgradeMosparo') && $this->updateHelper->isUpgradeAvailable()) {
+            $isUpdateAvailable = true;
+            $availableUpdateData = $this->updateHelper->getAvailableUpgradeData()['versionData'];
+        }
+
+        return [$isUpdateAvailable, $availableUpdateData];
     }
 }
