@@ -9,74 +9,127 @@
     <div class="row">
         <div class="col-12 col-lg-6 mb-3">
             {% if checkedForUpdates %}
-                <div class="card mb-3">
-                    {% if isUpdateAvailable %}
-                        <div class="card-status-start bg-info"></div>
-                        <div class="card-header">
-                            <h3 class="card-title">{{ 'administration.update.version.titleAvailable'|trans }}</h3>
+                {% if isUpgradeAvailable %}
+                    <div class="card mb-3">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-green">
+                                <i class="ti ti-package"></i>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <p>{{ 'administration.update.version.messageAvailable'|trans }}</p>
-
-                            <div class="row mb-3">
-                                <div class="col-6">
-                                    <h4 class="mb-0">
-                                        {{ 'administration.update.installedVersion'|trans }}
-                                    </h4>
-                                    <div>
-                                        {{ mosparoVersion }}
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <h4 class="mb-0">
-                                        {{ 'administration.update.availableVersion'|trans }}
-                                    </h4>
-                                    <div>
-                                        {{ availableUpdateData.version }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {% if 'description' in availableUpdateData and 'detailsUrl' in availableUpdateData %}
+                            <h3 class="card-title">{{ 'administration.update.upgrade.titleAvailable'|trans }}</h3>
+                            {% if isUpdateAvailable %}
+                                <p>
+                                    {{ 'administration.update.upgrade.updateFirst'|trans }}
+                                </p>
+                            {% else %}
+                                <p>
+                                    {{ 'administration.update.upgrade.introAvailable'|trans }}
+                                </p>
                                 <div class="row mb-3">
-                                    <div class="col-12">
-                                        <h4 class="mb-1">
-                                            {{ 'administration.update.version.releaseNotes'|trans }}
+                                    <div class="col-6">
+                                        <h4 class="mb-0">
+                                            {{ 'administration.update.upgrade.installedVersion'|trans }}
                                         </h4>
-                                        <pre class="mb-2">{{ (availableUpdateData.description ?? '')|trim }}</pre>
-                                        <div class="d-flex justify-content-end">
-                                            <a href="{{ availableUpdateData.detailsUrl ?? '' }}" class="btn btn-info">
-                                                <i class="ti ti-info-circle"></i>
-                                                {{ 'administration.update.version.releaseNotes'|trans }}
-                                            </a>
+                                        <div>
+                                            {{ mosparoMajorVersion }}
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <h4 class="mb-0">
+                                            {{ 'administration.update.upgrade.availableVersion'|trans }}
+                                        </h4>
+                                        <div>
+                                            {{ availableUpgradeData.majorVersionData.number }}
                                         </div>
                                     </div>
                                 </div>
-                            {% endif %}
 
-                            <div class="alert alert-danger">
                                 {% if updatesEnabled %}
-                                    {{ 'administration.update.version.warningUpdate'|trans }}
-                                {% else %}
-                                    {{ 'administration.update.version.warningUpdatesDisabled'|trans }}
+                                    <div class="row mt-3">
+                                        <div class="col-12 col-md-auto ms-auto">
+                                            <a href="{{ path('administration_upgrade_check_requirements') }}" class="btn btn-green w-100">
+                                                <i class="ti ti-package"></i>
+                                                {{ 'action.checkRequirements'|trans }}
+                                            </a>
+                                        </div>
+                                    </div>
                                 {% endif %}
-                            </div>
+                            {% endif %}
                         </div>
-                    {% else %}
-                        <div class="card-status-start bg-success"></div>
-                        <div class="card-header">
-                            <h3 class="card-title">{{ 'administration.update.version.titleNotAvailable'|trans }}</h3>
-                        </div>
-                        <div class="card-body">
-                            <p>
-                                {{ 'administration.update.version.messageNotAvailable'|trans }}
-                            </p>
-                        </div>
-                    {% endif %}
-                    <div class="card-footer text-muted">
-                        <strong>{{ 'administration.update.version.lastChecked'|trans }}</strong> {{ checkedAt|date }}
                     </div>
-                </div>
+                {% endif %}
+
+                {% if isUpdateAvailable or not isUpgradeAvailable %}
+                    <div class="card mb-3">
+                        {% if isUpdateAvailable %}
+                            <div class="card-status-start bg-info"></div>
+                            <div class="card-header">
+                                <h3 class="card-title">{{ 'administration.update.version.titleAvailable'|trans }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ 'administration.update.version.messageAvailable'|trans }}</p>
+
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <h4 class="mb-0">
+                                            {{ 'administration.update.installedVersion'|trans }}
+                                        </h4>
+                                        <div>
+                                            {{ mosparoVersion }}
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <h4 class="mb-0">
+                                            {{ 'administration.update.availableVersion'|trans }}
+                                        </h4>
+                                        <div>
+                                            {{ availableUpdateData.number }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if 'description' in availableUpdateData and 'detailsUrl' in availableUpdateData %}
+                                    <div class="row mb-3">
+                                        <div class="col-12">
+                                            <h4 class="mb-1">
+                                                {{ 'administration.update.version.releaseNotes'|trans }}
+                                            </h4>
+                                            <pre class="mb-2">{{ (availableUpdateData.description ?? '')|trim }}</pre>
+                                            <div class="d-flex justify-content-end">
+                                                <a href="{{ availableUpdateData.detailsUrl ?? '' }}" class="btn btn-info">
+                                                    <i class="ti ti-info-circle"></i>
+                                                    {{ 'administration.update.version.releaseNotes'|trans }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="alert alert-danger">
+                                    {% if updatesEnabled %}
+                                        {{ 'administration.update.version.warningUpdate'|trans }}
+                                    {% else %}
+                                        {{ 'administration.update.version.warningUpdatesDisabled'|trans }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card-status-start bg-success"></div>
+                            <div class="card-header">
+                                <h3 class="card-title">{{ 'administration.update.version.titleNotAvailable'|trans }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    {{ 'administration.update.version.messageNotAvailable'|trans }}
+                                </p>
+                            </div>
+                        {% endif %}
+                        <div class="card-footer text-muted">
+                            <strong>{{ 'administration.update.version.lastChecked'|trans }}</strong> {{ checkedAt|date }}
+                        </div>
+                    </div>
+                {% endif %}
 
                 {% if isUpdateAvailable and updatesEnabled and downloadCheck.downloadPossible %}
                     <div class="row mt-3 mb-3">

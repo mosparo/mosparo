@@ -608,6 +608,20 @@ administration:
         updateError: Při aktualizaci systému mosparo došlo k chybě. Zkontrolujte prosím níže uvedené chybové hlášení.
     button:
       updateAvailable: Aktualizace k dispozici
+    checkRequirements:
+      action:
+        upgrade: Aktualizovat na %newMajorVersion%
+        recheck: Překontrolovat
+      meetPrerequisites: Všechny požadavky splněny. Můžete pokračovat v aktualizaci.
+      missingPrerequisites: Některé požadavky nejsou splněny. Zkontrolujte níže uvedený přehled.
+      title: Kontrola požadavků
+      introduction: Před upgradem se ujistěte, že splňujete všechny požadavky. S každou novou hlavní verzí se mohou požadavky měnit a musí být splněny před provedením aktualizace.
+    upgrade:
+      titleAvailable: Dostupná aktualizace
+      introAvailable: K dispozici je nová hlavní verze. K aktualizaci na nejnovější hlavní verzi můžete použít aktualizační nástroj.
+      installedVersion: Instalovaná hlavní verze
+      availableVersion: Dostupná hlavní verze
+      updateFirst: Před upgradem na hlavní verzi proveďte aktualizaci na nejnovější menší verzi.
   system:
     general:
       title: Obecné
@@ -730,7 +744,7 @@ setup:
   prerequisites:
     types:
       general: Obecné
-      phpExtensions: PHP rozšíření
+      phpExtension: PHP rozšíření
       internetConnection: Internetové připojení
       writeAccess: Povolení zápisu
     title: Požadavky
@@ -744,6 +758,9 @@ setup:
       notOkay: Není v pořádku
       writable: Zapisovatelné
       notWritable: Nelze zapisovat
+      minPhpVersion:
+        required: 'Požadováno:'
+        available: 'Dostupné:'
     optional: volitelný
     introduction: mosparo má určité požadavky ke správnému chodu. Než budeme moci mosparo nastavit, je třeba tyto požadavky splnit.
     missingPrerequisites: Chybí některé požadavky. Podívejte se na níže uvedený přehled.
@@ -825,6 +842,7 @@ action:
   skipWizard: Přeskočit průvodce
   saveAndContinue: Uložit a pokračovat
   goToTheDashboard: Přejít na nástěnku
+  checkRequirements: Kontrola požadavků
 general:
   infoUndo: Tento proces nelze vrátit zpět.
   example: Příklad

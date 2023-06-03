@@ -25,7 +25,7 @@ class SetupHelper
         'general' => [
             'minPhpVersion' => '8.1.10',
         ],
-        'phpExtensions' => [
+        'phpExtension' => [
             'ctype' => true,
             'curl' => true,
             'dom' => true,
@@ -64,12 +64,16 @@ class SetupHelper
         $this->projectDirectory = $projectDirectory;
     }
 
-    public function checkPrerequisites(): array
+    public function checkPrerequisites($fullPrerequisites = null): array
     {
+        if ($fullPrerequisites === null) {
+            $fullPrerequisites = $this->prerequisites;
+        }
+
         $meetPrerequisites = true;
         $checkedPrerequisites = [];
 
-        foreach ($this->prerequisites as $type => $prerequisites) {
+        foreach ($fullPrerequisites as $type => $prerequisites) {
             if (!isset($checkedPrerequisites[$type])) {
                 $checkedPrerequisites[$type] = [];
             }
@@ -85,12 +89,12 @@ class SetupHelper
 
                         $checkedPrerequisites[$type][$subtype] = [
                             'required' => $prerequisite,
-                            'available' => PHP_VERSION,
+                            'available' => str_replace(PHP_EXTRA_VERSION, '', PHP_VERSION),
                             'pass' => $result
                         ];
                     }
                 }
-            } else if ($type === 'phpExtensions') {
+            } else if ($type === 'phpExtension') {
                 foreach ($prerequisites as $extensionKey => $isRequired) {
                     $version = phpversion($extensionKey);
                     if ($version == '' && $isRequired) {
@@ -127,6 +131,25 @@ class SetupHelper
         }
 
         return [ $meetPrerequisites, $checkedPrerequisites ];
+    }
+
+    public function checkUpgradePrerequisites($majorVersionData): array
+    {
+        $prerequisites = [];
+        foreach ($majorVersionData['requirements'] as $requirement) {
+            $type = $requirement['type'];
+            $name = $requirement['name'];
+            $required = $requirement['required'];
+            $minValue = $requirement['minValue'] ?? null;
+
+            if (!isset($prerequisites[$type]) || !is_array($prerequisites[$type])) {
+                $prerequisites[$type] = [];
+            }
+
+            $prerequisites[$type][$name] = ($minValue !== null) ? $minValue : $required;
+        }
+
+        return $this->checkPrerequisites($prerequisites);
     }
 
     public function generateEncryptionKey(): string
@@ -170,7 +193,7 @@ class SetupHelper
     public function getExtensionsData(): array
     {
         $data = [];
-        foreach ($this->prerequisites['phpExtensions'] as $extension => $isRequired) {
+        foreach ($this->prerequisites['phpExtension'] as $extension => $isRequired) {
             $versionNumber = phpversion($extension);
             if (!$versionNumber) {
                 $versionNumber = null;

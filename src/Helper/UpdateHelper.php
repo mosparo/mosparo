@@ -15,7 +15,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 class UpdateHelper
 {
-    const MOSPARO_UPDATE_URL = 'https://updates.mosparo.io/{channel}.json';
+    const MOSPARO_UPDATE_URL = 'https://updates.mosparo.io/v/{majorVersion}.json';
     const FILE_COPY = 'copy';
     const FILE_DELETE = 'delete';
 
@@ -70,6 +70,16 @@ class UpdateHelper
      * @var bool
      */
     protected bool $updateAvailable = false;
+
+    /**
+     * @var array
+     */
+    protected array $upgradeData = [];
+
+    /**
+     * @var bool
+     */
+    protected bool $upgradeAvailable = false;
 
     /**
      * @var array
@@ -156,6 +166,26 @@ class UpdateHelper
     }
 
     /**
+     * Returns true if there is an upgrade available
+     *
+     * @return bool
+     */
+    public function isUpgradeAvailable(): bool
+    {
+        return ($this->upgradeAvailable); // @TODO
+    }
+
+    /**
+     * Returns the data for the available upgrade
+     *
+     * @return array
+     */
+    public function getAvailableUpgradeData(): array
+    {
+        return $this->upgradeData; // @TODO
+    }
+
+    /**
      * Returns a DateTime object, at which the update check was done, or returns null
      * if no cached data is available.
      *
@@ -164,6 +194,39 @@ class UpdateHelper
     public function getCheckedAt(): ?\DateTime
     {
         return $this->getCachedUpdateData(false)['checkedAt'] ?? null;
+    }
+
+
+    /**
+     * Defines and creates the directory for the update log file
+     *
+     * @return string
+     */
+    public function getUpdateLogFileDirectory(): string
+    {
+        $directory = $this->projectDirectory . '/public/update-log';
+        if (!$this->fileSystem->exists($directory)) {
+            $this->fileSystem->mkdir($directory);
+        }
+
+        return $directory;
+    }
+
+    /**
+     * Returns an array with the path and the absolute URI to the
+     * temporary log file.
+     *
+     * @return array
+     */
+    public function defineTemporaryLogFile(): array
+    {
+        $directory = $this->getUpdateLogFileDirectory();
+        $fileName = '/update-log-' . uniqid() . '.html';
+        $filePath = $directory . $fileName;
+
+        $fileUrl = '/update-log' . $fileName;
+
+        return [$filePath, $fileUrl];
     }
 
     /**
@@ -216,7 +279,7 @@ class UpdateHelper
     public function checkForUpdates()
     {
         $channel = $this->configHelper->getEnvironmentConfigValue('updateChannel', 'stable');
-        $url = str_replace('{channel}', $channel, self::MOSPARO_UPDATE_URL);
+        $url = str_replace('{majorVersion}', Kernel::MAJOR_VERSION, self::MOSPARO_UPDATE_URL);
 
         // Get the version data and the signature
         $versionData = $this->loadRemoteData($url);
@@ -233,7 +296,7 @@ class UpdateHelper
         // Parse the data and process it
         $updateData = json_decode($versionData, true);
 
-        $this->processVersionData($updateData);
+        $this->processVersionData($updateData, $channel);
     }
 
     /**
@@ -247,64 +310,12 @@ class UpdateHelper
         $jsonData = json_decode($versionData);
 
         $validator = new Validator();
-        $validator->resolver()->registerFile('http://schema.mosparo.io/update.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_UPDATE));
+        $validator->resolver()->registerPrefix('http://schema.mosparo.io/', Specifications::getJsonSchemaPath(''));
 
-        $result = $validator->validate($jsonData, 'http://schema.mosparo.io/update.json');
+        $result = $validator->validate($jsonData, 'http://schema.mosparo.io/version.json');
 
         return $result->isValid();
     }
-
-    /**
-     * Processes the version data and tries to determine the next available version.
-     *
-     * @param array $versionData
-     */
-    protected function processVersionData(array $versionData): void
-    {
-        foreach ($versionData as $version) {
-            if (
-                version_compare(Kernel::VERSION, $version['version'], '<')
-                && (empty($this->newVersionData) || version_compare($this->newVersionData['version'], $version['version'], '<'))
-            ) {
-                $this->newVersionData = $version;
-            }
-        }
-
-        $this->updateAvailable = (!empty($this->newVersionData));
-    }
-
-    /**
-     * Defines and creates the directory for the update log file
-     *
-     * @return string
-     */
-    public function getUpdateLogFileDirectory(): string
-    {
-        $directory = $this->projectDirectory . '/public/update-log';
-        if (!$this->fileSystem->exists($directory)) {
-            $this->fileSystem->mkdir($directory);
-        }
-
-        return $directory;
-    }
-
-    /**
-     * Returns an array with the path and the absolute URI to the
-     * temporary log file.
-     *
-     * @return array
-     */
-    public function defineTemporaryLogFile(): array
-    {
-        $directory = $this->getUpdateLogFileDirectory();
-        $fileName = '/update-log-' . uniqid() . '.html';
-        $filePath = $directory . $fileName;
-
-        $fileUrl = '/update-log' . $fileName;
-
-        return [$filePath, $fileUrl];
-    }
-
 
     /**
      * Updates the mosparo installation. Returns true if everything worked correctly or false if an
@@ -528,6 +539,107 @@ class UpdateHelper
         }
 
         return false;
+    }
+
+    /**
+     * Processes the version data and tries to determine the next available version.
+     *
+     * @param array $versionData
+     * @param string $channel
+     */
+    protected function processVersionData(array $versionData, string $channel): void
+    {
+        $channelData = $versionData['channels'][$channel] ?? null;
+
+        if (!$channelData || !($channelData['latestVersion'] ?? null)) {
+            throw new Exception('The update information for the selected channel are not available.');
+        }
+
+        if (version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
+            $this->newVersionData = $this->loadVersionChannelVersions($channelData['versionsUrl']);
+            $this->updateAvailable = (!empty($this->newVersionData));
+        }
+
+        $recommendUpgrade = $channelData['recommendNextMajorVersion'] ?? false;
+        if ($recommendUpgrade) {
+            try {
+                $this->loadUpgradeInformation($channelData, $channel);
+            } catch (Exception $e) {
+                // We hide the exception since the upgrade is optional.
+                // If the schema has changed, the user may have to upgrade
+                // to the latest mosparo version before the upgrade is possible.
+            }
+        }
+    }
+
+    protected function loadVersionChannelVersions($url): array
+    {
+        $versionDataRaw = $this->loadRemoteData($url);
+        $signature = $this->loadRemoteData($url . '.signature');
+
+        if (!$this->validateSignature($versionDataRaw, $signature)) {
+            throw new Exception(sprintf('Signature validation failed for "%s".', $url));
+        }
+
+        if (!$this->validateVersionChannelVersions($versionDataRaw)) {
+            throw new Exception('The update data is not valid against the schema.');
+        }
+
+        // Parse the data and process it
+        $versionData = json_decode($versionDataRaw, true);
+        $newVersionData = [];
+        foreach ($versionData['versions'] as $version) {
+            if (
+                version_compare(Kernel::VERSION, $version['number'], '<')
+                && (empty($newVersionData) || version_compare($newVersionData['number'], $version['number'], '<'))
+            ) {
+                $newVersionData = $version;
+            }
+        }
+
+        return $newVersionData;
+    }
+
+    protected function validateVersionChannelVersions(string $versionData): bool
+    {
+        $jsonData = json_decode($versionData);
+
+        $validator = new Validator();
+        $validator->resolver()->registerPrefix('http://schema.mosparo.io/', Specifications::getJsonSchemaPath(''));
+
+        $result = $validator->validate($jsonData, 'http://schema.mosparo.io/version-channel-versions.json');
+
+        return $result->isValid();
+    }
+
+    protected function loadUpgradeInformation(array $channelData, $channel)
+    {
+        // Get the version data and the signature
+        $versionData = $this->loadRemoteData($channelData['nextMajorVersionUrl']);
+        $signature = $this->loadRemoteData($channelData['nextMajorVersionUrl'] . '.signature');
+
+        if (!$this->validateSignature($versionData, $signature)) {
+            throw new Exception(sprintf('Signature validation failed for "%s".', $channelData['nextMajorVersionUrl']));
+        }
+
+        if (!$this->validateUpdateData($versionData)) {
+            throw new Exception('The update data is not valid against the schema.');
+        }
+
+        // Parse the data and process it
+        $updateData = json_decode($versionData, true);
+
+        $channelData = $updateData['channels'][$channel] ?? null;
+
+        if (!$channelData || !($channelData['latestVersion'] ?? null)) {
+            throw new Exception('The update information for the selected channel are not available.');
+        }
+
+        if (version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
+            $this->upgradeData['majorVersionData'] = $updateData;
+            $this->upgradeData['versionData'] = $this->loadVersionChannelVersions($channelData['versionsUrl']);
+            $this->upgradeAvailable = (!empty($this->upgradeData));
+        }
     }
 
     /**

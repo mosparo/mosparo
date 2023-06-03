@@ -634,7 +634,7 @@ setup:
     installOptionalExtensions: Certaines extensions facultatives ne sont pas installées. Nous vous recommandons d'installer ces extensions avant de continuer.
     types:
       general: Général
-      phpExtensions: Extensions PHP
+      phpExtension: Extensions PHP
     subtypes:
       minPhpVersion: Version minimale de PHP
     results:

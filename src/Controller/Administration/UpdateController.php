@@ -117,15 +117,25 @@ class UpdateController extends AbstractController
         $isUpdateAvailable = $this->updateHelper->isUpdateAvailable();
         $availableUpdateData = $this->updateHelper->getAvailableUpdateData();
 
+        $isUpgradeAvailable = $session->get('isUpgradeAvailable', false); // @TODO
+        $availableUpgradeData = $session->get('availableUpgradeData', []); // @TODO
+
         $translatedChannels = array_flip($channels);
         return $this->render('administration/update/overview.html.twig', [
+            'mosparoMajorVersion' => Kernel::MAJOR_VERSION,
             'mosparoVersion' => Kernel::VERSION,
+
             'updateChannel' => $translatedChannels[$updateChannel],
             'settingsForm' => $settingsForm->createView(),
             'checkedForUpdates' => $checkedForUpdates,
             'checkedAt' => $checkedAt,
+
             'isUpdateAvailable' => $isUpdateAvailable,
             'availableUpdateData' => $availableUpdateData,
+
+            'isUpgradeAvailable' => $isUpgradeAvailable,
+            'availableUpgradeData' => $availableUpgradeData,
+
             'updatesEnabled' => $this->updatesEnabled,
             'downloadCheck' => $this->connectionHelper->checkIfDownloadIsPossible(),
         ]);
@@ -148,7 +158,69 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
+        // @TODO below
+        if ($this->updateHelper->isUpgradeAvailable()) {
+            $session->set('isUpgradeAvailable', $this->updateHelper->isUpgradeAvailable());
+            $session->set('availableUpgradeData', $this->updateHelper->getAvailableUpgradeData());
+        } else {
+            $session->remove('isUpgradeAvailable');
+            $session->remove('availableUpgradeData');
+        }
+
         return $this->redirectToRoute('administration_update_overview', ['checkedForUpdates' => 1]);
+    }
+
+    /**
+     * @Route("/upgrade/check-requirements", name="administration_upgrade_check_requirements")
+     */
+    public function upgradeCheckRequirements(Request $request): Response
+    {
+        $session = $request->getSession();
+
+        // @TODO
+        $isUpgradeAvailable = $session->get('isUpgradeAvailable', false);
+        $availableUpgradeData = $session->get('availableUpgradeData', []);
+
+        if (!$isUpgradeAvailable || !$this->updatesEnabled) {
+            return $this->redirectToRoute('administration_update_overview');
+        }
+
+        [ $meetPrerequisites, $prerequisites ] = $this->setupHelper->checkUpgradePrerequisites($availableUpgradeData['majorVersionData'] ?? []);
+
+        return $this->render('administration/update/check_requirements.html.twig', [
+            'mosparoMajorVersion' => Kernel::MAJOR_VERSION,
+
+            'isUpgradeAvailable' => $isUpgradeAvailable,
+            'availableUpgradeData' => $availableUpgradeData,
+
+            'meetPrerequisites' => $meetPrerequisites,
+            'prerequisites' => $prerequisites,
+
+            'updatesEnabled' => $this->updatesEnabled,
+        ]);
+    }
+
+    /**
+     * @Route("/upgrade/execute", name="administration_upgrade_execute")
+     */
+    public function executeUpgrade(Request $request): Response
+    {
+        $session = $request->getSession();
+
+        $isUpgradeAvailable = $session->get('isUpgradeAvailable', false);
+        $availableUpgradeData = $session->get('availableUpgradeData', []);
+
+        $availableUpdateData = $availableUpgradeData['versionData'] ?? false;
+
+        if (!$isUpgradeAvailable || !$this->updatesEnabled || !$availableUpdateData) {
+            return $this->redirectToRoute('administration_update_overview');
+        }
+
+        // @TODO
+        $session->set('isUpdateAvailable', true);
+        $session->set('availableUpdateData', $availableUpgradeData['versionData']);
+
+        return $this->redirectToRoute('administration_update_execute');
     }
 
     /**
@@ -168,7 +240,7 @@ class UpdateController extends AbstractController
         $availableUpdateData = $this->updateHelper->getAvailableUpdateData();
 
         // Abort, if this version is already installed.
-        if ($availableUpdateData['version'] == Kernel::VERSION) {
+        if ($availableUpdateData['number'] == Kernel::VERSION) {
             return $this->redirectToRoute('administration_update_overview');
         }
 
@@ -198,7 +270,7 @@ class UpdateController extends AbstractController
         }
 
         // Abort, if this version is already installed.
-        if ($versionData['version'] == Kernel::VERSION) {
+        if ($versionData['number'] == Kernel::VERSION) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Version already installed.']);
         }
 

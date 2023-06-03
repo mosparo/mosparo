@@ -758,6 +758,20 @@ administration:
       title: Update ausgeführt
       description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
 
+    upgrade:
+      updateFirst: Bevor Sie auf die nächste Hauptversion upgraden können, müssen Sie die neuste Version Ihrer bisherigen Hauptversion installieren.
+      introAvailable: Eine neue Hauptversion ist verfügbar. Sie können das Update-Tool verwenden, um auf die neuste Hauptversion zu aktualisieren.
+      availableVersion: Verfügbare Hauptversion
+      titleAvailable: Upgrade verfügbar
+      installedVersion: Installierte Hauptversion
+    checkRequirements:
+      title: Voraussetzungen überprüfen
+      introduction: Stellen Sie bitte Sicher, dass Ihr Webhosting alle Voraussetzungen erfüllt, bevor Sie mit dem Upgrade fortfahren. Mit einer neuen Hauptversion können die Voraussetzungen ändern und müssen daher zwingend erfüllt werden.
+      missingPrerequisites: Einige der Voraussetzungen sind nicht erfüllt. Bitte prüfen Sie die Auswertung unten.
+      action:
+        upgrade: Upgrade zu %newMajorVersion%
+        recheck: Erneut prüfen
+      meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit dem Upgrade fortfahren.
   system:
     title: System-Informationen
     description: Alle Informationen über mosparo.
@@ -790,7 +804,6 @@ administration:
 
     website: Website
 
-# Download check
   security:
     title: Sicherheits-Einstellungen
     reverseProxy:
@@ -810,6 +823,7 @@ administration:
     message:
       savedSuccessfully: Die Sicherheitseinstellungen wurden erfolgreich gespeichert.
     description: Konfigurieren Sie verschiedene sicherheitsrelevante Einstellungen Ihrer mosparo Installation.
+# Download check
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
@@ -964,11 +978,12 @@ action:
   configure: Konfigurieren
   checkForUpdate: Nach Updates suchen
   installUpdate: Update installieren
-
-# General values
   goToTheDashboard: Zur Übersicht
   saveAndContinue: Speichern und Weiter
   skipWizard: Assistent überspringen
+  checkRequirements: Voraussetzungen prüfen
+
+# General values
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
@@ -994,8 +1009,8 @@ form:
   choices:
     systemDefault: Standard-Einstellung
     browserLanguage: Sprache des Browsers
-
   clearField: Feld leeren
+
 interface:
   colorModes:
     light: Hell
@@ -1045,7 +1060,7 @@ setup:
 
     types:
       general: Allgemein
-      phpExtensions: PHP-Erweiterungen
+      phpExtension: PHP-Erweiterungen
       internetConnection: Internet-Verbindung
       writeAccess: Schreibzugriff
 
@@ -1060,6 +1075,9 @@ setup:
       writable: Beschreibbar
       notWritable: Nicht beschreibbar
 
+      minPhpVersion:
+        required: 'Erforderlich:'
+        available: 'Verfügbar:'
     optional: optional
 
   database:

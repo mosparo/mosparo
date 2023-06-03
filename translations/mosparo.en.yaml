@@ -167,6 +167,7 @@ rule:
       intro: The provider rule type allows to filter for AS numbers and country codes.
       infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
       label: AS number/Country
+
       action:
         configureGeoip2: GeoIP2 Configuration
 
@@ -197,6 +198,7 @@ rule:
       shortIntro: Allows to filter by specific words or patterns in the user agent
       intro: The user agent rule type allows to filter for words and Regular Expression patterns in the user agent of the user.
       label: User agent (Word/Pattern)
+
       text:
         title: Text
         intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
@@ -225,6 +227,7 @@ rule:
       shortIntro: Allows to filter by specific words or patterns
       intro: The word rule type allows to filter for words and Regular Expression patterns.
       label: Word/Pattern
+
       text:
         title: Text
         intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
@@ -763,6 +766,24 @@ administration:
       messageNotAvailable: No new update for mosparo is available. Please check again later.
       lastChecked: 'Last check:'
 
+    upgrade:
+      titleAvailable: Upgrade available
+      updateFirst: Please update to the latest minor version before upgrading to the next major version.
+      introAvailable: A new major version is available. You can use the update tool to upgrade to the latest major version.
+      installedVersion: Installed major version
+      availableVersion: Available major version
+
+    checkRequirements:
+      title: Check requirements
+      introduction: Before you upgrade, make sure that you meet all requirements. With a new major version, the requirements can change and must be met before the upgrade can be executed.
+
+      meetPrerequisites: All requirements are met. You can proceed with the upgrade.
+      missingPrerequisites: Some requirements are missing. Please check the summary below.
+
+      action:
+        upgrade: Upgrade to %newMajorVersion%
+        recheck: Recheck
+
     execute:
       title: Update mosparo
       description: Please wait and don't leave this page. Update progress started…
@@ -982,6 +1003,7 @@ action:
   checkForUpdate: Check for update
   installUpdate: Install update
   goToTheDashboard: Go to the dashboard
+  checkRequirements: Check requirements
 
 # General values
 general:
@@ -1060,7 +1082,7 @@ setup:
 
     types:
       general: General
-      phpExtensions: PHP extensions
+      phpExtension: PHP extensions
       internetConnection: Internet connection
       writeAccess: Write access
 
@@ -1074,6 +1096,10 @@ setup:
       notOkay: Not okay
       writable: Writable
       notWritable: Not writable
+
+      minPhpVersion:
+        required: 'Required:'
+        available: 'Available:'
 
     optional: optional
 

@@ -26,7 +26,7 @@ class ProviderFormType extends AbstractRuleTypeFormType
             ])
             ->add('value', TextType::class, [
                 'label' => 'rule.type.provider.label',
-                'attr' => ['placeholder' => 'rule.type.provider.placeholder', 'class' => 'rule-item-value']
+                'attr' => ['class' => 'rule-item-value']
             ])
             ->add('spamRatingFactor', NumberType::class, [
                 'label' => 'rule.form.items.rating',

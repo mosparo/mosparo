@@ -36,7 +36,7 @@ class WordFormType extends AbstractRuleTypeFormType
             ])
             ->add('value', TextType::class, [
                 'label' => 'rule.type.word.label',
-                'attr' => ['placeholder' => 'rule.type.word.placeholder', 'class' => 'rule-item-value']
+                'attr' => ['class' => 'rule-item-value']
             ])
             ->add('spamRatingFactor', NumberType::class, [
                 'label' => 'rule.form.items.rating',
