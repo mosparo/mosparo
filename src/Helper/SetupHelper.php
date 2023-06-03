@@ -94,7 +94,7 @@ class SetupHelper
 
                         $checkedPrerequisites[$type][$subtype] = [
                             'required' => $prerequisite,
-                            'available' => PHP_VERSION,
+                            'available' => str_replace(PHP_EXTRA_VERSION, '', PHP_VERSION),
                             'pass' => $result
                         ];
                     }
