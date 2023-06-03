@@ -260,6 +260,7 @@ submission:
         asNumber: Dengan nomor
         country: Negara
         title: Klien
+        userAgent: User-Agent
       value: Nilai
       rating: Peringkat
       formData:
@@ -268,6 +269,7 @@ submission:
         invalid: Verifikasi gagal
         notVerified: Tidak terverifikasi
         hasPoints: poin
+        honeypot: Honeypot
       fieldMustBeEmpty: Kolom harus kosong
       points: '%totalPoints% poin'
     source:
@@ -297,14 +299,19 @@ settings:
         message:
           errorOnlyOwner: Hanya pemilik proyek yang dapat menerbitkan ulang kunci API.
           successfullyReissued: Kunci API berhasil diterbitkan ulang.
+        title: Memperbarui kunci API
       publicKey: Kunci publik
       privateKey: Kunci pribadi
+      title: Kunci API
     connectionDetails:
       title: Detail koneksi
       host: Host
       uuid: Nomor identifikasi unik
     help:
       integrateMosparo: Integrasikan mosparo
+    action:
+      reissueApiKeys: Memperbarui kunci API
+      reissue: Memperbarui
   projectMember:
     form:
       message:
@@ -436,5 +443,169 @@ administration:
     title: Pengaturan sistem
     mailSettings:
       title: Pengaturan pesan
+      form:
+        user: Pengguna
+        useSmtp: Gunakan server SMTP untuk mengirim pesan
+        host: Host
+        port: Port
+        password: Kata Sandi
+        fromAddress: Dari alamat email
+        fromName: Dari nama
+      help:
+        password: Jika anda memasukkan sesuatu di dalam kolom ini, nilai yang sudah ada akan ditimpa.
     description: Konfigurasikan berbagai pengaturan yang berlaku untuk instalasi mosparo Anda.
+    message:
+      savedSuccessfully: Pengaturan berhasil disimpan.
   title: Administrasi
+  geoip2:
+    settings:
+      getLicenseKey: 'Untuk mendapatkan kunci lisensi, Anda memerlukan akun MaxMind. Silakan kunjungi situs berikut:'
+      useGeoip2Field: Gunakan lokalisasi alamat IP otomatis
+      message:
+        infoActivationTime: Jika Anda baru saja meminta kunci lisensi, perlu beberapa saat agar kunci lisensi menjadi aktif.
+        savedSuccessfully: Pengaturan berhasil disimpan.
+      title: Pengaturan
+      licenseKeyField: Kunci lisensi
+    downloadAndUpdate:
+      web:
+        intro: 'Gunakan tombol berikut untuk membiarkan mosparo mengunduh database:'
+        message:
+          successfullyDownloaded: Database berhasil diunduh.
+          errorDownload: Terjadi kesalahan saat mosparo mencoba mengunduh database. %error%
+          specifyLicenseKey: Harap masukkan kunci lisensi sebelum Anda mencoba mengunduh database.
+        action: Unduh basis data
+        title: Web
+      cli:
+        intro: 'Gunakan perintah berikut untuk mengunduh database melalui CLI:'
+        title: CLI
+      update:
+        intro: 'Untuk me-refresh database secara otomatis, disarankan untuk menyiapkan cronjob yang akan mendownload database secara otomatis. Untuk menggunakan pembaruan otomatis, silakan atur cronjob seperti berikut:'
+        infoAbsolutePath: Anda mungkin harus menyesuaikan jalur file %pathToBinConsole%. Bisa jadi Anda harus mengisi jalur absolut.
+        title: Pembaruan otomatis
+        infoRateLimit: Harap diingat bahwa jumlah unduhan yang dapat dilakukan oleh kunci lisensi terbatas. Harap jangan terlalu sering menggunakan fungsi unduhan.
+      title: Unduh & perbarui otomatis
+      intro: Setelah Anda menyimpan kunci lisensi, mosparo perlu mengunduh database. Anda dapat melakukannya di sini secara langsung atau menggunakan koneksi SSH untuk menjalankan perintah.
+    version:
+      typeAsn: 'AS nomor:'
+      titleAvailable: GeoIP2 tersedia
+      messageAvailable: 'Database GeoIP2 telah berhasil diunduh dan aktif. Versi berikut aktif:'
+      typeCountry: 'Negara:'
+      titleNotAvailable: GeoIP2 tidak tersedia
+      messageDatabaseNotAvailable: Basis data GeoIP2 belum diunduh atau terjadi kesalahan saat mengunduh.
+    description: Konfigurasi itegrasi GeoIP2.
+    title: GeoIP2
+  update:
+    version:
+      titleNotAvailable: Tidak ada pembaruan yang tersedia
+      messageAvailable: Pembaruan baru untuk mosparo tersedia. Silakan klik tombol instal di bawah ini jika Anda ingin menginstal pembaruan.
+      messageNotAvailable: Tidak ada pembaruan baru untuk mosparo yang tersedia. Silakan periksa lagi nanti.
+      warningUpdatesDisabled: Pembaruan dinonaktifkan untuk penginstalan mosparo ini. Silakan periksa dokumentasi untuk melihat opsi lain untuk memperbarui instalasi mosparo Anda.
+      titleAvailable: Pembaruan tersedia
+      warningUpdate: Harap buat cadangan file mosparo dan database sebelum memperbarui. Proses pembaruan otomatis ini tidak akan mencadangkan file atau database. Jika sesuatu tidak berfungsi dengan benar, itu dapat merusak instalasi mosparo Anda.
+    upgrade:
+      titleAvailable: Peningkatan tersedia
+      updateFirst: Perbarui ke versi minor terbaru sebelum meningkatkan ke versi mayor berikutnya.
+      introAvailable: Versi utama baru tersedia. Anda dapat menggunakan alat pembaruan untuk memutakhirkan ke versi utama terbaru.
+      installedVersion: Versi utama diinstal
+      availableVersion: Tersedia versi utama
+    checkRequirements:
+      title: Periksa persyaratan
+      introduction: Sebelum melakukan upgrade, pastikan Anda memenuhi semua persyaratan. Dengan versi utama yang baru, persyaratan dapat berubah dan harus dipenuhi sebelum pemutakhiran dapat dijalankan.
+      meetPrerequisites: Semua persyaratan terpenuhi. Anda dapat melanjutkan dengan peningkatan.
+      missingPrerequisites: Beberapa persyaratan tidak ada. Silakan periksa ringkasan di bawah ini.
+      action:
+        upgrade: Perbarui ke %newMajorVersion%
+        recheck: Cek ulang
+    execute:
+      description: Harap tunggu dan jangan tinggalkan halaman ini. Progres pembaruan dimulai…
+      message:
+        updateError: Terjadi kesalahan saat memperbarui mosparo. Silakan periksa pesan kesalahan di bawah ini.
+        successfullyUpdated: mosparo berhasil diperbarui. Silakan lanjutkan ke dasbor.
+      log: Proses
+      title: Perbarui mosparo
+    settings:
+      form:
+        channelDevelop: Pengembangkan
+        channelStable: Stabil
+        channelBeta: Beta
+      message:
+        infoDevelopChannel: Saluran pengembangan dan beta berisi versi yang belum teruji dan tidak stabil yang belum siap digunakan untuk produksi. Harap jangan menggunakannya di lingkungan produksi.
+        savedSuccessfully: Saluran pembaruan berhasil disimpan.
+      title: Perbarui pengaturan
+    updateChannel: Perbarui saluran
+    installedVersion: Versi terpasang
+    check:
+      intro: Jika Anda ingin memeriksa pembaruan, silakan klik tombol di bawah ini.
+      title: Status
+      message:
+        errorCheckingForUpdates: 'Terjadi kesalahan saat memeriksa pembaruan. Error: %errorMessage%'
+    availableVersion: Versi yang tersedia
+    buttons:
+      continue: Melanjutkan
+    title: Memperbarui
+    description: Periksa versi baru dan perbarui instalasi mosparo Anda.
+    finalize:
+      title: Pembaruan dieksekusi
+      description: Perubahan yang diperlukan untuk pembaruan ini dijalankan. Instalasi Anda mutakhir.
+  system:
+    title: Sistem Informasi
+    logo:
+      license: Logo dilisensikan di bawah %linkStart%Creative Commons Attribution-NoDerivatives 4.0 International License%linkEnd%.
+      title: Logo
+      intro: Logo ini dirancang oleh Jan Kosa.
+    projectMembers:
+      title: Anggota proyek
+      intro: Orang-orang ini membuat mosparo apa adanya - perangkat lunak yang diinstal di hosting web Anda.
+    usedLibrariesAndResources:
+      title: Pustaka dan sumber daya yang digunakan
+      intro: Kami ingin berterima kasih kepada semua pengembang open source atas kerja luar biasa mereka.
+      frontend: Tampilan depan / Visual
+      license: Lisensi
+      backend: Backend / PHP Librari
+    website: Situs Web
+    general:
+      phpVersion: Versi PHP
+      extensions: Ekstensi
+      title: Jeneral
+      mosparoVersion: Versi mosparo
+      serverInfo: Server
+    description: Temukan semua informasi tentang mosparo.
+    license:
+      title: Lisenso mosparo
+  user:
+    delete:
+      title: Hapus pengguna %email%
+      confirm: Apa kamu yakin akan menghapus pengguna %email%?
+      infoCantSelfDelete: Anda tidak dapat menghapus diri sendiri.
+      message:
+        errorUserIsOwner: Pengguna adalah pemilik setidaknya satu proyek. Anda tidak dapat menghapus pemilik proyek.
+        successfullyDeleted: Pengguna %email% berhasil di hapus.
+    modify:
+      title: Memodifikasi pengguna %email%
+    form:
+      email: Pesan
+      password: Kata Sandi
+      message:
+        errorSendingResetEmail: 'Email dengan tautan tidak dapat dikirim dengan benar. Error: %errorMessage%'
+        successfullySaved: Pengguna berhasil disimpan.
+        errorCreatingResetToken: 'Terjadi kesalahan teknis saat membuat email. Error: %errorMessage%'
+      isActiveUser: Pengguna aktif
+      isAdministrator: Administrator
+      sendPasswordResetEmail: Kirim email kepada pengguna untuk mengatur kata sandi
+    list:
+      actions: Aksi
+      roles: Peran
+      user: Pengguna
+    create:
+      title: Membuat pengguna
+    help:
+      password: Biarkan kolom ini kosong jika tidak ada perubahan kata sandi yang diperlukan.
+    title: Pengguna
+    description: Mengelola semua pengguna dari instansi mosparo ini.
+    backToOverview: Kembali ke pengguna
+    roles: Peran
+account:
+  backToOverview: Kembali ke gambaran umum
+  settings:
+    title: Pengaturan pengguna
+  title: Akun
