@@ -89,15 +89,17 @@
                                     </div>
                                 </div>
 
-                                {% if availableUpdateData.description != '' and availableUpdateData.detailsUrl != '' %}
+                                {% set description = availableUpdateData.description ?? '' %}
+                                {% set detailsUrl = availableUpdateData.detailsUrl ?? '' %}
+                                {% if description != '' and detailsUrl != '' %}
                                     <div class="row mb-3">
                                         <div class="col-12">
                                             <h4 class="mb-1">
                                                 {{ 'administration.update.version.releaseNotes'|trans }}
                                             </h4>
-                                            <pre class="mb-2">{{ (availableUpdateData.description ?? '')|trim }}</pre>
+                                            <pre class="mb-2">{{ description|trim }}</pre>
                                             <div class="d-flex justify-content-end">
-                                                <a href="{{ availableUpdateData.detailsUrl ?? '' }}" class="btn btn-info" target="_blank">
+                                                <a href="{{ detailsUrl }}" class="btn btn-info" target="_blank">
                                                     <i class="ti ti-info-circle"></i>
                                                     {{ 'administration.update.version.releaseNotes'|trans }}
                                                 </a>
