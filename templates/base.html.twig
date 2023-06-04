@@ -32,7 +32,8 @@
                         </button>
                         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
                             <a href="/">
-                                <img src="{{ asset('build/images/mosparo-logo.svg') }}" width="110" alt="mosparo" class="navbar-brand-image" />
+                                <img src="{{ asset('build/images/mosparo-logo-bird.svg') }}" width="50" alt="mosparo" class="navbar-brand-image d-block d-sm-none" />
+                                <img src="{{ asset('build/images/mosparo-logo.svg') }}" width="110" alt="mosparo" class="navbar-brand-image d-none d-sm-block" />
                             </a>
                         </h1>
                         <div class="navbar-nav header-navbar flex-row order-md-last">
@@ -40,8 +41,10 @@
                                 {% if updatesEnabled and isUpdateAvailable %}
                                     <div class="nav-item pe-3">
                                         <a href="{{ path('administration_update_overview') }}" class="btn btn-outline-warning">
-                                            <i class="ti ti-refresh"></i>
-                                            {{ 'administration.update.button.updateAvailable'|trans }}
+                                            <i class="ti ti-refresh me-0 me-md-2"></i>
+                                            <span class="d-none d-md-block">
+                                                {{ 'administration.update.button.updateAvailable'|trans }}
+                                            </span>
                                         </a>
                                     </div>
                                 {% endif %}
