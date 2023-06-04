@@ -49,7 +49,7 @@ class UpdateExtension extends AbstractExtension implements GlobalsInterface
 
         $isUpdateAvailable = false;
         try {
-            $isUpdateAvailable = $this->updateHelper->isUpdateAvailable($checkForUpdates);
+            $isUpdateAvailable = ($this->updateHelper->isUpdateAvailable($checkForUpdates) || $this->updateHelper->isUpgradeAvailable($checkForUpdates));
         } catch (Exception $e) {
             // Do nothing
         }
