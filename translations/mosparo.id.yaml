@@ -9,6 +9,8 @@ project:
     goto: Pergi ke proyek
   create:
     title: Buat proyek
+    message:
+      successfullyCreatedAndConfigured: Proyek baru berhasil dibuat dan dikonfigurasi.
   form:
     name: Nama
     description: Deskripsi
@@ -27,6 +29,9 @@ project:
     reader: Pembaca
     editor: Editor
     owner: Pemilik
+  createWizard:
+    design:
+      title: Pilih desain
 header:
   pleaseChoose: Silakan pilih…
   account: Akun
@@ -589,3 +594,205 @@ account:
   title: Akun
   settings:
     title: Pengaturan pengguna
+    form:
+      dateFormat: Format tanggal
+      locale: Bahasa
+      timeFormat: Format waktu
+      timezone: Zona waktu
+    description: Ubah pengaturan umum untuk akun Anda.
+    message:
+      successfullySaved: Pengaturan Anda berhasil disimpan.
+  twoFactor:
+    backupCodes:
+      infoResetBackupCodes: Anda dapat menggunakan setiap kode cadangan hanya sekali. Anda harus mengatur ulang kode cadangan, segera setelah Anda harus menggunakannya.
+      title: Kode cadangan
+      intro: Harap simpan kode ini di tempat yang aman. Jika Anda kehilangan akses ke perangkat, Anda dapat masuk dengan kode cadangan ini.
+    action:
+      configure: Konfigurasi
+      resetBackupCodes: Setel ulang kode cadangan
+      disable: Dimatikan
+      continue: Lanjut
+      verify: Verifikasi
+      reconfigure: Konfigurasi ulang
+    status:
+      intro: Akun anda di lindungi autentikasi dua langkah.
+    description: Konfigurasikan autentikasi dua faktor untuk akun anda.
+    title: Autentikasi dua langkah
+    start:
+      qrCodeAlt: Gambar ini menunjukkan kode QR, yang harus Anda pindai dengan aplikasi autentikasi di ponsel cerdas Anda.
+      title: Siapkan autentikasi dua faktor
+      textManually: Alih-alih memindai kode QR, Anda dapat memasukkan kode berikut secara manual ke dalam aplikasi autentikasi.
+      intro: Harap pindai kode QR ini dengan aplikasi autentikasi di ponsel cerdas anda. Dan anda dapat menggunakan Google Authenticator, Microsoft Authenticator, atau aplikasi serupa.
+    error:
+      verificationFailed: Verifikasi otentikasi dua faktor gagal. Silakan ulangi prosesnya.
+    message:
+      successfullyDisabled: Autentikasi dua faktor berhasil dinonaktifkan untuk akun Anda.
+    verify:
+      intro: Harap masukkan kode yang terlihat di aplikasi autentikasi pada bidang di bawah dan verifikasi penyiapan.
+      title: Verifikasi otentikasi dua faktor
+  changePassword:
+    description: Ubah kata sandi akun anda.
+    form:
+      oldPassword: Kata sandi lama
+    message:
+      successfullyChanged: Kata sandi berhasil diganti.
+    title: Ganti kata sandi
+security:
+  twoFactor:
+    title: Autentikasi dua langkah
+    intro: Harap masukan kode dari autentikasi dua faktor app.
+  login:
+    youAreLoggedIn: Anda masuk dengan %username%.
+    title: Masuk
+    emailLabel: Alamat email
+    passwordLabel: Kata sandi
+  forgotPassword:
+    title: Lupa kata sandi
+  noAccess:
+    title: Tidak ada akses
+  logout:
+    title: Keluar
+password:
+  request:
+    action: Mengirim email reset kata sandi
+    form:
+      email: Email
+    title: Reset kata sandi
+    intro: Masukan alamat email anda dan kami akan mengirim tautan reset kata sandi.
+    message:
+      failedToSendEmail: 'Karena kesalahan teknis, email tidak dapat dikirim. Coba lagi nanti. Pesan kesalahan: %errorMessage%'
+  emailSent:
+    title: Email setel ulang kata sandi dikirim
+    infoSpamFolder: Jika Anda tidak menerima email, harap periksa folder spam Anda atau %linkStart%try again%linkEnd%.
+    infoEmailWithLink: Jika ada akun yang cocok dengan email Anda, maka baru saja dikirim email yang berisi tautan yang dapat Anda gunakan untuk mengatur ulang kata sandi. Tautan ini akan kedaluwarsa dalam %time%.
+  reset:
+    error:
+      tokenNotFound: Tidak ada token setel ulang kata sandi yang ditemukan di URL atau di sesi.
+      errorOccurred: Terjadi masalah saat memvalidasi permintaan reset Anda. %error%
+    title: Mereset password Anda
+    action: Atur ulang kata sandi
+    message:
+      successfullyReset: Kata sandi Anda berhasil diatur ulang.
+  form:
+    password: Kata sandi
+    repeatPassword: Ulangi kata sandi
+    newPassword: Kata sandi baru
+  backToLogin: Kembali ke masuk
+  email:
+    resetPasswordButton: Reset kata sandi
+    subject: Permintaan pengaturan ulang kata sandi Anda
+    greeting: Hai!
+    infoClickButton: Untuk mengatur ulang kata sandi Anda, klik tombol di bawah dan ikuti petunjuknya.
+    infoLinkExpiration: Tautan ini akan kedaluwarsa dalam %time%.
+    goodbye: Terima kasih,
+    help: Jika Anda mengalami masalah dengan tombol di atas, salin dan tempel URL di bawah ke browser web Anda.
+action:
+  remove: Singkirkan
+  save: Simpan
+  help: Bantuan
+  configure: Konfigurasi
+  checkRequirements: Periksa persyaratan
+  checkForUpdate: Cek Pembaruan
+  installUpdate: Pasang pembaruan
+  view: Lihat
+  add: Tambahkan
+  actions: Aksi
+  close: Tutup
+  manage: Mengelola
+  edit: Ganti
+  delete: Hapus
+roles:
+  user: Pengguna
+  inactive: Tidak aktif
+  administrator: Administrasi
+form:
+  choices:
+    browserLanguage: Bahasa browser
+    systemDefault: Pengaturan bawaan
+  addMultipleItems: Tambahkan beberapa item
+datatable:
+  datatable:
+    search: 'Mencari:'
+    lengthMenu: Tampilkan _MENU_ entri
+    infoEmpty: Menampilkan 0 hingga 0 dari 0 entri
+    infoFiltered: (difilter dari total _MAX_ entri)
+    zeroRecords: Tidak ada catatan yang cocok ditemukan
+    emptyTable: Tak ada data yang tersedia pada tabel ini
+    searchPlaceholder: Mencari
+    paginate:
+      previous: Sebelumnya
+      next: Selanjutnya
+      last: Akhir
+      first: Pertama
+    processing: Memproses…
+    loadingRecords: Memuat…
+    info: Menampilkan _START_ ke _END_ dari _TOTAL_ entri
+    aria:
+      sortAscending: ': aktifkan untuk mengurutkan kolom naik'
+      sortDescending: ': aktifkan untuk mengurutkan kolom naik'
+setup:
+  prerequisites:
+    types:
+      phpExtension: Ekstensi PHP
+      general: Jeneral
+      writeAccess: Akses tulis
+    subtypes:
+      minPhpVersion: Versi PHP minimal
+    results:
+      available: Tersedia
+      notOkay: Tidak oke
+      writable: Dapat ditulis
+      notWritable: Tidak dapat ditulisi
+      minPhpVersion:
+        required: 'Diperlukan:'
+        available: 'Tersedia:'
+      okay: Oke
+      missing: Hilang
+    optional: opsional
+    meetPrerequisites: Semua persyaratan terpenuhi. Anda dapat melanjutkan dengan penyiapan.
+    missingPrerequisites: Beberapa persyaratan tidak ada. Silakan periksa ringkasan di bawah ini.
+    title: Persyaratan
+    introduction: mosparo memiliki beberapa persyaratan untuk dapat berjalan dengan baik. Sebelum kita dapat menyiapkan mosparo, persyaratan ini harus dipenuhi.
+    installOptionalExtensions: Beberapa ekstensi opsional tidak diinstal. Kami menyarankan Anda untuk memasang ekstensi ini sebelum melanjutkan.
+  database:
+    connectionDataInvalid: Itu tidak mungkin untuk terhubung ke database. Periksa setelan Anda di bawah dan coba lagi.
+    form:
+      host: Host
+      port: Port
+      database: Basis data
+      password: Kata sandi
+      user: Pengguna
+    title: Basis data
+    useEmptyDatabase: Silakan gunakan database kosong atau database di mana tidak ada tabel mosparo.
+    mosparoTablesExistInDatabase: Tabel mosparo ditemukan di database yang ditentukan. Silakan gunakan database lain atau hapus tabel.
+    introduction: Silakan masukkan detail database MySQL Anda.
+  other:
+    title: Informasi lainnya
+    form:
+      password: Kata sandi
+      subtitleCreateYourUser: Buat pengguna Anda
+      name: Nama mosparo
+      emailAddress: Alamat email
+    introduction: Kami memiliki beberapa nilai lain yang kami butuhkan. Harap isi kolom di bawah ini.
+  buttons:
+    goToLogin: Pergi halaman masuk
+    recheck: Cek ulang
+    continue: Selanjutnya
+    install: Instal
+  start:
+    title: Mempersiapkan
+    introduction: Penyiapan ini akan memandu Anda melalui proses penyiapan mosparo.
+  install:
+    title: Penginstalan berhasil
+    description: Instalasi berhasil diselesaikan. Anda sekarang dapat masuk dengan pengguna Anda.
+state:
+  active: Aktif
+  inactive: Tidak aktif
+  yes: Iya
+  no: Tidak
+  ignored: Abaikan
+general:
+  unlimited: Tak terbatas
+  infoUndo: Anda tidak dapat membatalkan proses ini.
+  example: Contoh
+  empty: Kosong
