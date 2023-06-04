@@ -11,3 +11,15 @@
         }
     }
 }
+
+.theme-dark {
+    .card-header-with-actions {
+        @media only screen and (max-width: 500px) {
+            & {
+                .card-actions {
+                    border-top: 1px solid #243049;
+                }
+            }
+        }
+    }
+}

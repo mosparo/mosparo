@@ -40,6 +40,22 @@
     }
 }
 
+.theme-dark {
+    .card-tabs {
+        .nav-tabs {
+            .nav-link {
+                &.active,
+                &:active {
+                    color: var(--tblr-nav-tabs-link-active-color);
+                }
+                &:hover {
+                    color: var(--tblr-nav-link-hover-color);
+                }
+            }
+        }
+    }
+}
+
 .avatar {
     .ti {
         font-size: 1.25rem;

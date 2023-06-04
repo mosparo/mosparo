@@ -42,7 +42,6 @@ project:
     editor: Bearbeiter
     owner: Besitzer
 
-# Dashboard
   createWizard:
     security:
       title: Sicherheits-Funktionen aktivieren
@@ -57,6 +56,8 @@ project:
       title: Darstellung wählen
       infoAdvancedMode: Nach dem Assistenten können Sie in den Erweiterten Modus wechseln, welcher Ihnen weitere Anpassungsmöglichkeiten bietet.
       introStartWizard: Ihr Projekt wurde erfolgreich erstellt. Damit Sie auf Ihrer Website benutzen können, wählen Sie bitte die gewünschte Darstellung und fahren Sie fort.
+
+# Dashboard
 dashboard:
   title: Übersicht
   chart:
@@ -564,13 +565,14 @@ settings:
       successfullySaved: Die Darstellungs-Einstellungen wurden erfolgreich gespeichert.
       boxRadiusTooLarge: Das Logo kann nur angezeigt werden, wenn der Radius der Box unterhalb eines gewissen Wertes liegt.
 
-# Administration
     action:
       switchToSimpleMode: Zum einfachen Modus wechseln
       switchToAdvancedMode: Zum erweiterten Modus wechseln
     simpleDesign:
       introPreview: Auf der rechten Seite sehen Sie eine Vorschau der mosparo Box auf Ihrer Website. Mit der Kontrastverhältnis-Anzeige sehen Sie, wie gut das Kontrastverhältnis Ihrer Farben ist.
       introColors: Bitte wählen Sie die Farben Ihrer Website aus. Die Hintergrundfarbe ist für die Berechnung des Kontrastverhältnisses erforderlich. Die Vordergrundfarbe repräsentiert die Textfarbe, während die Akzentfarbe für die Spezialelemente der mosparo Box verwendet wird.
+
+# Administration
 administration:
   title: Administration
 
