@@ -32,6 +32,17 @@ project:
   createWizard:
     design:
       title: Pilih desain
+      introStartWizard: Proyek Anda berhasil dibuat. Untuk mulai menggunakannya, silakan pilih desain dan lanjutkan.
+      infoAdvancedMode: Anda dapat beralih ke mode lanjutan di pengaturan desain setelah wizard, yang memungkinkan Anda menyesuaikan desain secara tepat ke situs web Anda.
+    security:
+      title: Aktifkan fitur keamanan
+      introSecurity: Pilih fitur keamanan yang ingin Anda aktifkan.
+      infoSettings: Anda dapat mengaktifkan, menonaktifkan, atau mengatur fitur keamanan ini di pengaturan keamanan setelah wizard.
+    connection:
+      title: Detail koneksi
+      savedSuccessfully: Pengaturan desain dan keamanan berhasil disimpan. Proyek ini sekarang siap digunakan di situs web.
+      introConnection: Untuk menggunakan mosparo di situs web, Anda harus menambahkan integrasi ke situs web dan kemudian menghubungkan situs web tersebut dengan proyek mosparo ini. Untuk langkah ini, harap salin dan tempel informasi berikut ke kolom yang benar di integrasi.
+      infoSettings: Setelah wizard ini, Anda dapat menemukan detail koneksi ini di pengaturan proyek.
 header:
   pleaseChoose: Silakan pilih…
   account: Akun
@@ -289,6 +300,11 @@ submission:
         text: Formulir dikirimkan terlalu cepat. Pengirim hanya memerlukan %seconds% detik, yang kurang dari waktu minimum %minimumTimeSeconds% detik.
   title: Pengajuan
   backToList: Kembali ke kiriman
+  filter:
+    options:
+      all: Semua kiriman
+      spam: Kiriman spam
+      valid: Kiriman yang valid
 settings:
   title: Pengaturan proyek
   backToSettings: Kembali ke pengaturan
@@ -339,10 +355,15 @@ settings:
         textError: Huruf Error
         text: Huruf
         shadow: Bayangan
+        websiteBackground: Warna latar belakang situs web
+        websiteForeground: Warna latar depan situs web
+        websiteAccent: Warna aksen situs web
       boxSize: Ukuran kotak
       boxRadius: Jari-jari kotak
       boxBorderWidth: Lebar batas
       showMosparoLogo: Tampilkan logo mosparo di bawah kotak centang
+      help:
+        websiteBackground: Pilih warna latar belakang situs web Anda. Warna ini digunakan untuk menghitung rasio kontras.
     choices:
       boxSize:
         large: Besar
@@ -358,6 +379,12 @@ settings:
         success: Sukses
         failure: Gagal
       dimensionSettings: Dimensi
+      simpleDesign: Desain sederhana
+      colorAndDimensionSettings: Warna dan Dimensi
+      preview: Pratinjau
+    action:
+      switchToAdvancedMode: Beralih ke mode lanjutan
+      switchToSimpleMode: Beralih ke mode sederhana
   security:
     validation:
       honeypotFieldNameInvalidCharacter: Gunakan hanya huruf, angka dan tanda strip (-).
@@ -387,6 +414,10 @@ settings:
       lockoutTime: Waktu penguncian dasar
       ipAllowListHelp: 'Tentukan satu alamat ip atau subnet per baris. Contoh: 192.168.1.13 atau 192.168.1.0/24'
       lockoutDetectionTimeFrameHelp: Dalam hitungan detik
+      delayActive: Aktifkan penundaan permintaan
+      honeypotFieldActive: Aktifkan bidang honeypot
+      lockoutActive: Aktifkan penguncian otomatis
+      minimumTimeActive: Aktifkan waktu minimum
     title: Pengaman
     honeypot:
       title: Honeypot
