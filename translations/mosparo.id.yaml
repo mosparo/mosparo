@@ -608,4 +608,206 @@ account:
   backToOverview: Kembali ke gambaran umum
   settings:
     title: Pengaturan pengguna
+    form:
+      timeFormat: Format waktu
+      timezone: Zona waktu
+      locale: Bahasa
+      dateFormat: Format tanggal
+    description: Ubah pengaturan umum untuk akun Anda.
+    message:
+      successfullySaved: Pengaturan Anda berhasil disimpan.
   title: Akun
+  twoFactor:
+    verify:
+      title: Verifikasi otentikasi dua faktor
+      intro: Harap masukkan kode yang terlihat di aplikasi autentikasi pada bidang di bawah dan verifikasi penyiapan.
+    status:
+      intro: Akun anda di lindungi autentikasi dua langkah.
+    backupCodes:
+      infoResetBackupCodes: Anda dapat menggunakan setiap kode cadangan hanya sekali. Anda harus mengatur ulang kode cadangan, segera setelah Anda harus menggunakannya.
+      intro: Harap simpan kode ini di tempat yang aman. Jika Anda kehilangan akses ke perangkat, Anda dapat masuk dengan kode cadangan ini.
+      title: Kode cadangan
+    start:
+      qrCodeAlt: Gambar ini menunjukkan kode QR, yang harus Anda pindai dengan aplikasi autentikasi di ponsel cerdas Anda.
+      title: Siapkan autentikasi dua faktor
+      textManually: Alih-alih memindai kode QR, Anda dapat memasukkan kode berikut secara manual ke dalam aplikasi autentikasi.
+      intro: Harap pindai kode QR ini dengan aplikasi autentikasi di ponsel cerdas anda. Dan anda dapat menggunakan Google Authenticator, Microsoft Authenticator, atau aplikasi serupa.
+    message:
+      successfullyDisabled: Autentikasi dua faktor berhasil dinonaktifkan untuk akun Anda.
+    error:
+      verificationFailed: Verifikasi otentikasi dua faktor gagal. Silakan ulangi prosesnya.
+    description: Konfigurasikan autentikasi dua faktor untuk akun anda.
+    action:
+      configure: Konfigurasi
+      reconfigure: Konfigurasi ulang
+      resetBackupCodes: Setel ulang kode cadangan
+      disable: Dimatikan
+      continue: Lanjut
+      verify: Verifikasi
+    title: Autentikasi dua langkah
+  changePassword:
+    title: Ganti kata sandi
+    form:
+      oldPassword: Kata sandi lama
+    description: Ubah kata sandi akun anda.
+    message:
+      successfullyChanged: Kata sandi berhasil diganti.
+security:
+  login:
+    youAreLoggedIn: Anda masuk dengan %username%.
+    title: Masuk
+    emailLabel: Alamat email
+    passwordLabel: Kata sandi
+  twoFactor:
+    intro: Harap masukan kode dari autentikasi dua faktor app.
+    title: Autentikasi dua langkah
+  noAccess:
+    title: Tidak ada akses
+  forgotPassword:
+    title: Lupa kata sandi
+  logout:
+    title: Keluar
+password:
+  backToLogin: Kembali ke masuk
+  request:
+    title: Reset kata sandi
+    action: Mengirim email reset kata sandi
+    form:
+      email: Email
+    message:
+      failedToSendEmail: 'Karena kesalahan teknis, email tidak dapat dikirim. Coba lagi nanti. Pesan kesalahan: %errorMessage%'
+    intro: Masukan alamat email anda dan kami akan mengirim tautan reset kata sandi.
+  email:
+    goodbye: Terima kasih,
+    help: Jika Anda mengalami masalah dengan tombol di atas, salin dan tempel URL di bawah ke browser web Anda.
+    subject: Permintaan pengaturan ulang kata sandi Anda
+    greeting: Hai!
+    infoClickButton: Untuk mengatur ulang kata sandi Anda, klik tombol di bawah dan ikuti petunjuknya.
+    resetPasswordButton: Reset kata sandi
+    infoLinkExpiration: Tautan ini akan kedaluwarsa dalam %time%.
+  emailSent:
+    infoEmailWithLink: Jika ada akun yang cocok dengan email Anda, maka baru saja dikirim email yang berisi tautan yang dapat Anda gunakan untuk mengatur ulang kata sandi. Tautan ini akan kedaluwarsa dalam %time%.
+    infoSpamFolder: Jika Anda tidak menerima email, harap periksa folder spam Anda atau %linkStart%try again%linkEnd%.
+    title: Email setel ulang kata sandi dikirim
+  reset:
+    title: Mereset password Anda
+    action: Atur ulang kata sandi
+    error:
+      errorOccurred: Terjadi masalah saat memvalidasi permintaan reset Anda. %error%
+      tokenNotFound: Tidak ada token setel ulang kata sandi yang ditemukan di URL atau di sesi.
+    message:
+      successfullyReset: Kata sandi Anda berhasil diatur ulang.
+  form:
+    password: Kata sandi
+    newPassword: Kata sandi baru
+    repeatPassword: Ulangi kata sandi
+action:
+  checkRequirements: Periksa persyaratan
+  add: Tambahkan
+  remove: Singkirkan
+  save: Simpan
+  view: Lihat
+  help: Bantuan
+  actions: Aksi
+  configure: Konfigurasi
+  close: Tutup
+  checkForUpdate: Cek Pembaruan
+  manage: Mengelola
+  edit: Ganti
+  delete: Hapus
+  installUpdate: Pasang pembaruan
+form:
+  choices:
+    systemDefault: Pengaturan bawaan
+    browserLanguage: Bahasa browser
+  addMultipleItems: Tambahkan beberapa item
+datatable:
+  datatable:
+    paginate:
+      first: Pertama
+      previous: Sebelumnya
+      next: Selanjutnya
+      last: Akhir
+    infoEmpty: Menampilkan 0 hingga 0 dari 0 entri
+    searchPlaceholder: Mencari
+    emptyTable: Tak ada data yang tersedia pada tabel ini
+    zeroRecords: Tidak ada catatan yang cocok ditemukan
+    info: Menampilkan _START_ ke _END_ dari _TOTAL_ entri
+    infoFiltered: (difilter dari total _MAX_ entri)
+    loadingRecords: Memuat…
+    processing: Memproses…
+    search: 'Mencari:'
+    lengthMenu: Tampilkan _MENU_ entri
+    aria:
+      sortAscending: ': aktifkan untuk mengurutkan kolom naik'
+      sortDescending: ': aktifkan untuk mengurutkan kolom naik'
+setup:
+  database:
+    connectionDataInvalid: Itu tidak mungkin untuk terhubung ke database. Periksa setelan Anda di bawah dan coba lagi.
+    useEmptyDatabase: Silakan gunakan database kosong atau database di mana tidak ada tabel mosparo.
+    introduction: Silakan masukkan detail database MySQL Anda.
+    form:
+      host: Host
+      port: Port
+      database: Basis data
+      password: Kata sandi
+      user: Pengguna
+    mosparoTablesExistInDatabase: Tabel mosparo ditemukan di database yang ditentukan. Silakan gunakan database lain atau hapus tabel.
+    title: Basis data
+  start:
+    introduction: Penyiapan ini akan memandu Anda melalui proses penyiapan mosparo.
+    title: Mempersiapkan
+  prerequisites:
+    introduction: mosparo memiliki beberapa persyaratan untuk dapat berjalan dengan baik. Sebelum kita dapat menyiapkan mosparo, persyaratan ini harus dipenuhi.
+    installOptionalExtensions: Beberapa ekstensi opsional tidak diinstal. Kami menyarankan Anda untuk memasang ekstensi ini sebelum melanjutkan.
+    optional: opsional
+    results:
+      notOkay: Tidak oke
+      available: Tersedia
+      missing: Hilang
+      okay: Oke
+      writable: Dapat ditulis
+      notWritable: Tidak dapat ditulisi
+      minPhpVersion:
+        required: 'Diperlukan:'
+        available: 'Tersedia:'
+    types:
+      general: Jeneral
+      phpExtension: Ekstensi PHP
+      writeAccess: Akses tulis
+    subtypes:
+      minPhpVersion: Versi PHP minimal
+    title: Persyaratan
+    meetPrerequisites: Semua persyaratan terpenuhi. Anda dapat melanjutkan dengan penyiapan.
+    missingPrerequisites: Beberapa persyaratan tidak ada. Silakan periksa ringkasan di bawah ini.
+  install:
+    title: Penginstalan berhasil
+    description: Instalasi berhasil diselesaikan. Anda sekarang dapat masuk dengan pengguna Anda.
+  other:
+    title: Informasi lainnya
+    introduction: Kami memiliki beberapa nilai lain yang kami butuhkan. Harap isi kolom di bawah ini.
+    form:
+      name: Nama mosparo
+      subtitleCreateYourUser: Buat pengguna Anda
+      emailAddress: Alamat email
+      password: Kata sandi
+  buttons:
+    install: Instal
+    recheck: Cek ulang
+    goToLogin: Pergi halaman masuk
+    continue: Selanjutnya
+roles:
+  administrator: Administrasi
+  user: Pengguna
+  inactive: Tidak aktif
+general:
+  infoUndo: Anda tidak dapat membatalkan proses ini.
+  example: Contoh
+  empty: Kosong
+  unlimited: Tak terbatas
+state:
+  ignored: Abaikan
+  active: Aktif
+  inactive: Tidak aktif
+  yes: Iya
+  no: Tidak
