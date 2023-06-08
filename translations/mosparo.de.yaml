@@ -821,7 +821,7 @@ administration:
         replaceForwardedProtoHeaderHelp: Falls erforderlich, geben Sie den Namen der Kopfzeile an, in welcher Ihr Reverse Proxy das Protokoll der Anfrage sendet.
       title: Reverse Proxy
       providerPresets: Provider-Vorlagen
-      intro: Konfigurerien Sie bitte die folgenden Einstellungen, falls Sie einen Reverse Proxy verwenden. mosparo benötigt diese Informationen um die IP-Adresse des Benutzers korrekt zu erkennen.
+      intro: Konfigurieren Sie bitte die folgenden Einstellungen, falls Sie einen Reverse Proxy verwenden. mosparo benötigt diese Informationen, um die IP-Adresse des Benutzers korrekt zu erkennen.
       modifyNotAllowed: Diese Einstellungen werden in den Umgebungseinstellungen von mosparo überschrieben. Sie können die Einstellungen hier nicht ändern.
     message:
       savedSuccessfully: Die Sicherheitseinstellungen wurden erfolgreich gespeichert.
