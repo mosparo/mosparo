@@ -453,6 +453,7 @@ settings:
       title: Mindestzeit
       intro: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung der Einsendung (nach dem das Formular abgesendet wurde). Wenn die Zeit kleiner ist also die definierte Zeit unten, wird die Einsendung abgewiesen. Wenn Sie ein kurzes Formular haben, sollte diese Funktion deaktiviert sein oder Sie sollten eine sehr kurze Zeit verwenden.
 
+      introShort: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung der Einsendung (nach dem das Formular abgesendet wurde). Diese Funktionalität ist hauptsächlich für längere Formulare empfehlenswert.
     honeypot:
       title: Honeypot-Feld
       intro: Ein Honeypot-Feld ist ein verstecktes Feld innerhalb des Formulars. Menschen sehen das Feld nicht - aber Spam-Bots werden möglicherweise Spam-Inhalt in das Feld einfügen. Wenn das passiert, wissen wir, dass es kein Mensch gewesen sein kann und blockieren die Einsendung.
@@ -464,7 +465,7 @@ settings:
 
     ipLockout:
       title: IP-Sperre
-      intro: Um es einem Bot noch schwieriger zu machen, kann mosparo automatisch eine IP-Adresse temporär blockieren. Wenn eine IP-Adresse eine hohe Anzahl von Tokens beantragt, kann mosparo diese automatisch zählen und wenn eine bestimmte Anzahl erreicht ist, die IP-Adresse blockieren.
+      intro: Um es einem Bot noch schwieriger zu machen, kann mosparo automatisch eine IP-Adresse temporär blockieren. Wenn eine IP-Adresse eine hohe Anzahl von Formularen absendet, kann mosparo diese automatisch zählen und wenn eine bestimmte Anzahl erreicht ist, die IP-Adresse blockieren.
 
     ipAllowList:
       title: Liste der erlaubten IP-Adressen
@@ -569,7 +570,7 @@ settings:
       switchToSimpleMode: Zum einfachen Modus wechseln
       switchToAdvancedMode: Zum erweiterten Modus wechseln
     simpleDesign:
-      introPreview: Auf der rechten Seite sehen Sie eine Vorschau der mosparo Box auf Ihrer Website. Mit der Kontrastverhältnis-Anzeige sehen Sie, wie gut das Kontrastverhältnis Ihrer Farben ist.
+      introPreview: Auf der rechten Seite sehen Sie eine Vorschau der mosparo Box auf Ihrer Website.
       introColors: Bitte wählen Sie die Farben Ihrer Website aus. Die Hintergrundfarbe ist für die Berechnung des Kontrastverhältnisses erforderlich. Die Vordergrundfarbe repräsentiert die Textfarbe, während die Akzentfarbe für die Spezialelemente der mosparo Box verwendet wird.
 
 # Administration
