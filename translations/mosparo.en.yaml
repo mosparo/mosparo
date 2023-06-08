@@ -459,6 +459,7 @@ settings:
     minimumTime:
       title: Minimum Time
       intro: The minimum time functionality will measure the time between the initialization of the mosparo checkbox (when the page loads) and the validation of the submission (after the form was submitted). If this time is lower than the entered number below, the validation is invalid. If you have a short form, this check should be disabled or you should us a very low number.
+      introShort: The minimum time functionality will measure the time between the initialization of the mosparo checkbox (when the page loads) and the validation of the submission (after the form was submitted). This functionality is mainly recommended for longer forms.
 
     honeypot:
       title: Honeypot
@@ -471,7 +472,7 @@ settings:
 
     ipLockout:
       title: IP lockout
-      intro: To make it even harder for bots, mosparo can automatically block IP addresses temporary. If an IP address requests a lot of tokens, mosparo can automatically count the requests and block the IP address if a specific number is reached.
+      intro: To make it even harder for bots, mosparo can automatically block IP addresses temporarily. If an IP address submits many forms, mosparo can automatically count the submissions and block the IP address if a specific number is reached.
 
     ipAllowList:
       title: IP allow list
@@ -579,7 +580,7 @@ settings:
 
     simpleDesign:
       introColors: Please choose the colors which your website has. The background color is required to calculate the correct contrast ratio, the foreground color represents your text color, and the accent color is used for the special elements of the mosparo box.
-      introPreview: On the right side, you'll see a preview of the mosparo box on your website. With the contrast ratio helper, you'll see if the contrast ratio of your selected colors is good.
+      introPreview: On the right side, you'll see a preview of the mosparo box on your website.
 
 # Administration
 administration:
