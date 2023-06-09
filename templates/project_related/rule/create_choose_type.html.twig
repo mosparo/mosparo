@@ -19,10 +19,12 @@
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">{{ 'rule.createChooseType.title'|trans }}</h2>
 
+                        <p>{{ 'rule.createChooseType.intro'|trans }}</p>
+
                         <div class="row">
                             {% for ruleType in ruleTypes %}
                                 <div class="col-12 col-md-6 mb-3">
-                                    <a href="{{ path('rule_create_with_type', { type: ruleType.key }) }}" class="btn btn-outline-primary w-100 h-100 flex-column align-items-start justify-content-start rule-type-button">
+                                    <a href="{{ path('rule_create_with_type', { type: ruleType.key }) }}" class="btn btn-outline-green w-100 h-100 flex-column align-items-start justify-content-start rule-type-button">
                                         <div class="h2">
                                             <i class="{{ ruleType.icon }}"></i>
                                             {{ ruleType.name|trans }}

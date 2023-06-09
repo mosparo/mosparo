@@ -77,6 +77,7 @@ rule:
 
   createChooseType:
     title: Typ wählen
+    intro: Bitte wählen Sie den Typ der Regel, die Sie erstellen möchten. Die verfügbaren Typen werden für verschiedene Felder verwendet und können für eine Regel nicht nachträglich geändert werden.
 
   create:
     title: Regel erstellen

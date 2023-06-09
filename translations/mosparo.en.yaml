@@ -80,6 +80,7 @@ rule:
 
   createChooseType:
     title: Choose type
+    intro: Please choose the type of rule you want to create. The available types are used for different fields and cannot be changed for a rule afterward.
 
   create:
     title: Create rule
