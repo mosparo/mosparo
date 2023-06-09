@@ -51,6 +51,7 @@ project:
   delete:
     title: Delete project %projectName%
     confirm: Do you really want to delete the project %projectName%?
+    disconnectFirst: Please ensure you have disconnected your website or integration with this project before deleting it.
 
     message:
       successfullyDeleted: The project %projectName% was deleted successfully.

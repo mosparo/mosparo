@@ -33,6 +33,7 @@ project:
   delete:
     title: Projekt %projectName% löschen
     confirm: Wollen Sie das Projekt %projectName% wirklich löschen?
+    disconnectFirst: Bitte vergewissern Sie sich, dass Sie die Verbindung zwischen Ihrer Website oder Integration mit diesem Projekt getrennt haben, bevor Sie das Projekt löschen.
 
     message:
       successfullyDeleted: Das Projekt %projectName% wurde erfolgreich gelöscht.
