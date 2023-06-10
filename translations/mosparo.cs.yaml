@@ -32,6 +32,7 @@ project:
     confirm: Opravdu chcete odstranit projekt %projectName%?
     message:
       successfullyDeleted: Projekt %projectName% byl úspěšně odstraněn.
+    disconnectFirst: Před odstraněním se ujistěte, že jste odpojili své webové stránky integrované s tímto projektem.
   createWizard:
     design:
       title: Zvolte design
@@ -59,6 +60,7 @@ rule:
     actions: Akce
   createChooseType:
     title: Zvolte typ
+    intro: Vyberte typ pravidla, které chcete vytvořit. Dostupné typy se používají pro různá pole a nelze je pro pravidlo dodatečně změnit.
   create:
     title: Vytvořit pravidlo
     message:
@@ -353,7 +355,7 @@ settings:
       delayDetectionTimeFrameHelp: V sekundách
       lockoutDetectionTimeFrameHelp: V sekundách
       honeypotFieldNameHelp: Musí to být název pole, který se ve formuláři ještě nenachází a který je normálním názvem pole, například "url" nebo "address-line-2". Používejte pouze písmena, číslice a znak pomlčky (-). Pokud je prázdné, nebude do formuláře přidáno žádné pole honeypot.
-      delayActive: Aktivovat odložení požadavku
+      delayActive: Povolit zpoždění požadavku
       lockoutNumberOfAllowedRequests: Počet povolených požadavků
       delayNumberOfAllowedRequestsHelp: Počet povolených požadavků předtím, než dojde k odložení.
       lockoutDetectionTimeFrame: Časový rámec detekce
@@ -363,7 +365,7 @@ settings:
       lockoutTime: Základní doba uzamčení
     ipLockout:
       title: Zablokování IP
-      intro: Pro ztížení botům, může mosparo automaticky dočasně blokovat IP adresy. Pokud IP adresa požaduje hodně tokenů, může mosparo automaticky počítat požadavky a při dosažení určitého počtu IP adresu zablokovat.
+      intro: Pro stížení botům může mosparo automaticky dočasně blokovat IP adresy. Pokud jedna IP adresa odešle více formulářů, může mosparo automaticky počítat tato odeslání a IP adresu zablokovat, pokud dosáhne určitého počtu.
     ipAllowList:
       intro: Zadejte IP adresy a podsítě, které mají být vyloučeny z výše nakonfigurovaných bezpečnostních opatření (zpoždění požadavků a uzamčení IP).
       title: Seznam povolených IP
@@ -371,6 +373,7 @@ settings:
     minimumTime:
       title: Minimální čas
       intro: Funkce minimálního času měří čas mezi inicializací zaškrtávacího políčka mosparo (při načtení stránky) a validací odeslání (po odeslání formuláře). Pokud je tento čas nižší než níže zadané číslo, je validace neplatná. Pokud máte krátký formulář, měla by být tato kontrola vypnuta nebo byste měli použít velmi nízké číslo.
+      introShort: Funkce minimálního času měří čas mezi inicializací zaškrtávacího políčka mosparo (při načtení stránky) a validací odeslání (po odeslání formuláře). Tuto funkcionalitu doporučujeme především u delších formulářů.
     requestDelaying:
       title: Odložení požadavku
       intro: Pro ztížení botům, může mosparo tvorbu odesílaných tokenů odložit. Bez odesílacího tokenu nelze formulář odeslat. Uživatel uvidí, jak dlouho musí čekat, než bude možné formulář odeslat.
@@ -435,7 +438,7 @@ settings:
       boxRadiusTooLarge: Logo lze zobrazit pouze tehdy, pokud je poloměr rámečku menší než určitá hodnota.
     simpleDesign:
       introColors: Vyberte si prosím barvy Vašich webových stránek. Barva pozadí je nutná pro výpočet správného kontrastního poměru, barva popředí představuje barvu textu a barva akcentu se používá pro speciální prvky rámečku mosparo.
-      introPreview: Na pravé straně se zobrazí náhled rámečku mosparo na Vašich webových stránkách. Díky pomocné funkce výpočtu kontrastního poměru zjistíte, zda je kontrastní poměr vybraných barev v pořádku.
+      introPreview: Na pravé straně se zobrazí náhled rámečku mosparo, který bude na Vašich webových stránkách.
     action:
       switchToSimpleMode: Přepnout do jednoduchého režimu
       switchToAdvancedMode: Přepnout do pokročilého režimu
