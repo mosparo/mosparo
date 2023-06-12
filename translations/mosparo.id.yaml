@@ -25,6 +25,7 @@ project:
     title: Hapus proyek% nama proyek%
     message:
       successfullyDeleted: Proyek %nama proyek% berhasil dihapus.
+    disconnectFirst: Pastikan Anda telah memutuskan sambungan situs web atau integrasi dengan proyek ini sebelum menghapusnya.
   roles:
     reader: Pembaca
     editor: Editor
@@ -49,7 +50,7 @@ header:
 dashboard:
   title: Dasbor
   chart:
-    valid: Valid
+    valid: Sah
     spam: Spam
 rule:
   title: Aturan
@@ -61,6 +62,7 @@ rule:
     actions: Aksi
   createChooseType:
     title: Pilih tipe
+    intro: Silakan pilih jenis aturan yang ingin Anda buat. Jenis yang tersedia digunakan untuk bidang yang berbeda dan tidak dapat diubah untuk aturan sesudahnya.
   create:
     title: Buat peraturan
     message:
@@ -364,6 +366,9 @@ settings:
       showMosparoLogo: Tampilkan logo mosparo di bawah kotak centang
       help:
         websiteBackground: Pilih warna latar belakang situs web Anda. Warna ini digunakan untuk menghitung rasio kontras.
+        websiteAccent: Pilih warna aksen situs web Anda. Warna ini digunakan untuk berbagai elemen kotak mosparo.
+        boxSize: Pilih ukuran kotak.
+        websiteForeground: Pilih warna latar depan situs web Anda. Warna ini digunakan untuk menampilkan elemen utama kotak mosparo.
     choices:
       boxSize:
         large: Besar
@@ -385,11 +390,14 @@ settings:
     action:
       switchToAdvancedMode: Beralih ke mode lanjutan
       switchToSimpleMode: Beralih ke mode sederhana
+    simpleDesign:
+      introPreview: Di sisi kanan, Anda akan melihat pratinjau kotak mosparo di situs web Anda.
+      introColors: Silakan pilih warna yang dimiliki situs web Anda. Warna latar belakang diperlukan untuk menghitung rasio kontras yang benar, warna latar depan mewakili warna teks Anda, dan warna aksen digunakan untuk elemen khusus kotak mosparo.
   security:
     validation:
       honeypotFieldNameInvalidCharacter: Gunakan hanya huruf, angka dan tanda strip (-).
     ipLockout:
-      intro: Untuk mempersulit bot, mosparo dapat secara otomatis memblokir alamat IP sementara. Jika alamat IP meminta banyak token, mosparo dapat menghitung permintaan secara otomatis dan memblokir alamat IP jika nomor tertentu tercapai.
+      intro: Untuk mempersulit bot, mosparo dapat secara otomatis memblokir alamat IP untuk sementara. Jika alamat IP mengirimkan banyak formulir, mosparo dapat menghitung pengiriman secara otomatis dan memblokir alamat IP jika nomor tertentu tercapai.
       title: Penguncian IP
     form:
       honeypotFieldName: Nama kolom
@@ -425,6 +433,7 @@ settings:
     minimumTime:
       intro: Fungsionalitas waktu minimum akan mengukur waktu antara inisialisasi kotak centang mosparo (saat halaman dimuat) dan validasi pengiriman (setelah formulir dikirimkan). Jika kali ini lebih rendah dari angka yang dimasukkan di bawah, validasi tidak valid. Jika Anda memiliki formulir pendek, pemeriksaan ini harus dinonaktifkan atau Anda harus memberi kami jumlah yang sangat rendah.
       title: Waktu Minimal
+      introShort: Fungsionalitas waktu minimum akan mengukur waktu antara inisialisasi kotak centang mosparo (saat halaman dimuat) dan validasi pengiriman (setelah formulir dikirimkan). Fungsionalitas ini terutama direkomendasikan untuk formulir yang lebih panjang.
     requestDelaying:
       title: Permintaan menunda
       intro: Untuk mempersulit bot, mosparo dapat menunda pembuatan token pengiriman. Tanpa token kirim, formulir tidak dapat dikirimkan. Pengguna akan melihat, berapa lama dia harus menunggu, hingga formulir dikirimkan.
@@ -486,6 +495,10 @@ administration:
     description: Konfigurasikan berbagai pengaturan yang berlaku untuk instalasi mosparo Anda.
     message:
       savedSuccessfully: Pengaturan berhasil disimpan.
+    interfaceSettings:
+      title: Pengaturan antarmuka
+      form:
+        defaultColorMode: Mode warna default
   title: Administrasi
   user:
     delete:
@@ -569,6 +582,8 @@ administration:
       warningUpdatesDisabled: Pembaruan dinonaktifkan untuk penginstalan mosparo ini. Silakan periksa dokumentasi untuk melihat opsi lain untuk memperbarui instalasi mosparo Anda.
       titleNotAvailable: Tidak ada pembaruan yang tersedia
       messageNotAvailable: Tidak ada pembaruan baru untuk mosparo yang tersedia. Silakan periksa lagi nanti.
+      releaseNotes: Catatan rilis
+      lastChecked: 'Pemeriksaan terakhir:'
     settings:
       message:
         savedSuccessfully: Saluran pembaruan berhasil disimpan.
@@ -595,6 +610,22 @@ administration:
     finalize:
       title: Pembaruan dieksekusi
       description: Perubahan yang diperlukan untuk pembaruan ini dijalankan. Instalasi Anda mutakhir.
+    upgrade:
+      installedVersion: Versi utama diinstal
+      availableVersion: Tersedia versi utama
+      introAvailable: Versi utama baru tersedia. Anda dapat menggunakan alat pembaruan untuk memutakhirkan ke versi utama terbaru.
+      updateFirst: Perbarui ke versi minor terbaru sebelum meningkatkan ke versi mayor berikutnya.
+      titleAvailable: Peningkatan tersedia
+    checkRequirements:
+      title: Periksa persyaratan
+      action:
+        recheck: Cek Ulang
+        upgrade: Tingkatkan ke %newMajorVersion%
+      meetPrerequisites: Semua persyaratan terpenuhi. Anda dapat melanjutkan dengan peningkatan.
+      missingPrerequisites: Beberapa persyaratan tidak ada. Silakan periksa ringkasan di bawah ini.
+      introduction: Sebelum melakukan upgrade, pastikan Anda memenuhi semua persyaratan. Dengan versi utama yang baru, persyaratan dapat berubah dan harus dipenuhi sebelum pemutakhiran dapat dijalankan.
+    button:
+      updateAvailable: Pembaruan tersedia
   system:
     general:
       extensions: Ekstensi
@@ -620,6 +651,25 @@ administration:
       license: Lisensi
       backend: Backend / PHP Librari
     website: Situs Web
+  security:
+    message:
+      savedSuccessfully: Pengaturan keamanan berhasil disimpan.
+    title: Pengaturan keamanan
+    reverseProxy:
+      title: Proksi terbalik
+      modifyNotAllowed: Pengaturan ini ditimpa dalam file lingkungan mosparo. Anda tidak dapat mengubah pengaturan apa pun di sini.
+      form:
+        trustedProxiesHelp: Tentukan semua proxy tepercaya. Ini dapat didefinisikan sebagai alamat IP sederhana atau sebagai subnet dari alamat IP. Localhost (127.0.0.1) selalu ditambahkan ke daftar secara otomatis.
+        trustedProxies: Daftar proxy tepercaya
+        replaceForwardedProtoHeader: Nama header protokol kustom
+        trustedProxiesIncludeRemoteAddr: Sertakan REMOTE_ADDR di proxy tepercaya
+        trustedProxiesIncludeRemoteAddrHelp: Opsi ini akan menambahkan REMOTE_ADDR ke daftar proxy tepercaya. Ini bisa berbahaya karena menerima header yang Diteruskan dari semua klien yang memungkinkan.
+        replaceForwardedForHeader: Nama tajuk alamat jarak jauh khusus
+        replaceForwardedProtoHeaderHelp: Jika diperlukan, tentukan nama header di mana proxy balik mengirimkan protokol permintaan.
+        replaceForwardedForHeaderHelp: Jika diperlukan, tentukan nama header di mana proxy balik mengirimkan alamat IP klien.
+      providerPresets: Preset penyedia
+      intro: Jika Anda menggunakan proxy terbalik untuk melayani mosparo, Anda harus mengonfigurasi pengaturan ini agar mosparo mengetahui cara mendeteksi alamat IP klien dengan benar.
+    description: Konfigurasikan berbagai pengaturan terkait keamanan yang berlaku untuk instalasi mosparo Anda.
 account:
   backToOverview: Kembali ke gambaran umum
   title: Akun
@@ -630,6 +680,7 @@ account:
       locale: Bahasa
       timeFormat: Format waktu
       timezone: Zona waktu
+      colorMode: Mode warna
     description: Ubah pengaturan umum untuk akun Anda.
     message:
       successfullySaved: Pengaturan Anda berhasil disimpan.
@@ -732,6 +783,9 @@ action:
   manage: Mengelola
   edit: Ganti
   delete: Hapus
+  saveAndContinue: Simpan dan lanjutkan
+  skipWizard: Lewati wizard
+  goToTheDashboard: Buka dasbor
 roles:
   user: Pengguna
   inactive: Tidak aktif
@@ -741,6 +795,7 @@ form:
     browserLanguage: Bahasa browser
     systemDefault: Pengaturan bawaan
   addMultipleItems: Tambahkan beberapa item
+  clearField: Kosongkan kolom
 datatable:
   datatable:
     search: 'Mencari:'
@@ -767,6 +822,7 @@ setup:
       phpExtension: Ekstensi PHP
       general: Jeneral
       writeAccess: Akses tulis
+      internetConnection: Koneksi internet
     subtypes:
       minPhpVersion: Versi PHP minimal
     results:
@@ -827,3 +883,14 @@ general:
   infoUndo: Anda tidak dapat membatalkan proses ini.
   example: Contoh
   empty: Kosong
+interface:
+  colorModes:
+    light: Terang
+    dark: Gelap
+downloadCheck:
+  moreInformation: Informasi lebih lanjut
+  downloadIsPossible: Pengaturan PHP memungkinkan pengunduhan kumpulan aturan dan pembaruan. Tidak diperlukan penyesuaian.
+  downloadIsNotPossible: Pengaturan PHP tidak mengizinkan pengunduhan pembaruan atau kumpulan aturan. Jika Anda ingin menggunakan kumpulan aturan atau fungsi pembaruan, harap sesuaikan konfigurasi PHP Anda.
+  cardTitle: Koneksi internet
+  intro: Koneksi internet keluar bukan persyaratan untuk mosparo. mosparo hanya terhubung ke internet dengan interaksi Anda. Anda memerlukan koneksi internet aktif untuk mengunduh pembaruan dan kumpulan aturan.
+  curlIsEnabledButFunctionsAreDisabled: Ekstensi %extensionName% diaktifkan, tetapi fungsi yang diperlukan (%functionNames%) dinonaktifkan. Kami menyarankan untuk menonaktifkan ekstensi secara umum atau mengaktifkan fungsi yang diperlukan.
