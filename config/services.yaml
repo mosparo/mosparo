@@ -7,6 +7,7 @@ parameters:
     env(mosparo_name): 'mosparo'
     env(mosparo_installed): ~
     env(mosparo_installed_version): ~
+    env(mosparo_assets_version): '' # A random string for cache busting without revealing the real version
 
     env(default_locale): 'en'
     env(default_date_format): 'Y-m-d'

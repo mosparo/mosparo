@@ -10,6 +10,7 @@ use Mosparo\Helper\SetupHelper;
 use Mosparo\Helper\UpdateHelper;
 use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
+use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -306,9 +307,12 @@ class UpdateController extends AbstractController
         $application->run($input, $output);
         $output->fetch();
 
+        $tokenGenerator = new TokenGenerator();
+
         // Update the installed version
         $this->configHelper->writeEnvironmentConfig([
             'mosparo_installed_version' => Kernel::VERSION,
+            'mosparo_assets_version' => $tokenGenerator->generateShortToken(),
         ]);
 
         // Clear the cache after the upgrade
