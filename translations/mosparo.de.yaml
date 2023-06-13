@@ -474,13 +474,13 @@ settings:
       intro: Tragen Sie die IP-Adressen und Subnetze ein, welche von den oben konfigurierten Sicherheitsmassnahmen (Anfrageverzögerung und IP-Sperre) ausgenommen werden sollen.
 
     form:
-      minimumTimeActive: Mindestzeit aktiv
+      minimumTimeActive: Mindestzeit aktivieren
       minimumTimeSeconds: Mindestzeit
       minimumTimeSecondsHelp: In Sekunden
-      honeypotFieldActive: Honeypot-Feld aktiv
+      honeypotFieldActive: Honeypot-Feld aktivieren
       honeypotFieldName: Feldname
       honeypotFieldNameHelp: Es muss ein Feldname sein, welchen Sie nicht bereits in Ihrem Formular verwenden und welcher ein normales Feld sein könnte, wie zum Beispiel "url" oder "adress-zeile-2". Bitte verwenden Sie nur Buchstaben, Zahlen und den Bindestrich (-). Wenn Sie dieses Feld leer lassen wird die Funktion nicht verwendet.
-      delayActive: Anfrageverzögerung aktiv
+      delayActive: Anfrageverzögerung aktivieren
       delayNumberOfAllowedRequests: Anzahl erlaubter Anfragen
       delayNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Anfrageverzögerung aktiv wird.
       delayDetectionTimeFrame: Erkennungszeitraum
@@ -489,7 +489,7 @@ settings:
       delayTimeHelp: In Sekunden
       delayMultiplicator: Multiplikator
       delayMultiplicatorHelp: Die Anfagsverzögerungszeit wird mit jeder weiteren Anfrage erhöht.
-      lockoutActive: Automatische Sperre aktiv
+      lockoutActive: Automatische Sperre aktivieren
       lockoutNumberOfAllowedRequests: Anzahl erlaubter Anfragen
       lockoutNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Sperre aktiv wird.
       lockoutDetectionTimeFrame: Erkennungszeitraum
