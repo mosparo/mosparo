@@ -24,9 +24,14 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
 
     /**
      * @Route("/", name="submission_list")
+     * @Route("/filter/{filter}", name="submission_list_filtered")
      */
-    public function index(Request $request, DataTableFactory $dataTableFactory): Response
+    public function index(Request $request, DataTableFactory $dataTableFactory, $filter = ''): Response
     {
+        if (!in_array($filter, ['spam', 'valid'])) {
+            $filter = '';
+        }
+
         $table = $dataTableFactory->create(['autoWidth' => true])
             ->add('id', TextColumn::class, ['label' => 'submission.list.id'])
             ->add('page', TwigColumn::class, [
@@ -72,12 +77,24 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
             ->addOrderBy('submittedAt', DataTable::SORT_DESCENDING)
             ->createAdapter(ORMAdapter::class, [
                 'entity' => Submission::class,
-                'query' => function (QueryBuilder $builder) {
+                'query' => function (QueryBuilder $builder) use ($filter) {
                     $builder
                         ->select('e')
-                        ->from(Submission::class, 'e')
-                        ->where('e.spam = 1')
-                        ->orWhere('e.valid IS NOT NULL');
+                        ->from(Submission::class, 'e');
+
+                    if ($filter === 'spam') {
+                        $builder
+                            ->where('e.spam = 1')
+                            ->orWhere('e.valid = 0');
+                    } else if ($filter === 'valid') {
+                        $builder
+                            ->where('e.spam = 0')
+                            ->andWhere('e.valid = 1');
+                    } else {
+                        $builder
+                            ->where('e.spam = 1')
+                            ->orWhere('e.valid IS NOT NULL');
+                    }
                 },
             ])
             ->handleRequest($request);
@@ -90,7 +107,8 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
         }
 
         return $this->render('project_related/submission/list.html.twig', [
-            'datatable' => $table
+            'datatable' => $table,
+            'filter' => $filter,
         ]);
     }
 

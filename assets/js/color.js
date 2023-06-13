@@ -2,6 +2,10 @@ const $ = require('jquery');
 const { normal } = require('color-blend');
 const tinycolor = require("tinycolor2");
 
+const calculateTextScore = function (backgroundColor, foregroundColor) {
+    return Math.round(tinycolor.readability(backgroundColor, foregroundColor) * 100) / 100;
+};
+
 const getSpectrumValue = function (el, format)
 {
     if (!el.val()) {
@@ -102,7 +106,7 @@ const recalculateContrastRatioForGroup = function (groupEl)
 
     // Define the text contrast ratio
     let textColor = getContrastValueColor(groupEl, 'text', 'hex');
-    let scoreText = Math.round(tinycolor.readability(backgroundColor, textColor) * 100) / 100;
+    let scoreText = calculateTextScore(backgroundColor, textColor);
 
     updateContrastRatioValues(groupEl.find('tr.cr-text'), scoreText, aaMin, aaaMin);
 
@@ -111,7 +115,7 @@ const recalculateContrastRatioForGroup = function (groupEl)
     let scoreErrorText = null;
     if (groupEl.find('input[data-contrast-value="error-text"]').length > 0) {
         errorTextColor = getContrastValueColor(groupEl, 'error-text', 'hex');
-        scoreErrorText = Math.round(tinycolor.readability(backgroundColor, errorTextColor) * 100) / 100;
+        scoreErrorText = calculateTextScore(backgroundColor, errorTextColor);
 
         updateContrastRatioValues(groupEl.find('tr.cr-text-error'), scoreErrorText, aaMin, aaaMin);
     }
@@ -132,6 +136,73 @@ const recalculateContrastRatioForAllGroups = function ()
     });
 };
 
+const defineContrastValue = function (col) {
+    let val = col / 255.0;
+
+    if (val <= 0.04045) {
+        val = val / 12.92;
+    } else {
+        val = Math.pow((val + 0.055) / 1.055, 2.4);
+    }
+
+    return val;
+};
+
+const determineAdjustmentMode = function (backgroundColor) {
+    let col = tinycolor(backgroundColor).toRgb();
+
+    let red = defineContrastValue(col.r);
+    let green = defineContrastValue(col.g);
+    let blue = defineContrastValue(col.b);
+
+    let contrastRatio = (0.2126 * red) + (0.7152 * green) + (0.0722 * blue);
+    if (contrastRatio < 0.179) {
+        return 'dark';
+    }
+
+    return 'light';
+};
+
+const searchColorWithBestContrast = function (backgroundColor, targetColor, mode, doNotCheckForAlternative) {
+    if (typeof mode === 'undefined' || !mode) {
+        mode = determineAdjustmentMode(backgroundColor);
+    }
+
+    let adjustedColor = tinycolor(targetColor.toString());
+    let textScore = 0;
+    let tries = 30;
+    while (textScore < 7) {
+        textScore = calculateTextScore(backgroundColor, adjustedColor.toHexString());
+
+        if (textScore >= 7) {
+            return adjustedColor;
+        }
+
+        if (tries === 0) {
+            break;
+        }
+
+        if (mode === 'light') {
+            adjustedColor.darken(1);
+        } else {
+            adjustedColor.lighten(1);
+        }
+
+        tries--;
+    }
+
+    if (typeof doNotCheckForAlternative === 'undefined' || !doNotCheckForAlternative) {
+        let alternativeColor = searchColorWithBestContrast(backgroundColor, tinycolor(targetColor.toString()), (mode === 'light') ? 'dark' : 'light', true);
+        let alternativeTextScore = calculateTextScore(backgroundColor, alternativeColor.toHexString());
+
+        if (alternativeTextScore > textScore) {
+            return alternativeColor;
+        }
+    }
+
+    return adjustedColor;
+};
+
 $(document).ready(function () {
     $('input.colorpicker').on('color-change', function () {
         if ($(this).is('#page_body_backgroundColor')) {
@@ -147,3 +218,5 @@ $(document).ready(function () {
 
     recalculateContrastRatioForAllGroups();
 });
+
+window.searchColorWithBestContrast = searchColorWithBestContrast;

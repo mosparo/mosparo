@@ -12,6 +12,12 @@ let collectionGetRandomHash = function () {
     return Math.random().toString().substring(2, 16);
 }
 
+let updateMultipleCssVariable = function (variables, value, type) {
+    for (let ind in variables) {
+        updateCssVariable(variables[ind], value, type);
+    }
+};
+
 let updateCssVariable = function (variableName, value, type) {
     if (type === 'color' && !value) {
         value = 'transparent';
@@ -25,6 +31,7 @@ let updateCssVariable = function (variableName, value, type) {
 window.collectionToggleRemoveButton = collectionToggleRemoveButton;
 window.collectionGetRandomHash = collectionGetRandomHash;
 window.updateCssVariable = updateCssVariable;
+window.updateMultipleCssVariable = updateMultipleCssVariable;
 
 $(document).ready(function () {
     $('.collection-widget.add-allowed .add-item-button').click(function () {
@@ -92,6 +99,11 @@ $(document).ready(function () {
         }
     };
     $('input.colorpicker').wrap('<div class="colorpicker-container"></div>').each(function () {
+        let allowEmpty = $(this).data('colorpicker-allow-empty');
+        if (allowEmpty == null) {
+            allowEmpty = true;
+        }
+
         let showAlpha = $(this).data('colorpicker-allow-alpha-value');
         if (showAlpha == null) {
             showAlpha = true;
@@ -99,7 +111,7 @@ $(document).ready(function () {
 
         $(this).spectrum({
             preferredFormat: "rgb",
-            allowEmpty: true,
+            allowEmpty: allowEmpty,
             showInitial: true,
             showButtons: false,
             showAlpha: showAlpha,
@@ -258,4 +270,21 @@ $(document).ready(function () {
         ev.preventDefault();
         return false;
     }).attr("autocomplete", "off");
+
+    $('.input-with-clear-button').each(function () {
+        let container = $(this);
+        let input = container.find('input');
+        let link = container.find('a');
+        input.on('keyup change', function () {
+            if ($(this).val() === '') {
+                link.hide();
+            } else {
+                link.show();
+            }
+        }).trigger('change');
+
+        link.click(function () {
+            input.val('').trigger('change');
+        });
+    });
 });

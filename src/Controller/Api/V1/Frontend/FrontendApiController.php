@@ -89,8 +89,8 @@ class FrontendApiController extends AbstractController
         $this->cleanupHelper->cleanup();
 
         // Check if the request is allowed
-        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp());
-        if ($securityResult instanceof Lockout || $securityResult instanceof Delay) {
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_DELAY);
+        if ($securityResult instanceof Delay) {
             return $this->prepareSecurityResponse($request, $securityResult, true);
         }
 
@@ -130,8 +130,8 @@ class FrontendApiController extends AbstractController
         $this->cleanupHelper->cleanup();
 
         // Check if the request is allowed
-        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp());
-        if ($securityResult instanceof Lockout || $securityResult instanceof Delay) {
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_LOCKOUT);
+        if ($securityResult instanceof Lockout) {
             return $this->prepareSecurityResponse($request, $securityResult);
         }
 

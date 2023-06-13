@@ -37,12 +37,6 @@
     {{ parent() }}
 {%- endblock choice_widget_options -%}
 
-{%- block choice_widget_collapsed -%}
-    <div class="form-select-container">
-        {{ parent() }}
-    </div>
-{%- endblock choice_widget_collapsed -%}
-
 {% block collection_row %}
     {%- if compound is defined and compound -%}
         {%- set element = 'fieldset' -%}
@@ -59,7 +53,7 @@
 
 {% block collection_widget %}
     <div class="collection-widget {% if form.vars.allow_add %}add-allowed{% endif %} {% if form.vars.allow_delete %}remove-allowed{% endif %}">
-        <ul class="collection-list" data-prototype="{{ form_widget(form.vars.prototype)|e }}" data-widget-tags="{{ '<li><div class="input-group"></div></li>'|e }}" data-widget-counter="{{ form|length }}">
+        <ul class="collection-list" {% if form.vars.allow_add %}data-prototype="{{ form_widget(form.vars.prototype)|e }}"{% endif %} data-widget-tags="{{ '<li><div class="input-group"></div></li>'|e }}" data-widget-counter="{{ form|length }}">
             {% for field in form %}
                 <li>
                     <div class="input-group">

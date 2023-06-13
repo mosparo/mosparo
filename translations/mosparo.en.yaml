@@ -19,7 +19,24 @@ project:
     title: Create project
 
     message:
-      successfullyCreated: The new project was successfully created.
+      successfullyCreatedAndConfigured: The new project was successfully created and configured.
+
+  createWizard:
+    design:
+      title: Select design
+      introStartWizard: Your project was created successfully. To start using it, please select the design and continue.
+      infoAdvancedMode: You can switch to the advanced mode in the design settings after the wizard, which allows you to adjust the design precisely to your website.
+
+    security:
+      title: Enable security features
+      introSecurity: Please choose the security features you would like to enable.
+      infoSettings: You can enable, disable, or tune these security features in the security settings after the wizard.
+
+    connection:
+      title: Connection details
+      savedSuccessfully: The design and security settings were saved successfully. The project is now ready to be used on a website.
+      introConnection: To use mosparo in a website, you have to add the integration to the website and then connect the website with this mosparo project. For this step, please copy and paste the following information into the correct field in the integration.
+      infoSettings: After this wizard, you can find these connection details in the project settings.
 
   form:
     name: Name
@@ -34,6 +51,7 @@ project:
   delete:
     title: Delete project %projectName%
     confirm: Do you really want to delete the project %projectName%?
+    disconnectFirst: Please ensure you have disconnected your website or integration with this project before deleting it.
 
     message:
       successfullyDeleted: The project %projectName% was deleted successfully.
@@ -63,6 +81,7 @@ rule:
 
   createChooseType:
     title: Choose type
+    intro: Please choose the type of rule you want to create. The available types are used for different fields and cannot be changed for a rule afterward.
 
   create:
     title: Create rule
@@ -308,6 +327,12 @@ submission:
     verifiedAt: Verified at
     actions: Actions
 
+  filter:
+    options:
+      all: All submissions
+      spam: Spam submissions
+      valid: Valid submissions
+
   view:
     title: Submission %submissionId%
 
@@ -436,6 +461,7 @@ settings:
     minimumTime:
       title: Minimum Time
       intro: The minimum time functionality will measure the time between the initialization of the mosparo checkbox (when the page loads) and the validation of the submission (after the form was submitted). If this time is lower than the entered number below, the validation is invalid. If you have a short form, this check should be disabled or you should us a very low number.
+      introShort: The minimum time functionality will measure the time between the initialization of the mosparo checkbox (when the page loads) and the validation of the submission (after the form was submitted). This functionality is mainly recommended for longer forms.
 
     honeypot:
       title: Honeypot
@@ -448,20 +474,20 @@ settings:
 
     ipLockout:
       title: IP lockout
-      intro: To make it even harder for bots, mosparo can automatically block IP addresses temporary. If an IP address requests a lot of tokens, mosparo can automatically count the requests and block the IP address if a specific number is reached.
+      intro: To make it even harder for bots, mosparo can automatically block IP addresses temporarily. If an IP address submits many forms, mosparo can automatically count the submissions and block the IP address if a specific number is reached.
 
     ipAllowList:
       title: IP allow list
       intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above (Request delaying and IP lockout).
 
     form:
-      minimumTimeActive: Minimum time active
+      minimumTimeActive: Enable minimum time
       minimumTimeSeconds: Minimum time
       minimumTimeSecondsHelp: In seconds
-      honeypotFieldActive: Honeypot field active
+      honeypotFieldActive: Enable honeypot field
       honeypotFieldName: Field name
       honeypotFieldNameHelp: It has to be a field name which is not already in your form and which is a normal field name like "url" or "address-line-2". Please use only letters, numbers and the dash sign (-). If empty, no honeypot field will be added to the form.
-      delayActive: Request delay active
+      delayActive: Enable request delay
       delayNumberOfAllowedRequests: Number of allowed requests
       delayNumberOfAllowedRequestsHelp: The number of allowed requests before the delay come into place.
       delayDetectionTimeFrame: Detection time frame
@@ -470,7 +496,7 @@ settings:
       delayTimeHelp: In seconds
       delayMultiplicator: Multiplicator
       delayMultiplicatorHelp: The base delay time will be increased with every additional request.
-      lockoutActive: Automatic lockout active
+      lockoutActive: Enable automatic lockout
       lockoutNumberOfAllowedRequests: Number of allowed requests
       lockoutNumberOfAllowedRequestsHelp: The number of allowed requests before the lockout come into place.
       lockoutDetectionTimeFrame: Detection time frame
@@ -494,12 +520,19 @@ settings:
     subtitles:
       dimensionSettings: Dimensions
       colorSettings: Colors
+      simpleDesign: Simple design
+      colorAndDimensionSettings: Colors and Dimension
+      preview: Preview
       colors:
         normal: Normal
         focus: On focus and hover
         loading: When loading
         success: Success
         failure: Failure
+
+    action:
+      switchToSimpleMode: Switch to simple mode
+      switchToAdvancedMode: Switch to advanced mode
 
     preview:
       background: Preview background
@@ -527,6 +560,15 @@ settings:
         textError: Text Error
         shadow: Shadow
         shadowInset: Shadow Inset
+        websiteBackground: Background color of the website
+        websiteForeground: Foreground color of the website
+        websiteAccent: Accent color of the website
+
+      help:
+        websiteBackground: Choose the background color of your website. This color is used to calculate the contrast ratio.
+        websiteForeground: Choose the foreground color of your website. This color is used to display the main elements of the mosparo box.
+        websiteAccent: Choose the accent color of your website. This color is used for different elements of the mosparo box.
+        boxSize: Choose the size of the box.
 
     choices:
       boxSize:
@@ -537,6 +579,10 @@ settings:
     message:
       successfullySaved: The design settings were saved successfully.
       boxRadiusTooLarge: The logo can only be displayed if the radius of the box is below a certain value.
+
+    simpleDesign:
+      introColors: Please choose the colors which your website has. The background color is required to calculate the correct contrast ratio, the foreground color represents your text color, and the accent color is used for the special elements of the mosparo box.
+      introPreview: On the right side, you'll see a preview of the mosparo box on your website.
 
 # Administration
 administration:
@@ -559,6 +605,11 @@ administration:
         defaultTimeFormat: Default time format
         defaultTimezone: Default timezone
 
+    interfaceSettings:
+      title: Interface settings
+      form:
+        defaultColorMode: Default color mode
+
     mailSettings:
       title: Mail settings
       form:
@@ -575,6 +626,30 @@ administration:
 
     message:
       savedSuccessfully: The settings were saved successfully.
+
+  security:
+    title: Security settings
+    description: Configure various security related settings which apply to your mosparo installation.
+
+    reverseProxy:
+      title: Reverse proxy
+      providerPresets: Provider presets
+      intro: In case you're using a reverse proxy to serve mosparo, you have to configure these settings so mosparo knows how to detect the client's IP address correctly.
+
+      modifyNotAllowed: These settings are overwritten in the environment file of mosparo. You cannot change any settings here.
+
+      form:
+        trustedProxies: List of trusted proxies
+        trustedProxiesHelp: Define all trusted proxies. These can be defined as simple IP address or as a subnet of IP addresses. The localhost (127.0.0.1) is always added to the list automatically.
+        trustedProxiesIncludeRemoteAddr: Include REMOTE_ADDR in trusted proxies
+        trustedProxiesIncludeRemoteAddrHelp: This option will add REMOTE_ADDR to the list of trusted proxies. This can be dangerous since it accepts the Forwarded headers from all possible clients.
+        replaceForwardedForHeader: Name of the custom remote address header
+        replaceForwardedForHeaderHelp: If required, specify the header's name in which the reverse proxy sends the IP address of the client.
+        replaceForwardedProtoHeader: Name of the custom protocol header
+        replaceForwardedProtoHeaderHelp: If required, specify the header's name in which the reverse proxy sends the request protocol.
+
+    message:
+      savedSuccessfully: The security settings were saved successfully.
 
   user:
     title: Users
@@ -673,6 +748,9 @@ administration:
     installedVersion: Installed version
     availableVersion: Available version
 
+    button:
+      updateAvailable: Update available
+
     check:
       title: Status
       intro: If you want to check for updates, please click on the button below.
@@ -685,9 +763,11 @@ administration:
       messageAvailable: A new update for mosparo is available. Please click on the install button below if you would like to install the update.
       warningUpdate: Please backup the mosparo files and the database before update. This automatic update process will not backup the files or the database. If something does not work correctly, it can destroy your mosparo installation.
       warningUpdatesDisabled: Updates are disabled for this mosparo installation. Please check the documentation to see other options to update your mosparo installation.
+      releaseNotes: Release notes
 
       titleNotAvailable: No update available
       messageNotAvailable: No new update for mosparo is available. Please check again later.
+      lastChecked: 'Last check:'
 
     upgrade:
       titleAvailable: Upgrade available
@@ -767,6 +847,15 @@ administration:
 
     website: Website
 
+# Download check
+downloadCheck:
+  cardTitle: Internet connection
+  intro: An outgoing internet connection is not a requirement for mosparo. mosparo only connects to the internet with your interaction. You need an active internet connection to download updates and rulesets.
+  downloadIsPossible: The PHP settings allow downloads of rulesets and updates. No adjustment is required.
+  downloadIsNotPossible: The PHP settings do not allow the download of updates or rulesets. If you want to use the rulesets or update functionality, please adjust your PHP configuration accordingly.
+  curlIsEnabledButFunctionsAreDisabled: The extension %extensionName% is enabled, but the required functions (%functionNames%) are disabled. We recommend disabling the extension in general or enabling the needed functions.
+  moreInformation: More information
+
 # Account
 account:
   title: Account
@@ -781,6 +870,7 @@ account:
       dateFormat: Date format
       timeFormat: Time format
       timezone: Timezone
+      colorMode: Color mode
 
     message:
       successfullySaved: Your settings were saved successfully.
@@ -903,6 +993,8 @@ action:
   add: Add
   remove: Remove
   save: Save
+  saveAndContinue: Save and continue
+  skipWizard: Skip wizard
   view: View
   edit: Edit
   delete: Delete
@@ -913,6 +1005,7 @@ action:
   configure: Configure
   checkForUpdate: Check for update
   installUpdate: Install update
+  goToTheDashboard: Go to the dashboard
   checkRequirements: Check requirements
 
 # General values
@@ -941,6 +1034,12 @@ form:
   choices:
     systemDefault: Default setting
     browserLanguage: Browser language
+  clearField: Clear field
+
+interface:
+  colorModes:
+    light: Light
+    dark: Dark
 
 # Datatables
 datatable:
@@ -987,6 +1086,7 @@ setup:
     types:
       general: General
       phpExtension: PHP extensions
+      internetConnection: Internet connection
       writeAccess: Write access
 
     subtypes:

@@ -33,7 +33,7 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Do not set the locale for stateless sessions
+        // Do not set the locale for stateless requests
         if ($event->getRequest()->attributes->get('_stateless', false)) {
             return;
         }

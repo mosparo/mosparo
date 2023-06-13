@@ -1,4 +1,4 @@
-{% extends 'administration/administration_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% trans_default_domain 'mosparo' %}
 
@@ -13,7 +13,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_settings') }}">
-                                <img src="{{ asset('build/images/icons/settings.svg') }}" height="128" alt="" />
+                                <img src="{{ asset('build/images/icons/settings.svg') }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.settings.title'|trans }}</p>
@@ -33,8 +33,29 @@
                 <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
+                            <a href="{{ path('administration_security') }}">
+                                <img src="{{ asset('build/images/icons/security.svg') }}" alt="" class="illustration-list" />
+                            </a>
+                        </div>
+                        <p class="empty-title">{{ 'administration.security.title'|trans }}</p>
+                        <p class="empty-subtitle text-muted">
+                            {{ 'administration.security.description'|trans }}
+                        </p>
+                        <div class="empty-action">
+                            <a href="{{ path('administration_security') }}" class="btn btn-primary">
+                                <i class="ti ti-shield-lock"></i>
+                                {{ 'action.configure'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="empty">
+                        <div class="empty-img">
                             <a href="{{ path('administration_user_list') }}">
-                                <img src="{{ asset('build/images/icons/users.svg') }}" height="128" alt="" />
+                                <img src="{{ asset('build/images/icons/users.svg') }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.user.title'|trans }}</p>
@@ -55,7 +76,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_geoip2_settings') }}">
-                                <img src="{{ asset('build/images/icons/geoip.svg') }}" height="128" alt="" />
+                                <img src="{{ asset('build/images/icons/geoip.svg') }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.geoip2.title'|trans }}</p>
@@ -76,7 +97,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_update_overview') }}">
-                                <img src="{{ asset('build/images/icons/update.svg') }}" height="128" alt="" />
+                                <img src="{{ asset('build/images/icons/update.svg') }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.update.title'|trans }}</p>
@@ -97,7 +118,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_system') }}">
-                                <img src="{{ asset('build/images/icons/system.svg') }}" height="128" alt="" />
+                                <img src="{{ asset('build/images/icons/system.svg') }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.system.title'|trans }}</p>

@@ -17,6 +17,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ path('administration_security') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_security' %}active{% endif %}">
+                            <i class="ti ti-shield-lock"></i>
+                            {{ 'administration.security.title'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ path('administration_user_list') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_user_list' %}active{% endif %}">
                             <i class="ti ti-users"></i>
                             {{ 'administration.user.title'|trans }}

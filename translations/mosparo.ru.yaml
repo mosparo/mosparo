@@ -11,8 +11,6 @@ project:
     goto: Перейти к проекту
   create:
     title: Создать проект
-    message:
-      successfullyCreated: Новый проект успешно создан.
   form:
     name: Имя
   infoCreateProjectOrRequestAccess: Создайте новый проект или запросите доступ к другому проекту.

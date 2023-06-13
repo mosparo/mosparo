@@ -14,6 +14,9 @@ use Mosparo\Util\HashUtil;
 
 class SecurityHelper
 {
+    const FEATURE_DELAY = 1;
+    const FEATURE_LOCKOUT = 2;
+
     protected EntityManagerInterface $entityManager;
 
     protected ProjectHelper $projectHelper;
@@ -24,30 +27,34 @@ class SecurityHelper
         $this->projectHelper = $projectHelper;
     }
 
-    public function checkIpAddress($ipAddress)
+    public function checkIpAddress($ipAddress, $feature)
     {
         $project = $this->projectHelper->getActiveProject();
         $ipAllowList = $project->getConfigValue('ipAllowList');
-        $delayActive = $project->getConfigValue('delayActive');
-        $lockoutActive = $project->getConfigValue('lockoutActive');
 
         if ($this->isIpOnAllowList($ipAddress, $ipAllowList)) {
             return false;
         }
 
-        if ($lockoutActive) {
-            $lockout = $this->checkForLockout($ipAddress, $project);
+        if ($feature === self::FEATURE_DELAY) {
+            $delayActive = $project->getConfigValue('delayActive');
 
-            if ($lockout !== null) {
-                return $lockout;
+            if ($delayActive) {
+                $delay = $this->checkForDelay($ipAddress, $project);
+
+                if ($delay !== null) {
+                    return $delay;
+                }
             }
-        }
+        } else if ($feature === self::FEATURE_LOCKOUT) {
+            $lockoutActive = $project->getConfigValue('lockoutActive');
 
-        if ($delayActive) {
-            $delay = $this->checkForDelay($ipAddress, $project);
+            if ($lockoutActive) {
+                $lockout = $this->checkForLockout($ipAddress, $project);
 
-            if ($delay !== null) {
-                return $delay;
+                if ($lockout !== null) {
+                    return $lockout;
+                }
             }
         }
 

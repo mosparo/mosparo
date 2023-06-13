@@ -25,7 +25,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
      */
     public function dashboard(Request $request, EntityManagerInterface $entityManager, LocaleHelper $localeHelper): Response
     {
-        [$noSpamSubmissionsData, $spamSubmissionsData] = $this->getSubmissionDataForChart($entityManager);
+        [$noSpamSubmissionsData, $spamSubmissionsData, $numberOfNoSpamSubmissions, $numberOfSpamSubmissions] = $this->getSubmissionDataForChart($entityManager);
 
         $builder = $entityManager->createQueryBuilder();
         $builder
@@ -48,6 +48,8 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
         return $this->render('project_related/dashboard/dashboard.html.twig', [
             'noSpamSubmissionsData' => $noSpamSubmissionsData,
             'spamSubmissionsData' => $spamSubmissionsData,
+            'numberOfNoSpamSubmissions' => $numberOfNoSpamSubmissions,
+            'numberOfSpamSubmissions' => $numberOfSpamSubmissions,
             'numberOfRules' => $numberOfRules,
             'numberOfRulesets' => $numberOfRulesets,
             'chartDateFormat' => $dateFormat,
@@ -82,7 +84,12 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
             }
         }
 
-        return [$this->convertIntoChartArray($noSpamSubmissionsData), $this->convertIntoChartArray($spamSubmissionsData)];
+        return [
+            $this->convertIntoChartArray($noSpamSubmissionsData),
+            $this->convertIntoChartArray($spamSubmissionsData),
+            array_sum($noSpamSubmissionsData),
+            array_sum($spamSubmissionsData)
+        ];
     }
 
     protected function createEmptyDateArray(): array

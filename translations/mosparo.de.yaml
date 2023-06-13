@@ -19,8 +19,7 @@ project:
     title: Projekt erstellen
 
     message:
-      successfullyCreated: Das neue Projekt wurde erfolgreich erstellt.
-
+      successfullyCreatedAndConfigured: Das neue Projekt wurde erfolgreich erstellt und konfiguriert.
   form:
     name: Name
     description: Beschreibung
@@ -34,6 +33,7 @@ project:
   delete:
     title: Projekt %projectName% löschen
     confirm: Wollen Sie das Projekt %projectName% wirklich löschen?
+    disconnectFirst: Bitte vergewissern Sie sich, dass Sie die Verbindung zwischen Ihrer Website oder Integration mit diesem Projekt getrennt haben, bevor Sie das Projekt löschen.
 
     message:
       successfullyDeleted: Das Projekt %projectName% wurde erfolgreich gelöscht.
@@ -42,6 +42,21 @@ project:
     reader: Leser
     editor: Bearbeiter
     owner: Besitzer
+
+  createWizard:
+    security:
+      title: Sicherheits-Funktionen aktivieren
+      introSecurity: Bitte wählen Sie die Sicherheits-Funktionen, die Sie aktivieren möchten.
+      infoSettings: Sie können diese Sicherheits-Funktionen nach dem Assistenten in den Sicherheits-Einstellungen aktivieren, deaktivieren und anpassen.
+    connection:
+      title: Verbindungsdetails
+      savedSuccessfully: Die Darstellungs- und Sicherheits-Einstellungen wurden erfolgreich gespeichert. Das Projekt ist nun für den Einsatz auf Ihre Website vorbereitet.
+      infoSettings: Diese Verbindungsdetails können Sie nach dem Assistenten in den Einstellungen des Projektes finden.
+      introConnection: Um mosparo auf Ihrer Website verwenden zu können, müssen Sie die entsprechende Integration Ihrer Website hinzufügen, um Ihre Website mit mosparo zu verbinden. Für die Konfiguration der Integration kopieren Sie bitte die folgenden Informationen in die dafür vorgesehenen Felder in Ihrer Website.
+    design:
+      title: Darstellung wählen
+      infoAdvancedMode: Nach dem Assistenten können Sie in den Erweiterten Modus wechseln, welcher Ihnen weitere Anpassungsmöglichkeiten bietet.
+      introStartWizard: Ihr Projekt wurde erfolgreich erstellt. Damit Sie auf Ihrer Website benutzen können, wählen Sie bitte die gewünschte Darstellung und fahren Sie fort.
 
 # Dashboard
 dashboard:
@@ -63,6 +78,7 @@ rule:
 
   createChooseType:
     title: Typ wählen
+    intro: Bitte wählen Sie den Typ der Regel, die Sie erstellen möchten. Die verfügbaren Typen werden für verschiedene Felder verwendet und können für eine Regel nicht nachträglich geändert werden.
 
   create:
     title: Regel erstellen
@@ -361,6 +377,11 @@ submission:
         text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit beträgt %minimumTimeSeconds% Sekunden.
 
 # Settings
+  filter:
+    options:
+      spam: Spam-Einsendungen
+      all: Alle Einsendungen
+      valid: Gültige Einsendungen
 settings:
   title: Projekt-Einstellungen
   backToSettings: Zu den Einstellungen
@@ -434,6 +455,7 @@ settings:
       title: Mindestzeit
       intro: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung der Einsendung (nach dem das Formular abgesendet wurde). Wenn die Zeit kleiner ist also die definierte Zeit unten, wird die Einsendung abgewiesen. Wenn Sie ein kurzes Formular haben, sollte diese Funktion deaktiviert sein oder Sie sollten eine sehr kurze Zeit verwenden.
 
+      introShort: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung der Einsendung (nach dem das Formular abgesendet wurde). Diese Funktionalität ist hauptsächlich für längere Formulare empfehlenswert.
     honeypot:
       title: Honeypot-Feld
       intro: Ein Honeypot-Feld ist ein verstecktes Feld innerhalb des Formulars. Menschen sehen das Feld nicht - aber Spam-Bots werden möglicherweise Spam-Inhalt in das Feld einfügen. Wenn das passiert, wissen wir, dass es kein Mensch gewesen sein kann und blockieren die Einsendung.
@@ -445,7 +467,7 @@ settings:
 
     ipLockout:
       title: IP-Sperre
-      intro: Um es einem Bot noch schwieriger zu machen, kann mosparo automatisch eine IP-Adresse temporär blockieren. Wenn eine IP-Adresse eine hohe Anzahl von Tokens beantragt, kann mosparo diese automatisch zählen und wenn eine bestimmte Anzahl erreicht ist, die IP-Adresse blockieren.
+      intro: Um es einem Bot noch schwieriger zu machen, kann mosparo automatisch eine IP-Adresse temporär blockieren. Wenn eine IP-Adresse eine hohe Anzahl von Formularen absendet, kann mosparo diese automatisch zählen und wenn eine bestimmte Anzahl erreicht ist, die IP-Adresse blockieren.
 
     ipAllowList:
       title: Liste der erlaubten IP-Adressen
@@ -498,6 +520,9 @@ settings:
         success: Erfolg
         failure: Fehler
 
+      simpleDesign: Einfache Darstellung
+      preview: Vorschau
+      colorAndDimensionSettings: Farben und Grösse
     preview:
       background: Hintergrund der Vorschau
 
@@ -525,6 +550,14 @@ settings:
         shadow: Schatten
         shadowInset: Schatten, Innen
 
+        websiteForeground: Vordergrundfarbe der Website
+        websiteBackground: Hintergrundfarbe der Website
+        websiteAccent: Akzentfarbe der Website
+      help:
+        boxSize: Wählen Sie die Grösse der Box.
+        websiteForeground: Wählen Sie die Vordergrundfarbe Ihrer Website. Die Farbe wird für die Hauptelemente der mosparo Box verwendet.
+        websiteBackground: Wählen Sie die Hintergrundfarbe Ihrer Website. Die Farbe wird für die Berechnung des Kontrastverhältnis verwendet.
+        websiteAccent: Wählen Sie die Akzentfarbe Ihrer Website. Die Farbe wird für verschiedene Elemente der mosparo box verwendet.
     choices:
       boxSize:
         small: Klein
@@ -534,6 +567,13 @@ settings:
     message:
       successfullySaved: Die Darstellungs-Einstellungen wurden erfolgreich gespeichert.
       boxRadiusTooLarge: Das Logo kann nur angezeigt werden, wenn der Radius der Box unterhalb eines gewissen Wertes liegt.
+
+    action:
+      switchToSimpleMode: Zum einfachen Modus wechseln
+      switchToAdvancedMode: Zum erweiterten Modus wechseln
+    simpleDesign:
+      introPreview: Auf der rechten Seite sehen Sie eine Vorschau der mosparo Box auf Ihrer Website.
+      introColors: Bitte wählen Sie die Farben Ihrer Website aus. Die Hintergrundfarbe ist für die Berechnung des Kontrastverhältnisses erforderlich. Die Vordergrundfarbe repräsentiert die Textfarbe, während die Akzentfarbe für die Spezialelemente der mosparo Box verwendet wird.
 
 # Administration
 administration:
@@ -555,6 +595,11 @@ administration:
         defaultDateFormat: Standard-Datumsformat
         defaultTimeFormat: Standard-Zeitformat
         defaultTimezone: Standard-Zeitzone
+
+    interfaceSettings:
+      title: Oberflächeneinstellungen
+      form:
+        defaultColorMode: Standard-Farbmodus
 
     mailSettings:
       title: Maileinstellungen
@@ -669,6 +714,9 @@ administration:
     installedVersion: Installierte Version
     availableVersion: Verfügbare Version
 
+    button:
+      updateAvailable: Update verfügbar
+
     check:
       title: Status
       intro: Wenn Sie prüfen möchten, ob eine neue Version verfügbar ist, klicken Sie bitte auf die Schaltfläche unten.
@@ -681,9 +729,11 @@ administration:
       messageAvailable: Eine Update für mosparo ist verfügbar. Bitte klicken Sie auf die Installieren-Schaltfläche, wenn Sie dieses Update installieren möchten.
       warningUpdate: Bitte erstellen Sie eine Backup der Dateien und der Datenbank von mosparo. Dieser automatische Update-Prozess erstellt kein Backup der Dateien oder der Datenbank. Wenn beim Update etwas nicht korrekt funktioniert, kann Ihre mosparo-Installation zerstört werden.
       warningUpdatesDisabled: Updates sind für diese mosparo-Installation deaktiviert. Bitte schauen Sie in der Dokumentation nach, welche anderen Möglichkeiten es gibt, Ihre mosparo-Installation zu aktualisieren.
+      releaseNotes: Versionshinweise
 
       titleNotAvailable: Neuste Version
       messageNotAvailable: Kein neues Update verfügbar. Sie verwenden bereits die neuste Version von mosparo.
+      lastChecked: 'Letzte Überprüfung:'
 
     execute:
       title: mosparo aktualisieren
@@ -759,6 +809,34 @@ administration:
 
     website: Website
 
+  security:
+    title: Sicherheits-Einstellungen
+    reverseProxy:
+      form:
+        trustedProxies: Liste der vertrauenswürdigen Proxies
+        trustedProxiesIncludeRemoteAddr: REMOTE_ADDR in die Liste der vertrauenswürdigen Proxies einfügen
+        replaceForwardedForHeader: Name der benutzerdefinierten Adress-Kopfzeile
+        replaceForwardedForHeaderHelp: Falls erforderlich, geben Sie den Namen der Kopfzeile an, in welcher Ihr Reverse Proxy die IP-Adresse des Benutzers sendet.
+        trustedProxiesHelp: Definieren Sie alle vertrauenswürdige Proxies. Sie können eine einfache IP-Adresse oder ein Subnetz eingeben. Die lokale IP-Adresse (127.0.0.1) wird immer automatisch zur Liste hinzugefügt.
+        trustedProxiesIncludeRemoteAddrHelp: Diese Option wird REMOTE_ADDR zur Liste der vertrauenswürdigen Proxies hinzufügen. Diese Einstellung kann gefährlich sein, da mosparo damit alle Forwarded Kopfzeilen von allen möglichen Benutzer akzeptiert.
+        replaceForwardedProtoHeader: Name der benutzerdefinierten Protokoll-Kopfzeile
+        replaceForwardedProtoHeaderHelp: Falls erforderlich, geben Sie den Namen der Kopfzeile an, in welcher Ihr Reverse Proxy das Protokoll der Anfrage sendet.
+      title: Reverse Proxy
+      providerPresets: Provider-Vorlagen
+      intro: Konfigurieren Sie bitte die folgenden Einstellungen, falls Sie einen Reverse Proxy verwenden. mosparo benötigt diese Informationen, um die IP-Adresse des Benutzers korrekt zu erkennen.
+      modifyNotAllowed: Diese Einstellungen werden in den Umgebungseinstellungen von mosparo überschrieben. Sie können die Einstellungen hier nicht ändern.
+    message:
+      savedSuccessfully: Die Sicherheitseinstellungen wurden erfolgreich gespeichert.
+    description: Konfigurieren Sie verschiedene sicherheitsrelevante Einstellungen Ihrer mosparo Installation.
+# Download check
+downloadCheck:
+  cardTitle: Internet-Verbindung
+  intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
+  downloadIsPossible: Die PHP-Einstellungen ermöglichen das Herunterladen von Regel-Paketen und Updates. Eine Anpassung ist nicht erforderlich.
+  downloadIsNotPossible: Die PHP-Einstellungen lassen den Download von Updates oder Regel-Paketen nicht zu. Wenn Sie die Regel-Pakete- oder die Update-Funktionalität nutzen möchten, passen Sie bitte Ihre PHP-Konfiguration entsprechend an.
+  curlIsEnabledButFunctionsAreDisabled: Die Erweiterung %extensionName% ist aktiviert, aber die benötigten Funktionen (%functionNames%) sind deaktiviert. Wir empfehlen, die Erweiterung generell zu deaktivieren oder die benötigten Funktionen zu aktivieren.
+  moreInformation: Mehr Informationen
+
 # Account
 account:
   title: Account
@@ -773,6 +851,7 @@ account:
       dateFormat: Datumsformat
       timeFormat: Zeitformat
       timezone: Zeitzone
+      colorMode: Farbmodus
 
     message:
       successfullySaved: Ihre Einstellungen wurden erfolgreich gespeichert.
@@ -904,9 +983,12 @@ action:
   configure: Konfigurieren
   checkForUpdate: Nach Updates suchen
   installUpdate: Update installieren
+  goToTheDashboard: Zur Übersicht
+  saveAndContinue: Speichern und Weiter
+  skipWizard: Assistent überspringen
+  checkRequirements: Voraussetzungen prüfen
 
 # General values
-  checkRequirements: Voraussetzungen prüfen
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
@@ -932,6 +1014,12 @@ form:
   choices:
     systemDefault: Standard-Einstellung
     browserLanguage: Sprache des Browsers
+  clearField: Feld leeren
+
+interface:
+  colorModes:
+    light: Hell
+    dark: Dunkel
 
 # Datatables
 datatable:
@@ -978,6 +1066,7 @@ setup:
     types:
       general: Allgemein
       phpExtension: PHP-Erweiterungen
+      internetConnection: Internet-Verbindung
       writeAccess: Schreibzugriff
 
     subtypes:

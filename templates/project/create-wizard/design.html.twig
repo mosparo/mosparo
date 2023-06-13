@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'project.create.title'|trans }} &rsaquo; {{ 'project.createWizard.design.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset('build/images/icons/project_new.svg') }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-lg-9 mx-auto">
+                {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col">
+                            <div class="card card-md">
+                                <div class="card-body">
+                                    <h2 class="card-title text-center mb-4">
+                                        <span class="text-muted">{{ 'project.create.title'|trans }} <i class="ti ti-chevron-right"></i></span> {{ 'project.createWizard.design.title'|trans }}
+                                    </h2>
+
+                                    <div class="alert alert-success">
+                                        {{ 'project.createWizard.design.introStartWizard'|trans }}
+                                    </div>
+                                    {% include 'design/simple.html.twig' %}
+                                    <div class="alert alert-info">
+                                        {{ 'project.createWizard.design.infoAdvancedMode'|trans }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12 col-md-auto mt-2 mt-md-0">
+                            <a href="{{ path('project_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                                <i class="ti ti-chevron-left"></i>
+                                {{ 'project.backToList'|trans }}
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                            <div class="row">
+                                <div class="col-12 col-md-auto">
+                                    <a href="{{ path('project_switch', {'project': project.id}) }}" class="btn btn-secondary">
+                                        <i class="ti ti-arrow-ramp-left"></i>
+                                        {{ 'action.skipWizard'|trans }}
+                                    </a>
+                                </div>
+                                <div class="col-12 col-md-auto">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="ti ti-device-floppy"></i>
+                                        {{ 'action.saveAndContinue'|trans }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% include 'design/scripts.html.twig' %}
+{% endblock %}

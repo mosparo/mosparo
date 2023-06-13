@@ -60,6 +60,10 @@
     }
 }
 
+.dataTables_wrapper {
+    min-height: 140px;
+}
+
 .dataTables_processing.visible {
     display: flex !important;
     align-items: center;

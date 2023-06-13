@@ -66,7 +66,7 @@ class CleanupHelper
 
                 // The WHERE part is encapsulated by an extra set of brackets because of the general project filter which
                 // is added at the end of the WHERE with "AND project_id = ?" (see Mosparo\Doctrine\ProjectRelatedFilter).
-                ->where('(s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.valid IS NULL))')
+                ->where('(s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = 0 AND s.valid IS NULL))')
 
                 ->setParameter('limit', (new DateTime())->sub(new DateInterval('P14D')))
                 ->setParameter('limitDay', (new DateTime())->sub(new DateInterval('PT24H')));

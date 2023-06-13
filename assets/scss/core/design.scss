@@ -16,6 +16,38 @@
     }
 }
 
+.design-mode-page-container {
+    background: var(--page-body-background, #FFFFFF);
+    border-radius: 5px;
+
+    padding: 1.75rem;
+
+    @media only screen and (max-width: 1199px) {
+        & {
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    @media only screen and (max-width: 500px) {
+        & {
+            padding: 0;
+            margin: 0 -1.5rem;
+            border-radius: 0;
+
+            .design-mode-inner-page-container {
+                overflow-x: auto;
+                padding: 1.75rem;
+            }
+        }
+
+        &.simple-design-mode {
+            margin: -0.5rem -1rem;
+            border-radius: 5px;
+        }
+    }
+}
+
 .cr-accordion {
     .cra-title {
         flex: 1 0 auto;
@@ -45,5 +77,16 @@
     &.bg-azure-lt {
         border: 1px solid #4299e1;
         border-radius: 5px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .sp-container {
+        flex-direction: column-reverse;
+
+        .sp-palette .sp-thumb-el {
+            width: 19px;
+            height: 19px;
+        }
     }
 }

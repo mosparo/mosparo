@@ -23,6 +23,16 @@
 
     {% include 'snippets/prerequisites.html.twig' %}
 
+    <h3 class="mb-0">
+        {{ 'setup.prerequisites.types.internetConnection'|trans }}
+    </h3>
+    <p>
+        {{ 'downloadCheck.intro'|trans }}
+    </p>
+    <div>
+        {% include 'snippets/download-check.html.twig' %}
+    </div>
+
     {% if meetPrerequisites %}
         <div class="form-footer">
             <a href="{{ path('setup_database') }}" class="btn btn-primary w-100">

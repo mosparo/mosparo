@@ -7,8 +7,11 @@ use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
+use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpClient\NativeHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class UpdateHelper
 {
@@ -21,6 +24,8 @@ class UpdateHelper
      */
     protected ConfigHelper $configHelper;
 
+    protected ConnectionHelper $connectionHelper;
+
     /**
      * @var \Symfony\Contracts\HttpClient\HttpClientInterface
      */
@@ -30,6 +35,11 @@ class UpdateHelper
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     protected Filesystem $fileSystem;
+
+    /**
+     * @var \Symfony\Contracts\Cache\CacheInterface
+     */
+    protected CacheInterface $cache;
 
     /**
      * @var string
@@ -57,19 +67,9 @@ class UpdateHelper
     protected array $newVersionData = [];
 
     /**
-     * @var bool
-     */
-    protected bool $updateAvailable = false;
-
-    /**
      * @var array
      */
     protected array $upgradeData = [];
-
-    /**
-     * @var bool
-     */
-    protected bool $upgradeAvailable = false;
 
     /**
      * @var array
@@ -82,15 +82,18 @@ class UpdateHelper
      * @param \Mosparo\Helper\ConfigHelper $configHelper
      * @param \Symfony\Contracts\HttpClient\HttpClientInterface $client
      * @param \Symfony\Component\Filesystem\Filesystem $fileSystem
+     * @param \Symfony\Contracts\Cache\CacheInterface $cache
      * @param string $projectDirectory
      * @param string $cacheDirectory
      * @param string $env
      */
-    public function __construct(ConfigHelper $configHelper,  HttpClientInterface $client, Filesystem $fileSystem, string $projectDirectory, string $cacheDirectory, string $env)
+    public function __construct(ConfigHelper $configHelper, ConnectionHelper $connectionHelper, HttpClientInterface $client, Filesystem $fileSystem, CacheInterface $cache, string $projectDirectory, string $cacheDirectory, string $env)
     {
         $this->configHelper = $configHelper;
+        $this->connectionHelper = $connectionHelper;
         $this->client = $client;
         $this->fileSystem = $fileSystem;
+        $this->cache = $cache;
         $this->projectDirectory = $projectDirectory;
         $this->cacheDirectory = $cacheDirectory;
         $this->env = $env;
@@ -121,44 +124,70 @@ class UpdateHelper
     }
 
     /**
-     * Returns true if there is an update available
+     * Returns true if we have cached update data
      *
      * @return bool
      */
-    public function isUpdateAvailable(): bool
+    public function hasCachedData(): bool
     {
-        return ($this->updateAvailable);
+        return (bool) ($this->getCachedUpdateData(false)['checkedAt'] ?? false);
     }
 
     /**
-     * Returns the data for the available update
+     * Returns true if there is an update available
      *
+     * @param bool $checkForUpdates
+     * @return bool
+     */
+    public function isUpdateAvailable(bool $checkForUpdates = false): bool
+    {
+        return $this->getCachedUpdateData($checkForUpdates)['isUpdateAvailable'] ?? false;
+    }
+
+    /**
+     * Returns the available update data
+     *
+     * @param bool $checkForUpdates
      * @return array
      */
-    public function getAvailableUpdateData(): array
+    public function getAvailableUpdateData(bool $checkForUpdates = false): array
     {
-        return $this->newVersionData;
+        return $this->getCachedUpdateData($checkForUpdates)['availableUpdate'] ?? [];
     }
 
     /**
      * Returns true if there is an upgrade available
      *
+     * @param bool $checkForUpdates
      * @return bool
      */
-    public function isUpgradeAvailable(): bool
+    public function isUpgradeAvailable(bool $checkForUpdates = false): bool
     {
-        return ($this->upgradeAvailable);
+        return $this->getCachedUpdateData($checkForUpdates)['isUpgradeAvailable'] ?? false;
     }
 
     /**
      * Returns the data for the available upgrade
      *
+     * @param bool $checkForUpdates
      * @return array
      */
-    public function getAvailableUpgradeData(): array
+    public function getAvailableUpgradeData(bool $checkForUpdates = false): array
     {
-        return $this->upgradeData;
+        return $this->getCachedUpdateData($checkForUpdates)['availableUpgrade'] ?? [];
     }
+
+    /**
+     * Returns a DateTime object, at which the update check was done, or returns null
+     * if no cached data is available.
+     *
+     * @return \DateTime|null
+     */
+    public function getCheckedAt(): ?\DateTime
+    {
+        return $this->getCachedUpdateData(false)['checkedAt'] ?? null;
+    }
+
 
     /**
      * Defines and creates the directory for the update log file
@@ -190,6 +219,48 @@ class UpdateHelper
         $fileUrl = '/update-log' . $fileName;
 
         return [$filePath, $fileUrl];
+    }
+
+    /**
+     * Returns the data for the available update
+     *
+     * @param bool $checkForUpdates
+     * @return array
+     */
+    public function getCachedUpdateData(bool $checkForUpdates = false): array
+    {
+        $cacheKey = 'availableUpdateData';
+        if ($checkForUpdates) {
+            $this->cache->delete($cacheKey);
+        }
+
+        $cachedData = $this->cache->get($cacheKey, function (CacheItemInterface $item) use ($checkForUpdates) {
+            if ($checkForUpdates) {
+                $item->expiresAfter(86400);
+
+                $this->checkForUpdates();
+
+                $data = [
+                    'isUpdateAvailable' => !empty($this->newVersionData),
+                    'availableUpdate' => $this->newVersionData,
+                    'isUpgradeAvailable' => !empty($this->upgradeData),
+                    'availableUpgrade' => $this->upgradeData,
+                    'checkedAt' => new \DateTime(),
+                ];
+
+                $item->set($data);
+
+                return $data;
+            }
+
+            return $item->get();
+        });
+
+        if ($cachedData === null) {
+            return [];
+        }
+
+        return $cachedData;
     }
 
     /**
@@ -315,12 +386,22 @@ class UpdateHelper
      * @param array $args
      * @return string
      *
+     * @throws \Mosparo\Exception Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.
      * @throws \Mosparo\Exception Cannot load the remote data for the given url "{URL}".
      */
     protected function loadRemoteData(string $url, array $args = []): string
     {
+        if (!$this->connectionHelper->isDownloadPossible()) {
+            throw new Exception('Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.');
+        }
+
+        $client = $this->client;
+        if ($this->connectionHelper->useNativeConnection()) {
+            $client = new NativeHttpClient();
+        }
+
         try {
-            $response = $this->client->request('GET', $url, $args);
+            $response = $client->request('GET', $url, $args);
         } catch (\Exception $e) {
             throw new Exception(sprintf('Cannot load the remote data for the given url "%s".', $url), 0, $e);
         }
@@ -339,12 +420,22 @@ class UpdateHelper
      * @param string $url
      * @param string $destinationFilePath
      *
+     * @throws \Mosparo\Exception Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.
      * @throws \Mosparo\Exception Cannot load the remote data for the given url "{URL}".
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     protected function streamRemoteData(string $url, string $destinationFilePath)
     {
-        $response = $this->client->request('GET', $url);
+        if (!$this->connectionHelper->isDownloadPossible()) {
+            throw new Exception('Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.');
+        }
+
+        $client = $this->client;
+        if ($this->connectionHelper->useNativeConnection()) {
+            $client = new NativeHttpClient();
+        }
+
+        $response = $client->request('GET', $url);
 
         if ($response->getStatusCode() !== 200) {
             throw new Exception(sprintf('Cannot load the remote data for the given url "%s".', $url));
@@ -454,13 +545,13 @@ class UpdateHelper
     {
         $channelData = $versionData['channels'][$channel] ?? null;
 
-        if (!$channelData || !($channelData['latestVersion'] ?? null)) {
+        if (!$channelData) {
             throw new Exception('The update information for the selected channel are not available.');
         }
 
-        if (version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
+        $latestVersion = $channelData['latestVersion'] ?? null;
+        if ($latestVersion && version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
             $this->newVersionData = $this->loadVersionChannelVersions($channelData['versionsUrl']);
-            $this->updateAvailable = (!empty($this->newVersionData));
         }
 
         $recommendUpgrade = $channelData['recommendNextMajorVersion'] ?? false;
@@ -541,7 +632,6 @@ class UpdateHelper
         if (version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
             $this->upgradeData['majorVersionData'] = $updateData;
             $this->upgradeData['versionData'] = $this->loadVersionChannelVersions($channelData['versionsUrl']);
-            $this->upgradeAvailable = (!empty($this->upgradeData));
         }
     }
 

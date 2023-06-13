@@ -36,6 +36,20 @@
     }
 }
 
+.illustration-list {
+    height: 128px;
+}
+
+.illustration-detail {
+    height: 192px;
+}
+
+.theme-dark {
+    .mosparo-logo-container {
+        filter: brightness(0) invert(1);
+    }
+}
+
 .empty-subtitle {
     flex: 1 0;
 }
@@ -46,6 +60,33 @@ pre {
     background: #fdfdfe;
     color: unset;
     border: 1px solid rgba(98,105,118,.16);
+}
+
+.theme-dark {
+    pre {
+        background: var(--tblr-bg-surface-dark);
+        color: var(--tblr-light);
+        border-radius: var(--tblr-border-radius);
+    }
+
+    .dropdown-menu {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+    }
+
+    /**
+     * Autofill styles for WebKit browsers
+     */
+    .form-control:-webkit-autofill,
+    .form-control:-webkit-autofill:hover,
+    .form-control:-webkit-autofill:focus,
+    .form-control:-webkit-autofill:active {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #fff !important;
+    }
+
+    .text-muted {
+        color: rgb(125, 134, 154) !important;
+    }
 }
 
 @media screen and (max-width: 768px) {

@@ -353,9 +353,56 @@ class DesignHelper
     {
         $configValues = [];
 
-        foreach (self::$designConfigValueKeys as $designConfigValueKey) {
-            $configValues[$designConfigValueKey] = $project->getConfigValue($designConfigValueKey);
+        if ($project->getDesignMode() === 'simple') {
+            $defaultConfigValues = $project->getDefaultConfigValues();
+            foreach (self::$designConfigValueKeys as $designConfigValueKey) {
+                $configValues[$designConfigValueKey] = $defaultConfigValues[$designConfigValueKey] ?? '';
+            }
+
+            $configValues = $this->getSimpleModeValues($project, $configValues);
+        } else {
+            foreach (self::$designConfigValueKeys as $designConfigValueKey) {
+                $configValues[$designConfigValueKey] = $project->getConfigValue($designConfigValueKey);
+            }
         }
+
+        return $configValues;
+    }
+
+    protected function getSimpleModeValues(Project $project, $configValues)
+    {
+        $colorWebsiteBackground = $project->getConfigValue('colorWebsiteBackground');
+        $configValues['colorBackground'] = $colorWebsiteBackground;
+        $configValues['colorSuccessBackground'] = $colorWebsiteBackground;
+        $configValues['colorFailureBackground'] = $colorWebsiteBackground;
+
+        $colorWebsiteForeground = $project->getConfigValue('colorWebsiteForeground');
+        $configValues['colorText'] = $colorWebsiteForeground;
+
+        $colorWebsiteAccent = $project->getConfigValue('colorWebsiteAccent');
+        $configValues['colorBorder'] = $colorWebsiteAccent;
+        $configValues['colorCheckbox'] = $colorWebsiteAccent;
+        $configValues['colorLoadingCheckboxAnimatedCircle'] = $colorWebsiteAccent;
+        $configValues['colorFocusCheckbox'] = $colorWebsiteAccent;
+
+        $colorHover = $project->getConfigValue('colorHover');
+        $configValues['colorFocusCheckboxShadow'] = $colorHover;
+
+        $colorSuccess = $project->getConfigValue('colorSuccess');
+        $configValues['colorSuccessBorder'] = $colorSuccess;
+        $configValues['colorSuccessCheckbox'] = $colorSuccess;
+        $configValues['colorSuccessText'] = $colorSuccess;
+
+        $colorFailure = $project->getConfigValue('colorFailure');
+        $configValues['colorFailureBorder'] = $colorFailure;
+        $configValues['colorFailureCheckbox'] = $colorFailure;
+        $configValues['colorFailureText'] = $colorFailure;
+        $configValues['colorFailureTextError'] = $colorFailure;
+
+        $transparent = 'transparent';
+        $configValues['colorShadow'] = $transparent;
+        $configValues['colorSuccessShadow'] = $transparent;
+        $configValues['colorFailureShadow'] = $transparent;
 
         return $configValues;
     }

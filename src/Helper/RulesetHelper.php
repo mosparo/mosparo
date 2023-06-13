@@ -13,6 +13,7 @@ use Mosparo\Entity\RulesetCache;
 use Mosparo\Entity\RulesetRuleCache;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
+use Symfony\Component\HttpClient\NativeHttpClient;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -24,15 +25,18 @@ class RulesetHelper
 
     protected HttpClientInterface $client;
 
+    protected ConnectionHelper $connectionHelper;
+
     protected CleanupHelper $cleanupHelper;
 
     protected ProjectHelper $projectHelper;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $router, HttpClientInterface $client, CleanupHelper $cleanupHelper, ProjectHelper $projectHelper)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $router, HttpClientInterface $client, ConnectionHelper $connectionHelper, CleanupHelper $cleanupHelper, ProjectHelper $projectHelper)
     {
         $this->entityManager = $entityManager;
         $this->router = $router;
         $this->client = $client;
+        $this->connectionHelper = $connectionHelper;
         $this->cleanupHelper = $cleanupHelper;
         $this->projectHelper = $projectHelper;
     }
@@ -55,6 +59,15 @@ class RulesetHelper
 
     public function downloadRuleset(Ruleset $ruleset): bool
     {
+        if (!$this->connectionHelper->isDownloadPossible()) {
+            throw new Exception('Downloading files from the internet is impossible because requirements need to be met. Please check the system page or the mosparo documentation.');
+        }
+
+        $client = $this->client;
+        if ($this->connectionHelper->useNativeConnection()) {
+            $client = new NativeHttpClient();
+        }
+
         $this->verifyUrl($ruleset->getUrl());
 
         $rulesetCache = $ruleset->getRulesetCache();
@@ -81,7 +94,7 @@ class RulesetHelper
 
         $files = [];
         foreach ($urls as $fileType => $url) {
-            $response = $this->client->request('GET', $url, $args);
+            $response = $client->request('GET', $url, $args);
 
             if ($response->getStatusCode() !== 200) {
                 throw new Exception('Cannot download the ruleset file.');

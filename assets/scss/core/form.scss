@@ -67,38 +67,27 @@ textarea.form-control {
     min-height: 150px;
 }
 
-.form-select-container {
-    position: relative;
+form .colorpicker-container {
+    margin-bottom: 0;
+}
 
-    background: #FFFFFF;
+.form-text {
+    display: block;
+}
 
-    &:after {
-        @extend .ti;
-
-        content: '\ea5f';
-        font-size: 1.25rem;
-        color: #A5A9B1;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-
-        padding: 0.75rem;
+.input-group-text {
+    .link-secondary:hover,
+    .link-secondary:focus {
+        text-decoration: none;
     }
+}
 
-    select {
-        @extend .form-select;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
-        background-color: transparent;
-        background-image: none;
-
-        z-index: 1;
-
-        position: relative;
-    }
+input[type="number"] {
+    -moz-appearance: textfield;
 }

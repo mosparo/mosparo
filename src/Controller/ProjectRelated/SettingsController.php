@@ -346,7 +346,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         $project = $this->getActiveProject();
         $config = $project->getConfigValues();
 
-        $form = $this->createForm(DesignSettingsFormType::class, $config);
+        $form = $this->createForm(DesignSettingsFormType::class, $config, ['mode' => $config['designMode'] ?? 'simple']);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -382,7 +382,24 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             'project' => $project,
             'sizeVariables' => $designHelper->getBoxSizeVariables(),
             'maxRadiusForLogo' => $designHelper->getMaxRadiusForLogo(),
+            'mode' => $project->getDesignMode(),
         ]);
+    }
+
+    /**
+     * @Route("/design/switch-mode", name="settings_design_switch_mode")
+     */
+    public function switchDesignMode(Request $request, EntityManagerInterface $entityManager, DesignHelper $designHelper): Response
+    {
+        $project = $this->getActiveProject();
+
+        if ($request->query->has('mode') && in_array($request->query->get('mode'), ['simple', 'advanced'])) {
+            $project->setConfigValue('designMode', $request->query->get('mode'));
+
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('settings_design');
     }
 
     /**

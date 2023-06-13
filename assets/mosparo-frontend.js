@@ -15,6 +15,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         loadCssResource: false,
         cssResourceUrl: '',
         requestSubmitTokenOnInit: true,
+        customMessages: {},
 
         // Callbacks
         onCheckForm: null,
@@ -162,7 +163,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         if (this.options.designMode) {
             this.containerElement.classList.add('mosparo__design-mode');
             this.checkboxFieldElement.removeAttribute('required');
-            this.labelElement.textContent = this.messages.label;
+            this.labelElement.textContent = this.getMessage('label');
         } else {
             // Set up the event listener
             this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el) {
@@ -263,13 +264,13 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 _this.containerElement.classList.remove('mosparo__loading');
                 _this.containerElement.classList.add('mosparo__invalid');
 
-                _this.showError(_this.messages.errorGotNoToken);
+                _this.showError(_this.getMessage('errorGotNoToken'));
             }
         }, function () {
             _this.containerElement.classList.remove('mosparo__loading');
             _this.containerElement.classList.add('mosparo__invalid');
 
-            _this.showError(_this.messages.errorInternalError);
+            _this.showError(_this.getMessage('errorInternalError'));
         });
     }
 
@@ -281,7 +282,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         if (this.submitTokenElement.value === '') {
             this.containerElement.classList.add('mosparo__invalid');
 
-            this.showError(this.messages.errorNoSubmitTokenAvailable);
+            this.showError(this.getMessage('errorNoSubmitTokenAvailable'));
             return;
         }
 
@@ -292,7 +293,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
 
         this.containerElement.classList.add('mosparo__loading');
-        this.updateAccessibleStatus(this.messages.accessibilityCheckingData);
+        this.updateAccessibleStatus(this.getMessage('accessibilityCheckingData'));
 
         let formData = JSON.stringify(this.getFormData());
         let data = {
@@ -311,7 +312,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 _this.containerElement.classList.add('mosparo__checked');
                 _this.validationTokenElement.value = response.validationToken;
 
-                _this.updateAccessibleStatus(_this.messages.accessibilityDataValid);
+                _this.updateAccessibleStatus(_this.getMessage('accessibilityDataValid'));
             } else if (response.security) {
                 _this.checkboxFieldElement.checked = false;
                 _this.setHpFieldElementDisabled(false);
@@ -326,7 +327,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 _this.containerElement.classList.add('mosparo__invalid');
                 _this.validationTokenElement.value = '';
 
-                _this.showError(_this.messages.errorSpamDetected);
+                _this.showError(_this.getMessage('errorSpamDetected'));
             }
 
             _this.formElement.dispatchEvent(new CustomEvent('form-checked', { bubbles: true, detail: { valid: response.valid } }));
@@ -340,7 +341,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             _this.containerElement.classList.remove('mosparo__loading');
             _this.containerElement.classList.add('mosparo__invalid');
 
-            _this.showError(_this.messages.errorInternalError);
+            _this.showError(_this.getMessage('errorInternalError'));
         });
     }
 
@@ -495,7 +496,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         this.hpFieldElement.setAttribute('style', 'position: absolute !important; left: -1000px !important; top: -1000px !important;');
         this.hpFieldElement.setAttribute('autocomplete', 'one-time-code');
         this.hpFieldElement.setAttribute('tabindex', '-1');
-        this.hpFieldElement.setAttribute('title', this.messages.hpLeaveEmpty);
+        this.hpFieldElement.setAttribute('title', this.getMessage('hpLeaveEmpty'));
         this.formElement.appendChild(this.hpFieldElement);
 
         this.hpFieldElement.addEventListener('change', function () {
@@ -521,11 +522,11 @@ function mosparo(containerId, url, uuid, publicKey, options)
             this.containerElement.classList.add('mosparo__invalid');
 
             let date = new Date(response.until);
-            this.showError(this.messages.errorLockedOut.replace('%datetime%', date.toLocaleString()));
+            this.showError(this.getMessage('errorLockedOut').replace('%datetime%', date.toLocaleString()));
         } else if (response.type === 'delay') {
             let timeVal = '<span>%val%</span>'.replace('%val%', response.forSeconds);
-            this.showError(this.messages.errorDelay.replace('%seconds%', timeVal), false, true);
-            this.updateAccessibleStatus(this.messages.errorDelay.replace('%seconds%', response.forSeconds));
+            this.showError(this.getMessage('errorDelay').replace('%seconds%', timeVal), false, true);
+            this.updateAccessibleStatus(this.getMessage('errorDelay').replace('%seconds%', response.forSeconds));
 
             this.countdownSeconds = response.forSeconds;
             this.countdownInterval = setInterval(function () { _this.countDown() }, 1000);
@@ -551,7 +552,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.updateMessages = function (messages) {
         this.messages = messages;
 
-        this.labelElement.textContent = this.messages.label;
+        this.labelElement.textContent = this.getMessage('label');
     }
 
     this.stringifyData = function (data) {
@@ -591,6 +592,29 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.updateAccessibleStatus = function (status) {
         this.accessibleStatusElement.setAttribute('role', 'alert');
         this.accessibleStatusElement.textContent = status;
+    }
+
+    this.getMessage = function (messageKey) {
+        let languages = [];
+        if (typeof navigator.languages != 'undefined') {
+            languages = navigator.languages;
+        } else if (typeof navigator.language != 'undefined') {
+            languages = [navigator.language];
+        }
+
+        for (let idx in languages) {
+            let locale = navigator.languages[idx].replace('-', '_');
+
+            if (
+                typeof this.options.customMessages[locale] != 'undefined' &&
+                typeof this.options.customMessages[locale][messageKey] != 'undefined' &&
+                this.options.customMessages[locale][messageKey] != ''
+            ) {
+                return this.options.customMessages[locale][messageKey];
+            }
+        }
+
+        return this.messages[messageKey];
     }
 
     this.debug = function (message) {

@@ -77,7 +77,7 @@ class UpdateMosparoCommand extends Command
             }
         }
 
-        $this->updateHelper->checkForUpdates();
+        $this->updateHelper->getCachedUpdateData(true);
         if (!$this->updateHelper->isUpdateAvailable() && !$this->updateHelper->isUpgradeAvailable()) {
             $output->writeln('No updates available.');
 

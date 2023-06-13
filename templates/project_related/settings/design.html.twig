@@ -23,7 +23,7 @@
                     </span>
                 </button>
             </h2>
-            <div id="collapse-crb-{{ name }}" class="accordion-collapse collapse" data-bs-parent="#contrast-ratio-box-{{ name }}" style="">
+            <div id="collapse-crb-{{ name }}" class="accordion-collapse collapse" data-bs-parent="#contrast-ratio-box-{{ name }}">
                 <div class="accordion-body pt-0">
                     <table class="table table-bordered table-sm table-vcenter mb-3">
                         <thead>
@@ -88,238 +88,310 @@
     <div class="row">
         <div class="col-12 mb-3">
             {{ form_start(form) }}
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">{{ 'settings.design.subtitles.dimensionSettings'|trans }}</h2>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-lg-4 mb-3 mb-lg-0">
-                            {{ form_row(form.boxSize) }}
+                {% if mode == 'advanced' %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">{{ 'settings.design.subtitles.dimensionSettings'|trans }}</h2>
                         </div>
-                        <div class="col-12 col-lg-4 mb-3 mb-lg-0">
-                            <div class="form-group">
-                                {{ form_label(form.boxRadius) }}
-                                <div class="input-group">
-                                    <button class="btn btn-icon-only btn-decrease-value" type="button">
-                                        <i class="ti ti-minus"></i>
-                                    </button>
-                                    {{ form_widget(form.boxRadius) }}
-                                    <span class="input-group-text">px</span>
-                                    <button class="btn btn-icon-only btn-increase-value" type="button">
-                                        <i class="ti ti-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <div class="form-group">
-                                {{ form_label(form.boxBorderWidth) }}
-                                <div class="input-group">
-                                    <button class="btn btn-icon-only btn-decrease-value" type="button">
-                                        <i class="ti ti-minus"></i>
-                                    </button>
-                                    {{ form_widget(form.boxBorderWidth) }}
-                                    <span class="input-group-text">px</span>
-                                    <button class="btn btn-icon-only btn-increase-value" type="button">
-                                        <i class="ti ti-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mt-3">
-                <div class="card-header card-header-with-actions">
-                    <h2 class="card-title">{{ 'settings.design.subtitles.colorSettings'|trans }}</h2>
-                    <div class="card-actions">
-                        <div class="d-flex align-items-center">
-                            <label for="page_body_backgroundColor" class="me-2">{{ 'settings.design.preview.background'|trans }}</label>
-                            <input type="text" id="page_body_backgroundColor" name="" class="colorpicker form-control" data-variable="--page-body-background" data-colorpicker-allow-alpha-value="false" value="">
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <h3>{{ 'settings.design.subtitles.colors.normal'|trans }}</h3>
-                        </div>
-                    </div>
-                    <div class="row contrast-ratio-group">
-                        <div class="col-12 col-lg-6">
+                        <div class="card-body">
                             <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorBackground) }}
+                                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                                    {{ form_row(form.boxSize) }}
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorBorder) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorCheckbox) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorText) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorShadow) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorShadowInset) }}
-                                </div>
-                                <div class="col-12">
-                                    <div class="mb-3">
-                                        {{ form_row(form.showPingAnimation) }}
+                                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                                    <div class="form-group">
+                                        {{ form_label(form.boxRadius) }}
+                                        <div class="input-group">
+                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                                <i class="ti ti-minus"></i>
+                                            </button>
+                                            {{ form_widget(form.boxRadius) }}
+                                            <span class="input-group-text">px</span>
+                                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                                <i class="ti ti-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="design-mode-page-container mb-3">
-                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="normal"></div>
-                            </div>
-
-                            {{ _self.contrastRatioBox('normal') }}
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h3>{{ 'settings.design.subtitles.colors.focus'|trans }}</h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFocusCheckbox) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFocusCheckboxShadow) }}
-                                </div>
-                                <div class="col-12 logo-container">
-                                    <div class="mb-3">
-                                        {{ form_row(form.showMosparoLogo) }}
-                                        <div class="message-box bg-azure-lt p-3 mb-3 d-none">
-                                            {{ 'settings.design.message.boxRadiusTooLarge'|trans }}
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-group">
+                                        {{ form_label(form.boxBorderWidth) }}
+                                        <div class="input-group">
+                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                                <i class="ti ti-minus"></i>
+                                            </button>
+                                            {{ form_widget(form.boxBorderWidth) }}
+                                            <span class="input-group-text">px</span>
+                                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                                <i class="ti ti-plus"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="design-mode-page-container">
-                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="focus"></div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h3>{{ 'settings.design.subtitles.colors.loading'|trans }}</h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorLoadingCheckbox) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorLoadingCheckboxAnimatedCircle) }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="design-mode-page-container">
-                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="loading"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h3>{{ 'settings.design.subtitles.colors.success'|trans }}</h3>
-                        </div>
-                    </div>
-                    <div class="row contrast-ratio-group">
-                        <div class="col-12 col-lg-6">
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorSuccessBackground) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorSuccessBorder) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorSuccessCheckbox) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorSuccessText) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorSuccessShadow) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorSuccessShadowInset) }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="design-mode-page-container mb-3">
-                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="success"></div>
-                            </div>
 
-                            {{ _self.contrastRatioBox('success') }}
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h3>{{ 'settings.design.subtitles.colors.failure'|trans }}</h3>
-                        </div>
-                    </div>
-                    <div class="row contrast-ratio-group">
-                        <div class="col-12 col-lg-6">
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFailureBackground) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFailureBorder) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFailureCheckbox) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFailureText) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFailureShadow) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFailureShadowInset) }}
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    {{ form_row(form.colorFailureTextError) }}
+                    <div class="card mt-3">
+                        <div class="card-header card-header-with-actions">
+                            <h2 class="card-title">{{ 'settings.design.subtitles.colorSettings'|trans }}</h2>
+                            <div class="card-actions">
+                                <div class="d-flex align-items-center">
+                                    {{ form_label(form.colorPageBodyBackground, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}
+                                    {{ form_widget(form.colorPageBodyBackground) }}
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="design-mode-page-container mb-3">
-                                <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="failure"></div>
-                            </div>
+                        <div class="card-body">
+                            <div class="card-tabs">
+                                <ul class="nav nav-tabs" data-bs-toggle="tabs">
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-preview-normal" class="nav-link active" data-bs-toggle="tab">
+                                            <i class="ti ti-checkbox"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.colors.normal'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-preview-focus" class="nav-link" data-bs-toggle="tab">
+                                            <i class="ti ti-focus"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.colors.focus'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-preview-loading" class="nav-link" data-bs-toggle="tab">
+                                            <i class="ti ti-loader"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.colors.loading'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-preview-success" class="nav-link" data-bs-toggle="tab">
+                                            <i class="ti ti-check"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.colors.success'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-preview-error" class="nav-link" data-bs-toggle="tab">
+                                            <i class="ti ti-exclamation-circle"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.colors.failure'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="card tab-pane active show" id="tabs-preview-normal">
+                                        <div class="card-body">
+                                            <div class="row contrast-ratio-group">
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorBackground) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorBorder) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorCheckbox) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorText) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorShadow) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorShadowInset) }}
+                                                        </div>
+                                                        <div class="col-12 mb-3 mb-xl-0">
+                                                            {{ form_row(form.showPingAnimation) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="design-mode-page-container mb-3">
+                                                        <div class="design-mode-inner-page-container">
+                                                            <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="normal"></div>
+                                                        </div>
+                                                    </div>
 
-                            {{ _self.contrastRatioBox('failure') }}
+                                                    {{ _self.contrastRatioBox('normal') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-preview-focus">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorFocusCheckbox) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorFocusCheckboxShadow) }}
+                                                        </div>
+                                                        <div class="col-12 logo-container">
+                                                            {{ form_row(form.showMosparoLogo) }}
+                                                            <div class="message-box bg-azure-lt p-3 mb-3 mb-xl-0 d-none">
+                                                                {{ 'settings.design.message.boxRadiusTooLarge'|trans }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="design-mode-page-container">
+                                                        <div class="design-mode-inner-page-container">
+                                                            <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="focus"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-preview-loading">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                                                            {{ form_row(form.colorLoadingCheckbox) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                                                            {{ form_row(form.colorLoadingCheckboxAnimatedCircle) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="design-mode-page-container">
+                                                        <div class="design-mode-inner-page-container">
+                                                            <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="loading"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-preview-success">
+                                        <div class="card-body">
+                                            <div class="row contrast-ratio-group">
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorSuccessBackground) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorSuccessBorder) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorSuccessCheckbox) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorSuccessText) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                                                            {{ form_row(form.colorSuccessShadow) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                                                            {{ form_row(form.colorSuccessShadowInset) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="design-mode-page-container mb-3">
+                                                        <div class="design-mode-inner-page-container">
+                                                            <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="success"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    {{ _self.contrastRatioBox('success') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-preview-error">
+                                        <div class="card-body">
+                                            <div class="row contrast-ratio-group">
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorFailureBackground) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorFailureBorder) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorFailureCheckbox) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorFailureText) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3">
+                                                            {{ form_row(form.colorFailureShadow) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                                                            {{ form_row(form.colorFailureShadowInset) }}
+                                                        </div>
+                                                        <div class="col-12 col-md-6 mb-3 mb-lg-0">
+                                                            {{ form_row(form.colorFailureTextError) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="design-mode-page-container mb-3">
+                                                        <div class="design-mode-inner-page-container">
+                                                            <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="failure"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    {{ _self.contrastRatioBox('failure') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                {% else %}
+                    <div class="card mt-3">
+                        <div class="card-header card-header-with-actions">
+                            <h2 class="card-title">{{ 'settings.design.subtitles.simpleDesign'|trans }}</h2>
+                        </div>
+                        <div class="card-body">
+                            {% include 'design/simple.html.twig' %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="row mt-3">
+                    <div class="col-12 col-md-auto mt-2 mt-md-0">
+                        {% if mode == 'advanced' %}
+                            <a href="{{ path('settings_design_switch_mode', { mode: 'simple' }) }}" class="btn btn-secondary w-100">
+                                <i class="ti ti-triangle"></i>
+                                {{ 'settings.design.action.switchToSimpleMode'|trans }}
+                            </a>
+                        {% else %}
+                            <a href="{{ path('settings_design_switch_mode', { mode: 'advanced' }) }}" class="btn btn-secondary w-100">
+                                <i class="ti ti-triangle-square-circle"></i>
+                                {{ 'settings.design.action.switchToAdvancedMode'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="ti ti-device-floppy"></i>
+                            {{ 'action.save'|trans }}
+                        </button>
                     </div>
                 </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12 col-md-auto ms-auto">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="ti ti-device-floppy"></i>
-                        {{ 'action.save'|trans }}
-                    </button>
-                </div>
-            </div>
             {{ form_end(form) }}
         </div>
     </div>
@@ -328,93 +400,5 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <link href="{{ asset('/build/mosparo-frontend.css') }}" rel="stylesheet">
-    <script src="{{ asset('/build/mosparo-frontend.js') }}"></script>
-    {% cspscript %}
-        <script>
-            var sizeVariables = {{ sizeVariables|json_encode()|raw }};
-            var maxRadiusForLogo = {{ maxRadiusForLogo|json_encode()|raw }};
-            var initialTrigger = false;
-
-            function checkLogoAvailability()
-            {
-                let radius = $('input[name="design_settings_form[boxRadius]"]').val();
-                let size = $('input[name="design_settings_form[boxSize]"]:checked').val();
-                let logoCheckbox = $('input[name="design_settings_form[showMosparoLogo]"]');
-                let logoContainer = $('.logo-container');
-                if (!(size in maxRadiusForLogo)) {
-                    return;
-                }
-
-                let maxRadius = maxRadiusForLogo[size];
-
-                if (radius > maxRadius) {
-                    logoCheckbox.prop('readonly', true);
-                    logoContainer
-                        .find('.form-group').addClass('d-none').end()
-                        .find('.message-box').removeClass('d-none').end();
-                } else {
-                    logoCheckbox.prop('readonly', false);
-                    logoContainer
-                        .find('.form-group').removeClass('d-none').end()
-                        .find('.message-box').addClass('d-none').end();
-                }
-
-                logoCheckbox.trigger('change');
-            }
-
-            $(document).ready(function () {
-                $('.mosparo-box').each(function () {
-                    new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
-
-                    $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend')|escape('js') }}');
-                    let type = $(this).data('type');
-                    switch (type) {
-                        case 'focus':
-                            $(this).addClass('mosparo__focus');
-                            break;
-                        case 'loading':
-                            $(this).addClass('mosparo__loading');
-                            break;
-                        case 'success':
-                            $(this).addClass('mosparo__checked');
-                            break;
-                        case 'failure':
-                            $(this).addClass('mosparo__invalid');
-                            $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend')|escape('js') }}');
-                            break;
-                    }
-                });
-
-                $('input[name="design_settings_form[boxRadius]"]').change(function () {
-                    checkLogoAvailability();
-                });
-
-                $('input[name="design_settings_form[boxSize]"]').change(function () {
-                    let size = $(this).val();
-                    if (!(size in sizeVariables)) {
-                        return;
-                    }
-
-                    let variables = sizeVariables[size];
-                    for (let variableName in variables) {
-                        let fieldForVariable = $('input[data-variable="' + variableName + '"]');
-                        if (fieldForVariable.length > 0 && initialTrigger) {
-                            continue;
-                        } else if (fieldForVariable.length > 0) {
-                            fieldForVariable.val(variables[variableName]);
-                        }
-
-                        updateCssVariable(variableName, variables[variableName], 'number');
-                    }
-
-                    checkLogoAvailability();
-                });
-
-                initialTrigger = true;
-                $('input[name="design_settings_form[boxSize]"]:checked').trigger('change');
-                initialTrigger = false;
-            });
-        </script>
-    {% endcspscript %}
+    {% include 'design/scripts.html.twig' %}
 {% endblock %}

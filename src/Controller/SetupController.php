@@ -10,8 +10,10 @@ use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Helper\ConfigHelper;
+use Mosparo\Helper\ConnectionHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Kernel;
+use Mosparo\Util\TokenGenerator;
 use PDO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -35,11 +37,14 @@ class SetupController extends AbstractController
 
     protected ConfigHelper $configHelper;
 
-    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper)
+    protected ConnectionHelper $connectionHelper;
+
+    public function __construct(KernelInterface $kernel, SetupHelper $setupHelper, ConfigHelper $configHelper, ConnectionHelper $connectionHelper)
     {
         $this->kernel = $kernel;
         $this->setupHelper = $setupHelper;
         $this->configHelper = $configHelper;
+        $this->connectionHelper = $connectionHelper;
     }
 
     /**
@@ -59,7 +64,8 @@ class SetupController extends AbstractController
 
         return $this->render('setup/prerequisites.html.twig', [
             'meetPrerequisites' => $meetPrerequisites,
-            'prerequisites' => $prerequisites
+            'prerequisites' => $prerequisites,
+            'downloadCheck' => $this->connectionHelper->checkIfDownloadIsPossible(),
         ]);
     }
 
@@ -197,9 +203,12 @@ class SetupController extends AbstractController
             // Ignore this exception since the user exists, everything should be good.
         }
 
+        $tokenGenerator = new TokenGenerator();
+
         $this->configHelper->writeEnvironmentConfig([
             'mosparo_installed' => true,
             'mosparo_installed_version' => Kernel::VERSION,
+            'mosparo_assets_version' => $tokenGenerator->generateShortToken(),
         ]);
 
         // Clear the cache after the installation

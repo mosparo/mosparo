@@ -8,40 +8,106 @@
 {% block pageBody %}
     <div class="container-xl">
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-12">
                 <div class="card mb-3">
-                    <div class="card-header border-0">
-                        <div class="card-title">{{ 'submission.title'|trans }}</div>
-                        <a href="{{ path('submission_list') }}" class="ms-auto btn btn-light btn-pill btn-icon-sm">
-                            <i class="ti ti-chevron-right"></i>
-                        </a>
+                    <div class="card-header border-0 p-0">
+                        <div class="card-title p-0 flex-fill">
+                            <a href="{{ path('submission_list') }}" class="d-block p-3 text-body dashboard-link">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="bg-blue text-white avatar">
+                                            <i class="ti ti-mail"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">
+                                            {{ 'submission.title'|trans }}
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="text-green me-2">
+                                            <i class="ti ti-check"></i>
+                                            {{ numberOfNoSpamSubmissions }}
+                                        </span>
+                                        <span class="text-danger">
+                                            <i class="ti ti-circle-x"></i>
+                                            {{ numberOfSpamSubmissions }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                     <div class="position-relative">
                         <div class="dashboard-submission-chart" id="submission_chart"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3 d-flex flex-column">
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4">
                 <div class="card mb-3 flex-fill">
-                    <div class="card-header border-0">
-                        <div class="card-title">{{ 'rule.title'|trans }}</div>
-                        <a href="{{ path('rule_list') }}" class="ms-auto btn btn-light btn-pill btn-icon-sm">
-                            <i class="ti ti-chevron-right"></i>
+                    <div class="card-title mb-0 p-0 flex-fill">
+                        <a href="{{ path('rule_list') }}" class="d-block p-3 text-body dashboard-link">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-teal text-white avatar">
+                                        <i class="ti ti-filter"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{ 'rule.title'|trans }}
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    {{ numberOfRules }}
+                                </div>
+                            </div>
                         </a>
-                    </div>
-                    <div class="card-body p-2 d-flex flex-column align-items-center">
-                        <div class="card-number flex-fill d-flex align-items-center">{{ numberOfRules }}</div>
                     </div>
                 </div>
+            </div>
+            <div class="col-12 col-md-4">
                 <div class="card mb-3 flex-fill">
-                    <div class="card-header border-0">
-                        <div class="card-title">{{ 'ruleset.title'|trans }}</div>
-                        <a href="{{ path('ruleset_list') }}" class="ms-auto btn btn-light btn-pill btn-icon-sm">
-                            <i class="ti ti-chevron-right"></i>
+                    <div class="card-title mb-0 p-0 flex-fill">
+                        <a href="{{ path('ruleset_list') }}" class="d-block p-3 text-body dashboard-link">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-cyan text-white avatar">
+                                        <i class="ti ti-stack"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{ 'ruleset.title'|trans }}
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    {{ numberOfRulesets }}
+                                </div>
+                            </div>
                         </a>
                     </div>
-                    <div class="card-body p-2 d-flex flex-column align-items-center">
-                        <div class="card-number flex-fill d-flex align-items-center">{{ numberOfRulesets }}</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card mb-3 flex-fill">
+                    <div class="card-title mb-0 p-0 flex-fill">
+                        <a href="{{ path('settings_general') }}" class="d-block p-3 text-body dashboard-link">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-azure text-white avatar">
+                                        <i class="ti ti-settings"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{ 'settings.title'|trans }}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -59,8 +125,26 @@
     {{ parent() }}
 
     {% cspscript %}
-        <script>
+        <script type="text/javascript">
             $(document).ready(function () {
+                let colors = {
+                    background: '#FFFFFF',
+                    fill: ['#EAF7EC', '#FBEBEB'],
+                    colors: ['#56B344', '#D63939'],
+                    shade: 'light',
+                    tooltipTheme: 'light',
+                };
+
+                if ($('body').hasClass('theme-dark')) {
+                    colors = {
+                        background: '#1d273b',
+                        fill: ['#1d3b21', '#3b1d1d'],
+                        colors: ['#56B344', '#D63939'],
+                        shade: 'dark',
+                        tooltipTheme: 'dark',
+                    };
+                }
+
                 let chartOptions = {
                     series: [
                         {
@@ -74,11 +158,11 @@
                     ],
                     chart: {
                         type: "area",
-                        background: '#fff',
+                        background: colors.background,
                         fontFamily: 'inherit',
                         height: 250,
                         stacked: true,
-                        offsetY: -10,
+                        /*offsetY: -10,*/
                         parentHeightOffset: 5,
                         animations: {
                             enabled: false
@@ -89,16 +173,19 @@
                         toolbar: {
                             show: false
                         },
+                        sparkline: {
+                            enabled: false
+                        }
                     },
                     dataLabels: {
                         enabled: false,
                     },
                     fill: {
-                        colors: ['#EAF7EC', '#FBEBEB'],
+                        colors: colors.fill,
                         type: 'gradient',
                         gradient: {
                             inverseColors: false,
-                            shade: 'light',
+                            shade: colors.shade,
                             type: "vertical",
                             opacityFrom: 0.9,
                             opacityTo: 0.6,
@@ -106,6 +193,7 @@
                         }
                     },
                     tooltip: {
+                        theme: colors.tooltipTheme,
                         x: {
                             show: true,
                             format: '{{ chartDateFormat }}',
@@ -117,9 +205,10 @@
                         lineCap: "round",
                         curve: "smooth",
                     },
-                    colors: ['#56B344', '#D63939'],
+                    colors: colors.colors,
                     grid: {
-                        show: true
+                        show: true,
+                        strokeDashArray: 4,
                     },
                     legend: {
                         show: false
@@ -138,13 +227,14 @@
                             enabled: false
                         },
                         axisBorder: {
-                            show: true,
+                            show: false,
                         },
                         type: 'datetime',
                     },
                     yaxis: {
                         show: true,
                         labels: {
+                            show: true,
                             offsetX: 0,
                             offsetY: 3,
                         },

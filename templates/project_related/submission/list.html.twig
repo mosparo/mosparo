@@ -5,6 +5,35 @@
 {% block documentTitle %}{{ 'submission.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'submission.title'|trans }}{% endblock %}
 
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'submission.filter.dropdown'|trans }}">
+                    <i class="ti ti-filter"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="{{ path('submission_list') }}" class="dropdown-item {% if filter != 'spam' and filter != 'valid' %}active{% endif %}">
+                        <i class="ti ti-check {% if filter == 'spam' or filter == 'valid' %}invisible{% endif %}"></i>
+                        {{ 'submission.filter.options.all'|trans }}
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ path('submission_list_filtered', {filter: 'spam'}) }}" class="dropdown-item {% if filter == 'spam' %}active{% endif %}">
+                        <i class="ti ti-check {% if filter != 'spam' %}invisible{% endif %}"></i>
+                        {{ 'submission.filter.options.spam'|trans }}
+                    </a>
+                    <a href="{{ path('submission_list_filtered', {filter: 'valid'}) }}" class="dropdown-item {% if filter == 'valid' %}active{% endif %}">
+                        <i class="ti ti-check {% if filter != 'valid' %}invisible{% endif %}"></i>
+                        {{ 'submission.filter.options.valid'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block pageBody %}
     <div class="container-xl">
         <div class="row">

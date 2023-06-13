@@ -7,11 +7,14 @@ parameters:
     env(mosparo_name): 'mosparo'
     env(mosparo_installed): ~
     env(mosparo_installed_version): ~
+    env(mosparo_assets_version): '' # A random string for cache busting without revealing the real version
 
     env(default_locale): 'en'
     env(default_date_format): 'Y-m-d'
     env(default_time_format): 'H:i:s'
     env(default_timezone): 'UTC'
+
+    env(default_color_mode): 'light'
 
     env(database_driver): 'pdo_mysql'
     env(database_host): '127.0.0.1'
@@ -31,6 +34,9 @@ parameters:
     env(mailer_dsn): 'sendmail://default'
 
     env(secret): 'SecretMosparoToken'
+
+    env(trusted_proxies): '127.0.0.1'
+    default_trusted_proxies: '%env(trusted_proxies)%'
 
 services:
     # default configuration for services in *this* file
@@ -77,6 +83,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Mosparo\Subscriber\AuthenticationSubscriber:
+        class: Mosparo\Subscriber\AuthenticationSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
     Mosparo\Subscriber\ProjectSubscriber:
         class: Mosparo\Subscriber\ProjectSubscriber
         arguments:
@@ -86,6 +97,11 @@ services:
 
     Mosparo\Subscriber\LocaleSubscriber:
         class: Mosparo\Subscriber\LocaleSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
+    Mosparo\Subscriber\InterfaceSubscriber:
+        class: Mosparo\Subscriber\InterfaceSubscriber
         tags:
             - { name: kernel.event_subscriber }
 
@@ -113,6 +129,14 @@ services:
         tags:
             - { name: twig.extension }
 
+    Mosparo\Twig\UpdateExtension:
+        class: Mosparo\Twig\UpdateExtension
+        arguments:
+            $updatesEnabled: '%env(MOSPARO_UPDATES_ENABLED)%'
+            $automaticUpdateCheckEnabled: '%env(MOSPARO_AUTOMATIC_UPDATE_CHECK_ENABLED)%'
+        tags:
+            - { name: twig.extension }
+
     Mosparo\Rule\RuleTypeManager:
         class: Mosparo\Rule\RuleTypeManager
         arguments: [ !tagged mosparo.ruleType ]
@@ -136,6 +160,10 @@ services:
             $defaultDateFormat: '%env(default_date_format)%'
             $defaultTimeFormat: '%env(default_time_format)%'
             $defaultTimezone: '%env(default_timezone)%'
+
+    Mosparo\Helper\InterfaceHelper:
+        arguments:
+            $defaultColorMode: '%env(default_color_mode)%'
 
     Mosparo\Helper\DesignHelper:
         arguments:
@@ -163,3 +191,7 @@ services:
     Mosparo\Controller\Administration\SystemController:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+
+    Mosparo\Controller\Administration\SecurityController:
+        arguments:
+            $trustedProxies: '%kernel.trusted_proxies%'

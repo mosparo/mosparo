@@ -10,7 +10,7 @@ project:
   create:
     title: Buat proyek
     message:
-      successfullyCreated: Proyek baru berhasil dibuat.
+      successfullyCreatedAndConfigured: Proyek baru berhasil dibuat dan dikonfigurasi.
   form:
     name: Nama
     description: Deskripsi
@@ -25,17 +25,32 @@ project:
     title: Hapus proyek% nama proyek%
     message:
       successfullyDeleted: Proyek %nama proyek% berhasil dihapus.
+    disconnectFirst: Pastikan Anda telah memutuskan sambungan situs web atau integrasi dengan proyek ini sebelum menghapusnya.
   roles:
     reader: Pembaca
     editor: Editor
     owner: Pemilik
+  createWizard:
+    design:
+      title: Pilih desain
+      introStartWizard: Proyek Anda berhasil dibuat. Untuk mulai menggunakannya, silakan pilih desain dan lanjutkan.
+      infoAdvancedMode: Anda dapat beralih ke mode lanjutan di pengaturan desain setelah wizard, yang memungkinkan Anda menyesuaikan desain secara tepat ke situs web Anda.
+    security:
+      title: Aktifkan fitur keamanan
+      introSecurity: Pilih fitur keamanan yang ingin Anda aktifkan.
+      infoSettings: Anda dapat mengaktifkan, menonaktifkan, atau mengatur fitur keamanan ini di pengaturan keamanan setelah wizard.
+    connection:
+      title: Detail koneksi
+      savedSuccessfully: Pengaturan desain dan keamanan berhasil disimpan. Proyek ini sekarang siap digunakan di situs web.
+      introConnection: Untuk menggunakan mosparo di situs web, Anda harus menambahkan integrasi ke situs web dan kemudian menghubungkan situs web tersebut dengan proyek mosparo ini. Untuk langkah ini, harap salin dan tempel informasi berikut ke kolom yang benar di integrasi.
+      infoSettings: Setelah wizard ini, Anda dapat menemukan detail koneksi ini di pengaturan proyek.
 header:
   pleaseChoose: Silakan pilih…
   account: Akun
 dashboard:
   title: Dasbor
   chart:
-    valid: Valid
+    valid: Sah
     spam: Spam
 rule:
   title: Aturan
@@ -47,6 +62,7 @@ rule:
     actions: Aksi
   createChooseType:
     title: Pilih tipe
+    intro: Silakan pilih jenis aturan yang ingin Anda buat. Jenis yang tersedia digunakan untuk bidang yang berbeda dan tidak dapat diubah untuk aturan sesudahnya.
   create:
     title: Buat peraturan
     message:
@@ -254,29 +270,29 @@ submission:
       title: Verifikasi
       isValid: Adalah benar
     data:
-      client:
-        asOrganization: Dengan organisasi
-        ipAddress: Alamat IP
-        asNumber: Dengan nomor
-        country: Negara
-        title: Klien
-        userAgent: User-Agent
       value: Nilai
       rating: Peringkat
+      points: '%totalPoints% poin'
+      fieldMustBeEmpty: Kolom harus kosong
       formData:
         title: Data formulir
         valid: Verifikasi sukses
         invalid: Verifikasi gagal
-        notVerified: Tidak terverifikasi
         hasPoints: poin
+        notVerified: Tidak terverifikasi
         honeypot: Honeypot
-      fieldMustBeEmpty: Kolom harus kosong
-      points: '%totalPoints% poin'
+      client:
+        country: Negara
+        asOrganization: Dengan organisasi
+        title: Klien
+        ipAddress: Alamat IP
+        asNumber: Dengan nomor
+        userAgent: User-Agent
     source:
+      requestedAt: Meminta ke
       title: Sumber
       pageTitle: Judul halaman
       pageUrl: Halaman URL
-      requestedAt: Meminta ke
     ignoredFields:
       intro: Kolom berikut tidak dikirim karena jenis kolomnya (misalnya kolom kata sandi atau upload file).
       title: Kolom diabaikan
@@ -286,6 +302,11 @@ submission:
         text: Formulir dikirimkan terlalu cepat. Pengirim hanya memerlukan %seconds% detik, yang kurang dari waktu minimum %minimumTimeSeconds% detik.
   title: Pengajuan
   backToList: Kembali ke kiriman
+  filter:
+    options:
+      all: Semua kiriman
+      spam: Kiriman spam
+      valid: Kiriman yang valid
 settings:
   title: Pengaturan proyek
   backToSettings: Kembali ke pengaturan
@@ -293,269 +314,336 @@ settings:
     title: Pengaturan Umum
     message:
       successfullySaved: Pengaturan berhasil disimpan.
-    apiKeys:
-      reissueApiKeys:
-        confirm: Apakah Anda benar-benar ingin menerbitkan ulang kunci API untuk proyek %projectName%?
-        message:
-          errorOnlyOwner: Hanya pemilik proyek yang dapat menerbitkan ulang kunci API.
-          successfullyReissued: Kunci API berhasil diterbitkan ulang.
-        title: Memperbarui kunci API
-      publicKey: Kunci publik
-      privateKey: Kunci pribadi
-      title: Kunci API
+    help:
+      integrateMosparo: Integrasikan mosparo
     connectionDetails:
       title: Detail koneksi
       host: Host
       uuid: Nomor identifikasi unik
-    help:
-      integrateMosparo: Integrasikan mosparo
+    apiKeys:
+      reissueApiKeys:
+        message:
+          errorOnlyOwner: Hanya pemilik proyek yang dapat menerbitkan ulang kunci API.
+          successfullyReissued: Kunci API berhasil diterbitkan ulang.
+        confirm: Apakah Anda benar-benar ingin menerbitkan ulang kunci API untuk proyek %projectName%?
+        title: Memperbarui kunci API
+      privateKey: Kunci pribadi
+      publicKey: Kunci publik
+      title: Kunci API
     action:
-      reissueApiKeys: Memperbarui kunci API
       reissue: Memperbarui
-  projectMember:
+      reissueApiKeys: Memperbarui kunci API
+  design:
+    message:
+      successfullySaved: Pengaturan desain berhasil disimpan.
+      boxRadiusTooLarge: Logo hanya dapat ditampilkan jika radius kotak berada di bawah nilai tertentu.
+    preview:
+      background: Pratinjau latar belakang
+    cr:
+      title: Rasio kontras
+      description: Nilai yang ditampilkan di atas menjelaskan rasio antara warna latar belakang dan warna teks. Dua kolom di sebelahnya menunjukkan apakah persyaratan minimum untuk pedoman WCAG terpenuhi.
+      value: Nilai
+      text: Huruf
+      textError: Huruf Error
     form:
-      message:
-        errorUserNotFound: Pengguna tidak ditemukan.
-        successfullySaved: Anggota proyek berhasil disimpan.
-        errorNeedsOwner: Proyek membutuhkan setidaknya satu pemilik.
-      email: Alamat email
-      role: Peran
-    title: Anggota proyek
-    list:
-      user: Pengguna
-      role: Peran
-      actions: Tindakan
-    add:
-      title: Tambahkan anggota proyek
-    edit:
-      title: Edit anggota proyek %projectMemberName%
-    backToList: Kembali ke anggota proyek
-    delete:
-      message:
-        successfullyRemoved: Anggota proyek %projectMemberName% berhasil dihapus dari proyek.
-      confirm: Apakah Anda benar-benar ingin menghapus anggota proyek %projectMemberName%?
-      title: Hapus anggota proyek %projectMemberName%
+      showPingAnimation: Tampilkan animasi ping untuk menyorot kotak centang
+      color:
+        background: Latar belakang
+        border: Berbatasan
+        shadowInset: Sisipan Bayangan
+        checkboxShadow: Kotak centang Bayangan
+        checkboxAnimatedCircle: Bagian Animasi
+        checkbox: Kotak centang
+        textError: Huruf Error
+        text: Huruf
+        shadow: Bayangan
+        websiteBackground: Warna latar belakang situs web
+        websiteForeground: Warna latar depan situs web
+        websiteAccent: Warna aksen situs web
+      boxSize: Ukuran kotak
+      boxRadius: Jari-jari kotak
+      boxBorderWidth: Lebar batas
+      showMosparoLogo: Tampilkan logo mosparo di bawah kotak centang
+      help:
+        websiteBackground: Pilih warna latar belakang situs web Anda. Warna ini digunakan untuk menghitung rasio kontras.
+        websiteAccent: Pilih warna aksen situs web Anda. Warna ini digunakan untuk berbagai elemen kotak mosparo.
+        boxSize: Pilih ukuran kotak.
+        websiteForeground: Pilih warna latar depan situs web Anda. Warna ini digunakan untuk menampilkan elemen utama kotak mosparo.
+    choices:
+      boxSize:
+        large: Besar
+        medium: Sedang
+        small: Kecil
+    title: Desain
+    subtitles:
+      colorSettings: Warna
+      colors:
+        normal: Normal
+        focus: Pada fokus dan hover
+        loading: Saat memuat
+        success: Sukses
+        failure: Gagal
+      dimensionSettings: Dimensi
+      simpleDesign: Desain sederhana
+      colorAndDimensionSettings: Warna dan Dimensi
+      preview: Pratinjau
+    action:
+      switchToAdvancedMode: Beralih ke mode lanjutan
+      switchToSimpleMode: Beralih ke mode sederhana
+    simpleDesign:
+      introPreview: Di sisi kanan, Anda akan melihat pratinjau kotak mosparo di situs web Anda.
+      introColors: Silakan pilih warna yang dimiliki situs web Anda. Warna latar belakang diperlukan untuk menghitung rasio kontras yang benar, warna latar depan mewakili warna teks Anda, dan warna aksen digunakan untuk elemen khusus kotak mosparo.
   security:
-    requestDelaying:
-      title: Permintaan menunda
-      infoIpAddress: Dalam hal pembuatan token perlu ditunda, akan diputuskan karena jumlah permintaan yang dibuat oleh alamat IP. Dengan setiap permintaan token tambahan, penundaan akan diperpanjang.
-      intro: Untuk mempersulit bot, mosparo dapat menunda pembuatan token pengiriman. Tanpa token kirim, formulir tidak dapat dikirimkan. Pengguna akan melihat, berapa lama dia harus menunggu, hingga formulir dikirimkan.
+    validation:
+      honeypotFieldNameInvalidCharacter: Gunakan hanya huruf, angka dan tanda strip (-).
+    ipLockout:
+      intro: Untuk mempersulit bot, mosparo dapat secara otomatis memblokir alamat IP untuk sementara. Jika alamat IP mengirimkan banyak formulir, mosparo dapat menghitung pengiriman secara otomatis dan memblokir alamat IP jika nomor tertentu tercapai.
+      title: Penguncian IP
     form:
-      delayActive: Permintaan penundaan aktif
-      delayNumberOfAllowedRequests: Jumlah permintaan yang diizinkan
-      delayMultiplicator: Pengganda
-      lockoutMultiplicatorHelp: Waktu penguncian dasar akan ditingkatkan dengan setiap permintaan tambahan.
-      minimumTimeSeconds: Waktu minimal
-      minimumTimeSecondsHelp: Dalam hitungan detik
-      honeypotFieldActive: Kolom honeypot aktif
       honeypotFieldName: Nama kolom
-      delayDetectionTimeFrame: Kerangka waktu deteksi
+      lockoutNumberOfAllowedRequestsHelp: Jumlah permintaan yang diizinkan sebelum penguncian diberlakukan.
+      lockoutMultiplicator: Pengganda
       delayDetectionTimeFrameHelp: Dalam hitungan detik
-      delayMultiplicatorHelp: Waktu tunda dasar akan ditingkatkan dengan setiap permintaan tambahan.
-      lockoutDetectionTimeFrame: Kerangka waktu deteksi
-      lockoutDetectionTimeFrameHelp: Dalam hitungan detik
-      ipAllowList: Selalu izinkan alamat IP dan subnet
-      ipAllowListHelp: 'Tentukan satu alamat ip atau subnet per baris. Contoh: 192.168.1.13 atau 192.168.1.0/24'
-      minimumTimeActive: Minimal waktu aktif
-      delayNumberOfAllowedRequestsHelp: Jumlah permintaan yang diizinkan sebelum penundaan diterapkan.
-      honeypotFieldNameHelp: Itu harus nama kolom yang belum ada dalam formulir Anda dan yang merupakan nama kolom normal seperti "url" atau "address-line-2". Gunakan hanya huruf, angka dan tanda strip (-). Jika kosong, tidak ada kolom honeypot yang akan ditambahkan ke formulir.
       delayTime: Waktu tunda dasar
       delayTimeHelp: Dalam hitungan detik
       lockoutNumberOfAllowedRequests: Jumlah permintaan yang diizinkan
-      lockoutNumberOfAllowedRequestsHelp: Jumlah permintaan yang diizinkan sebelum penguncian diberlakukan.
-      lockoutMultiplicator: Pengganda
-      lockoutActive: Penguncian otomatis aktif
-      lockoutTime: Waktu penguncian dasar
+      minimumTimeSeconds: Waktu minimal
+      minimumTimeSecondsHelp: Dalam hitungan detik
+      delayDetectionTimeFrame: Kerangka waktu deteksi
+      delayMultiplicator: Pengganda
+      delayNumberOfAllowedRequests: Jumlah permintaan yang diizinkan
+      delayNumberOfAllowedRequestsHelp: Jumlah permintaan yang diizinkan sebelum penundaan diterapkan.
+      delayMultiplicatorHelp: Waktu tunda dasar akan ditingkatkan dengan setiap permintaan tambahan.
+      lockoutDetectionTimeFrame: Kerangka waktu deteksi
       lockoutTimeHelp: Dalam hitungan detik
+      ipAllowList: Selalu izinkan alamat IP dan subnet
+      honeypotFieldNameHelp: Itu harus nama kolom yang belum ada dalam formulir Anda dan yang merupakan nama kolom normal seperti "url" atau "address-line-2". Gunakan hanya huruf, angka dan tanda strip (-). Jika kosong, tidak ada kolom honeypot yang akan ditambahkan ke formulir.
+      lockoutMultiplicatorHelp: Waktu penguncian dasar akan ditingkatkan dengan setiap permintaan tambahan.
+      lockoutTime: Waktu penguncian dasar
+      ipAllowListHelp: 'Tentukan satu alamat ip atau subnet per baris. Contoh: 192.168.1.13 atau 192.168.1.0/24'
+      lockoutDetectionTimeFrameHelp: Dalam hitungan detik
+      delayActive: Aktifkan penundaan permintaan
+      honeypotFieldActive: Aktifkan bidang honeypot
+      lockoutActive: Aktifkan penguncian otomatis
+      minimumTimeActive: Aktifkan waktu minimum
     title: Pengaman
     honeypot:
       title: Honeypot
       intro: Bidang honeypot adalah bidang tersembunyi dalam formulir. Manusia tidak akan dapat melihatnya - tetapi bot spam mungkin akan mengisi beberapa konten di bidang ini. Jika itu terjadi, kami tahu bahwa itu bukan manusia sehingga kami dapat memblokir pengirimannya.
-    ipLockout:
-      intro: Untuk mempersulit bot, mosparo dapat secara otomatis memblokir alamat IP sementara. Jika alamat IP meminta banyak token, mosparo dapat menghitung permintaan secara otomatis dan memblokir alamat IP jika nomor tertentu tercapai.
-      title: Penguncian IP
     minimumTime:
-      title: Waktu Minimal
       intro: Fungsionalitas waktu minimum akan mengukur waktu antara inisialisasi kotak centang mosparo (saat halaman dimuat) dan validasi pengiriman (setelah formulir dikirimkan). Jika kali ini lebih rendah dari angka yang dimasukkan di bawah, validasi tidak valid. Jika Anda memiliki formulir pendek, pemeriksaan ini harus dinonaktifkan atau Anda harus memberi kami jumlah yang sangat rendah.
+      title: Waktu Minimal
+      introShort: Fungsionalitas waktu minimum akan mengukur waktu antara inisialisasi kotak centang mosparo (saat halaman dimuat) dan validasi pengiriman (setelah formulir dikirimkan). Fungsionalitas ini terutama direkomendasikan untuk formulir yang lebih panjang.
+    requestDelaying:
+      title: Permintaan menunda
+      intro: Untuk mempersulit bot, mosparo dapat menunda pembuatan token pengiriman. Tanpa token kirim, formulir tidak dapat dikirimkan. Pengguna akan melihat, berapa lama dia harus menunggu, hingga formulir dikirimkan.
+      infoIpAddress: Dalam hal pembuatan token perlu ditunda, akan diputuskan karena jumlah permintaan yang dibuat oleh alamat IP. Dengan setiap permintaan token tambahan, penundaan akan diperpanjang.
     ipAllowList:
       title: daftar yang diizinkan IP
       intro: Masukkan alamat IP dan subnet yang harus dikecualikan dari tindakan keamanan yang dikonfigurasi di atas (Permintaan penundaan dan penguncian IP).
     message:
       successfullySaved: Pengaturan keamanan berhasil disimpan.
-    validation:
-      honeypotFieldNameInvalidCharacter: Gunakan hanya huruf, angka dan tanda strip (-).
-  design:
-    subtitles:
-      colors:
-        focus: Pada fokus dan hover
-        loading: Saat memuat
-        normal: Normal
-        success: Sukses
-        failure: Gagal
-      dimensionSettings: Dimensi
-      colorSettings: Warna
+  projectMember:
+    title: Anggota proyek
+    backToList: Kembali ke anggota proyek
+    list:
+      user: Pengguna
+      role: Peran
+      actions: Tindakan
     form:
-      color:
-        textError: Huruf Error
-        text: Huruf
-        background: Latar belakang
-        checkboxAnimatedCircle: Bagian Animasi
-        border: Berbatasan
-        checkbox: Kotak centang
-        checkboxShadow: Kotak centang Bayangan
-        shadow: Bayangan
-        shadowInset: Sisipan Bayangan
-      boxBorderWidth: Lebar batas
-      boxSize: Ukuran kotak
-      boxRadius: Jari-jari kotak
-      showMosparoLogo: Tampilkan logo mosparo di bawah kotak centang
-      showPingAnimation: Tampilkan animasi ping untuk menyorot kotak centang
-    cr:
-      value: Nilai
-      description: Nilai yang ditampilkan di atas menjelaskan rasio antara warna latar belakang dan warna teks. Dua kolom di sebelahnya menunjukkan apakah persyaratan minimum untuk pedoman WCAG terpenuhi.
-      title: Rasio kontras
-      text: Huruf
-      textError: Huruf Error
-    choices:
-      boxSize:
-        large: Besar
-        small: Kecil
-        medium: Sedang
-    message:
-      successfullySaved: Pengaturan desain berhasil disimpan.
-      boxRadiusTooLarge: Logo hanya dapat ditampilkan jika radius kotak berada di bawah nilai tertentu.
-    title: Desain
-    preview:
-      background: Pratinjau latar belakang
+      email: Alamat email
+      role: Peran
+      message:
+        successfullySaved: Anggota proyek berhasil disimpan.
+        errorUserNotFound: Pengguna tidak ditemukan.
+        errorNeedsOwner: Proyek membutuhkan setidaknya satu pemilik.
+    delete:
+      title: Hapus anggota proyek %projectMemberName%
+      confirm: Apakah Anda benar-benar ingin menghapus anggota proyek %projectMemberName%?
+      message:
+        successfullyRemoved: Anggota proyek %projectMemberName% berhasil dihapus dari proyek.
+    add:
+      title: Tambahkan anggota proyek
+    edit:
+      title: Edit anggota proyek %projectMemberName%
 administration:
   settings:
     mainSettings:
-      title: Pengaturan utama
       form:
         mosparoName: Nama instalasi mosparo
+      title: Pengaturan utama
     localeSettings:
-      title: Pengaturan lokal
       form:
-        defaultLocale: Bahasa bawaan
-        defaultDateFormat: Format tanggal default
-        defaultTimeFormat: Format waktu default
         defaultTimezone: Zona waktu default
-    title: Pengaturan sistem
+        defaultLocale: Bahasa bawaan
+        defaultTimeFormat: Format waktu default
+        defaultDateFormat: Format tanggal default
+      title: Pengaturan lokal
     mailSettings:
       title: Pengaturan pesan
       form:
-        user: Pengguna
         useSmtp: Gunakan server SMTP untuk mengirim pesan
-        host: Host
         port: Port
+        user: Pengguna
+        host: Host
         password: Kata Sandi
         fromAddress: Dari alamat email
         fromName: Dari nama
       help:
         password: Jika anda memasukkan sesuatu di dalam kolom ini, nilai yang sudah ada akan ditimpa.
+    title: Pengaturan sistem
     description: Konfigurasikan berbagai pengaturan yang berlaku untuk instalasi mosparo Anda.
     message:
       savedSuccessfully: Pengaturan berhasil disimpan.
+    interfaceSettings:
+      title: Pengaturan antarmuka
+      form:
+        defaultColorMode: Mode warna default
   title: Administrasi
+  user:
+    delete:
+      message:
+        errorUserIsOwner: Pengguna adalah pemilik setidaknya satu proyek. Anda tidak dapat menghapus pemilik proyek.
+        successfullyDeleted: Pengguna %email% berhasil di hapus.
+      title: Hapus pengguna %email%
+      confirm: Apa kamu yakin akan menghapus pengguna %email%?
+      infoCantSelfDelete: Anda tidak dapat menghapus diri sendiri.
+    title: Pengguna
+    description: Mengelola semua pengguna dari instansi mosparo ini.
+    form:
+      password: Kata Sandi
+      email: Pesan
+      isActiveUser: Pengguna aktif
+      isAdministrator: Administrator
+      sendPasswordResetEmail: Kirim email kepada pengguna untuk mengatur kata sandi
+      message:
+        successfullySaved: Pengguna berhasil disimpan.
+        errorCreatingResetToken: 'Terjadi kesalahan teknis saat membuat email. Error: %errorMessage%'
+        errorSendingResetEmail: 'Email dengan tautan tidak dapat dikirim dengan benar. Error: %errorMessage%'
+    help:
+      password: Biarkan kolom ini kosong jika tidak ada perubahan kata sandi yang diperlukan.
+    roles: Peran
+    list:
+      roles: Peran
+      user: Pengguna
+      actions: Aksi
+    backToOverview: Kembali ke pengguna
+    create:
+      title: Membuat pengguna
+    modify:
+      title: Memodifikasi pengguna %email%
   geoip2:
     settings:
-      getLicenseKey: 'Untuk mendapatkan kunci lisensi, Anda memerlukan akun MaxMind. Silakan kunjungi situs berikut:'
       useGeoip2Field: Gunakan lokalisasi alamat IP otomatis
-      message:
-        infoActivationTime: Jika Anda baru saja meminta kunci lisensi, perlu beberapa saat agar kunci lisensi menjadi aktif.
-        savedSuccessfully: Pengaturan berhasil disimpan.
       title: Pengaturan
+      getLicenseKey: 'Untuk mendapatkan kunci lisensi, Anda memerlukan akun MaxMind. Silakan kunjungi situs berikut:'
       licenseKeyField: Kunci lisensi
+      message:
+        savedSuccessfully: Pengaturan berhasil disimpan.
+        infoActivationTime: Jika Anda baru saja meminta kunci lisensi, perlu beberapa saat agar kunci lisensi menjadi aktif.
+    version:
+      messageAvailable: 'Database GeoIP2 telah berhasil diunduh dan aktif. Versi berikut aktif:'
+      typeAsn: 'AS nomor:'
+      titleAvailable: GeoIP2 tersedia
+      typeCountry: 'Negara:'
+      titleNotAvailable: GeoIP2 tidak tersedia
+      messageDatabaseNotAvailable: Basis data GeoIP2 belum diunduh atau terjadi kesalahan saat mengunduh.
     downloadAndUpdate:
+      intro: Setelah Anda menyimpan kunci lisensi, mosparo perlu mengunduh database. Anda dapat melakukannya di sini secara langsung atau menggunakan koneksi SSH untuk menjalankan perintah.
+      update:
+        infoAbsolutePath: Anda mungkin harus menyesuaikan jalur file %pathToBinConsole%. Bisa jadi Anda harus mengisi jalur absolut.
+        infoRateLimit: Harap diingat bahwa jumlah unduhan yang dapat dilakukan oleh kunci lisensi terbatas. Harap jangan terlalu sering menggunakan fungsi unduhan.
+        title: Pembaruan otomatis
+        intro: 'Untuk me-refresh database secara otomatis, disarankan untuk menyiapkan cronjob yang akan mendownload database secara otomatis. Untuk menggunakan pembaruan otomatis, silakan atur cronjob seperti berikut:'
+      title: Unduh & perbarui otomatis
       web:
-        intro: 'Gunakan tombol berikut untuk membiarkan mosparo mengunduh database:'
         message:
           successfullyDownloaded: Database berhasil diunduh.
           errorDownload: Terjadi kesalahan saat mosparo mencoba mengunduh database. %error%
           specifyLicenseKey: Harap masukkan kunci lisensi sebelum Anda mencoba mengunduh database.
-        action: Unduh basis data
         title: Web
+        intro: 'Gunakan tombol berikut untuk membiarkan mosparo mengunduh database:'
+        action: Unduh basis data
       cli:
-        intro: 'Gunakan perintah berikut untuk mengunduh database melalui CLI:'
         title: CLI
-      update:
-        intro: 'Untuk me-refresh database secara otomatis, disarankan untuk menyiapkan cronjob yang akan mendownload database secara otomatis. Untuk menggunakan pembaruan otomatis, silakan atur cronjob seperti berikut:'
-        infoAbsolutePath: Anda mungkin harus menyesuaikan jalur file %pathToBinConsole%. Bisa jadi Anda harus mengisi jalur absolut.
-        title: Pembaruan otomatis
-        infoRateLimit: Harap diingat bahwa jumlah unduhan yang dapat dilakukan oleh kunci lisensi terbatas. Harap jangan terlalu sering menggunakan fungsi unduhan.
-      title: Unduh & perbarui otomatis
-      intro: Setelah Anda menyimpan kunci lisensi, mosparo perlu mengunduh database. Anda dapat melakukannya di sini secara langsung atau menggunakan koneksi SSH untuk menjalankan perintah.
-    version:
-      typeAsn: 'AS nomor:'
-      titleAvailable: GeoIP2 tersedia
-      messageAvailable: 'Database GeoIP2 telah berhasil diunduh dan aktif. Versi berikut aktif:'
-      typeCountry: 'Negara:'
-      titleNotAvailable: GeoIP2 tidak tersedia
-      messageDatabaseNotAvailable: Basis data GeoIP2 belum diunduh atau terjadi kesalahan saat mengunduh.
+        intro: 'Gunakan perintah berikut untuk mengunduh database melalui CLI:'
     description: Konfigurasi itegrasi GeoIP2.
     title: GeoIP2
   update:
-    version:
-      titleNotAvailable: Tidak ada pembaruan yang tersedia
-      messageAvailable: Pembaruan baru untuk mosparo tersedia. Silakan klik tombol instal di bawah ini jika Anda ingin menginstal pembaruan.
-      messageNotAvailable: Tidak ada pembaruan baru untuk mosparo yang tersedia. Silakan periksa lagi nanti.
-      warningUpdatesDisabled: Pembaruan dinonaktifkan untuk penginstalan mosparo ini. Silakan periksa dokumentasi untuk melihat opsi lain untuk memperbarui instalasi mosparo Anda.
-      titleAvailable: Pembaruan tersedia
-      warningUpdate: Harap buat cadangan file mosparo dan database sebelum memperbarui. Proses pembaruan otomatis ini tidak akan mencadangkan file atau database. Jika sesuatu tidak berfungsi dengan benar, itu dapat merusak instalasi mosparo Anda.
-    upgrade:
-      titleAvailable: Peningkatan tersedia
-      updateFirst: Perbarui ke versi minor terbaru sebelum meningkatkan ke versi mayor berikutnya.
-      introAvailable: Versi utama baru tersedia. Anda dapat menggunakan alat pembaruan untuk memutakhirkan ke versi utama terbaru.
-      installedVersion: Versi utama diinstal
-      availableVersion: Tersedia versi utama
-    checkRequirements:
-      title: Periksa persyaratan
-      introduction: Sebelum melakukan upgrade, pastikan Anda memenuhi semua persyaratan. Dengan versi utama yang baru, persyaratan dapat berubah dan harus dipenuhi sebelum pemutakhiran dapat dijalankan.
-      meetPrerequisites: Semua persyaratan terpenuhi. Anda dapat melanjutkan dengan peningkatan.
-      missingPrerequisites: Beberapa persyaratan tidak ada. Silakan periksa ringkasan di bawah ini.
-      action:
-        upgrade: Perbarui ke %newMajorVersion%
-        recheck: Cek ulang
-    execute:
-      description: Harap tunggu dan jangan tinggalkan halaman ini. Progres pembaruan dimulai…
-      message:
-        updateError: Terjadi kesalahan saat memperbarui mosparo. Silakan periksa pesan kesalahan di bawah ini.
-        successfullyUpdated: mosparo berhasil diperbarui. Silakan lanjutkan ke dasbor.
-      log: Proses
-      title: Perbarui mosparo
-    settings:
-      form:
-        channelDevelop: Pengembangkan
-        channelStable: Stabil
-        channelBeta: Beta
-      message:
-        infoDevelopChannel: Saluran pengembangan dan beta berisi versi yang belum teruji dan tidak stabil yang belum siap digunakan untuk produksi. Harap jangan menggunakannya di lingkungan produksi.
-        savedSuccessfully: Saluran pembaruan berhasil disimpan.
-      title: Perbarui pengaturan
-    updateChannel: Perbarui saluran
-    installedVersion: Versi terpasang
     check:
-      intro: Jika Anda ingin memeriksa pembaruan, silakan klik tombol di bawah ini.
-      title: Status
       message:
         errorCheckingForUpdates: 'Terjadi kesalahan saat memeriksa pembaruan. Error: %errorMessage%'
+      title: Status
+      intro: Jika Anda ingin memeriksa pembaruan, silakan klik tombol di bawah ini.
+    version:
+      warningUpdate: Harap buat cadangan file mosparo dan database sebelum memperbarui. Proses pembaruan otomatis ini tidak akan mencadangkan file atau database. Jika sesuatu tidak berfungsi dengan benar, itu dapat merusak instalasi mosparo Anda.
+      titleAvailable: Pembaruan tersedia
+      messageAvailable: Pembaruan baru untuk mosparo tersedia. Silakan klik tombol instal di bawah ini jika Anda ingin menginstal pembaruan.
+      warningUpdatesDisabled: Pembaruan dinonaktifkan untuk penginstalan mosparo ini. Silakan periksa dokumentasi untuk melihat opsi lain untuk memperbarui instalasi mosparo Anda.
+      titleNotAvailable: Tidak ada pembaruan yang tersedia
+      messageNotAvailable: Tidak ada pembaruan baru untuk mosparo yang tersedia. Silakan periksa lagi nanti.
+      releaseNotes: Catatan rilis
+      lastChecked: 'Pemeriksaan terakhir:'
+    settings:
+      message:
+        savedSuccessfully: Saluran pembaruan berhasil disimpan.
+        infoDevelopChannel: Saluran pengembangan dan beta berisi versi yang belum teruji dan tidak stabil yang belum siap digunakan untuk produksi. Harap jangan menggunakannya di lingkungan produksi.
+      title: Perbarui pengaturan
+      form:
+        channelStable: Stabil
+        channelBeta: Beta
+        channelDevelop: Pengembangkan
     availableVersion: Versi yang tersedia
     buttons:
       continue: Melanjutkan
+    execute:
+      description: Harap tunggu dan jangan tinggalkan halaman ini. Progres pembaruan dimulai…
+      title: Perbarui mosparo
+      log: Proses
+      message:
+        successfullyUpdated: mosparo berhasil diperbarui. Silakan lanjutkan ke dasbor.
+        updateError: Terjadi kesalahan saat memperbarui mosparo. Silakan periksa pesan kesalahan di bawah ini.
     title: Memperbarui
     description: Periksa versi baru dan perbarui instalasi mosparo Anda.
+    updateChannel: Perbarui saluran
+    installedVersion: Versi terpasang
     finalize:
       title: Pembaruan dieksekusi
       description: Perubahan yang diperlukan untuk pembaruan ini dijalankan. Instalasi Anda mutakhir.
+    upgrade:
+      installedVersion: Versi utama diinstal
+      availableVersion: Tersedia versi utama
+      introAvailable: Versi utama baru tersedia. Anda dapat menggunakan alat pembaruan untuk memutakhirkan ke versi utama terbaru.
+      updateFirst: Perbarui ke versi minor terbaru sebelum meningkatkan ke versi mayor berikutnya.
+      titleAvailable: Peningkatan tersedia
+    checkRequirements:
+      title: Periksa persyaratan
+      action:
+        recheck: Cek Ulang
+        upgrade: Tingkatkan ke %newMajorVersion%
+      meetPrerequisites: Semua persyaratan terpenuhi. Anda dapat melanjutkan dengan peningkatan.
+      missingPrerequisites: Beberapa persyaratan tidak ada. Silakan periksa ringkasan di bawah ini.
+      introduction: Sebelum melakukan upgrade, pastikan Anda memenuhi semua persyaratan. Dengan versi utama yang baru, persyaratan dapat berubah dan harus dipenuhi sebelum pemutakhiran dapat dijalankan.
+    button:
+      updateAvailable: Pembaruan tersedia
   system:
-    title: Sistem Informasi
+    general:
+      extensions: Ekstensi
+      title: Jeneral
+      mosparoVersion: Versi mosparo
+      serverInfo: Server
+      phpVersion: Versi PHP
     logo:
-      license: Logo dilisensikan di bawah %linkStart%Creative Commons Attribution-NoDerivatives 4.0 International License%linkEnd%.
-      title: Logo
       intro: Logo ini dirancang oleh Jan Kosa.
+      title: Logo
+      license: Logo dilisensikan di bawah %linkStart%Creative Commons Attribution-NoDerivatives 4.0 International License%linkEnd%.
     projectMembers:
-      title: Anggota proyek
       intro: Orang-orang ini membuat mosparo apa adanya - perangkat lunak yang diinstal di hosting web Anda.
+      title: Anggota proyek
+    title: Sistem Informasi
+    description: Temukan semua informasi tentang mosparo.
+    license:
+      title: Lisenso mosparo
     usedLibrariesAndResources:
       title: Pustaka dan sumber daya yang digunakan
       intro: Kami ingin berterima kasih kepada semua pengembang open source atas kerja luar biasa mereka.
@@ -563,251 +651,246 @@ administration:
       license: Lisensi
       backend: Backend / PHP Librari
     website: Situs Web
-    general:
-      phpVersion: Versi PHP
-      extensions: Ekstensi
-      title: Jeneral
-      mosparoVersion: Versi mosparo
-      serverInfo: Server
-    description: Temukan semua informasi tentang mosparo.
-    license:
-      title: Lisenso mosparo
-  user:
-    delete:
-      title: Hapus pengguna %email%
-      confirm: Apa kamu yakin akan menghapus pengguna %email%?
-      infoCantSelfDelete: Anda tidak dapat menghapus diri sendiri.
-      message:
-        errorUserIsOwner: Pengguna adalah pemilik setidaknya satu proyek. Anda tidak dapat menghapus pemilik proyek.
-        successfullyDeleted: Pengguna %email% berhasil di hapus.
-    modify:
-      title: Memodifikasi pengguna %email%
-    form:
-      email: Pesan
-      password: Kata Sandi
-      message:
-        errorSendingResetEmail: 'Email dengan tautan tidak dapat dikirim dengan benar. Error: %errorMessage%'
-        successfullySaved: Pengguna berhasil disimpan.
-        errorCreatingResetToken: 'Terjadi kesalahan teknis saat membuat email. Error: %errorMessage%'
-      isActiveUser: Pengguna aktif
-      isAdministrator: Administrator
-      sendPasswordResetEmail: Kirim email kepada pengguna untuk mengatur kata sandi
-    list:
-      actions: Aksi
-      roles: Peran
-      user: Pengguna
-    create:
-      title: Membuat pengguna
-    help:
-      password: Biarkan kolom ini kosong jika tidak ada perubahan kata sandi yang diperlukan.
-    title: Pengguna
-    description: Mengelola semua pengguna dari instansi mosparo ini.
-    backToOverview: Kembali ke pengguna
-    roles: Peran
+  security:
+    message:
+      savedSuccessfully: Pengaturan keamanan berhasil disimpan.
+    title: Pengaturan keamanan
+    reverseProxy:
+      title: Proksi terbalik
+      modifyNotAllowed: Pengaturan ini ditimpa dalam file lingkungan mosparo. Anda tidak dapat mengubah pengaturan apa pun di sini.
+      form:
+        trustedProxiesHelp: Tentukan semua proxy tepercaya. Ini dapat didefinisikan sebagai alamat IP sederhana atau sebagai subnet dari alamat IP. Localhost (127.0.0.1) selalu ditambahkan ke daftar secara otomatis.
+        trustedProxies: Daftar proxy tepercaya
+        replaceForwardedProtoHeader: Nama header protokol kustom
+        trustedProxiesIncludeRemoteAddr: Sertakan REMOTE_ADDR di proxy tepercaya
+        trustedProxiesIncludeRemoteAddrHelp: Opsi ini akan menambahkan REMOTE_ADDR ke daftar proxy tepercaya. Ini bisa berbahaya karena menerima header yang Diteruskan dari semua klien yang memungkinkan.
+        replaceForwardedForHeader: Nama tajuk alamat jarak jauh khusus
+        replaceForwardedProtoHeaderHelp: Jika diperlukan, tentukan nama header di mana proxy balik mengirimkan protokol permintaan.
+        replaceForwardedForHeaderHelp: Jika diperlukan, tentukan nama header di mana proxy balik mengirimkan alamat IP klien.
+      providerPresets: Preset penyedia
+      intro: Jika Anda menggunakan proxy terbalik untuk melayani mosparo, Anda harus mengonfigurasi pengaturan ini agar mosparo mengetahui cara mendeteksi alamat IP klien dengan benar.
+    description: Konfigurasikan berbagai pengaturan terkait keamanan yang berlaku untuk instalasi mosparo Anda.
 account:
   backToOverview: Kembali ke gambaran umum
+  title: Akun
   settings:
     title: Pengaturan pengguna
     form:
+      dateFormat: Format tanggal
+      locale: Bahasa
       timeFormat: Format waktu
       timezone: Zona waktu
-      locale: Bahasa
-      dateFormat: Format tanggal
+      colorMode: Mode warna
     description: Ubah pengaturan umum untuk akun Anda.
     message:
       successfullySaved: Pengaturan Anda berhasil disimpan.
-  title: Akun
   twoFactor:
-    verify:
-      title: Verifikasi otentikasi dua faktor
-      intro: Harap masukkan kode yang terlihat di aplikasi autentikasi pada bidang di bawah dan verifikasi penyiapan.
-    status:
-      intro: Akun anda di lindungi autentikasi dua langkah.
     backupCodes:
       infoResetBackupCodes: Anda dapat menggunakan setiap kode cadangan hanya sekali. Anda harus mengatur ulang kode cadangan, segera setelah Anda harus menggunakannya.
-      intro: Harap simpan kode ini di tempat yang aman. Jika Anda kehilangan akses ke perangkat, Anda dapat masuk dengan kode cadangan ini.
       title: Kode cadangan
+      intro: Harap simpan kode ini di tempat yang aman. Jika Anda kehilangan akses ke perangkat, Anda dapat masuk dengan kode cadangan ini.
+    action:
+      configure: Konfigurasi
+      resetBackupCodes: Setel ulang kode cadangan
+      disable: Dimatikan
+      continue: Lanjut
+      verify: Verifikasi
+      reconfigure: Konfigurasi ulang
+    status:
+      intro: Akun anda di lindungi autentikasi dua langkah.
+    description: Konfigurasikan autentikasi dua faktor untuk akun anda.
+    title: Autentikasi dua langkah
     start:
       qrCodeAlt: Gambar ini menunjukkan kode QR, yang harus Anda pindai dengan aplikasi autentikasi di ponsel cerdas Anda.
       title: Siapkan autentikasi dua faktor
       textManually: Alih-alih memindai kode QR, Anda dapat memasukkan kode berikut secara manual ke dalam aplikasi autentikasi.
       intro: Harap pindai kode QR ini dengan aplikasi autentikasi di ponsel cerdas anda. Dan anda dapat menggunakan Google Authenticator, Microsoft Authenticator, atau aplikasi serupa.
-    message:
-      successfullyDisabled: Autentikasi dua faktor berhasil dinonaktifkan untuk akun Anda.
     error:
       verificationFailed: Verifikasi otentikasi dua faktor gagal. Silakan ulangi prosesnya.
-    description: Konfigurasikan autentikasi dua faktor untuk akun anda.
-    action:
-      configure: Konfigurasi
-      reconfigure: Konfigurasi ulang
-      resetBackupCodes: Setel ulang kode cadangan
-      disable: Dimatikan
-      continue: Lanjut
-      verify: Verifikasi
-    title: Autentikasi dua langkah
+    message:
+      successfullyDisabled: Autentikasi dua faktor berhasil dinonaktifkan untuk akun Anda.
+    verify:
+      intro: Harap masukkan kode yang terlihat di aplikasi autentikasi pada bidang di bawah dan verifikasi penyiapan.
+      title: Verifikasi otentikasi dua faktor
   changePassword:
-    title: Ganti kata sandi
+    description: Ubah kata sandi akun anda.
     form:
       oldPassword: Kata sandi lama
-    description: Ubah kata sandi akun anda.
     message:
       successfullyChanged: Kata sandi berhasil diganti.
+    title: Ganti kata sandi
 security:
+  twoFactor:
+    title: Autentikasi dua langkah
+    intro: Harap masukan kode dari autentikasi dua faktor app.
   login:
     youAreLoggedIn: Anda masuk dengan %username%.
     title: Masuk
     emailLabel: Alamat email
     passwordLabel: Kata sandi
-  twoFactor:
-    intro: Harap masukan kode dari autentikasi dua faktor app.
-    title: Autentikasi dua langkah
-  noAccess:
-    title: Tidak ada akses
   forgotPassword:
     title: Lupa kata sandi
+  noAccess:
+    title: Tidak ada akses
   logout:
     title: Keluar
 password:
-  backToLogin: Kembali ke masuk
   request:
-    title: Reset kata sandi
     action: Mengirim email reset kata sandi
     form:
       email: Email
+    title: Reset kata sandi
+    intro: Masukan alamat email anda dan kami akan mengirim tautan reset kata sandi.
     message:
       failedToSendEmail: 'Karena kesalahan teknis, email tidak dapat dikirim. Coba lagi nanti. Pesan kesalahan: %errorMessage%'
-    intro: Masukan alamat email anda dan kami akan mengirim tautan reset kata sandi.
-  email:
-    goodbye: Terima kasih,
-    help: Jika Anda mengalami masalah dengan tombol di atas, salin dan tempel URL di bawah ke browser web Anda.
-    subject: Permintaan pengaturan ulang kata sandi Anda
-    greeting: Hai!
-    infoClickButton: Untuk mengatur ulang kata sandi Anda, klik tombol di bawah dan ikuti petunjuknya.
-    resetPasswordButton: Reset kata sandi
-    infoLinkExpiration: Tautan ini akan kedaluwarsa dalam %time%.
   emailSent:
-    infoEmailWithLink: Jika ada akun yang cocok dengan email Anda, maka baru saja dikirim email yang berisi tautan yang dapat Anda gunakan untuk mengatur ulang kata sandi. Tautan ini akan kedaluwarsa dalam %time%.
-    infoSpamFolder: Jika Anda tidak menerima email, harap periksa folder spam Anda atau %linkStart%try again%linkEnd%.
     title: Email setel ulang kata sandi dikirim
+    infoSpamFolder: Jika Anda tidak menerima email, harap periksa folder spam Anda atau %linkStart%try again%linkEnd%.
+    infoEmailWithLink: Jika ada akun yang cocok dengan email Anda, maka baru saja dikirim email yang berisi tautan yang dapat Anda gunakan untuk mengatur ulang kata sandi. Tautan ini akan kedaluwarsa dalam %time%.
   reset:
+    error:
+      tokenNotFound: Tidak ada token setel ulang kata sandi yang ditemukan di URL atau di sesi.
+      errorOccurred: Terjadi masalah saat memvalidasi permintaan reset Anda. %error%
     title: Mereset password Anda
     action: Atur ulang kata sandi
-    error:
-      errorOccurred: Terjadi masalah saat memvalidasi permintaan reset Anda. %error%
-      tokenNotFound: Tidak ada token setel ulang kata sandi yang ditemukan di URL atau di sesi.
     message:
       successfullyReset: Kata sandi Anda berhasil diatur ulang.
   form:
     password: Kata sandi
-    newPassword: Kata sandi baru
     repeatPassword: Ulangi kata sandi
+    newPassword: Kata sandi baru
+  backToLogin: Kembali ke masuk
+  email:
+    resetPasswordButton: Reset kata sandi
+    subject: Permintaan pengaturan ulang kata sandi Anda
+    greeting: Hai!
+    infoClickButton: Untuk mengatur ulang kata sandi Anda, klik tombol di bawah dan ikuti petunjuknya.
+    infoLinkExpiration: Tautan ini akan kedaluwarsa dalam %time%.
+    goodbye: Terima kasih,
+    help: Jika Anda mengalami masalah dengan tombol di atas, salin dan tempel URL di bawah ke browser web Anda.
 action:
-  checkRequirements: Periksa persyaratan
-  add: Tambahkan
   remove: Singkirkan
   save: Simpan
-  view: Lihat
   help: Bantuan
-  actions: Aksi
   configure: Konfigurasi
-  close: Tutup
+  checkRequirements: Periksa persyaratan
   checkForUpdate: Cek Pembaruan
+  installUpdate: Pasang pembaruan
+  view: Lihat
+  add: Tambahkan
+  actions: Aksi
+  close: Tutup
   manage: Mengelola
   edit: Ganti
   delete: Hapus
-  installUpdate: Pasang pembaruan
+  saveAndContinue: Simpan dan lanjutkan
+  skipWizard: Lewati wizard
+  goToTheDashboard: Buka dasbor
+roles:
+  user: Pengguna
+  inactive: Tidak aktif
+  administrator: Administrasi
 form:
   choices:
-    systemDefault: Pengaturan bawaan
     browserLanguage: Bahasa browser
+    systemDefault: Pengaturan bawaan
   addMultipleItems: Tambahkan beberapa item
+  clearField: Kosongkan kolom
 datatable:
   datatable:
+    search: 'Mencari:'
+    lengthMenu: Tampilkan _MENU_ entri
+    infoEmpty: Menampilkan 0 hingga 0 dari 0 entri
+    infoFiltered: (difilter dari total _MAX_ entri)
+    zeroRecords: Tidak ada catatan yang cocok ditemukan
+    emptyTable: Tak ada data yang tersedia pada tabel ini
+    searchPlaceholder: Mencari
     paginate:
-      first: Pertama
       previous: Sebelumnya
       next: Selanjutnya
       last: Akhir
-    infoEmpty: Menampilkan 0 hingga 0 dari 0 entri
-    searchPlaceholder: Mencari
-    emptyTable: Tak ada data yang tersedia pada tabel ini
-    zeroRecords: Tidak ada catatan yang cocok ditemukan
-    info: Menampilkan _START_ ke _END_ dari _TOTAL_ entri
-    infoFiltered: (difilter dari total _MAX_ entri)
-    loadingRecords: Memuat…
+      first: Pertama
     processing: Memproses…
-    search: 'Mencari:'
-    lengthMenu: Tampilkan _MENU_ entri
+    loadingRecords: Memuat…
+    info: Menampilkan _START_ ke _END_ dari _TOTAL_ entri
     aria:
       sortAscending: ': aktifkan untuk mengurutkan kolom naik'
       sortDescending: ': aktifkan untuk mengurutkan kolom naik'
 setup:
+  prerequisites:
+    types:
+      phpExtension: Ekstensi PHP
+      general: Jeneral
+      writeAccess: Akses tulis
+      internetConnection: Koneksi internet
+    subtypes:
+      minPhpVersion: Versi PHP minimal
+    results:
+      available: Tersedia
+      notOkay: Tidak oke
+      writable: Dapat ditulis
+      notWritable: Tidak dapat ditulisi
+      minPhpVersion:
+        required: 'Diperlukan:'
+        available: 'Tersedia:'
+      okay: Oke
+      missing: Hilang
+    optional: opsional
+    meetPrerequisites: Semua persyaratan terpenuhi. Anda dapat melanjutkan dengan penyiapan.
+    missingPrerequisites: Beberapa persyaratan tidak ada. Silakan periksa ringkasan di bawah ini.
+    title: Persyaratan
+    introduction: mosparo memiliki beberapa persyaratan untuk dapat berjalan dengan baik. Sebelum kita dapat menyiapkan mosparo, persyaratan ini harus dipenuhi.
+    installOptionalExtensions: Beberapa ekstensi opsional tidak diinstal. Kami menyarankan Anda untuk memasang ekstensi ini sebelum melanjutkan.
   database:
     connectionDataInvalid: Itu tidak mungkin untuk terhubung ke database. Periksa setelan Anda di bawah dan coba lagi.
-    useEmptyDatabase: Silakan gunakan database kosong atau database di mana tidak ada tabel mosparo.
-    introduction: Silakan masukkan detail database MySQL Anda.
     form:
       host: Host
       port: Port
       database: Basis data
       password: Kata sandi
       user: Pengguna
-    mosparoTablesExistInDatabase: Tabel mosparo ditemukan di database yang ditentukan. Silakan gunakan database lain atau hapus tabel.
     title: Basis data
+    useEmptyDatabase: Silakan gunakan database kosong atau database di mana tidak ada tabel mosparo.
+    mosparoTablesExistInDatabase: Tabel mosparo ditemukan di database yang ditentukan. Silakan gunakan database lain atau hapus tabel.
+    introduction: Silakan masukkan detail database MySQL Anda.
+  other:
+    title: Informasi lainnya
+    form:
+      password: Kata sandi
+      subtitleCreateYourUser: Buat pengguna Anda
+      name: Nama mosparo
+      emailAddress: Alamat email
+    introduction: Kami memiliki beberapa nilai lain yang kami butuhkan. Harap isi kolom di bawah ini.
+  buttons:
+    goToLogin: Pergi halaman masuk
+    recheck: Cek ulang
+    continue: Selanjutnya
+    install: Instal
   start:
-    introduction: Penyiapan ini akan memandu Anda melalui proses penyiapan mosparo.
     title: Mempersiapkan
-  prerequisites:
-    introduction: mosparo memiliki beberapa persyaratan untuk dapat berjalan dengan baik. Sebelum kita dapat menyiapkan mosparo, persyaratan ini harus dipenuhi.
-    installOptionalExtensions: Beberapa ekstensi opsional tidak diinstal. Kami menyarankan Anda untuk memasang ekstensi ini sebelum melanjutkan.
-    optional: opsional
-    results:
-      notOkay: Tidak oke
-      available: Tersedia
-      missing: Hilang
-      okay: Oke
-      writable: Dapat ditulis
-      notWritable: Tidak dapat ditulisi
-      minPhpVersion:
-        required: 'Diperlukan:'
-        available: 'Tersedia:'
-    types:
-      general: Jeneral
-      phpExtension: Ekstensi PHP
-      writeAccess: Akses tulis
-    subtypes:
-      minPhpVersion: Versi PHP minimal
-    title: Persyaratan
-    meetPrerequisites: Semua persyaratan terpenuhi. Anda dapat melanjutkan dengan penyiapan.
-    missingPrerequisites: Beberapa persyaratan tidak ada. Silakan periksa ringkasan di bawah ini.
+    introduction: Penyiapan ini akan memandu Anda melalui proses penyiapan mosparo.
   install:
     title: Penginstalan berhasil
     description: Instalasi berhasil diselesaikan. Anda sekarang dapat masuk dengan pengguna Anda.
-  other:
-    title: Informasi lainnya
-    introduction: Kami memiliki beberapa nilai lain yang kami butuhkan. Harap isi kolom di bawah ini.
-    form:
-      name: Nama mosparo
-      subtitleCreateYourUser: Buat pengguna Anda
-      emailAddress: Alamat email
-      password: Kata sandi
-  buttons:
-    install: Instal
-    recheck: Cek ulang
-    goToLogin: Pergi halaman masuk
-    continue: Selanjutnya
-roles:
-  administrator: Administrasi
-  user: Pengguna
-  inactive: Tidak aktif
-general:
-  infoUndo: Anda tidak dapat membatalkan proses ini.
-  example: Contoh
-  empty: Kosong
-  unlimited: Tak terbatas
 state:
-  ignored: Abaikan
   active: Aktif
   inactive: Tidak aktif
   yes: Iya
   no: Tidak
+  ignored: Abaikan
+general:
+  unlimited: Tak terbatas
+  infoUndo: Anda tidak dapat membatalkan proses ini.
+  example: Contoh
+  empty: Kosong
+interface:
+  colorModes:
+    light: Terang
+    dark: Gelap
+downloadCheck:
+  moreInformation: Informasi lebih lanjut
+  downloadIsPossible: Pengaturan PHP memungkinkan pengunduhan kumpulan aturan dan pembaruan. Tidak diperlukan penyesuaian.
+  downloadIsNotPossible: Pengaturan PHP tidak mengizinkan pengunduhan pembaruan atau kumpulan aturan. Jika Anda ingin menggunakan kumpulan aturan atau fungsi pembaruan, harap sesuaikan konfigurasi PHP Anda.
+  cardTitle: Koneksi internet
+  intro: Koneksi internet keluar bukan persyaratan untuk mosparo. mosparo hanya terhubung ke internet dengan interaksi Anda. Anda memerlukan koneksi internet aktif untuk mengunduh pembaruan dan kumpulan aturan.
+  curlIsEnabledButFunctionsAreDisabled: Ekstensi %extensionName% diaktifkan, tetapi fungsi yang diperlukan (%functionNames%) dinonaktifkan. Kami menyarankan untuk menonaktifkan ekstensi secara umum atau mengaktifkan fungsi yang diperlukan.

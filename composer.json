@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": ">=7.4.0 <8.1.0 || >=8.1.10",
+        "php": ">=8.1.10",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",

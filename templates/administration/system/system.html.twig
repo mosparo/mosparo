@@ -56,12 +56,27 @@
                                         <strong>{{ extension }}</strong>
                                     </div>
                                     <div class="col">
-                                        {{ versionNumber }}
+                                        {% if versionNumber %}
+                                            {{ versionNumber }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'downloadCheck.cardTitle'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'downloadCheck.intro'|trans }}
+                    </p>
+                    {% include 'snippets/download-check.html.twig' %}
                 </div>
             </div>
             <div class="card mt-3">
@@ -184,9 +199,9 @@
                             <a href="https://github.com/bgrins/TinyColor/blob/master/LICENSE" target="_blank" class="badge bg-purple-lt">MIT</a>
                         </li>
                         <li class="py-1">
-                            unDraw
-                            <a href="https://undraw.co" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
-                            <a href="https://undraw.co/license" target="_blank" class="badge bg-purple-lt">{{ 'administration.system.usedLibrariesAndResources.license'|trans }}</a>
+                            manypixels
+                            <a href="https://www.manypixels.co/" target="_blank" class="badge bg-blue-lt ms-2">{{ 'administration.system.website'|trans }}</a>
+                            <a href="https://www.manypixels.co/gallery" target="_blank" class="badge bg-purple-lt">{{ 'administration.system.usedLibrariesAndResources.license'|trans }}</a>
                         </li>
                         <li class="py-1">
                             webpack and extensions

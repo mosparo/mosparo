@@ -36,7 +36,7 @@ webpack_encore:
 
 framework:
     assets:
-        json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
+        version: '%env(mosparo_assets_version)%'
 
 #when@prod:
 #    webpack_encore:
