@@ -545,11 +545,12 @@ class UpdateHelper
     {
         $channelData = $versionData['channels'][$channel] ?? null;
 
-        if (!$channelData || !($channelData['latestVersion'] ?? null)) {
+        if (!$channelData) {
             throw new Exception('The update information for the selected channel are not available.');
         }
 
-        if (version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
+        $latestVersion = $channelData['latestVersion'] ?? null;
+        if ($latestVersion && version_compare(Kernel::VERSION, $channelData['latestVersion'], '<')) {
             $this->newVersionData = $this->loadVersionChannelVersions($channelData['versionsUrl']);
         }
 
