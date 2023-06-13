@@ -769,7 +769,7 @@ setup:
     missingPrerequisites: Chybí některé požadavky. Podívejte se na níže uvedený přehled.
     installOptionalExtensions: Některá volitelná rozšíření nejsou nainstalována. Doporučujeme vám, abyste si tato rozšíření nainstalovali dříve, než budete pokračovat.
   start:
-    title: Nastavení
+    title: Nastavit
     introduction: Toto nastavení vás provede procesem nastavení systému mosparo.
   database:
     title: Databáze
