@@ -78,12 +78,24 @@ class CleanupHelper
 
             $this->entityManager->flush();
 
-            // Delete all submit tokens which were created more than 24 hours ago and weren't used in a submission
+            // This subquery is needed to find all submit tokens that are still referenced by a submission.
+            $subQb = $this->entityManager->createQueryBuilder();
+            $subQb->select('smt.id')
+                ->from('Mosparo\Entity\Submission', 'sm')
+                ->innerJoin('sm.submitToken', 'smt')
+                ->groupBy('smt.id');
+
+            // Delete all submit tokens created more than 24 hours ago and not referenced by a submission.
             $qb = $this->entityManager->createQueryBuilder();
             $qb->delete('Mosparo\Entity\SubmitToken', 'st')
                 ->where('st.createdAt < :limit')
-                ->andWhere('st.submission IS NULL')
-                ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT24H')))
+                ->andWhere(
+                    $qb->expr()->notIn(
+                        'st.id',
+                        $subQb->getDQL()
+                    )
+                )
+                ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT1M')))
                 ->getQuery()->execute();
         }
 
