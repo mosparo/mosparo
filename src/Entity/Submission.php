@@ -112,13 +112,13 @@ class Submission implements ProjectRelatedEntityInterface
     public function setSubmitToken(?SubmitToken $submitToken): self
     {
         // unset the owning side of the relation if necessary
-        if ($submitToken === null && $this->submitToken !== null && $this->submitToken->getSubmission() === $this) {
-            $this->submitToken->setSubmission(null);
+        if ($submitToken === null && $this->submitToken !== null && $this->submitToken->getValidSubmission() === $this) {
+            $this->submitToken->setValidSubmission(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($submitToken !== null && $submitToken->getSubmission() !== $this) {
-            $submitToken->setSubmission($this);
+        if ($submitToken !== null && $submitToken->getValidSubmission() !== $this) {
+            $submitToken->setValidSubmission($this);
         }
 
         $this->submitToken = $submitToken;
