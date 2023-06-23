@@ -95,7 +95,7 @@ class CleanupHelper
                         $subQb->getDQL()
                     )
                 )
-                ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT1M')))
+                ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT24H')))
                 ->getQuery()->execute();
         }
 

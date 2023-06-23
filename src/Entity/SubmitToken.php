@@ -67,7 +67,7 @@ class SubmitToken implements ProjectRelatedEntityInterface
     /**
      * @ORM\OneToOne(targetEntity=Submission::class)
      */
-    private ?Submission $validSubmission;
+    private ?Submission $lastSubmission;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
@@ -188,14 +188,14 @@ class SubmitToken implements ProjectRelatedEntityInterface
         return $this;
     }
 
-    public function getValidSubmission(): ?Submission
+    public function getLastSubmission(): ?Submission
     {
-        return $this->validSubmission;
+        return $this->lastSubmission;
     }
 
-    public function setValidSubmission(?Submission $validSubmission): self
+    public function setLastSubmission(?Submission $lastSubmission): self
     {
-        $this->validSubmission = $validSubmission;
+        $this->lastSubmission = $lastSubmission;
 
         return $this;
     }

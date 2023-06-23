@@ -56,7 +56,7 @@ class VerificationApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not found or not valid.']);
         }
 
-        $submission = $submitToken->getValidSubmission();
+        $submission = $submitToken->getLastSubmission();
         if (!$submission) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.']);
         }
