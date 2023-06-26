@@ -3,11 +3,16 @@
 namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\RulesetRuleCache;
+use Mosparo\Entity\RulesetRuleItemCache;
 use Mosparo\Exception;
 use Mosparo\Form\RulesetFormType;
 use Mosparo\Helper\RulesetHelper;
+use Mosparo\Rule\RuleTypeManager;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
+use Omines\DataTablesBundle\Column\NumberColumn;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
 use Omines\DataTablesBundle\DataTableFactory;
@@ -24,12 +29,26 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
 {
     use ProjectRelatedTrait;
 
+    protected EntityManagerInterface $entityManager;
+
+    protected DataTableFactory $dataTableFactory;
+
+    protected RuleTypeManager $ruleTypeManager;
+
     protected RulesetHelper $rulesetHelper;
 
     protected TranslatorInterface $translator;
 
-    public function __construct(RulesetHelper $rulesetHelper, TranslatorInterface $translator)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        DataTableFactory $dataTableFactory,
+        RuleTypeManager $ruleTypeManager,
+        RulesetHelper $rulesetHelper,
+        TranslatorInterface $translator
+    ) {
+        $this->entityManager = $entityManager;
+        $this->dataTableFactory = $dataTableFactory;
+        $this->ruleTypeManager = $ruleTypeManager;
         $this->rulesetHelper = $rulesetHelper;
         $this->translator = $translator;
     }
@@ -37,9 +56,9 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
     /**
      * @Route("/", name="ruleset_list")
      */
-    public function index(Request $request, DataTableFactory $dataTableFactory): Response
+    public function index(Request $request): Response
     {
-        $table = $dataTableFactory->create(['autoWidth' => true])
+        $table = $this->dataTableFactory->create(['autoWidth' => true])
             ->add('name', TextColumn::class, ['label' => 'ruleset.list.name'])
             ->add('status', TwigColumn::class, [
                 'label' => 'ruleset.list.status',
@@ -78,7 +97,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
      * @Route("/add", name="ruleset_add")
      * @Route("/{id}/edit", name="ruleset_edit")
      */
-    public function form(Request $request, EntityManagerInterface $entityManager, Ruleset $ruleset = null): Response
+    public function form(Request $request, Ruleset $ruleset = null): Response
     {
         $isNew = false;
         if ($ruleset === null) {
@@ -94,7 +113,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         $errorMessage = '';
         if ($form->isSubmitted() && $form->isValid()) {
             if ($isNew) {
-                $entityManager->persist($ruleset);
+                $this->entityManager->persist($ruleset);
             }
 
             try {
@@ -105,7 +124,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             }
 
             if (!$hasError) {
-                $entityManager->flush();
+                $this->entityManager->flush();
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
@@ -133,14 +152,14 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
     /**
      * @Route("/{id}/delete", name="ruleset_delete")
      */
-    public function delete(Request $request, EntityManagerInterface $entityManager, Ruleset $ruleset): Response
+    public function delete(Request $request, Ruleset $ruleset): Response
     {
         if ($request->request->has('delete-token')) {
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-ruleset', $submittedToken)) {
-                $entityManager->remove($ruleset);
-                $entityManager->flush();
+                $this->entityManager->remove($ruleset);
+                $this->entityManager->flush();
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
@@ -163,8 +182,9 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
 
     /**
      * @Route("/{id}/view", name="ruleset_view")
+     * @Route("/{id}/view/filter/{filter}", name="ruleset_view_filtered")
      */
-    public function view(EntityManagerInterface $entityManager, Ruleset $ruleset): Response
+    public function view(Request $request, Ruleset $ruleset, $filter = ''): Response
     {
         $hasError = false;
         $errorMessage = '';
@@ -172,17 +192,122 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             $result = $this->rulesetHelper->downloadRuleset($ruleset);
 
             if ($result) {
-                $entityManager->flush();
+                $this->entityManager->flush();
             }
         } catch (Exception $e) {
             $hasError = true;
             $errorMessage = $e->getMessage();
         }
 
+        $filteredType = null;
+        if (in_array($filter, $this->ruleTypeManager->getRuleTypeKeys())) {
+            $filteredType = $filter;
+        }
+
+        $table = $this->dataTableFactory->create(['autoWidth' => true, 'pageLength' => 10])
+            ->add('name', TextColumn::class, ['label' => 'ruleset.view.list.rules.name'])
+            ->add('type', TwigColumn::class, [
+                'label' => 'ruleset.view.list.rules.type',
+                'template' => 'project_related/ruleset/view/rule_list/_type.html.twig'
+            ])
+            ->add('numberOfRuleItems', TwigColumn::class, [
+                'label' => 'ruleset.view.list.rules.numberOfRuleItems',
+                'template' => 'project_related/ruleset/view/rule_list/_numberOfRuleItems.html.twig'
+            ])
+            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'ruleset.view.list.rules.spamRatingFactor'])
+            ->add('actions', TwigColumn::class, [
+                'label' => 'ruleset.view.list.rules.actions',
+                'className' => 'buttons',
+                'template' => 'project_related/ruleset/view/rule_list/_actions.html.twig'
+            ])
+            ->createAdapter(ORMAdapter::class, [
+                'entity' => RulesetRuleCache::class,
+                'query' => function (QueryBuilder $builder) use ($ruleset, $filteredType) {
+                    $builder
+                        ->select('e')
+                        ->from(RulesetRuleCache::class, 'e')
+                        ->where('e.rulesetCache = :rulesetCache')
+                        ->setParameter('rulesetCache', $ruleset->getRulesetCache());
+
+                    if ($filteredType !== null) {
+                        $builder
+                            ->andWhere('e.type = :filteredType')
+                            ->setParameter('filteredType', $filteredType);
+                    }
+                },
+            ])
+            ->handleRequest($request);
+
+        if ($table->isCallback()) {
+            return $table->getResponse();
+        }
+
+        // Count the rule types
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb
+            ->select('rrc.type, COUNT(rrc) AS countRules')
+            ->from(RulesetRuleCache::class, 'rrc')
+            ->where('rrc.rulesetCache = :rulesetCache')
+            ->groupBy('rrc.type')
+            ->setParameter('rulesetCache', $ruleset->getRulesetCache());
+        $numberOfRulesByType = [];
+        foreach ($qb->getQuery()->getArrayResult() as $result) {
+            $numberOfRulesByType[$result['type']] = $result['countRules'];
+        }
+
         return $this->render('project_related/ruleset/view.html.twig', [
             'ruleset' => $ruleset,
             'hasError' => $hasError,
-            'errorMessage' => $errorMessage
+            'errorMessage' => $errorMessage,
+            'datatable' => $table,
+            'ruleTypes' => $this->ruleTypeManager->getRuleTypes(),
+            'numberOfRulesByType' => $numberOfRulesByType,
+            'filter' => $filter,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/view/rule/{ruleUuid}", name="ruleset_view_rule")
+     */
+    public function viewRule(Request $request, Ruleset $ruleset, string $ruleUuid): Response
+    {
+        $rulesetRuleCacheRepository = $this->entityManager->getRepository(RulesetRuleCache::class);
+        $rulesetRuleCache = $rulesetRuleCacheRepository->findOneBy(['uuid' => $ruleUuid]);
+
+        if (!$rulesetRuleCache) {
+            return $this->redirectToRoute('ruleset_view', ['id' => $ruleset->getId()]);
+        }
+
+        $table = $this->dataTableFactory->create(['autoWidth' => true, 'pageLength' => 25])
+            ->add('type', TwigColumn::class, [
+                'label' => 'ruleset.view.list.ruleItems.type',
+                'template' => 'project_related/ruleset/view/rule_item_list/_type.html.twig'
+            ])
+            ->add('value', TwigColumn::class, [
+                'label' => 'ruleset.view.list.ruleItems.value',
+                'template' => 'project_related/ruleset/view/rule_item_list/_value.html.twig'
+            ])
+            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'ruleset.view.list.ruleItems.spamRatingFactor'])
+            ->createAdapter(ORMAdapter::class, [
+                'entity' => RulesetRuleItemCache::class,
+                'query' => function (QueryBuilder $builder) use ($rulesetRuleCache) {
+                    $builder
+                        ->select('e')
+                        ->from(RulesetRuleItemCache::class, 'e')
+                        ->where('e.rulesetRuleCache = :rulesetRuleCache')
+                        ->setParameter('rulesetRuleCache', $rulesetRuleCache);
+                },
+            ])
+            ->handleRequest($request);
+
+        if ($table->isCallback()) {
+            return $table->getResponse();
+        }
+
+        return $this->render('project_related/ruleset/view_rule.html.twig', [
+            'ruleset' => $ruleset,
+            'rule' => $rulesetRuleCache,
+            'datatable' => $table
         ]);
     }
 }

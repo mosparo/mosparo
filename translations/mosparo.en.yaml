@@ -125,6 +125,10 @@ rule:
     message:
       successfullyDeleted: The rule %ruleName% was deleted successfully.
 
+  filter:
+    options:
+      all: Show all
+
   type:
     domain:
       title: Domain
@@ -302,6 +306,33 @@ ruleset:
       type: Type
       value: Value
       rating: Rating
+
+    list:
+      rules:
+        name: Name
+        type: Type
+        numberOfRuleItems: Number of items
+        spamRatingFactor: Spam rating factor
+        actions: Actions
+
+      ruleItems:
+        type: Type
+        value: Value
+        spamRatingFactor: Spam rating factor
+
+    rule:
+      title: View rule %ruleName%
+
+      details:
+        title: Rule details
+        name: Name
+        type: Type
+        spamRatingFactor: Spam rating factor
+
+      items:
+        title: Included items
+
+      backToRuleset: Back to ruleset
 
   delete:
     title: Delete ruleset %rulesetName%

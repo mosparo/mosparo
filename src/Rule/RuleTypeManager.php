@@ -31,4 +31,14 @@ class RuleTypeManager
 
         return null;
     }
+
+    public function getRuleTypeKeys(): array
+    {
+        $key = [];
+        foreach ($this->ruleTypes as $ruleType) {
+            $key[] = $ruleType->getKey();
+        }
+
+        return $key;
+    }
 }

@@ -1,0 +1,11 @@
+{% trans_default_domain 'mosparo' %}
+
+{% set ruleType = rule_type(row.type) %}
+{% if ruleType %}
+    <div class="rule-type-label">
+        <i class="{{ ruleType.icon }}"></i>
+        {{ ruleType.name|trans }}
+    </div>
+{% else %}
+    <code>{{ row.type }}</code>
+{% endif %}
