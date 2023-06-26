@@ -3,6 +3,7 @@
 namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\Rule;
 use Mosparo\Form\RuleAddMultipleItemsType;
 use Mosparo\Form\RuleFormType;
@@ -24,18 +25,30 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 {
     use ProjectRelatedTrait;
 
+    protected EntityManagerInterface $entityManager;
+
     protected TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    protected RuleTypeManager $ruleTypeManager;
+
+    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, RuleTypeManager $ruleTypeManager)
     {
+        $this->entityManager = $entityManager;
         $this->translator = $translator;
+        $this->ruleTypeManager = $ruleTypeManager;
     }
 
     /**
      * @Route("/", name="rule_list")
+     * @Route("/filter/{filter}", name="rule_list_filtered")
      */
-    public function index(Request $request, DataTableFactory $dataTableFactory): Response
+    public function index(Request $request, DataTableFactory $dataTableFactory, $filter = ''): Response
     {
+        $filteredType = null;
+        if (in_array($filter, $this->ruleTypeManager->getRuleTypeKeys())) {
+            $filteredType = $filter;
+        }
+
         $table = $dataTableFactory->create(['autoWidth' => true])
             ->add('name', TextColumn::class, ['label' => 'rule.list.name'])
             ->add('type', TwigColumn::class, [
@@ -53,6 +66,17 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             ])
             ->createAdapter(ORMAdapter::class, [
                 'entity' => Rule::class,
+                'query' => function (QueryBuilder $builder) use ($filteredType) {
+                    $builder
+                        ->select('e')
+                        ->from(Rule::class, 'e');
+
+                    if ($filteredType !== null) {
+                        $builder
+                            ->andWhere('e.type = :filteredType')
+                            ->setParameter('filteredType', $filteredType);
+                    }
+                },
             ])
             ->handleRequest($request);
 
@@ -60,8 +84,22 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             return $table->getResponse();
         }
 
+        // Count the rule types
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb
+            ->select('r.type, COUNT(r) AS countRules')
+            ->from(Rule::class, 'r')
+            ->groupBy('r.type');
+        $numberOfRulesByType = [];
+        foreach ($qb->getQuery()->getArrayResult() as $result) {
+            $numberOfRulesByType[$result['type']] = $result['countRules'];
+        }
+
         return $this->render('project_related/rule/list.html.twig', [
-            'datatable' => $table
+            'datatable' => $table,
+            'ruleTypes' => $this->ruleTypeManager->getRuleTypes(),
+            'numberOfRulesByType' => $numberOfRulesByType,
+            'filter' => $filter
         ]);
     }
 
