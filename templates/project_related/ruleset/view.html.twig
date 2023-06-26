@@ -93,7 +93,7 @@
                             <i class="ti ti-filter"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a href="{{ path('ruleset_view', { 'id': ruleset.id }) }}" class="dropdown-item {% if filter != '' %}active{% endif %}">
+                            <a href="{{ path('ruleset_view', { 'id': ruleset.id }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
                                 <i class="ti ti-check {% if filter != '' %}invisible{% endif %}"></i>
                                 {{ 'rule.filter.options.all'|trans }}
                             </a>
