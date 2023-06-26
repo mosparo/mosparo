@@ -204,7 +204,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             $filteredType = $filter;
         }
 
-        $table = $this->dataTableFactory->create(['autoWidth' => true, 'pageLength' => 10])
+        $table = $this->dataTableFactory->create(['autoWidth' => true])
             ->add('name', TextColumn::class, ['label' => 'ruleset.view.list.rules.name'])
             ->add('type', TwigColumn::class, [
                 'label' => 'ruleset.view.list.rules.type',
@@ -278,7 +278,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             return $this->redirectToRoute('ruleset_view', ['id' => $ruleset->getId()]);
         }
 
-        $table = $this->dataTableFactory->create(['autoWidth' => true, 'pageLength' => 25])
+        $table = $this->dataTableFactory->create(['autoWidth' => true])
             ->add('type', TwigColumn::class, [
                 'label' => 'ruleset.view.list.ruleItems.type',
                 'template' => 'project_related/ruleset/view/rule_item_list/_type.html.twig'
