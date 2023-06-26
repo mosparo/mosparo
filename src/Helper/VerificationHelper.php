@@ -7,7 +7,7 @@ use Mosparo\Entity\Submission;
 class VerificationHelper
 {
     /**
-     * Verifies the form data. Returns an arra with the result.
+     * Verifies the form data. Returns an array with the result.
      *
      * @param \Mosparo\Entity\Submission $submission
      * @param array $formData
