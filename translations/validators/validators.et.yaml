@@ -1,1 +1,10 @@
-{}
+password:
+  form:
+    constraint:
+      notBlank: Palun sisesta salasõna.
+      length: Sinu salasõna pikkus peaks olema vähemalt {{ limit }} tähemärki.
+      passwordMustMatch: Salasõnad peavad omavahel klappima.
+  request:
+    form:
+      constraint:
+        notBlank: Palun sisesta oma e-posti aadress.
