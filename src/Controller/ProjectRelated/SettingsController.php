@@ -99,7 +99,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                         ->select('e')
                         ->from(ProjectMember::class, 'e')
                         ->where('e.project = :project')
-                        ->setParameter(':project', $project);
+                        ->setParameter('project', $project);
                 },
             ])
             ->handleRequest($request);
@@ -251,7 +251,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 $session->getFlashBag()->add(
                     'error',
                     $this->translator->trans(
-                        'settings.projectMember.remove.message.successfullyRemoved',
+                        'settings.projectMember.delete.message.successfullyRemoved',
                         ['%projectMemberName%' => $projectMember->getUser()->getEmail()],
                         'mosparo'
                     )
