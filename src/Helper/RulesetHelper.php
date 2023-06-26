@@ -73,7 +73,7 @@ class RulesetHelper
         $rulesetCache = $ruleset->getRulesetCache();
         if ($rulesetCache !== null) {
             $refreshInterval = new DateInterval('PT' . $rulesetCache->getRefreshInterval() . 'S');
-            $timeLeast = $rulesetCache->getRefreshedAt()->add($refreshInterval);
+            $timeLeast = (clone $rulesetCache->getRefreshedAt())->add($refreshInterval);
 
             // We're not allowed to download the ruleset again.
             if ($timeLeast > new DateTime()) {
