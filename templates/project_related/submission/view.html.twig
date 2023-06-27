@@ -279,7 +279,7 @@
                                                             <tbody>
                                                             {% for match in submission.matchedRuleItems[path] %}
                                                                 <tr>
-                                                                    <td>{{ match.value|format_rule_value(match.uuid, app.request.locale) }}</td>
+                                                                    <td><code>{{ match.value|format_rule_value(match.uuid, app.request.locale) }}</code></td>
                                                                     <td class="text-center">
                                                                         {% if match.rating > 0 %}
                                                                             <span class="text-danger">
