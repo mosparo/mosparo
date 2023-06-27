@@ -359,6 +359,7 @@ submission:
     actions: Actions
 
   filter:
+    dropdown: Filter the list of submissions
     options:
       all: All submissions
       spam: Spam submissions
