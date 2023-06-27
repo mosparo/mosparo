@@ -126,6 +126,7 @@ rule:
       successfullyDeleted: The rule %ruleName% was deleted successfully.
 
   filter:
+    dropdown: Filter the list of rules
     options:
       all: Show all
 
