@@ -708,6 +708,22 @@ administration:
     title: Security settings
     description: Configure various security related settings which apply to your mosparo installation.
 
+    loginThrottling:
+      title: Login throttling
+      intro: Login throttling helps to protect the mosparo login from a brute force attack. By counting the number of requests and blocking an attacker after some tries, such an attack will take a lot of time and is nearly senseless.
+
+      form:
+        uiLimit: Number of requests for username and IP address
+        uiLimitHelp: This is the number of requests an attacker can make for a combination of a username and IP address.
+        ipLimit: Number of requests for an IP address
+        ipLimitHelp: This is the number of requests an IP address can make on different usernames. This number should be higher than the number of requests for username and IP address.
+        interval: Time range
+        intervalHelp: The time in minutes when the number of requests is evaluated.
+
+      unit:
+        requests: Requests
+        minutes: Minutes
+
     reverseProxy:
       title: Reverse proxy
       providerPresets: Provider presets

@@ -9,6 +9,7 @@ use Mosparo\Util\ProviderUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +49,12 @@ class SecurityController extends AbstractController
 
         $environmentConfig = $this->configHelper->readEnvironmentConfig();
         $config = [
+            // Login throttling
+            'loginThrottlingUiLimit' => $environmentConfig['login_throttling_ui_limit'] ?? 5,
+            'loginThrottlingIpLimit' => $environmentConfig['login_throttling_ip_limit'] ?? 25,
+            'loginThrottlingInterval' => $environmentConfig['login_throttling_interval_numeric'] ?? 5,
+
+            // Reverse proxy
             'trustedProxies' => $this->prepareTrustedProxies($environmentConfig['trusted_proxies'] ?? ''),
             'trustedProxiesIncludeRemoteAddr' => $environmentConfig['trusted_proxies_include_remote_addr'] ?? false,
             'replaceForwardedForHeader' => $environmentConfig['replace_forwarded_for_header'] ?? '',
@@ -55,6 +62,24 @@ class SecurityController extends AbstractController
         ];
 
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
+            // Login throttling
+            ->add('loginThrottlingUiLimit', NumberType::class, [
+                'label' => 'administration.security.loginThrottling.form.uiLimit',
+                'help' => 'administration.security.loginThrottling.form.uiLimitHelp',
+                'attr' => ['class' => 'text-end'],
+            ])
+            ->add('loginThrottlingIpLimit', NumberType::class, [
+                'label' => 'administration.security.loginThrottling.form.ipLimit',
+                'help' => 'administration.security.loginThrottling.form.ipLimitHelp',
+                'attr' => ['class' => 'text-end'],
+            ])
+            ->add('loginThrottlingInterval', NumberType::class, [
+                'label' => 'administration.security.loginThrottling.form.interval',
+                'help' => 'administration.security.loginThrottling.form.intervalHelp',
+                'attr' => ['class' => 'text-end'],
+            ])
+
+            // Reverse proxy
             ->add('trustedProxies', CollectionType::class, [
                 'label' => 'administration.security.reverseProxy.form.trustedProxies',
                 'disabled' => !$modifyTrustedSettingsAllowed,
@@ -90,6 +115,11 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($modifyTrustedSettingsAllowed) {
                 $configValues = [
+                    'login_throttling_ui_limit' => $form->get('loginThrottlingUiLimit')->getData(),
+                    'login_throttling_ip_limit' => $form->get('loginThrottlingIpLimit')->getData(),
+                    'login_throttling_interval' => sprintf('%d minutes', $form->get('loginThrottlingInterval')->getData()),
+                    'login_throttling_interval_numeric' => $form->get('loginThrottlingInterval')->getData(),
+
                     'trusted_proxies' => $this->buildTrustedProxiesString($form->get('trustedProxies')->getData(), $form->get('trustedProxiesIncludeRemoteAddr')->getData()),
                     'trusted_proxies_include_remote_addr' => $form->get('trustedProxiesIncludeRemoteAddr')->getData(),
                     'replace_forwarded_for_header' => $form->get('replaceForwardedForHeader')->getData(),

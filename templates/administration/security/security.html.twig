@@ -9,6 +9,51 @@
     {{ form_start(form) }}
         <div class="card mb-3">
             <div class="card-header">
+                <h3 class="card-title">{{ 'administration.security.loginThrottling.title'|trans }}</h3>
+            </div>
+            <div class="card-body">
+                <p>
+                    {{ 'administration.security.loginThrottling.intro'|trans }}
+                </p>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 mb-3">
+                        {{ form_label(form.loginThrottlingUiLimit) }}
+                        <div class="input-group mb-2">
+                            {{ form_widget(form.loginThrottlingUiLimit) }}
+                            <span class="input-group-text">
+                                {{ 'administration.security.loginThrottling.unit.requests'|trans }}
+                            </span>
+                        </div>
+                        {{ form_help(form.loginThrottlingUiLimit) }}
+                    </div>
+                    <div class="col-sm-12 col-lg-6 mb-3">
+                        {{ form_label(form.loginThrottlingIpLimit) }}
+                        <div class="input-group mb-2">
+                            {{ form_widget(form.loginThrottlingIpLimit) }}
+                            <span class="input-group-text">
+                                {{ 'administration.security.loginThrottling.unit.requests'|trans }}
+                            </span>
+                        </div>
+                        {{ form_help(form.loginThrottlingIpLimit) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 mb-3 mb-md-0">
+                        {{ form_label(form.loginThrottlingInterval) }}
+                        <div class="input-group mb-2">
+                            {{ form_widget(form.loginThrottlingInterval) }}
+                            <span class="input-group-text">
+                                {{ 'administration.security.loginThrottling.unit.minutes'|trans }}
+                            </span>
+                        </div>
+                        {{ form_help(form.loginThrottlingInterval) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
                 <h3 class="card-title">{{ 'administration.security.reverseProxy.title'|trans }}</h3>
 
                 <div class="card-actions">
@@ -66,12 +111,6 @@
                             </div>
                             {{ form_help(form.replaceForwardedProtoHeader) }}
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-lg-6 mb-3 mb-lg-0">
-                    </div>
-                    <div class="col-sm-12 col-lg-6">
                     </div>
                 </div>
             </div>

@@ -38,6 +38,10 @@ parameters:
     env(trusted_proxies): '127.0.0.1'
     default_trusted_proxies: '%env(trusted_proxies)%'
 
+    env(login_throttling_ui_limit): '5'
+    env(login_throttling_ip_limit): '25'
+    env(login_throttling_interval): '5 minutes'
+
 services:
     # default configuration for services in *this* file
     _defaults:
