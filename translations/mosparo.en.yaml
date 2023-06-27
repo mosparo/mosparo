@@ -615,6 +615,52 @@ settings:
       introColors: Please choose the colors which your website has. The background color is required to calculate the correct contrast ratio, the foreground color represents your text color, and the accent color is used for the special elements of the mosparo box.
       introPreview: On the right side, you'll see a preview of the mosparo box on your website.
 
+tools:
+  title: Tools
+
+  ruleTester:
+    title: Rule tester
+    description: Test how your rules will detect spam.
+
+    form:
+      title: Test settings
+      value: Test value
+      type: Field type
+      useRules: Use rules
+      useRulesets: Use rulesets
+
+    types:
+      textField: Text field (Single-line)
+      textarea: Text field (Multi-line)
+      emailField: Email field
+      urlField: URL field
+      userAgent: User-Agent
+      ipAddress: IP address
+
+    result:
+      title: Test result
+
+      testData:
+        title: Test data
+        testValue: Test value
+        fieldType: Field type
+        enabledRules: Enabled rules
+
+      detectionResult:
+        title: Detection result
+        isSpam: Is spam
+        spamRating: Spam rating
+        spamDetectionRating: Spam score
+
+      matchedRules:
+        title: Matched rules
+
+      table:
+        type: Rule type
+        value: Value
+        rating: Rating
+        noMatchingRules: No rule matched the test value.
+
 # Administration
 administration:
   title: Administration
@@ -1033,7 +1079,9 @@ action:
   help: Help
   close: Close
   manage: Manage
+  use: Use
   configure: Configure
+  test: Test
   checkForUpdate: Check for update
   installUpdate: Install update
   goToTheDashboard: Go to the dashboard

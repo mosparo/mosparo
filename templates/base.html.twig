@@ -189,6 +189,21 @@
                                                 </div>
                                             </li>
                                         {% endif %}
+
+                                        <li class="nav-item {% if route starts with 'tools_' %}active{% endif %} dropdown">
+                                            <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
+                                                <i class="ti ti-tool"></i>
+                                                <span class="nav-link-title">
+                                                    {{ 'tools.title'|trans }}
+                                                </span>
+                                            </a>
+                                            <div class="dropdown-menu" data-bs-popper="none">
+                                                <a class="dropdown-item" href="{{ path('tools_rule_tester') }}">
+                                                    <i class="ti ti-test-pipe"></i>
+                                                    {{ 'tools.ruleTester.title'|trans }}
+                                                </a>
+                                            </div>
+                                        </li>
                                     {% endif %}
                                 </ul>
                             </div>

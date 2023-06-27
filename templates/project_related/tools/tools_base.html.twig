@@ -1,0 +1,48 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'tools.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'tools.title'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
+
+{% block pageFlashes %}
+{% endblock %}
+
+{% block pageBody %}
+<div class="container-xl">
+    <div class="row gx-lg-4">
+        <div class="d-none d-lg-block col-lg-2">
+            <ul class="nav nav-pills nav-vertical">
+                <li class="nav-item">
+                    <a href="{{ path('tools_rule_tester') }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_rule_tester' %}active{% endif %}">
+                        <i class="ti ti-test-pipe"></i>
+                        {{ 'tools.ruleTester.title'|trans }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-12 col-lg-10">
+            {% set flashes = app.flashes %}
+            {% if flashes|length > 0 %}
+                {% for label, messages in flashes %}
+                    {%- if label == 'notice' -%}
+                        {% set class = 'info' %}
+                    {%- elseif label == 'success' -%}
+                        {% set class = 'success' %}
+                    {%- elseif label == 'warning' -%}
+                        {% set class = 'warning' %}
+                    {%- elseif label == 'error' -%}
+                        {% set class = 'danger' %}
+                    {%- endif -%}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ class }}">
+                            {{ message|trans }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% block settingsPageBody %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

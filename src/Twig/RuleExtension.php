@@ -4,6 +4,7 @@ namespace Mosparo\Twig;
 
 use Mosparo\Repository\RuleRepository;
 use Mosparo\Repository\RulesetRuleCacheRepository;
+use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleTypeManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
@@ -31,15 +32,31 @@ class RuleExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('format_rule_value', [$this, 'formatRuleValue'])
+            new TwigFilter('format_rule_value', [$this, 'formatRuleValue']),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('get_rule_detail_url', [$this, 'getRuleDetailUrl'])
+            new TwigFunction('get_rule', [$this, 'getRule']),
+            new TwigFunction('get_rule_detail_url', [$this, 'getRuleDetailUrl']),
         ];
+    }
+
+    public function getRule($uuid): ?RuleEntityInterface
+    {
+        $rule = $this->ruleRepository->findOneBy(['uuid' => $uuid]);
+        if ($rule) {
+            return $rule;
+        }
+
+        $rulesetRuleCache = $this->rulesetRuleCacheRepository->findOneBy(['uuid' => $uuid]);
+        if ($rulesetRuleCache) {
+            return $rulesetRuleCache;
+        }
+
+        return null;
     }
 
     public function getRuleDetailUrl($uuid): ?string

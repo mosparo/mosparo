@@ -23,6 +23,8 @@ class RuleTesterHelper
 
     protected RulesetHelper $rulesetHelper;
 
+    protected GeoIp2Helper $geoIp2Helper;
+
     protected array $rules = [];
     protected array $ruleTesters = [];
 
@@ -31,16 +33,97 @@ class RuleTesterHelper
         RuleTypeManager $ruleTypeManager,
         ProjectHelper $projectHelper,
         TokenGenerator $tokenGenerator,
-        RulesetHelper $rulesetHelper
+        RulesetHelper $rulesetHelper,
+        GeoIp2Helper $geoIp2Helper
     ) {
         $this->entityManager = $entityManager;
         $this->ruleTypeManager = $ruleTypeManager;
         $this->projectHelper = $projectHelper;
         $this->tokenGenerator = $tokenGenerator;
         $this->rulesetHelper = $rulesetHelper;
+        $this->geoIp2Helper = $geoIp2Helper;
     }
 
-    public function checkRequest(Submission $submission, $type = null)
+    public function simulateRequest($value, $type = 'textField', $useRules = true, $useRulesets = true): Submission
+    {
+        $translatedFieldType = [
+            'textField' => 'text',
+            'emailField' => 'email',
+            'urlField' => 'url',
+        ];
+        $data = [];
+        if (in_array($type, ['textField', 'emailField', 'urlField'])) {
+            $fieldType = $translatedFieldType[$type] ?? 'text';
+            $data = [
+                'formData' => [
+                    [
+                        'name' => 'test-field',
+                        'value' => $value,
+                        'fieldPath' => 'input[' . $fieldType . '].test-field'
+                    ]
+                ]
+            ];
+        } else if ($type === 'textarea') {
+            $data = [
+                'formData' => [
+                    [
+                        'name' => 'test-field',
+                        'value' => $value,
+                        'fieldPath' => 'textarea.test-field'
+                    ]
+                ]
+            ];
+        } else if ($type === 'userAgent') {
+            $data = [
+                'client' => [
+                    [
+                        'name' => 'userAgent',
+                        'value' => $value,
+                        'fieldPath' => 'userAgent'
+                    ]
+                ]
+            ];
+        } else if ($type === 'ipAddress') {
+            $data = [
+                'client' => [
+                    [
+                        'name' => 'ipAddress',
+                        'value' => $value,
+                        'fieldPath' => 'ipAddress'
+                    ]
+                ]
+            ];
+
+            $ipLocalization = $this->geoIp2Helper->locateIpAddress($value);
+            if ($ipLocalization !== false) {
+                $data['client'][] = [
+                    'name' => 'asNumber',
+                    'value' => $ipLocalization->getAsNumber(),
+                    'fieldPath' => 'asNumber'
+                ];
+                $data['client'][] = [
+                    'name' => 'asOrganization',
+                    'value' => $ipLocalization->getAsOrganization(),
+                    'fieldPath' => 'asOrganization'
+                ];
+                $data['client'][] = [
+                    'name' => 'country',
+                    'value' => $ipLocalization->getCountry(),
+                    'fieldPath' => 'country'
+                ];
+            }
+        }
+
+        // Do not save the submission since it's only a simulation.
+        $submission = new Submission();
+        $submission->setData($data);
+
+        $this->checkRequest($submission, null, $useRules, $useRulesets);
+
+        return $submission;
+    }
+
+    public function checkRequest(Submission $submission, $type = null, $useRules = true, $useRulesets = true)
     {
         $ruleArgs = ['status' => 1];
         if ($type !== null) {
@@ -48,7 +131,7 @@ class RuleTesterHelper
         }
 
         // Load the rules
-        $this->loadRules($ruleArgs);
+        $this->loadRules($ruleArgs, $useRules, $useRulesets);
 
         // Load the rule testers
         $this->loadRuleTesters();
@@ -60,36 +143,41 @@ class RuleTesterHelper
         $this->analyzeResults($submission, $results);
     }
 
-    protected function loadRules(array $ruleArgs)
+    protected function loadRules(array $ruleArgs, $useRules = true, $useRulesets = true)
     {
-        $ruleRepository = $this->entityManager->getRepository(Rule::class);
-        $this->rules = $ruleRepository->findBy($ruleArgs);
+        $this->rules = [];
+        if ($useRules) {
+            $ruleRepository = $this->entityManager->getRepository(Rule::class);
+            $this->rules = $ruleRepository->findBy($ruleArgs);
+        }
 
-        $rulesetRepository = $this->entityManager->getRepository(Ruleset::class);
-        $rulesets = $rulesetRepository->findBy(['status' => 1]);
+        if ($useRulesets) {
+            $rulesetRepository = $this->entityManager->getRepository(Ruleset::class);
+            $rulesets = $rulesetRepository->findBy(['status' => 1]);
 
-        foreach ($rulesets as $ruleset) {
-            try {
-                $result = $this->rulesetHelper->downloadRuleset($ruleset);
+            foreach ($rulesets as $ruleset) {
+                try {
+                    $result = $this->rulesetHelper->downloadRuleset($ruleset);
 
-                if ($result) {
-                    $this->entityManager->flush($ruleset);
+                    if ($result) {
+                        $this->entityManager->flush($ruleset);
+                    }
+                } catch (Exception $e) {
+                    // Do nothing
                 }
-            } catch (Exception $e) {
-                // Do nothing
-            }
 
-            $rulesetCache = $ruleset->getRulesetCache();
-            if ($rulesetCache === null) {
-                continue;
-            }
-
-            foreach ($rulesetCache->getRules() as $rule) {
-                if (isset($ruleArgs['type']) && !in_array($rule->getType(), $ruleArgs['type'])) {
+                $rulesetCache = $ruleset->getRulesetCache();
+                if ($rulesetCache === null) {
                     continue;
                 }
 
-                $this->rules[] = $rule;
+                foreach ($rulesetCache->getRules() as $rule) {
+                    if (isset($ruleArgs['type']) && !in_array($rule->getType(), $ruleArgs['type'])) {
+                        continue;
+                    }
+
+                    $this->rules[] = $rule;
+                }
             }
         }
     }

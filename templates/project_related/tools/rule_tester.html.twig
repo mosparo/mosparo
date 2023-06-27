@@ -1,0 +1,174 @@
+{% extends 'project_related/tools/tools_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'tools.ruleTester.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'tools.ruleTester.title'|trans }}{% endblock %}
+
+{% block settingsPageBody %}
+    {% if submission %}
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">{{ 'tools.ruleTester.result.title'|trans }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <h3>{{ 'tools.ruleTester.result.testData.title'|trans }}</h3>
+                        <div class="row mb-4">
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'tools.ruleTester.result.testData.testValue'|trans }}</h4>
+                                <div class="submission-row">
+                                    <code>
+                                        {{ testData.value|nl2br|raw }}
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'tools.ruleTester.result.testData.fieldType'|trans }}</h4>
+                                <div>
+                                    {{ ('tools.ruleTester.types.' ~ testData.type)|trans }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'tools.ruleTester.result.testData.enabledRules'|trans }}</h4>
+                                <div>
+                                    {% if testData.useRules %}
+                                        <span class="badge bg-lime">{{ 'tools.ruleTester.form.useRules'|trans }}</span>
+                                    {% endif %}
+                                    {% if testData.useRulesets %}
+                                        <span class="badge bg-purple">{{ 'tools.ruleTester.form.useRulesets'|trans }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>{{ 'tools.ruleTester.result.detectionResult.title'|trans }}</h3>
+                        <div class="row mb-4">
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'tools.ruleTester.result.detectionResult.isSpam'|trans }}</h4>
+                                <div>
+                                    {% if submission.spam %}
+                                        <span class="text-danger"><strong>{{ 'state.yes'|trans }}</strong></span>
+                                    {% else %}
+                                        {% if not submission.spam and submission.spamRating > submission.spamDetectionRating %}
+                                            <span class="text-blue"><strong>{{ 'state.ignored'|trans }}</strong></span>
+                                        {% else %}
+                                            <span class="text-success"><strong>{{ 'state.no'|trans }}</strong></span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'tools.ruleTester.result.detectionResult.spamRating'|trans }}</h4>
+                                <div>
+                                    {% if submission.spam or submission.spamRating > submission.spamDetectionRating %}
+                                        <span class="text-danger">
+                                    {% else %}
+                                        <span class="text-success">
+                                    {% endif %}
+                                        {{ submission.spamRating }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'tools.ruleTester.result.detectionResult.spamDetectionRating'|trans }}</h4>
+                                <div>
+                                    {% if submission.spam or submission.spamRating > submission.spamDetectionRating %}
+                                        <span class="text-danger">
+                                    {% else %}
+                                        <span class="text-success">
+                                    {% endif %}
+                                        {{ submission.spamDetectionRating }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>{{ 'tools.ruleTester.result.matchedRules.title'|trans }}</h3>
+                        <table class="table table-striped table-vcenter">
+                            <thead>
+                                <tr>
+                                    <th width="20%">{{ 'tools.ruleTester.result.table.type'|trans }}</th>
+                                    <th>{{ 'tools.ruleTester.result.table.value'|trans }}</th>
+                                    <th width="1%">{{ 'tools.ruleTester.result.table.rating'|trans }}</th>
+                                    <th width="1%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for fieldMatches in submission.matchedRuleItems %}
+                                    {% for fieldMatch in fieldMatches %}
+                                        <tr>
+                                            <td>
+                                                {% set ruleType = get_rule(fieldMatch.uuid) %}
+                                                {% set ruleType = rule_type(ruleType.type) %}
+                                                {% if ruleType %}
+                                                    <div class="rule-type-label">
+                                                        <i class="{{ ruleType.icon }}"></i>
+                                                        {{ ruleType.name|trans }}
+                                                    </div>
+                                                {% else %}
+                                                    <code>{{ fieldMatch.type }}</code>
+                                                {% endif %}
+                                            </td>
+                                            <td><code>{{ fieldMatch.value|format_rule_value(fieldMatch.uuid, app.request.locale) }}</code></td>
+                                            <td class="text-end">
+                                                {% if fieldMatch.rating > 0 %}
+                                                    <span class="text-danger">
+                                                {% else %}
+                                                    <span class="text-success">
+                                                {% endif %}
+                                                    {{ fieldMatch.rating }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {% set url = get_rule_detail_url(fieldMatch.uuid) %}
+                                                {% if url != '' %}
+                                                    <a href="{{ url }}" class="btn btn-ghost-info btn-sm" target="_blank">
+                                                        <i class="ti ti-info-circle me-0"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            {{ 'tools.ruleTester.result.table.noMatchingRules'|trans }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">{{ 'tools.ruleTester.form.title'|trans }}</h2>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.value) }}
+                        {{ form_row(form.type) }}
+                        {{ form_row(form.useRules) }}
+                        {{ form_row(form.useRulesets) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto ms-auto">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-test-pipe"></i>
+                    {{ 'action.test'|trans }}
+                </button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
