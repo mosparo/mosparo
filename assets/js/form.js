@@ -277,14 +277,15 @@ $(document).ready(function () {
         let link = container.find('a');
         input.on('keyup change', function () {
             if ($(this).val() === '') {
-                link.hide();
+                link.addClass('invisible');
             } else {
-                link.show();
+                link.removeClass('invisible');
             }
         }).trigger('change');
 
-        link.click(function () {
+        link.click(function (ev) {
             input.val('').trigger('change');
+            ev.preventDefault();
         });
     });
 });

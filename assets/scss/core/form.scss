@@ -75,6 +75,10 @@ form .colorpicker-container {
     display: block;
 }
 
+.input-group > .input-group {
+    z-index: 5;
+}
+
 .input-group-text {
     .link-secondary:hover,
     .link-secondary:focus {
