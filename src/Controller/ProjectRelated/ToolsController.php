@@ -39,6 +39,9 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         $form = $this->createFormBuilder($data, ['translation_domain' => 'mosparo'])
             ->add('value', TextareaType::class, [
                 'label' => 'tools.ruleTester.form.value',
+                'attr' => [
+                    'data-bs-toggle' => 'autosize'
+                ],
             ])
             ->add('type', ChoiceType::class, [
                 'label' => 'tools.ruleTester.form.type',
