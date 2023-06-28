@@ -3,14 +3,20 @@
 namespace Mosparo\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\Submission;
+use Mosparo\Entity\User;
 use Mosparo\Form\DesignSettingsFormType;
 use Mosparo\Form\ProjectFormType;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Util\TokenGenerator;
+use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
+use Omines\DataTablesBundle\Column\TextColumn;
+use Omines\DataTablesBundle\Column\TwigColumn;
+use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,9 +51,21 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/", name="project_list")
+     * @Route("/filter/{filter}", name="project_list_filtered")
      */
-    public function list(): Response
+    public function list(DataTableFactory $dataTableFactory, Request $request, $filter = ''): Response
     {
+        // Load the view from the user configuration
+        $user = $this->getUser();
+        $view = 'boxes';
+        if ($user instanceof User) {
+            $userView = $user->getConfigValue('projectListView');
+
+            if ($userView !== null) {
+                $view = $userView;
+            }
+        }
+
         $filters = $this->entityManager->getFilters();
         $filterEnabled = false;
         if ($filters->isEnabled('project_related_filter')) {
@@ -55,17 +73,58 @@ class ProjectController extends AbstractController
             $filterEnabled = true;
         }
 
-        $numberOfSubmissions = $this->entityManager->createQueryBuilder()
-            ->select('IDENTITY(s.project) AS project_id', 'COUNT(s) AS count')
-            ->from(Submission::class, 's')
-            ->where('s.spam = 1')
-            ->orWhere('s.valid IS NOT NULL')
-            ->groupBy('s.project')
-            ->getQuery();
+        // Table view
+        $table = null;
+        if ($view === 'table') {
+            $table = $dataTableFactory->create(['autoWidth' => true])
+                ->add('name', TextColumn::class, ['label' => 'project.list.name'])
+                ->add('status', TwigColumn::class, [
+                    'label' => 'project.list.status',
+                    'template' => 'project/list/_status.html.twig'
+                ])
+                ->add('actions', TwigColumn::class, [
+                    'label' => 'project.list.actions',
+                    'className' => 'buttons',
+                    'template' => 'project/list/_actions.html.twig'
+                ])
+                ->createAdapter(ORMAdapter::class, [
+                    'entity' => Project::class,
+                    'query' => function (QueryBuilder $builder) use ($filter) {
+                        $builder
+                            ->select('e')
+                            ->from(Project::class, 'e');
 
-        $numberOfSubmissionsByProject = [];
-        foreach ($numberOfSubmissions->getResult() as $row) {
-            $numberOfSubmissionsByProject[$row['project_id']] = $row['count'];
+                        if ($filter === 'active') {
+                            $builder
+                                ->andWhere('e.status = 1');
+                        } else if ($filter === 'inactive') {
+                            $builder
+                                ->andWhere('e.status = 0');
+                        }
+                    },
+                ])
+                ->handleRequest($request);
+
+            if ($table->isCallback()) {
+                return $table->getResponse();
+            }
+        }
+
+        // Box view
+        $numberOfSubmissionsByProject = null;
+        if ($view === 'boxes') {
+            $numberOfSubmissions = $this->entityManager->createQueryBuilder()
+                ->select('IDENTITY(s.project) AS project_id', 'COUNT(s) AS count')
+                ->from(Submission::class, 's')
+                ->where('s.spam = 1')
+                ->orWhere('s.valid IS NOT NULL')
+                ->groupBy('s.project')
+                ->getQuery();
+
+            $numberOfSubmissionsByProject = [];
+            foreach ($numberOfSubmissions->getResult() as $row) {
+                $numberOfSubmissionsByProject[$row['project_id']] = $row['count'];
+            }
         }
 
         if ($filterEnabled) {
@@ -73,8 +132,27 @@ class ProjectController extends AbstractController
         }
 
         return $this->render('project/list.html.twig', [
-            'numberOfSubmissionsByProject' => $numberOfSubmissionsByProject
+            'numberOfSubmissionsByProject' => $numberOfSubmissionsByProject,
+            'view' => $view,
+            'datatable' => $table,
+            'filter' => $filter
         ]);
+    }
+
+    /**
+     * @Route("/switch-view/{view}", name="project_list_switch_view")
+     */
+    public function switchView($view): Response
+    {
+        $user = $this->getUser();
+
+        $possibleViews = ['table', 'boxes'];
+        if ($user instanceof User && in_array($view, $possibleViews)) {
+            $user->setConfigValue('projectListView', $view);
+            $this->entityManager->flush();
+        }
+
+        return $this->redirectToRoute('project_list');
     }
 
     /**

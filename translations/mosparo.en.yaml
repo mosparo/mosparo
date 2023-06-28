@@ -10,6 +10,18 @@ project:
   infoNoProjectAvailable: No projects available
   infoCreateProjectOrRequestAccess: Create a new project or request access to another project.
 
+  list:
+    name: Name
+    status: Status
+    actions: Actions
+
+  filter:
+    dropdown: Filter the list of projects
+    options:
+      all: Show all
+      active: Show active projects
+      inactive: Show inactive projects
+
   action:
     manage: Manage project
     delete: Delete project

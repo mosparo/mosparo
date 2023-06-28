@@ -14,6 +14,38 @@
 
     <div class="col-auto ms-auto">
         <div class="btn-list">
+            {% if view == 'table' %}
+                <div class="dropdown">
+                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'project.filter.dropdown'|trans }}">
+                        <i class="ti ti-filter"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="{{ path('project_list') }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
+                            <i class="ti ti-check {% if filter != '' %}invisible{% endif %}"></i>
+                            {{ 'project.filter.options.all'|trans }}
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ path('project_list_filtered', { 'filter': 'active' }) }}" class="dropdown-item {% if filter == 'active' %}active{% endif %}">
+                            <i class="ti ti-check {% if filter != 'active' %}invisible{% endif %}"></i>
+                            {{ 'project.filter.options.active'|trans }}
+                        </a>
+                        <a href="{{ path('project_list_filtered', { 'filter': 'inactive' }) }}" class="dropdown-item {% if filter == 'inactive' %}active{% endif %}">
+                            <i class="ti ti-check {% if filter != 'inactive' %}invisible{% endif %}"></i>
+                            {{ 'project.filter.options.inactive'|trans }}
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="btn-group">
+                <a href="{{ path('project_list_switch_view', {'view': 'boxes'}) }}" class="btn {% if view == 'boxes' %}active{% endif %}">
+                    <i class="ti ti-list-details me-0"></i>
+                </a>
+                <a href="{{ path('project_list_switch_view', {'view': 'table'}) }}" class="btn {% if view == 'table' %}active{% endif %} ms-0">
+                    <i class="ti ti-columns me-0"></i>
+                </a>
+            </div>
+
             <a href="{{ path('project_create') }}" class="btn btn-primary add-button">
                 <i class="ti ti-plus"></i>
                 <span>{{ 'project.create.title'|trans }}</span>
@@ -25,53 +57,67 @@
 {% block pageBody %}
     {# Uses the project list which is registred by the Mosparo\Twig\ProjectExtension globally #}
     {% if projects|length > 0 %}
-        <div class="container-xl">
-            <div class="row">
-                {% for project in projects %}
-                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
-                        <div class="card card-md mb-3 w-100">
-                            <div class="card-body d-flex flex-column">
-                                <div class="text-center">
-                                    {% if numberOfSubmissionsByProject[project.id] is defined and numberOfSubmissionsByProject[project.id] %}
-                                        <img src="{{ asset('build/images/icons/project_full.svg') }}" class="mb-4 illustration-list" alt="" />
-                                    {% else %}
-                                        <img src="{{ asset('build/images/icons/project_empty.svg') }}" class="mb-4 illustration-list" alt="" />
-                                    {% endif %}
-                                </div>
-
-                                <h2 class="card-title text-center mb-2">{{ project.name }}</h2>
-
-                                <p class="text-center flex-fill">
-                                    {{ project.description }}
-                                </p>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <a href="{{ path('project_switch', { project: project.id }) }}" class="btn btn-secondary w-100">
-                                            <i class="ti ti-folder"></i>
-                                            {{ 'project.action.goto'|trans }}
-                                        </a>
+        {% if view == 'boxes' %}
+            <div class="container-xl">
+                <div class="row">
+                    {% for project in projects %}
+                        <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
+                            <div class="card card-md mb-3 w-100">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="text-center">
+                                        {% if numberOfSubmissionsByProject[project.id] is defined and numberOfSubmissionsByProject[project.id] %}
+                                            <img src="{{ asset('build/images/icons/project_full.svg') }}" class="mb-4 illustration-list" alt="" />
+                                        {% else %}
+                                            <img src="{{ asset('build/images/icons/project_empty.svg') }}" class="mb-4 illustration-list" alt="" />
+                                        {% endif %}
                                     </div>
-                                    {% if can_user_manage_project(project) %}
-                                        <div class="col-auto dropdown">
-                                            <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
-                                                <i class="ti ti-settings"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a href="{{ path('project_delete', { project: project.id }) }}" class="dropdown-item text-red">
-                                                    <i class="ti ti-circle-minus"></i>
-                                                    {{ 'project.action.delete'|trans }}
-                                                </a>
-                                            </div>
+
+                                    <h2 class="card-title text-center mb-2">{{ project.name }}</h2>
+
+                                    <p class="text-center flex-fill">
+                                        {{ project.description }}
+                                    </p>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <a href="{{ path('project_switch', { project: project.id }) }}" class="btn btn-secondary w-100">
+                                                <i class="ti ti-folder"></i>
+                                                {{ 'project.action.goto'|trans }}
+                                            </a>
                                         </div>
-                                    {% endif %}
+                                        {% if can_user_manage_project(project) %}
+                                            <div class="col-auto dropdown">
+                                                <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-settings"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a href="{{ path('project_delete', { project: project.id }) }}" class="dropdown-item text-red">
+                                                        <i class="ti ti-circle-minus"></i>
+                                                        {{ 'project.action.delete'|trans }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        {% elseif view == 'table' %}
+            <div class="container-xl">
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div id="projects">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     {% else %}
         <div class="container-xl d-flex flex-column justify-content-center">
             <div class="empty">
@@ -88,5 +134,30 @@
                 </div>
             </div>
         </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% if view == 'table' %}
+        <!-- Insert this at the end of your body element, but before the closing tag -->
+        <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+        {% cspscript %}
+            <script>
+                $(function() {
+                    $('#projects').initDataTables({{ datatable_settings(datatable) }}, {
+                        autoWidth: false,
+                        searching: false,
+                        info: false,
+                        responsive: true,
+                        columnDefs: [
+                            { width: "70%", targets: 0 },
+                            { width: "1%", targets: 2 }
+                        ]
+                    });
+                });
+            </script>
+        {% endcspscript %}
     {% endif %}
 {% endblock %}
