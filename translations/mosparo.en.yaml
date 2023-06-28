@@ -1,6 +1,7 @@
 # Header
 header:
   pleaseChoose: Please choose…
+  noProjectsFound: No projects found
   account: Account
 
 # Projects
@@ -21,6 +22,9 @@ project:
       all: Show all
       active: Show active projects
       inactive: Show inactive projects
+
+  search:
+    placeholder: Search for…
 
   action:
     manage: Manage project

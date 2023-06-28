@@ -36,6 +36,52 @@
     }
 }
 
+.project-dropdown-menu {
+    width: 21.25rem;
+
+    .project-name {
+        max-width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}
+
+.dropdown-projects-list {
+    max-height: 18rem;
+
+    overflow-y: auto;
+
+    .dropdown-item.focus {
+        color: var(--tblr-dropdown-link-hover-color);
+        background-color: var(--tblr-dropdown-link-hover-bg);
+    }
+}
+
+.dropdown-item-with-input {
+    padding: 0;
+
+    &:first-child {
+        margin-top: -0.25rem;
+    }
+
+    & + .dropdown-divider {
+        margin-top: 0;
+    }
+
+    input,
+    .input-group-text {
+        border: none;
+    }
+
+    .input-group-flat:focus-within {
+        box-shadow: none;
+    }
+
+    .input-group-text + input {
+        padding-left: 0;
+    }
+}
+
 .illustration-list {
     height: 128px;
 }

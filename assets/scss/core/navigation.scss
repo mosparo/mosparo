@@ -6,7 +6,7 @@
 
 .nav-link:not(.avatar-link),
 .dropdown-item {
-    .ti {
+    .ti:not(.ti-x) {
         font-size: 1.25rem;
         margin-right: 0.5rem;
         margin-top: -2px;

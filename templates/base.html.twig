@@ -87,8 +87,8 @@
                         <div class="navbar navbar-light project-navbar">
                             <div class="container-xl">
                                 <ul class="navbar-nav">
-                                    <div class="nav-item dropdown me-lg-2">
-                                        <a href="#" class="btn btn-secondary dropdown-toggle project-dropdown-toggle" data-bs-toggle="dropdown" aria-label="Open user menu">
+                                    <div class="nav-item dropdown me-lg-2 project-dropdown">
+                                        <a href="#" class="btn btn-secondary dropdown-toggle project-dropdown-toggle" aria-label="Open user menu">
                                             <i class="ti ti-folder"></i>
                                             <span class="project-name">
                                                 {% if activeProject %}
@@ -100,17 +100,37 @@
                                         </a>
                                         <div class="dropdown-menu project-dropdown-menu">
                                             {% if projects %}
-                                                {% for project in projects %}
-                                                    <a href="{{ path('project_switch', { 'project': project.id }) }}" class="dropdown-item">
-                                                        {% if activeProject and activeProject.id == project.id %}
-                                                            <i class="ti ti-check"></i>
-                                                        {% else %}
-                                                            <i class="ti ti-folder"></i>
-                                                        {% endif %}
-                                                        {{ project.name }}
-                                                    </a>
-                                                {% endfor %}
-                                                <div class="dropdown-divider"></div>
+                                                <div class="dropdown-item dropdown-item-with-input">
+                                                    <div class="input-group input-group-flat input-with-clear-button w-100">
+                                                        <span class="input-group-text">
+                                                            <i class="ti ti-search"></i>
+                                                        </span>
+                                                        <input type="text" class="form-control" name="q" placeholder="{{ 'project.search.placeholder'|trans }}" value="" autocomplete="off">
+                                                        <span class="input-group-text">
+                                                            <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="{{ 'form.clearField'|trans }}" data-bs-original-title="{{ 'form.clearField'|trans }}">
+                                                                <i class="ti ti-x"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-divider my-0"></div>
+                                                <div class="dropdown-projects-list">
+                                                    <div class="dropdown-item no-projects-found justify-content-center disabled d-none">
+                                                        <i class="ti ti-info-circle"></i>
+                                                        {{ 'header.noProjectsFound'|trans }}
+                                                    </div>
+                                                    {% for project in projects %}
+                                                        <a href="{{ path('project_switch', { 'project': project.id }) }}" class="dropdown-item project-item">
+                                                            {% if activeProject and activeProject.id == project.id %}
+                                                                <i class="ti ti-check"></i>
+                                                            {% else %}
+                                                                <i class="ti ti-folder"></i>
+                                                            {% endif %}
+                                                            <span class="project-name">{{ project.name }}</span>
+                                                        </a>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="dropdown-divider mt-0"></div>
                                             {% endif %}
                                             <a href="{{ path('project_list') }}" class="dropdown-item">
                                                 <i class="ti ti-folders"></i>

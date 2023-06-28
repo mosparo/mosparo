@@ -66,6 +66,12 @@ class ProjectController extends AbstractController
             }
         }
 
+        // Determine the search query
+        $searchQuery = '';
+        if ($request->query->has('q') && trim($request->query->get('q'))) {
+            $searchQuery = $request->query->get('q');
+        }
+
         $filters = $this->entityManager->getFilters();
         $filterEnabled = false;
         if ($filters->isEnabled('project_related_filter')) {
@@ -89,7 +95,7 @@ class ProjectController extends AbstractController
                 ])
                 ->createAdapter(ORMAdapter::class, [
                     'entity' => Project::class,
-                    'query' => function (QueryBuilder $builder) use ($filter) {
+                    'query' => function (QueryBuilder $builder) use ($filter, $searchQuery) {
                         $builder
                             ->select('e')
                             ->from(Project::class, 'e');
@@ -100,6 +106,12 @@ class ProjectController extends AbstractController
                         } else if ($filter === 'inactive') {
                             $builder
                                 ->andWhere('e.status = 0');
+                        }
+
+                        if ($searchQuery) {
+                            $builder
+                                ->andWhere('e.name LIKE :searchQuery')
+                                ->setParameter('searchQuery', '%' . $searchQuery . '%');
                         }
                     },
                 ])
@@ -135,7 +147,8 @@ class ProjectController extends AbstractController
             'numberOfSubmissionsByProject' => $numberOfSubmissionsByProject,
             'view' => $view,
             'datatable' => $table,
-            'filter' => $filter
+            'filter' => $filter,
+            'searchQuery' => $searchQuery,
         ]);
     }
 

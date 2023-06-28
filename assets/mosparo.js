@@ -21,6 +21,7 @@ global.ApexCharts = apexCharts;
 const dt = require('datatables.net');
 const dtR = require('datatables.net-responsive');
 
+import './js/ui.js';
 import './js/form.js';
 import './js/color.js';
 import './js/table.js';
