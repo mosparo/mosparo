@@ -20,6 +20,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Danish                | da            | [Digi92](https://hosted.weblate.org/user/Digi92/)                                                            |
 | Dutch                 | nl            | [Digi92](https://hosted.weblate.org/user/Digi92/)                                                            |
 | English               | en            | mosparo Core Developers                                                                                      |
+| Estonian              | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                      |
 | French                | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), mosparo Core Developers                             |
 | German                | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/)                                   |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                                                            |
@@ -56,6 +57,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 |------------|---------------|-------------------------------------------------------------|
 | Czech      | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)         |
 | English    | en            | mosparo Core Developers                                     |
+| Estonian   | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)     |
 | French     | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/)     |
 | German     | de            | mosparo Core Developers                                     |
 | Indonesian | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)           |
