@@ -177,7 +177,12 @@ class RulesetHelper
             $rulesetRuleCache->setName($rule['name']);
             $rulesetRuleCache->setDescription($rule['description']);
             $rulesetRuleCache->setType($rule['type']);
-            $rulesetRuleCache->setSpamRatingFactor($rule['spamRatingFactor']);
+
+            $rating = null;
+            if ($rule['spamRatingFactor']) {
+                $rating = (float) $rule['spamRatingFactor'];
+            }
+            $rulesetRuleCache->setSpamRatingFactor($rating);
 
             $processedItemUuids = [];
             foreach ($rule['items'] as $item) {
@@ -194,7 +199,12 @@ class RulesetHelper
 
                 $rulesetRuleItemCache->setType($item['type']);
                 $rulesetRuleItemCache->setValue($item['value']);
-                $rulesetRuleItemCache->setSpamRatingFactor((float) $item['rating']);
+
+                $rating = null;
+                if ($item['rating']) {
+                    $rating = (float) $item['rating'];
+                }
+                $rulesetRuleItemCache->setSpamRatingFactor($rating);
             }
 
             // Remove all rule items which are not in the data anymore
