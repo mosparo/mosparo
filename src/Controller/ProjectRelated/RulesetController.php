@@ -102,7 +102,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         $isNew = false;
         if ($ruleset === null) {
             $ruleset = new Ruleset();
-            $ruleset->setSTatus(true);
+            $ruleset->setStatus(true);
             $isNew = true;
         }
 
