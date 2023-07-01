@@ -1209,6 +1209,7 @@ action:
   goToTheDashboard: Go to the dashboard
   checkRequirements: Check requirements
   export: Export
+  importProject: Import project
   simulateImport: Simulate import
   executeChanges: Execute changes
 
