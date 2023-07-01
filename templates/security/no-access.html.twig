@@ -2,7 +2,7 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'security.title.noAccess'|trans }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'security.noAccess.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
 {% block pageBody %}
@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col">
             <div class="alert alert-important alert-danger text-center">
-                {{ 'security.title.noAccess'|trans }}
+                {{ 'security.noAccess.title'|trans }}
             </div>
         </div>
     </div>
