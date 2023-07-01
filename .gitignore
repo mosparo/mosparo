@@ -9,6 +9,7 @@
 /public/update-log/
 /var/
 !/var/data/geoip2/.gitkeep
+!/var/data/import/.gitkeep
 /vendor/
 ###< symfony/framework-bundle ###
 
