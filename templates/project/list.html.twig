@@ -101,19 +101,24 @@
                                                 {{ 'project.action.goto'|trans }}
                                             </a>
                                         </div>
-                                        {% if can_user_manage_project(project) %}
-                                            <div class="col-auto dropdown">
-                                                <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
-                                                    <i class="ti ti-settings"></i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
+                                        <div class="col-auto dropdown">
+                                            <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="ti ti-settings"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <div class="dropdown-item disabled">
+                                                    {{ 'project.action.id'|trans }}
+                                                    <span class="ms-auto">{{ project.id }}</span>
+                                                </div>
+                                                <div class="dropdown-divider"></div>
+                                                {% if can_user_manage_project(project) %}
                                                     <a href="{{ path('project_delete', { project: project.id }) }}" class="dropdown-item text-red">
                                                         <i class="ti ti-circle-minus"></i>
                                                         {{ 'project.action.delete'|trans }}
                                                     </a>
-                                                </div>
+                                                {% endif %}
                                             </div>
-                                        {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

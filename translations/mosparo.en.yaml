@@ -28,6 +28,7 @@ project:
 
   action:
     manage: Manage project
+    id: Project ID
     delete: Delete project
     goto: Go to project
 
