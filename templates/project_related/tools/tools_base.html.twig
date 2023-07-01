@@ -19,6 +19,20 @@
                         {{ 'tools.ruleTester.title'|trans }}
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ path('tools_export') }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_export' %}active{% endif %}">
+                        <i class="ti ti-file-export"></i>
+                        {{ 'tools.export.title'|trans }}
+                    </a>
+                </li>
+                {% if isOwner %}
+                    <li class="nav-item">
+                        <a href="{{ path('tools_import') }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_import' %}active{% endif %}">
+                            <i class="ti ti-file-import"></i>
+                            {{ 'tools.import.title'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
         <div class="col-12 col-lg-10">

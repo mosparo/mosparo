@@ -679,6 +679,93 @@ tools:
         rating: Rating
         noMatchingRules: No rule matched the test value.
 
+  export:
+    title: Export
+    intro: If you want to move your project to a different mosparo installation or if you want to synchronize the settings with another project, you can export the project with this functionality. Choose which data you want to export and click the button.
+    includedData: Included data
+    infoSensitiveData: Sensitive data will never be included in the export. Submissions, submit tokens, the unique project identifier, the API keys, and the project members will not be in the export.
+
+    errorMessage:
+      selectAtLeastOneElement: Select at least one element that you want to export.
+
+  import:
+    title: Import
+    intro: If you want to copy the data from another project into this one, please choose the file to import and which data you want to import. If you import the rules, please choose how mosparo should handle existing rules.
+    intro2: After you've selected all the data, please click the button below. mosparo will analyze the file and gives you a summary of what will be changed before anything is imported.
+    importData: Data to import
+    infoOverrideData: The settings, as well as the rulesets, will always be overridden in the project. The URL will match the ruleset. For the rules, you have to choose what mosparo should do with existing rules.
+
+    backToImport: Back to import
+
+    form:
+      importFile: File to import
+      handlingExistingRules: Handling of existing rules
+
+      choice:
+        override: Override
+        overrideHelp: All existing rules will be overridden with the rule from the import file. All additional rule items will be deleted.
+        append: Append
+        appendHelp: mosparo will append the rule items from the file to the existing rules but will not delete any rule items.
+        add: Add
+        addHelp: mosparo will add existing rules as new rules. The new rules will receive a new identifier.
+
+    message:
+      changesSuccessfullyExecuted: The changes were executed successfully.
+
+    errorMessage:
+      selectAtLeastOneElement: Select at least one element that you want to import.
+      fileUploadError: The file was not uploaded correctly. Please check the log file.
+
+    simulate:
+      title: Available changes
+      intro: mosparo simulated the import and detected the following changes. Please review them and execute the changes if everything is okay.
+      notRedoable: You cannot redo these changes as soon as you've executed them. You can export the project before executing the changes to have a configuration backup.
+      noChangesFound: The project is already the same as the data in the import file, and no changes are available.
+
+      changes:
+        notActive: This section is not active for this import.
+        notInExport: This section is not available in the import file.
+        noChangesRequired: For this section are no changes required since everything is up to date already.
+
+      table:
+        name: Name
+        oldValue: Old value
+        newValue: New value
+        type: Type
+        status: Status
+        url: URL
+        add: Add
+        modify: Modify
+        items: Items
+        itemsAdd: Add
+        itemsModify: Modify
+        itemsRemove: Remove
+        spamRatingFactor: Spam rating factor
+
+      errorMessage:
+        jobDataFileNotFound: Job data file for token does not exist.
+        jobDataInvalid: Job data for token are invalid.
+        importFileNotFound: The import file does not exist.
+        importFileInvalid: The import file is not valid.
+        projectNotAvailable: Cannot find project by id.
+        wrongSpecificationsVersion: The import file was created with a different specifications version than this mosparo is using.
+        noChangesAvailable: There are no changes are available.
+        storedRuleNotFound: The stored rule was not found.
+        storedRuleItemNotFound: The stored rule item was not found.
+        storedRulesetNotFound: The stored ruleset was not found.
+
+  eiParts:
+    generalSettings: General settings
+    generalSettingsHelp: Includes the general settings of a project like the name, the description, the hosts as well as the spam score.
+    designSettings: Design settings
+    designSettingsHelp: Includes all settings related to the design of a project.
+    securitySettings: Security settings
+    securitySettingsHelp: Includes all settings related to the security of a project.
+    rules: Rules
+    rulesHelp: Includes all rules of a project.
+    rulesets: Rulesets
+    rulesetsHelp: Includes all rulesets of a project.
+
 # Administration
 administration:
   title: Administration
@@ -1120,6 +1207,9 @@ action:
   installUpdate: Install update
   goToTheDashboard: Go to the dashboard
   checkRequirements: Check requirements
+  export: Export
+  simulateImport: Simulate import
+  executeChanges: Execute changes
 
 # General values
 general:

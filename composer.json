@@ -30,7 +30,7 @@
         "gracious/doctrine-encryption-bundle": "^3.0",
         "mlocati/ip-lib": "^1.16",
         "mosparo/php-api-client": "^1.0",
-        "mosparo/specifications": "^2.0",
+        "mosparo/specifications": "^3.0",
         "nelmio/security-bundle": "^3.0",
         "omines/datatables-bundle": "^0.5.4",
         "opis/json-schema": "^2.2",

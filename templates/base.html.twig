@@ -191,7 +191,7 @@
                                                 </a>
                                                 <div class="dropdown-menu" data-bs-popper="none">
                                                     <a class="dropdown-item" href="{{ path('settings_general') }}">
-                                                        <i class="ti ti-tool"></i>
+                                                        <i class="ti ti-settings"></i>
                                                         {{ 'settings.general.title'|trans }}
                                                     </a>
                                                     <a class="dropdown-item" href="{{ path('settings_member_list') }}">
@@ -222,6 +222,16 @@
                                                     <i class="ti ti-test-pipe"></i>
                                                     {{ 'tools.ruleTester.title'|trans }}
                                                 </a>
+                                                <a class="dropdown-item" href="{{ path('tools_export') }}">
+                                                    <i class="ti ti-file-export"></i>
+                                                    {{ 'tools.export.title'|trans }}
+                                                </a>
+                                                {% if isOwner %}
+                                                    <a class="dropdown-item" href="{{ path('tools_import') }}">
+                                                        <i class="ti ti-file-import"></i>
+                                                        {{ 'tools.import.title'|trans }}
+                                                    </a>
+                                                {% endif %}
                                             </div>
                                         </li>
                                     {% endif %}

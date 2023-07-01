@@ -1,0 +1,107 @@
+{% extends 'project_related/tools/tools_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'tools.import.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'tools.import.title'|trans }}{% endblock %}
+
+{% block settingsPageBody %}
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">{{ 'tools.import.title'|trans }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ 'tools.import.intro'|trans }}</p>
+
+                        <p>{{ 'tools.import.intro2'|trans }}</p>
+
+                        {% if error %}
+                            <div class="alert alert-danger">
+                                {{ errorMessage|trans }}
+                            </div>
+                        {% endif %}
+
+                        {{ form_row(form.importFile) }}
+
+                        <h4>{{ 'tools.import.importData'|trans }}</h4>
+                        <div class="row">
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.generalSettings) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.designSettings) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.securitySettings) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.rules) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.rulesets) }}
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            {{ 'tools.import.infoOverrideData'|trans }}
+                        </div>
+
+                        <div id="handlingExistingRulesContainer" class="d-none">
+                            {{ form_label(form.handlingExistingRules) }}
+                            <div class="row">
+                                <div class="col-12 col-md-4 mb-3">
+                                    {{ form_widget(form.handlingExistingRules[0]) }}
+                                    <p class="form-text mb-0 help-text">
+                                        {{ 'tools.import.form.choice.overrideHelp'|trans }}
+                                    </p>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    {{ form_widget(form.handlingExistingRules[1]) }}
+                                    <p class="form-text mb-0 help-text">
+                                        {{ 'tools.import.form.choice.appendHelp'|trans }}
+                                    </p>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    {{ form_widget(form.handlingExistingRules[2]) }}
+                                    <p class="form-text mb-0 help-text">
+                                        {{ 'tools.import.form.choice.addHelp'|trans }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto ms-auto">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-file-import"></i>
+                    {{ 'action.simulateImport'|trans }}
+                </button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#form_rules').change(function () {
+                    let container = $('#handlingExistingRulesContainer');
+                    if ($(this).is(':checked')) {
+                        container.removeClass('d-none');
+                    } else {
+                        container.addClass('d-none');
+                    }
+                }).trigger('change');
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

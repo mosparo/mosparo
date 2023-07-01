@@ -9,3 +9,8 @@ password:
     form:
       constraint:
         notBlank: Please enter your email.
+
+tools:
+  import:
+    importFile:
+      correctFile: Please upload a correct JSON file.

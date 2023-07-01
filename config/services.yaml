@@ -150,6 +150,11 @@ services:
         arguments:
             $downloadDirectory: '%kernel.project_dir%/var/data/geoip2'
 
+    Mosparo\Helper\ImportHelper:
+        class: Mosparo\Helper\ImportHelper
+        arguments:
+            $importDirectory: '%kernel.project_dir%/var/data/import'
+
     Mosparo\Helper\SetupHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'

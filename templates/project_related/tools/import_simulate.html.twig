@@ -1,0 +1,363 @@
+{% extends 'project_related/tools/tools_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'tools.import.simulate.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'tools.import.simulate.title'|trans }}{% endblock %}
+
+{% block settingsPageBody %}
+    {% if error %}
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ errorMessage|trans }}
+            </div>
+        {% endif %}
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto">
+                <a href="{{ path('tools_import') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'tools.import.backToImport'|trans }}
+                </a>
+            </div>
+        </div>
+    {% else %}
+        {{ form_start(form) }}
+            {{ form_widget(form.token) }}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">{{ 'tools.import.simulate.title'|trans }}</h2>
+                        </div>
+                        <div class="card-body">
+                            {% if hasChanges and changes %}
+                                <p>{{ 'tools.import.simulate.intro'|trans }}</p>
+
+                                <div class="card-tabs">
+                                    <ul class="nav nav-tabs" data-bs-toggle="tabs">
+                                        <li class="nav-item only-icon">
+                                            <a href="#tabs-general-settings" class="nav-link active" data-bs-toggle="tab">
+                                                <i class="ti ti-settings"></i>
+                                                <span class="visible-when-active d-xl-inline">
+                                                    {{ 'tools.eiParts.generalSettings'|trans }}
+                                                </span>
+                                                {% if changes.generalSettings is defined %}
+                                                    {%  set numberOfChanges = changes.generalSettings|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                {% endif %}
+                                            </a>
+                                        </li>
+                                        <li class="nav-item only-icon">
+                                            <a href="#tabs-design-settings" class="nav-link" data-bs-toggle="tab">
+                                                <i class="ti ti-color-swatch"></i>
+                                                <span class="visible-when-active d-xl-inline">
+                                                    {{ 'tools.eiParts.designSettings'|trans }}
+                                                </span>
+                                                {% if changes.designSettings is defined %}
+                                                    {%  set numberOfChanges = changes.designSettings|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                {% endif %}
+                                            </a>
+                                        </li>
+                                        <li class="nav-item only-icon">
+                                            <a href="#tabs-security-settings" class="nav-link" data-bs-toggle="tab">
+                                                <i class="ti ti-shield-x"></i>
+                                                <span class="visible-when-active d-xl-inline">
+                                                    {{ 'tools.eiParts.securitySettings'|trans }}
+                                                </span>
+                                                {% if changes.securitySettings is defined %}
+                                                    {%  set numberOfChanges = changes.securitySettings|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                {% endif %}
+                                            </a>
+                                        </li>
+                                        <li class="nav-item only-icon">
+                                            <a href="#tabs-rules" class="nav-link" data-bs-toggle="tab">
+                                                <i class="ti ti-filter"></i>
+                                                <span class="visible-when-active d-xl-inline">
+                                                    {{ 'tools.eiParts.rules'|trans }}
+                                                </span>
+                                                {% if changes.rules is defined %}
+                                                    {%  set numberOfChanges = changes.rules|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                {% endif %}
+                                            </a>
+                                        </li>
+                                        <li class="nav-item only-icon">
+                                            <a href="#tabs-rulesets" class="nav-link" data-bs-toggle="tab">
+                                                <i class="ti ti-stack"></i>
+                                                <span class="visible-when-active d-xl-inline">
+                                                    {{ 'tools.eiParts.rulesets'|trans }}
+                                                </span>
+                                                {% if changes.rulesets is defined %}
+                                                    {%  set numberOfChanges = changes.rulesets|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                {% endif %}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="card tab-pane active show" id="tabs-general-settings">
+                                            <div class="card-body">
+                                                {% if changes.generalSettings is defined and changes.generalSettings %}
+                                                    {{ _self.changesTable('generalSettings', changes.generalSettings) }}
+                                                {% else %}
+                                                    {% if not jobData.importGeneralSettings %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
+                                                        </div>
+                                                    {% elseif not importData.project.name is defined %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="card tab-pane" id="tabs-design-settings">
+                                            <div class="card-body">
+                                                {% if changes.designSettings is defined and changes.designSettings %}
+                                                    {{ _self.changesTable('designSettings', changes.designSettings) }}
+                                                {% else %}
+                                                    {% if not jobData.importDesignSettings %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
+                                                        </div>
+                                                    {% elseif not importData.project.design is defined %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="card tab-pane" id="tabs-security-settings">
+                                            <div class="card-body">
+                                                {% if changes.securitySettings is defined and changes.securitySettings %}
+                                                    {{ _self.changesTable('securitySettings', changes.securitySettings) }}
+                                                {% else %}
+                                                    {% if not jobData.importSecuritySettings %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
+                                                        </div>
+                                                    {% elseif not importData.project.security is defined %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="card tab-pane" id="tabs-rules">
+                                            <div class="card-body">
+                                                {% if changes.rules is defined and changes.rules %}
+                                                    {{ _self.changesTable('rules', changes.rules) }}
+                                                {% else %}
+                                                    {% if not jobData.importRules %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
+                                                        </div>
+                                                    {% elseif not importData.project.rules is defined %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="card tab-pane" id="tabs-rulesets">
+                                            <div class="card-body">
+                                                {% if changes.rulesets is defined and changes.rulesets %}
+                                                    {{ _self.changesTable('rulesets', changes.rulesets) }}
+                                                {% else %}
+                                                    {% if not jobData.importRulesets %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
+                                                        </div>
+                                                    {% elseif not importData.project.rulesets is defined %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="alert alert-info">
+                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-warning mt-3">
+                                    {{ 'tools.import.simulate.notRedoable'|trans }}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success">
+                                    {{ 'tools.import.simulate.noChangesFound'|trans }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto">
+                    <a href="#" class="btn btn-outline-secondary w-100 go-back-button" tabindex="1000">
+                        <i class="ti ti-chevron-left"></i>
+                        {{ 'tools.import.backToImport'|trans }}
+                    </a>
+                </div>
+                {% if hasChanges and changes %}
+                    <div class="col-12 col-md-auto ms-auto">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="ti ti-file-import"></i>
+                            {{ 'action.executeChanges'|trans }}
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+        {{ form_end(form) }}
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('.go-back-button').click(function () {
+                    window.history.back();
+                });
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}
+
+{% macro changesTable(type, changes) %}
+    <table class="table table-striped table-vcenter">
+        <thead>
+            {% if type == 'generalSettings' or type == 'designSettings' or type == 'securitySettings' %}
+                <tr>
+                    <th width="30%">{{ 'tools.import.simulate.table.name'|trans }}</th>
+                    <th width="35%">{{ 'tools.import.simulate.table.oldValue'|trans }}</th>
+                    <th width="35%">{{ 'tools.import.simulate.table.newValue'|trans }}</th>
+                </tr>
+            {% elseif type == 'rules' %}
+                <tr>
+                    <td colspan="3"></td>
+                    <th colspan="3" class="text-center">{{ 'tools.import.simulate.table.items'|trans }}</th>
+                </tr>
+                <tr>
+                    <th width="1%"></th>
+                    <th>{{ 'tools.import.simulate.table.name'|trans }}</th>
+                    <th>{{ 'tools.import.simulate.table.type'|trans }}</th>
+                    <th width="1%" class="text-center">{{ 'tools.import.simulate.table.itemsAdd'|trans }}</th>
+                    <th width="1%" class="text-center">{{ 'tools.import.simulate.table.itemsModify'|trans }}</th>
+                    <th width="1%" class="text-center">{{ 'tools.import.simulate.table.itemsRemove'|trans }}</th>
+                </tr>
+            {% elseif type == 'rulesets' %}
+                <tr>
+                    <th width="1%"></th>
+                    <th>{{ 'tools.import.simulate.table.name'|trans }}</th>
+                    <th>{{ 'tools.import.simulate.table.url'|trans }}</th>
+                    <th width="1%" class="text-center">{{ 'tools.import.simulate.table.status'|trans }}</th>
+                    <th width="1%" class="text-end">{{ 'tools.import.simulate.table.spamRatingFactor'|trans }}</th>
+                </tr>
+            {% endif %}
+        </thead>
+        <tbody>
+            {% for change in changes %}
+                {% if type == 'generalSettings' or type == 'designSettings' or type == 'securitySettings' %}
+                    <tr>
+                        <td>{{ change.key }}</td>
+                        <td class="text-danger">
+                            {% if change.oldValue is iterable %}
+                                {{ change.oldValue|join(', ') }}
+                            {% else %}
+                                {{ change.oldValue|nl2br }}
+                            {% endif %}
+                        </td>
+                        <td class="text-success">
+                            {% if change.newValue is iterable %}
+                                {{ change.newValue|join(', ') }}
+                            {% else %}
+                                {{ change.newValue|nl2br }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% elseif type == 'rules' %}
+                    <tr>
+                        <td>
+                            {% if change.mode == 'add' %}
+                                <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.add'|trans }}">
+                                    <i class="ti ti-plus"></i>
+                                </span>
+                            {% elseif change.mode == 'modify' %}
+                                <span class="text-azure mode-icon" title="{{ 'tools.import.simulate.table.modify'|trans }}">
+                                    <i class="ti ti-pencil"></i>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ change.importedRule.name }}</td>
+                        <td>
+                            {% set ruleType = rule_type(change.importedRule.type) %}
+                            {% if ruleType %}
+                                <div class="rule-type-label">
+                                    <i class="{{ ruleType.icon }}"></i>
+                                    {{ ruleType.name|trans }}
+                                </div>
+                            {% else %}
+                                <code>{{ change.importedRule.type }}</code>
+                            {% endif %}
+                        </td>
+                        <td class="text-end text-success strong">{{ change.itemChanges['add']|length }}</td>
+                        <td class="text-end text-azure strong">{{ change.itemChanges['modify']|length }}</td>
+                        <td class="text-end text-danger strong">{{ change.itemChanges['remove']|length }}</td>
+                    </tr>
+                {% elseif type == 'rulesets' %}
+                    <tr>
+                        <td>
+                            {% if change.mode == 'add' %}
+                                <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.add'|trans }}">
+                                    <i class="ti ti-plus"></i>
+                                </span>
+                            {% elseif change.mode == 'modify' %}
+                                <span class="text-azure mode-icon" title="{{ 'tools.import.simulate.table.modify'|trans }}">
+                                    <i class="ti ti-pencil"></i>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ change.importedRuleset.name }}</td>
+                        <td><code>{{ change.importedRuleset.url }}</code></td>
+                        <td class="text-center">
+                            {% if change.importedRuleset.status %}
+                                <span class="text-success"><strong>{{ 'state.active'|trans }}</strong></span>
+                            {% else %}
+                                <span class="text-danger"><strong>{{ 'state.inactive'|trans }}</strong></span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">{{ change.importedRuleset.spamRatingFactor }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}

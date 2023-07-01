@@ -173,7 +173,9 @@ class ProjectSubscriber implements EventSubscriberInterface
             'settings_member_remove' => ProjectMember::ROLE_OWNER,
             'settings_security' => ProjectMember::ROLE_OWNER,
             'settings_design' => ProjectMember::ROLE_OWNER,
-            'settings_reissue_keys' => ProjectMember::ROLE_OWNER
+            'settings_reissue_keys' => ProjectMember::ROLE_OWNER,
+            'tools_import' => ProjectMember::ROLE_OWNER,
+            'tools_import_simulate' => ProjectMember::ROLE_OWNER,
         ];
 
         if ($activeRoute === 'rule_edit' && $request->getMethod() === 'POST') {

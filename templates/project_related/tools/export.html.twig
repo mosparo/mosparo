@@ -1,0 +1,60 @@
+{% extends 'project_related/tools/tools_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'tools.export.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'tools.export.title'|trans }}{% endblock %}
+
+{% block settingsPageBody %}
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">{{ 'tools.export.title'|trans }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ 'tools.export.intro'|trans }}</p>
+
+                        {% if error %}
+                            <div class="alert alert-danger">
+                                {{ errorMessage|trans }}
+                            </div>
+                        {% endif %}
+
+                        <h4>{{ 'tools.export.includedData'|trans }}</h4>
+                        <div class="row">
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.generalSettings) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.designSettings) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.securitySettings) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.rules) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.rulesets) }}
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            {{ 'tools.export.infoSensitiveData'|trans }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto ms-auto">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-file-export"></i>
+                    {{ 'action.export'|trans }}
+                </button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
