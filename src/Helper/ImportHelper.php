@@ -59,9 +59,11 @@ class ImportHelper
         return $data;
     }
 
-    public function simulateImport(string $token): array
+    public function simulateImport(?string $token, array $jobData = []): array
     {
-        $jobData = $this->loadJobData($token);
+        if ($token !== null) {
+            $jobData = $this->loadJobData($token);
+        }
 
         // Get the project to make sure we're using the right project
         $projectRepository = $this->entityManager->getRepository(Project::class);
@@ -95,9 +97,11 @@ class ImportHelper
         return [$jobData, $importData, $this->hasChanges($changes), $changes];
     }
 
-    public function executeImport(string $token)
+    public function executeImport(?string $token, array $jobData = [])
     {
-        $jobData = $this->loadJobData($token);
+        if ($token !== null) {
+            $jobData = $this->loadJobData($token);
+        }
 
         // Get the project to make sure we're using the right project
         $projectRepository = $this->entityManager->getRepository(Project::class);
@@ -130,7 +134,9 @@ class ImportHelper
         }
 
         // Remove the two files since everything is done
-        $this->removeFiles($token, $jobData['importDataFilename']);
+        if ($token !== null) {
+            $this->removeFiles($token, $jobData['importDataFilename']);
+        }
 
         // Set the originally active project
         $this->projectHelper->setActiveProject($activeProject);
@@ -138,7 +144,11 @@ class ImportHelper
 
     protected function loadImportData(array $jobData): array
     {
-        $filePath = $this->importDirectory . '/' . $jobData['importDataFilename'];
+        $filePath = $jobData['importDataFilename'];
+        if (!str_starts_with($filePath, '/')) {
+            $filePath = $this->importDirectory . '/' . $jobData['importDataFilename'];
+        }
+
         if (!file_exists($filePath)) {
             throw new ImportException(sprintf('Import file "%s" does not exist.', $jobData['importDataFilename']), ImportException::IMPORT_FILE_NOT_FOUND);
         }
@@ -322,7 +332,7 @@ class ImportHelper
                         if (
                             $storedItem->getType() !== $item['type'] ||
                             $storedItem->getValue() !== $item['value'] ||
-                            $storedItem->getSpamRatingFactor() !== (float) $item['rating']
+                            !$this->isSpamRatingFactorEqual($storedItem->getSpamRatingFactor(), (float) $item['rating'])
                         ) {
                             $itemChanges['modify'][] = array_merge(
                                 [
@@ -352,7 +362,7 @@ class ImportHelper
                 if (
                     $storedRule->getName() === $rule['name'] &&
                     $storedRule->getDescription() === $rule['description'] &&
-                    $storedRule->getSpamRatingFactor() === (float) $rule['spamRatingFactor'] &&
+                    $this->isSpamRatingFactorEqual($storedRule->getSpamRatingFactor(), (float) $rule['spamRatingFactor']) &&
                     $storedRule->getStatus() === (int) $rule['status'] &&
                     count($itemChanges['add']) === 0 &&
                     count($itemChanges['modify']) === 0 &&
@@ -376,6 +386,19 @@ class ImportHelper
         }
 
         return $changes;
+    }
+
+    protected function isSpamRatingFactorEqual(?float $storedRating, ?float $importedRating)
+    {
+        if ($storedRating == 1) {
+            $storedRating = null;
+        }
+
+        if ($importedRating == 1) {
+            $importedRating = null;
+        }
+
+        return ($storedRating === $importedRating);
     }
 
     protected function findRulesetChanges(array $rulesets): array
