@@ -4,6 +4,7 @@ header:
   account: Account
 
 # Projects
+  noProjectsFound: Keine Projekte gefunden
 project:
   title: Projekte
   backToList: Zu den Projekten
@@ -15,6 +16,7 @@ project:
     delete: Projekt löschen
     goto: Zum Projekt
 
+    id: Projekt-ID
   create:
     title: Projekt erstellen
 
@@ -59,6 +61,17 @@ project:
       introStartWizard: Ihr Projekt wurde erfolgreich erstellt. Damit Sie auf Ihrer Website benutzen können, wählen Sie bitte die gewünschte Darstellung und fahren Sie fort.
 
 # Dashboard
+  list:
+    name: Name
+    status: Status
+    actions: Aktionen
+  filter:
+    options:
+      all: Alle anzeigen
+      active: Alle aktiven Projekte anzeigen
+      inactive: Alle inaktiven Projekte anzeigen
+  search:
+    placeholder: Suchen nach…
 dashboard:
   title: Übersicht
   chart:
@@ -244,6 +257,9 @@ rule:
       placeholder: Bewertung
 
 # Ruleset
+  filter:
+    options:
+      all: Alle anzeigen
 ruleset:
   title: Regel-Pakete
   backToList: Zu den Regel-Paketen
@@ -297,6 +313,22 @@ ruleset:
       value: Wert
       rating: Bewertung
 
+    list:
+      ruleItems:
+        value: Wert
+        type: Typ
+        spamRatingFactor: Spam-Bewertungsfaktor
+      rules:
+        spamRatingFactor: Spam-Bewertungsfaktor
+        name: Name
+        type: Typ
+        actions: Aktionen
+    rule:
+      details:
+        spamRatingFactor: Spam-Bewertungsfaktor
+        type: Typ
+        title: Details der Regel
+        name: Name
   delete:
     title: Regel-Paket %rulesetName% löschen
     confirm: Wollen Sie das Regel-Paket %rulesetName% wirklich löschen?
@@ -1113,3 +1145,5 @@ setup:
     title: Installation abgeschlossen
     description: Die Installation wurde erfolgreich abgeschlossen. Sie können sich nun mit Ihrem Benutzer einloggen.
 
+tools:
+  title: Werkzeuge
