@@ -17,12 +17,15 @@ class ImportHelper
 
     protected ProjectHelper $projectHelper;
 
+    protected DesignHelper $designHelper;
+
     protected string $importDirectory;
 
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, string $importDirectory)
+    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, DesignHelper $designHelper, string $importDirectory)
     {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
+        $this->designHelper = $designHelper;
         $this->importDirectory = $importDirectory;
     }
 
@@ -121,9 +124,14 @@ class ImportHelper
         }
 
         // Execute the changes
+        $refreshCssCache = false;
         foreach ($changes as $sectionKey => $sectionChanges) {
             if (in_array($sectionKey, ['generalSettings', 'designSettings', 'securitySettings'])) {
                 $this->executeProjectChanges($project, $sectionChanges);
+
+                if ($sectionKey === 'designSettings' && $sectionChanges) {
+                    $refreshCssCache = true;
+                }
             } else if ($sectionKey === 'rules') {
                 $this->executeRuleChanges($sectionChanges);
             } else if ($sectionKey === 'rulesets') {
@@ -131,6 +139,11 @@ class ImportHelper
             }
 
             $this->entityManager->flush();
+        }
+
+        // Prepare the css cache
+        if ($refreshCssCache) {
+            $this->designHelper->generateCssCache($project);
         }
 
         // Remove the two files since everything is done
