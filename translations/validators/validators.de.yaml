@@ -10,3 +10,7 @@ password:
     form:
       constraint:
         notBlank: Bitte geben Sie Ihre E-Mail-Adresse ein.
+tools:
+  import:
+    importFile:
+      correctFile: Bitte laden Sie eine korrekte JSON-Datei hoch.
