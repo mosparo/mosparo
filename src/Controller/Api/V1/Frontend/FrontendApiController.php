@@ -113,6 +113,7 @@ class FrontendApiController extends AbstractController
         return new JsonResponse([
             'submitToken' => $submitToken->getToken(),
             'messages' => $this->getTranslations($request),
+            'invisible' => ($submitToken->getProject()->getDesignMode() === 'invisible-simple')
         ] + $args);
     }
 
@@ -292,6 +293,10 @@ class FrontendApiController extends AbstractController
 
         if ($withMessages) {
             $data['messages'] = $this->getTranslations($request);
+        }
+
+        if ($this->projectHelper->getActiveProject() && $this->projectHelper->getActiveProject()->getDesignMode() === 'invisible-simple') {
+            $data['invisible'] = true;
         }
 
         return new JsonResponse($data);

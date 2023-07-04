@@ -21,8 +21,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
         onCheckForm: null,
         onResetState: null,
         onAbortSubmit: null,
+        onSwitchToInvisible: null,
+        onValidateFormInvisible: null,
+        onSubmitFormInvisible: null
     };
     this.options = {...this.defaultOptions, ...options};
+    this.invisible = false;
 
     this.id = '';
     this.formElement = null;
@@ -33,7 +37,9 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.validationTokenElement = null;
     this.labelElement = null;
     this.accessibleStatusElement = null;
+    this.errorMessageElement = null;
     this.hpFieldElement = null;
+    this.loaderContainerElement = null;
 
     this.countdownInterval = null;
     this.countdownSeconds = 0;
@@ -177,7 +183,21 @@ function mosparo(containerId, url, uuid, publicKey, options)
             });
 
             this.formElement.addEventListener('submit', function (ev) {
-                if (!_this.verifyCheckedFormData()) {
+                if (_this.invisible && (!_this.checkboxFieldElement.checked || !_this.verifyCheckedFormData())) {
+                    _this.loaderContainerElement.classList.add('mosparo__loader-visible');
+
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+
+                    // Execute the event and the callback
+                    _this.formElement.dispatchEvent(new CustomEvent('validate-form-invisible', { bubbles: true }));
+
+                    if (_this.options.onValidateFormInvisible !== null) {
+                        _this.options.onValidateFormInvisible();
+                    }
+
+                    _this.checkForm();
+                } else if (!_this.verifyCheckedFormData()) {
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
 
@@ -246,6 +266,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
         };
 
         this.send('/api/v1/frontend/request-submit-token', data, function (response) {
+            if (response.invisible) {
+                _this.switchToInvisible();
+            }
+
             if (response.submitToken) {
                 _this.containerElement.classList.remove('mosparo__loading');
                 _this.submitTokenElement.value = response.submitToken;
@@ -334,6 +358,28 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
             if (_this.options.onCheckForm !== null) {
                 _this.options.onCheckForm(response.valid);
+            }
+
+            if (_this.invisible) {
+                if (response.valid) {
+                    _this.checkboxFieldElement.setAttribute('checked', 'checked');
+
+                    // Execute the event and the callback
+                    _this.formElement.dispatchEvent(new CustomEvent('submit-form-invisible', { bubbles: true }));
+
+                    if (_this.options.onSubmitFormInvisible !== null) {
+                        _this.options.onSubmitFormInvisible();
+                    }
+
+                    let buttons = _this.formElement.querySelectorAll('[type="submit"]');
+                    if (buttons.length) {
+                        buttons.item(0).click();
+                    } else {
+                        _this.formElement.submit();
+                    }
+                }
+
+                _this.loaderContainerElement.classList.remove('mosparo__loader-visible');
             }
         }, function () {
             _this.checkboxFieldElement.checked = false;
@@ -547,6 +593,37 @@ function mosparo(containerId, url, uuid, publicKey, options)
         this.countdownSeconds--;
 
         this.errorMessageElement.querySelectorAll('span')[0].textContent = this.countdownSeconds;
+    }
+
+    this.switchToInvisible = function () {
+        this.invisible = true;
+
+        this.formElement.classList.add('mosparo__form-with-invisible-box');
+        this.checkboxFieldElement.removeAttribute('required');
+
+        this.loaderContainerElement = document.createElement('div');
+        this.loaderContainerElement.classList.add('mosparo__loader-container');
+        this.containerElement.appendChild(this.loaderContainerElement);
+
+        let loaderInnerContainerElement = document.createElement('div');
+        loaderInnerContainerElement.classList.add('mosparo__loader-inner-container');
+        this.loaderContainerElement.appendChild(loaderInnerContainerElement);
+
+        let loaderCircleElement = document.createElement('div');
+        loaderCircleElement.classList.add('mosparo__loader-circle');
+        loaderInnerContainerElement.appendChild(loaderCircleElement);
+
+        let loaderTextElement = document.createElement('div');
+        loaderTextElement.classList.add('mosparo__loader-text');
+        loaderTextElement.textContent = this.messages.accessibilityCheckingData;
+        loaderInnerContainerElement.appendChild(loaderTextElement);
+
+        // Execute the event and the callback
+        _this.formElement.dispatchEvent(new CustomEvent('switch-to-invisible', { bubbles: true }));
+
+        if (_this.options.onSwitchToInvisible !== null) {
+            _this.options.onSwitchToInvisible();
+        }
     }
 
     this.updateMessages = function (messages) {

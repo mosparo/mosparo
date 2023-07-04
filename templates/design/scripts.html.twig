@@ -35,146 +35,160 @@
         }
 
         $(document).ready(function () {
-            $('.mosparo-box').each(function () {
-                new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
+            {% if mode == 'simple' or mode == 'advanced' %}
+                $('.mosparo-box').each(function () {
+                    new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
 
-                $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend') }}');
-                let type = $(this).data('type');
-                switch (type) {
-                    case 'focus':
-                        $(this).addClass('mosparo__focus');
-                        break;
-                    case 'loading':
-                        $(this).addClass('mosparo__loading');
-                        break;
-                    case 'success':
-                        $(this).addClass('mosparo__checked');
-                        break;
-                    case 'failure':
-                        $(this).addClass('mosparo__invalid');
-                        $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend') }}');
-                        break;
-                }
-            });
+                    $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend')|escape('js') }}');
+                    let type = $(this).data('type');
+                    switch (type) {
+                        case 'focus':
+                            $(this).addClass('mosparo__focus');
+                            break;
+                        case 'loading':
+                            $(this).addClass('mosparo__loading');
+                            break;
+                        case 'success':
+                            $(this).addClass('mosparo__checked');
+                            break;
+                        case 'failure':
+                            $(this).addClass('mosparo__invalid');
+                            $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend')|escape('js') }}');
+                            break;
+                    }
+                });
 
-            $('input[name="design_settings_form[boxRadius]"]').change(function () {
-                checkLogoAvailability();
-            });
+                $('input[name="design_settings_form[boxRadius]"]').change(function () {
+                    checkLogoAvailability();
+                });
 
-            $('input[name="design_settings_form[boxSize]"]').change(function () {
-                let size = $(this).val();
-                if (!(size in sizeVariables)) {
-                    return;
-                }
-
-                let variables = sizeVariables[size];
-                for (let variableName in variables) {
-                    let fieldForVariable = $('input[data-variable="' + variableName + '"]');
-                    if (fieldForVariable.length > 0 && initialTrigger) {
-                        continue;
-                    } else if (fieldForVariable.length > 0) {
-                        fieldForVariable.val(variables[variableName]);
+                $('input[name="design_settings_form[boxSize]"]').change(function () {
+                    let size = $(this).val();
+                    if (!(size in sizeVariables)) {
+                        return;
                     }
 
-                    updateCssVariable(variableName, variables[variableName], 'number');
-                }
+                    let variables = sizeVariables[size];
+                    for (let variableName in variables) {
+                        let fieldForVariable = $('input[data-variable="' + variableName + '"]');
+                        if (fieldForVariable.length > 0 && initialTrigger) {
+                            continue;
+                        } else if (fieldForVariable.length > 0) {
+                            fieldForVariable.val(variables[variableName]);
+                        }
 
-                checkLogoAvailability();
-            });
+                        updateCssVariable(variableName, variables[variableName], 'number');
+                    }
 
-            {% if mode == 'simple' %}
-            $('input[name="design_settings_form[colorWebsiteBackground]"]').on('change color-change', function () {
-                let val = $(this).val();
+                    checkLogoAvailability();
+                });
 
-                updateMultipleCssVariable(
-                    [
-                        '--page-body-background',
-                        '--mosparo-background-color',
-                        '--mosparo-success-background-color',
-                        '--mosparo-failure-background-color',
-                    ],
-                    val,
-                    'color'
-                );
+                {% if mode == 'simple' %}
+                    $('input[name="design_settings_form[colorWebsiteBackground]"]').on('change color-change', function () {
+                        let val = $(this).val();
 
-                let successColor = searchColorWithBestContrast(val, tinycolor('#00FF00')).toHexString();
-                updateMultipleCssVariable(
-                    [
-                        '--mosparo-success-border-color',
-                        '--mosparo-success-circle-border-color',
-                        '--mosparo-success-text-color',
-                    ],
-                    successColor,
-                    'color'
-                );
-                $('input[name="design_settings_form[colorSuccess]"]').val(successColor);
+                        updateMultipleCssVariable(
+                            [
+                                '--page-body-background',
+                                '--mosparo-background-color',
+                                '--mosparo-success-background-color',
+                                '--mosparo-failure-background-color',
+                            ],
+                            val,
+                            'color'
+                        );
 
-                let failureColor = searchColorWithBestContrast(val, tinycolor('#FF0000')).toHexString();
-                updateMultipleCssVariable(
-                    [
-                        '--mosparo-failure-border-color',
-                        '--mosparo-failure-circle-border-color',
-                        '--mosparo-failure-text-color',
-                        '--mosparo-failure-text-error-color',
-                    ],
-                    failureColor,
-                    'color'
-                );
-                $('input[name="design_settings_form[colorFailure]"]').val(failureColor);
-            });
+                        let successColor = searchColorWithBestContrast(val, tinycolor('#00FF00')).toHexString();
+                        updateMultipleCssVariable(
+                            [
+                                '--mosparo-success-border-color',
+                                '--mosparo-success-circle-border-color',
+                                '--mosparo-success-text-color',
+                            ],
+                            successColor,
+                            'color'
+                        );
+                        $('input[name="design_settings_form[colorSuccess]"]').val(successColor);
 
-            $('input[name="design_settings_form[colorWebsiteForeground]"]').on('change color-change', function () {
-                let val = $(this).val();
+                        let failureColor = searchColorWithBestContrast(val, tinycolor('#FF0000')).toHexString();
+                        updateMultipleCssVariable(
+                            [
+                                '--mosparo-failure-border-color',
+                                '--mosparo-failure-circle-border-color',
+                                '--mosparo-failure-text-color',
+                                '--mosparo-failure-text-error-color',
+                            ],
+                            failureColor,
+                            'color'
+                        );
+                        $('input[name="design_settings_form[colorFailure]"]').val(failureColor);
+                    });
 
-                updateMultipleCssVariable(
-                    [
-                        '--mosparo-text-color',
-                    ],
-                    val,
-                    'color'
-                );
-            });
+                    $('input[name="design_settings_form[colorWebsiteForeground]"]').on('change color-change', function () {
+                        let val = $(this).val();
 
-            $('input[name="design_settings_form[colorWebsiteAccent]"]').on('change color-change', function () {
-                let val = $(this).val();
+                        updateMultipleCssVariable(
+                            [
+                                '--mosparo-text-color',
+                            ],
+                            val,
+                            'color'
+                        );
+                    });
 
-                updateMultipleCssVariable(
-                    [
-                        '--mosparo-border-color',
-                        '--mosparo-circle-border-color',
-                        '--mosparo-loading-circle-animated-border-color',
-                        '--mosparo-focus-circle-border-color',
-                    ],
-                    val,
-                    'color'
-                );
+                    $('input[name="design_settings_form[colorWebsiteAccent]"]').on('change color-change', function () {
+                        let val = $(this).val();
 
-                let transparentVal = tinycolor(val).setAlpha(0.5).toRgbString();
-                updateMultipleCssVariable(
-                    [
-                        '--mosparo-focus-circle-shadow-color',
-                    ],
-                    transparentVal,
-                    'color'
-                );
-                $('input[name="design_settings_form[colorHover]"]').val(transparentVal);
-            });
-            updateMultipleCssVariable(
-                [
-                    '--mosparo-shadow-color',
-                    '--mosparo-success-shadow-color',
-                    '--mosparo-failure-shadow-color',
-                ],
-                'transparent',
-                'color'
-            );
+                        updateMultipleCssVariable(
+                            [
+                                '--mosparo-border-color',
+                                '--mosparo-circle-border-color',
+                                '--mosparo-loading-circle-animated-border-color',
+                                '--mosparo-focus-circle-border-color',
+                            ],
+                            val,
+                            'color'
+                        );
 
-            $('input.colorpicker').trigger('change');
+                        let transparentVal = tinycolor(val).setAlpha(0.5).toRgbString();
+                        updateMultipleCssVariable(
+                            [
+                                '--mosparo-focus-circle-shadow-color',
+                            ],
+                            transparentVal,
+                            'color'
+                        );
+                        $('input[name="design_settings_form[colorHover]"]').val(transparentVal);
+                    });
+                    updateMultipleCssVariable(
+                        [
+                            '--mosparo-shadow-color',
+                            '--mosparo-success-shadow-color',
+                            '--mosparo-failure-shadow-color',
+                        ],
+                        'transparent',
+                        'color'
+                    );
+
+                    $('input.colorpicker').trigger('change');
+                {% endif %}
+
+                initialTrigger = true;
+                $('input[name="design_settings_form[boxSize]"]:checked').trigger('change');
+                initialTrigger = false;
+            {% elseif mode == 'invisible-simple' %}
+                {% for variableName, variableValue in designConfigValues %}
+                    document.documentElement.style.setProperty('{{ variableName }}', '{{ variableValue }}');
+                {% endfor %}
+
+                $('.mosparo-box').each(function () {
+                    let m = new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
+                    m.switchToInvisible();
+
+                    $(this).find('.mosparo__loader-container').addClass('mosparo__loader-visible');
+                    $(this).find('.mosparo__loader-text').text('{{ 'accessibility.checkingData'|trans({}, 'frontend')|escape('js') }}');
+                });
             {% endif %}
-
-            initialTrigger = true;
-            $('input[name="design_settings_form[boxSize]"]:checked').trigger('change');
-            initialTrigger = false;
         });
     </script>
 {% endcspscript %}

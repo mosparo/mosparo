@@ -19,11 +19,15 @@
         font-weight: normal;
     }
 
+    .mosparo__label {
+        display: var(--mosparo-content-display, block);
+    }
+
     min-width: var(--mosparo-container-min-width, 300px);
     max-width: var(--mosparo-container-max-width, 500px);
 
     display: flex;
-    position: relative;
+    position: var(--mosparo-container-position, relative);
 
     user-select: none;
 
@@ -39,6 +43,7 @@
     }
 
     .mosparo__checkbox_column {
+        display: var(--mosparo-content-display, block);
         position: relative;
         margin-right: var(--mosparo-circle-margin-right, 20px);
 
@@ -316,6 +321,103 @@
             display: block;
         }
     }
+
+    .mosparo__loader-container {
+        display: none;
+        justify-content: center;
+        align-items: center;
+
+        position: var(--mosparo-loader-position, fixed);
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        z-index: 6777;
+
+        background-color: var(--mosparo-loader-background-color, rgba(255, 255, 255, 0.8));
+
+        &.mosparo__loader-visible {
+            display: flex;
+        }
+
+        .mosparo__loader-inner-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+
+            position: relative;
+
+            max-width: 80%;
+
+            &:after {
+                content: '';
+                display: var(--mosparo-show-logo, block);
+
+                width: 100%;
+                height: 15px;
+
+                margin-top: 1rem;
+
+                -webkit-mask: url('../images/mosparo_text_logo.svg') no-repeat center;
+                mask: url('../images/mosparo_text_logo.svg') no-repeat center;
+
+                background: var(--mosparo-loader-text-color, rgb(0, 0, 0));
+            }
+
+            .mosparo__loader-circle {
+                flex: 0 0 40px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                border: 3px solid transparent;
+                border-radius: 20px;
+                position: relative;
+                width: 40px;
+                height: 40px;
+
+                transition: all 0.25s;
+
+                &:after {
+                    content: "";
+                    display: block;
+
+                    opacity: 1;
+                    animation: mosparo__loading-animation 1s linear infinite;
+
+                    border: 3px solid transparent;
+                    border-left-color: var(--mosparo-loader-circle-color, rgb(0, 0, 255));
+                    border-radius: 20px;
+
+                    transition: all 0.25s;
+
+                    width: 40px;
+                    height: 40px;
+
+                    position: absolute;
+                    top: -3px;
+                    left: -3px;
+                }
+            }
+
+            .mosparo__loader-text {
+                color: var(--mosparo-loader-text-color, rgb(0, 0, 0));
+
+                font-size: 1.5rem;
+                line-height: 1.35;
+
+                padding-left: 1.5rem;
+
+                flex: 1;
+            }
+        }
+    }
+}
+
+.mosparo__form-with-invisible-box {
+    position: relative;
 }
 
 [dir="rtl"] {

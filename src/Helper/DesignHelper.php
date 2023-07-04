@@ -15,6 +15,8 @@ use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 class DesignHelper
 {
     protected static array $designConfigValueKeys = [
+        'displayContent',
+        'positionContainer',
         'boxSize',
         'boxRadius',
         'boxBorderWidth',
@@ -43,9 +45,16 @@ class DesignHelper
         'colorFailureShadowInset',
         'showPingAnimation',
         'showMosparoLogo',
+
+        'fullPageOverlay',
+        'colorLoaderBackground',
+        'colorLoaderText',
+        'colorLoaderCircle',
     ];
 
     protected static array $cssVariableNames = [
+        '--mosparo-content-display' => ['key' => 'displayContent', 'type' => 'string'],
+        '--mosparo-container-position' => ['key' => 'positionContainer', 'type' => 'string'],
         '--mosparo-border-color' => ['key' => 'colorBorder', 'type' => 'color'],
         '--mosparo-border-radius' => ['key' => 'boxRadius', 'type' => 'number'],
         '--mosparo-border-width' => ['key' => 'boxBorderWidth', 'type' => 'number'],
@@ -73,6 +82,11 @@ class DesignHelper
         '--mosparo-failure-shadow-color' => ['key' => 'colorFailureShadow', 'type' => 'color'],
         '--mosparo-failure-shadow-inset-color' => ['key' => 'colorFailureShadowInset', 'type' => 'color'],
         '--mosparo-show-logo' => ['key' => 'showMosparoLogo', 'type' => 'bool'],
+
+        '--mosparo-loader-position' => ['key' => 'fullPageOverlay', 'type' => 'bool'],
+        '--mosparo-loader-background-color' => ['key' => 'colorLoaderBackground', 'type' => 'color'],
+        '--mosparo-loader-text-color' => ['key' => 'colorLoaderText', 'type' => 'color'],
+        '--mosparo-loader-circle-color' => ['key' => 'colorLoaderCircle', 'type' => 'color'],
     ];
 
     protected static array $boxSizeVariables = [
@@ -153,6 +167,32 @@ class DesignHelper
             '--mosparo-logo-bottom' => 10,
             '--mosparo-logo-width' => 75,
             '--mosparo-logo-height' => 15,
+        ],
+        'invisible' => [
+            '--mosparo-font-size' => 16,
+            '--mosparo-line-height' => 22,
+            '--mosparo-padding-top' => 0,
+            '--mosparo-padding-left' => 0,
+            '--mosparo-padding-right' => 0,
+            '--mosparo-padding-bottom' => 0,
+            '--mosparo-border-radius' => 0,
+            '--mosparo-border-width' => 0,
+            '--mosparo-container-min-width' => 'unset',
+            '--mosparo-container-max-width' => 'unset',
+            '--mosparo-circle-size' => 0,
+            '--mosparo-circle-radius' => 0,
+            '--mosparo-circle-border-width' => 0,
+            '--mosparo-circle-offset' => 0,
+            '--mosparo-circle-margin-right' => 0,
+            '--mosparo-shadow-blur-radius' => 0,
+            '--mosparo-shadow-spread-radius' => 0,
+            '--mosparo-icon-border-offset' => 0,
+            '--mosparo-icon-border-width' => 0,
+            '--mosparo-checkmark-icon-height' => 0,
+            '--mosparo-logo-left' => 0,
+            '--mosparo-logo-bottom' => 0,
+            '--mosparo-logo-width' => 0,
+            '--mosparo-logo-height' => 0,
         ],
     ];
 
@@ -295,6 +335,22 @@ class DesignHelper
         $this->removeMapping($projectUri);
     }
 
+    public function prepareCssVariables(Project $project): array
+    {
+        $designConfigValues = $this->getDesignConfigValues($project);
+        $variables = [];
+        foreach (self::$cssVariableNames as $cssVariableName => $configValue) {
+            $key = $configValue['key'];
+            $realValue = $designConfigValues[$key];
+
+            $realValue = $this->translateValue($key, $realValue, $configValue['type']);
+
+            $variables[$cssVariableName] = $realValue;
+        }
+
+        return $variables;
+    }
+
     protected function adjustLogoVisibility($configValues): array
     {
         $size = $configValues['boxSize'] ?? 'medium';
@@ -353,13 +409,17 @@ class DesignHelper
     {
         $configValues = [];
 
-        if ($project->getDesignMode() === 'simple') {
+        if (in_array($project->getDesignMode(), ['simple', 'invisible-simple'])) {
             $defaultConfigValues = $project->getDefaultConfigValues();
             foreach (self::$designConfigValueKeys as $designConfigValueKey) {
                 $configValues[$designConfigValueKey] = $defaultConfigValues[$designConfigValueKey] ?? '';
             }
 
-            $configValues = $this->getSimpleModeValues($project, $configValues);
+            if ($project->getDesignMode() === 'simple') {
+                $configValues = $this->getSimpleModeValues($project, $configValues);
+            } else if ($project->getDesignMode() === 'invisible-simple') {
+                $configValues = $this->getInvisibleSimpleModeValues($project, $configValues);
+            }
         } else {
             foreach (self::$designConfigValueKeys as $designConfigValueKey) {
                 $configValues[$designConfigValueKey] = $project->getConfigValue($designConfigValueKey);
@@ -403,6 +463,44 @@ class DesignHelper
         $configValues['colorShadow'] = $transparent;
         $configValues['colorSuccessShadow'] = $transparent;
         $configValues['colorFailureShadow'] = $transparent;
+
+        return $configValues;
+    }
+
+    protected function getInvisibleSimpleModeValues(Project $project, $configValues)
+    {
+        $transparent = 'transparent';
+        $configValues['colorBackground'] = $transparent;
+        $configValues['colorSuccessBackground'] = $transparent;
+        $configValues['colorFailureBackground'] = $transparent;
+        $configValues['colorText'] = $transparent;
+        $configValues['colorBorder'] = $transparent;
+        $configValues['colorCheckbox'] = $transparent;
+        $configValues['colorLoadingCheckboxAnimatedCircle'] = $transparent;
+        $configValues['colorFocusCheckbox'] = $transparent;
+        $configValues['colorFocusCheckboxShadow'] = $transparent;
+        $configValues['colorSuccessBorder'] = $transparent;
+        $configValues['colorSuccessCheckbox'] = $transparent;
+        $configValues['colorSuccessText'] = $transparent;
+        $configValues['colorFailureBorder'] = $transparent;
+        $configValues['colorFailureCheckbox'] = $transparent;
+        $configValues['colorFailureText'] = $transparent;
+        $configValues['colorShadow'] = $transparent;
+        $configValues['colorSuccessShadow'] = $transparent;
+        $configValues['colorFailureShadow'] = $transparent;
+
+        $configValues['boxSize'] = 'invisible';
+        $configValues['displayContent'] = 'none';
+        $configValues['positionContainer'] = 'static';
+        $configValues['boxRadius'] = 0;
+        $configValues['boxBorderWidth'] = 0;
+
+        $configValues['fullPageOverlay'] = $project->getConfigValue('fullPageOverlay');
+        $configValues['colorLoaderBackground'] = $project->getConfigValue('colorLoaderBackground');
+        $configValues['colorLoaderText'] = $project->getConfigValue('colorLoaderText');
+        $configValues['colorLoaderCircle'] = $project->getConfigValue('colorLoaderCircle');
+        $configValues['colorFailureTextError'] = $project->getConfigValue('colorFailureTextError');
+        $configValues['showMosparoLogo'] = $project->getConfigValue('showMosparoLogo');
 
         return $configValues;
     }
@@ -488,7 +586,10 @@ class DesignHelper
         $boxCssVariables = self::$boxSizeVariables[$boxSize];
         $defaultBoxCssVariables = self::$boxSizeVariables[$defaultConfigValues['boxSize']];
         foreach ($boxCssVariables as $cssVariableName => $value) {
-            $realValue = $value . 'px';
+            $realValue = $value;
+            if (is_numeric($value)) {
+                $realValue = $value . 'px';
+            }
 
             $content = $this->replaceCssVariable($content, $cssVariableName, $defaultBoxCssVariables[$cssVariableName] . 'px', $realValue);
         }
@@ -528,6 +629,12 @@ class DesignHelper
                 } else {
                     $value = 'none';
                 }
+            } else if ($key == 'fullPageOverlay') {
+                if ($value) {
+                    $value = 'fixed';
+                } else {
+                    $value = 'absolute';
+                }
             }
         }
 
@@ -545,26 +652,6 @@ class DesignHelper
                 continue;
             }
 
-            /*$filePath = $this->getBuildFilePath($result[2]);
-            if (!file_exists($filePath)) {
-                continue;
-            }
-
-            $fileContent = file_get_contents($filePath);
-
-            $mimeType = $mimeTypes->guessMimeType($filePath);
-            if ($mimeType == null) {
-                continue;
-            }
-
-            if ($mimeType == 'image/svg') {
-                $encodedFileContent = ';utf8,' . $this->resolveCssVariables($fileContent, $designConfigValues, $defaultConfigValues);
-                $mimeType = 'image/svg+xml';
-            } else {
-                $encodedFileContent = ';base64,' . base64_encode($fileContent);
-            }*/
-
-            //$content = str_replace($result[2], '\'data:' . $mimeType . $encodedFileContent . '\'', $content);
             $content = str_replace($result[2], '/resources/logo.svg', $content);
         }
 

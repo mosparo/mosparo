@@ -13,6 +13,10 @@
                 box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
             }
         }
+
+        .mosparo__loader-container {
+            position: absolute !important;
+        }
     }
 }
 
@@ -20,7 +24,14 @@
     background: var(--page-body-background, #FFFFFF);
     border-radius: 5px;
 
+    position: relative;
+
     padding: 1.75rem;
+
+    &.large-preview {
+        min-height: 15rem;
+        z-index: 2;
+    }
 
     @media only screen and (max-width: 1199px) {
         & {

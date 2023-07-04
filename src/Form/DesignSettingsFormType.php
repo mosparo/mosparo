@@ -53,6 +53,79 @@ class DesignSettingsFormType extends AbstractType
                 ->add('showMosparoLogo', CheckboxType::class, ['label' => 'settings.design.form.showMosparoLogo', 'required' => false, 'attr' => ['data-variable' => '--mosparo-show-logo', 'data-variable-value' => 'block', 'data-disabled-variable-value' => 'none']])
                 ->add('colorPageBodyBackground', TextType::class, ['label' => 'settings.design.preview.background', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--page-body-background', 'autocomplete' => 'off']])
             ;
+        } elseif ($options['mode'] === 'invisible-simple') {
+            $builder
+                ->add('colorPageBodyBackground', TextType::class, [
+                    'label' => 'settings.design.preview.background',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'colorpicker',
+                        'data-variable' => '--page-body-background',
+                        'autocomplete' => 'off'
+                    ]
+                ])
+                ->add('colorLoaderBackground', TextType::class, [
+                    'label' => 'settings.design.form.color.loaderBackground',
+                    'help' => 'settings.design.form.help.loaderBackground',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'colorpicker',
+                        'data-variable' => '--mosparo-loader-background-color',
+                        'data-colorpicker-allow-empty' => 'false',
+                    ]
+                ])
+                ->add('colorLoaderText', TextType::class, [
+                    'label' => 'settings.design.form.color.loaderText',
+                    'help' => 'settings.design.form.help.loaderText',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'colorpicker',
+                        'data-variable' => '--mosparo-loader-text-color',
+                        'data-colorpicker-allow-empty' => 'false',
+                    ]
+                ])
+                ->add('colorLoaderCircle', TextType::class, [
+                    'label' => 'settings.design.form.color.loaderCircle',
+                    'help' => 'settings.design.form.help.loaderCircle',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'colorpicker',
+                        'data-variable' => '--mosparo-loader-circle-color',
+                        'data-colorpicker-allow-empty' => 'false',
+                    ]
+                ])
+                ->add('colorFailureTextError', TextType::class, [
+                    'label' => 'settings.design.form.color.textError',
+                    'help' => 'settings.design.form.help.textError',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'colorpicker',
+                        'data-variable' => '--mosparo-failure-text-error-color',
+                        'data-colorpicker-allow-empty' => 'false',
+                        'data-colorpicker-allow-alpha-value' => 'false',
+                        'data-contrast-value' => 'error-text',
+                        'autocomplete' => 'off'
+                    ]
+                ])
+                ->add('showMosparoLogo', CheckboxType::class, [
+                    'label' => 'settings.design.form.showMosparoLogo',
+                    'help' => 'settings.design.form.help.showMosparoLogo',
+                    'required' => false,
+                    'attr' => [
+                        'data-variable' => '--mosparo-show-logo',
+                        'data-variable-value' => 'block',
+                        'data-disabled-variable-value' => 'none'
+                    ]
+                ])
+                ->add('fullPageOverlay', CheckboxType::class, [
+                    'label' => 'settings.design.form.fullPageOverlay',
+                    'help' => 'settings.design.form.help.fullPageOverlay',
+                    'required' => false,
+                    'attr' => [
+                        'data-disabled-variable-value' => 'none'
+                    ]
+                ])
+            ;
         } else {
             $builder
                 ->add('boxSize', ChoiceType::class, [

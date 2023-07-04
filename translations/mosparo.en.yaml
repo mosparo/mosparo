@@ -42,7 +42,7 @@ project:
     design:
       title: Select design
       introStartWizard: Your project was created successfully. To start using it, please select the design and continue.
-      infoAdvancedMode: You can switch to the advanced mode in the design settings after the wizard, which allows you to adjust the design precisely to your website.
+      infoAdvancedMode: After the wizard, you can switch to the advanced or invisible mode in the design settings. The advanced mode allows you to adjust the design precisely to your website, while the invisible mode will not show a visible mosparo box.
 
     security:
       title: Enable security features
@@ -571,6 +571,7 @@ settings:
       dimensionSettings: Dimensions
       colorSettings: Colors
       simpleDesign: Simple design
+      invisibleSimpleDesign: Invisible simple design
       colorAndDimensionSettings: Colors and Dimension
       preview: Preview
       colors:
@@ -580,9 +581,12 @@ settings:
         success: Success
         failure: Failure
 
-    action:
-      switchToSimpleMode: Switch to simple mode
-      switchToAdvancedMode: Switch to advanced mode
+    dropdown:
+      title: Design mode
+      groupTitleVisible: Visible spam protection
+      groupTitleInvisible: Invisible spam protection
+      simple: Simple
+      advanced: Advanced
 
     preview:
       background: Preview background
@@ -600,6 +604,9 @@ settings:
       boxBorderWidth: Border width
       showMosparoLogo: Show mosparo logo below the checkbox
       showPingAnimation: Show ping animation to highlight the checkbox
+      invisibleLogo: Logo
+      invisiblePageOverlay: Page overlay
+      fullPageOverlay: Use full page overlay
       color:
         background: Background
         border: Border
@@ -613,12 +620,22 @@ settings:
         websiteBackground: Background color of the website
         websiteForeground: Foreground color of the website
         websiteAccent: Accent color of the website
+        loaderBackground: Background color of the loader overlay
+        loaderText: Text color of the loader
+        loaderCircle: Color of the loading circle
 
       help:
         websiteBackground: Choose the background color of your website. This color is used to calculate the contrast ratio.
         websiteForeground: Choose the foreground color of your website. This color is used to display the main elements of the mosparo box.
         websiteAccent: Choose the accent color of your website. This color is used for different elements of the mosparo box.
         boxSize: Choose the size of the box.
+
+        loaderBackground: Define the background color of the loader overlay. It should be slightly transparent to see your website in the background.
+        loaderText: Define the color of the text in the overlay.
+        loaderCircle: Define the color of the animated loader circle.
+        textError: This is the text color with which the error will be visible if there is an error.
+        showMosparoLogo: Shows the logo below the loading message.
+        fullPageOverlay: Defines if the overlay will block the full page or only the form for which mosparo validates the data.
 
     choices:
       boxSize:

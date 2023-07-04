@@ -383,6 +383,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             'sizeVariables' => $designHelper->getBoxSizeVariables(),
             'maxRadiusForLogo' => $designHelper->getMaxRadiusForLogo(),
             'mode' => $project->getDesignMode(),
+            'designConfigValues' => $designHelper->prepareCssVariables($project),
         ]);
     }
 
@@ -393,7 +394,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     {
         $project = $this->getActiveProject();
 
-        if ($request->query->has('mode') && in_array($request->query->get('mode'), ['simple', 'advanced'])) {
+        if ($request->query->has('mode') && in_array($request->query->get('mode'), ['simple', 'advanced', 'invisible-simple'])) {
             $project->setConfigValue('designMode', $request->query->get('mode'));
 
             $entityManager->flush();

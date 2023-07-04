@@ -90,8 +90,10 @@ class Project
 
         'designMode' => '',
         'boxSize' => 'medium',
+        'positionContainer' => 'relative',
+        'displayContent' => 'block',
 
-        // Simple
+        // Visible: Simple
         'colorWebsiteBackground' => 'rgb(255, 255, 255)',
         'colorWebsiteForeground' => 'rgb(0, 0, 0)',
         'colorWebsiteAccent' => 'rgb(32, 107, 196)',
@@ -99,7 +101,7 @@ class Project
         'colorSuccess' => 'rgb(0, 255, 0)',
         'colorFailure' => 'rgb(255, 0, 0)',
 
-        // Advanced
+        // Visible: Advanced
         'boxRadius' => 11,
         'boxBorderWidth' => 3,
         'colorBackground' => 'rgb(255, 255, 255)',
@@ -127,6 +129,12 @@ class Project
         'colorFailureShadowInset' => 'transparent',
         'showPingAnimation' => true,
         'showMosparoLogo' => true,
+
+        // Invisible: Simple
+        'fullPageOverlay' => true,
+        'colorLoaderBackground' => 'rgba(255, 255, 255, 0.8)',
+        'colorLoaderText' => 'rgb(0, 0, 0)',
+        'colorLoaderCircle' => 'rgb(0, 0, 255)',
     ];
 
     /**
