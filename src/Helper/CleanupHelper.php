@@ -4,6 +4,7 @@ namespace Mosparo\Helper;
 
 use DateInterval;
 use DateTime;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -84,18 +85,15 @@ class CleanupHelper
                 ->from('Mosparo\Entity\Submission', 'sm')
                 ->innerJoin('sm.submitToken', 'smt')
                 ->groupBy('smt.id');
+            $requiredIds = $subQb->getQuery()->getSingleColumnResult();
 
             // Delete all submit tokens created more than 24 hours ago and not referenced by a submission.
             $qb = $this->entityManager->createQueryBuilder();
             $qb->delete('Mosparo\Entity\SubmitToken', 'st')
                 ->where('st.createdAt < :limit')
-                ->andWhere(
-                    $qb->expr()->notIn(
-                        'st.id',
-                        $subQb->getDQL()
-                    )
-                )
+                ->andWhere('st.id NOT IN (:requiredIds)')
                 ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT24H')))
+                ->setParameter('requiredIds', $requiredIds, ArrayParameterType::INTEGER)
                 ->getQuery()->execute();
         }
 
