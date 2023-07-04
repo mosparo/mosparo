@@ -601,7 +601,6 @@ settings:
       boxRadiusTooLarge: Das Logo kann nur angezeigt werden, wenn der Radius der Box unterhalb eines gewissen Wertes liegt.
 
     action:
-      switchToSimpleMode: Zum einfachen Modus wechseln
       switchToAdvancedMode: Zum erweiterten Modus wechseln
     simpleDesign:
       introPreview: Auf der rechten Seite sehen Sie eine Vorschau der mosparo Box auf Ihrer Website.

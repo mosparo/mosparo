@@ -440,7 +440,6 @@ settings:
       introColors: Vyberte si prosím barvy Vašich webových stránek. Barva pozadí je nutná pro výpočet správného kontrastního poměru, barva popředí představuje barvu textu a barva akcentu se používá pro speciální prvky rámečku mosparo.
       introPreview: Na pravé straně se zobrazí náhled rámečku mosparo, který bude na Vašich webových stránkách.
     action:
-      switchToSimpleMode: Přepnout do jednoduchého režimu
       switchToAdvancedMode: Přepnout do pokročilého režimu
   projectMember:
     title: Členové projektu

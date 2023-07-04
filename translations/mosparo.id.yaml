@@ -427,7 +427,6 @@ settings:
       colorAndDimensionSettings: Warna dan Dimensi
       preview: Pratinjau
     action:
-      switchToAdvancedMode: Beralih ke mode lanjutan
       switchToSimpleMode: Beralih ke mode sederhana
     simpleDesign:
       introPreview: Di sisi kanan, Anda akan melihat pratinjau kotak mosparo di situs web Anda.
