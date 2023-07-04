@@ -336,7 +336,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 _this.containerElement.classList.add('mosparo__checked');
                 _this.validationTokenElement.value = response.validationToken;
 
-                _this.updateAccessibleStatus(_this.getMessage('accessibilityDataValid'));
+                if (!_this.invisible) {
+                    // We skip the message if the box is invisible since the form will be submitted automatically.
+                    _this.updateAccessibleStatus(_this.getMessage('accessibilityDataValid'));
+                }
             } else if (response.security) {
                 _this.checkboxFieldElement.checked = false;
                 _this.setHpFieldElementDisabled(false);
