@@ -57,7 +57,7 @@ project:
       introConnection: Um mosparo auf Ihrer Website verwenden zu können, müssen Sie die entsprechende Integration Ihrer Website hinzufügen, um Ihre Website mit mosparo zu verbinden. Für die Konfiguration der Integration kopieren Sie bitte die folgenden Informationen in die dafür vorgesehenen Felder in Ihrer Website.
     design:
       title: Darstellung wählen
-      infoAdvancedMode: Nach dem Assistenten können Sie in den Erweiterten Modus wechseln, welcher Ihnen weitere Anpassungsmöglichkeiten bietet.
+      infoAdvancedMode: Nach dem Assistenten können Sie entweder in den erweiterten oder in den unsichtbaren Darstellungs-Modus wechseln. Im erweiterten Modus können Sie das Design genau an Ihre Website anpassen, während im unsichtbaren Modus keine sichtbare mosparo Box angezeigt wird.
       introStartWizard: Ihr Projekt wurde erfolgreich erstellt. Damit Sie auf Ihrer Website benutzen können, wählen Sie bitte die gewünschte Darstellung und fahren Sie fort.
 
 # Dashboard
@@ -70,6 +70,7 @@ project:
       all: Alle anzeigen
       active: Alle aktiven Projekte anzeigen
       inactive: Alle inaktiven Projekte anzeigen
+    dropdown: Liste der Projekte filtern
   search:
     placeholder: Suchen nach…
 dashboard:
@@ -260,6 +261,7 @@ rule:
   filter:
     options:
       all: Alle anzeigen
+    dropdown: Liste der Regeln filtern
 ruleset:
   title: Regel-Pakete
   backToList: Zu den Regel-Paketen
@@ -323,12 +325,17 @@ ruleset:
         name: Name
         type: Typ
         actions: Aktionen
+        numberOfRuleItems: Anzahl Einträge
     rule:
       details:
         spamRatingFactor: Spam-Bewertungsfaktor
         type: Typ
         title: Details der Regel
         name: Name
+      title: Regel %ruleName% ansehen
+      backToRuleset: Zurück zum Regel-Paket
+      items:
+        title: Enthaltene Einträge
   delete:
     title: Regel-Paket %rulesetName% löschen
     confirm: Wollen Sie das Regel-Paket %rulesetName% wirklich löschen?
@@ -414,6 +421,7 @@ submission:
       spam: Spam-Einsendungen
       all: Alle Einsendungen
       valid: Gültige Einsendungen
+    dropdown: Liste der Einsendungen filtern
 settings:
   title: Projekt-Einstellungen
   backToSettings: Zu den Einstellungen
@@ -555,6 +563,7 @@ settings:
       simpleDesign: Einfache Darstellung
       preview: Vorschau
       colorAndDimensionSettings: Farben und Grösse
+      invisibleSimpleDesign: Einfache unsichtbare Darstellung
     preview:
       background: Hintergrund der Vorschau
 
@@ -585,11 +594,23 @@ settings:
         websiteForeground: Vordergrundfarbe der Website
         websiteBackground: Hintergrundfarbe der Website
         websiteAccent: Akzentfarbe der Website
+        loaderText: Schriftfarbe des Lade-Overlays
+        loaderBackground: Hintergrundfarbe des Lade-Overlays
+        loaderCircle: Farbe der Lade-Kreises
       help:
         boxSize: Wählen Sie die Grösse der Box.
         websiteForeground: Wählen Sie die Vordergrundfarbe Ihrer Website. Die Farbe wird für die Hauptelemente der mosparo Box verwendet.
         websiteBackground: Wählen Sie die Hintergrundfarbe Ihrer Website. Die Farbe wird für die Berechnung des Kontrastverhältnis verwendet.
         websiteAccent: Wählen Sie die Akzentfarbe Ihrer Website. Die Farbe wird für verschiedene Elemente der mosparo box verwendet.
+        loaderCircle: Definieren Sie die Farbe des animierten Lade-Kreises.
+        loaderText: Definieren Sie die Farbe des Textes im Lade-Overlay.
+        loaderBackground: Definieren Sie die Hintergrundfarbe des Lade-Overlays. Es sollte leicht transparent sein damit die Website im Hintergrund noch sichtbar ist.
+        textError: Dies ist die Farbe mit dem ein Fehler dargestellt wird, falls ein Fehler auftreten sollte.
+        fullPageOverlay: Definiert, ob das Overlay die gesamte Website oder nur das Formular, für welches mosparo die Daten validiert, blockiert.
+        showMosparoLogo: Zeigt das Logo unterhalb der Lade-Nachricht.
+      fullPageOverlay: Mit Overlay ganze Website überlagern
+      invisibleLogo: Logo
+      invisiblePageOverlay: Seiten-Overlay
     choices:
       boxSize:
         small: Klein
@@ -605,6 +626,12 @@ settings:
       introColors: Bitte wählen Sie die Farben Ihrer Website aus. Die Hintergrundfarbe ist für die Berechnung des Kontrastverhältnisses erforderlich. Die Vordergrundfarbe repräsentiert die Textfarbe, während die Akzentfarbe für die Spezialelemente der mosparo Box verwendet wird.
 
 # Administration
+    dropdown:
+      groupTitleVisible: Sichtbarer Spam-Schutz
+      advanced: Erweitert
+      simple: Einfach
+      title: Darstellungsart
+      groupTitleInvisible: Unsichtbarer Spam-Schutz
 administration:
   title: Administration
 
@@ -858,6 +885,19 @@ administration:
       savedSuccessfully: Die Sicherheitseinstellungen wurden erfolgreich gespeichert.
     description: Konfigurieren Sie verschiedene sicherheitsrelevante Einstellungen Ihrer mosparo Installation.
 # Download check
+    loginThrottling:
+      title: Login-Drosselung
+      form:
+        uiLimit: Anzahl der Anfragen pro Benutzername und IP-Adresse
+        ipLimitHelp: Dies ist die Anzahl der Anfragen, die eine IP-Adresse mit verschiedenen Benutzernamen machen kann. Diese Zahl sollte höher sein als die Anzahl der Anfragen pro Benutzernamen und IP-Adresse.
+        interval: Zeitspanne
+        intervalHelp: Die Zeit in Minuten, während der die Anzahl der Anfragen ausgewertet wird.
+        uiLimitHelp: Dies ist die Anzahl der Anfragen, die ein Angreifer für eine Kombination aus einem Benutzernamen und einer IP-Adresse stellen kann.
+        ipLimit: Anzahl der Anfragen für eine IP-Adresse
+      unit:
+        requests: Anfragen
+        minutes: Minuten
+      intro: Die Login-Drosselung hilft, die mosparo Login-Seite vor einem Brute-Force-Angriff zu schützen. Indem die Anzahl der Anfragen gezählt und ein Angreifer nach einigen Versuchen blockiert wird, ist ein solcher Angriff sehr zeitaufwändig und nahezu sinnlos.
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
@@ -1018,6 +1058,12 @@ action:
   checkRequirements: Voraussetzungen prüfen
 
 # General values
+  export: Exportieren
+  use: Benutzen
+  importProject: Projekt importieren
+  simulateImport: Import simulieren
+  executeChanges: Änderungen ausführen
+  test: Testen
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
@@ -1144,3 +1190,112 @@ setup:
 
 tools:
   title: Werkzeuge
+  import:
+    importData: Zu importierende Daten
+    simulate:
+      noChangesFound: Das Projekt ist bereits mit den Daten in der Importdatei identisch und es sind keine Änderungen möglich.
+      table:
+        add: Hinzufügen
+        status: Status
+        url: URL
+        modify: Ändern
+        items: Einträge
+        itemsAdd: Hinzufügen
+        itemsModify: Ändern
+        name: Name
+        oldValue: Alter Wert
+        newValue: Neuer Wert
+        type: Typ
+        itemsRemove: Entfernen
+        spamRatingFactor: Spam-Bewertungsfaktor
+      title: Verfügbare Änderungen
+      intro: mosparo hat den Import simuliert und die folgenden Änderungen festgestellt. Bitte überprüfen Sie diese und führen Sie die Änderungen aus, wenn alles in Ordnung ist.
+      changes:
+        notActive: Dieser Abschnitt ist für diesen Import nicht aktiv.
+        notInExport: Dieser Abschnitt ist in der Importdatei nicht verfügbar.
+        noChangesRequired: Für diesen Abschnitt sind keine Änderungen erforderlich, da bereits alles auf dem neuesten Stand ist.
+      errorMessage:
+        jobDataFileNotFound: Die Jobdatei für den Token existiert nicht.
+        noChangesAvailable: Es sind keine Änderungen verfügbar.
+        jobDataInvalid: Auftragsdaten für Token sind ungültig.
+        importFileNotFound: Die Importdatei ist nicht vorhanden.
+        importFileInvalid: Die Importdatei ist ungültig.
+        projectNotAvailable: Das Projekt kann über die ID nicht gefunden werden.
+        wrongSpecificationsVersion: Die Importdatei wurde mit einer anderen Spezifikationsversion erstellt als die, die mosparo verwendet.
+        storedRuleNotFound: Die gespeicherte Regel wurde nicht gefunden.
+        storedRuleItemNotFound: Der gespeicherte Eintrag wurde nicht gefunden.
+        storedRulesetNotFound: Das gespeicherte Regel-Paket wurde nicht gefunden.
+      notRedoable: Sie können diese Änderungen nicht rückgängig machen, sobald Sie sie ausgeführt haben. Sie können das Projekt exportieren, bevor Sie die Änderungen ausführen, um eine Sicherungskopie der Konfiguration zu erstellen.
+    title: Importieren
+    form:
+      handlingExistingRules: Behandlung bestehender Regeln
+      choice:
+        override: Überschreiben
+        overrideHelp: Alle bestehenden Regeln werden mit der Regel aus der Importdatei überschrieben. Alle zusätzlichen Einträge werden gelöscht.
+        append: Anfügen
+        add: Hinzufügen
+        appendHelp: mosparo wird die Einträge aus der Importdatei an die bestehenden Regeln anhängen, aber keine Einträge löschen.
+        addHelp: mosparo fügt bestehende Regeln als neue Regeln hinzu. Die neuen Regeln erhalten eine neue Identifikation (UUID).
+      importFile: Zu importierende Datei
+    intro: Wenn Sie die Daten aus einem anderen Projekt in dieses Projekt kopieren möchten, wählen Sie bitte die zu importierende Datei und die zu importierenden Daten aus. Wenn Sie die Regeln importieren, wählen Sie bitte aus, wie mosparo bestehende Regeln behandeln soll.
+    infoOverrideData: Die Einstellungen sowie die Regel-Pakete werden im Projekt immer überschrieben. Für Regel-Pakete muss die URL übereinstimmen. Bei den Regeln müssen Sie auswählen, was mosparo mit den vorhandenen Regeln machen soll.
+    errorMessage:
+      selectAtLeastOneElement: Wählen Sie mindestens ein Element aus, das Sie importieren möchten.
+      fileUploadError: Die Datei wurde nicht korrekt hochgeladen. Bitte prüfen Sie die Protokolldatei.
+    backToImport: Zurück zum Importieren
+    intro2: Nachdem Sie alle Daten ausgewählt haben, klicken Sie bitte auf die Schaltfläche unten. mosparo analysiert die Datei und gibt Ihnen eine Zusammenfassung, was geändert wird, bevor irgendetwas importiert wird.
+    message:
+      changesSuccessfullyExecuted: Die Änderungen wurden erfolgreich ausgeführt.
+  ruleTester:
+    result:
+      testData:
+        testValue: Test-Wert
+        fieldType: Feld-Typ
+        enabledRules: Regeln aktiviert
+        title: Test-Daten
+      table:
+        rating: Bewertung
+        type: Regel-Typ
+        value: Wert
+        noMatchingRules: Keine der Regeln entspricht dem eingegebenen Test-Wert.
+      detectionResult:
+        isSpam: Ist Spam
+        title: Erkennungsresultat
+        spamRating: Spam-Bewertung
+        spamDetectionRating: Spam-Grenzwert
+      matchedRules:
+        title: Passende Regeln
+      title: Test-Resultat
+    form:
+      useRulesets: Regel-Pakete verwenden
+      useRules: Regeln verwenden
+      title: Test-Einstellungen
+      value: Test-Wert
+      type: Feldtyp
+    types:
+      userAgent: User-Agent
+      emailField: E-Mail-Feld
+      textarea: Textfeld (Mehrzeilig)
+      urlField: URL-Feld
+      textField: Textfeld (Einzeilig)
+      ipAddress: IP-Adresse
+    title: Regel-Tester
+    description: Testen Sie wie Ihre Regeln Spam erkennen werden.
+  export:
+    title: Exportieren
+    includedData: Enthaltene Daten
+    intro: Wenn Sie Ihr Projekt zu einer andere mosparo Installation verschieben oder die Einstellungen mit einem anderen Projekt synchronisieren wollen, können Sie das Projekt mit dieser Funktion exportieren. Wählen Sie aus, welche Daten Sie exportieren möchten und klicken Sie auf die Schaltfläche.
+    errorMessage:
+      selectAtLeastOneElement: Wählen Sie mindestens ein Element aus, das Sie exportieren möchten.
+    infoSensitiveData: Sensible Daten werden niemals exportiert. Einsendungen, Einsendecodes, die eindeutige Projekt-ID (UUID), die API-Schlüssel und die Projektmitglieder werden daher nicht exportiert.
+  eiParts:
+    generalSettings: Haupteinstellungen
+    securitySettings: Sicherheitseinstellungen
+    rules: Regeln
+    designSettingsHelp: Umfasst alle Einstellungen, die sich auf die Darstellung eines Projekts beziehen.
+    securitySettingsHelp: Umfasst alle Einstellungen, die sich auf die Sicherheit eines Projekts beziehen.
+    rulesHelp: Enthält alle Regeln eines Projekts.
+    generalSettingsHelp: Enthält die allgemeinen Einstellungen eines Projekts wie den Namen, die Beschreibung, die Hosts sowie den Spam-Score.
+    rulesets: Regel-Pakete
+    designSettings: Darstellungseinstellungen
+    rulesetsHelp: Enthält alle Regel-Pakete eines Projekts.
