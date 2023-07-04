@@ -57,7 +57,7 @@ project:
       introConnection: Um mosparo auf Ihrer Website verwenden zu können, müssen Sie die entsprechende Integration Ihrer Website hinzufügen, um Ihre Website mit mosparo zu verbinden. Für die Konfiguration der Integration kopieren Sie bitte die folgenden Informationen in die dafür vorgesehenen Felder in Ihrer Website.
     design:
       title: Darstellung wählen
-      infoAdvancedMode: Nach dem Assistenten können Sie entweder in den erweiterten oder in den unsichtbaren Darstellungs-Modus wechseln. Im erweiterten Modus können Sie das Design genau an Ihre Website anpassen, während im unsichtbaren Modus keine sichtbare mosparo Box angezeigt wird.
+      infoAdvancedMode: Nach dem Assistenten können Sie in den Darstellungseinstellungen entweder in den erweiterten oder in den unsichtbaren Modus wechseln. Im erweiterten Modus können Sie das Design genau an Ihre Website anpassen, während im unsichtbaren Modus keine sichtbare mosparo Box angezeigt wird.
       introStartWizard: Ihr Projekt wurde erfolgreich erstellt. Damit Sie auf Ihrer Website benutzen können, wählen Sie bitte die gewünschte Darstellung und fahren Sie fort.
 
 # Dashboard
