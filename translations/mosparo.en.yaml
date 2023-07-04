@@ -711,7 +711,7 @@ tools:
     intro: If you want to copy the data from another project into this one, please choose the file to import and which data you want to import. If you import the rules, please choose how mosparo should handle existing rules.
     intro2: After you've selected all the data, please click the button below. mosparo will analyze the file and gives you a summary of what will be changed before anything is imported.
     importData: Data to import
-    infoOverrideData: The settings, as well as the rulesets, will always be overridden in the project. The URL will match the ruleset. For the rules, you have to choose what mosparo should do with existing rules.
+    infoOverrideData: The settings, as well as the rulesets, will always be overridden in the project. The ruleset will be matched against the URL. For the rules, you have to choose what mosparo should do with existing rules.
 
     backToImport: Back to import
 
