@@ -426,8 +426,6 @@ settings:
       simpleDesign: Desain sederhana
       colorAndDimensionSettings: Warna dan Dimensi
       preview: Pratinjau
-    action:
-      switchToSimpleMode: Beralih ke mode sederhana
     simpleDesign:
       introPreview: Di sisi kanan, Anda akan melihat pratinjau kotak mosparo di situs web Anda.
       introColors: Silakan pilih warna yang dimiliki situs web Anda. Warna latar belakang diperlukan untuk menghitung rasio kontras yang benar, warna latar depan mewakili warna teks Anda, dan warna aksen digunakan untuk elemen khusus kotak mosparo.
