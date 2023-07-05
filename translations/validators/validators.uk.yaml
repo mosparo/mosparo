@@ -8,3 +8,7 @@ password:
     form:
       constraint:
         notBlank: Будь ласка, введіть свою електронну адресу.
+tools:
+  import:
+    importFile:
+      correctFile: Будь ласка, завантажте коректний JSON-файл.
