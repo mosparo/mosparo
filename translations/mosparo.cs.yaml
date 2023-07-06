@@ -1,6 +1,7 @@
 header:
   pleaseChoose: Vyberte prosím…
   account: Účet
+  noProjectsFound: Nebyly nalezeny žádné projekty
 project:
   title: Projekty
   backToList: Zpět na projekty
@@ -23,6 +24,7 @@ project:
     manage: Spravovat projekt
     delete: Odstranit projekt
     goto: Přejít na projekt
+    id: ID projektu
   create:
     title: Vytvořit projekt
     message:
@@ -37,7 +39,7 @@ project:
     design:
       title: Zvolte design
       introStartWizard: Váš projekt byl úspěšně vytvořen. Chcete-li jej začít používat, vyberte design a pokračujte.
-      infoAdvancedMode: Po dokončení průvodce můžete v nastavení designu přepnout do pokročilého režimu, který Vám umožní přizpůsobit návrh na míru Vašim webovým stránkám.
+      infoAdvancedMode: Po dokončení průvodce můžete v nastavení designu přepnout do pokročilého nebo neviditelného režimu. Pokročilý režim vám umožní přizpůsobit design přesně na míru vašemu webu, zatímco v neviditelném režimu se nezobrazí viditelný rámeček mosparo.
     security:
       introSecurity: Vyberte bezpečnostní funkce, které chcete povolit.
       title: Povolit bezpečnostní funkce
@@ -47,6 +49,18 @@ project:
       savedSuccessfully: Nastavení designu a zabezpečení bylo úspěšně uloženo. Projekt je nyní připraven k použití na webových stránkách.
       infoSettings: Po ukončení průvodce, najdete detaily připojení v nastavení projektu.
       introConnection: Chcete-li použít mosparo ve Vašem webu, musíte přidat integraci a webovou stránku propojit s tímto projektem mosparo. Pro tento krok, zkopírujte a vložte následující informace do správných polí v integraci na webu.
+  list:
+    name: Jméno
+    status: Stav
+    actions: Akce
+  filter:
+    dropdown: Filtrovat seznam projektů
+    options:
+      all: Zobrazit vše
+      active: Zobrazit aktivní projekty
+      inactive: Zobrazit neaktivní projekty
+  search:
+    placeholder: Hledat…
 dashboard:
   chart:
     valid: Platné
@@ -195,6 +209,10 @@ rule:
       infoValueEqualZero: Pokud je hodnocení nastaveno na %zero%, položka nebude detekována jako spam, protože hodnota hodnocení spamu bude v každém případě %zero%.
   title: Pravidla
   backToList: Zpět na pravidla
+  filter:
+    dropdown: Filtrovat seznam pravidel
+    options:
+      all: Zobrazit vše
 ruleset:
   list:
     refreshedAt: Aktualizováno v
@@ -230,6 +248,27 @@ ruleset:
       title: Zahrnutá pravidla
       ruleDetails: Podrobnosti pravidla
     title: Zobrazit sadu pravidel %rulesetName%
+    list:
+      rules:
+        type: Typ
+        numberOfRuleItems: Počet položek
+        actions: Akce
+        name: Název
+        spamRatingFactor: Faktor hodnocení spamu
+      ruleItems:
+        value: Hodnota
+        spamRatingFactor: Faktor hodnocení spamu
+        type: Typ
+    rule:
+      title: Zobrazit pravidlo %ruleName%
+      details:
+        title: Podrobnosti pravidla
+        type: Typ
+        spamRatingFactor: Faktor hodnocení spamu
+        name: Název
+      items:
+        title: Zahrnuté položky
+      backToRuleset: Zpět na sadu pravidel
   delete:
     title: Odstranit sadu pravidel %rulesetName%
     confirm: Opravdu chcete odstranit sadu pravidel %rulesetName%?
@@ -307,6 +346,7 @@ submission:
       all: Všechny záznamy
       valid: Platné záznamy
       spam: Spam záznamy
+    dropdown: Filtrovat seznam záznámů
 settings:
   title: Nastavení projektu
   general:
@@ -404,6 +444,9 @@ settings:
         websiteBackground: Barva pozadí webové stránky
         websiteForeground: Barva popředí webové stránky
         websiteAccent: Barva akcentu webové stránky
+        loaderText: Barva textu při načítání
+        loaderCircle: Barva kruhu načítání
+        loaderBackground: Barva pozadí překrytí při načítání
       boxRadius: Poloměr rámečku
       boxBorderWidth: Šířka okraje
       showMosparoLogo: Zobrazit logo mosparo pod zaškrtávacím políčkem
@@ -413,6 +456,15 @@ settings:
         websiteBackground: Zvolte barvu pozadí svých webových stránek. Tato barva se používá k výpočtu kontrastního poměru.
         websiteForeground: Zvolte barvu popředí svých webových stránek. Tato barva se používá k zobrazení hlavních prvků mosparo.
         boxSize: Zvolte velikost rámečku.
+        loaderText: Definujte barvu textu v překrytí.
+        showMosparoLogo: Zobrazí logo pod zprávou při načítání.
+        textError: Jedná se o barvu textu, která bude v případě chyby viditelná.
+        loaderBackground: Definuje barvu překrytí pozadí při načítání. Měla by být mírně průhledná, aby byly na pozadí vidět vaše webové stránky.
+        loaderCircle: Definujte barvu animovaného kruhu při načítání.
+        fullPageOverlay: Určuje, zda překrytí zablokuje celou stránku nebo pouze formulář, pro který mosparo ověřuje data.
+      invisiblePageOverlay: Překrytí stránky
+      invisibleLogo: Logo
+      fullPageOverlay: Použít překrytí celé stránky
     title: Vzhled
     subtitles:
       dimensionSettings: Rozměry
@@ -426,6 +478,7 @@ settings:
       preview: Náhled
       simpleDesign: Jednoduchý design
       colorAndDimensionSettings: Barvy a rozměry
+      invisibleSimpleDesign: Neviditelný jednoduchý design
     preview:
       background: Pozadí náhledu
     choices:
@@ -439,6 +492,12 @@ settings:
     simpleDesign:
       introColors: Vyberte si prosím barvy Vašich webových stránek. Barva pozadí je nutná pro výpočet správného kontrastního poměru, barva popředí představuje barvu textu a barva akcentu se používá pro speciální prvky rámečku mosparo.
       introPreview: Na pravé straně se zobrazí náhled rámečku mosparo, který bude na Vašich webových stránkách.
+    dropdown:
+      title: Režím návhru
+      groupTitleInvisible: Neviditelná ochrana proti spamu
+      groupTitleVisible: Viditelná ochrana proti spamu
+      simple: Jednoduché
+      advanced: Pokročilé
   projectMember:
     title: Členové projektu
     list:
@@ -667,6 +726,19 @@ administration:
       savedSuccessfully: Nastavení zabezpečení bylo úspěšně uloženo.
     title: Nastavení zabezpečení
     description: Konfigurace různých nastavení souvisejících se zabezpečením, která se vztahují na Vaši instalaci mosparo.
+    loginThrottling:
+      title: Omezení přihlášení
+      form:
+        uiLimit: Počet požadavků na uživatelské jméno a IP adresu
+        ipLimit: Počet požadavků na IP adresu
+        uiLimitHelp: Toto je počet požadavků, které může útočník provést s danou kombinací uživatelského jména a IP adresy.
+        ipLimitHelp: Toto je počet požadavků, které může IP adresa provést s různými uživatelskými jmény. Toto číslo by mělo být vyšší než počet požadavků na kombinaci uživatelského jména a IP adresy.
+        intervalHelp: Čas v minutách, kdy se vyhodnocuje počet požadavků.
+        interval: Časový rozsah
+      intro: Omezení přihlášení pomáhá chránit formulář přihlášení mosparo před útokem hrubou silou. Počítáním počtu požadavků a zablokováním útočníka po několika pokusech bude takový útok trvat hodně času a je téměř nesmyslný.
+      unit:
+        requests: Požadavky
+        minutes: Minut
 account:
   settings:
     form:
@@ -843,6 +915,12 @@ action:
   saveAndContinue: Uložit a pokračovat
   goToTheDashboard: Přejít na nástěnku
   checkRequirements: Kontrola požadavků
+  importProject: Importovat projekt
+  export: Export
+  executeChanges: Provést změny
+  simulateImport: Simulovat import
+  use: Použít
+  test: Otestovat
 general:
   infoUndo: Tento proces nelze vrátit zpět.
   example: Příklad
@@ -891,3 +969,114 @@ interface:
   colorModes:
     light: Světlý
     dark: Tmavý
+tools:
+  title: Nástroje
+  ruleTester:
+    result:
+      title: Výsledek testu
+      detectionResult:
+        spamRating: Hodnocení spamu
+        title: Výsledek detekce
+        isSpam: Je spam
+        spamDetectionRating: Skóre spamu
+      testData:
+        title: Testovací data
+        testValue: Hodnota testu
+        fieldType: Typ pole
+        enabledRules: Povolená pravidla
+      table:
+        noMatchingRules: Testované hodnotě neodpovídá žádné pravidlo.
+        rating: Hodnocení
+        value: Hodnota
+        type: Typ pravidla
+      matchedRules:
+        title: Odpovídající pravidla
+    form:
+      title: Nastavení testu
+      value: Hodnota testu
+      useRulesets: Použít sady pravidel
+      type: Typ pole
+      useRules: Použít pravidla
+    types:
+      userAgent: Uživatelský agent
+      textarea: Textové pole (víceřádkové)
+      textField: Textové pole (jednořádkové)
+      emailField: E-mailové pole
+      urlField: URL pole
+      ipAddress: IP adresa
+    title: Testovač pravidel
+    description: Otestujte, jak budou vaše pravidla detekovat spam.
+  export:
+    title: Export
+    includedData: Zahrnuté údaje
+    infoSensitiveData: Citlivé údaje nebudou do exportu nikdy zahrnuty. V exportu nebudou obsaženy údaje o záznamech, tokenech pro odeslání, jedinečných identifikátorech projektu, klíčích API a členech projektu.
+    intro: Pokud chcete projekt přesunout do jiné instalace mosparo nebo chcete synchronizovat nastavení s jiným projektem, můžete projekt pomocí této funkce exportovat. Vyberte, která data chcete exportovat, a klikněte na tlačítko.
+    errorMessage:
+      selectAtLeastOneElement: Vyberte alespoň jeden prvek, který chcete exportovat.
+  import:
+    intro: Pokud chcete zkopírovat data z jiného projektu do tohoto projektu, vyberte soubor, který chcete importovat, a data, která chcete importovat. Pokud importujete pravidla, zvolte, jak má mosparo zacházet se stávajícími pravidly.
+    importData: Data k importu
+    form:
+      handlingExistingRules: Nakládání se stávajícími pravidly
+      choice:
+        override: Přepsat
+        append: Připojit
+        add: Přidat
+        appendHelp: mosparo připojí položky pravidel ze souboru ke stávajícím pravidlům, ale žádné položky pravidel neodstraní.
+        overrideHelp: Všechna existující pravidla budou nahrazena pravidlem z importovaného souboru. Všechny další položky pravidel budou odstraněny.
+        addHelp: mosparo přidá stávající pravidla jako nová pravidla. Nová pravidla dostanou nový identifikátor.
+      importFile: Soubor k importu
+    simulate:
+      title: Dostupné změny
+      noChangesFound: Projekt je již stejný jako data v importním souboru a nejsou k dispozici žádné změny.
+      changes:
+        notActive: Tato sekce není pro tento import aktivní.
+        noChangesRequired: V této sekci nejsou nutné žádné změny, protože vše je již aktuální.
+        notInExport: Tato sekce není v souboru importu dostupná.
+      table:
+        status: Stav
+        url: URL
+        add: Přidat
+        modify: Upravit
+        spamRatingFactor: Faktor hodnocení spamu
+        newValue: Nová hodnota
+        oldValue: Stará hodnota
+        itemsAdd: Přidat
+        name: Název
+        type: Typ
+        items: Položky
+        itemsRemove: Odstranit
+        itemsModify: Upravit
+      errorMessage:
+        importFileNotFound: Soubor importu neexistuje.
+        importFileInvalid: Soubor importu není platný.
+        projectNotAvailable: Nelze najít projekt podle ID.
+        noChangesAvailable: Nejsou k dispozici žádné změny.
+        jobDataFileNotFound: Datový soubor úlohy pro token neexistuje.
+        jobDataInvalid: Data úlohy pro token jsou neplatná.
+        storedRuleItemNotFound: Uložená položka pravidla nebyla nalezena.
+        wrongSpecificationsVersion: Soubor importu byl vytvořen s jinou verzí, než používá tento mosparo projekt.
+        storedRuleNotFound: Uložené pravidlo nebylo nalezeno.
+        storedRulesetNotFound: Uložená sada pravidel nebyla nalezena.
+      intro: mosparo simulovalo import a zjistilo následující změny. Zkontrolujte je a proveďte změny, pokud je vše v pořádku.
+      notRedoable: Tyto změny nelze po provedení vrátit zpět. Před provedením změn můžete projekt exportovat, abyste měli zálohu konfigurace.
+    title: Import
+    intro2: Po výběru všech dat klikněte na tlačítko níže. mosparo soubor analyzuje a poskytne vám shrnutí toho, co se změní, než se cokoli začne importovat.
+    infoOverrideData: Nastavení, stejně jako sady pravidel, budou v projektu vždy přepsány. Sada pravidel bude porovnána s adresou URL. U pravidel je třeba zvolit, co má mosparo udělat s existujícími pravidly.
+    backToImport: Zpět k importu
+    errorMessage:
+      selectAtLeastOneElement: Vyberte alespoň jeden prvek, který chcete importovat.
+      fileUploadError: Soubor nebyl správně nahrán. Zkontrolujte prosím soubor protokolu.
+    message:
+      changesSuccessfullyExecuted: Změny byly úspěšně provedeny.
+  eiParts:
+    generalSettings: Obecná nastavení
+    generalSettingsHelp: Zahrnuje obecná nastavení projektu, jako je název, popis, hostitelé a také skóre spamu.
+    designSettings: Nastavení designu
+    designSettingsHelp: Zahrnuje všechna nastavení související s designem projektu.
+    securitySettings: Nastavení zabezpečení
+    rulesHelp: Zahrnuje všechna pravidla projektu.
+    rulesets: Sady pravidel
+    securitySettingsHelp: Zahrnuje všechna nastavení související se zabezpečením projektu.
+    rulesetsHelp: Zahrnuje všechny sady pravidel projektu.
+    rules: Pravidla
