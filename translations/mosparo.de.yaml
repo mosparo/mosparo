@@ -702,10 +702,12 @@ administration:
         successfullySaved: Der Benutzer wurde erfolgreich gespeichert.
         errorCreatingResetToken: 'Beim Erstellen des E-Mails gab es einen technischen Fehler. Fehler: %errorMessage%'
         errorSendingResetEmail: 'Das E-Mail mit dem Link konnte nicht korrekt versendet werden. Fehler: %errorMessage%'
+      canCreateProjects: Kann Projekte erstellen
     help:
       password: Lassen Sie das Feld leer wenn kein neues Passwort gespeichert werden soll.
 
 
+      canCreateProjects: Erlaubt einem Benutzer, neue Projekte zu erstellen. Ein Administrator kann immer Projekte erstellen.
     delete:
       title: Benutzer %email% löschen
       confirm: Möchten Sie den Benutzer %email% wirklich löschen?
