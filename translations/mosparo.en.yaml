@@ -889,6 +889,7 @@ administration:
       password: Password
       isActiveUser: Is active user
       isAdministrator: Is administrator
+      canCreateProjects: Can create projects
       sendPasswordResetEmail: Send the user an email to set the password
 
       message:
@@ -898,6 +899,7 @@ administration:
 
     help:
       password: Leave these fields empty if no password change is required.
+      canCreateProjects: Allows the user to create new projects. An administrator can always create projects.
 
     delete:
       title: Delete user %email%

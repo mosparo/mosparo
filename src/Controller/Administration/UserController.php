@@ -95,6 +95,11 @@ class UserController extends AbstractController
             $isAdminUserAttributes['checked'] = 'checked';
         }
 
+        $canCreateProjectsAttributes = [];
+        if ($user->hasRole('ROLE_CAN_CREATE_PROJECTS')) {
+            $canCreateProjectsAttributes['checked'] = 'checked';
+        }
+
         $form = $this->createFormBuilder($user, ['translation_domain' => 'mosparo'])
             ->add('email', EmailType::class, ['label' => 'administration.user.form.email'])
             ->add('password', PasswordFormType::class, [
@@ -119,6 +124,13 @@ class UserController extends AbstractController
                 'mapped' => false,
                 'required' => false,
                 'attr' => $isAdminUserAttributes,
+            ])
+            ->add('canCreateProjects', CheckboxType::class, [
+                'label' => 'administration.user.form.canCreateProjects',
+                'help' => 'administration.user.help.canCreateProjects',
+                'mapped' => false,
+                'required' => false,
+                'attr' => $canCreateProjectsAttributes,
             ])
             ->add('sendPasswordResetEmail', CheckboxType::class, [
                 'label' => 'administration.user.form.sendPasswordResetEmail',
@@ -159,6 +171,12 @@ class UserController extends AbstractController
                 $user->addRole('ROLE_ADMIN');
             } else {
                 $user->removeRole('ROLE_ADMIN');
+            }
+
+            if ($form->get('canCreateProjects')->getData()) {
+                $user->addRole('ROLE_CAN_CREATE_PROJECTS');
+            } else {
+                $user->removeRole('ROLE_CAN_CREATE_PROJECTS');
             }
 
             if ($isNewUser) {

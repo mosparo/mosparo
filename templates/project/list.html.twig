@@ -62,10 +62,12 @@
                 </a>
             </div>
 
-            <a href="{{ path('project_create') }}" class="btn btn-primary add-button">
-                <i class="ti ti-plus"></i>
-                <span>{{ 'project.create.title'|trans }}</span>
-            </a>
+            {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
+                <a href="{{ path('project_create') }}" class="btn btn-primary add-button">
+                    <i class="ti ti-plus"></i>
+                    <span>{{ 'project.create.title'|trans }}</span>
+                </a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

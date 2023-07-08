@@ -43,6 +43,7 @@
                         <h4 class="mt-3">{{ 'administration.user.roles'|trans }}</h4>
                         {{ form_widget(form.isActiveUser) }}
                         {{ form_widget(form.isAdminUser) }}
+                        {{ form_row(form.canCreateProjects) }}
                     </div>
                 </div>
             </div>
@@ -86,6 +87,17 @@
                             passwordFields.prop('required', true);
                             passwordFields.prev('label').addClass('required');
                         }
+                    }
+                }).trigger('change');
+
+                $('#form_isAdminUser').change(function () {
+                    let isActive = $(this).is(':checked');
+                    let canCreateProjectsEl = $('#form_canCreateProjects');
+
+                    if (isActive) {
+                        canCreateProjectsEl.prop('disabled', true);
+                    } else {
+                        canCreateProjectsEl.prop('disabled', false);
                     }
                 }).trigger('change');
             });
