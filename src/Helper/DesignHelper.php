@@ -490,7 +490,7 @@ class DesignHelper
         $configValues['colorFailureShadow'] = $transparent;
 
         $configValues['boxSize'] = 'invisible';
-        $configValues['displayContent'] = 'none';
+        $configValues['displayContent'] = 'none !important';
         $configValues['positionContainer'] = 'static';
         $configValues['boxRadius'] = 0;
         $configValues['boxBorderWidth'] = 0;
