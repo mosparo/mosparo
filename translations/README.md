@@ -46,6 +46,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | English              | en            | mosparo Core Developers                                                                                                      |
 | French               | fr            | [baudouin](https://hosted.weblate.org/user/baudouin/), [NathanBnm](https://hosted.weblate.org/user/NathanBnm/)               |
 | German               | de            | mosparo Core Developers                                                                                                      |
+| High German (Middle) | gmh           | [OriCat101](https://hosted.weblate.org/user/OriCat101/)                                                                      |
 | Indonesian           | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/)               |
 | Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/), [rglauco](https://hosted.weblate.org/user/rglauco/) |
 | Russian              | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                                                                          |
