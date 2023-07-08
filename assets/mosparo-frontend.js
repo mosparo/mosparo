@@ -23,7 +23,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
         onAbortSubmit: null,
         onSwitchToInvisible: null,
         onValidateFormInvisible: null,
-        onSubmitFormInvisible: null
+        onSubmitFormInvisible: null,
+        doSubmitFormInvisible: null
     };
     this.options = {...this.defaultOptions, ...options};
     this.invisible = false;
@@ -182,34 +183,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 });
             });
 
-            this.formElement.addEventListener('submit', function (ev) {
-                if (_this.invisible && (!_this.checkboxFieldElement.checked || !_this.verifyCheckedFormData())) {
-                    _this.loaderContainerElement.classList.add('mosparo__loader-visible');
-
-                    ev.preventDefault();
-                    ev.stopImmediatePropagation();
-
-                    // Execute the event and the callback
-                    _this.formElement.dispatchEvent(new CustomEvent('validate-form-invisible', { bubbles: true }));
-
-                    if (_this.options.onValidateFormInvisible !== null) {
-                        _this.options.onValidateFormInvisible();
-                    }
-
-                    _this.checkForm();
-                } else if (!_this.verifyCheckedFormData()) {
-                    ev.preventDefault();
-                    ev.stopImmediatePropagation();
-
-                    _this.formElement.dispatchEvent(new CustomEvent('submit-aborted', { bubbles: true }));
-
-                    if (_this.options.onAbortSubmit !== null) {
-                        _this.options.onAbortSubmit();
-                    }
-
-                    _this.resetState();
-                }
-            });
+            this.formElement.addEventListener('submit', this.onSubmit);
 
             this.formElement.addEventListener('reset', function () {
                 _this.resetState();
@@ -298,6 +272,37 @@ function mosparo(containerId, url, uuid, publicKey, options)
         });
     }
 
+    this.onSubmit = function (ev) {
+        if (_this.invisible) {
+            if (!_this.checkboxFieldElement.checked || !_this.verifyCheckedFormData()) {
+                _this.loaderContainerElement.classList.add('mosparo__loader-visible');
+
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
+
+                // Execute the event and the callback
+                _this.formElement.dispatchEvent(new CustomEvent('validate-form-invisible', {bubbles: true}));
+
+                if (_this.options.onValidateFormInvisible !== null) {
+                    _this.options.onValidateFormInvisible();
+                }
+
+                _this.checkForm();
+            }
+        } else if (!_this.verifyCheckedFormData()) {
+            ev.preventDefault();
+            ev.stopImmediatePropagation();
+
+            _this.formElement.dispatchEvent(new CustomEvent('submit-aborted', { bubbles: true }));
+
+            if (_this.options.onAbortSubmit !== null) {
+                _this.options.onAbortSubmit();
+            }
+
+            _this.resetState();
+        }
+    };
+
     this.checkForm = function () {
         if (this.isLocked) {
             return;
@@ -374,11 +379,15 @@ function mosparo(containerId, url, uuid, publicKey, options)
                         _this.options.onSubmitFormInvisible();
                     }
 
-                    let buttons = _this.formElement.querySelectorAll('[type="submit"]');
-                    if (buttons.length) {
-                        buttons.item(0).click();
+                    if (_this.options.doSubmitFormInvisible !== null) {
+                        _this.options.doSubmitFormInvisible();
                     } else {
-                        _this.formElement.submit();
+                        let buttons = _this.formElement.querySelectorAll('[type="submit"]');
+                        if (buttons.length) {
+                            buttons.item(0).click();
+                        } else {
+                            _this.formElement.submit();
+                        }
                     }
                 }
 
@@ -527,7 +536,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
                     callbackError(this.responseText);
                 }
             }
-        }
+        };
 
         request.open('POST', url, true);
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
