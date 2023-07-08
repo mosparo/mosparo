@@ -1,0 +1,25 @@
+header:
+  pleaseChoose: Bitte auswählen…
+  noProjectsFound: Keine Projekte gefunden
+  account: Konto
+project:
+  title: Projekte
+  backToList: Zurück zu den Projekten
+  list:
+    name: Name
+    actions: Aktionen
+    status: Status
+  filter:
+    dropdown: Filtern Sie die Liste der Projekte
+    options:
+      all: Alle anzeigen
+      active: Aktive Projekte anzeigen
+      inactive: Inaktive Projekte anzeigen
+  search:
+    placeholder: Suche nach…
+  action:
+    manage: Projekt verwalten
+    id: Projekt ID
+    delete: Projekt löschen
+  infoNoProjectAvailable: Keine Projekte verfügbar
+  infoCreateProjectOrRequestAccess: Erstellen Sie ein neues Projekt oder beantragen Sie Zugang zu einem bestehenden Projekt.

@@ -369,7 +369,7 @@ submission:
     page: Page
     spam: Spam
     verification: Verification
-    ipAddress: IP Address
+    ipAddress: IP address
     spamRating: Spam rating
     submittedAt: Submitted at
     valid: Valid
