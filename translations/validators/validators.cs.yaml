@@ -8,3 +8,7 @@ password:
     form:
       constraint:
         notBlank: Zadejte prosím svůj e-mail.
+tools:
+  import:
+    importFile:
+      correctFile: Prosím nahrajte správný soubor JSON.

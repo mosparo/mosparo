@@ -44,9 +44,22 @@ project:
       savedSuccessfully: Pengaturan desain dan keamanan berhasil disimpan. Proyek ini sekarang siap digunakan di situs web.
       introConnection: Untuk menggunakan mosparo di situs web, Anda harus menambahkan integrasi ke situs web dan kemudian menghubungkan situs web tersebut dengan proyek mosparo ini. Untuk langkah ini, harap salin dan tempel informasi berikut ke kolom yang benar di integrasi.
       infoSettings: Setelah wizard ini, Anda dapat menemukan detail koneksi ini di pengaturan proyek.
+  filter:
+    options:
+      all: Tampilkan semua
+      active: Tampilkan proyek aktif
+      inactive: Tampilkan proyek yang tidak aktif
+    dropdown: Saring daftar proyek
+  list:
+    name: Nama
+    status: Status
+    actions: Tindakan
+  search:
+    placeholder: Pencarian untuk…
 header:
   pleaseChoose: Silakan pilih…
   account: Akun
+  noProjectsFound: Tidak ada proyek yang ditemukan
 dashboard:
   title: Dasbor
   chart:
@@ -195,6 +208,10 @@ rule:
     title: Edit aturan %ruleName%
     message:
       successfullySaved: Aturan berhasil disimpan.
+  filter:
+    options:
+      all: Tampilkan semua
+    dropdown: Filter daftar aturan
 ruleset:
   title: Kumpulan aturan
   backToList: Kembali ke kumpulan aturan
@@ -234,6 +251,27 @@ ruleset:
       type: Tipe
       value: Nilai
       rating: Peringkat
+    rule:
+      details:
+        spamRatingFactor: Faktor peringkat spam
+        name: Nama
+        type: Tipe
+        title: Detail aturan
+      title: Lihat aturan %ruleName%
+      items:
+        title: Item yang disertakan
+      backToRuleset: Kembali ke aturan dipilih
+    list:
+      rules:
+        actions: Tindakan
+        type: Tipe
+        numberOfRuleItems: Jumlah item
+        spamRatingFactor: Faktor peringkat spam
+        name: Nama
+      ruleItems:
+        type: Tipe
+        value: Nilai
+        spamRatingFactor: Faktor peringkat spam
   add:
     title: Tambahkan kumpulan aturan
   edit:
@@ -307,6 +345,7 @@ submission:
       all: Semua kiriman
       spam: Kiriman spam
       valid: Kiriman yang valid
+    dropdown: Saring daftar kiriman
 settings:
   title: Pengaturan proyek
   backToSettings: Kembali ke pengaturan
@@ -387,9 +426,6 @@ settings:
       simpleDesign: Desain sederhana
       colorAndDimensionSettings: Warna dan Dimensi
       preview: Pratinjau
-    action:
-      switchToAdvancedMode: Beralih ke mode lanjutan
-      switchToSimpleMode: Beralih ke mode sederhana
     simpleDesign:
       introPreview: Di sisi kanan, Anda akan melihat pratinjau kotak mosparo di situs web Anda.
       introColors: Silakan pilih warna yang dimiliki situs web Anda. Warna latar belakang diperlukan untuk menghitung rasio kontras yang benar, warna latar depan mewakili warna teks Anda, dan warna aksen digunakan untuk elemen khusus kotak mosparo.
@@ -670,6 +706,19 @@ administration:
       providerPresets: Preset penyedia
       intro: Jika Anda menggunakan proxy terbalik untuk melayani mosparo, Anda harus mengonfigurasi pengaturan ini agar mosparo mengetahui cara mendeteksi alamat IP klien dengan benar.
     description: Konfigurasikan berbagai pengaturan terkait keamanan yang berlaku untuk instalasi mosparo Anda.
+    loginThrottling:
+      title: Batasan masuk
+      intro: Pelambatan login membantu melindungi login mosparo dari serangan brute force. Dengan menghitung jumlah permintaan dan memblokir penyerang setelah mencoba beberapa kali, serangan seperti itu akan memakan banyak waktu dan hampir tidak masuk akal.
+      form:
+        uiLimit: Jumlah permintaan nama pengguna dan alamat IP
+        ipLimit: Jumlah permintaan untuk alamat IP
+        ipLimitHelp: Ini adalah jumlah permintaan yang dapat dilakukan alamat IP pada nama pengguna yang berbeda. Jumlah ini harus lebih tinggi dari jumlah permintaan nama pengguna dan alamat IP.
+        intervalHelp: Waktu dalam menit saat jumlah permintaan dievaluasi.
+        uiLimitHelp: Ini adalah jumlah permintaan yang dapat dilakukan penyerang untuk kombinasi nama pengguna dan alamat IP.
+        interval: Rentang waktu
+      unit:
+        requests: Permintaan
+        minutes: Menit
 account:
   backToOverview: Kembali ke gambaran umum
   title: Akun
@@ -786,6 +835,8 @@ action:
   saveAndContinue: Simpan dan lanjutkan
   skipWizard: Lewati wizard
   goToTheDashboard: Buka dasbor
+  use: Menggunakan
+  test: Tes
 roles:
   user: Pengguna
   inactive: Tidak aktif
@@ -894,3 +945,40 @@ downloadCheck:
   cardTitle: Koneksi internet
   intro: Koneksi internet keluar bukan persyaratan untuk mosparo. mosparo hanya terhubung ke internet dengan interaksi Anda. Anda memerlukan koneksi internet aktif untuk mengunduh pembaruan dan kumpulan aturan.
   curlIsEnabledButFunctionsAreDisabled: Ekstensi %extensionName% diaktifkan, tetapi fungsi yang diperlukan (%functionNames%) dinonaktifkan. Kami menyarankan untuk menonaktifkan ekstensi secara umum atau mengaktifkan fungsi yang diperlukan.
+tools:
+  ruleTester:
+    result:
+      detectionResult:
+        isSpam: Adalah spam
+        title: Hasil deteksi
+        spamRating: Peringkat spam
+        spamDetectionRating: Skor spam
+      title: Hasil tes
+      testData:
+        title: Data uji
+        testValue: Nilai tes
+        fieldType: Jenis bidang
+        enabledRules: Aturan yang diaktifkan
+      table:
+        type: Jenis aturan
+        value: Nilai
+        rating: Peringkat
+        noMatchingRules: Tidak ada aturan yang cocok dengan nilai tes.
+      matchedRules:
+        title: Aturan yang cocok
+    title: Penguji aturan
+    description: Uji bagaimana aturan Anda akan mendeteksi spam.
+    form:
+      title: Pengaturan pengujian
+      value: Nilai tes
+      type: Jenis bidang
+      useRules: Gunakan aturan
+      useRulesets: Gunakan kumpulan aturan
+    types:
+      textField: Bidang teks (Baris tunggal)
+      textarea: Bidang teks (Multi-baris)
+      emailField: bidang email
+      urlField: bidang URL
+      userAgent: Agen pengguna
+      ipAddress: alamat IP
+  title: Peralatan
