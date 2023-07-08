@@ -14,8 +14,8 @@
                 {{ 'project.action.id'|trans }}
                 <span class="ms-auto">{{ row.id }}</span>
             </div>
-            <div class="dropdown-divider"></div>
             {% if can_user_manage_project(row) %}
+                <div class="dropdown-divider"></div>
                 <a href="{{ path('project_delete', { project: row.id }) }}" class="dropdown-item text-red">
                     <i class="ti ti-circle-minus"></i>
                     {{ 'project.action.delete'|trans }}
