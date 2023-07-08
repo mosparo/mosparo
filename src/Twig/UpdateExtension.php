@@ -36,9 +36,10 @@ class UpdateExtension extends AbstractExtension implements GlobalsInterface
             return [];
         }
 
-        if (!$this->updatesEnabled) {
+        if (!$this->automaticUpdateCheckEnabled) {
             return [
-                'updatesEnabled' => false
+                'updatesEnabled' => $this->updatesEnabled,
+                'isUpdateAvailable' => false,
             ];
         }
 
@@ -55,7 +56,7 @@ class UpdateExtension extends AbstractExtension implements GlobalsInterface
         }
 
         return [
-            'updatesEnabled' => true,
+            'updatesEnabled' => $this->updatesEnabled,
             'isUpdateAvailable' => $isUpdateAvailable,
         ];
     }

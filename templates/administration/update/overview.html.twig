@@ -177,9 +177,11 @@
                     {% endif %}
                 </div>
 
-                <div class="card-footer text-muted">
-                    <strong>{{ 'administration.update.version.lastChecked'|trans }}</strong> {{ checkedAt|date }}
-                </div>
+                {% if checkedAt %}
+                    <div class="card-footer text-muted">
+                        <strong>{{ 'administration.update.version.lastChecked'|trans }}</strong> {{ checkedAt|date }}
+                    </div>
+                {% endif %}
             </div>
             <div class="row mt-3">
                 <div class="col-12 col-md-auto ms-auto">
