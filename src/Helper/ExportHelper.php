@@ -83,8 +83,10 @@ class ExportHelper
         return $this->exportProjectSettings($project, [
             'designMode',
             'boxSize',
+            'positionContainer',
+            'displayContent',
 
-            // Simple
+            // Visible: Simple
             'colorWebsiteBackground',
             'colorWebsiteForeground',
             'colorWebsiteAccent',
@@ -92,7 +94,7 @@ class ExportHelper
             'colorSuccess',
             'colorFailure',
 
-            // Advanced
+            // Visible: Advanced
             'boxRadius',
             'boxBorderWidth',
             'colorBackground',
@@ -120,6 +122,12 @@ class ExportHelper
             'colorFailureShadowInset',
             'showPingAnimation',
             'showMosparoLogo',
+
+            // Invisible: Simple
+            'fullPageOverlay',
+            'colorLoaderBackground',
+            'colorLoaderText',
+            'colorLoaderCircle',
         ]);
     }
 
