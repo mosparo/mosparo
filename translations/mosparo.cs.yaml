@@ -558,6 +558,7 @@ administration:
   user:
     help:
       password: Pokud není vyžadována změna hesla, ponechte tato pole prázdná.
+      canCreateProjects: Umožňuje uživateli vytvářet nové projekty. Administrátor může vždy vytvářet projekty.
     backToOverview: Zpět na uživatele
     list:
       roles: Role
@@ -576,6 +577,7 @@ administration:
       password: Heslo
       email: E-mail
       sendPasswordResetEmail: Pošlete uživateli e-mail pro nastavení hesla
+      canCreateProjects: Může vytvářet projekty
     delete:
       infoCantSelfDelete: Nemůžete smazat sami sebe.
       message:
