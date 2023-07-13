@@ -1,1 +1,13 @@
-{}
+label: Form girişlerinin spam olup olmadığının kontrol edildiğini ve 14 gün boyunca şifrelenmiş olarak saklandığını kabul ediyorum.
+accessibility:
+  checkingData: Verilerinizi kontrol ediyoruz. Lütfen bekleyin.
+  dataValid: Verileriniz geçerlidir. Formu gönderebilirsiniz.
+error:
+  gotNoToken: mosparo gönderilen jetonu iade etmedi.
+  internalError: Bir hata oluştu. Lütfen tekrar deneyin.
+  noSubmitTokenAvailable: Gönderme belirteci yok. Bu formun doğrulanması mümkün değildir.
+  spamDetected: Verileriniz spam korumamız tarafından yakalandı.
+  lockedOut: Kilitlendin. Lütfen %datetime% sonra tekrar deneyin.
+  delay: İsteğiniz gecikti. Lütfen %seconds% saniye bekleyin.
+hp:
+  fieldTitle: Bu alanı boş bırakın
