@@ -12,6 +12,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 |-----------------------|---------------|--------------------------------------------------------------------------------------------------------------|
 | Albanian              | sq            | [fim](https://hosted.weblate.org/user/fim/)                                                                  |
 | Arabic                | ar            | [abodinagdat16](https://hosted.weblate.org/user/abodinagdat16/)                                              |
+| Bengali               | bn            | [Kominak](https://hosted.weblate.org/user/Kominak/)                                                          |
 | Catalan               | ca            | [limusina10](https://hosted.weblate.org/user/limusina10/)                                                    |
 | Chinese (Simplified)  | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                                                        |
 | Chinese (Traditional) | zh_Hant       | Célia (via [mahonebay](https://hosted.weblate.org/user/mahonebay))                                           |
@@ -35,6 +36,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Slovenian             | sl            | Alona and Lesly (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                |
 | Spanish               | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)                                              |
 | Swedish               | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                            |
+| Turkish               | tr            | [emircanydn](https://hosted.weblate.org/user/emircanydn/)                                                    |
 | Ukrainian             | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                      |
 | Vietnamese            | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                      |
 
