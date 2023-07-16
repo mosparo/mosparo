@@ -8,3 +8,7 @@ password:
       notBlank: Upiši lozinku.
       length: Lozinka mora sadržati barem {{ limit }} znakova.
       passwordMustMatch: Polja lozinki se moraju poklapati.
+tools:
+  import:
+    importFile:
+      correctFile: Prenesi ispravnu JSON datoteku.
