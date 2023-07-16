@@ -1,1 +1,13 @@
-{}
+error:
+  noSubmitTokenAvailable: Kinnitustunnus on puudu. Selle vormi sisestuste kontrollimine pole võimalik.
+  spamDetected: Sinu sisestatud andmetes leidub midagi, mis ei vasta spämmikontrolli tingimustele.
+  delay: Liiga sagedased päringud. Palun oota %seconds% sekundit.
+  internalError: Tekkis viga. Palun proovi uuesti.
+  lockedOut: Sinu päringud on mõneks ajaks blokeeritud. Palun proovi uuesti peale %datetime% .
+  gotNoToken: mosparo päringuvastuses puudus kinnitustunnus.
+hp:
+  fieldTitle: Palun jäta see väli tühjaks
+accessibility:
+  checkingData: Kontrollime sisestust. Palun oota hetkeks.
+  dataValid: Sinu sisestatu on korrektne. Võid vormi kinnitada.
+label: Ma olen nõus, et selle vormi sisestusi kontrollitakse spämmi vältimiseks ning salvestatakse krüptituna 14 päeva jooksul.
