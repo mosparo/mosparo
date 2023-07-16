@@ -43,7 +43,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
 
         // Get the date format for the chart
         [ , $dateFormat, , ] = $localeHelper->determineLocaleValues($request);
-        $dateFormat = str_replace(['d', 'm', 'Y'], ['dd', 'MM', 'yy'], $dateFormat);
+        $dateFormat = str_replace(['d', 'm', 'Y'], ['dd', 'MM', 'yyyy'], $dateFormat);
 
         return $this->render('project_related/dashboard/dashboard.html.twig', [
             'noSpamSubmissionsData' => $noSpamSubmissionsData,
