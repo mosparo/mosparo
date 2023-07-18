@@ -64,11 +64,7 @@
     min-height: 140px;
 }
 
-.dataTables_processing.visible {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-
+.processing-container.visible {
     position: absolute;
     top: 0;
     left: 0;
@@ -80,6 +76,21 @@
     font-size: 1.5rem;
 
     z-index: 5;
+
+    .dataTables_processing {
+        display: block !important;
+
+        position: sticky;
+        top: calc(50% - 1rem);
+
+        text-align: center;
+    }
+}
+
+.theme-dark {
+    .processing-container.visible {
+        background: rgba(26, 34, 52, 0.8);
+    }
 }
 
 .dataTables_length {

@@ -8,7 +8,7 @@ $(document).ready(function () {
             $(this).html(button);
         });
     }).on('processing.dt', 'table', function (e, settings, processing) {
-        let tableProcessing = $(this).parents('.dataTables_wrapper').find('.dataTables_processing')
+        let tableProcessing = $(this).parents('.dataTables_wrapper').find('.processing-container')
         if (processing) {
             tableProcessing.addClass('visible');
         } else {

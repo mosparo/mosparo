@@ -5,7 +5,7 @@ datatables:
         lengthMenu : [10, 25, 50, 100, 250, 500]
         pageLength: 50
         pagingType: 'simple_numbers'
-        dom: "tr<'card-footer d-flex align-items-center'<'dt-footer'<'dt-page-size'l><'dt-info ms-4'i><'dt-pagination pagination m-0 ms-md-auto'p>>>"
+        dom: "t<'processing-container'r><'card-footer d-flex align-items-center'<'dt-footer'<'dt-page-size'l><'dt-info ms-4'i><'dt-pagination pagination m-0 ms-md-auto'p>>>"
         searching: true
 
     template_parameters:
