@@ -152,8 +152,16 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">{{ 'tools.ruleTester.form.title'|trans }}</h2>
+                        <div class="card-actions">
+                            <a href="https://documentation.mosparo.io/docs/usage/tools#rule-tester" class="btn btn-info btn-sm" target="_blank">
+                                <i class="ti ti-question-mark"></i>
+                                {{ 'action.help'|trans }}
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body">
+                        <p>{{ 'tools.ruleTester.intro'|trans }}</p>
+
                         {{ form_row(form.value) }}
                         {{ form_row(form.type) }}
                         {{ form_row(form.useRules) }}
