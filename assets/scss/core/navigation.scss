@@ -65,3 +65,15 @@
         --tblr-avatar-size: 2.25rem;
     }
 }
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .nav-link-title {
+        display: none;
+    }
+
+    .nav-item.active {
+        .nav-link-title {
+            display: block;
+        }
+    }
+}
