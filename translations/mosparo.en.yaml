@@ -657,7 +657,7 @@ tools:
   ruleTester:
     title: Rule tester
     description: Test how your rules will detect spam.
-    intro: Enter the value you want to test. Choose which field type you want to use for the test and if you want to use rules and rulesets. The data type is important because some rule types only apply to specific data types.
+    intro: Enter the value you want to test. Choose which data type you want to use for the test and if you want to use rules and rulesets. The data type is important because some rule types only apply to specific data types.
 
     form:
       title: Test settings
