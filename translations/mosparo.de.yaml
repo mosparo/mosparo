@@ -1273,7 +1273,11 @@ tools:
       useRules: Regeln verwenden
       title: Test-Einstellungen
       value: Test-Wert
-      type: Feldtyp
+      type: Datentyp
+      valueHelp: Geben Sie den Wert ein, mit dem Sie Ihre Regeln testen wollen.
+      typeHelp: Wählen Sie den Datentyp. Einige Regeltypen gelten nur für bestimmte Datentypen.
+      useRulesHelp: Aktivieren Sie dieses Feld, um Ihre Regeln zu testen.
+      useRulesetsHelp: Aktivieren Sie dieses Feld, um Ihre Regel-Pakete zu testen.
     types:
       userAgent: User-Agent
       emailField: E-Mail-Feld
@@ -1283,6 +1287,7 @@ tools:
       ipAddress: IP-Adresse
     title: Regel-Tester
     description: Testen Sie wie Ihre Regeln Spam erkennen werden.
+    intro: Geben Sie den Wert ein, den Sie testen möchten. Wählen Sie, welchen Datentyp Sie für den Test verwenden wollen und ob Sie Regeln und Regelsätze verwenden wollen. Der Datentyp ist wichtig, da einige Regeltypen nur für bestimmte Datentypen gelten.
   export:
     title: Exportieren
     includedData: Enthaltene Daten
