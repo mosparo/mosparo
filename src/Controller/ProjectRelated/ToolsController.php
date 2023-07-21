@@ -120,26 +120,31 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'label' => 'tools.eiParts.generalSettings',
                 'required' => false,
                 'help' => 'tools.eiParts.generalSettingsHelp',
+                'data' => true,
             ])
             ->add('designSettings', CheckboxType::class, [
                 'label' => 'tools.eiParts.designSettings',
                 'required' => false,
                 'help' => 'tools.eiParts.designSettingsHelp',
+                'data' => true,
             ])
             ->add('securitySettings', CheckboxType::class, [
                 'label' => 'tools.eiParts.securitySettings',
                 'required' => false,
                 'help' => 'tools.eiParts.securitySettingsHelp',
+                'data' => true,
             ])
             ->add('rules', CheckboxType::class, [
                 'label' => 'tools.eiParts.rules',
                 'required' => false,
                 'help' => 'tools.eiParts.rulesHelp',
+                'data' => true,
             ])
             ->add('rulesets', CheckboxType::class, [
                 'label' => 'tools.eiParts.rulesets',
                 'required' => false,
                 'help' => 'tools.eiParts.rulesetsHelp',
+                'data' => true,
             ])
             ->getForm();
 
