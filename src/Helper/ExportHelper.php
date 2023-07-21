@@ -211,7 +211,7 @@ class ExportHelper
                 'name' => $ruleset->getName(),
                 'url' => $ruleset->getUrl(),
                 'status' => (bool) $ruleset->getStatus(),
-                'spamRatingFactor' => $ruleset->getSpamRatingFactor(),
+                'spamRatingFactor' => $ruleset->getSpamRatingFactor() ?? 1,
             ];
         }
 
