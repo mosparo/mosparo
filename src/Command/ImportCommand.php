@@ -87,6 +87,13 @@ class ImportCommand extends Command
         $handlingExistingRules = $input->getOption('handlingExistingRules');
         $rulesets = $input->getOption('rulesets');
 
+
+        if (!$generalSettings && !$designSettings && !$securitySettings && !$rules && !$rulesets) {
+            $output->writeln($formatter->formatBlock(['Enable at least one section to import.'], 'error', true));
+            return Command::FAILURE;
+        }
+
+
         if ($rules) {
             if (!in_array($handlingExistingRules, ['override', 'append', 'add'])) {
                 $output->writeln($formatter->formatBlock(['Invalid value for handlingExistingRules.'], 'error', true));
