@@ -8,3 +8,7 @@ password:
     form:
       constraint:
         notBlank: Proszę podać swój adres e-mail.
+tools:
+  import:
+    importFile:
+      correctFile: Prosimy przesłać poprawny plik JSON.
