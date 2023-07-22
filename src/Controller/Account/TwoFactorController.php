@@ -52,7 +52,7 @@ class TwoFactorController extends AbstractController
         /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
 
-        if ($user->isGoogleAuthenticatorEnabled() && $request->get('_route') !== 'account_two_factor_start_force') {
+        if ($user->isGoogleAuthenticatorEnabled() && $request->attributes->get('_route') !== 'account_two_factor_start_force') {
             return $this->redirectToRoute('account_two_factor_status');
         } else {
             $form = $this->createQrCodeForm();

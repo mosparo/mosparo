@@ -66,7 +66,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        $activeRoute = $request->get('_route');
+        $activeRoute = $request->attributes->get('_route');
         $activeProject = null;
         $projectRepository = $this->entityManager->getRepository(Project::class);
 

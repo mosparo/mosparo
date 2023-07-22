@@ -34,7 +34,7 @@ class ApiSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // If the route is not a frontend api route, we do nothing
-        if (!$request->headers->has('Origin') || strpos($request->get('_route'), 'frontend_api_') !== 0) {
+        if (!$request->headers->has('Origin') || strpos($request->attributes->get('_route'), 'frontend_api_') !== 0) {
             return;
         }
 
@@ -88,7 +88,7 @@ class ApiSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // If the route is not a frontend api route, we do nothing
-        if (strpos($request->get('_route'), 'frontend_api_') !== 0) {
+        if (strpos($request->attributes->get('_route'), 'frontend_api_') !== 0) {
             return;
         }
 

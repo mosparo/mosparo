@@ -62,7 +62,7 @@ class SetupSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        $route = $request->get('_route');
+        $route = $request->attributes->get('_route');
         if (in_array($route, $this->allowedRoutes)) {
             return;
         }
@@ -75,7 +75,7 @@ class SetupSubscriber implements EventSubscriberInterface
         // If the two versions aren't the same, redirect to the update controller
         if (Kernel::VERSION != $this->installedVersion) {
             $request = $event->getRequest();
-            $route = $request->get('_route');
+            $route = $request->attributes->get('_route');
 
             // We redirect only GET requests
             if ($request->getMethod() !== 'GET') {
