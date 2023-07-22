@@ -4,6 +4,7 @@ namespace Mosparo\Twig;
 
 use Mosparo\Exception;
 use Mosparo\Helper\UpdateHelper;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
@@ -17,26 +18,31 @@ class UpdateExtension extends AbstractExtension implements GlobalsInterface
 
     protected Environment $twig;
 
+    protected RequestStack $requestStack;
+
     protected bool $updatesEnabled = false;
 
     protected bool $automaticUpdateCheckEnabled = false;
 
-    public function __construct(Security $security, UpdateHelper $updateHelper, Environment $twig, bool $updatesEnabled, bool $automaticUpdateCheckEnabled)
+    public function __construct(Security $security, UpdateHelper $updateHelper, Environment $twig, RequestStack $requestStack, bool $updatesEnabled, bool $automaticUpdateCheckEnabled)
     {
         $this->security = $security;
         $this->updateHelper = $updateHelper;
         $this->twig = $twig;
+        $this->requestStack = $requestStack;
         $this->updatesEnabled = $updatesEnabled;
         $this->automaticUpdateCheckEnabled = $automaticUpdateCheckEnabled;
     }
 
     public function getGlobals(): array
     {
-        if (!$this->security->isGranted('ROLE_ADMIN')) {
+        $request = $this->requestStack->getMainRequest();
+        $route = $request->attributes->get('_route');
+        if (!$this->security->isGranted('ROLE_ADMIN') || $route === 'administration_update_finalize') {
             return [];
         }
 
-        if (!$this->automaticUpdateCheckEnabled) {
+        if (!$this->automaticUpdateCheckEnabled ) {
             return [
                 'updatesEnabled' => $this->updatesEnabled,
                 'isUpdateAvailable' => false,
