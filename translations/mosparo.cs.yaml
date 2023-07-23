@@ -997,8 +997,12 @@ tools:
       title: Nastavení testu
       value: Hodnota testu
       useRulesets: Použít sady pravidel
-      type: Typ pole
+      type: Typ dat
       useRules: Použít pravidla
+      valueHelp: Zadejte hodnotu, se kterou chcete pravidla otestovat.
+      typeHelp: Vyberte typ dat. Některé typy pravidel se vztahují pouze na určité datové typy.
+      useRulesetsHelp: Aktivujte toto pole pro testování sad pravidel.
+      useRulesHelp: Aktivujte toto pole pro otestování pravidel.
     types:
       userAgent: Uživatelský agent
       textarea: Textové pole (víceřádkové)
@@ -1008,6 +1012,7 @@ tools:
       ipAddress: IP adresa
     title: Testovač pravidel
     description: Otestujte, jak budou vaše pravidla detekovat spam.
+    intro: Zadejte hodnotu, kterou chcete testovat. Zvolte, jaký typ dat chcete pro test použít a zda chcete použít pravidla a sady pravidel. Datový typ je důležitý, protože některé typy pravidel se vztahují pouze na určité datové typy.
   export:
     title: Export
     includedData: Zahrnuté údaje
