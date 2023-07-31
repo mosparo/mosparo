@@ -8,8 +8,8 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
-use Mosparo\Entity\Submission;
 use Mosparo\Helper\LocaleHelper;
+use Mosparo\Helper\StatisticHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,9 +23,9 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
     /**
      * @Route("/", name="dashboard")
      */
-    public function dashboard(Request $request, EntityManagerInterface $entityManager, LocaleHelper $localeHelper): Response
+    public function dashboard(Request $request, EntityManagerInterface $entityManager, LocaleHelper $localeHelper, StatisticHelper $statisticHelper): Response
     {
-        [$noSpamSubmissionsData, $spamSubmissionsData, $numberOfNoSpamSubmissions, $numberOfSpamSubmissions] = $this->getSubmissionDataForChart($entityManager);
+        [$noSpamSubmissionsData, $spamSubmissionsData, $numberOfNoSpamSubmissions, $numberOfSpamSubmissions] = $this->getSubmissionDataForChart($statisticHelper);
 
         $builder = $entityManager->createQueryBuilder();
         $builder
@@ -56,32 +56,18 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
         ]);
     }
 
-    protected function getSubmissionDataForChart($entityManager): array
+    protected function getSubmissionDataForChart(StatisticHelper $statisticHelper): array
     {
         $noSpamSubmissionsData = $spamSubmissionsData = $this->createEmptyDateArray();
 
-        $builder = $entityManager->createQueryBuilder();
-        $builder
-            ->select('s')
-            ->from(Submission::class, 's')
-            ->where('s.spam = 1')
-            ->orWhere('s.valid IS NOT NULL');
-
-        foreach ($builder->getQuery()->getResult() as $submission) {
-            $dateKey = $submission->getSubmittedAt()->format('Y-m-d');
-            if ($submission->isSpam() || !$submission->isValid()) {
-                if (!isset($spamSubmissionsData[$dateKey])) {
-                    continue;
-                }
-
-                $spamSubmissionsData[$dateKey]++;
-            } else if ($submission->isValid()) {
-                if (!isset($noSpamSubmissionsData[$dateKey])) {
-                    continue;
-                }
-
-                $noSpamSubmissionsData[$dateKey]++;
+        $statisticData = $statisticHelper->getStatisticData();
+        foreach ($statisticData['numbersByDate'] as $date => $numbers) {
+            if (!isset($spamSubmissionsData[$date]) || !isset($noSpamSubmissionsData[$date])) {
+                continue;
             }
+
+            $spamSubmissionsData[$date] = $numbers['numberOfSpamSubmissions'];
+            $noSpamSubmissionsData[$date] = $numbers['numberOfValidSubmissions'];
         }
 
         return [
