@@ -8,5 +8,6 @@ error:
   spamDetected: Uw gegevens bevatten spam.
   lockedOut: U bent tijdelijk geblokkeerd. Probeer het na %datetime% nogmaals.
   delay: Uw aanvraag is vertraagd. Wacht %seconds%.
+  gotNoToken: mosparo heeft geen token teruggegeven.
 hp:
   fieldTitle: Laat dit veld leeg
