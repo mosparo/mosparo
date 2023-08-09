@@ -7,6 +7,7 @@ project:
     manage: Kelola proyek
     delete: Hapus proyek
     goto: Pergi ke proyek
+    id: ID Proyek
   create:
     title: Buat proyek
     message:
@@ -399,6 +400,9 @@ settings:
         websiteBackground: Warna latar belakang situs web
         websiteForeground: Warna latar depan situs web
         websiteAccent: Warna aksen situs web
+        loaderBackground: Warna latar belakang hamparan pemuat
+        loaderText: Warna teks pemuat
+        loaderCircle: Warna lingkaran pemuatan
       boxSize: Ukuran kotak
       boxRadius: Jari-jari kotak
       boxBorderWidth: Lebar batas
@@ -408,6 +412,15 @@ settings:
         websiteAccent: Pilih warna aksen situs web Anda. Warna ini digunakan untuk berbagai elemen kotak mosparo.
         boxSize: Pilih ukuran kotak.
         websiteForeground: Pilih warna latar depan situs web Anda. Warna ini digunakan untuk menampilkan elemen utama kotak mosparo.
+        loaderText: Tentukan warna teks dalam hamparan.
+        loaderCircle: Tentukan warna lingkaran pemuat animasi.
+        loaderBackground: Tentukan warna latar belakang hamparan pemuat. Warna ini harus sedikit transparan untuk melihat situs web Anda di latar belakang.
+        textError: Ini adalah warna teks yang akan terlihat jika terjadi kesalahan.
+        showMosparoLogo: Menampilkan logo di bawah pesan pemuatan.
+        fullPageOverlay: Menentukan apakah overlay akan memblokir seluruh halaman atau hanya formulir yang datanya divalidasi oleh mosparo.
+      invisibleLogo: Logo
+      invisiblePageOverlay: Hamparan halaman
+      fullPageOverlay: Gunakan hamparan halaman penuh
     choices:
       boxSize:
         large: Besar
@@ -426,9 +439,16 @@ settings:
       simpleDesign: Desain sederhana
       colorAndDimensionSettings: Warna dan Dimensi
       preview: Pratinjau
+      invisibleSimpleDesign: Desain sederhana yang tak terlihat
     simpleDesign:
       introPreview: Di sisi kanan, Anda akan melihat pratinjau kotak mosparo di situs web Anda.
       introColors: Silakan pilih warna yang dimiliki situs web Anda. Warna latar belakang diperlukan untuk menghitung rasio kontras yang benar, warna latar depan mewakili warna teks Anda, dan warna aksen digunakan untuk elemen khusus kotak mosparo.
+    dropdown:
+      groupTitleVisible: Perlindungan spam yang terlihat
+      groupTitleInvisible: Perlindungan spam yang tidak terlihat
+      simple: Simpel
+      advanced: Lanjutan
+      title: Mode desain
   security:
     validation:
       honeypotFieldNameInvalidCharacter: Gunakan hanya huruf, angka dan tanda strip (-).
@@ -981,4 +1001,5 @@ tools:
       urlField: bidang URL
       userAgent: Agen pengguna
       ipAddress: alamat IP
+    intro: Masukkan nilai yang ingin Anda uji. Pilih tipe data yang ingin Anda gunakan untuk pengujian dan jika Anda ingin menggunakan aturan dan ruleset. Tipe data penting karena beberapa tipe aturan hanya berlaku untuk tipe data tertentu.
   title: Peralatan
