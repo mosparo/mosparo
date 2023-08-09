@@ -19,7 +19,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Croatian              | hr            | DMI (via [fim](https://hosted.weblate.org/user/fim/)), [milotype](https://hosted.weblate.org/user/milotype/) |
 | Czech                 | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                          |
 | Danish                | da            | [Digi92](https://hosted.weblate.org/user/Digi92/)                                                            |
-| Dutch                 | nl            | [Digi92](https://hosted.weblate.org/user/Digi92/)                                                            |
+| Dutch                 | nl            | [Digi92](https://hosted.weblate.org/user/Digi92/), [Astrid](https://hosted.weblate.org/user/Astrid/)         |
 | English               | en            | mosparo Core Developers                                                                                      |
 | Estonian              | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                      |
 | French                | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), mosparo Core Developers                             |
