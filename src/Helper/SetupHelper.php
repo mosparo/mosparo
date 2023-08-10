@@ -64,6 +64,11 @@ class SetupHelper
         $this->projectDirectory = $projectDirectory;
     }
 
+    public function isInstalled(): bool
+    {
+        return $this->configHelper->getEnvironmentConfigValue('mosparo_installed', false);
+    }
+
     public function checkPrerequisites($fullPrerequisites = null): array
     {
         if ($fullPrerequisites === null) {

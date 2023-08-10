@@ -69,7 +69,21 @@ class LocaleHelper
             $scriptPart = ucfirst(strtolower($scriptPart));
         }
 
-        return $languagePart . '_' . $scriptPart;
+        $fixedLocale = $languagePart . '_' . $scriptPart;
+
+        /**
+         * The browser usually uses the locale with the country code. Since we use the script in the filename
+         * of some languages, we have to convert the browser locale to the translation file locale.
+         */
+        $fallbacks = [
+            'zh_CN' => 'zh_Hans',
+            'zh_TW' => 'zh_Hant',
+        ];
+        if (isset($fallbacks[$fixedLocale])) {
+            $fixedLocale = $fallbacks[$fixedLocale];
+        }
+
+        return $fixedLocale;
     }
 
     public function determineLocaleValues(Request $request): array
