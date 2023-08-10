@@ -294,6 +294,10 @@ class UpdateController extends AbstractController
      */
     public function finalize(Request $request, Filesystem $filesystem): Response
     {
+        if ($this->configHelper->getEnvironmentConfigValue('mosparo_installed_version') === Kernel::VERSION) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         // Prepare database and execute the migrations
         $application = new Application($this->kernel);
         $application->setAutoExit(false);

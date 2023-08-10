@@ -52,6 +52,10 @@ class SetupController extends AbstractController
      */
     public function start(): Response
     {
+        if ($this->setupHelper->isInstalled()) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         return $this->render('setup/start.html.twig');
     }
 
@@ -60,6 +64,10 @@ class SetupController extends AbstractController
      */
     public function prerequisites(): Response
     {
+        if ($this->setupHelper->isInstalled()) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         [ $meetPrerequisites, $prerequisites ] = $this->setupHelper->checkPrerequisites();
 
         return $this->render('setup/prerequisites.html.twig', [
@@ -74,6 +82,10 @@ class SetupController extends AbstractController
      */
     public function database(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if ($this->setupHelper->isInstalled()) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->add('host', TextType::class, ['label' => 'setup.database.form.host'])
             ->add('port', TextType::class, ['label' => 'setup.database.form.port', 'required' => false, 'data' => 3306])
@@ -146,6 +158,10 @@ class SetupController extends AbstractController
      */
     public function other(Request $request): Response
     {
+        if ($this->setupHelper->isInstalled()) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->add('name', TextType::class, ['label' => 'setup.other.form.name'])
             ->add('emailAddress', TextType::class, ['label' => 'setup.other.form.emailAddress'])
@@ -181,6 +197,10 @@ class SetupController extends AbstractController
      */
     public function install(Request $request): Response
     {
+        if ($this->setupHelper->isInstalled()) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         $session = $request->getSession();
 
         // Prepare database and execute the migrations
