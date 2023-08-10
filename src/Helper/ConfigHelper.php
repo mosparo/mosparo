@@ -58,7 +58,7 @@ class ConfigHelper
 
     public function readEnvironmentConfig(): array
     {
-        if (!file_exists($this->environmentConfigFilePath)) {
+        if (!file_exists($this->environmentConfigFilePath) || empty(file_get_contents($this->environmentConfigFilePath))) {
             return [];
         }
 
