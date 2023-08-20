@@ -140,6 +140,8 @@ class ProjectSubscriber implements EventSubscriberInterface
                     'rule_edit' => Rule::class,
                     'ruleset_edit' => Ruleset::class,
                     'ruleset_view' => Ruleset::class,
+                    'ruleset_view_filtered' => Ruleset::class,
+                    'ruleset_view_rule' => Ruleset::class,
                     'submission_view' => Submission::class,
                 ];
 
