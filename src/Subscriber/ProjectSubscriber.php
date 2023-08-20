@@ -6,6 +6,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
+use Mosparo\Entity\Rule;
+use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\Submission;
 use Mosparo\Helper\ProjectHelper;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -130,6 +133,28 @@ class ProjectSubscriber implements EventSubscriberInterface
             $activeProjectId = $session->get('activeProjectId', false);
             if ($activeProjectId !== false) {
                 $activeProject = $projectRepository->find($activeProjectId);
+            } else if (!$activeProjectId) {
+                // Try to determine the entity and the project and switch to it if one of
+                // these routes is requested.
+                $entityReleatedRoutes = [
+                    'rule_edit' => Rule::class,
+                    'ruleset_edit' => Ruleset::class,
+                    'ruleset_view' => Ruleset::class,
+                    'submission_view' => Submission::class,
+                ];
+
+                if (isset($entityReleatedRoutes[$activeRoute])) {
+                    $projectId = $this->findProjectForRequestedEntity($request, $entityReleatedRoutes[$activeRoute]);
+
+                    if ($projectId) {
+                        $event->setResponse(new RedirectResponse($this->router->generate('project_switch', [
+                            'project' => $projectId,
+                            'targetPath' => $request->getRequestUri(),
+                        ])));
+
+                        return;
+                    }
+                }
             }
 
             // If the project does not exist we have to clean the session value and return to the project list
@@ -214,5 +239,23 @@ class ProjectSubscriber implements EventSubscriberInterface
             ->getFilters()
             ->enable('project_related_filter')
             ->setProjectHelper($this->projectHelper);
+    }
+
+    protected function findProjectForRequestedEntity(Request $request, string $class): ?int
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder
+            ->select('IDENTITY(e.project) AS project_id')
+            ->from($class, 'e')
+            ->where('e.id = :id')
+            ->setParameter('id', $request->attributes->get('id'));
+
+        $result = $builder->getQuery()->getOneOrNullResult();
+
+        if (!$result) {
+            return null;
+        }
+
+        return $result['project_id'];
     }
 }

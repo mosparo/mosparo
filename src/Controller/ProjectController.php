@@ -278,6 +278,12 @@ class ProjectController extends AbstractController
             return $this->redirectToRoute('project_list');
         }
 
+        // Redirect back to the originally requested path
+        $targetPath = $request->query->get('targetPath', false);
+        if ($targetPath) {
+            return $this->redirect($targetPath);
+        }
+
         return $this->redirectToRoute('dashboard');
     }
 
