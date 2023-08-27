@@ -11,10 +11,6 @@
 
 -----
 
-## Now in open beta!
-
-**mosparo is finally available in open beta. Please report to us possible bugs as an issue.**
-
 ## Description
 
 mosparo is the modern solution to protect your online forms from spam. The protection method is simple: mosparo blocks spam based on rules matching the form's data. The detection method is comparable to an email spam filter. The user does not have to prove it is a real human by solving a puzzle. Instead, the tool scans the entered form data for words or other information which are not allowed. You can add different kinds of rules to catch all possible spam.
