@@ -79,6 +79,14 @@ class ProjectController extends AbstractController
             $filterEnabled = true;
         }
 
+        // Determine to which projects the user has access. If it's an admin, it has access to all projects
+        $allowedProjectIds = [];
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            foreach ($this->getUser()->getProjectMemberships() as $membership) {
+                $allowedProjectIds[] = $membership->getProject()->getId();
+            }
+        }
+
         // Table view
         $table = null;
         if ($view === 'table') {
@@ -95,7 +103,7 @@ class ProjectController extends AbstractController
                 ])
                 ->createAdapter(ORMAdapter::class, [
                     'entity' => Project::class,
-                    'query' => function (QueryBuilder $builder) use ($filter, $searchQuery) {
+                    'query' => function (QueryBuilder $builder) use ($filter, $searchQuery, $allowedProjectIds) {
                         $builder
                             ->select('e')
                             ->from(Project::class, 'e');
@@ -113,6 +121,13 @@ class ProjectController extends AbstractController
                                 ->andWhere('e.name LIKE :searchQuery')
                                 ->setParameter('searchQuery', '%' . $searchQuery . '%');
                         }
+
+                        // Limit the possible projects to the ones the user has access to
+                        if ($allowedProjectIds) {
+                            $builder
+                                ->andWhere('e.id IN (:projects)')
+                                ->setParameter('projects', $allowedProjectIds);
+                        }
                     },
                 ])
                 ->handleRequest($request);
@@ -125,13 +140,21 @@ class ProjectController extends AbstractController
         // Box view
         $numberOfSubmissionsByProject = null;
         if ($view === 'boxes') {
-            $numberOfSubmissions = $this->entityManager->createQueryBuilder()
+            $builder = $this->entityManager->createQueryBuilder()
                 ->select('IDENTITY(s.project) AS project_id', 'COUNT(s) AS count')
                 ->from(Submission::class, 's')
                 ->where('s.spam = 1')
                 ->orWhere('s.valid IS NOT NULL')
-                ->groupBy('s.project')
-                ->getQuery();
+                ->groupBy('s.project');
+
+            // Limit the possible projects to the ones the user has access to
+            if ($allowedProjectIds) {
+                $builder
+                    ->andWhere('s.project IN (:projects)')
+                    ->setParameter('projects', $allowedProjectIds);
+            }
+
+            $numberOfSubmissions = $builder->getQuery();
 
             $numberOfSubmissionsByProject = [];
             foreach ($numberOfSubmissions->getResult() as $row) {
