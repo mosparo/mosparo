@@ -31,6 +31,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Korean                | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                                                  |
 | Polish                | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)                                                          |
 | Portuguese            | pt            | Northon (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
+| Romanian              | ro            | [Speedyu](https://hosted.weblate.org/user/Speedyu/)                                                          |
 | Russian               | ru            | [Senya0](https://hosted.weblate.org/user/Senya0/), [Andrej730](https://hosted.weblate.org/user/Andrej730/)   |
 | Slovak                | sk            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                          |
 | Slovenian             | sl            | Alona and Lesly (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                |
