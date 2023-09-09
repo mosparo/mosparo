@@ -13,7 +13,7 @@ class DomainRuleTester extends AbstractRuleTester
             $value = strtolower($value);
             $itemValue = strtolower($item->getValue());
 
-            $pattern = '/(.|\/\/|@)' . str_replace('.', '\\.', trim($itemValue, './')) . '/is';
+            $pattern = '/(^|\.|\/\/|@)' . preg_quote(trim($itemValue, './'), '/') . '($|\/|#|\?|&)/is';
             if (preg_match($pattern, $value)) {
                 $matchingItems[] = [
                     'type' => $item->getType(),

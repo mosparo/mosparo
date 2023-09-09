@@ -57,4 +57,36 @@ class DomainRuleTesterTest extends TestCaseWithItems
         $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
+
+    public function testValidateDataNothingFoundExtendedTld()
+    {
+        $ruleStub = $this->createStub(Rule::class);
+        $ruleStub
+            ->method('getItems')
+            ->willReturn($this->buildItemsCollection(RuleItem::class, [
+                ['type' => 'website', 'value' => 'example.net', 'rating' => 5.0],
+            ]));
+
+        $ruleTester = new DomainRuleTester();
+        $result = $ruleTester->validateData('test', 'https://example.network/test/test.html', $ruleStub);
+
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
+
+    public function testValidateDataNothingFoundExtendedDomain()
+    {
+        $ruleStub = $this->createStub(Rule::class);
+        $ruleStub
+            ->method('getItems')
+            ->willReturn($this->buildItemsCollection(RuleItem::class, [
+                ['type' => 'website', 'value' => 'example.net', 'rating' => 5.0],
+            ]));
+
+        $ruleTester = new DomainRuleTester();
+        $result = $ruleTester->validateData('test', 'texample.net', $ruleStub);
+
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
 }
