@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\UrlHelper;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -23,10 +24,13 @@ class DynamicResourcesController extends AbstractController
 
     protected DesignHelper $designHelper;
 
-    public function __construct(ProjectRepository $projectRepository, DesignHelper $designHelper)
+    protected UrlHelper $urlHelper;
+
+    public function __construct(ProjectRepository $projectRepository, DesignHelper $designHelper, UrlHelper $urlHelper)
     {
         $this->projectRepository = $projectRepository;
         $this->designHelper = $designHelper;
+        $this->urlHelper = $urlHelper;
     }
 
     /**
@@ -77,7 +81,7 @@ class DynamicResourcesController extends AbstractController
             return new Response('404 Not Found', 404);
         }
 
-        return new Response($redirectResponse->getTargetUrl());
+        return new Response($this->urlHelper->getAbsoluteUrl($redirectResponse->getTargetUrl()));
     }
 
     /**
