@@ -78,7 +78,7 @@
         {% if view == 'boxes' %}
             <div class="container-xl">
                 <div class="row">
-                    {% for project in projects|filter(project => searchQuery in project.name) %}
+                    {% for project in projects|filter(project => searchQuery|lower in project.name|lower) %}
                         <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
                             <div class="card card-md mb-3 w-100">
                                 <div class="card-body d-flex flex-column">
@@ -123,6 +123,12 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-info">
+                                {{ 'header.noProjectsFound'|trans }}
                             </div>
                         </div>
                     {% endfor %}
