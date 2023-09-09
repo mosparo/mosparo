@@ -57,4 +57,42 @@ class EmailRuleTesterTest extends TestCaseWithItems
         $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
+
+    /**
+     * @see https://github.com/mosparo/mosparo/issues/132
+     */
+    public function testValidateDataDoNotFindPartialEmailAddressFullValue()
+    {
+        $ruleStub = $this->createStub(Rule::class);
+        $ruleStub
+            ->method('getItems')
+            ->willReturn($this->buildItemsCollection(RuleItem::class, [
+                ['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0],
+            ]));
+
+        $ruleTester = new EmailRuleTester();
+        $result = $ruleTester->validateData('test', 'test+no-reply@test.com', $ruleStub);
+
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * @see https://github.com/mosparo/mosparo/issues/132
+     */
+    public function testValidateDataDoNotFindPartialEmailAddressInText()
+    {
+        $ruleStub = $this->createStub(Rule::class);
+        $ruleStub
+            ->method('getItems')
+            ->willReturn($this->buildItemsCollection(RuleItem::class, [
+                ['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0],
+            ]));
+
+        $ruleTester = new EmailRuleTester();
+        $result = $ruleTester->validateData('test', 'Test this is a test+no-reply@example.com text with email address in it.', $ruleStub);
+
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
 }

@@ -10,10 +10,10 @@ class EmailRuleTester extends AbstractRuleTester
     {
         $matchingItems = [];
         foreach ($rule->getItems() as $item) {
-            $value = strtolower($value);
-            $itemValue = strtolower($item->getValue());
+            $value = trim(strtolower($value));
+            $itemValue = trim(strtolower($item->getValue()));
 
-            if (strpos($value, $itemValue) !== false) {
+            if ($value === $itemValue || preg_match('/(^|\s+)' . preg_quote($itemValue, '/') . '(\s+|$)/', $value)) {
                 $matchingItems[] = [
                     'type' => $item->getType(),
                     'value' => $item->getValue(),
