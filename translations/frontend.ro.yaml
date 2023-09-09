@@ -1,1 +1,13 @@
-{}
+error:
+  spamDetected: Datele dvs. au fost reținute de sistemul nostru de protecție împotriva spam-ului.
+  delay: Cererea dumneavoastră a fost amânată. Vă rugăm să așteptați %seconds% secunde.
+  gotNoToken: mosparo nu a returnat niciun token.
+  internalError: S-a produs o eroare. Vă rugăm să încercați din nou.
+  lockedOut: Sunteți blocat. Vă rugăm să încercați din nou după %datetime%.
+  noSubmitTokenAvailable: Nu este disponibil niciun token de trimitere. Validarea acestui formular nu este posibilă.
+hp:
+  fieldTitle: Lăsați acest câmp liber
+accessibility:
+  dataValid: Datele dumneavoastră sunt corecte. Puteți trimite formularul.
+  checkingData: Vă verificăm datele. Vă rugăm să așteptați.
+label: Sunt de acord cu faptul că datele înscrise în formular sunt verificate pentru spam și stocate în mod criptat timp de 14 zile.
