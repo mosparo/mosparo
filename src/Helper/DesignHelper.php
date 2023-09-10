@@ -249,6 +249,9 @@ class DesignHelper
             $this->generateCssCache($project);
         }
 
+        // Store the new design hashes. Otherwise, the resources will not be found correctly.
+        $this->entityManager->flush();
+
         // Set the originally active project again
         $this->projectHelper->setActiveProject($activeProject);
     }
