@@ -394,7 +394,7 @@ class ProjectController extends AbstractController
 
         // Redirect back to the originally requested path
         $targetPath = $request->query->get('targetPath', false);
-        if ($targetPath) {
+        if ($targetPath && $this->isLocalUrl($request, $targetPath)) {
             return $this->redirect($targetPath);
         }
 
@@ -410,5 +410,23 @@ class ProjectController extends AbstractController
         $request->getSession()->set('activeProjectId', $project->getId());
 
         return true;
+    }
+
+    protected function isLocalUrl(Request $request, $url): bool
+    {
+        // If the first character is a slash, the URL is relative (only the path) and is local
+        if (str_starts_with($url, '/')) {
+            return true;
+        }
+
+        // If the URL is absolute but starts with the host of mosparo, we can redirect it.
+        // Add the slash to prevent a redirect when a similar top-level domain is used.
+        // For example, mosparo.com should not allow a redirect to mosparo.com.au
+        if (str_starts_with($url, $request->getSchemeAndHttpHost() . '/')) {
+            return true;
+        }
+
+        // The URL does not match the two checks because it's an external URL; no redirect in that case.
+        return false;
     }
 }
