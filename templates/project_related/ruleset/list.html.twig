@@ -8,16 +8,20 @@
 {% block pageTitleColumn %}
     {{ parent() }}
 
-    {% if canManage %}
-        <div class="col-auto ms-auto">
-            <div class="btn-list">
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/usage/rule_packages" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+            {% if canManage %}
                 <a href="{{ path('ruleset_add') }}" class="btn btn-success add-button">
                     <i class="ti ti-plus"></i>
                     <span>{{ 'ruleset.add.title'|trans }}</span>
                 </a>
-            </div>
+            {% endif %}
         </div>
-    {% endif %}
+    </div>
 {% endblock %}
 
 {% block pageBody %}
