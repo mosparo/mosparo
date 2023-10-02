@@ -6,3 +6,9 @@ Please send us an email to security@mosparo.io to report a security vulnerabilit
 We prefer encrypted emails. You can find our PGP public key at https://mosparo.io/.well-known/pgp-key.txt
 
 Please see all our security information at https://mosparo.io/.well-known/security.txt
+
+# Reporting a Vulnerability
+
+If you discover a security vulnerability in mosparo please disclose it via [our huntr page](https://huntr.dev/repos/mosparo/mosparo/). Information about bounties, CVEs, response times and past reports are all there..
+
+Thank you for improving the security of mosparo.
