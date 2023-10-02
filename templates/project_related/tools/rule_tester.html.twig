@@ -5,6 +5,19 @@
 {% block documentTitle %}{{ 'tools.ruleTester.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'tools.ruleTester.title'|trans }}{% endblock %}
 
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/usage/tools#rule-tester" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
 {% block settingsPageBody %}
     {% if submission %}
         <div class="row mb-3">
@@ -152,12 +165,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">{{ 'tools.ruleTester.form.title'|trans }}</h2>
-                        <div class="card-actions">
-                            <a href="https://documentation.mosparo.io/docs/usage/tools#rule-tester" class="btn btn-info btn-sm" target="_blank">
-                                <i class="ti ti-question-mark"></i>
-                                {{ 'action.help'|trans }}
-                            </a>
-                        </div>
                     </div>
                     <div class="card-body">
                         <p>{{ 'tools.ruleTester.intro'|trans }}</p>

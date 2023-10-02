@@ -5,6 +5,19 @@
 {% block documentTitle %}{{ 'settings.design.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'settings.design.title'|trans }}{% endblock %}
 
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/usage/settings#design" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
 {% macro contrastRatioBox(name) %}
     <div class="accordion cr-accordion" id="contrast-ratio-box-{{ name }}">
         <div class="accordion-item">

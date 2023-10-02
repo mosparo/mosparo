@@ -37,6 +37,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Slovenian             | sl            | Alona and Lesly (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                |
 | Spanish               | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)                                              |
 | Swedish               | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                            |
+| Thai                  | th            | [ntk.6639](https://hosted.weblate.org/user/ntk.6639/)                                                        |
 | Turkish               | tr            | [emircanydn](https://hosted.weblate.org/user/emircanydn/)                                                    |
 | Ukrainian             | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                      |
 | Vietnamese            | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                      |

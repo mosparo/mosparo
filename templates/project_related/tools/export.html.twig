@@ -5,6 +5,19 @@
 {% block documentTitle %}{{ 'tools.export.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'tools.export.title'|trans }}{% endblock %}
 
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/usage/tools/#export" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
 {% block settingsPageBody %}
     {{ form_start(form) }}
         <div class="row">
