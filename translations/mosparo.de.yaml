@@ -994,6 +994,9 @@ security:
   noAccess:
     title: Kein Zugriff
 
+  notFound:
+    title: Nicht gefunden
+
 # Password reset
 password:
   backToLogin: Zurück zur Anmeldung

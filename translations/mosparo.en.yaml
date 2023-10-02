@@ -1166,6 +1166,9 @@ security:
   noAccess:
     title: No access
 
+  notFound:
+    title: Not found
+
 # Password reset
 password:
   backToLogin: Back to login
