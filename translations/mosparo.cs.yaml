@@ -805,6 +805,8 @@ security:
     title: Zapomenuté heslo
   noAccess:
     title: Žádný přístup
+  notFound:
+    title: Nenalezeno
 roles:
   inactive: Neaktivní
   user: Uživatel
