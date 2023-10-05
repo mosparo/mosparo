@@ -1,1 +1,6 @@
-{}
+password:
+  form:
+    constraint:
+      passwordMustMatch: Heslo musí zodpovedať.
+      length: Vaše heslo by malo byť aspoň {{ limit }} znakov.
+      notBlank: Zadajte heslo.
