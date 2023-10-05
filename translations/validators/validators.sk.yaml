@@ -1,6 +1,14 @@
 password:
   form:
     constraint:
-      passwordMustMatch: Heslo musí zodpovedať.
-      length: Vaše heslo by malo byť aspoň {{ limit }} znakov.
-      notBlank: Zadajte heslo.
+      passwordMustMatch: Heslo musí byť zhodné.
+      length: Vaše heslo by malo mať aspoň {{ limit }} znakov.
+      notBlank: Zadať heslo.
+  request:
+    form:
+      constraint:
+        notBlank: Zadajte e-mail.
+tools:
+  import:
+    importFile:
+      correctFile: Nahrať správny súbor JSON.
