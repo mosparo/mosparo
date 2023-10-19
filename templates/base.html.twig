@@ -72,7 +72,7 @@
                                         <i class="ti ti-adjustments"></i>
                                         {{ 'account.title'|trans }}
                                     </a>
-                                    <a href="{{ path('security_logout') }}" class="dropdown-item">
+                                    <a href="{{ path('security_logout', {'token' : csrf_token('logout')}) }}" class="dropdown-item">
                                         <i class="ti ti-logout"></i>
                                         {{ 'security.logout.title'|trans }}
                                     </a>

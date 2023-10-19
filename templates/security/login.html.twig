@@ -36,7 +36,7 @@
 
         {% if app.user %}
             <div class="alert alert-info">
-                {{ 'security.login.youAreLoggedIn'|trans({'%username%': app.user.username}, 'mosparo') }}. <a href="{{ path('security_logout') }}">{{ 'security.logout.title'|trans }}</a>
+                {{ 'security.login.youAreLoggedIn'|trans({'%username%': app.user.username}, 'mosparo') }} <a href="{{ path('security_logout', {'token' : csrf_token('logout')}) }}">{{ 'security.logout.title'|trans }}</a>
             </div>
         {% endif %}
 
