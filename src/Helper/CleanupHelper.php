@@ -6,7 +6,6 @@ use DateInterval;
 use DateTime;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
-use Mosparo\Entity\Project;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class CleanupHelper
@@ -21,18 +20,39 @@ class CleanupHelper
         $this->projectHelper = $projectHelper;
     }
 
-    public function cleanup($force = false)
+    public function cleanup($maxIterations = 10, $force = false)
     {
         $cache = new FilesystemAdapter();
-        $lastCleanup = $cache->getItem('mosparoLastCleanup');
+        $nextCleanup = $cache->getItem('mosparoNextCleanup');
+        $cleanupStartedAt = $cache->getItem('mosparoCleanupStartedAt');
 
-        // If the force parameter is not set, we execute the cleanup only once every 24 hours
-        if ($lastCleanup->get() !== null && !$force) {
-            $dayAgo = (new DateTime())->sub(new DateInterval('P1D'));
-
-            if ($lastCleanup->get() > $dayAgo) {
+        // If the force parameter is set, we execute the cleanup anyways
+        if ($nextCleanup->get() !== null && !$force) {
+            // Return, if the next cleanup date is in the future
+            if ($nextCleanup->get() > new DateTime()) {
                 return;
             }
+
+            // Do not start the cleanup if another request is already executing the cleanup
+            if ($cleanupStartedAt->get() !== null && $cleanupStartedAt->get() > (new DateTime())->sub(new DateInterval('PT5M'))) {
+                return;
+            }
+        }
+
+        $maxPerIteration = 2500;
+        $notFinished = true;
+        $startTime = microtime(true);
+
+        // Lock the cleanup
+        $cleanupStartedAt->set(new DateTime());
+        $cache->save($cleanupStartedAt);
+
+        // Disable the project filters for the cleanup
+        $filters = $this->entityManager->getFilters();
+        $filterEnabled = false;
+        if ($filters->isEnabled('project_related_filter')) {
+            $filters->disable('project_related_filter');
+            $filterEnabled = true;
         }
 
         // Delete expired delays
@@ -41,6 +61,7 @@ class CleanupHelper
             ->where('d.validUntil < :now')
             ->setParameter('now', new DateTime())
             ->getQuery()->execute();
+        unset($qb);
 
         // Delete expired lockouts
         $qb = $this->entityManager->createQueryBuilder();
@@ -48,60 +69,106 @@ class CleanupHelper
              ->where('l.validUntil < :now')
              ->setParameter('now', new DateTime())
              ->getQuery()->execute();
+        unset($qb);
 
-        // Save the active project
-        $activeProject = $this->projectHelper->getActiveProject();
-        $projectRepository = $this->entityManager->getRepository(Project::class);
-        foreach ($projectRepository->findAll() as $project) {
-            // Clear the cache before starting with the project cleanup process
-            $this->entityManager->getConfiguration()->getQueryCache()->clear();
-            $this->entityManager->getConfiguration()->getResultCache()->clear();
-
-            // Set the active project for the filter
-            $this->projectHelper->setActiveProject($project);
-
-            // Delete all submissions which were submitted more than 14 days ago or more than 24 hours ago but never validated
-            $qb = $this->entityManager->createQueryBuilder();
-            $qb->select('s')
-                ->from('Mosparo\Entity\Submission', 's')
-
-                // The WHERE part is encapsulated by an extra set of brackets because of the general project filter which
-                // is added at the end of the WHERE with "AND project_id = ?" (see Mosparo\Doctrine\ProjectRelatedFilter).
-                ->where('(s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = 0 AND s.valid IS NULL))')
-
+        for ($iterationCounter = 0; $iterationCounter < $maxIterations; $iterationCounter++) {
+            // Find all deletable submissions and submit tokens
+            $query = $this->entityManager->createQuery('
+                    SELECT s.id, st.id AS stId
+                    FROM Mosparo\Entity\Submission s
+                    JOIN s.submitToken st
+                    WHERE (s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = 0 AND s.valid IS NULL))
+                ')
                 ->setParameter('limit', (new DateTime())->sub(new DateInterval('P14D')))
-                ->setParameter('limitDay', (new DateTime())->sub(new DateInterval('PT24H')));
+                ->setParameter('limitDay', (new DateTime())->sub(new DateInterval('PT24H')))
+                ->setMaxResults($maxPerIteration);
 
-            foreach ($qb->getQuery()->getResult() as $submission) {
-                $submission->setSubmitToken(null);
-                $this->entityManager->remove($submission);
+            $result = $query->getResult();
+            $deletableSubmissionIds = array_column($result,'id');
+            $deletableSubmitTokenIds = array_unique(array_column($result, 'stId'));
+            unset($query);
+            unset($result);
+
+            if (count($deletableSubmissionIds) === 0) {
+                // Break the loop when we have no more deletable submissions
+                $notFinished = false;
+                break;
             }
 
-            $this->entityManager->flush();
+            // Remove the connection between submissions and submit tokens
+            $query = $this->entityManager->createQuery('
+                    UPDATE Mosparo\Entity\Submission s
+                    SET s.submitToken = NULL
+                    WHERE s.id IN (:deletableSubmissionIds)
+                ')
+                ->setParameter('deletableSubmissionIds', $deletableSubmissionIds, ArrayParameterType::INTEGER);
+            $query->execute();
+            unset($query);
 
-            // This subquery is needed to find all submit tokens that are still referenced by a submission.
-            $subQb = $this->entityManager->createQueryBuilder();
-            $subQb->select('smt.id')
-                ->from('Mosparo\Entity\Submission', 'sm')
-                ->innerJoin('sm.submitToken', 'smt')
-                ->groupBy('smt.id');
-            $requiredIds = $subQb->getQuery()->getSingleColumnResult();
+            // Delete the submit tokens
+            $query = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\SubmitToken st
+                    WHERE st.id IN (:deletableSubmitTokenIds)
+                ')
+                ->setParameter('deletableSubmitTokenIds', $deletableSubmitTokenIds, ArrayParameterType::INTEGER);
+            $query->execute();
+            unset($query);
 
-            // Delete all submit tokens created more than 24 hours ago and not referenced by a submission.
-            $qb = $this->entityManager->createQueryBuilder();
-            $qb->delete('Mosparo\Entity\SubmitToken', 'st')
-                ->where('st.createdAt < :limit')
-                ->andWhere('st.id NOT IN (:requiredIds)')
-                ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT24H')))
-                ->setParameter('requiredIds', $requiredIds, ArrayParameterType::INTEGER)
-                ->getQuery()->execute();
+            // Delete the submissions
+            $query = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\Submission s
+                    WHERE s.id IN (:deletableSubmissionIds)
+                ')
+                ->setParameter('deletableSubmissionIds', $deletableSubmissionIds, ArrayParameterType::INTEGER);
+            $query->execute();
+            unset($query);
+
+            // If it took more than 1.5 seconds, stop the cleanup
+            if ($maxIterations > 1 && (microtime(true) - $startTime) > 1.5) {
+                break;
+            }
         }
 
-        $lastCleanup->set(new DateTime());
-        $cache->save($lastCleanup);
+        // Delete the submissions without submit token
+        $query = $this->entityManager->createQuery('
+                DELETE Mosparo\Entity\Submission s
+                WHERE s.submitToken IS NULL
+            ');
+        $query->execute();
+        unset($query);
 
-        // Restore the active project
-        $this->projectHelper->setActiveProject($activeProject);
+        // Delete the submit tokens without submission and older than one day
+        $query = $this->entityManager->createQuery('
+                DELETE Mosparo\Entity\SubmitToken st
+                WHERE st.createdAt < :limit
+                AND (SELECT COUNT(s.id) FROM Mosparo\Entity\Submission s WHERE s.submitToken = st.id) = 0
+            ')
+            ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT24H')));
+        $query->execute();
+        unset($query);
+
+        // Enable the project filters after the cleanup
+        if ($filterEnabled) {
+            $filters
+                ->enable('project_related_filter')
+                ->setProjectHelper($this->projectHelper);
+        }
+
+        $nextCleanupDate = new DateTime();
+        if ($notFinished) {
+            // Execute the next cleanup in 10 minutes
+            // We give the (database) server these 10 minutes to relax after deleting so many rows.
+            $nextCleanupDate->add(new DateInterval('PT10M'));
+        } else {
+            // If the cleanup process was finished, perform the next cleanup in 6 hours
+            $nextCleanupDate->add(new DateInterval('PT6H'));
+        }
+
+        $nextCleanup->set($nextCleanupDate);
+        $cache->save($nextCleanup);
+
+        $cleanupStartedAt->set(null);
+        $cache->save($cleanupStartedAt);
     }
 
     public function cleanupProjectEntities($project)
@@ -112,6 +179,7 @@ class CleanupHelper
             ->where('ri.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
+        unset($qb);
 
         // Delete all rules
         $qb = $this->entityManager->createQueryBuilder();
@@ -119,6 +187,7 @@ class CleanupHelper
             ->where('r.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
+        unset($qb);
 
         // Delete all rulesets rule item cache
         $qb = $this->entityManager->createQueryBuilder();
@@ -126,6 +195,7 @@ class CleanupHelper
             ->where('rsric.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
+        unset($qb);
 
         // Delete all rulesets rule cache
         $qb = $this->entityManager->createQueryBuilder();
@@ -133,6 +203,7 @@ class CleanupHelper
             ->where('rsrc.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
+        unset($qb);
 
         // Delete all rulesets cache
         $qb = $this->entityManager->createQueryBuilder();
@@ -140,6 +211,7 @@ class CleanupHelper
             ->where('rsc.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
+        unset($qb);
 
         // Delete all rulesets
         $qb = $this->entityManager->createQueryBuilder();
@@ -147,27 +219,35 @@ class CleanupHelper
             ->where('rs.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
+        unset($qb);
 
-        // Delete all submissions
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('s')
-            ->from('Mosparo\Entity\Submission', 's')
-            ->where('s.project = :project')
+        // Remove the connection between submissions and submit tokens
+        $query = $this->entityManager->createQuery('
+                UPDATE Mosparo\Entity\Submission s
+                SET s.submitToken = NULL
+                WHERE s.project = :project
+            ')
             ->setParameter('project', $project);
+        $query->execute();
+        unset($query);
 
-        foreach ($qb->getQuery()->getResult() as $submission) {
-            $submission->setSubmitToken(null);
-            $this->entityManager->remove($submission);
-        }
+        // Delete the submit tokens
+        $query = $this->entityManager->createQuery('
+                DELETE Mosparo\Entity\SubmitToken st
+                WHERE st.project = :project
+            ')
+            ->setParameter('project', $project);
+        $query->execute();
+        unset($query);
 
-        $this->entityManager->flush();
-
-        // Delete all submit tokens
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->delete('Mosparo\Entity\SubmitToken', 'st')
-            ->where('st.project = :project')
-            ->setParameter('project', $project)
-            ->getQuery()->execute();
+        // Delete the submissions
+        $query = $this->entityManager->createQuery('
+                DELETE Mosparo\Entity\Submission s
+                WHERE s.project = :project
+            ')
+            ->setParameter('project', $project);
+        $query->execute();
+        unset($query);
     }
 
     public function cleanupIpLocalizationCache()
