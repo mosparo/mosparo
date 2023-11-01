@@ -163,7 +163,9 @@ class ProjectController extends AbstractController
         }
 
         if ($filterEnabled) {
-            $filters->enable('project_related_filter');
+            $filters
+                ->enable('project_related_filter')
+                ->setProjectHelper($this->projectHelper);
         }
 
         return $this->render('project/list.html.twig', [
