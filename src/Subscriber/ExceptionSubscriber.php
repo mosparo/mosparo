@@ -3,6 +3,7 @@
 namespace Mosparo\Subscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -28,12 +29,29 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event)
     {
+        $request = $event->getRequest();
         $exception = $event->getThrowable();
 
+        $apiRequest = ($request->headers->get('Accept', '') === 'application/json');
+
         if ($exception instanceof AccessDeniedHttpException) {
-            $event->setResponse(new Response($this->twig->render('security/no-access.html.twig')));
+            if ($apiRequest) {
+                $event->setResponse(new JsonResponse([
+                    'error' => true,
+                    'errorMessage' => $exception->getMessage(),
+                ], 403));
+            } else {
+                $event->setResponse(new Response($this->twig->render('security/no-access.html.twig'), 403));
+            }
         } else if ($exception instanceof NotFoundHttpException) {
-            $event->setResponse(new Response($this->twig->render('security/not-found.html.twig')));
+            if ($apiRequest) {
+                $event->setResponse(new JsonResponse([
+                    'error' => true,
+                    'errorMessage' => $exception->getMessage(),
+                ], 404));
+            } else {
+                $event->setResponse(new Response($this->twig->render('security/not-found.html.twig'), 404));
+            }
         }
     }
 }

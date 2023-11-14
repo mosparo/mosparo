@@ -5,12 +5,11 @@ namespace Mosparo\Helper;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use IPLib\Factory;
-use IPLib\Range\Subnet;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
 use Mosparo\Util\HashUtil;
+use Mosparo\Util\IpUtil;
 
 class SecurityHelper
 {
@@ -32,7 +31,7 @@ class SecurityHelper
         $project = $this->projectHelper->getActiveProject();
         $ipAllowList = $project->getConfigValue('ipAllowList');
 
-        if ($this->isIpOnAllowList($ipAddress, $ipAllowList)) {
+        if (IpUtil::isIpAllowed($ipAddress, $ipAllowList)) {
             return false;
         }
 
@@ -55,29 +54,6 @@ class SecurityHelper
                 if ($lockout !== null) {
                     return $lockout;
                 }
-            }
-        }
-
-        return false;
-    }
-
-    protected function isIpOnAllowList($ipAddress, $ipAllowList): bool
-    {
-        $items = preg_split('/\r\n|\r|\n/', $ipAllowList);
-        foreach ($items as $item) {
-            if (strpos($item, '/') !== false) {
-                $address = Factory::parseAddressString($ipAddress);
-                $subnet = Subnet::parseString($item);
-
-                if ($address !== null &&
-                    $subnet !== null &&
-                    $address->getAddressType() == $subnet->getAddressType() &&
-                    $subnet->contains($address)
-                ) {
-                    return true;
-                }
-            } else if ($item === $ipAddress) {
-                return true;
             }
         }
 

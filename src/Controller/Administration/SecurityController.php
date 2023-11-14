@@ -5,15 +5,20 @@ namespace Mosparo\Controller\Administration;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\InterfaceHelper;
 use Mosparo\Helper\LocaleHelper;
+use Mosparo\Helper\SecurityHelper;
+use Mosparo\Util\IpUtil;
 use Mosparo\Util\ProviderUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -29,14 +34,25 @@ class SecurityController extends AbstractController
 
     protected InterfaceHelper $interfaceHelper;
 
+    protected SecurityHelper $securityHelper;
+
     protected string $trustedProxies;
 
-    public function __construct(ConfigHelper $configHelper, TranslatorInterface $translator, LocaleHelper $localeHelper, InterfaceHelper $interfaceHelper, string $trustedProxies)
-    {
+    protected string $clientIpAddress = '';
+
+    public function __construct(
+        ConfigHelper $configHelper,
+        TranslatorInterface $translator,
+        LocaleHelper $localeHelper,
+        InterfaceHelper $interfaceHelper,
+        SecurityHelper $securityHelper,
+        string $trustedProxies
+    ) {
         $this->configHelper = $configHelper;
         $this->translator = $translator;
         $this->localeHelper = $localeHelper;
         $this->interfaceHelper = $interfaceHelper;
+        $this->securityHelper = $securityHelper;
         $this->trustedProxies = $trustedProxies;
     }
 
@@ -45,6 +61,7 @@ class SecurityController extends AbstractController
      */
     public function security(Request $request): Response
     {
+        $this->clientIpAddress = $request->getClientIp();
         $modifyTrustedSettingsAllowed = $this->determineIfModifyingTrustedSettingsIsAllowed();
 
         $environmentConfig = $this->configHelper->readEnvironmentConfig();
@@ -59,6 +76,12 @@ class SecurityController extends AbstractController
             'trustedProxiesIncludeRemoteAddr' => $environmentConfig['trusted_proxies_include_remote_addr'] ?? false,
             'replaceForwardedForHeader' => $environmentConfig['replace_forwarded_for_header'] ?? '',
             'replaceForwardedProtoHeader' => $environmentConfig['replace_forwarded_proto_header'] ?? '',
+
+            // Backend access
+            'backendAccessIpAllowList' => implode("\n", IpUtil::convertToArray($environmentConfig['backend_access_ip_allow_list'] ?? '')),
+
+            // API access
+            'apiAccessIpAllowList' => implode("\n", IpUtil::convertToArray($environmentConfig['api_access_ip_allow_list'] ?? '')),
         ];
 
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
@@ -108,6 +131,30 @@ class SecurityController extends AbstractController
                 'disabled' => !$modifyTrustedSettingsAllowed,
                 'required' => false,
             ])
+
+            // Backend Access
+            ->add('backendAccessIpAllowList', TextareaType::class, [
+                'label' => 'administration.security.backendAccess.form.ipAllowList',
+                'required' => false,
+                'help' => 'administration.security.backendAccess.form.ipAllowListHelp',
+                'attr' => ['class' => 'ip-address-field'],
+                'constraints' => [
+                    new Callback([$this, 'validateIpAllowListField']),
+                    new Callback([$this, 'checkIpAllowListFieldForOwnIp']),
+                ],
+            ])
+
+            // API Access
+            ->add('apiAccessIpAllowList', TextareaType::class, [
+                'label' => 'administration.security.apiAccess.form.ipAllowList',
+                'required' => false,
+                'help' => 'administration.security.apiAccess.form.ipAllowListHelp',
+                'attr' => ['class' => 'ip-address-field'],
+                'constraints' => [
+                    new Callback([$this, 'validateIpAllowListField']),
+                ],
+            ])
+
             ->getForm();
 
         $form->handleRequest($request);
@@ -124,6 +171,9 @@ class SecurityController extends AbstractController
                     'trusted_proxies_include_remote_addr' => $form->get('trustedProxiesIncludeRemoteAddr')->getData(),
                     'replace_forwarded_for_header' => $form->get('replaceForwardedForHeader')->getData(),
                     'replace_forwarded_proto_header' => $form->get('replaceForwardedProtoHeader')->getData(),
+
+                    'backend_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('backendAccessIpAllowList')->getData())),
+                    'api_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('apiAccessIpAllowList')->getData())),
                 ];
 
                 $this->configHelper->writeEnvironmentConfig($configValues);
@@ -145,7 +195,8 @@ class SecurityController extends AbstractController
         return $this->render('administration/security/security.html.twig', [
             'form' => $form->createView(),
             'providers' => ProviderUtil::getReverseProxyProviders(),
-            'modifyTrustedSettingsAllowed' => $modifyTrustedSettingsAllowed
+            'modifyTrustedSettingsAllowed' => $modifyTrustedSettingsAllowed,
+            'clientIpAddress' => $this->clientIpAddress,
         ]);
     }
 
@@ -200,5 +251,33 @@ class SecurityController extends AbstractController
         $list = array_unique($list);
 
         return implode(',', $list);
+    }
+
+    public function validateIpAllowListField($settings, ExecutionContextInterface $context)
+    {
+        if (!$context->getValue()) {
+            return;
+        }
+
+        $items = IpUtil::convertToArray($context->getValue());
+        foreach ($items as $item) {
+            if (!IpUtil::isValid($item)) {
+                $context
+                    ->buildViolation('ipAllowList.itemInvalid', ['%item%' => $item])
+                    ->atPath($context->getPropertyPath())
+                    ->addViolation();
+            }
+        }
+    }
+
+    public function checkIpAllowListFieldForOwnIp($settings, ExecutionContextInterface $context)
+    {
+        // Checks if the client IP address is allowed by the allow list
+        if ($this->clientIpAddress && !IpUtil::isIpAllowed($this->clientIpAddress, $context->getValue())) {
+            $context
+                ->buildViolation('administration.security.backendAccess.ownIpNotInAllowList')
+                ->atPath($context->getPropertyPath())
+                ->addViolation();
+        }
     }
 }

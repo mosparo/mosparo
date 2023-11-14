@@ -556,7 +556,7 @@ settings:
       lockoutMultiplicator: Multiplicator
       lockoutMultiplicatorHelp: The base lockout time will be increased with every additional request.
       ipAllowList: Always allowed IP addresses and subnets
-      ipAllowListHelp: "Specify one ip address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+      ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
     message:
       successfullySaved: The security settings were saved successfully.
@@ -868,6 +868,24 @@ administration:
         replaceForwardedForHeaderHelp: If required, specify the header's name in which the reverse proxy sends the IP address of the client.
         replaceForwardedProtoHeader: Name of the custom protocol header
         replaceForwardedProtoHeaderHelp: If required, specify the header's name in which the reverse proxy sends the request protocol.
+
+    backendAccess:
+      title: Backend access
+      intro: If you want to protect mosparo from unallowed access from the internet, you can specify which IP addresses are allowed to access the backend. Leave this field empty to allow everybody to access the login form and the backend.
+      hintOwnIp: Please note that you can only save this setting if your IP address (%ipAddress%) is also included in the list (as IP address or subnet). If you have an IPv6 address, adding your subnet is recommended.
+
+      form:
+        ipAllowList: Allowed IP addresses and subnets
+        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+
+    apiAccess:
+      title: API access
+      intro: If you want to protect the mosparo API from unallowed access from the internet, you can specify which IP addresses are allowed to access it. Leave this field empty to allow every client to access the APIs.
+      hintFrontendApi: Please note that this limits only the verification and statistic API. The frontend API will always be publicly available.
+
+      form:
+        ipAllowList: Allowed IP addresses and subnets
+        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
     message:
       savedSuccessfully: The security settings were saved successfully.

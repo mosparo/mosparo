@@ -10,6 +10,7 @@ use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Entity\Submission;
 use Mosparo\Helper\ProjectHelper;
+use Mosparo\Util\IpUtil;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,8 +18,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 class ProjectSubscriber implements EventSubscriberInterface
@@ -35,7 +37,9 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     protected bool $installed;
 
-    public function __construct(Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig, $installed)
+    protected string $apiAccessIpAllowList;
+
+    public function __construct(Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig, $installed, string $apiAccessIpAllowList)
     {
         $this->security = $security;
         $this->router = $router;
@@ -43,6 +47,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         $this->projectHelper = $projectHelper;
         $this->twig = $twig;
         $this->installed = ($installed == true);
+        $this->apiAccessIpAllowList = $apiAccessIpAllowList;
     }
 
     public static function getSubscribedEvents(): array
@@ -75,7 +80,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
         if (strpos($activeRoute, 'frontend_api_') === 0) {
             if (!$request->request->has('publicKey')) {
-                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No public key sent.']));
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No public key sent.'], 400));
                 return;
             }
 
@@ -83,12 +88,17 @@ class ProjectSubscriber implements EventSubscriberInterface
             $activeProject = $projectRepository->findOneBy(['publicKey' => $publicKey]);
 
             if ($activeProject === null) {
-                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No project available for the sent public key.']));
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No project available for the sent public key.'], 403));
                 return;
             }
         } else if (strpos($activeRoute, 'verification_api_') === 0 || strpos($activeRoute, 'statistic_api_') === 0) {
+            // Check if the IP is allowed to access the backend APIs
+            if (!IpUtil::isIpAllowed($request->getClientIp(), $this->apiAccessIpAllowList)) {
+                throw new AccessDeniedHttpException(sprintf('Access to the API for this IP address (%s) is not allowed.', $request->getClientIp()));
+            }
+
             if (!$request->headers->has('authorization') || empty($request->headers->get('authorization'))) {
-                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No authorization header found.']));
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No authorization header found.'], 400));
                 return;
             }
 
@@ -99,7 +109,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
             $authData = explode(':', base64_decode($authorizationHeader));
             if (count($authData) !== 2) {
-                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Authorization header invalid.']));
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Authorization header invalid.', 401]));
                 return;
             }
 
@@ -108,7 +118,7 @@ class ProjectSubscriber implements EventSubscriberInterface
             // Search the active project
             $activeProject = $projectRepository->findOneBy(['publicKey' => $publicKey]);
             if ($activeProject === null) {
-                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No project available for the sent public key.']));
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No project available for the sent public key.'], 403));
                 return;
             }
 
@@ -118,7 +128,7 @@ class ProjectSubscriber implements EventSubscriberInterface
             // Verify the request signature
             $requestHelper = new RequestHelper($publicKey, $activeProject->getPrivateKey());
             if ($requestSignature !== $requestHelper->createHmacHash($apiEndpoint . $requestHelper->toJson($requestData))) {
-                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Request invalid.']));
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Request invalid.'], 400));
                 return;
             }
         } else if ($this->security->getToken() && $this->security->isGranted('IS_AUTHENTICATED_FULLY')) {

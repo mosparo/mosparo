@@ -14,3 +14,11 @@ tools:
   import:
     importFile:
       correctFile: Please upload a correct JSON file.
+
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Your IP address is not allowed by the allow list. Please add your IP address to the list.
+
+ipAllowList:
+  itemInvalid: The item '%item%' is not a valid IP address or subnet.
