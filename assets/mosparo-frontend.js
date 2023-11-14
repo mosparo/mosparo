@@ -16,6 +16,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         cssResourceUrl: '',
         requestSubmitTokenOnInit: true,
         customMessages: {},
+        language: null,
 
         // Callbacks
         onCheckForm: null,
@@ -238,6 +239,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
             pageTitle: document.title,
             pageUrl: document.location.href
         };
+
+        if (this.options.language !== null) {
+            data.language = this.options.language;
+        }
 
         this.send('/api/v1/frontend/request-submit-token', data, function (response) {
             if (response.invisible) {
@@ -685,14 +690,19 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
     this.getMessage = function (messageKey) {
         let languages = [];
-        if (typeof navigator.languages != 'undefined') {
-            languages = navigator.languages;
-        } else if (typeof navigator.language != 'undefined') {
-            languages = [navigator.language];
+
+        if (this.options.language !== null) {
+            languages = [this.options.language];
+        } else {
+            if (typeof navigator.languages != 'undefined') {
+                languages = navigator.languages;
+            } else if (typeof navigator.language != 'undefined') {
+                languages = [navigator.language];
+            }
         }
 
         for (let idx in languages) {
-            let locale = navigator.languages[idx].replace('-', '_');
+            let locale = languages[idx].replace('-', '_');
 
             if (
                 typeof this.options.customMessages[locale] != 'undefined' &&
