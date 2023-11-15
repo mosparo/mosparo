@@ -32,6 +32,12 @@
                         {{ form_row(form.hosts) }}
                         {{ form_row(form.status) }}
                         {{ form_row(form.spamScore) }}
+
+                        <hr>
+
+                        <h4>{{ 'settings.general.subtitle.developerOptions'|trans }}</h4>
+                        {{ form_row(form.apiDebugMode) }}
+                        {{ form_row(form.verificationSimulationMode) }}
                     </div>
                 </div>
                 <div class="row mt-3">

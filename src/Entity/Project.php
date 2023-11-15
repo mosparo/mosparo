@@ -60,6 +60,16 @@ class Project
     private float $spamScore = 5;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $apiDebugMode = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $verificationSimulationMode = false;
+
+    /**
      * @ORM\OneToMany(targetEntity=ProjectConfigValue::class, mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private Collection $configValues;
@@ -244,6 +254,30 @@ class Project
     public function setSpamScore(float $spamScore): self
     {
         $this->spamScore = $spamScore;
+
+        return $this;
+    }
+
+    public function isApiDebugMode(): ?bool
+    {
+        return $this->apiDebugMode;
+    }
+
+    public function setApiDebugMode(bool $apiDebugMode): self
+    {
+        $this->apiDebugMode = $apiDebugMode;
+
+        return $this;
+    }
+
+    public function isVerificationSimulationMode(): ?bool
+    {
+        return $this->verificationSimulationMode;
+    }
+
+    public function setVerificationSimulationMode(bool $verificationSimulationMode): self
+    {
+        $this->verificationSimulationMode = $verificationSimulationMode;
 
         return $this;
     }

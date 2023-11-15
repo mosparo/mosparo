@@ -3,6 +3,7 @@
 namespace Mosparo\Form;
 
 use Mosparo\Entity\Project;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,6 +31,16 @@ class ExtendedProjectFormType extends ProjectFormType
                     'min' => 0.1,
                     'step' => 'any',
                 ]
+            ])
+            ->add('apiDebugMode', CheckboxType::class, [
+                'label' => 'project.form.apiDebugMode',
+                'help' => 'project.form.apiDebugModeHelp',
+                'required' => false,
+            ])
+            ->add('verificationSimulationMode', CheckboxType::class, [
+                'label' => 'project.form.verificationSimulationMode',
+                'help' => 'project.form.verificationSimulationModeHelp',
+                'required' => false,
             ])
         ;
     }

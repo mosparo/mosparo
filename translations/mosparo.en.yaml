@@ -64,6 +64,10 @@ project:
     statusHelp: Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.
     spamScore: Spam score
     spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.
+    apiDebugMode: API debug mode
+    apiDebugModeHelp: If the API debug mode is enabled, the verification API will return more information about the verification process. This information can be relevant to understand why a verification failed. Use this option to help integrate mosparo into your form.
+    verificationSimulationMode: Verification simulation mode
+    verificationSimulationModeHelp: You can simulate the verification process if the verification simulation mode is enabled. Please open the submission details and click the button in the top right corner. The simulation tool will show you how your request should look and which data mosparo expects to verify the submission.
 
   delete:
     title: Delete project %projectName%
@@ -445,6 +449,9 @@ settings:
 
   general:
     title: General settings
+
+    subtitle:
+      developerOptions: Developer options
 
     message:
       successfullySaved: The settings were saved successfully.
