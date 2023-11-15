@@ -35,7 +35,16 @@ class VerificationHelper
             $sValue = $sFieldData['value'] ?? '';
 
             if (!isset($formData[$sKey])) {
-                $issues[] = ['name' => $sKey, 'message' => 'Missing in form data, verification not possible.'];
+                // Prepare the API debug data
+                $debugInformation = [];
+                if ($submission->getProject()->isApiDebugMode()) {
+                    $debugInformation['debugInformation'] = [
+                        'reason' => 'field_not_in_received_data',
+                        'expectedValue' => $this->describeValue($sValue),
+                    ];
+                }
+
+                $issues[] = ['name' => $sKey, 'message' => 'Missing in form data, verification not possible.'] + $debugInformation;
                 $submission->setVerifiedField($sKey, Submission::SUBMISSION_FIELD_INVALID);
                 continue;
             }
@@ -43,7 +52,17 @@ class VerificationHelper
             $fValue = $formData[$sKey];
 
             if (!$this->verifyValues($sValue, $fValue)) {
-                $issues[] = ['name' => $sKey, 'message' => 'Field not valid.'];
+                // Prepare the API debug data
+                $debugInformation = [];
+                if ($submission->getProject()->isApiDebugMode()) {
+                    $debugInformation['debugInformation'] = [
+                        'reason' => 'field_signature_invalid',
+                        'expectedValue' => $this->describeValue($sValue),
+                        'receivedValue' => $this->describeValue($fValue, true),
+                    ];
+                }
+
+                $issues[] = ['name' => $sKey, 'message' => 'Field not valid.'] + $debugInformation;
                 $submission->setVerifiedField($sKey, Submission::SUBMISSION_FIELD_INVALID);
             } else {
                 $submission->setVerifiedField($sKey, Submission::SUBMISSION_FIELD_VALID);
@@ -54,7 +73,7 @@ class VerificationHelper
     }
 
     /**
-     * Checks the signatures of the given values. Returns true when the values are the same.
+     * Checks the hash of the given values. Returns true when the values are the same.
      *
      * @param mixed $sValue
      * @param mixed $fValue
@@ -89,5 +108,37 @@ class VerificationHelper
         }
 
         return true;
+    }
+
+    /**
+     * Brings the value in a explainable format for the API debug mode
+     *
+     * @param mixed $value
+     * @param boolean $valueIsHash
+     * @return array
+     */
+    protected function describeValue($value, $valueIsHash = false): array
+    {
+        if (is_array($value)) {
+            $items = [];
+            foreach ($value as $key => $item) {
+                $items[$key] = $this->describeValue($item, $valueIsHash);
+            }
+
+            return [
+                'type' => ($valueIsHash) ? 'hash-array' : 'array',
+                'items' => $items,
+            ];
+        } else {
+            $hash = [];
+            if (!$valueIsHash && !is_array($value)) {
+                $hash = ['hash' => hash('sha256', $value)];
+            }
+
+            return [
+                'type' => ($valueIsHash) ? 'hash' : gettype($value),
+                'value' => $value,
+            ] + $hash;
+        }
     }
 }

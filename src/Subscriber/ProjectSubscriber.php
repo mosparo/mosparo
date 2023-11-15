@@ -128,7 +128,18 @@ class ProjectSubscriber implements EventSubscriberInterface
             // Verify the request signature
             $requestHelper = new RequestHelper($publicKey, $activeProject->getPrivateKey());
             if ($requestSignature !== $requestHelper->createHmacHash($apiEndpoint . $requestHelper->toJson($requestData))) {
-                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Request invalid.'], 400));
+                // Prepare the API debug data
+                $debugInformation = [];
+                if ($activeProject->isApiDebugMode()) {
+                    $debugInformation['debugInformation'] = [
+                        'reason' => 'hmac_hash_invalid',
+                        'expectedHmacHash' => $requestHelper->createHmacHash($apiEndpoint . $requestHelper->toJson($requestData)),
+                        'receivedHmacHash' => $requestSignature,
+                        'payload' => $apiEndpoint . $requestHelper->toJson($requestData),
+                    ];
+                }
+
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Request invalid.'] + $debugInformation, 400));
                 return;
             }
         } else if ($this->security->getToken() && $this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
