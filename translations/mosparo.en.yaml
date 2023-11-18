@@ -390,6 +390,9 @@ submission:
   view:
     title: Submission %submissionId%
 
+    action:
+      openVerificationSimulation: Verification simulation
+
     spam:
       title: Spam
       isSpam: Is spam
@@ -441,6 +444,95 @@ submission:
       minimumTime:
         title: Submission too fast
         text: The form was submitted too fast. The submitter required only %seconds% seconds, which is less than the minimum time of %minimumTimeSeconds% seconds.
+
+    verificationSimulation:
+      title: Verification simulation
+      intro: The verification simulation shows you which data mosparo accepts for the verification process. You can compare the displayed data with the data your verification process will generate to find possible problems.
+
+      buttons:
+        customIntegration: Custom integration
+        apiDocumentation: API documentation
+
+      errors:
+        noValidationToken: The verification simulation is impossible because no validation token is stored for this submission. This means that the data in the form did not pass the mosparo validation, making the verification impossible.
+
+      info:
+        authorizationHeader: The authorization header must be Base64-encoded.
+
+      labels:
+        formData: Form data
+        submitToken: Submit token
+        validationToken: Validation token
+        preparedFormData: Prepared form data
+        hashedFormData: Hashed form data
+        formDataJson: Form data as JSON
+        privateKey: Private key
+        formDataSignature: Form data signature
+        validationSignature: Validation signature
+        validationAndFormDataSignature: Validation and form data signature
+        verificationSignature: Verification signature
+        apiEndpoint: API endpoint
+        requestData: Request data
+        apiEndpointAndRequestDataJson: API endpoint and request data
+        requestSignature: Request signature
+        authorization: Authorization
+        username: Username
+        password: Password
+        method: Method
+        headers: Headers
+        postData: Post data
+        response: Response
+
+      hints:
+        formData: The form data submitted by your form.
+        submitToken: Submit token from step 1.
+        validationToken: Validation token from step 1.
+        preparedFormData: The form data from step 1 after the preparation.
+        hashedFormData: The hashes for the prepared form data from step 2.
+        privateKey: Private key from the project.
+        publicKey: Public key from the project.
+        formDataJson: Hashed form data from step 3 as JSON string.
+        validationSignature: Validation signature from step 5.
+        formDataSignature: Form data signature from step 4.
+        hashedFormDataPlain: Hashed form data from step 3.
+        apiEndpoint: The verification API endpoint.
+        requestSignature: Request signature from step 8.
+        requestDataJson: Request data from step 7 as JSON string.
+        verificationSignature: Verification signature from step 6.
+        requestDataPlain: Request data from step 7.
+        response: Response from the API.
+
+      sections:
+        one:
+          title: 'Step 1: Extract submit and validation token'
+          intro: To verify a submission, you have to know the submit token, which identifies a submission, and the validation token, which proves the validity of the submission. Extract these two tokens from the form data.
+        two:
+          title: 'Step 2: Prepare the form data'
+          intro: Before sending the data to the verification API, you must prepare the form data. The mosparo fields (starting with %codeStart%_mosparo_%codeEnd%) must be removed from the form data. After that, please replace all CRLF line breaks with LF line breaks and change all field names to lowercase letters. Sort the form data by name in alphabetical order (A-Z).
+        three:
+          title: 'Step 3: Generate the hashes'
+          intro: For the verification, mosparo excepts the form data as SHA256 hashes. For this, the SHA256 hashes for the form data must be calculated.
+        four:
+          title: 'Step 4: Generate form data signature'
+          intro: You must generate the form data's signature to ensure that nothing has manipulated the form data. The signature is an HMAC SHA256 hash of the form data hashes (Step 2), encoded as JSON. Use the private key of the project as key.
+        five:
+          title: 'Step 5: Generate validation signature'
+          intro: Use the validation token, which you extracted from the form data in the first step, and generate the signature of it. The signature is an HMAC SHA256 hash of the validation token. Use the private key of the project as key.
+        six:
+          title: 'Step 6: Generate verification signature'
+          intro: Combine the validation and the form data signature and create the verification signature. The signature is an HMAC SHA256 hash of the validation token. Use the private key of the project as key.
+        seven:
+          title: 'Step 7: Collect request data'
+          intro: After all the data is collected and the signatures and hashes generated, it's time to send it to the API for verification. For that, please collect the following information.
+        eight:
+          title: 'Step 8: Generate request signature'
+          intro: To ensure the request is valid, you must generate the signature for the request. First, convert the request data into a JSON string. Combine the API endpoint with the request data JSON string and Generate the HMAC SHA256 hash for this string with the private key of the project as key.
+        nine:
+          title: 'Step 9: Send the API request'
+          intro: All data were collected and prepared. Now, you can send the data to the API.
+        ten:
+          title: 'Step 10: Verify the response'
+          intro: mosparo will answer your API request with a JSON string. Decode the JSON string and check if a key %codeStart%valid%codeEnd% exists and is set to %codeStart%true%codeEnd%. If that's the case, ensure that the key %codeStart%verificationSignature%codeEnd% is set as well and is equal to the verification signature generated in step 6. If that's the case, the response is valid.
 
 # Settings
 settings:
@@ -1390,3 +1482,8 @@ setup:
   install:
     title: Installation completed
     description: The installation was successfully completed. You can now login with your user.
+
+dataTable:
+  name: Name
+  value: Value
+  empty: Empty

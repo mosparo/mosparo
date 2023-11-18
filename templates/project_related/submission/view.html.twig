@@ -6,6 +6,69 @@
 {% block pagePreTitle %}{{ parent() }} {{ 'submission.title'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
 {% block pageTitle %}{{ 'submission.view.title'|trans({ '%submissionId%': submission.id }) }}{% endblock %}
 
+{% macro dataTable(data, helpText) %}
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>{{ 'dataTable.name'|trans }}</th>
+                <th>
+                    {{ 'dataTable.value'|trans }}
+                    {% if helpText %}
+                        <span class="data-table-help" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ helpText|trans }}">
+                            <i class="ti ti-question-circle"></i>
+                        </span>
+                    {% endif %}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in data %}
+                <tr>
+                    <td>
+                        <code class="data-table-key">{{ key }}</code>
+                    </td>
+                    <td>
+                        {% if value is iterable %}
+                            {{ _self.dataTable(value) }}
+                        {% elseif value != '' %}
+                            <code>
+                                {% if value == 'true' or value == 'valid' %}
+                                    <span class="text-success">{{ value }}</span>
+                                {% elseif value == 'false' or value == 'invalid' %}
+                                    <span class="text-danger">{{ value }}</span>
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
+                            </code>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2" class="text-center">
+                        <em>{{ 'dataTable.empty'|trans }}</em>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    {% if activeProject.verificationSimulationMode %}
+        <div class="col-auto ms-auto">
+            <div class="btn-list">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#verification-simulation-modal">
+                    <i class="ti ti-route"></i>
+                    {{ 'submission.view.action.openVerificationSimulation'|trans }}
+                </button>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block pageBody %}
     <div class="container-xl">
         <div class="row">
@@ -323,4 +386,538 @@
             </div>
         </div>
     </div>
+
+    {% if activeProject.verificationSimulationMode %}
+        <div class="modal modal-blur fade verification-simulation" tabindex="-1" id="verification-simulation-modal">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="ti ti-route"></i>
+                            {{ 'submission.view.verificationSimulation.title'|trans }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% if submission.validationToken %}
+                            <p>{{ 'submission.view.verificationSimulation.intro'|trans }}</p>
+
+                            <div class="toolbar mb-3">
+                                <a href="https://documentation.mosparo.io/docs/integration/custom#performing-verification" target="_blank" class="btn btn-info">
+                                    <i class="ti ti-book"></i>
+                                    {{ 'submission.view.verificationSimulation.buttons.customIntegration'|trans }}
+                                </a>
+                                <a href="https://documentation.mosparo.io/docs/api/verification" target="_blank" class="btn btn-info">
+                                    <i class="ti ti-book"></i>
+                                    {{ 'submission.view.verificationSimulation.buttons.apiDocumentation'|trans }}
+                                </a>
+                            </div>
+
+                            <div class="accordion" id="simulation-accordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-1" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.one.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-1" class="accordion-collapse collapse show" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.one.intro'|trans }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.formData'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            {{ _self.dataTable(verificationSimulation.formData, 'submission.view.verificationSimulation.hints.formData') }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.submitToken'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="text-break">{{ submission.submitToken.token }}</code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.validationToken'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="text-break">{{ submission.validationToken }}</code>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-2" aria-expanded="true">
+                                            {{ 'submission.view.verificationSimulation.sections.two.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-2" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.two.intro'|trans({'%codeStart%': '<code>', '%codeEnd%': '</code>'})|raw }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.preparedFormData'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            {{ _self.dataTable(verificationSimulation.cleanedFormData, 'submission.view.verificationSimulation.hints.preparedFormData') }}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-3" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.three.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-3" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.three.intro'|trans }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.hashedFormData'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            {{ _self.dataTable(verificationSimulation.hashedFormData, 'submission.view.verificationSimulation.hints.hashedFormData') }}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-4" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.four.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-4" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.four.intro'|trans }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.formDataJson'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="cursor-help">
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.formDataJson'|trans }}">{{ verificationSimulation.formDataJson }}</span>
+                                                            </code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.privateKey'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="cursor-help">
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.privateKey'|trans }}">{{ verificationSimulation.privateKey }}</span>
+                                                            </code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.formDataSignature'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="text-break">{{ verificationSimulation.formDataSignature }}</code>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-5" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.five.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-5" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.five.intro'|trans }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.validationToken'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="cursor-help">
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.validationToken'|trans }}">{{ submission.validationToken }}</span>
+                                                            </code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.privateKey'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="cursor-help">
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.privateKey'|trans }}">{{ verificationSimulation.privateKey }}</span>
+                                                            </code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.validationSignature'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="text-break">{{ verificationSimulation.validationSignature }}</code>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-6" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.six.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-6" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.six.intro'|trans }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                <tr>
+                                                    <th class="text-nowrap">
+                                                        {{ 'submission.view.verificationSimulation.labels.validationAndFormDataSignature'|trans }}
+                                                    </th>
+                                                    <td>
+                                                        {% apply spaceless %}
+                                                            <code class="cursor-help">
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.validationSignature'|trans }}">{{ verificationSimulation.validationSignature }}</span>
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.formDataSignature'|trans }}">{{ verificationSimulation.formDataSignature }}</span>
+                                                            </code>
+                                                        {% endapply %}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-nowrap">
+                                                        {{ 'submission.view.verificationSimulation.labels.privateKey'|trans }}
+                                                    </th>
+                                                    <td>
+                                                        <code class="cursor-help">
+                                                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.privateKey'|trans }}">{{ verificationSimulation.privateKey }}</span>
+                                                        </code>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-nowrap">
+                                                        {{ 'submission.view.verificationSimulation.labels.verificationSignature'|trans }}
+                                                    </th>
+                                                    <td>
+                                                        <code class="text-break">{{ verificationSimulation.verificationSignature }}</code>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-7" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.seven.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-7" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.seven.intro'|trans }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.apiEndpoint'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="text-break">{{ verificationSimulation.apiEndpoint }}</code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.requestData'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <table class="table table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>{{ 'dataTable.name'|trans }}</th>
+                                                                        <th>{{ 'dataTable.value'|trans }}</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <code class="data-table-key">submitToken</code>
+                                                                        </td>
+                                                                        <td>
+                                                                            <code class="cursor-help">
+                                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.submitToken'|trans }}">{{ verificationSimulation.requestData.submitToken }}</span>
+                                                                            </code>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <code class="data-table-key">validationSignature</code>
+                                                                        </td>
+                                                                        <td>
+                                                                            <code class="cursor-help">
+                                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.validationSignature'|trans }}">{{ verificationSimulation.requestData.validationSignature }}</span>
+                                                                            </code>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <code class="data-table-key">formSignature</code>
+                                                                        </td>
+                                                                        <td>
+                                                                            <code class="cursor-help">
+                                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.formDataSignature'|trans }}">{{ verificationSimulation.requestData.formSignature }}</span>
+                                                                            </code>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <code class="data-table-key">formData</code>
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ _self.dataTable(verificationSimulation.requestData.formData, 'submission.view.verificationSimulation.hints.hashedFormDataPlain') }}
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-8" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.eight.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-8" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.eight.intro'|trans }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.apiEndpointAndRequestDataJson'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            {% apply spaceless %}
+                                                                <code class="cursor-help">
+                                                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.apiEndpoint'|trans }}">{{ verificationSimulation.apiEndpoint }}</span>
+                                                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.requestDataJson'|trans }}">{{ verificationSimulation.requestDataJson }}</span>
+                                                                </code>
+                                                            {% endapply %}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.privateKey'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="cursor-help">
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.privateKey'|trans }}">{{ verificationSimulation.privateKey }}</span>
+                                                            </code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.requestSignature'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="text-break">{{ verificationSimulation.requestSignature }}</code>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-9" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.nine.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-9" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.nine.intro'|trans }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.apiEndpoint'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="cursor-help">
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.apiEndpoint'|trans }}">{{ verificationSimulation.apiEndpoint }}</span>
+                                                            </code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.authorization'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <table class="table table-bordered table-striped">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th class="text-nowrap">
+                                                                            {{ 'submission.view.verificationSimulation.labels.username'|trans }}
+                                                                        </th>
+                                                                        <td>
+                                                                            <code class="cursor-help">
+                                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.publicKey'|trans }}">{{ verificationSimulation.publicKey }}</span>
+                                                                            </code>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="text-nowrap">
+                                                                            {{ 'submission.view.verificationSimulation.labels.password'|trans }}
+                                                                        </th>
+                                                                        <td>
+                                                                            <code class="cursor-help">
+                                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.requestSignature'|trans }}">{{ verificationSimulation.requestSignature }}</span>
+                                                                            </code>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <span class="text-muted">{{ 'submission.view.verificationSimulation.info.authorizationHeader'|trans }}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.method'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code>POST</code>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.headers'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <table class="table table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>{{ 'dataTable.name'|trans }}</th>
+                                                                        <th>{{ 'dataTable.value'|trans }}</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <code>Accept</code>
+                                                                        </td>
+                                                                        <td>
+                                                                            <code>application/json</code>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.postData'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            {{ _self.dataTable(verificationSimulation.requestData, 'submission.view.verificationSimulation.hints.requestDataPlain') }}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#simcol-item-10" aria-expanded="false">
+                                            {{ 'submission.view.verificationSimulation.sections.ten.title'|trans }}
+                                        </button>
+                                    </h2>
+                                    <div id="simcol-item-10" class="accordion-collapse collapse" data-bs-parent="#simulation-accordion">
+                                        <div class="accordion-body pt-0">
+                                            <p>{{ 'submission.view.verificationSimulation.sections.ten.intro'|trans({'%codeStart%': '<code>', '%codeEnd%': '</code>'})|raw }}</p>
+
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.response'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            {{ _self.dataTable(verificationSimulation.response, 'submission.view.verificationSimulation.hints.response') }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap">
+                                                            {{ 'submission.view.verificationSimulation.labels.verificationSignature'|trans }}
+                                                        </th>
+                                                        <td>
+                                                            <code class="cursor-help">
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'submission.view.verificationSimulation.hints.verificationSignature'|trans }}">{{ verificationSimulation.verificationSignature }}</span>
+                                                            </code>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                {{ 'submission.view.verificationSimulation.errors.noValidationToken'|trans }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

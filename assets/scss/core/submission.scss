@@ -111,3 +111,31 @@
         width: 1%;
     }
 }
+
+.verification-simulation {
+    code {
+        white-space: normal;
+        word-break: break-all;
+
+        &.data-table-key {
+            word-break: break-word;
+        }
+
+        span[data-bs-toggle="tooltip"]:hover {
+            color: var(--tblr-info);
+        }
+    }
+}
+
+.data-table-help {
+    font-size: 1.25rem;
+
+    display: inline-block;
+    float: right;
+    margin-top: -0.2rem;
+    margin-bottom: -0.15rem;
+
+    vertical-align: middle;
+
+    cursor: help;
+}

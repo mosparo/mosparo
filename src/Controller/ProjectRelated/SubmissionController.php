@@ -3,6 +3,8 @@
 namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\ApiClient\RequestHelper;
+use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
 use Mosparo\Verification\GeneralVerification;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
@@ -117,6 +119,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
      */
     public function view(Submission $submission): Response
     {
+        $activeProject = $this->projectHelper->getActiveProject();
         $minimumTimeActive = $submission->getProject()->getConfigValue('minimumTimeActive');
         $args = ['minimumTimeActive' => $minimumTimeActive];
         if ($minimumTimeActive) {
@@ -125,9 +128,95 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
             $args['minimumTimeGv'] = $minimumTimeGv;
         }
 
+        $verificationSimulationData = [];
+        if ($activeProject->isVerificationSimulationMode()) {
+            $formData = $this->prepareFormData($submission->getData());
+            $formData['_mosparo_submitToken'] = $submission->getSubmitToken()->getToken();
+            $formData['_mosparo_validationToken'] = $submission->getValidationToken();
+
+            $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
+
+            $cleanedFromData = $requestHelper->cleanupFormData($formData);
+            $hashedFormData = $requestHelper->prepareFormData($cleanedFromData);
+            $formDataSignature = $requestHelper->createFormDataHmacHash($hashedFormData);
+            $validationSignature = '';
+            if ($submission->getValidationToken()) {
+                $validationSignature = $requestHelper->createHmacHash($submission->getValidationToken());
+            }
+            $apiEndpoint = '/api/v1/verification/verify';
+            $requestData = [
+                'submitToken' => $submission->getSubmitToken()->getToken(),
+                'validationSignature' => $validationSignature,
+                'formSignature' => $formDataSignature,
+                'formData' => $hashedFormData,
+            ];
+            $requestDataJson = $requestHelper->toJson($requestData);
+            $requestSignature = $requestHelper->createHmacHash($apiEndpoint . $requestDataJson);
+            [$verifiedFields, $issues] = $this->generateVerifiedFields($submission);
+            $verificationSimulationData['verificationSimulation'] = [
+                'formData' => $formData,
+                'cleanedFormData' => $cleanedFromData,
+                'hashedFormData' => $hashedFormData,
+                'formDataJson' => $requestHelper->toJson($hashedFormData),
+                'publicKey' => $activeProject->getPublicKey(),
+                'privateKey' => $this->preparePrivateKey($activeProject),
+                'formDataSignature' => $formDataSignature,
+                'validationSignature' => $validationSignature,
+                'verificationSignature' => $requestHelper->createHmacHash($validationSignature . $formDataSignature),
+                'apiEndpoint' => $apiEndpoint,
+                'requestData' => $requestData,
+                'requestDataJson' => $requestDataJson,
+                'requestSignature' => $requestSignature,
+                'response' => [
+                    'valid' => var_export($submission->isValid(), true),
+                    'verificationSignature' => $requestHelper->createHmacHash($validationSignature . $formDataSignature),
+                    'verifiedFields' => $verifiedFields,
+                    'issues' => $issues,
+                ],
+            ];
+        }
+
         return $this->render('project_related/submission/view.html.twig', [
             'submission' => $submission,
             'generalVerifications' => $submission->getGeneralVerifications(),
-        ] + $args);
+        ] + $args + $verificationSimulationData);
+    }
+
+    protected function prepareFormData($submissionFormData): array
+    {
+        $formData = [];
+        foreach ($submissionFormData['formData'] as $data) {
+            $formData[$data['name']] = $data['value'];
+        }
+
+        return $formData;
+    }
+
+    protected function preparePrivateKey(Project $project): string
+    {
+        $privateKey = $project->getPrivateKey();
+
+        $preparedPrivateKey = substr($privateKey, 0, 4) . str_repeat('*', strlen($privateKey) - 8) . substr($privateKey, -4);
+
+        return $preparedPrivateKey;
+    }
+
+    protected function generateVerifiedFields(Submission $submission): array
+    {
+        $issues = [];
+        foreach ($submission->getData()['formData'] as $data) {
+            if (isset($data['type']) && $data['type'] === 'honeypot') {
+                continue;
+            }
+
+            $key = $data['name'];
+            $verificationResult = $submission->getVerifiedField($key);
+
+            if ($verificationResult !== Submission::SUBMISSION_FIELD_VALID) {
+                $issues[] = ['name' => $key, 'message' => 'Field not valid.'];
+            }
+        }
+
+        return [$submission->getVerifiedFields(), $issues];
     }
 }
