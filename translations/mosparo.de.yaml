@@ -32,6 +32,8 @@ project:
     spamScore: Spam-Grenzwert
     spamScoreHelp: Definiert die Grenze, ab welcher eine Einsendung als Spam erkannt wird. Wenn die Bewertung einer Einsendung über diesem Wert liegt, wird die Einsendung als Spam erkannt.
 
+    verificationSimulationMode: Verifizierungs-Simulations-Modus
+    apiDebugMode: API-Debugging-Modus
   delete:
     title: Projekt %projectName% löschen
     confirm: Wollen Sie das Projekt %projectName% wirklich löschen?
@@ -416,6 +418,13 @@ submission:
         text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit beträgt %minimumTimeSeconds% Sekunden.
 
 # Settings
+    action:
+      openVerificationSimulation: Verifizierungs-Simulation
+    verificationSimulation:
+      buttons:
+        customIntegration: Eigene Integration
+        apiDocumentation: API-Dokumentation
+      title: Verifizierungs-Simulation
   filter:
     options:
       spam: Spam-Einsendungen
@@ -457,6 +466,8 @@ settings:
           successfullyReissued: Die API-Zugangsdaten wurden erfolgreich neu ausgestellt.
           errorOnlyOwner: Nur ein Besitzer des Projektes kann die API-Zugangsdaten neu ausstellen lassen.
 
+    subtitle:
+      developerOptions: Entwickler-Optionen
   projectMember:
     title: Projekt-Mitglieder
     backToList: Zu den Projekt-Mitgliedern
@@ -900,6 +911,14 @@ administration:
         requests: Anfragen
         minutes: Minuten
       intro: Die Login-Drosselung hilft, die mosparo Login-Seite vor einem Brute-Force-Angriff zu schützen. Indem die Anzahl der Anfragen gezählt und ein Angreifer nach einigen Versuchen blockiert wird, ist ein solcher Angriff sehr zeitaufwändig und nahezu sinnlos.
+    backendAccess:
+      form:
+        ipAllowList: Erlaubte IP-Adressen und Subnetze
+      title: Backend-Zugriff
+    apiAccess:
+      form:
+        ipAllowList: Erlaubte IP-Adressen und Subnetze
+      title: API-Zugriff
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
@@ -1309,3 +1328,7 @@ tools:
     rulesets: Regel-Pakete
     designSettings: Darstellungseinstellungen
     rulesetsHelp: Enthält alle Regel-Pakete eines Projekts.
+dataTable:
+  name: Name
+  empty: Leer
+  value: Wert
