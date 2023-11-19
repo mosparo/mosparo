@@ -16,6 +16,10 @@ project:
     statusHelp: Aktivace nebo deaktivace detekce spamu. Pokud je neaktivní, systém zaznamená všechny požadavky, ale nezabrání žádnému odeslání.
     spamScore: Skóre spamu
     spamScoreHelp: Definuje číslo, od kterého bude podání hodnoceno jako spam. Pokud je hodnocení poždavku vyšší než toto číslo, je požadavek vyhodnocena jako spam.
+    verificationSimulationMode: Režim simulace ověření
+    verificationSimulationModeHelp: Pokud je povolen režim simulace ověření, můžete proces ověření simulovat. Otevřete podrobnosti o záznamu a klikněte na tlačítko v pravém horním rohu. Simulační nástroj vám ukáže, jak by vaše žádost měla vypadat a které údaje mosparo očekává pro ověření podání.
+    apiDebugModeHelp: Pokud je povolen režim ladění rozhraní API, vrátí rozhraní API pro ověřování více informací o procesu ověřování. Tyto informace mohou být důležité pro pochopení důvodu neúspěšného ověření. Tuto možnost použijte pro usnadnění integrace nástroje mosparo do vašeho formuláře.
+    apiDebugMode: Režim ladění API
   roles:
     reader: Čtenář
     editor: Editor
@@ -340,6 +344,30 @@ submission:
       minimumTime:
         title: Záznam odeslán příliš rychle
         text: Formulář byl odeslán příliš rychle. Zadavatel požadoval pouze %seconds% sekund, což je méně než minimální čas %minimumTimeSeconds% sekund.
+    verificationSimulation:
+      labels:
+        headers: Záhlaví
+        requestData: Data požadavku
+        privateKey: Soukromý klíč
+        method: Způsob
+        formData: Údaje formuláře
+        response: Odpověď
+        formDataJson: Data formuláře v JSON
+        username: Uživatelské jméno
+        apiEndpoint: Koncový bod API
+        requestSignature: Podpis požadavku
+        authorization: Autorizace
+        password: Heslo
+      hints:
+        publicKey: Veřejný klíč z projektu.
+        privateKey: Soukromý klíč z projektu.
+        formData: Data odeslána ve vaším formulářem.
+      buttons:
+        customIntegration: Vlastní integrace
+        apiDocumentation: Dokumentace API
+      title: Simulace ověření
+    action:
+      openVerificationSimulation: Simulace ověření
   backToList: Zpět k záznamům
   filter:
     options:
@@ -384,7 +412,7 @@ settings:
       lockoutActive: Automatické uzamčení aktivní
       lockoutMultiplicatorHelp: S každým dalším požadavkem se základní doba uzamčení prodlužuje.
       ipAllowList: Vždy povolené IP adresy a podsítě
-      ipAllowListHelp: 'Na každém řádku zadejte jednu adresu ip nebo podsíť. Příklad: 192.168.1.13 nebo 192.168.1.0/24'
+      ipAllowListHelp: 'Zadejte jednu IP adresu nebo podsíť na řádek. Příklad: 192.168.1.13 nebo 192.168.1.0/24'
       minimumTimeSeconds: Minimální čas
       lockoutTimeHelp: V sekundách
       honeypotFieldActive: Pole Honeypot aktivní
