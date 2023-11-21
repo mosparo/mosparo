@@ -64,6 +64,8 @@ project:
     statusHelp: Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.
     spamScore: Spam score
     spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.
+    statisticStorageLimit: Statistic storage
+    statisticStorageLimitHelp: Defines how long mosparo should keep the statistics in the database. This option has no connection to the storage range of the submissions, after which the submissions get deleted from the database (14 days).
     apiDebugMode: API debug mode
     apiDebugModeHelp: If the API debug mode is enabled, the verification API will return more information about the verification process. This information can be relevant to understand why a verification failed. Use this option to help integrate mosparo into your form.
     verificationSimulationMode: Verification simulation mode
@@ -85,9 +87,16 @@ project:
 # Dashboard
 dashboard:
   title: Dashboard
+
+  dateRange:
+    dropdown: Select visible date range
+
   chart:
     valid: Valid
     spam: Spam
+
+    annotation:
+      statisticOnly: Statistic only
 
 # Rules
 rule:
@@ -1487,3 +1496,13 @@ dataTable:
   name: Name
   value: Value
   empty: Empty
+
+dateRange:
+  14d: 14 Days
+  1m: 1 Month
+  2m: 2 Months
+  3m: 3 Months
+  6m: 6 Months
+  1y: 1 Year
+  2y: 2 Years
+  forever: Forever

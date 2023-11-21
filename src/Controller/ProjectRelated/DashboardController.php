@@ -10,6 +10,7 @@ use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
 use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\StatisticHelper;
+use Mosparo\Util\DateRangeUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +23,16 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
 
     /**
      * @Route("/", name="dashboard")
+     * @Route("/range/{range}", name="dashboard_with_range")
      */
-    public function dashboard(Request $request, EntityManagerInterface $entityManager, LocaleHelper $localeHelper, StatisticHelper $statisticHelper): Response
+    public function dashboard(Request $request, EntityManagerInterface $entityManager, LocaleHelper $localeHelper, StatisticHelper $statisticHelper, string $range = ''): Response
     {
-        [$noSpamSubmissionsData, $spamSubmissionsData, $numberOfNoSpamSubmissions, $numberOfSpamSubmissions] = $this->getSubmissionDataForChart($statisticHelper);
+        $statisticStorageLimit = $this->projectHelper->getActiveProject()->getStatisticStorageLimit();
+        if (!DateRangeUtil::isValidRange($range, false, $statisticStorageLimit)) {
+            $range = DateRangeUtil::DATE_RANGE_14D;
+        }
+
+        [$noSpamSubmissionsData, $spamSubmissionsData, $numberOfNoSpamSubmissions, $numberOfSpamSubmissions, $startDate] = $this->getSubmissionDataForChart($statisticHelper, $range);
 
         $builder = $entityManager->createQueryBuilder();
         $builder
@@ -45,6 +52,8 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
         [ , $dateFormat, , ] = $localeHelper->determineLocaleValues($request);
         $dateFormat = str_replace(['d', 'm', 'Y'], ['dd', 'MM', 'yyyy'], $dateFormat);
 
+        $endDate = (new DateTime())->setTime(0, 0)->sub(new DateInterval('P14D'));
+
         return $this->render('project_related/dashboard/dashboard.html.twig', [
             'noSpamSubmissionsData' => $noSpamSubmissionsData,
             'spamSubmissionsData' => $spamSubmissionsData,
@@ -53,14 +62,19 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
             'numberOfRules' => $numberOfRules,
             'numberOfRulesets' => $numberOfRulesets,
             'chartDateFormat' => $dateFormat,
+            'dateRangeOptions' => DateRangeUtil::getChoiceOptions(false, $statisticStorageLimit),
+            'activeRange' => $range,
+            'statisticOnlyRangeStartDate' => $startDate->getTimestamp() * 1000,
+            'statisticOnlyRangeEndDate' => $endDate->getTimestamp() * 1000,
         ]);
     }
 
-    protected function getSubmissionDataForChart(StatisticHelper $statisticHelper): array
+    protected function getSubmissionDataForChart(StatisticHelper $statisticHelper, string $range): array
     {
-        $noSpamSubmissionsData = $spamSubmissionsData = $this->createEmptyDateArray();
+        $startDate = DateRangeUtil::getStartDateForRange($range);
+        $noSpamSubmissionsData = $spamSubmissionsData = $this->createEmptyDateArray($startDate);
 
-        $statisticData = $statisticHelper->getStatisticData();
+        $statisticData = $statisticHelper->getStatisticData($startDate);
         foreach ($statisticData['numbersByDate'] as $date => $numbers) {
             if (!isset($spamSubmissionsData[$date]) || !isset($noSpamSubmissionsData[$date])) {
                 continue;
@@ -74,15 +88,15 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
             $this->convertIntoChartArray($noSpamSubmissionsData),
             $this->convertIntoChartArray($spamSubmissionsData),
             array_sum($noSpamSubmissionsData),
-            array_sum($spamSubmissionsData)
+            array_sum($spamSubmissionsData),
+            $startDate,
         ];
     }
 
-    protected function createEmptyDateArray(): array
+    protected function createEmptyDateArray(DateTime $startDate): array
     {
         $dateArray = [];
         $endDate = new DateTime();
-        $startDate = (clone $endDate)->sub(DateInterval::createFromDateString('13 days'));
 
         $interval = DateInterval::createFromDateString('1 day');
         $period = new DatePeriod($startDate, $interval, $endDate);

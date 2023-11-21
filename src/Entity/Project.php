@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Util\DateRangeUtil;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
@@ -58,6 +59,11 @@ class Project
      * @ORM\Column(type="float")
      */
     private float $spamScore = 5;
+
+    /**
+     * @ORM\Column(type="string", length=7)
+     */
+    private ?string $statisticStorageLimit;
 
     /**
      * @ORM\Column(type="boolean")
@@ -155,6 +161,7 @@ class Project
     public function __construct()
     {
         $this->uuid = uuid_create(UUID_TYPE_RANDOM);
+        $this->statisticStorageLimit = DateRangeUtil::DATE_RANGE_FOREVER;
         $this->configValues = new ArrayCollection();
         $this->projectMembers = new ArrayCollection();
     }
@@ -254,6 +261,18 @@ class Project
     public function setSpamScore(float $spamScore): self
     {
         $this->spamScore = $spamScore;
+
+        return $this;
+    }
+
+    public function getStatisticStorageLimit(): ?string
+    {
+        return $this->statisticStorageLimit;
+    }
+
+    public function setStatisticStorageLimit(string $statisticStorageLimit): self
+    {
+        $this->statisticStorageLimit = $statisticStorageLimit;
 
         return $this;
     }

@@ -17,6 +17,7 @@ use Mosparo\Helper\GeoIp2Helper;
 use Mosparo\Helper\HmacSignatureHelper;
 use Mosparo\Helper\RuleTesterHelper;
 use Mosparo\Helper\SecurityHelper;
+use Mosparo\Helper\StatisticHelper;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,6 +50,8 @@ class FrontendApiController extends AbstractController
 
     protected LocaleHelper $localeHelper;
 
+    protected StatisticHelper $statisticHelper;
+
     public function __construct(
         ProjectHelper $projectHelper,
         TokenGenerator $tokenGenerator,
@@ -58,7 +61,8 @@ class FrontendApiController extends AbstractController
         CleanupHelper $cleanupHelper,
         GeoIp2Helper $geoIp2Helper,
         TranslatorInterface $translator,
-        LocaleHelper $localeHelper
+        LocaleHelper $localeHelper,
+        StatisticHelper $statisticHelper
     ) {
         $this->projectHelper = $projectHelper;
         $this->tokenGenerator = $tokenGenerator;
@@ -69,6 +73,7 @@ class FrontendApiController extends AbstractController
         $this->geoIp2Helper = $geoIp2Helper;
         $this->translator = $translator;
         $this->localeHelper = $localeHelper;
+        $this->statisticHelper = $statisticHelper;
     }
 
     /**
@@ -252,6 +257,11 @@ class FrontendApiController extends AbstractController
 
         $entityManager->persist($submission);
         $entityManager->flush();
+
+        // Increase the day statistic if it is spam
+        if ($submission->isSpam()) {
+            $this->statisticHelper->increaseDayStatistic($submission);
+        }
 
         return new JsonResponse([
             'valid' => (!$submission->isSpam()),

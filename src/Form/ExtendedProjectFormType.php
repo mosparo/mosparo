@@ -3,6 +3,7 @@
 namespace Mosparo\Form;
 
 use Mosparo\Entity\Project;
+use Mosparo\Util\DateRangeUtil;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -31,6 +32,12 @@ class ExtendedProjectFormType extends ProjectFormType
                     'min' => 0.1,
                     'step' => 'any',
                 ]
+            ])
+            ->add('statisticStorageLimit', ChoiceType::class, [
+                'label' => 'project.form.statisticStorageLimit',
+                'attr' => ['class' => 'form-select'],
+                'choices' => DateRangeUtil::getChoiceOptions(),
+                'help' => 'project.form.statisticStorageLimitHelp'
             ])
             ->add('apiDebugMode', CheckboxType::class, [
                 'label' => 'project.form.apiDebugMode',

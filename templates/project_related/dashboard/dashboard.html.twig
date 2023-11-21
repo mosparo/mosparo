@@ -5,6 +5,30 @@
 {% block documentTitle %}{{ 'dashboard.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'dashboard.title'|trans }}{% endblock %}
 
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    {% if dateRangeOptions|length > 1 %}
+        <div class="col-auto ms-auto">
+            <div class="btn-list">
+                <div class="dropdown">
+                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'dashboard.dateRange.dropdown'|trans }}">
+                        <i class="ti ti-calendar-stats"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for dateRangeLabel, value in dateRangeOptions %}
+                            <a href="{{ path('dashboard_with_range', {'range': value}) }}" class="dropdown-item">
+                                <i class="ti {% if activeRange == value %}ti-check{% else %}ti-calendar-stats{% endif %}"></i>
+                                {{ dateRangeLabel|trans }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block pageBody %}
     <div class="container-xl">
         <div class="row">
@@ -241,6 +265,28 @@
                             enabled: false
                         }
                     },
+                    {% if statisticOnlyRangeStartDate != statisticOnlyRangeEndDate %}
+                        annotations: {
+                            xaxis: [
+                                {
+                                    x: {{ statisticOnlyRangeEndDate }},
+                                    borderColor: '#888888',
+                                    label: {
+                                        borderColor: 'transparent',
+                                        text: '{{ 'dashboard.chart.annotation.statisticOnly'|trans }}',
+                                        orientation: 'horizontal',
+                                        textAnchor: 'end',
+                                        offsetY: 15,
+                                        offsetX: -10,
+                                        style: {
+                                            fontSize: '14px',
+                                            background: 'transparent',
+                                        }
+                                    }
+                                },
+                            ]
+                        }
+                    {% endif %}
                 };
 
                 var submissionChart = new ApexCharts($('#submission_chart')[0], chartOptions);

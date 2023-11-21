@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\HmacSignatureHelper;
+use Mosparo\Helper\StatisticHelper;
 use Mosparo\Helper\VerificationHelper;
 use Mosparo\Repository\SubmitTokenRepository;
 use Mosparo\Util\TimeUtil;
@@ -28,11 +29,14 @@ class VerificationApiController extends AbstractController
 
     protected VerificationHelper $verificationHelper;
 
-    public function __construct(ProjectHelper $projectHelper, HmacSignatureHelper $hmacSignatureHelper, VerificationHelper $verificationHelper)
+    protected StatisticHelper $statisticHelper;
+
+    public function __construct(ProjectHelper $projectHelper, HmacSignatureHelper $hmacSignatureHelper, VerificationHelper $verificationHelper, StatisticHelper $statisticHelper)
     {
         $this->projectHelper = $projectHelper;
         $this->hmacSignatureHelper = $hmacSignatureHelper;
         $this->verificationHelper = $verificationHelper;
+        $this->statisticHelper = $statisticHelper;
     }
 
     /**
@@ -155,6 +159,8 @@ class VerificationApiController extends AbstractController
         }
 
         $entityManager->flush();
+
+        $this->statisticHelper->increaseDayStatistic($submission);
 
         return new JsonResponse([
             'valid' => $verificationResult['valid'],
