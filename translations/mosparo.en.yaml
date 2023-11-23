@@ -615,6 +615,61 @@ settings:
 
   security:
     title: Security
+    backToSecurity: Back to security settings
+
+    generalSecuritySettings:
+      title: General security settings
+      intro: The general security settings apply to all users not matched by an origin-based security guideline.
+      action: Edit general security settings
+
+    originBasedSecuritySettings:
+      title: Origin-based security guidelines
+
+      add:
+        title: Add guideline
+
+    guideline:
+      list:
+        name: Name
+        priority: Priority
+        actions: Actions
+
+      add:
+        title: Add guideline
+
+      edit:
+        title: Edit guideline %guidelineName%
+
+      form:
+        guideline:
+          title: Guideline
+          name: Name
+          description: Description
+          priority: Priority
+          priorityHelp: Defines in which order the guidelines will be tested. The highest guideline will be tested first.
+
+        criteria:
+          title: Criteria
+          intro: The guideline will be used for the user as soon as one of these criteria matches. You must add at least one criterion to save the guideline.
+          subnets: Subnets
+          subnetsHelp: "Add the subnets for which this guideline should be considered. You can define IPv4 or IPv6 subnets. You can see the IP address in the submission details. Example: 192.168.1.0/24"
+          countryCodes: Country codes
+          countryCodesHelp: "Add the country codes (ISO alpha-2) for which this guideline should be considered. You can see the country code in the submission details. Example: CH"
+          asNumbers: AS numbers
+          asNumbersHelp: "Add the AS numbers for which this guideline should be considered. You can see the AS number in the submission details. Example: 123456"
+
+        settings:
+          title: Security settings
+          intro: Please check the override checkbox for the settings you want to override from the general security settings. If you do not override a setting, mosparo will use the one from the project settings.
+
+        infoGeoIp2Disabled: GeoIP2 is not available. Please configure the GeoIP2 database to use the country codes and AS numbers criteria.
+
+      delete:
+        title: Remove security guideline %guidelineName%
+        confirm: Do you really want to remove the security guideline %guidelineName%?
+
+        message:
+          successfullyRemoved: The security guideline %guidelineName% was removed successfully from the project.
 
     minimumTime:
       title: Minimum Time
@@ -666,11 +721,14 @@ settings:
       ipAllowList: Always allowed IP addresses and subnets
       ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
+      overrideMinimumTime: Override minimum time
+      overrideHoneypotField: Override honeypot field
+      overrideDelay: Override request delay
+      overrideLockout: Override automatic lockout
+
     message:
       successfullySaved: The security settings were saved successfully.
-
-    validation:
-      honeypotFieldNameInvalidCharacter: Please use only letters, numbers and the dash sign (-).
+      guidelineSuccessfullySaved: The security guideline was saved successfully.
 
   design:
     title: Design

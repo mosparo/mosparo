@@ -33,6 +33,11 @@ class GeoIp2Helper
         $this->downloadDirectory = $downloadDirectory;
     }
 
+    public function isGeoIp2Active()
+    {
+        return $this->configHelper->getEnvironmentConfigValue('geoipActive', false);
+    }
+
     public function downloadDatabase()
     {
         $licenseKey = $this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', '');

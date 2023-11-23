@@ -5,27 +5,27 @@ namespace Mosparo\Controller\ProjectRelated;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\ProjectMember;
+use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Entity\User;
 use Mosparo\Form\DesignSettingsFormType;
 use Mosparo\Form\ExtendedProjectFormType;
+use Mosparo\Form\SecurityGuidelineFormType;
+use Mosparo\Form\SecuritySettingsFormType;
 use Mosparo\Helper\DesignHelper;
+use Mosparo\Helper\GeoIp2Helper;
 use Mosparo\Util\TokenGenerator;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
+use Omines\DataTablesBundle\Column\NumberColumn;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
+use Omines\DataTablesBundle\DataTable;
 use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -269,46 +269,52 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     /**
      * @Route("/security", name="settings_security")
      */
-    public function security(Request $request, EntityManagerInterface $entityManager): Response
+    public function security(Request $request, DataTableFactory $dataTableFactory): Response
+    {
+        $project = $this->getActiveProject();
+
+        $table = $dataTableFactory->create(['autoWidth' => true])
+            ->add('name', TextColumn::class, ['label' => 'settings.security.guideline.list.name'])
+            ->add('priority', NumberColumn::class, [
+                'label' => 'settings.security.guideline.list.priority',
+            ])
+            ->add('actions', TwigColumn::class, [
+                'label' => 'settings.security.guideline.list.actions',
+                'className' => 'buttons',
+                'template' => 'project_related/settings/security/list/_actions.html.twig'
+            ])
+            ->createAdapter(ORMAdapter::class, [
+                'entity' => SecurityGuideline::class,
+                'query' => function (QueryBuilder $builder) use ($project) {
+                    $builder
+                        ->select('e')
+                        ->from(SecurityGuideline::class, 'e')
+                        ->where('e.project = :project')
+                        ->setParameter('project', $project);
+                },
+            ])
+            ->addOrderBy('priority', DataTable::SORT_DESCENDING)
+            ->handleRequest($request);
+
+        if ($table->isCallback()) {
+            return $table->getResponse();
+        }
+
+        return $this->render('project_related/settings/security/security.html.twig', [
+            'project' => $project,
+            'datatable' => $table
+        ]);
+    }
+
+    /**
+     * @Route("/security/edit-general", name="settings_security_edit_general")
+     */
+    public function securityEditGeneralForm(Request $request, EntityManagerInterface $entityManager, SecurityGuideline $securityGuideline = null): Response
     {
         $project = $this->getActiveProject();
         $config = $project->getConfigValues();
 
-        $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
-            // Minimum time
-            ->add('minimumTimeActive', CheckboxType::class, ['label' => 'settings.security.form.minimumTimeActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
-            ->add('minimumTimeSeconds', IntegerType::class, ['label' => 'settings.security.form.minimumTimeSeconds', 'help' => 'settings.security.form.minimumTimeSecondsHelp', 'required' => false])
-
-            // Honeypot
-            ->add('honeypotFieldActive', CheckboxType::class, ['label' => 'settings.security.form.honeypotFieldActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
-            ->add('honeypotFieldName', TextType::class, ['label' => 'settings.security.form.honeypotFieldName', 'help' => 'settings.security.form.honeypotFieldNameHelp', 'required' => false, 'constraints' => [
-                new Regex([
-                    'pattern' => '/^[a-z0-9\-]*$/i',
-                    'message' => $this->translator->trans(
-                        'settings.security.validation.honeypotFieldNameInvalidCharacter',
-                        [],
-                        'mosparo'
-                    ),
-                ])
-            ]])
-
-            // delay
-            ->add('delayActive', CheckboxType::class, ['label' => 'settings.security.form.delayActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
-            ->add('delayNumberOfRequests', IntegerType::class, ['label' => 'settings.security.form.delayNumberOfAllowedRequests', 'help' => 'settings.security.form.delayNumberOfAllowedRequestsHelp'])
-            ->add('delayDetectionTimeFrame', IntegerType::class, ['label' => 'settings.security.form.delayDetectionTimeFrame', 'help' => 'settings.security.form.delayDetectionTimeFrameHelp'])
-            ->add('delayTime', IntegerType::class, ['label' => 'settings.security.form.delayTime', 'help' => 'settings.security.form.delayTimeHelp'])
-            ->add('delayMultiplicator', NumberType::class, ['label' => 'settings.security.form.delayMultiplicator', 'help' => 'settings.security.form.delayMultiplicatorHelp', 'html5' => true, 'scale' => 1, 'attr' => ['min' => 0.1, 'step' => 'any']])
-
-            // lockout
-            ->add('lockoutActive', CheckboxType::class, ['label' => 'settings.security.form.lockoutActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
-            ->add('lockoutNumberOfRequests', IntegerType::class, ['label' => 'settings.security.form.lockoutNumberOfAllowedRequests', 'help' => 'settings.security.form.lockoutNumberOfAllowedRequestsHelp'])
-            ->add('lockoutDetectionTimeFrame', IntegerType::class, ['label' => 'settings.security.form.lockoutDetectionTimeFrame', 'help' => 'settings.security.form.lockoutDetectionTimeFrameHelp'])
-            ->add('lockoutTime', IntegerType::class, ['label' => 'settings.security.form.lockoutTime', 'help' => 'settings.security.form.lockoutTimeHelp'])
-            ->add('lockoutMultiplicator', NumberType::class, ['label' => 'settings.security.form.lockoutMultiplicator', 'help' => 'settings.security.form.lockoutMultiplicatorHelp', 'html5' => true, 'scale' => 1, 'attr' => ['min' => 0.1, 'step' => 'any']])
-
-            ->add('ipAllowList', TextareaType::class, ['label' => 'settings.security.form.ipAllowList', 'required' => false, 'help' => 'settings.security.form.ipAllowListHelp', 'attr' => ['class' => 'ip-address-field']])
-
-            ->getForm();
+        $form = $this->createForm(SecuritySettingsFormType::class, $config, ['isGeneralSettings' => true]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -332,9 +338,89 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             return $this->redirectToRoute('settings_security');
         }
 
-        return $this->render('project_related/settings/security.html.twig', [
+        return $this->render('project_related/settings/security/general_form.html.twig', [
             'form' => $form->createView(),
             'project' => $project,
+        ]);
+    }
+
+    /**
+     * @Route("/security/guideline/add", name="settings_security_guideline_add")
+     * @Route("/security/guideline/{id}/edit", name="settings_security_guideline_edit")
+     */
+    public function securityGuidelineForm(Request $request, EntityManagerInterface $entityManager, GeoIp2Helper $geoIp2Helper, SecurityGuideline $securityGuideline = null): Response
+    {
+        $project = $this->getActiveProject();
+        $isNew = false;
+        if ($securityGuideline === null) {
+            $securityGuideline = new SecurityGuideline();
+            $securityGuideline->setProject($project);
+            $isNew = true;
+        }
+
+        $geoIp2Active = $geoIp2Helper->isGeoIp2Active();
+        $form = $this->createForm(SecurityGuidelineFormType::class, $securityGuideline, [
+            'geoIp2Active' => $geoIp2Active,
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($isNew) {
+                $entityManager->persist($securityGuideline);
+            }
+
+            $entityManager->flush();
+
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'settings.security.message.guidelineSuccessfullySaved',
+                    [],
+                    'mosparo'
+                )
+            );
+
+            return $this->redirectToRoute('settings_security');
+        }
+
+        return $this->render('project_related/settings/security/guideline_form.html.twig', [
+            'guideline' => $securityGuideline,
+            'form' => $form->createView(),
+            'project' => $project,
+            'isNew' => $isNew,
+            'geoIp2Active' => $geoIp2Active,
+        ]);
+    }
+
+    /**
+     * @Route("/security/guideline/{id}/remove", name="settings_security_guideline_remove")
+     */
+    public function securityGuidelineRemove(Request $request, EntityManagerInterface $entityManager, SecurityGuideline $securityGuideline): Response
+    {
+        if ($request->request->has('delete-token')) {
+            $submittedToken = $request->request->get('delete-token');
+
+            if ($this->isCsrfTokenValid('delete-security-guideline', $submittedToken)) {
+                $entityManager->remove($securityGuideline);
+                $entityManager->flush();
+
+                $session = $request->getSession();
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans(
+                        'settings.security.guideline.delete.message.successfullyRemoved',
+                        ['%guidelineName%' => $securityGuideline->getName()],
+                        'mosparo'
+                    )
+                );
+
+                return $this->redirectToRoute('settings_security');
+            }
+        }
+
+        return $this->render('project_related/settings/security/guideline_remove.html.twig', [
+            'guideline' => $securityGuideline,
         ]);
     }
 

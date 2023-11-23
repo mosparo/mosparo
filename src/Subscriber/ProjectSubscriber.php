@@ -8,6 +8,7 @@ use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Entity\Submission;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Util\IpUtil;
@@ -145,9 +146,9 @@ class ProjectSubscriber implements EventSubscriberInterface
         } else if ($this->security->getToken() && $this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
             $session = $request->getSession();
 
-            // Ignore all requests with the project management routes
+            // Ignore all requests for general routes like project management, account or administration
             $abortRequest = true;
-            if (preg_match('/(project|account|security|password|administration)_/', $activeRoute)) {
+            if (preg_match('/^(project|account|security|password|administration)_/', $activeRoute)) {
                 $abortRequest = false;
             }
 
@@ -164,6 +165,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                     'ruleset_view_filtered' => Ruleset::class,
                     'ruleset_view_rule' => Ruleset::class,
                     'submission_view' => Submission::class,
+                    'settings_security_guideline_edit' => SecurityGuideline::class,
                 ];
 
                 if (isset($entityReleatedRoutes[$activeRoute])) {
@@ -220,6 +222,10 @@ class ProjectSubscriber implements EventSubscriberInterface
             'settings_member_edit' => ProjectMember::ROLE_OWNER,
             'settings_member_remove' => ProjectMember::ROLE_OWNER,
             'settings_security' => ProjectMember::ROLE_OWNER,
+            'settings_security_edit_general' => ProjectMember::ROLE_OWNER,
+            'settings_security_guideline_add' => ProjectMember::ROLE_OWNER,
+            'settings_security_guideline_edit' => ProjectMember::ROLE_OWNER,
+            'settings_security_guideline_remove' => ProjectMember::ROLE_OWNER,
             'settings_design' => ProjectMember::ROLE_OWNER,
             'settings_reissue_keys' => ProjectMember::ROLE_OWNER,
             'tools_import' => ProjectMember::ROLE_OWNER,

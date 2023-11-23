@@ -12,6 +12,16 @@
     }
 }
 
+.card-header-with-override-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .form-check {
+        margin-bottom: 0;
+    }
+}
+
 .theme-dark {
     .card-header-with-actions {
         @media only screen and (max-width: 500px) {

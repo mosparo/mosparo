@@ -59,6 +59,8 @@ $(document).ready(function () {
         if (list.find('li').length === 0) {
             $(this).find('.add-item-button').trigger('click');
         }
+
+        collectionToggleRemoveButton(list);
     });
 
     $('.collection-widget.remove-allowed').on('click', '.remove-item-button', function () {
@@ -75,12 +77,27 @@ $(document).ready(function () {
         let cardBody = $(this).parents('.card-body');
         let fields = cardBody.find('input, textarea, select').not($(this));
         let status = $(this).is(':checked');
+        let disabled = $(this).is(':disabled');
+
+        if (status && !disabled) {
+            fields.prop('disabled', false);
+        } else {
+            fields.prop('disabled', true);
+        }
+    }).trigger('change');
+
+    $('.full-card-field-switch').on('change', function () {
+        let cardBody = $(this).parents('.card').find('.card-body');
+        let fields = cardBody.find('input, textarea, select');
+        let status = $(this).is(':checked');
 
         if (status) {
             fields.prop('disabled', false);
         } else {
             fields.prop('disabled', true);
         }
+
+        cardBody.find('.card-field-switch').trigger('change');
     }).trigger('change');
 
     let updateVariable = function (el, value, type) {

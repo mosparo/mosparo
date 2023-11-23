@@ -279,13 +279,20 @@ class CleanupHelper
         unset($query);
 
         // Delete the day statistic
-        $query = $this->entityManager->createQuery('
-                DELETE Mosparo\Entity\DayStatistic ds
-                WHERE ds.project = :project
-            ')
-            ->setParameter('project', $project);
-        $query->execute();
-        unset($query);
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\DayStatistic', 'ds')
+            ->where('ds.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+        unset($qb);
+
+        // Delete the security guidelines
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\SecurityGuideline', 'sg')
+            ->where('sg.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+        unset($qb);
     }
 
     public function cleanupIpLocalizationCache()

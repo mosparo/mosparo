@@ -83,27 +83,7 @@ class Project
     /**
      * @var array
      */
-    private array $defaultConfigValues = [
-        'minimumTimeActive' => false,
-        'minimumTimeSeconds' => 10,
-
-        'honeypotFieldActive' => false,
-        'honeypotFieldName' => '',
-
-        'delayActive' => false,
-        'delayNumberOfRequests' => 30,
-        'delayDetectionTimeFrame' => 30,
-        'delayTime' => 60,
-        'delayMultiplicator' => 1.5,
-
-        'lockoutActive' => false,
-        'lockoutNumberOfRequests' => 60,
-        'lockoutDetectionTimeFrame' => 60,
-        'lockoutTime' => 300,
-        'lockoutMultiplicator' => 1.2,
-
-        'ipAllowList' => '',
-
+    private array $defaultGeneralConfigValues = [
         'designMode' => '',
         'boxSize' => 'medium',
         'positionContainer' => 'relative',
@@ -151,6 +131,31 @@ class Project
         'colorLoaderBackground' => 'rgba(255, 255, 255, 0.8)',
         'colorLoaderText' => 'rgb(0, 0, 0)',
         'colorLoaderCircle' => 'rgb(0, 0, 255)',
+    ];
+
+    /**
+     * @var array
+     */
+    private array $defaultSecurityConfigValues = [
+        'minimumTimeActive' => false,
+        'minimumTimeSeconds' => 10,
+
+        'honeypotFieldActive' => false,
+        'honeypotFieldName' => '',
+
+        'delayActive' => false,
+        'delayNumberOfRequests' => 30,
+        'delayDetectionTimeFrame' => 30,
+        'delayTime' => 60,
+        'delayMultiplicator' => 1.5,
+
+        'lockoutActive' => false,
+        'lockoutNumberOfRequests' => 60,
+        'lockoutDetectionTimeFrame' => 60,
+        'lockoutTime' => 300,
+        'lockoutMultiplicator' => 1.2,
+
+        'ipAllowList' => '',
     ];
 
     /**
@@ -303,7 +308,7 @@ class Project
 
     public function getConfigValues(): ?array
     {
-        $configValues = $this->defaultConfigValues;
+        $configValues = $this->getDefaultConfigValues();
         foreach ($this->configValues as $configValue) {
             $configValues[$configValue->getName()] = $configValue->getValue();
         }
@@ -313,9 +318,11 @@ class Project
 
     public function getConfigValue($key)
     {
+        $defaultConfigValues = $this->getDefaultConfigValues();
+
         $configValue = $this->findConfigValue($key);
         if (!$configValue) {
-            return $this->defaultConfigValues[$key] ?? null;
+            return $defaultConfigValues[$key] ?? null;
         }
 
         return $configValue->getValue();
@@ -323,8 +330,10 @@ class Project
 
     public function setConfigValue($key, $value): self
     {
+        $defaultConfigValues = $this->getDefaultConfigValues();
+
         $configValue = $this->findConfigValue($key);
-        if ((isset($this->defaultConfigValues[$key]) && $value === $this->defaultConfigValues[$key]) || $value === null) {
+        if ((isset($defaultConfigValues[$key]) && $value === $defaultConfigValues[$key]) || $value === null) {
             if ($configValue && $this->configValues->contains($configValue)) {
                 $this->configValues->removeElement($configValue);
             }
@@ -360,9 +369,14 @@ class Project
         return $filteredConfigValues->first();
     }
 
+    public function getDefaultSecurityConfigValues(): ?array
+    {
+        return $this->defaultSecurityConfigValues;
+    }
+
     public function getDefaultConfigValues(): ?array
     {
-        return $this->defaultConfigValues;
+        return $this->defaultGeneralConfigValues + $this->defaultSecurityConfigValues;
     }
 
     public function getDesignMode(): string
