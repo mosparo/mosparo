@@ -57,7 +57,7 @@ $(document).ready(function () {
         let list = $(this).find('.collection-list');
 
         if (list.find('li').length === 0) {
-            $('.add-item-button').trigger('click');
+            $(this).find('.add-item-button').trigger('click');
         }
     });
 
