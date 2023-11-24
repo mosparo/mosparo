@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\HmacSignatureHelper;
+use Mosparo\Helper\SecurityHelper;
 use Mosparo\Helper\StatisticHelper;
 use Mosparo\Helper\VerificationHelper;
 use Mosparo\Repository\SubmitTokenRepository;
@@ -29,13 +30,16 @@ class VerificationApiController extends AbstractController
 
     protected VerificationHelper $verificationHelper;
 
+    protected SecurityHelper $securityHelper;
+
     protected StatisticHelper $statisticHelper;
 
-    public function __construct(ProjectHelper $projectHelper, HmacSignatureHelper $hmacSignatureHelper, VerificationHelper $verificationHelper, StatisticHelper $statisticHelper)
+    public function __construct(ProjectHelper $projectHelper, HmacSignatureHelper $hmacSignatureHelper, VerificationHelper $verificationHelper, SecurityHelper $securityHelper, StatisticHelper $statisticHelper)
     {
         $this->projectHelper = $projectHelper;
         $this->hmacSignatureHelper = $hmacSignatureHelper;
         $this->verificationHelper = $verificationHelper;
+        $this->securityHelper = $securityHelper;
         $this->statisticHelper = $statisticHelper;
     }
 
@@ -93,9 +97,18 @@ class VerificationApiController extends AbstractController
         $submitToken->setVerifiedAt(new DateTime());
         $submission->setVerifiedAt(new DateTime());
 
+        // Get the client IP address
+        $clientIpAddress = $submission->getDataValue('client', 'ipAddress');
+        if (!$clientIpAddress) {
+            $clientIpAddress = null;
+        }
+
+        // Determine the security settings
+        $securitySettings = $this->securityHelper->determineSecuritySettings($clientIpAddress);
+
         // Check if the minimum time functionality is active and if the time difference is bigger than the minimum time.
-        if ($activeProject->getConfigValue('minimumTimeActive')) {
-            $minimumTimeSeconds = $activeProject->getConfigValue('minimumTimeSeconds');
+        if ($securitySettings['minimumTimeActive']) {
+            $minimumTimeSeconds = $securitySettings['minimumTimeSeconds'];
             $seconds = TimeUtil::getDifferenceInSeconds($submission->getSubmitToken()->getCreatedAt(), $submission->getVerifiedAt());
 
             $minimumTimeGv = new GeneralVerification(

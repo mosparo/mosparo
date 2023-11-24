@@ -97,8 +97,11 @@ class FrontendApiController extends AbstractController
             // This request should never fail if there is an issue with the cleanup process.
         }
 
+        // Determine the security settings
+        $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp());
+
         // Check if the request is allowed
-        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_DELAY);
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_DELAY, $securitySettings);
         if ($securityResult instanceof Delay) {
             return $this->prepareSecurityResponse($request, $securityResult, true);
         }
@@ -115,8 +118,8 @@ class FrontendApiController extends AbstractController
         $entityManager->flush();
 
         $args = [];
-        if ($submitToken->getProject()->getConfigValue('honeypotFieldActive')) {
-            $args['honeypotFieldName'] = $submitToken->getProject()->getConfigValue('honeypotFieldName');
+        if ($securitySettings['honeypotFieldActive']) {
+            $args['honeypotFieldName'] = $securitySettings['honeypotFieldName'];
         }
 
         return new JsonResponse([
@@ -143,8 +146,11 @@ class FrontendApiController extends AbstractController
             // This request should never fail if there is an issue with the cleanup process.
         }
 
+        // Determine the security settings
+        $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp());
+
         // Check if the request is allowed
-        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_LOCKOUT);
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_LOCKOUT, $securitySettings);
         if ($securityResult instanceof Lockout) {
             return $this->prepareSecurityResponse($request, $securityResult);
         }
@@ -212,8 +218,8 @@ class FrontendApiController extends AbstractController
         $submission->setIgnoredFields($formData['ignoredFields']);
 
         // Check for the honeypot field
-        if ($submitToken->getProject()->getConfigValue('honeypotFieldActive')) {
-            $hpFieldName = $activeProject->getConfigValue('honeypotFieldName');
+        if ($securitySettings['honeypotFieldActive']) {
+            $hpFieldName = $securitySettings['honeypotFieldName'];
             $hpField = false;
 
             foreach ($formData['fields'] as $key => $field) {

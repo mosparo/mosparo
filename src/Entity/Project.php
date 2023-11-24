@@ -316,6 +316,21 @@ class Project
         return $configValues;
     }
 
+    public function getSecurityConfigValues(): array
+    {
+        $defaultValues = $this->defaultSecurityConfigValues;
+
+        foreach ($defaultValues as $key => $value) {
+            $projectConfigValue = $this->getConfigValue($key);
+
+            if ($projectConfigValue !== null) {
+                $defaultValues[$key] = $projectConfigValue;
+            }
+        }
+
+        return $defaultValues;
+    }
+
     public function getConfigValue($key)
     {
         $defaultConfigValues = $this->getDefaultConfigValues();

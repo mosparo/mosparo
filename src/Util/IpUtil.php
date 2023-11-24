@@ -15,20 +15,27 @@ class IpUtil
         }
 
         foreach ($items as $item) {
-            if (strpos($item, '/') !== false) {
-                $address = Factory::parseAddressString($ipAddress);
-                $subnet = Subnet::parseString($item);
-
-                if ($address !== null &&
-                    $subnet !== null &&
-                    $address->getAddressType() == $subnet->getAddressType() &&
-                    $subnet->contains($address)
-                ) {
-                    return true;
-                }
+            if (strpos($item, '/') !== false && self::isIpInSubnet($item, $ipAddress)) {
+                return true;
             } else if ($item === $ipAddress) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    public static function isIpInSubnet(string $subnetAddress, string $ipAddress): bool
+    {
+        $address = Factory::parseAddressString($ipAddress);
+        $subnet = Subnet::parseString($subnetAddress);
+
+        if ($address !== null &&
+            $subnet !== null &&
+            $address->getAddressType() == $subnet->getAddressType() &&
+            $subnet->contains($address)
+        ) {
+            return true;
         }
 
         return false;

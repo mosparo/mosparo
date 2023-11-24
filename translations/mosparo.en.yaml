@@ -650,7 +650,8 @@ settings:
 
         criteria:
           title: Criteria
-          intro: The guideline will be used for the user as soon as one of these criteria matches. You must add at least one criterion to save the guideline.
+          intro: Please define the criteria for this guideline. With the criteria, you can define for which origin these security settings should be used.
+          intro2: The guideline will be used for the user as soon as one of these criteria matches. You must add at least one criterion to save the guideline.
           subnets: Subnets
           subnetsHelp: "Add the subnets for which this guideline should be considered. You can define IPv4 or IPv6 subnets. You can see the IP address in the submission details. Example: 192.168.1.0/24"
           countryCodes: Country codes

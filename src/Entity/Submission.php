@@ -150,6 +150,21 @@ class Submission implements ProjectRelatedEntityInterface
         return $this;
     }
 
+    public function getDataValue(string $group, string $name)
+    {
+        if (!isset($this->data[$group])) {
+            return false;
+        }
+
+        foreach ($this->data[$group] as $item) {
+            if ($item['name'] === $name) {
+                return $item['value'];
+            }
+        }
+
+        return false;
+    }
+
     public function getSignature(): ?string
     {
         return $this->signature;

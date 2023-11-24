@@ -24,6 +24,8 @@ class GeoIp2Helper
 
     protected string $downloadDirectory;
 
+    protected array $localizedIpAddresses = [];
+
     public function __construct(EntityManagerInterface $entityManager, ConfigHelper $configHelper, CleanupHelper $cleanupHelper, Filesystem $filesystem, string $downloadDirectory)
     {
         $this->entityManager = $entityManager;
@@ -101,9 +103,15 @@ class GeoIp2Helper
             return false;
         }
 
+        $ipAddressHash = HashUtil::hash($ipAddress);
+        if (isset($this->localizedIpAddresses[$ipAddressHash])) {
+            return $this->localizedIpAddresses[$ipAddressHash];
+        }
+
         $ipLocalizationRepository = $this->entityManager->getRepository(IpLocalization::class);
-        $ipLocalization = $ipLocalizationRepository->findOneBy(['ipAddress' => HashUtil::hash($ipAddress)]);
+        $ipLocalization = $ipLocalizationRepository->findOneBy(['ipAddress' => $ipAddressHash]);
         if ($ipLocalization !== null) {
+            $this->localizedIpAddresses[$ipAddressHash] = $ipLocalization;
             return $ipLocalization;
         }
 
@@ -133,6 +141,8 @@ class GeoIp2Helper
 
         $this->entityManager->persist($ipLocalization);
         $this->entityManager->flush();
+
+        $this->localizedIpAddresses[$ipAddressHash] = $ipLocalization;
 
         return $ipLocalization;
     }
