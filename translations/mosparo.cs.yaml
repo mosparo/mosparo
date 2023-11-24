@@ -448,8 +448,6 @@ settings:
       infoIpAddress: V případě, že je třeba vytvoření tokenu odložit, bude rozhodnuto na základě počtu požadavků, které IP adresa učinila. S každým dalším požadavkem na zpoždění prodlouží.
     message:
       successfullySaved: Nastavení zabezpečení bylo úspěšně uloženo.
-    validation:
-      honeypotFieldNameInvalidCharacter: Používejte pouze písmena, číslice a pomlčku (-).
   design:
     cr:
       text: Text

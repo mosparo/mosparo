@@ -555,9 +555,6 @@ settings:
     message:
       successfullySaved: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
 
-    validation:
-      honeypotFieldNameInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich (-).
-
   design:
     title: Darstellung
 
