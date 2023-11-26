@@ -22,3 +22,9 @@ administration:
 ipAllowList:
   itemInvalid: Der Eintrag „%item“ ist keine gültige IP-Adresse bzw. kein gültiges
     Subnetz.
+honeypotField:
+  nameHasInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich
+    (-).
+securityGuideline:
+  asNumberNotNumeric: Die AS-Nummer ist keine Nummer.
+  atLeastOneCriteriaRequired: Die Sicherheitsleitlinie benötigt mindestens ein Kriterium.
