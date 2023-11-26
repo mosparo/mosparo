@@ -34,6 +34,10 @@ project:
 
     verificationSimulationMode: Verifizierungs-Simulations-Modus
     apiDebugMode: API-Debugging-Modus
+    verificationSimulationModeHelp: Sie können den Verifizierungsprozess simulieren, wenn der Verifizierungssimulationsmodus aktiviert ist. Bitte öffnen Sie die Antragsdetails und klicken Sie auf den Button oben rechts. Das Simulationstool zeigt Ihnen, wie Ihre Anfrage aussehen sollte und welche Daten mosparo zur Verifizierung der Einsendung erwartet.
+    apiDebugModeHelp: Wenn der API-Debug-Modus aktiviert ist, gibt die Verifizierungs-API weitere Informationen über den Verifizierungsprozess zurück. Diese Informationen können wichtig sein, um zu verstehen, warum eine Verifizierung fehlgeschlagen ist. Verwenden Sie diese Option, wenn Sie versuchen, mosparo in Ihr Formular zu integrieren und dabei Probleme auftreten.
+    statisticStorageLimitHelp: Legt fest, wie lange mosparo die Statistiken in der Datenbank aufbewahren soll. Diese Option hat keinen Zusammenhang mit dem Speicherbereich der Einsendungen, nach dem die Einsendungen aus der Datenbank gelöscht werden (14 Tage).
+    statisticStorageLimit: Speichern der Statistik
   delete:
     title: Projekt %projectName% löschen
     confirm: Wollen Sie das Projekt %projectName% wirklich löschen?
@@ -82,6 +86,10 @@ dashboard:
     spam: Spam
 
 # Rules
+    annotation:
+      statisticOnly: Nur Statistik
+  dateRange:
+    dropdown: Sichtbaren Datumsbereich auswählen
 rule:
   title: Regeln
   backToList: Zu den Regeln
@@ -425,6 +433,70 @@ submission:
         customIntegration: Eigene Integration
         apiDocumentation: API-Dokumentation
       title: Verifizierungs-Simulation
+      hints:
+        validationToken: Validierungscode von Schritt 1.
+        validationSignature: Signatur der Validierung aus Schritt 5.
+        hashedFormData: Die Hashes für die vorbereiteten Formulardaten aus Schritt 2.
+        response: Antwort der API.
+        hashedFormDataPlain: Gehashte Formulardaten aus Schritt 3.
+        requestDataPlain: Anfrage-Daten aus Schritt 7.
+        submitToken: Einsendcode von Schritt 1.
+        verificationSignature: Verifizierungs-Signatur aus Schritt 6.
+        apiEndpoint: Der Verifizierungs-API-Endpunkt.
+        formDataJson: Gehashte Formulardaten aus Schritt 3 als JSON-String.
+        formDataSignature: Signatur der Formulardaten aus Schritt 4.
+        requestDataJson: Anfrage-Daten aus Schritt 7 als JSON-String.
+        publicKey: Öffentlicher Schlüssel des Projektes.
+        requestSignature: Signatur der Anfrage aus Schritt 8.
+        privateKey: Geheimer Schlüssel des Projektes.
+        formData: Die von Ihrem Formular übermittelten Daten.
+        preparedFormData: Die Formulardaten aus Schritt 1 nach der Aufbereitung.
+      labels:
+        headers: Kopfzeilen
+        validationAndFormDataSignature: Validierungs- und Formulardaten-Signatur
+        validationSignature: Signatur der Validierung
+        requestData: Anfrage-Daten
+        submitToken: Einsendecode
+        preparedFormData: Vorbereitete Formulardaten
+        hashedFormData: Gehashte Formulardaten
+        postData: Post-Daten
+        privateKey: Geheimer Schlüssel
+        apiEndpointAndRequestDataJson: API-Endpunkt und Anfrage-Daten
+        method: Methode
+        validationToken: Validierungscode
+        formData: Formulardaten
+        response: Antwort
+        formDataJson: Formulardaten als JSON
+        username: Benutzername
+        apiEndpoint: API-Endpunkt
+        requestSignature: Signatur der Anfrage
+        authorization: Autorisierung
+        verificationSignature: Signatur der Verifizierung
+        password: Passwort
+        formDataSignature: Signatur der Formulardaten
+      sections:
+        four:
+          intro: Sie müssen die Signatur der Formulardaten erstellen, um sicherzustellen, dass die Formulardaten nicht manipuliert wurden. Die Signatur ist ein HMAC SHA256-Hash der Formulardaten-Hashes (Schritt 2), kodiert als JSON. Verwenden Sie den geheimen Schlüssel des Projekts als Schlüssel.
+          title: 'Schritt 4: Signatur der Formulardaten generieren'
+        two:
+          title: 'Schritt 2: Formulardaten vorbereiten'
+          intro: Bevor Sie die Daten an die Verifizierungs-API senden, müssen Sie die Formulardaten vorbereiten. Die mosparo-Felder (beginnend mit %codeStart%_mosparo_%codeEnd%) müssen aus den Formulardaten entfernt werden. Danach ersetzen Sie bitte alle CRLF-Zeilenumbrüche durch LF-Zeilenumbrüche und ändern alle Feldnamen in Kleinbuchstaben. Sortieren Sie die Formulardaten nach Namen in alphabetischer Reihenfolge (A-Z).
+        five:
+          intro: Verwenden Sie den Validierungscode, welchen Sie im ersten Schritt aus den Formulardaten extrahiert haben, und erzeugen Sie die Signatur davon. Die Signatur ist ein HMAC SHA256 Hash des Validierungscodes. Verwenden Sie den geheimen Schlüssel des Projekts als Schlüssel.
+          title: 'Schritt 5: Generierung der Validierungssignatur'
+        one:
+          title: 'Schritt 1: Einsende- und Validierungscode extrahieren'
+          intro: Um eine Einsendung zu überprüfen, müssen Sie den Einsendecode kennen, welcher eine Einsendung identifiziert, und den Validierungscode, welcher die Gültigkeit der Einsendung bestätigt. Extrahieren Sie diese beiden Codes aus den Formulardaten.
+        three:
+          title: 'Schritt 3: Generierung der Hashes'
+          intro: Für die Verifikation erwartet mosparo die Formulardaten als SHA256-Hashes. Hierfür müssen die SHA256-Hashes für die Formulardaten berechnet werden.
+        six:
+          title: 'Schritt 6: Verifikationssignatur generieren'
+      intro: Die Verifikationssimulation zeigt Ihnen, welche Daten mosparo für den Verifikationsprozess akzeptiert. Sie können die angezeigten Daten mit den Daten vergleichen, die Ihr Verifizierungsprozess erzeugt, um mögliche Probleme zu finden.
+      info:
+        authorizationHeader: Die Autorisierungskopfzeile muss Base64-kodiert sein.
+      errors:
+        noValidationToken: Die Verifikationssimulation ist nicht möglich, da kein Validierungscode für diese Übermittlung gespeichert ist. Das bedeutet, dass die Daten im Formular die mosparo-Validierung nicht bestanden haben, wodurch die Verifizierung unmöglich ist.
   filter:
     options:
       spam: Spam-Einsendungen
