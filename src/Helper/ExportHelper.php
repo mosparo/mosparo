@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Exception\ExportException;
 use Mosparo\Specifications\Specifications;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -49,7 +50,11 @@ class ExportHelper
             $data['name'] = $project->getName();
             $data['description'] = $project->getDescription();
             $data['hosts'] = array_values($project->getHosts());
+            $data['status'] = $project->getStatus();
             $data['spamScore'] = $project->getSpamScore();
+            $data['statisticStorageLimit'] = $project->getStatisticStorageLimit();
+            $data['apiDebugMode'] = $project->isApiDebugMode();
+            $data['verificationSimulationMode'] = $project->isVerificationSimulationMode();
         }
 
         if ($exportDesignSettings) {
@@ -58,6 +63,7 @@ class ExportHelper
 
         if ($exportSecuritySettings) {
             $data['security'] = $this->exportSecuritySettings($project);
+            $data['securityGuidelines'] = $this->exportSecurityGuidelines();
         }
 
         if ($exportRules) {
@@ -169,6 +175,18 @@ class ExportHelper
         }
 
         return $settings;
+    }
+
+    protected function exportSecurityGuidelines(): array
+    {
+        $securityGuidelines = [];
+        $securityGuidelinesRepository = $this->entityManager->getRepository(SecurityGuideline::class);
+
+        foreach ($securityGuidelinesRepository->findAll() as $securityGuideline) {
+            $securityGuidelines[] = $securityGuideline->toArray();
+        }
+
+        return $securityGuidelines;
     }
 
     protected function exportRules(): array

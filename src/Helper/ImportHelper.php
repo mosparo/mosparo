@@ -7,6 +7,7 @@ use Mosparo\Entity\Project;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
 use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Exception\ImportException;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
@@ -132,6 +133,8 @@ class ImportHelper
                 if ($sectionKey === 'designSettings' && $sectionChanges) {
                     $refreshCssCache = true;
                 }
+            } else if ($sectionKey === 'securityGuidelines') {
+                $this->executeSecurityGuidelineChanges($sectionChanges);
             } else if ($sectionKey === 'rules') {
                 $this->executeRuleChanges($sectionChanges);
             } else if ($sectionKey === 'rulesets') {
@@ -200,6 +203,7 @@ class ImportHelper
             !empty($changes['generalSettings'] ?? []) ||
             !empty($changes['designSettings'] ?? []) ||
             !empty($changes['securitySettings'] ?? []) ||
+            !empty($changes['securityGuidelines'] ?? []) ||
             !empty($changes['rules'] ?? []) ||
             !empty($changes['rulesets'] ?? [])
         );
@@ -219,6 +223,10 @@ class ImportHelper
 
         if ($jobData['importSecuritySettings'] && isset($importData['project']['security'])) {
             $changes['securitySettings'] = $this->findSettingChanges($project, $importData['project']['security']);
+
+            if (isset($importData['project']['securityGuidelines'])) {
+                $changes['securityGuidelines'] = $this->findSecurityGuidelineChanges($importData['project']['securityGuidelines']);
+            }
         }
 
         if ($jobData['importRules'] && isset($importData['project']['rules'])) {
@@ -266,11 +274,43 @@ class ImportHelper
             ];
         }
 
+        if (isset($importData['status']) && $project->getStatus() !== $importData['status']) {
+            $changes[] = [
+                'key' => 'status',
+                'oldValue' => $project->getStatus(),
+                'newValue' => $importData['status']
+            ];
+        }
+
         if (isset($importData['spamScore']) && $project->getSpamScore() !== $importData['spamScore']) {
             $changes[] = [
                 'key' => 'spamScore',
                 'oldValue' => $project->getSpamScore(),
                 'newValue' => $importData['spamScore']
+            ];
+        }
+
+        if (isset($importData['statisticStorageLimit']) && $project->getStatisticStorageLimit() !== $importData['statisticStorageLimit']) {
+            $changes[] = [
+                'key' => 'statisticStorageLimit',
+                'oldValue' => $project->getStatisticStorageLimit(),
+                'newValue' => $importData['statisticStorageLimit']
+            ];
+        }
+
+        if (isset($importData['apiDebugMode']) && $project->isApiDebugMode() !== $importData['apiDebugMode']) {
+            $changes[] = [
+                'key' => 'apiDebugMode',
+                'oldValue' => $project->isApiDebugMode(),
+                'newValue' => $importData['apiDebugMode']
+            ];
+        }
+
+        if (isset($importData['verificationSimulationMode']) && $project->isVerificationSimulationMode() !== $importData['verificationSimulationMode']) {
+            $changes[] = [
+                'key' => 'verificationSimulationMode',
+                'oldValue' => $project->isVerificationSimulationMode(),
+                'newValue' => $importData['verificationSimulationMode']
             ];
         }
 
@@ -292,6 +332,53 @@ class ImportHelper
                     'newValue' => $newValue
                 ];
             }
+        }
+
+        return $changes;
+    }
+
+    protected function findSecurityGuidelineChanges(array $securityGuidelines): array
+    {
+        $changes = [];
+        $securityGuidelineRepository = $this->entityManager->getRepository(SecurityGuideline::class);
+
+        foreach ($securityGuidelines as $guideline) {
+            $storedGuideline = $securityGuidelineRepository->findOneBy(['uuid' => $guideline['uuid']]);
+
+            $mode = 'add';
+            $storedGuidelineId = null;
+            $storedGuidelineName = null;
+            $changedCriteria = true;
+            $changedSettings = true;
+            if ($storedGuideline !== null) {
+                if ($storedGuideline->isEqual($guideline)) {
+                    // Everything up to date, no change required.
+                    continue;
+                }
+
+                $mode = 'modify';
+                $storedGuidelineId = $storedGuideline->getId();
+                $storedGuidelineName = $storedGuideline->getName();
+
+                if ($storedGuideline->areCriteriaEqual($guideline)) {
+                    $changedCriteria = false;
+                }
+
+                if ($storedGuideline->areSettingsEqual($guideline)) {
+                    $changedSettings = false;
+                }
+            }
+
+            $changes[] = [
+                'mode' => $mode,
+                'storedGuideline' => [
+                    'id' => $storedGuidelineId,
+                    'name' => $storedGuidelineName
+                ],
+                'importedGuideline' => $guideline,
+                'changedCriteria' => $changedCriteria,
+                'changedSettings' => $changedSettings,
+            ];
         }
 
         return $changes;
@@ -457,7 +544,7 @@ class ImportHelper
     {
         foreach ($sectionChanges as $change) {
             $key = $change['key'];
-            if (in_array($key, ['name', 'description', 'hosts', 'spamScore'])) {
+            if (in_array($key, ['name', 'description', 'hosts', 'status', 'spamScore', 'statisticStorageLimit', 'apiDebugMode', 'verificationSimulationMode'])) {
                 switch ($key) {
                     case 'name':
                         $project->setName($change['newValue']);
@@ -468,12 +555,56 @@ class ImportHelper
                     case 'hosts':
                         $project->setHosts($change['newValue']);
                     break;
+                    case 'status':
+                        $project->setStatus($change['newValue']);
+                    break;
                     case 'spamScore':
                         $project->setSpamScore($change['newValue']);
+                    break;
+                    case 'statisticStorageLimit':
+                        $project->setStatisticStorageLimit($change['newValue']);
+                    break;
+                    case 'apiDebugMode':
+                        $project->setApiDebugMode($change['newValue']);
+                    break;
+                    case 'verificationSimulationMode':
+                        $project->setVerificationSimulationMode($change['newValue']);
                     break;
                 }
             } else {
                 $project->setConfigValue($key, $change['newValue']);
+            }
+        }
+    }
+
+    protected function executeSecurityGuidelineChanges(array $sectionChanges)
+    {
+        $securityGuidelineRepository = $this->entityManager->getRepository(SecurityGuideline::class);
+
+        foreach ($sectionChanges as $change) {
+            $importedSecurityGuideline = $change['importedGuideline'];
+
+            if ($change['mode'] === 'add') {
+                $securityGuideline = new SecurityGuideline();
+                $securityGuideline->setUuid($importedSecurityGuideline['uuid']);
+
+                $this->entityManager->persist($securityGuideline);
+            } else if ($change['mode'] === 'modify') {
+                $securityGuideline = $securityGuidelineRepository->find($change['storedGuideline']['id']);
+                if (!$securityGuideline) {
+                    throw new ImportException('Stored security guideline not found.', ImportException::STORED_SECURITY_GUIDELINE_NOT_FOUND);
+                }
+            }
+
+            $securityGuideline->setName($importedSecurityGuideline['name']);
+            $securityGuideline->setDescription($importedSecurityGuideline['description']);
+            $securityGuideline->setPriority($importedSecurityGuideline['priority']);
+            $securityGuideline->setSubnets($importedSecurityGuideline['subnets']);
+            $securityGuideline->setCountryCodes($importedSecurityGuideline['countryCodes']);
+            $securityGuideline->setAsNumbers($importedSecurityGuideline['asNumbers']);
+
+            foreach ($importedSecurityGuideline['securitySettings'] as $setting) {
+                $securityGuideline->setConfigValue($setting['name'], $setting['value']);
             }
         }
     }

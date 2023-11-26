@@ -133,7 +133,7 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
 
     public function getSubnets(): array
     {
-        return $this->subnets;
+        return array_values($this->subnets);
     }
 
     public function setSubnets(array $subnets): self
@@ -145,7 +145,7 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
 
     public function getCountryCodes(): array
     {
-        return $this->countryCodes;
+        return array_values($this->countryCodes);
     }
 
     public function setCountryCodes(array $countryCodes): self
@@ -157,7 +157,7 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
 
     public function getAsNumbers(): array
     {
-        return $this->asNumbers;
+        return array_values($this->asNumbers);
     }
 
     public function setAsNumbers(array $asNumbers): self
@@ -172,9 +172,9 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
         return !(empty($this->getSubnets()) && empty($this->getCountryCodes()) && empty($this->getAsNumbers()));
     }
 
-    public function getConfigValues(): ?array
+    public function getConfigValues(bool $withProjectDefaults = true): ?array
     {
-        $configValues = $this->getDefaultConfigValues();
+        $configValues = $this->getDefaultConfigValues($withProjectDefaults);
         foreach ($this->configValues as $configValue) {
             $configValues[$configValue->getName()] = $configValue->getValue();
         }
@@ -254,9 +254,14 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
         return $filteredConfigValues->first();
     }
 
-    public function getDefaultConfigValues(): array
+    public function getDefaultConfigValues(bool $withProjectDefaults = true): array
     {
         $defaultValues = $this->defaultSecurityConfigValues + $this->getProject()->getDefaultSecurityConfigValues();
+        unset($defaultValues['ipAllowList']);
+
+        if (!$withProjectDefaults) {
+            return $defaultValues;
+        }
 
         foreach ($defaultValues as $key => $value) {
             $projectConfigValue = $this->project->getConfigValue($key);
@@ -279,5 +284,90 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
         $this->project = $project;
 
         return $this;
+    }
+
+    public function isEqual(array $guideline): bool
+    {
+        if ($guideline['name'] !== $this->getName()) {
+            return false;
+        }
+
+        if ($guideline['description'] !== $this->getDescription()) {
+            return false;
+        }
+
+        if ($guideline['priority'] !== $this->getPriority()) {
+            return false;
+        }
+
+        if (!$this->areCriteriaEqual($guideline)) {
+            return false;
+        }
+
+        if (!$this->areSettingsEqual($guideline)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function areCriteriaEqual(array $guideline): bool
+    {
+        if ($guideline['subnets'] !== $this->getSubnets()) {
+            return false;
+        }
+
+        if ($guideline['countryCodes'] !== $this->getCountryCodes()) {
+            return false;
+        }
+
+        if ($guideline['asNumbers'] !== $this->getAsNumbers()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function areSettingsEqual(array $guideline): bool
+    {
+        $configValues = $this->getConfigValues(false);
+        foreach ($guideline['securitySettings'] as $setting) {
+            if (!isset($configValues[$setting['name']]) || $setting['value'] !== $configValues[$setting['name']]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function toArray(): array
+    {
+        $projectDefaultValues = $this->project->getDefaultSecurityConfigValues();
+        $projectSecuritySettings = $this->project->getSecurityConfigValues();
+
+        $securitySettings = [];
+        foreach ($this->getConfigValues(false) as $key => $value) {
+            if (
+                !isset($projectDefaultValues[$key]) ||
+                $value !== $projectDefaultValues[$key] ||
+                (isset($projectSecuritySettings[$key]) && $projectDefaultValues[$key] !== $projectSecuritySettings[$key])
+            ) {
+                $securitySettings[] = [
+                    'name' => $key,
+                    'value' => $value,
+                ];
+            }
+        }
+
+        return [
+            'uuid' => $this->getUuid(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'priority' => $this->getPriority(),
+            'subnets' => $this->getSubnets(),
+            'countryCodes' => $this->getCountryCodes(),
+            'asNumbers' => $this->getAsNumbers(),
+            'securitySettings' => $securitySettings,
+        ];
     }
 }

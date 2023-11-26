@@ -65,8 +65,8 @@
                                                 <span class="visible-when-active d-xl-inline">
                                                     {{ 'tools.eiParts.securitySettings'|trans }}
                                                 </span>
-                                                {% if changes.securitySettings is defined %}
-                                                    {%  set numberOfChanges = changes.securitySettings|length %}
+                                                {% if changes.securitySettings is defined and changes.securityGuidelines is defined %}
+                                                    {%  set numberOfChanges = changes.securitySettings|length + changes.securityGuidelines|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
                                                 {% endif %}
                                             </a>
@@ -141,8 +141,15 @@
                                         </div>
                                         <div class="card tab-pane" id="tabs-security-settings">
                                             <div class="card-body">
-                                                {% if changes.securitySettings is defined and changes.securitySettings %}
-                                                    {{ _self.changesTable('securitySettings', changes.securitySettings) }}
+                                                {% if (changes.securitySettings is defined and changes.securitySettings) or (changes.securityGuidelines is defined and changes.securityGuidelines) %}
+                                                    {% if changes.securitySettings is defined and changes.securitySettings %}
+                                                        {{ _self.changesTable('securitySettings', changes.securitySettings) }}
+                                                    {% endif %}
+
+                                                    {% if changes.securityGuidelines is defined and changes.securityGuidelines %}
+                                                        <h3 class="h2 mb-1">{{ 'settings.security.originBasedSecuritySettings.title'|trans }}</h3>
+                                                        {{ _self.changesTable('securityGuidelines', changes.securityGuidelines) }}
+                                                    {% endif %}
                                                 {% else %}
                                                     {% if not jobData.importSecuritySettings %}
                                                         <div class="alert alert-info">
@@ -260,6 +267,14 @@
                     <th width="35%">{{ 'tools.import.simulate.table.oldValue'|trans }}</th>
                     <th width="35%">{{ 'tools.import.simulate.table.newValue'|trans }}</th>
                 </tr>
+            {% elseif type == 'securityGuidelines' %}
+                <tr>
+                    <th width="1%"></th>
+                    <th>{{ 'tools.import.simulate.table.name'|trans }}</th>
+                    <th width="1%">{{ 'tools.import.simulate.table.priority'|trans }}</th>
+                    <th width="1%">{{ 'tools.import.simulate.table.criteria'|trans }}</th>
+                    <th width="1%">{{ 'tools.import.simulate.table.securitySettings'|trans }}</th>
+                </tr>
             {% elseif type == 'rules' %}
                 <tr>
                     <td colspan="3"></td>
@@ -302,6 +317,64 @@
                                 {{ change.newValue|nl2br }}
                             {% endif %}
                         </td>
+                    </tr>
+                {% elseif type == 'securityGuidelines' %}
+                    <tr>
+                        <td>
+                            {% if change.mode == 'add' %}
+                                <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.add'|trans }}">
+                                    <i class="ti ti-plus"></i>
+                                </span>
+                            {% elseif change.mode == 'modify' %}
+                                <span class="text-azure mode-icon" title="{{ 'tools.import.simulate.table.modify'|trans }}">
+                                    <i class="ti ti-pencil"></i>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ change.importedGuideline.name }}</td>
+                        <td>{{ change.importedGuideline.priority }}</td>
+                        {% if change.changedCriteria %}
+                            {% if change.mode == 'add' %}
+                                <td class="text-center">
+                                    <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.guidelineNew'|trans }}">
+                                        <i class="ti ti-plus"></i>
+                                    </span>
+                                </td>
+                            {% else %}
+                                <td class="text-center">
+                                    <span class="text-azure mode-icon" title="{{ 'tools.import.simulate.table.guidelineModify'|trans }}">
+                                        <i class="ti ti-pencil"></i>
+                                    </span>
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            <td class="text-center">
+                                <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.guidelineEqual'|trans }}">
+                                    <i class="ti ti-check"></i>
+                                </span>
+                            </td>
+                        {% endif %}
+                        {% if change.changedSettings %}
+                            {% if change.mode == 'add' %}
+                                <td class="text-center">
+                                    <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.guidelineNew'|trans }}">
+                                        <i class="ti ti-plus"></i>
+                                    </span>
+                                </td>
+                            {% else %}
+                                <td class="text-center">
+                                    <span class="text-azure mode-icon" title="{{ 'tools.import.simulate.table.guidelineModify'|trans }}">
+                                        <i class="ti ti-pencil"></i>
+                                    </span>
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            <td class="text-center">
+                                <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.guidelineEqual'|trans }}">
+                                    <i class="ti ti-check"></i>
+                                </span>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% elseif type == 'rules' %}
                     <tr>

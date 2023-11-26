@@ -931,6 +931,12 @@ tools:
         itemsModify: Modify
         itemsRemove: Remove
         spamRatingFactor: Spam rating factor
+        priority: Priority
+        criteria: Criteria
+        securitySettings: Security settings
+        guidelineNew: New guideline
+        guidelineModify: Modification required
+        guidelineEqual: No modification required
 
       errorMessage:
         jobDataFileNotFound: Job data file for token does not exist.
