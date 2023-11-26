@@ -529,7 +529,7 @@ submission:
           intro: Use the validation token, which you extracted from the form data in the first step, and generate the signature of it. The signature is an HMAC SHA256 hash of the validation token. Use the private key of the project as key.
         six:
           title: 'Step 6: Generate verification signature'
-          intro: Combine the validation and the form data signature and create the verification signature. The signature is an HMAC SHA256 hash combining the validation and form data signatures.. Use the private key of the project as key.
+          intro: Combine the validation and the form data signature and create the verification signature. The signature is an HMAC SHA256 hash combining the validation and form data signatures. Use the private key of the project as key.
         seven:
           title: 'Step 7: Collect request data'
           intro: After all the data is collected and the signatures and hashes generated, it's time to send it to the API for verification. For that, please collect the following information.
