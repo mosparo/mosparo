@@ -14,3 +14,17 @@ tools:
   import:
     importFile:
       correctFile: Bitte laden Sie eine korrekte JSON-Datei hoch.
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Ihre IP-Adresse ist in der Liste der erlaubten IP-Adressen
+        nicht enthalten. Bitte fügen Sie Ihre IP-Adresse der Liste hinzu.
+ipAllowList:
+  itemInvalid: Der Eintrag „%item“ ist keine gültige IP-Adresse bzw. kein gültiges
+    Subnetz.
+honeypotField:
+  nameHasInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich
+    (-).
+securityGuideline:
+  asNumberNotNumeric: Die AS-Nummer ist keine Nummer.
+  atLeastOneCriteriaRequired: Die Sicherheitsleitlinie benötigt mindestens ein Kriterium.
