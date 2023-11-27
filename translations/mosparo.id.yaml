@@ -450,8 +450,6 @@ settings:
       advanced: Lanjutan
       title: Mode desain
   security:
-    validation:
-      honeypotFieldNameInvalidCharacter: Gunakan hanya huruf, angka dan tanda strip (-).
     ipLockout:
       intro: Untuk mempersulit bot, mosparo dapat secara otomatis memblokir alamat IP untuk sementara. Jika alamat IP mengirimkan banyak formulir, mosparo dapat menghitung pengiriman secara otomatis dan memblokir alamat IP jika nomor tertentu tercapai.
       title: Penguncian IP

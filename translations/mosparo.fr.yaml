@@ -334,8 +334,6 @@ settings:
       title: Liste blanche d'IP
     message:
       successfullySaved: Les paramètres de sécurité ont bien été enregistrés.
-    validation:
-      honeypotFieldNameInvalidCharacter: Veuillez n'utiliser que des lettres, des chiffres et le tiret (-).
   title: Paramètres du projet
   backToSettings: Revenir aux paramètres
   projectMember:
