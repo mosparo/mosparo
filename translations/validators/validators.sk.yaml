@@ -12,3 +12,15 @@ tools:
   import:
     importFile:
       correctFile: Nahrať správny súbor JSON.
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Vaša IP adresa nie je povolená do zoznamu povolení. Pridajte
+        svoju IP adresu do zoznamu.
+ipAllowList:
+  itemInvalid: Položka "%itm%" nie je platná IP adresa alebo podnet.
+honeypotField:
+  nameHasInvalidCharacter: Použite iba písmená, čísla a znamenie dash (-).
+securityGuideline:
+  asNumberNotNumeric: Číslo AS nie je číslo.
+  atLeastOneCriteriaRequired: Bezpečnostná príručka vyžaduje minimálne jedno kritériá.
