@@ -40,7 +40,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     protected string $apiAccessIpAllowList;
 
-    public function __construct(Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig, $installed, string $apiAccessIpAllowList)
+    public function __construct(Security $security, UrlGeneratorInterface $router, EntityManagerInterface $entityManager, ProjectHelper $projectHelper, Environment $twig, $installed, ?string $apiAccessIpAllowList)
     {
         $this->security = $security;
         $this->router = $router;
@@ -48,7 +48,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         $this->projectHelper = $projectHelper;
         $this->twig = $twig;
         $this->installed = ($installed == true);
-        $this->apiAccessIpAllowList = $apiAccessIpAllowList;
+        $this->apiAccessIpAllowList = (string) $apiAccessIpAllowList;
     }
 
     public static function getSubscribedEvents(): array
