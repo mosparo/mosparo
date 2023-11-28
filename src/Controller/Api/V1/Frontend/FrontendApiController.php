@@ -86,11 +86,7 @@ class FrontendApiController extends AbstractController
         }
 
         // Cleanup the database
-        try {
-            $this->cleanupHelper->cleanup();
-        } catch (\Exception $e) {
-            // This request should never fail if there is an issue with the cleanup process.
-        }
+        $this->cleanupHelper->cleanup();
 
         // Check if the request is allowed
         $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_DELAY);
@@ -132,11 +128,7 @@ class FrontendApiController extends AbstractController
         }
 
         // Cleanup the database
-        try {
-            $this->cleanupHelper->cleanup();
-        } catch (\Exception $e) {
-            // This request should never fail if there is an issue with the cleanup process.
-        }
+        $this->cleanupHelper->cleanup();
 
         // Check if the request is allowed
         $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_LOCKOUT);

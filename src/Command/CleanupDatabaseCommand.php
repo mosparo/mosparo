@@ -28,7 +28,7 @@ class CleanupDatabaseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->cleanupHelper->cleanup(1000000, true);
+        $this->cleanupHelper->cleanup(1000000, true, false);
 
         return Command::SUCCESS;
     }
