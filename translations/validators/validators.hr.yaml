@@ -19,3 +19,8 @@ administration:
         svoju IP adresu u popis.
 ipAllowList:
   itemInvalid: Stavka „%item%” nije valjana IP adresa ili podmreža.
+honeypotField:
+  nameHasInvalidCharacter: Koristi samo slova, brojke i crticu (-).
+securityGuideline:
+  asNumberNotNumeric: AS broj nije broj.
+  atLeastOneCriteriaRequired: Sigurnosna smjernica zahtijeva barem jedan kriterij.
