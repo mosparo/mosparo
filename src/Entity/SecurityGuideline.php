@@ -179,6 +179,8 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
             $configValues[$configValue->getName()] = $configValue->getValue();
         }
 
+        $configValues['ipAllowList'] = $this->project->getConfigValue('ipAllowList');
+
         return $configValues;
     }
 
