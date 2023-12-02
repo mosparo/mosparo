@@ -252,6 +252,11 @@ class UserController extends AbstractController
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-user', $submittedToken)) {
+                // Remove all project memberships
+                foreach ($user->getProjectMemberships() as $projectMembership) {
+                    $entityManager->remove($projectMembership);
+                }
+
                 $entityManager->remove($user);
                 $entityManager->flush();
 
