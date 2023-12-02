@@ -141,6 +141,7 @@ class CleanupHelper
             $query = $this->entityManager->createQuery('
                     DELETE Mosparo\Entity\Submission s
                     WHERE s.submitToken IS NULL
+                    AND (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.lastSubmission = s.id) = 0
                 ');
             $query->execute();
             unset($query);
