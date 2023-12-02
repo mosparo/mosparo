@@ -304,7 +304,18 @@ class Project
             return null;
         }
 
-        return $filteredConfigValues->first();
+        $firstConfigValue = $filteredConfigValues->first();
+
+        // If there is more than one value, remove all other than the first one.
+        if ($filteredConfigValues->count() > 1) {
+            foreach ($filteredConfigValues as $configValue) {
+                if ($configValue !== $firstConfigValue) {
+                    $this->configValues->removeElement($configValue);
+                }
+            }
+        }
+
+        return $firstConfigValue;
     }
 
     public function getDefaultConfigValues(): ?array

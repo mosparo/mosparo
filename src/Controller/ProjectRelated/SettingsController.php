@@ -346,7 +346,9 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         $project = $this->getActiveProject();
         $config = $project->getConfigValues();
 
-        $form = $this->createForm(DesignSettingsFormType::class, $config, ['mode' => $config['designMode'] ?? 'simple']);
+        $designMode = $project->getDesignMode();
+
+        $form = $this->createForm(DesignSettingsFormType::class, $config, ['mode' => $designMode, 'projectId' => $project->getId()]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -382,7 +384,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             'project' => $project,
             'sizeVariables' => $designHelper->getBoxSizeVariables(),
             'maxRadiusForLogo' => $designHelper->getMaxRadiusForLogo(),
-            'mode' => $project->getDesignMode(),
+            'mode' => $designMode,
             'designConfigValues' => $designHelper->prepareCssVariables($project),
         ]);
     }
