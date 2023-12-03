@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/settings")
+ * @Route("/project/{_projectId}/settings")
  */
 class SettingsController extends AbstractController implements ProjectRelatedInterface
 {
@@ -65,7 +65,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 )
             );
 
-            return $this->redirectToRoute('settings_general');
+            return $this->redirectToRoute('settings_general', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         return $this->render('project_related/settings/general.html.twig', [
@@ -162,7 +162,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                         )
                     );
 
-                    return $this->redirectToRoute('settings_member_list');
+                    return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
                 }
 
                 $projectMember->setUser($user);
@@ -186,7 +186,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                         )
                     );
 
-                    return $this->redirectToRoute('settings_member_list');
+                    return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
                 }
             }
 
@@ -202,7 +202,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 )
             );
 
-            return $this->redirectToRoute('settings_member_list');
+            return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         return $this->render('project_related/settings/member/form.html.twig', [
@@ -236,7 +236,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                     )
                 );
 
-                return $this->redirectToRoute('settings_member_list');
+                return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 
@@ -257,7 +257,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                     )
                 );
 
-                return $this->redirectToRoute('settings_member_list');
+                return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 
@@ -335,7 +335,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 )
             );
 
-            return $this->redirectToRoute('settings_security');
+            return $this->redirectToRoute('settings_security', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         return $this->render('project_related/settings/security/general_form.html.twig', [
@@ -381,7 +381,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 )
             );
 
-            return $this->redirectToRoute('settings_security');
+            return $this->redirectToRoute('settings_security', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         return $this->render('project_related/settings/security/guideline_form.html.twig', [
@@ -415,7 +415,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                     )
                 );
 
-                return $this->redirectToRoute('settings_security');
+                return $this->redirectToRoute('settings_security', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 
@@ -462,7 +462,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 )
             );
 
-            return $this->redirectToRoute('settings_design');
+            return $this->redirectToRoute('settings_design', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         return $this->render('project_related/settings/design.html.twig', [
@@ -488,7 +488,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('settings_design');
+        return $this->redirectToRoute('settings_design', ['_projectId' => $this->getActiveProject()->getId()]);
     }
 
     /**
@@ -509,7 +509,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                 )
             );
 
-            return $this->redirectToRoute('settings_general');
+            return $this->redirectToRoute('settings_general', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         if ($request->request->has('reissue-token')) {
@@ -532,7 +532,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                     )
                 );
 
-                return $this->redirectToRoute('settings_general');
+                return $this->redirectToRoute('settings_general', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 

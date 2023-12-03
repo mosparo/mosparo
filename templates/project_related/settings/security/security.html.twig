@@ -35,7 +35,7 @@
                                 {{ 'settings.security.generalSecuritySettings.intro'|trans }}
                             </div>
                             <div class="mt-3">
-                                <a href="{{ path('settings_security_edit_general') }}" class="btn btn-primary">
+                                <a href="{{ path('settings_security_edit_general', { '_projectId': activeProject.id }) }}" class="btn btn-primary">
                                     <i class="ti ti-pencil"></i>
                                     {{ 'settings.security.generalSecuritySettings.action'|trans }}
                                 </a>
@@ -51,7 +51,7 @@
             <div class="d-flex align-items-center mb-3">
                 <h3 class="h2 mb-0">{{ 'settings.security.originBasedSecuritySettings.title'|trans }}</h3>
                 <div class="ms-auto">
-                    <a href="{{ path('settings_security_guideline_add') }}" class="btn btn-success">
+                    <a href="{{ path('settings_security_guideline_add', { '_projectId': activeProject.id }) }}" class="btn btn-success">
                         <i class="ti ti-plus"></i>
                         {{ 'settings.security.originBasedSecuritySettings.add.title'|trans }}
                     </a>

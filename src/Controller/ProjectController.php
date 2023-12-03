@@ -225,7 +225,7 @@ class ProjectController extends AbstractController
             $this->designHelper->generateCssCache($project);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('project_create_wizard_design', ['project' => $project->getId()]);
+            return $this->redirectToRoute('project_create_wizard_design', ['_projectId' => $project->getId()]);
         }
 
         return $this->render('project/create.html.twig', [
@@ -235,18 +235,11 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/create-wizard/{project}/design", name="project_create_wizard_design")
+     * @Route("/{_projectId}/create-wizard/design", name="project_create_wizard_design")
      */
-    public function createWizardDesign(Request $request, Project $project): Response
+    public function createWizardDesign(Request $request): Response
     {
-        if ($this->projectHelper->getActiveProject() !== $project) {
-            $result = $this->setActiveProject($request, $project);
-
-            if (!$result) {
-                return $this->redirectToRoute('project_list');
-            }
-        }
-
+        $project = $this->projectHelper->getActiveProject();
         $project->setConfigValue('designMode', 'simple');
         $config = $project->getConfigValues();
 
@@ -268,7 +261,7 @@ class ProjectController extends AbstractController
 
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('project_create_wizard_security', ['project' => $project->getId()]);
+            return $this->redirectToRoute('project_create_wizard_security', ['_projectId' => $project->getId()]);
         }
 
         return $this->render('project/create-wizard/design.html.twig', [
@@ -281,18 +274,11 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/create-wizard/{project}/security", name="project_create_wizard_security")
+     * @Route("/{_projectId}/create-wizard/security", name="project_create_wizard_security")
      */
-    public function createWizardSecurity(Request $request, Project $project): Response
+    public function createWizardSecurity(Request $request): Response
     {
-        if ($this->projectHelper->getActiveProject() !== $project) {
-            $result = $this->setActiveProject($request, $project);
-
-            if (!$result) {
-                return $this->redirectToRoute('project_list');
-            }
-        }
-
+        $project = $this->projectHelper->getActiveProject();
         $config = $project->getConfigValues();
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
             // Minimum time
@@ -318,7 +304,7 @@ class ProjectController extends AbstractController
 
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('project_create_wizard_connection', ['project' => $project->getId()]);
+            return $this->redirectToRoute('project_create_wizard_connection', ['_projectId' => $project->getId()]);
         }
 
         return $this->render('project/create-wizard/security.html.twig', [
@@ -328,28 +314,23 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/create-wizard/{project}/connection", name="project_create_wizard_connection")
+     * @Route("/{_projectId}/create-wizard/connection", name="project_create_wizard_connection")
      */
-    public function createWizardConnection(Request $request, Project $project): Response
+    public function createWizardConnection(Request $request): Response
     {
-        if ($this->projectHelper->getActiveProject() !== $project) {
-            $result = $this->setActiveProject($request, $project);
-
-            if (!$result) {
-                return $this->redirectToRoute('project_list');
-            }
-        }
-
+        $project = $this->projectHelper->getActiveProject();
         return $this->render('project/create-wizard/connection.html.twig', [
             'project' => $project,
         ]);
     }
 
     /**
-     * @Route("/delete/{project}", name="project_delete")
+     * @Route("/{_projectId}/delete", name="project_delete")
      */
-    public function delete(Request $request, Project $project): Response
+    public function delete(Request $request): Response
     {
+        $project = $this->projectHelper->getActiveProject();
+
         if ($request->request->has('delete-token')) {
             $submittedToken = $request->request->get('delete-token');
 
@@ -380,55 +361,5 @@ class ProjectController extends AbstractController
         return $this->render('project/delete.html.twig', [
             'project' => $project,
         ]);
-    }
-
-    /**
-     * @Route("/switch/{project}", name="project_switch")
-     */
-    public function switch(Request $request, Project $project): Response
-    {
-        $result = $this->setActiveProject($request, $project);
-
-        // Only admin users or user which are added as project member have access to the project
-        if (!$result) {
-            return $this->redirectToRoute('project_list');
-        }
-
-        // Redirect back to the originally requested path
-        $targetPath = $request->query->get('targetPath', false);
-        if ($targetPath && $this->isLocalUrl($request, $targetPath)) {
-            return $this->redirect($targetPath);
-        }
-
-        return $this->redirectToRoute('dashboard');
-    }
-
-    protected function setActiveProject(Request $request, Project $project): bool
-    {
-        if (!$this->isGranted('ROLE_ADMIN') && !$project->isProjectMember($this->getUser())) {
-            return false;
-        }
-
-        $request->getSession()->set('activeProjectId', $project->getId());
-
-        return true;
-    }
-
-    protected function isLocalUrl(Request $request, $url): bool
-    {
-        // If the first character is a slash, the URL is relative (only the path) and is local
-        if (str_starts_with($url, '/')) {
-            return true;
-        }
-
-        // If the URL is absolute but starts with the host of mosparo, we can redirect it.
-        // Add the slash to prevent a redirect when a similar top-level domain is used.
-        // For example, mosparo.com should not allow a redirect to mosparo.com.au
-        if (str_starts_with($url, $request->getSchemeAndHttpHost() . '/')) {
-            return true;
-        }
-
-        // The URL does not match the two checks because it's an external URL; no redirect in that case.
-        return false;
     }
 }

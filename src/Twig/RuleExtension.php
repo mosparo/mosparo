@@ -63,12 +63,16 @@ class RuleExtension extends AbstractExtension
     {
         $rule = $this->ruleRepository->findOneBy(['uuid' => $uuid]);
         if ($rule) {
-            return $this->router->generate('rule_edit', ['id' => $rule->getId()]);
+            return $this->router->generate('rule_edit', ['_projectId' => $rule->getProject()->getId(), 'id' => $rule->getId()]);
         }
 
         $rulesetRuleCache = $this->rulesetRuleCacheRepository->findOneBy(['uuid' => $uuid]);
         if ($rulesetRuleCache) {
-            return $this->router->generate('ruleset_view_rule', ['id' => $rulesetRuleCache->getRulesetCache()->getRuleset()->getId(), 'ruleUuid' => $rulesetRuleCache->getUuid()]);
+            return $this->router->generate('ruleset_view_rule', [
+                '_projectId' => $rulesetRuleCache->getProject()->getId(),
+                'id' => $rulesetRuleCache->getRulesetCache()->getRuleset()->getId(),
+                'ruleUuid' => $rulesetRuleCache->getUuid()
+            ]);
         }
 
         return null;

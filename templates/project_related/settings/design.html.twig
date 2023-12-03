@@ -440,17 +440,17 @@
                             </button>
                             <div class="dropdown-menu">
                                 <span class="dropdown-header">{{ 'settings.design.dropdown.groupTitleVisible'|trans }}</span>
-                                <a href="{{ path('settings_design_switch_mode', { mode: 'simple' }) }}" class="dropdown-item {% if mode == 'simple' %}active{% endif %}">
+                                <a href="{{ path('settings_design_switch_mode', { '_projectId': activeProject.id, mode: 'simple' }) }}" class="dropdown-item {% if mode == 'simple' %}active{% endif %}">
                                     <i class="ti ti-check {% if mode != 'simple' %}invisible{% endif %}"></i>
                                     {{ 'settings.design.dropdown.simple'|trans }}
                                 </a>
-                                <a href="{{ path('settings_design_switch_mode', { mode: 'advanced' }) }}" class="dropdown-item {% if mode == 'advanced' %}active{% endif %}">
+                                <a href="{{ path('settings_design_switch_mode', { '_projectId': activeProject.id, mode: 'advanced' }) }}" class="dropdown-item {% if mode == 'advanced' %}active{% endif %}">
                                     <i class="ti ti-check {% if mode != 'advanced' %}invisible{% endif %}"></i>
                                     {{ 'settings.design.dropdown.advanced'|trans }}
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <span class="dropdown-header">{{ 'settings.design.dropdown.groupTitleInvisible'|trans }}</span>
-                                <a href="{{ path('settings_design_switch_mode', { mode: 'invisible-simple' }) }}" class="dropdown-item {% if mode == 'invisible-simple' %}active{% endif %}">
+                                <a href="{{ path('settings_design_switch_mode', { '_projectId': activeProject.id, mode: 'invisible-simple' }) }}" class="dropdown-item {% if mode == 'invisible-simple' %}active{% endif %}">
                                     <i class="ti ti-check {% if mode != 'invisible-simple' %}invisible{% endif %}"></i>
                                     {{ 'settings.design.dropdown.simple'|trans }}
                                 </a>

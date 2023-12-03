@@ -379,7 +379,7 @@
 
         <div class="row">
             <div class="col-12 col-md-auto">
-                <a href="{{ path('submission_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                <a href="{{ path('submission_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
                     {{ 'submission.backToList'|trans }}
                 </a>

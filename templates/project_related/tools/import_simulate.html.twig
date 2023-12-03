@@ -14,7 +14,7 @@
         {% endif %}
         <div class="row mt-3">
             <div class="col-12 col-md-auto">
-                <a href="{{ path('tools_import') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                <a href="{{ path('tools_import', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
                     {{ 'tools.import.backToImport'|trans }}
                 </a>

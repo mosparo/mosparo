@@ -59,13 +59,13 @@
                         </a>
                     </div>
                     <div class="col-12 col-md-auto mt-2 mt-md-0 mx-auto">
-                        <a href="{{ path('tools_import') }}" class="btn btn-outline-lime w-100">
+                        <a href="{{ path('tools_import', { '_projectId': project.id }) }}" class="btn btn-outline-lime w-100">
                             <i class="ti ti-file-import"></i>
                             {{ 'action.importProject'|trans }}
                         </a>
                     </div>
                     <div class="col-12 col-md-auto order-first order-md-last">
-                        <a href="{{ path('project_switch', { 'project': project.id }) }}" class="btn btn-primary w-100">
+                        <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="btn btn-primary w-100">
                             <i class="ti ti-folder"></i>
                             {{ 'action.goToTheDashboard'|trans }}
                         </a>

@@ -17,7 +17,7 @@
                     </button>
                     <div class="dropdown-menu">
                         {% for dateRangeLabel, value in dateRangeOptions %}
-                            <a href="{{ path('dashboard_with_range', {'range': value}) }}" class="dropdown-item">
+                            <a href="{{ path('project_dashboard_with_range', {'_projectId': activeProject.id, 'range': value}) }}" class="dropdown-item">
                                 <i class="ti {% if activeRange == value %}ti-check{% else %}ti-calendar-stats{% endif %}"></i>
                                 {{ dateRangeLabel|trans }}
                             </a>
@@ -36,7 +36,7 @@
                 <div class="card mb-3">
                     <div class="card-header border-0 p-0">
                         <div class="card-title p-0 flex-fill">
-                            <a href="{{ path('submission_list') }}" class="d-block p-3 text-body dashboard-link">
+                            <a href="{{ path('submission_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <span class="bg-blue text-white avatar">
@@ -72,7 +72,7 @@
             <div class="col-12 col-md-4">
                 <div class="card mb-3 flex-fill">
                     <div class="card-title mb-0 p-0 flex-fill">
-                        <a href="{{ path('rule_list') }}" class="d-block p-3 text-body dashboard-link">
+                        <a href="{{ path('rule_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span class="bg-teal text-white avatar">
@@ -95,7 +95,7 @@
             <div class="col-12 col-md-4">
                 <div class="card mb-3 flex-fill">
                     <div class="card-title mb-0 p-0 flex-fill">
-                        <a href="{{ path('ruleset_list') }}" class="d-block p-3 text-body dashboard-link">
+                        <a href="{{ path('ruleset_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span class="bg-cyan text-white avatar">
@@ -118,7 +118,7 @@
             <div class="col-12 col-md-4">
                 <div class="card mb-3 flex-fill">
                     <div class="card-title mb-0 p-0 flex-fill">
-                        <a href="{{ path('settings_general') }}" class="d-block p-3 text-body dashboard-link">
+                        <a href="{{ path('settings_general', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span class="bg-azure text-white avatar">

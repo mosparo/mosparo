@@ -98,7 +98,7 @@
 
                                     <div class="row">
                                         <div class="col">
-                                            <a href="{{ path('project_switch', { project: project.id }) }}" class="btn btn-secondary w-100">
+                                            <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="btn btn-secondary w-100">
                                                 <i class="ti ti-folder"></i>
                                                 {{ 'project.action.goto'|trans }}
                                             </a>
@@ -114,7 +114,7 @@
                                                 </div>
                                                 {% if can_user_manage_project(project) %}
                                                     <div class="dropdown-divider"></div>
-                                                    <a href="{{ path('project_delete', { project: project.id }) }}" class="dropdown-item text-red">
+                                                    <a href="{{ path('project_delete', { '_projectId': project.id }) }}" class="dropdown-item text-red">
                                                         <i class="ti ti-circle-minus"></i>
                                                         {{ 'project.action.delete'|trans }}
                                                     </a>

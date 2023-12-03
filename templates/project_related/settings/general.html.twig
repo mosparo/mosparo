@@ -72,7 +72,7 @@
                     <h3 class="card-title">{{ 'settings.general.apiKeys.title'|trans }}</h3>
 
                     <div class="card-actions">
-                        <a href="{{ path('settings_reissue_keys') }}" class="btn btn-warning">
+                        <a href="{{ path('settings_reissue_keys', { '_projectId': activeProject.id }) }}" class="btn btn-warning">
                             <i class="ti ti-refresh"></i>
                             {{ 'settings.general.action.reissue'|trans }}
                         </a>

@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/rulesets")
+ * @Route("/project/{_projectId}/rulesets")
  */
 class RulesetController extends AbstractController implements ProjectRelatedInterface
 {
@@ -136,7 +136,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
                     )
                 );
 
-                return $this->redirectToRoute('ruleset_list');
+                return $this->redirectToRoute('ruleset_list', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 
@@ -171,7 +171,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
                     )
                 );
 
-                return $this->redirectToRoute('ruleset_list');
+                return $this->redirectToRoute('ruleset_list', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 
@@ -275,7 +275,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         $rulesetRuleCache = $rulesetRuleCacheRepository->findOneBy(['uuid' => $ruleUuid]);
 
         if (!$rulesetRuleCache) {
-            return $this->redirectToRoute('ruleset_view', ['id' => $ruleset->getId()]);
+            return $this->redirectToRoute('ruleset_view', ['_projectId' => $this->getActiveProject()->getId(), 'id' => $ruleset->getId()]);
         }
 
         $table = $this->dataTableFactory->create(['autoWidth' => true])

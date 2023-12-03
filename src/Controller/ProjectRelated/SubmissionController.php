@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/submissions")
+ * @Route("/project/{_projectId}/submissions")
  */
 class SubmissionController extends AbstractController implements ProjectRelatedInterface
 {

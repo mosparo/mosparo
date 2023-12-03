@@ -16,14 +16,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
+/**
+ * @Route("/project/{_projectId}")
+ */
 class DashboardController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
 
     /**
-     * @Route("/", name="dashboard")
-     * @Route("/range/{range}", name="dashboard_with_range")
+     * @Route("/", name="project_dashboard")
+     * @Route("/range/{range}", name="project_dashboard_with_range")
      */
     public function dashboard(Request $request, EntityManagerInterface $entityManager, LocaleHelper $localeHelper, StatisticHelper $statisticHelper, string $range = ''): Response
     {

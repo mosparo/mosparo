@@ -134,7 +134,7 @@
 
         <div class="row mt-3">
             <div class="col-12 col-md-auto">
-                <a href="{{ path('ruleset_view', { 'id': ruleset.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                <a href="{{ path('ruleset_view', { '_projectId': activeProject.id, 'id': ruleset.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
                     {{ 'ruleset.view.rule.backToRuleset'|trans }}
                 </a>

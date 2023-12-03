@@ -148,38 +148,27 @@ class ProjectSubscriber implements EventSubscriberInterface
 
             // Ignore all requests for general routes like project management, account or administration
             $abortRequest = true;
-            if (preg_match('/^(project|account|security|password|administration)_/', $activeRoute)) {
+            if (preg_match('/^(project|account|security|password|administration)_/', $activeRoute) && $activeRoute !== 'project_dashboard') {
                 $abortRequest = false;
             }
 
-            $activeProjectId = $session->get('activeProjectId', false);
+            $activeProjectId = false;
+
+            if ($request->attributes->has('_projectId')) {
+                $activeProjectId = $request->attributes->get('_projectId', false);
+
+                if ($activeProjectId !== false && $session->get('lastActiveProjectId', false) !== $activeProjectId) {
+                    $session->set('lastActiveProjectId', $activeProjectId);
+                }
+            } else if ($session->has('lastActiveProjectId')) {
+                // If no project ID is available in the URL, use the last active project ID from the session.
+                // It is used for general routes like administration or profile to return to the project quickly
+                // without selecting the project again.
+                $activeProjectId = $session->get('lastActiveProjectId', false);
+            }
+
             if ($activeProjectId !== false) {
                 $activeProject = $projectRepository->find($activeProjectId);
-            } else if (!$activeProjectId) {
-                // Try to determine the entity and the project and switch to it if one of
-                // these routes is requested.
-                $entityReleatedRoutes = [
-                    'rule_edit' => Rule::class,
-                    'ruleset_edit' => Ruleset::class,
-                    'ruleset_view' => Ruleset::class,
-                    'ruleset_view_filtered' => Ruleset::class,
-                    'ruleset_view_rule' => Ruleset::class,
-                    'submission_view' => Submission::class,
-                    'settings_security_guideline_edit' => SecurityGuideline::class,
-                ];
-
-                if (isset($entityReleatedRoutes[$activeRoute])) {
-                    $projectId = $this->findProjectForRequestedEntity($request, $entityReleatedRoutes[$activeRoute]);
-
-                    if ($projectId) {
-                        $event->setResponse(new RedirectResponse($this->router->generate('project_switch', [
-                            'project' => $projectId,
-                            'targetPath' => $request->getRequestUri(),
-                        ])));
-
-                        return;
-                    }
-                }
             }
 
             // If the project does not exist we have to clean the session value and return to the project list
@@ -239,7 +228,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         if ($activeRoute === 'project_delete') {
             $managerRoutes['project_delete'] = ProjectMember::ROLE_OWNER;
 
-            $projectId = $request->attributes->get('project');
+            $projectId = $request->attributes->get('_projectId');
             $projectRepository = $this->entityManager->getRepository(Project::class);
 
             $project = $projectRepository->find($projectId);
@@ -270,23 +259,5 @@ class ProjectSubscriber implements EventSubscriberInterface
             ->getFilters()
             ->enable('project_related_filter')
             ->setProjectHelper($this->projectHelper);
-    }
-
-    protected function findProjectForRequestedEntity(Request $request, string $class): ?int
-    {
-        $builder = $this->entityManager->createQueryBuilder();
-        $builder
-            ->select('IDENTITY(e.project) AS project_id')
-            ->from($class, 'e')
-            ->where('e.id = :id')
-            ->setParameter('id', $request->attributes->get('id'));
-
-        $result = $builder->getQuery()->getOneOrNullResult();
-
-        if (!$result) {
-            return null;
-        }
-
-        return $result['project_id'];
     }
 }

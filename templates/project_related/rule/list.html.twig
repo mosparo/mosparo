@@ -21,13 +21,13 @@
                     <i class="ti ti-filter"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <a href="{{ path('rule_list') }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
+                    <a href="{{ path('rule_list', { '_projectId': activeProject.id }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
                         <i class="ti ti-check {% if filter != '' %}invisible{% endif %}"></i>
                         {{ 'rule.filter.options.all'|trans }}
                     </a>
                     <div class="dropdown-divider"></div>
                     {% for ruleType in ruleTypes %}
-                        <a href="{{ path('rule_list_filtered', { 'filter': ruleType.key }) }}" class="dropdown-item {% if filter == ruleType.key %}active{% endif %} {% if not numberOfRulesByType[ruleType.key] is defined %}disabled{% endif %}">
+                        <a href="{{ path('rule_list_filtered', { '_projectId': activeProject.id, 'filter': ruleType.key }) }}" class="dropdown-item {% if filter == ruleType.key %}active{% endif %} {% if not numberOfRulesByType[ruleType.key] is defined %}disabled{% endif %}">
                             <i class="ti {% if filter == ruleType.key %}ti-check{% else %}{{ ruleType.icon }}{% endif %}"></i>
                             {{ ruleType.name|trans }}
 
@@ -40,7 +40,7 @@
             </div>
 
             {% if canManage %}
-                <a href="{{ path('rule_create_choose_type') }}" class="btn btn-success add-button">
+                <a href="{{ path('rule_create_choose_type', { '_projectId': activeProject.id }) }}" class="btn btn-success add-button">
                     <i class="ti ti-plus"></i>
                     <span>{{ 'rule.create.title'|trans }}</span>
                 </a>

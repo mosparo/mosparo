@@ -73,7 +73,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 col-md-auto mt-2 mt-md-0">
-                    <a href="{{ path('settings_security') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <a href="{{ path('settings_security', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
                         {{ 'settings.security.backToSecurity'|trans }}
                     </a>
