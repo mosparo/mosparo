@@ -194,7 +194,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             if ($result) {
                 $this->entityManager->flush();
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $hasError = true;
             $errorMessage = $e->getMessage();
         }
