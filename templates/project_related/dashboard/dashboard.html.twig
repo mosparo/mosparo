@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-4">
+            <div class="col-12 {% if isOwner %}col-md-4{% else %}col-md-6{% endif %}">
                 <div class="card mb-3 flex-fill">
                     <div class="card-title mb-0 p-0 flex-fill">
                         <a href="{{ path('rule_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
@@ -92,7 +92,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 {% if isOwner %}col-md-4{% else %}col-md-6{% endif %}">
                 <div class="card mb-3 flex-fill">
                     <div class="card-title mb-0 p-0 flex-fill">
                         <a href="{{ path('ruleset_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
@@ -115,26 +115,28 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
-                <div class="card mb-3 flex-fill">
-                    <div class="card-title mb-0 p-0 flex-fill">
-                        <a href="{{ path('settings_general', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <span class="bg-azure text-white avatar">
-                                        <i class="ti ti-settings"></i>
-                                    </span>
-                                </div>
-                                <div class="col">
-                                    <div class="font-weight-medium">
-                                        {{ 'settings.title'|trans }}
+            {% if isOwner %}
+                <div class="col-12 col-md-4">
+                    <div class="card mb-3 flex-fill">
+                        <div class="card-title mb-0 p-0 flex-fill">
+                            <a href="{{ path('settings_general', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="bg-azure text-white avatar">
+                                            <i class="ti ti-settings"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">
+                                            {{ 'settings.title'|trans }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
