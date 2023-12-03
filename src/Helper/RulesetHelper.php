@@ -52,9 +52,9 @@ class RulesetHelper
             foreach ($rulesetRepository->findBy(['status' => 1]) as $ruleset) {
                 $this->downloadRuleset($ruleset);
             }
-        }
 
-        $this->entityManager->flush();
+            $this->entityManager->flush();
+        }
     }
 
     public function downloadRuleset(Ruleset $ruleset): bool
@@ -143,6 +143,8 @@ class RulesetHelper
         if ($rulesetCache === null) {
             $rulesetCache = new RulesetCache();
             $rulesetCache->setRuleset($ruleset);
+            $rulesetCache->setProject($ruleset->getProject());
+            $ruleset->setRulesetCache($rulesetCache);
 
             $this->entityManager->persist($rulesetCache);
         }
@@ -169,6 +171,7 @@ class RulesetHelper
             if ($rulesetRuleCache === null) {
                 $rulesetRuleCache = new RulesetRuleCache();
                 $rulesetRuleCache->setRulesetCache($rulesetCache);
+                $rulesetRuleCache->setProject($ruleset->getProject());
                 $rulesetRuleCache->setUuid($rule['uuid']);
 
                 $this->entityManager->persist($rulesetRuleCache);
@@ -192,6 +195,7 @@ class RulesetHelper
                 if ($rulesetRuleItemCache === null) {
                     $rulesetRuleItemCache = new RulesetRuleItemCache();
                     $rulesetRuleItemCache->setRulesetRuleCache($rulesetRuleCache);
+                    $rulesetRuleItemCache->setProject($ruleset->getProject());
                     $rulesetRuleItemCache->setUuid($item['uuid']);
 
                     $this->entityManager->persist($rulesetRuleItemCache);
