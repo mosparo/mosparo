@@ -348,7 +348,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
         $designMode = $project->getDesignMode();
 
-        $form = $this->createForm(DesignSettingsFormType::class, $config, ['mode' => $designMode, 'projectId' => $project->getId()]);
+        $form = $this->createForm(DesignSettingsFormType::class, $config, ['mode' => $designMode]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
