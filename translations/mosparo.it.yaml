@@ -7,24 +7,65 @@ project:
     delete: Elimina progetto
     goto: Vai al progetto
     manage: Gestisci progetto
+    id: ID progetto
   create:
     title: Crea progetto
+    message:
+      successfullyCreatedAndConfigured: Il nuovo progetto è stato creato e configurato.
   form:
     status: Stato
     name: Nome
     description: Descrizione
-    hosts: Host
+    hosts: Hosts
     spamScore: Punteggio spam
     hostsHelp: Inserisci tutti gli host che questo progetto includerà.
     statusHelp: Attiva o disattiva il rilevamento dello spam. Se inattivo, il sistema registrerà tutti gli invii ma non impedirà alcun invio.
+    verificationSimulationMode: Modalità di verifica simulata
+    verificationSimulationModeHelp: Puoi simulare il processo di verifica abilitando la modalità di verifica simulata. Vai ai dettagli dell'invio e fai click sul pulsante in alto a destra. Lo strumento di simulazione ti mostrerà come dovrebbe risultare la richiesta e quali dati mosparo di aspetta per verificare l'invio.
+    apiDebugModeHelp: Se la modalità di debug API viene abilitata, questa restituirà maggiori informazioni relativi al processo di verifica. Queste informazioni possono essere rilevanti per comprendere come mai un processo di verifica fallisce. Utilizza questa opzione per aiutarti ad integrare correttamente mosparo nel tuo modulo.
+    statisticStorageLimitHelp: Definisci per quanto tempo mosparo dovrà tenere le statistiche nel database. Questa opzione non influenza il periodo di archiviazione degli invii, dopo il quale ogni invio verrà cancellato dal database (14 giorni).
+    apiDebugMode: Modalità debug API
+    statisticStorageLimit: Archivio statistiche
+    spamScoreHelp: Definisce il numero dal quale un invio verrà considerato spam. Se la valutazione dell'invio supererà questo numero, l'invio verrà considerato spam.
   delete:
     confirm: Vuoi davvero eliminare il progetto %projectName%?
     title: Elimina progetto %projectName%
     message:
       successfullyDeleted: Il progetto %projectName% è stato eliminato correttamente.
+    disconnectFirst: Assicurati di aver disconnesso il tuo sito o il codice di integrazione con questo progetto prima di eliminarlo.
+  createWizard:
+    connection:
+      savedSuccessfully: Le impostazioni della grafica e della sicurezza sono state salvate. Ora il progetto è pronto per essere utilizzato.
+      introConnection: Per poter utilizzare mosparo in un sito web dovrai integrarlo nel sito e collegare il sito a questo progetto. Per procedere in questo senso, copia e incolla le informazioni seguenti nei relativi campi del codice di integrazione.
+      infoSettings: Dopo la procedura guidata potrai trovare questi dettagli di connessione nelle impostazioni del progetto.
+      title: Dettagli connessione
+    design:
+      introStartWizard: Il tuo progetto è stato creato correttamente. Per iniziare ad usarlo seleziona la grafica e continua.
+      infoAdvancedMode: Al termine della procedura guidata puoi selezionare la modalità di selezione della grafica avanzata o invisibile. La modalità avanzata ti permetterà di regolare la grafica con precisione mentre la modalità invisibile non ti mostrerà il riquadro di mosparo.
+      title: Seleziona grafica
+    security:
+      introSecurity: Seleziona le caratteristiche di sicurezza che vuoi abilitare.
+      title: Abilita caratteristiche di sicurezza
+      infoSettings: Puoi abilitare, disabilitare o aggiustare le caratteristiche di sicurezza dopo la procedura guidata.
+  list:
+    name: Nome
+    actions: Azioni
+    status: Stato
+  filter:
+    options:
+      all: Mostra tutti
+      inactive: Visualizza i progetti non attivi
+      active: Visualizza i progetti attivi
+    dropdown: Filtra l'elenco dei progetti
+  search:
+    placeholder: Cerca…
+  roles:
+    reader: Lettore
+    owner: Proprietario
 header:
-  pleaseChoose: Per favore, scegli…
+  pleaseChoose: Prego, selezionare…
   account: Account
+  noProjectsFound: Nessun progetto trovato
 rule:
   edit:
     title: Modifica regola %ruleName%
@@ -41,6 +82,7 @@ rule:
       successfullyCreated: La nuova regola è stata creata correttamente.
   createChooseType:
     title: Scegli il tipo
+    intro: Seleziona il tipo di ruolo che vuoi creare. I tipi disponibili sono utilizzati per diversi campi e non possono essere modificati per regole successive.
   title: Regole
   backToList: Ritorna alle regole
   form:
@@ -48,8 +90,12 @@ rule:
       description: Descrizione
       name: Nome
       status: Stato
+      title: Ruolo
     addMultipleItems:
       label: Etichetta
+    ruleType: Tipo ruolo
+    items:
+      type: Tipo
   delete:
     confirm: Vuoi davvero eliminare la regola %ruleName%?
     title: Elimina regola %ruleName%
@@ -59,37 +105,46 @@ rule:
     domain:
       title: Dominio
       shortIntro: Consente di filtrare per domini specifici
-      placeholder: Dominio
+      placeholder: esempio.com
       domain:
         title: Dominio
+        intro: Inserisci un dominio che non sarà autorizzato ad effettuare invii. Utilizzando un dominio verranno anche intercettate tutte le email contenenti il dominio stesso.
       intro: Il tipo di regola di dominio consente di filtrare i domini.
+      label: Dominio
     email:
       title: Email
       intro: Il tipo di regola email consente di filtrare gli indirizzi email.
       shortIntro: Consente di filtrare per indirizzi email specifici
-      placeholder: Indirizzo email
+      placeholder: info@esempio.com
       email:
         title: Indirizzo email
+        intro: Inserisci un indirizzo email che non è autorizzato ad effettuare invii.
+      label: Indirizzo email
     ipAddress:
       title: Indirizzo IP
       shortIntro: Consente di filtrare per indirizzi IP e sottoreti
       intro: Il tipo di regola dell'indirizzo IP consente di filtrare gli indirizzi IP o le sottoreti.
       ipAddress:
         title: Indirizzo IP
-      placeholder: Indirizzo IP/sottorete
+        intro: Inserisci un indirizzo IP che non è autorizzato ad effettuare invii.
+      placeholder: 0.0.0.0
       subnet:
         title: Sottorete
+        intro: Inserisci una sottomaschera di rete che non è autorizzata ad effettuare invii.
+      label: Indirizzo IP/Sottorete
     provider:
       title: Provider
       country:
         intro: Immettere il codice ISO di un paese che non è autorizzato a inviare alcun messaggio. Tutti gli indirizzi IP registrati in questo paese saranno contrassegnati come spam.
-        infoCountryBlock: Se si aggiunge un Paese alla regola, significa che nessuno può inviare un modulo da questo Paese. Se da un lato questo suona bene, dall'altro potrebbe bloccare un utente reale dall'invio di un modulo. Fate attenzione a questa opzione. La corretta geolocalizzazione degli indirizzi IP non è mai garantita.
+        infoCountryBlock: Se si aggiunge un Paese alla regola, significa che nessuno potrà effettuare invii da questo Paese. Se da un lato questo suona bene, dall'altro potrebbe bloccare un utente reale dall'invio di un modulo. Fate attenzione a questa opzione. La corretta geolocalizzazione degli indirizzi IP non è mai garantita.
         title: Paese
       action:
         configureGeoip2: Configurazione GeoIP2
       asNumber:
         title: Numero di AS
         intro: Immettere un numero di AS che non è autorizzato a effettuare invii. Tutti gli indirizzi IP appartenenti a questo AS saranno bloccati.
+      shortIntro: Permetti di filtrare con informazioni specifiche relative al provider
+      infoGeoip2: Per poter utilizzare il tipo 'provider' è necessario configurare il database MindMax GeoLite2, diversamente questa opzione non avrà alcun effetto.
     unicodeBlock:
       shortIntro: Filtra l'input in base ai caratteri usati.
       block:
@@ -98,6 +153,38 @@ rule:
       intro: Il tipo di regola di blocco Unicode consente di valutare l'uso di determinati caratteri.
       label: Blocco Unicode
       title: Blocco Unicode
+    word:
+      title: Termine
+      label: Termine/Schema
+      regex:
+        title: Espressione regolare
+      text:
+        title: Testo
+    userAgent:
+      regex:
+        validation:
+          invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
+        title: Espressione regolare
+      text:
+        title: Testo
+    website:
+      url:
+        title: URL
+        intro: Inserisci un URL che non è autorizzato ad effettuare invii.
+      shortIntro: Permetti di filtrare siti web specifici
+      label: URL/Dominio
+      title: Sito web
+      placeholder: https://esempio.com
+  filter:
+    dropdown: Filtra l'elenco dei ruoli
+    options:
+      all: Mostra tutto
 dashboard:
   chart:
     spam: Spam
+    annotation:
+      statisticOnly: Solo statistiche
+    valid: Valido
+  dateRange:
+    dropdown: Seleziona un intervallo di dati visibile
+  title: Cruscotto
