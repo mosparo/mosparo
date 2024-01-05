@@ -16,7 +16,7 @@ project:
     status: Stato
     name: Nome
     description: Descrizione
-    hosts: Hosts
+    hosts: Host
     spamScore: Punteggio spam
     hostsHelp: Inserisci tutti gli host che questo progetto includerà.
     statusHelp: Attiva o disattiva il rilevamento dello spam. Se inattivo, il sistema registrerà tutti gli invii ma non impedirà alcun invio.
@@ -53,7 +53,7 @@ project:
     status: Stato
   filter:
     options:
-      all: Mostra tutti
+      all: Mostra tutto
       inactive: Visualizza i progetti non attivi
       active: Visualizza i progetti attivi
     dropdown: Filtra l'elenco dei progetti
@@ -62,6 +62,7 @@ project:
   roles:
     reader: Lettore
     owner: Proprietario
+    editor: Editore
 header:
   pleaseChoose: Prego, selezionare…
   account: Account
@@ -91,11 +92,19 @@ rule:
       name: Nome
       status: Stato
       title: Ruolo
+      spamRatingFactorHelp: Con il fattore di valutazione spam puoi definire un fattore per inasprire o addolcire la valutazione di questa regola. Se il valore è maggiore di 1.0 la valutazione è inasprita, se il valore è inferiore a 1.0 la valutazione è addolcita.
+      spamRatingFactor: Fattore di valutazione spam
     addMultipleItems:
       label: Etichetta
+      items: Oggetti
+      rating: Valutazione
+      ratingHelp: Se non impostata, la valutazione predefinita è 1.0. Se la valutazione viene impostata a 0.0 l'oggetto non verrà identificato come spam.
+      itemsHelp: Aggiungi un oggetto per ogni riga.
     ruleType: Tipo ruolo
     items:
       type: Tipo
+      title: Oggetti
+      rating: Valutazione
   delete:
     confirm: Vuoi davvero eliminare la regola %ruleName%?
     title: Elimina regola %ruleName%
@@ -145,11 +154,16 @@ rule:
         intro: Immettere un numero di AS che non è autorizzato a effettuare invii. Tutti gli indirizzi IP appartenenti a questo AS saranno bloccati.
       shortIntro: Permetti di filtrare con informazioni specifiche relative al provider
       infoGeoip2: Per poter utilizzare il tipo 'provider' è necessario configurare il database MindMax GeoLite2, diversamente questa opzione non avrà alcun effetto.
+      label: Numero AS/Paese
+      intro: La regola provider permette di filtrare per numero di AS e per codice Paese.
     unicodeBlock:
       shortIntro: Filtra l'input in base ai caratteri usati.
       block:
         title: Blocco
         intro: Selezionare uno dei blocchi che devono essere valutati durante l'inserimento. Inserire quindi la valutazione corrispondente.
+        hintExtended: Sono disponibili estensioni e aggiunte per alcuni blocchi che dovrebbero essere aggiunti alle regole.
+        exampleCounting: Supponiamo che tu abbia creato una regola con il blocco "Emoticon" e una valutazione di 3 punti. In un invio un utente inserisce 5 emoticons. L'invio viene valutato 3 punti perchè è stata usata una emoticon.
+        explanationCounting: Per la validazione ogni blocco viene contato una volta sola, anche se sono stati utilizzati diversi caratteri per blocco.
       intro: Il tipo di regola di blocco Unicode consente di valutare l'uso di determinati caratteri.
       label: Blocco Unicode
       title: Blocco Unicode
@@ -158,23 +172,44 @@ rule:
       label: Termine/Schema
       regex:
         title: Espressione regolare
+        validation:
+          invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
+        intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
       text:
         title: Testo
+        intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
+      shortIntro: Permette di filtrare termini specifici o schemi
+      intro: La regola termini permette di filtrare usando termini ed Espressioni Regolari.
     userAgent:
       regex:
         validation:
           invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
         title: Espressione regolare
+        intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
       text:
         title: Testo
+        intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
+      intro: La regola user agent permette di filtrare per parole ed Espressioni Regolari nello user agent dell'utente.
+      shortIntro: Permette di filtrare per parole specifiche o schemi nello user agent
+      title: User agent
+      label: User Agent (Termine/Schema)
     website:
       url:
         title: URL
         intro: Inserisci un URL che non è autorizzato ad effettuare invii.
+        infoProtocol: E' consigliabile iniziare l'URL con il protocollo o con le due barre per URLs con protocollo indipendente. Se il valore non inizia con il protocollo la regola potrebbe identificare URLs non corretti.
       shortIntro: Permetti di filtrare siti web specifici
       label: URL/Dominio
       title: Sito web
       placeholder: https://esempio.com
+      intro: La regola siti web permette di filtrare per URLs.
+    rating:
+      infoCalculationMethod: La valutazione spam sarà calcolata moltiplicando la valutazione dell'oggetto per il fattore di valutazione che è stato definito nella regola.
+      infoDefaultAndDataType: La valutazione è un numero flottante da %zero" a %unlimited%. Se non viene definita una valutazione, il valore predefinito sarà %one%.
+      infoValueEqualZero: Se la valutazione è impostata a %zero% l'oggetto non verrà identificato come spam dato che il valore della valutazione sarà %zero% in ogni caso.
+      placeholder: Valutazione
+      title: Valutazione
+      intro: Se un oggetto deve avere una valutazione spam più alta puoi impostare una valutazione addizionale.
   filter:
     dropdown: Filtra l'elenco dei ruoli
     options:
@@ -188,3 +223,256 @@ dashboard:
   dateRange:
     dropdown: Seleziona un intervallo di dati visibile
   title: Cruscotto
+ruleset:
+  view:
+    rule:
+      title: Visualizza regola %ruleName%
+      details:
+        name: Nome
+        type: Tipo
+        spamRatingFactor: Fattore di valutazione spam
+        title: Dettagli regola
+      items:
+        title: Oggetti inclusi
+      backToRuleset: Torna all'elenco delle regole
+    details:
+      url: URL
+      lastUpdatedAt: Ultimo aggiornamento il
+      spamRatingFactor: Fattore di valutazione spam
+      lastRefreshedAt: Ultimo aggiornamento il
+      numberOfIncludedRules: Numero di regole incluse
+      title: Dettagli gruppo di regole
+      status: Stato
+    includedRules:
+      title: Regole incluse
+      description: Descrizione
+      spamRatingFactor: Fattore di valutazione spam
+      type: Tipo
+      name: Nome
+      ruleDetails: Dettagli regola
+      items: Oggetti
+      value: Valore
+      rating: Valutazione
+    title: Visualizza gruppo di regole %rulesetName%
+    list:
+      rules:
+        name: Nome
+        type: Tipo
+        spamRatingFactor: Fattore di valutazione spam
+        actions: Azioni
+        numberOfRuleItems: Numero di oggetti
+      ruleItems:
+        type: Tipo
+        value: Valore
+        spamRatingFactor: Fattore di valutazione spam
+  list:
+    actions: Azioni
+    updatedAt: Aggiornato il
+    name: Nome
+    status: Stato
+    refreshedAt: Rinfrescato il
+  form:
+    message:
+      successfullySaved: Il gruppo di regole è stato salvato correttamente.
+    name: Nome
+    url: URL
+    status: Stato
+    spamRatingFactor: Fattore di valutazione spam
+    spamRatingFactorHelp: Con il fattore di valutazione spam è possibile definire un fattore per rafforzare o indebolire le regole in questo elenco. Se il valore è maggiore di 1.0 la regola viene rafforzata, se il valore è inferiore a 1.0 la regola viene indebolita.
+  delete:
+    message:
+      successfullyDeleted: L'elenco delle regole %rulesetName% è stato cancellato correttamente.
+    title: Cancella l'elenco delle regole %rulesetName%
+    confirm: Vuoi veramente cancellare l'elenco delle regole %rulesetName%?
+  title: Gruppo di regole
+  edit:
+    title: Modifica gruppo di regole %rulesetName%
+  backToList: Torna al gruppo di regole
+  message:
+    errorWhileUpdating: 'Si è verificato un errore aggiornando il gruppo di regole:'
+  add:
+    title: Aggiungi gruppo di regole
+submission:
+  list:
+    page: Pagina
+    spam: Spam
+    verification: Verifica
+    ipAddress: Indirizzo IP
+    actions: Azioni
+    verifiedAt: Verificato il
+    valid: Valido
+    id: ID
+    spamRating: Valutazione spam
+    submittedAt: Sottoposto il
+  view:
+    data:
+      rating: Valutazione
+      client:
+        asNumber: Numero di AS
+        userAgent: User-Agent
+        asOrganization: Organizzazione AS
+        country: Paese
+        title: Client
+        ipAddress: Indirizzo IP
+      formData:
+        notVerified: Non verificato
+        invalid: Verifica fallita
+        honeypot: Honeypot
+        valid: Verifica conclusa positivamente
+        hasPoints: Punti
+        title: Dati modulo
+      points: '%totalPoints% punti'
+      fieldMustBeEmpty: Il campo deve essere vuoto
+      value: Valore
+    verification:
+      minimumTime:
+        timeDifferenceInSeconds: '%seconds% secondi'
+        requiredTime: Tempo richiesto
+      title: Verifica
+      isValid: E' valido
+      verifiedAt: Verificato il
+    source:
+      pageUrl: URL pagina
+      pageTitle: Titolo pagina
+      requestedAt: Richiesto il
+      title: Sorgente
+    generalVerifications:
+      minimumTime:
+        text: Il modulo è stato inviato troppo velocemente. Sono stati impiegati solo %seconds% secondi, che è un tempo inferiore al tempo minimo di %minimumTimeSeconds% secondi.
+        title: Invio troppo rapido
+    title: Invio %submissionId%
+    spam:
+      submittedAt: Sottoposto il
+      title: Spam
+      spamRating: Valutazione spam
+      isSpam: E' spam
+    verificationSimulation:
+      labels:
+        authorization: Autorizzazione
+        privateKey: Chiave privata
+        formData: Dati modulo
+        submitToken: Invia token
+        validationToken: Token di validazione
+        validationSignature: Firma validazione
+        verificationSignature: Firma verifica
+        apiEndpoint: Endpoint API
+        username: Nome utente
+        password: Password
+        method: Metodo
+        headers: Intestazioni
+        response: Risposta
+      sections:
+        one:
+          intro: Per verificare un invio devi conoscere il token di invio che identifica l'invio stesso e il token di validazione che dimostra la validità di un invio. Estrai questi due token dai dati del modulo.
+          title: 'Passo 1: estrazione token di invio e validazione'
+        four:
+          intro: Devi generare una firma per i dati del modulo per essere sicuro che nessuno li abbia manipolati. La firma è un hash HMAC SHA256 degli has dei campi (Passo 2) codificato come JSON. Utilizza la chiave privata del progetto come chiave.
+          title: 'Passo 4: Creare una firma per i dati del modulo'
+        two:
+          title: 'Passo 2: preparare i dati del modulo'
+          intro: Prima di spedire i dati all'API di verifica occorre preparare i dati del modulo. I campi di mosparo (che iniziano con %codeStart%_mosparo_%codeEnd%) devono essere rimossi dai dati del modulo. Dopo di ciò occorre sostituire tutti i fine-linea CRLF con fine-linea LF e modificare tutti i nomi dei campi in minuscolo. I dati del modulo devono poi essere ordinati alfabeticamente (A-Z).
+        three:
+          title: 'Passo 3: Creare gli hash'
+          intro: Per la verifica mosparo accetta i dati del modulo come hash SHA256. Per questo motivo occorre calcolare gli hash SHA256 per i dati del modulo.
+        five:
+          title: 'Passo 5: Creare una firma di validazione'
+          intro: Utilizza il token di validazione che hai estratto dai dati del modulo al primo passo e genera una firma. La firma deve essere un hash HMAC SHA256 del token di validazione. Usa la chiave privata del progetto come chiave.
+        six:
+          title: 'Passo 6: Genera una firma di verifica'
+      title: Simulazione di validiazione
+      intro: La simulazione di verifica mostra i dati che mosparo accetta per il processo di verifica. Puoi confrontare i dati visualizzati con quelli che il tuo procedimento di verifica creerà per individuare eventuali problemi.
+      buttons:
+        customIntegration: Integrazione personalizzata
+        apiDocumentation: Documentazione API
+      errors:
+        noValidationToken: La simulazione di verifica è impossibile perchè nessun token di validazione è stato incluso con questo invio. Ciò significa che i dati del modulo non hanno superato la validazione di mosparo rendendo impossibile la verifica.
+      info:
+        authorizationHeader: L'intestazione di autorizzazione deve essere Base64-encoded.
+      hints:
+        privateKey: Chiave privata del progetto.
+        publicKey: Chiave pubblica del progetto.
+    action:
+      openVerificationSimulation: Simulazione di validiazione
+    ignoredFields:
+      title: Campi ignorati
+      intro: I campi seguenti non sono stati trasmessi a causa della loro tipologia (nell'esempio password o caricamento file).
+  filter:
+    options:
+      valid: Invii validi
+      spam: Invii spam
+      all: Tutti gli invii
+    dropdown: Filtra l'elenco degli invii
+  title: Invii
+  backToList: Torna agli invii
+settings:
+  general:
+    apiKeys:
+      privateKey: Chiave privata
+      title: Chiavi API
+      reissueApiKeys:
+        title: Riemetti chiavi API
+      publicKey: Chiave pubblica
+    title: Impostazioni generali
+    connectionDetails:
+      uuid: Numero identificativo unico
+      title: Dettagli connessione
+      host: Host
+    subtitle:
+      developerOptions: Opzioni sviluppatore
+    message:
+      successfullySaved: Le impostazioni sono state salvate correttamente.
+    action:
+      reissueApiKeys: Riemetti chiavi API
+      reissue: Riemetti
+    help:
+      integrateMosparo: Integra mosparo
+  projectMember:
+    form:
+      message:
+        errorNeedsOwner: Il progetto richiede almeno un proprietario.
+        errorUserNotFound: L'utente non è stato trovato.
+        successfullySaved: Il membro del progetto è stato salvato correttamente.
+      email: Indirizzo email
+      role: Ruolo
+    list:
+      user: Utente
+      role: Ruolo
+      actions: Azioni
+    title: Membri progetto
+    delete:
+      title: Rimuovi il membro di progetto %projectMemberName%
+      confirm: Vuoi veramente rimuovere il membro di progetto %projectMemberName%?
+      message:
+        successfullyRemoved: Il membro %projectMemberName% è stato correttamente rimosso dal progetto.
+    add:
+      title: Aggiungi membro al progetto
+    backToList: Torna ai membri progetto
+  backToSettings: Torna alle impostazioni
+  security:
+    title: Sicurezza
+    backToSecurity: Torna alle impostazioni di sicurezza
+    generalSecuritySettings:
+      title: Impostazioni di sicurezza generali
+      action: Modifica impostazioni generali di sicurezza
+    originBasedSecuritySettings:
+      add:
+        title: Aggiungi linea guida
+    guideline:
+      form:
+        criteria:
+          subnets: Sottoreti
+          title: Criterio
+        guideline:
+          title: Linea guida
+          name: Nome
+          description: Descrizione
+          priority: Priorità
+      list:
+        name: Nome
+        priority: Priorità
+        actions: Azioni
+      add:
+        title: Aggiungi linea guida
+      edit:
+        title: Modifica linea guida %guidelineName%
+  title: Impostazioni progetto
