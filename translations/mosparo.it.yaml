@@ -361,6 +361,14 @@ submission:
         method: Metodo
         headers: Intestazioni
         response: Risposta
+        preparedFormData: Dati modulo preparati
+        hashedFormData: Dati modulo criptati
+        requestData: Dati richiesta
+        formDataJson: Organizza dati come JSON
+        formDataSignature: Firma dati modulo
+        requestSignature: Firma richiesta
+        apiEndpointAndRequestDataJson: Endpoint API e dati richiesta
+        postData: Dati modulo
       sections:
         one:
           intro: Per verificare un invio devi conoscere il token di invio che identifica l'invio stesso e il token di validazione che dimostra la validità di un invio. Estrai questi due token dai dati del modulo.
@@ -391,6 +399,21 @@ submission:
       hints:
         privateKey: Chiave privata del progetto.
         publicKey: Chiave pubblica del progetto.
+        response: Risposta dall'API.
+        formData: I dati inseriti sul tuo modulo.
+        submitToken: Inoltra il token del passo 1.
+        validationToken: Validazione token del passo 1.
+        preparedFormData: I dati del modulo del passo 1 dopo la preparazione.
+        hashedFormData: Gli hash per i dati preparati al passo 2.
+        formDataJson: I dati criptati del modulo del passo 3 come stringa JSON.
+        validationSignature: La firma di validazione del passo 5.
+        formDataSignature: La firma dei dati del modulo del passo 4.
+        hashedFormDataPlain: I dati del modulo criptati del passo 3.
+        apiEndpoint: L'endpoint API di verifica.
+        requestSignature: La firma richiesta del passo 8.
+        requestDataJson: I dati richiesta del passo 7 come stringa JSON.
+        verificationSignature: La firma di verifica del passo 6.
+        requestDataPlain: I dati richiesta del passo 7.
     action:
       openVerificationSimulation: Simulazione di validiazione
     ignoredFields:
