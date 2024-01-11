@@ -42,6 +42,9 @@ parameters:
     env(login_throttling_ip_limit): '25'
     env(login_throttling_interval): '5 minutes'
 
+    env(backend_access_ip_allow_list): ~
+    env(api_access_ip_allow_list): ~
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -96,6 +99,7 @@ services:
         class: Mosparo\Subscriber\ProjectSubscriber
         arguments:
             $installed: '%env(mosparo_installed)%'
+            $apiAccessIpAllowList: '%env(api_access_ip_allow_list)%'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -204,3 +208,12 @@ services:
     Mosparo\Controller\Administration\SecurityController:
         arguments:
             $trustedProxies: '%kernel.trusted_proxies%'
+
+    Mosparo\ExpressionLanguage\AllowListExpressionLanguageProvider:
+        tags:
+            - { name: security.expression_language_provider }
+            - { name: routing.expression_language_provider }
+
+    #Mosparo\Security\RequestMatcher:
+    #    arguments:
+    #        $allowList: '%env(TRUSTED_IPS)%'

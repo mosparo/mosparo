@@ -1,0 +1,88 @@
+{% extends 'project_related/settings/settings_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'settings.security.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'settings.security.title'|trans }}{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/usage/settings#security-settings" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block settingsPageBody %}
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card card-md">
+                <div class="card-stamp card-stamp-lg">
+                    <div class="card-stamp-icon bg-primary">
+                        <i class="ti ti-shield-x"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-10">
+                            <h3 class="h2">{{ 'settings.security.generalSecuritySettings.title'|trans }}</h3>
+                            <div class="markdown text-secondary">
+                                {{ 'settings.security.generalSecuritySettings.intro'|trans }}
+                            </div>
+                            <div class="mt-3">
+                                <a href="{{ path('settings_security_edit_general', { '_projectId': activeProject.id }) }}" class="btn btn-primary">
+                                    <i class="ti ti-pencil"></i>
+                                    {{ 'settings.security.generalSecuritySettings.action'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex align-items-center mb-3">
+                <h3 class="h2 mb-0">{{ 'settings.security.originBasedSecuritySettings.title'|trans }}</h3>
+                <div class="ms-auto">
+                    <a href="{{ path('settings_security_guideline_add', { '_projectId': activeProject.id }) }}" class="btn btn-success">
+                        <i class="ti ti-plus"></i>
+                        {{ 'settings.security.originBasedSecuritySettings.add.title'|trans }}
+                    </a>
+                </div>
+            </div>
+            <div class="card">
+                <div id="origin-based-security-settings"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+    {% cspscript %}
+        <script>
+            $(function() {
+                $('#origin-based-security-settings').initDataTables({{ datatable_settings(datatable) }}, {
+                    autoWidth: false,
+                    searching: false,
+                    info: false,
+                    columnDefs: [
+                        { width: "80%", targets: 0 },
+                        { width: "20%", targets: 1 },
+                        { width: "1%", targets: 2 }
+                    ]
+                });
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

@@ -15,7 +15,7 @@
                 {{ 'action.help'|trans }}
             </a>
             {% if canManage %}
-                <a href="{{ path('ruleset_add') }}" class="btn btn-success add-button">
+                <a href="{{ path('ruleset_add', { '_projectId': activeProject.id }) }}" class="btn btn-success add-button">
                     <i class="ti ti-plus"></i>
                     <span>{{ 'ruleset.add.title'|trans }}</span>
                 </a>

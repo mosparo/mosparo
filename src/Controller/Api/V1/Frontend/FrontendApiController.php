@@ -17,6 +17,7 @@ use Mosparo\Helper\GeoIp2Helper;
 use Mosparo\Helper\HmacSignatureHelper;
 use Mosparo\Helper\RuleTesterHelper;
 use Mosparo\Helper\SecurityHelper;
+use Mosparo\Helper\StatisticHelper;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,6 +50,8 @@ class FrontendApiController extends AbstractController
 
     protected LocaleHelper $localeHelper;
 
+    protected StatisticHelper $statisticHelper;
+
     public function __construct(
         ProjectHelper $projectHelper,
         TokenGenerator $tokenGenerator,
@@ -58,7 +61,8 @@ class FrontendApiController extends AbstractController
         CleanupHelper $cleanupHelper,
         GeoIp2Helper $geoIp2Helper,
         TranslatorInterface $translator,
-        LocaleHelper $localeHelper
+        LocaleHelper $localeHelper,
+        StatisticHelper $statisticHelper
     ) {
         $this->projectHelper = $projectHelper;
         $this->tokenGenerator = $tokenGenerator;
@@ -69,6 +73,7 @@ class FrontendApiController extends AbstractController
         $this->geoIp2Helper = $geoIp2Helper;
         $this->translator = $translator;
         $this->localeHelper = $localeHelper;
+        $this->statisticHelper = $statisticHelper;
     }
 
     /**
@@ -88,8 +93,11 @@ class FrontendApiController extends AbstractController
         // Cleanup the database
         $this->cleanupHelper->cleanup();
 
+        // Determine the security settings
+        $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp());
+
         // Check if the request is allowed
-        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_DELAY);
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_DELAY, $securitySettings);
         if ($securityResult instanceof Delay) {
             return $this->prepareSecurityResponse($request, $securityResult, true);
         }
@@ -106,8 +114,8 @@ class FrontendApiController extends AbstractController
         $entityManager->flush();
 
         $args = [];
-        if ($submitToken->getProject()->getConfigValue('honeypotFieldActive')) {
-            $args['honeypotFieldName'] = $submitToken->getProject()->getConfigValue('honeypotFieldName');
+        if ($securitySettings['honeypotFieldActive']) {
+            $args['honeypotFieldName'] = $securitySettings['honeypotFieldName'];
         }
 
         return new JsonResponse([
@@ -130,8 +138,11 @@ class FrontendApiController extends AbstractController
         // Cleanup the database
         $this->cleanupHelper->cleanup();
 
+        // Determine the security settings
+        $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp());
+
         // Check if the request is allowed
-        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_LOCKOUT);
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_LOCKOUT, $securitySettings);
         if ($securityResult instanceof Lockout) {
             return $this->prepareSecurityResponse($request, $securityResult);
         }
@@ -199,8 +210,8 @@ class FrontendApiController extends AbstractController
         $submission->setIgnoredFields($formData['ignoredFields']);
 
         // Check for the honeypot field
-        if ($submitToken->getProject()->getConfigValue('honeypotFieldActive')) {
-            $hpFieldName = $activeProject->getConfigValue('honeypotFieldName');
+        if ($securitySettings['honeypotFieldActive']) {
+            $hpFieldName = $securitySettings['honeypotFieldName'];
             $hpField = false;
 
             foreach ($formData['fields'] as $key => $field) {
@@ -244,6 +255,11 @@ class FrontendApiController extends AbstractController
 
         $entityManager->persist($submission);
         $entityManager->flush();
+
+        // Increase the day statistic if it is spam
+        if ($submission->isSpam()) {
+            $this->statisticHelper->increaseDayStatistic($submission);
+        }
 
         return new JsonResponse([
             'valid' => (!$submission->isSpam()),
@@ -304,8 +320,12 @@ class FrontendApiController extends AbstractController
 
     protected function getTranslations(Request $request): array
     {
-        if ($this->translator instanceof LocaleAwareInterface && $request->getPreferredLanguage()) {
-            $this->translator->setLocale($this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage()));
+        if ($this->translator instanceof LocaleAwareInterface) {
+            if ($request->request->has('language')) {
+                $this->translator->setLocale($this->localeHelper->fixPreferredLanguage($request->request->get('language')));
+            } else if ($request->getPreferredLanguage()) {
+                $this->translator->setLocale($this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage()));
+            }
         }
 
         return [

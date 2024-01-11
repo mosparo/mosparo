@@ -160,6 +160,10 @@ class ImportCommand extends Command
                     foreach ($sections as $sectionKey => $sectionConfig) {
                         $sectionChanges = $changes[$sectionKey] ?? [];
 
+                        if ($sectionKey === 'securitySettings') {
+                            $sectionChanges += ($changes['securityGuidelines'] ?? []);
+                        }
+
                         if ($sectionChanges) {
                             $result = count($sectionChanges) . ' Changes';
                         } else {
@@ -198,6 +202,21 @@ class ImportCommand extends Command
                                 $sectionConfig['active'],
                                 $sectionConfig['inFile']
                             );
+
+                            if ($sectionKey === 'securitySettings' && isset($changes['securityGuidelines']) && !empty($changes['securityGuidelines'])) {
+                                $output->writeln('');
+
+                                $this->displayChangesTable(
+                                    $io,
+                                    $output,
+                                    $formatter,
+                                    $changes['securityGuidelines'] ?? [],
+                                    'securityGuidelines',
+                                    'Origin-based security guidelines',
+                                    $sectionConfig['active'],
+                                    $sectionConfig['inFile']
+                                );
+                            }
 
                             break;
                         }
@@ -263,6 +282,42 @@ class ImportCommand extends Command
                         $change['key'],
                         $oldValue,
                         $newValue,
+                    ];
+                }
+            } else if ($sectionKey === 'securityGuidelines') {
+                $headers = ['Action', 'Name', 'Priority', 'Criteria', 'Security settings'];
+
+                $values = [];
+                foreach ($changes as $change) {
+                    $modeCriteria = '';
+                    $modeSecuritySettings = '';
+
+                    if ($change['mode'] === 'add') {
+                        $mode = 'Add';
+
+                        $modeCriteria = $modeSecuritySettings = 'New guideline';
+                    } else if ($change['mode'] === 'modify') {
+                        $mode = 'Modify';
+
+                        if ($change['changedCriteria']) {
+                            $modeCriteria = 'Modification required';
+                        } else {
+                            $modeCriteria = 'No modification required';
+                        }
+
+                        if ($change['changedSettings']) {
+                            $modeSecuritySettings = 'Modification required';
+                        } else {
+                            $modeSecuritySettings = 'No modification required';
+                        }
+                    }
+
+                    $values[] = [
+                        $mode,
+                        $change['importedGuideline']['name'],
+                        $change['importedGuideline']['priority'],
+                        $modeCriteria,
+                        $modeSecuritySettings,
                     ];
                 }
             } else if ($sectionKey === 'rules') {

@@ -64,6 +64,12 @@ project:
     statusHelp: Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.
     spamScore: Spam score
     spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.
+    statisticStorageLimit: Statistic storage
+    statisticStorageLimitHelp: Defines how long mosparo should keep the statistics in the database. This option has no connection to the storage range of the submissions, after which the submissions get deleted from the database (14 days).
+    apiDebugMode: API debug mode
+    apiDebugModeHelp: If the API debug mode is enabled, the verification API will return more information about the verification process. This information can be relevant to understand why a verification failed. Use this option to help integrate mosparo into your form.
+    verificationSimulationMode: Verification simulation mode
+    verificationSimulationModeHelp: You can simulate the verification process if the verification simulation mode is enabled. Please open the submission details and click the button in the top right corner. The simulation tool will show you how your request should look and which data mosparo expects to verify the submission.
 
   delete:
     title: Delete project %projectName%
@@ -81,9 +87,16 @@ project:
 # Dashboard
 dashboard:
   title: Dashboard
+
+  dateRange:
+    dropdown: Select visible date range
+
   chart:
     valid: Valid
     spam: Spam
+
+    annotation:
+      statisticOnly: Statistic only
 
 # Rules
 rule:
@@ -386,6 +399,9 @@ submission:
   view:
     title: Submission %submissionId%
 
+    action:
+      openVerificationSimulation: Verification simulation
+
     spam:
       title: Spam
       isSpam: Is spam
@@ -438,6 +454,95 @@ submission:
         title: Submission too fast
         text: The form was submitted too fast. The submitter required only %seconds% seconds, which is less than the minimum time of %minimumTimeSeconds% seconds.
 
+    verificationSimulation:
+      title: Verification simulation
+      intro: The verification simulation shows you which data mosparo accepts for the verification process. You can compare the displayed data with the data your verification process will generate to find possible problems.
+
+      buttons:
+        customIntegration: Custom integration
+        apiDocumentation: API documentation
+
+      errors:
+        noValidationToken: The verification simulation is impossible because no validation token is stored for this submission. This means that the data in the form did not pass the mosparo validation, making the verification impossible.
+
+      info:
+        authorizationHeader: The authorization header must be Base64-encoded.
+
+      labels:
+        formData: Form data
+        submitToken: Submit token
+        validationToken: Validation token
+        preparedFormData: Prepared form data
+        hashedFormData: Hashed form data
+        formDataJson: Form data as JSON
+        privateKey: Private key
+        formDataSignature: Form data signature
+        validationSignature: Validation signature
+        validationAndFormDataSignature: Validation and form data signature
+        verificationSignature: Verification signature
+        apiEndpoint: API endpoint
+        requestData: Request data
+        apiEndpointAndRequestDataJson: API endpoint and request data
+        requestSignature: Request signature
+        authorization: Authorization
+        username: Username
+        password: Password
+        method: Method
+        headers: Headers
+        postData: Post data
+        response: Response
+
+      hints:
+        formData: The form data submitted by your form.
+        submitToken: Submit token from step 1.
+        validationToken: Validation token from step 1.
+        preparedFormData: The form data from step 1 after the preparation.
+        hashedFormData: The hashes for the prepared form data from step 2.
+        privateKey: Private key from the project.
+        publicKey: Public key from the project.
+        formDataJson: Hashed form data from step 3 as JSON string.
+        validationSignature: Validation signature from step 5.
+        formDataSignature: Form data signature from step 4.
+        hashedFormDataPlain: Hashed form data from step 3.
+        apiEndpoint: The verification API endpoint.
+        requestSignature: Request signature from step 8.
+        requestDataJson: Request data from step 7 as JSON string.
+        verificationSignature: Verification signature from step 6.
+        requestDataPlain: Request data from step 7.
+        response: Response from the API.
+
+      sections:
+        one:
+          title: 'Step 1: Extract submit and validation token'
+          intro: To verify a submission, you have to know the submit token, which identifies a submission, and the validation token, which proves the validity of the submission. Extract these two tokens from the form data.
+        two:
+          title: 'Step 2: Prepare the form data'
+          intro: Before sending the data to the verification API, you must prepare the form data. The mosparo fields (starting with %codeStart%_mosparo_%codeEnd%) must be removed from the form data. After that, please replace all CRLF line breaks with LF line breaks and change all field names to lowercase letters. Sort the form data by name in alphabetical order (A-Z).
+        three:
+          title: 'Step 3: Generate the hashes'
+          intro: For the verification, mosparo excepts the form data as SHA256 hashes. For this, the SHA256 hashes for the form data must be calculated.
+        four:
+          title: 'Step 4: Generate form data signature'
+          intro: You must generate the form data's signature to ensure that nothing has manipulated the form data. The signature is an HMAC SHA256 hash of the form data hashes (Step 2), encoded as JSON. Use the private key of the project as key.
+        five:
+          title: 'Step 5: Generate validation signature'
+          intro: Use the validation token, which you extracted from the form data in the first step, and generate the signature of it. The signature is an HMAC SHA256 hash of the validation token. Use the private key of the project as key.
+        six:
+          title: 'Step 6: Generate verification signature'
+          intro: Combine the validation and the form data signature and create the verification signature. The signature is an HMAC SHA256 hash combining the validation and form data signatures. Use the private key of the project as key.
+        seven:
+          title: 'Step 7: Collect request data'
+          intro: After all the data is collected and the signatures and hashes generated, it's time to send it to the API for verification. For that, please collect the following information.
+        eight:
+          title: 'Step 8: Generate request signature'
+          intro: To ensure the request is valid, you must generate the signature for the request. First, convert the request data into a JSON string. Combine the API endpoint with the request data JSON string and Generate the HMAC SHA256 hash for this string with the private key of the project as key.
+        nine:
+          title: 'Step 9: Send the API request'
+          intro: All data were collected and prepared. Now, you can send the data to the API.
+        ten:
+          title: 'Step 10: Verify the response'
+          intro: mosparo will answer your API request with a JSON string. Decode the JSON string and check if a key %codeStart%valid%codeEnd% exists and is set to %codeStart%true%codeEnd%. If that's the case, ensure that the key %codeStart%verificationSignature%codeEnd% is set as well and is equal to the verification signature generated in step 6. If that's the case, the response is valid.
+
 # Settings
 settings:
   title: Project settings
@@ -445,6 +550,9 @@ settings:
 
   general:
     title: General settings
+
+    subtitle:
+      developerOptions: Developer options
 
     message:
       successfullySaved: The settings were saved successfully.
@@ -507,6 +615,62 @@ settings:
 
   security:
     title: Security
+    backToSecurity: Back to security settings
+
+    generalSecuritySettings:
+      title: General security settings
+      intro: The general security settings apply to all users not matched by an origin-based security guideline.
+      action: Edit general security settings
+
+    originBasedSecuritySettings:
+      title: Origin-based security guidelines
+
+      add:
+        title: Add guideline
+
+    guideline:
+      list:
+        name: Name
+        priority: Priority
+        actions: Actions
+
+      add:
+        title: Add guideline
+
+      edit:
+        title: Edit guideline %guidelineName%
+
+      form:
+        guideline:
+          title: Guideline
+          name: Name
+          description: Description
+          priority: Priority
+          priorityHelp: Defines in which order the guidelines will be tested. The highest guideline will be tested first.
+
+        criteria:
+          title: Criteria
+          intro: Please define the criteria for this guideline. With the criteria, you can define for which origin these security settings should be used.
+          intro2: The guideline will be used for the user as soon as one of these criteria matches. You must add at least one criterion to save the guideline.
+          subnets: Subnets
+          subnetsHelp: "Add the subnets for which this guideline should be considered. You can define IPv4 or IPv6 subnets. You can see the IP address in the submission details. Example: 192.168.1.0/24"
+          countryCodes: Country codes
+          countryCodesHelp: "Add the country codes (ISO alpha-2) for which this guideline should be considered. You can see the country code in the submission details. Example: CH"
+          asNumbers: AS numbers
+          asNumbersHelp: "Add the AS numbers for which this guideline should be considered. You can see the AS number in the submission details. Example: 123456"
+
+        settings:
+          title: Security settings
+          intro: Please check the override checkbox for the settings you want to override from the general security settings. If you do not override a setting, mosparo will use the one from the project settings.
+
+        infoGeoIp2Disabled: GeoIP2 is not available. Please configure the GeoIP2 database to use the country codes and AS numbers criteria.
+
+      delete:
+        title: Remove security guideline %guidelineName%
+        confirm: Do you really want to remove the security guideline %guidelineName%?
+
+        message:
+          successfullyRemoved: The security guideline %guidelineName% was removed successfully from the project.
 
     minimumTime:
       title: Minimum Time
@@ -556,13 +720,16 @@ settings:
       lockoutMultiplicator: Multiplicator
       lockoutMultiplicatorHelp: The base lockout time will be increased with every additional request.
       ipAllowList: Always allowed IP addresses and subnets
-      ipAllowListHelp: "Specify one ip address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+      ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+
+      overrideMinimumTime: Override minimum time
+      overrideHoneypotField: Override honeypot field
+      overrideDelay: Override request delay
+      overrideLockout: Override automatic lockout
 
     message:
       successfullySaved: The security settings were saved successfully.
-
-    validation:
-      honeypotFieldNameInvalidCharacter: Please use only letters, numbers and the dash sign (-).
+      guidelineSuccessfullySaved: The security guideline was saved successfully.
 
   design:
     title: Design
@@ -764,6 +931,12 @@ tools:
         itemsModify: Modify
         itemsRemove: Remove
         spamRatingFactor: Spam rating factor
+        priority: Priority
+        criteria: Criteria
+        securitySettings: Security settings
+        guidelineNew: New guideline
+        guidelineModify: Modification required
+        guidelineEqual: No modification required
 
       errorMessage:
         jobDataFileNotFound: Job data file for token does not exist.
@@ -868,6 +1041,24 @@ administration:
         replaceForwardedForHeaderHelp: If required, specify the header's name in which the reverse proxy sends the IP address of the client.
         replaceForwardedProtoHeader: Name of the custom protocol header
         replaceForwardedProtoHeaderHelp: If required, specify the header's name in which the reverse proxy sends the request protocol.
+
+    backendAccess:
+      title: Backend access
+      intro: If you want to protect mosparo from unallowed access from the internet, you can specify which IP addresses are allowed to access the backend. Leave this field empty to allow everybody to access the login form and the backend.
+      hintOwnIp: Please note that you can only save this setting if your IP address (%ipAddress%) is also included in the list (as IP address or subnet). If you have an IPv6 address, adding your subnet is recommended.
+
+      form:
+        ipAllowList: Allowed IP addresses and subnets
+        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+
+    apiAccess:
+      title: API access
+      intro: If you want to protect the mosparo API from unallowed access from the internet, you can specify which IP addresses are allowed to access it. Leave this field empty to allow every client to access the APIs.
+      hintFrontendApi: Please note that this limits only the verification and statistic API. The frontend API will always be publicly available.
+
+      form:
+        ipAllowList: Allowed IP addresses and subnets
+        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
     message:
       savedSuccessfully: The security settings were saved successfully.
@@ -1365,3 +1556,18 @@ setup:
   install:
     title: Installation completed
     description: The installation was successfully completed. You can now login with your user.
+
+dataTable:
+  name: Name
+  value: Value
+  empty: Empty
+
+dateRange:
+  14d: 14 Days
+  1m: 1 Month
+  2m: 2 Months
+  3m: 3 Months
+  6m: 6 Months
+  1y: 1 Year
+  2y: 2 Years
+  forever: Forever

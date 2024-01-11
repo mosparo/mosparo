@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/tools")
+ * @Route("/project/{_projectId}/tools")
  */
 class ToolsController extends AbstractController implements ProjectRelatedInterface
 {
@@ -290,7 +290,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
             }
 
             if (!$error) {
-                return $this->redirectToRoute('tools_import_simulate', ['token' => $token]);
+                return $this->redirectToRoute('tools_import_simulate', ['_projectId' => $this->getActiveProject()->getId(), 'token' => $token]);
             }
         }
 
@@ -355,7 +355,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     )
                 );
 
-                return $this->redirectToRoute('tools_import');
+                return $this->redirectToRoute('tools_import', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 

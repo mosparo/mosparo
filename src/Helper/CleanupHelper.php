@@ -6,6 +6,8 @@ use DateInterval;
 use DateTime;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Entity\Project;
+use Mosparo\Util\DateRangeUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
@@ -167,6 +169,9 @@ class CleanupHelper
             $notFinished = true;
         }
 
+        // Clear the day statistic
+        $this->cleanupDayStatistcs();
+
         // Enable the project filters after the cleanup
         if ($filterEnabled) {
             $filters
@@ -189,6 +194,30 @@ class CleanupHelper
 
         $cleanupStartedAt->set(null);
         $cache->save($cleanupStartedAt);
+    }
+
+    public function cleanupDayStatistcs()
+    {
+        $projects = $this->entityManager->getRepository(Project::class)->findAll();
+        foreach ($projects as $project) {
+            if ($project->getStatisticStorageLimit() === DateRangeUtil::DATE_RANGE_FOREVER) {
+                continue;
+            }
+
+            $minDate = DateRangeUtil::getStartDateForRange($project->getStatisticStorageLimit());
+
+            $qb = $this->entityManager->createQueryBuilder();
+            $qb->delete('Mosparo\Entity\DayStatistic', 'ds')
+                ->where('ds.date < :minDate')
+                ->andWhere('ds.project = :project')
+                ->setParameter('minDate', $minDate)
+                ->setParameter('project', $project)
+                ->getQuery()->execute();
+            unset($qb);
+        }
+
+        unset($projects);
+        unset($project);
     }
 
     public function cleanupProjectEntities($project)
@@ -268,6 +297,22 @@ class CleanupHelper
             ->setParameter('project', $project);
         $query->execute();
         unset($query);
+
+        // Delete the day statistic
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\DayStatistic', 'ds')
+            ->where('ds.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+        unset($qb);
+
+        // Delete the security guidelines
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\SecurityGuideline', 'sg')
+            ->where('sg.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+        unset($qb);
     }
 
     public function cleanupIpLocalizationCache()

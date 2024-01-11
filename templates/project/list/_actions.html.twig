@@ -1,7 +1,7 @@
 {% trans_default_domain 'mosparo' %}
 
 <div class="d-flex action-buttons-list">
-    <a href="{{ path('project_switch', { project: row.id }) }}" class="btn btn-secondary me-2">
+    <a href="{{ path('project_dashboard', { '_projectId': row.id }) }}" class="btn btn-secondary me-2">
         <i class="ti ti-folder"></i>
         {{ 'project.action.goto'|trans }}
     </a>
@@ -16,7 +16,7 @@
             </div>
             {% if can_user_manage_project(row) %}
                 <div class="dropdown-divider"></div>
-                <a href="{{ path('project_delete', { project: row.id }) }}" class="dropdown-item text-red">
+                <a href="{{ path('project_delete', { '_projectId': row.id }) }}" class="dropdown-item text-red">
                     <i class="ti ti-circle-minus"></i>
                     {{ 'project.action.delete'|trans }}
                 </a>

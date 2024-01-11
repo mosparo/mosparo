@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/rules")
+ * @Route("/project/{_projectId}/rules")
  */
 class RuleController extends AbstractController implements ProjectRelatedInterface
 {
@@ -140,7 +140,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                 )
             );
 
-            return $this->redirectToRoute('rule_list');
+            return $this->redirectToRoute('rule_list', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         $addMultipleForm = $this->createForm(RuleAddMultipleItemsType::class, [], ['rule_type' => $ruleType]);
@@ -181,7 +181,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                 )
             );
 
-            return $this->redirectToRoute('rule_list');
+            return $this->redirectToRoute('rule_list', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         $addMultipleForm = $this->createForm(RuleAddMultipleItemsType::class, [], ['rule_type' => $ruleType]);
@@ -216,7 +216,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                     )
                 );
 
-                return $this->redirectToRoute('rule_list');
+                return $this->redirectToRoute('rule_list', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 

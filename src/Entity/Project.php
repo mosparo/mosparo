@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Util\DateRangeUtil;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
@@ -60,6 +61,21 @@ class Project
     private float $spamScore = 5;
 
     /**
+     * @ORM\Column(type="string", length=7)
+     */
+    private ?string $statisticStorageLimit;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $apiDebugMode = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $verificationSimulationMode = false;
+
+    /**
      * @ORM\OneToMany(targetEntity=ProjectConfigValue::class, mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private Collection $configValues;
@@ -67,27 +83,7 @@ class Project
     /**
      * @var array
      */
-    private array $defaultConfigValues = [
-        'minimumTimeActive' => false,
-        'minimumTimeSeconds' => 10,
-
-        'honeypotFieldActive' => false,
-        'honeypotFieldName' => '',
-
-        'delayActive' => false,
-        'delayNumberOfRequests' => 30,
-        'delayDetectionTimeFrame' => 30,
-        'delayTime' => 60,
-        'delayMultiplicator' => 1.5,
-
-        'lockoutActive' => false,
-        'lockoutNumberOfRequests' => 60,
-        'lockoutDetectionTimeFrame' => 60,
-        'lockoutTime' => 300,
-        'lockoutMultiplicator' => 1.2,
-
-        'ipAllowList' => '',
-
+    private array $defaultGeneralConfigValues = [
         'designMode' => '',
         'boxSize' => 'medium',
         'positionContainer' => 'relative',
@@ -138,6 +134,31 @@ class Project
     ];
 
     /**
+     * @var array
+     */
+    private array $defaultSecurityConfigValues = [
+        'minimumTimeActive' => false,
+        'minimumTimeSeconds' => 10,
+
+        'honeypotFieldActive' => false,
+        'honeypotFieldName' => '',
+
+        'delayActive' => false,
+        'delayNumberOfRequests' => 30,
+        'delayDetectionTimeFrame' => 30,
+        'delayTime' => 60,
+        'delayMultiplicator' => 1.5,
+
+        'lockoutActive' => false,
+        'lockoutNumberOfRequests' => 60,
+        'lockoutDetectionTimeFrame' => 60,
+        'lockoutTime' => 300,
+        'lockoutMultiplicator' => 1.2,
+
+        'ipAllowList' => '',
+    ];
+
+    /**
      * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="project", orphanRemoval=true)
      */
     private Collection $projectMembers;
@@ -145,6 +166,7 @@ class Project
     public function __construct()
     {
         $this->uuid = uuid_create(UUID_TYPE_RANDOM);
+        $this->statisticStorageLimit = DateRangeUtil::DATE_RANGE_FOREVER;
         $this->configValues = new ArrayCollection();
         $this->projectMembers = new ArrayCollection();
     }
@@ -248,9 +270,45 @@ class Project
         return $this;
     }
 
+    public function getStatisticStorageLimit(): ?string
+    {
+        return $this->statisticStorageLimit;
+    }
+
+    public function setStatisticStorageLimit(string $statisticStorageLimit): self
+    {
+        $this->statisticStorageLimit = $statisticStorageLimit;
+
+        return $this;
+    }
+
+    public function isApiDebugMode(): ?bool
+    {
+        return $this->apiDebugMode;
+    }
+
+    public function setApiDebugMode(bool $apiDebugMode): self
+    {
+        $this->apiDebugMode = $apiDebugMode;
+
+        return $this;
+    }
+
+    public function isVerificationSimulationMode(): ?bool
+    {
+        return $this->verificationSimulationMode;
+    }
+
+    public function setVerificationSimulationMode(bool $verificationSimulationMode): self
+    {
+        $this->verificationSimulationMode = $verificationSimulationMode;
+
+        return $this;
+    }
+
     public function getConfigValues(): ?array
     {
-        $configValues = $this->defaultConfigValues;
+        $configValues = $this->getDefaultConfigValues();
         foreach ($this->configValues as $configValue) {
             $configValues[$configValue->getName()] = $configValue->getValue();
         }
@@ -258,11 +316,28 @@ class Project
         return $configValues;
     }
 
+    public function getSecurityConfigValues(): array
+    {
+        $defaultValues = $this->defaultSecurityConfigValues;
+
+        foreach ($defaultValues as $key => $value) {
+            $projectConfigValue = $this->getConfigValue($key);
+
+            if ($projectConfigValue !== null) {
+                $defaultValues[$key] = $projectConfigValue;
+            }
+        }
+
+        return $defaultValues;
+    }
+
     public function getConfigValue($key)
     {
+        $defaultConfigValues = $this->getDefaultConfigValues();
+
         $configValue = $this->findConfigValue($key);
         if (!$configValue) {
-            return $this->defaultConfigValues[$key] ?? null;
+            return $defaultConfigValues[$key] ?? null;
         }
 
         return $configValue->getValue();
@@ -270,8 +345,10 @@ class Project
 
     public function setConfigValue($key, $value): self
     {
+        $defaultConfigValues = $this->getDefaultConfigValues();
+
         $configValue = $this->findConfigValue($key);
-        if ((isset($this->defaultConfigValues[$key]) && $value === $this->defaultConfigValues[$key]) || $value === null) {
+        if ((isset($defaultConfigValues[$key]) && $value === $defaultConfigValues[$key]) || $value === null) {
             if ($configValue && $this->configValues->contains($configValue)) {
                 $this->configValues->removeElement($configValue);
             }
@@ -318,9 +395,14 @@ class Project
         return $firstConfigValue;
     }
 
+    public function getDefaultSecurityConfigValues(): ?array
+    {
+        return $this->defaultSecurityConfigValues;
+    }
+
     public function getDefaultConfigValues(): ?array
     {
-        return $this->defaultConfigValues;
+        return $this->defaultGeneralConfigValues + $this->defaultSecurityConfigValues;
     }
 
     public function getDesignMode(): string

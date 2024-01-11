@@ -9,6 +9,12 @@
     }
 }
 
+.table {
+    .table:last-child {
+        margin-bottom: 0;
+    }
+}
+
 .project-navbar {
     > .container-xl {
         align-items: stretch;

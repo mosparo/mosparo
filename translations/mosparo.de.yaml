@@ -32,6 +32,12 @@ project:
     spamScore: Spam-Grenzwert
     spamScoreHelp: Definiert die Grenze, ab welcher eine Einsendung als Spam erkannt wird. Wenn die Bewertung einer Einsendung über diesem Wert liegt, wird die Einsendung als Spam erkannt.
 
+    verificationSimulationMode: Verifizierungs-Simulations-Modus
+    apiDebugMode: API-Debugging-Modus
+    verificationSimulationModeHelp: Sie können den Verifizierungsprozess simulieren, wenn der Verifizierungssimulationsmodus aktiviert ist. Bitte öffnen Sie die Antragsdetails und klicken Sie auf den Button oben rechts. Das Simulationstool zeigt Ihnen, wie Ihre Anfrage aussehen sollte und welche Daten mosparo zur Verifizierung der Einsendung erwartet.
+    apiDebugModeHelp: Wenn der API-Debug-Modus aktiviert ist, gibt die Verifizierungs-API weitere Informationen über den Verifizierungsprozess zurück. Diese Informationen können wichtig sein, um zu verstehen, warum eine Verifizierung fehlgeschlagen ist. Verwenden Sie diese Option, wenn Sie versuchen, mosparo in Ihr Formular zu integrieren und dabei Probleme auftreten.
+    statisticStorageLimitHelp: Legt fest, wie lange mosparo die Statistiken in der Datenbank aufbewahren soll. Diese Option hat keinen Zusammenhang mit dem Speicherbereich der Einsendungen, nach dem die Einsendungen aus der Datenbank gelöscht werden (14 Tage).
+    statisticStorageLimit: Speichern der Statistik
   delete:
     title: Projekt %projectName% löschen
     confirm: Wollen Sie das Projekt %projectName% wirklich löschen?
@@ -80,6 +86,10 @@ dashboard:
     spam: Spam
 
 # Rules
+    annotation:
+      statisticOnly: Nur Statistik
+  dateRange:
+    dropdown: Sichtbaren Datumsbereich auswählen
 rule:
   title: Regeln
   backToList: Zu den Regeln
@@ -416,6 +426,90 @@ submission:
         text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit beträgt %minimumTimeSeconds% Sekunden.
 
 # Settings
+    action:
+      openVerificationSimulation: Verifizierungs-Simulation
+    verificationSimulation:
+      buttons:
+        customIntegration: Eigene Integration
+        apiDocumentation: API-Dokumentation
+      title: Verifizierungs-Simulation
+      hints:
+        validationToken: Validierungscode von Schritt 1.
+        validationSignature: Signatur der Validierung aus Schritt 5.
+        hashedFormData: Die Hashes für die vorbereiteten Formulardaten aus Schritt 2.
+        response: Antwort der API.
+        hashedFormDataPlain: Gehashte Formulardaten aus Schritt 3.
+        requestDataPlain: Anfrage-Daten aus Schritt 7.
+        submitToken: Einsendcode von Schritt 1.
+        verificationSignature: Verifizierungs-Signatur aus Schritt 6.
+        apiEndpoint: Der Verifizierungs-API-Endpunkt.
+        formDataJson: Gehashte Formulardaten aus Schritt 3 als JSON-String.
+        formDataSignature: Signatur der Formulardaten aus Schritt 4.
+        requestDataJson: Anfrage-Daten aus Schritt 7 als JSON-String.
+        publicKey: Öffentlicher Schlüssel des Projektes.
+        requestSignature: Signatur der Anfrage aus Schritt 8.
+        privateKey: Geheimer Schlüssel des Projektes.
+        formData: Die von Ihrem Formular übermittelten Daten.
+        preparedFormData: Die Formulardaten aus Schritt 1 nach der Aufbereitung.
+      labels:
+        headers: Kopfzeilen
+        validationAndFormDataSignature: Validierungs- und Formulardaten-Signatur
+        validationSignature: Signatur der Validierung
+        requestData: Anfrage-Daten
+        submitToken: Einsendecode
+        preparedFormData: Vorbereitete Formulardaten
+        hashedFormData: Gehashte Formulardaten
+        postData: Post-Daten
+        privateKey: Geheimer Schlüssel
+        apiEndpointAndRequestDataJson: API-Endpunkt und Anfrage-Daten
+        method: Methode
+        validationToken: Validierungscode
+        formData: Formulardaten
+        response: Antwort
+        formDataJson: Formulardaten als JSON
+        username: Benutzername
+        apiEndpoint: API-Endpunkt
+        requestSignature: Signatur der Anfrage
+        authorization: Autorisierung
+        verificationSignature: Signatur der Verifizierung
+        password: Passwort
+        formDataSignature: Signatur der Formulardaten
+      sections:
+        four:
+          intro: Sie müssen die Signatur der Formulardaten erstellen, um sicherzustellen, dass die Formulardaten nicht manipuliert wurden. Die Signatur ist ein HMAC SHA256-Hash der Formulardaten-Hashes (Schritt 2), kodiert als JSON. Verwenden Sie den geheimen Schlüssel des Projekts als Schlüssel.
+          title: 'Schritt 4: Signatur der Formulardaten generieren'
+        two:
+          title: 'Schritt 2: Formulardaten vorbereiten'
+          intro: Bevor Sie die Daten an die Verifizierungs-API senden, müssen Sie die Formulardaten vorbereiten. Die mosparo-Felder (beginnend mit %codeStart%_mosparo_%codeEnd%) müssen aus den Formulardaten entfernt werden. Danach ersetzen Sie bitte alle CRLF-Zeilenumbrüche durch LF-Zeilenumbrüche und ändern alle Feldnamen in Kleinbuchstaben. Sortieren Sie die Formulardaten nach Namen in alphabetischer Reihenfolge (A-Z).
+        five:
+          intro: Verwenden Sie den Validierungscode, welchen Sie im ersten Schritt aus den Formulardaten extrahiert haben, und erzeugen Sie die Signatur davon. Die Signatur ist ein HMAC SHA256 Hash des Validierungscodes. Verwenden Sie den geheimen Schlüssel des Projekts als Schlüssel.
+          title: 'Schritt 5: Generierung der Validierungssignatur'
+        one:
+          title: 'Schritt 1: Einsende- und Validierungscode extrahieren'
+          intro: Um eine Einsendung zu überprüfen, müssen Sie den Einsendecode kennen, welcher eine Einsendung identifiziert, und den Validierungscode, welcher die Gültigkeit der Einsendung bestätigt. Extrahieren Sie diese beiden Codes aus den Formulardaten.
+        three:
+          title: 'Schritt 3: Generierung der Hashes'
+          intro: Für die Verifikation erwartet mosparo die Formulardaten als SHA256-Hashes. Hierfür müssen die SHA256-Hashes für die Formulardaten berechnet werden.
+        six:
+          title: 'Schritt 6: Verifikationssignatur generieren'
+          intro: Kombinieren Sie die Validierung- und die Formulardatensignatur und erstellen Sie die Verifizierungssignatur. Die Signatur ist ein HMAC SHA256 Hash, der die Validierungs- und Formulardatensignaturen kombiniert. Verwenden Sie den geheimen Schlüssel des Projekts als Schlüssel.
+        seven:
+          intro: Nachdem alle Daten erfasst und die Signaturen und Hashes generiert wurden, ist es an der Zeit, sie zur Überprüfung an die API zu senden. Dazu sammeln Sie bitte die folgenden Informationen.
+          title: 'Schritt 7: Sammeln der Anfragedaten'
+        eight:
+          intro: Um sicherzustellen, dass die Anfrage gültig ist, müssen Sie die Signatur für die Anfrage erstellen. Konvertieren Sie zunächst die Anfragedaten in einen JSON-String. Kombinieren Sie den API-Endpunkt mit dem JSON-String der Anfragedaten und generieren Sie den HMAC SHA256-Hash für diesen String mit dem geheimen Schlüssel des Projekts als Schlüssel.
+          title: 'Schritt 8: Generierung der Anfragesignatur'
+        ten:
+          title: 'Schritt 10: Überprüfen der Antwort'
+          intro: mosparo wird Ihre API-Anfrage mit einem JSON-String beantworten. Dekodieren Sie den JSON-String und prüfen Sie, ob ein Schlüssel %codeStart%valid%codeEnd% existiert und auf %codeStart%true%codeEnd% gesetzt ist. Wenn dies der Fall ist, stellen Sie sicher, dass der Schlüssel %codeStart%verificationSignature%codeEnd% ebenfalls gesetzt ist und der in Schritt 6 generierten Verifizierungssignatur entspricht. Wenn dies der Fall ist, ist die Antwort gültig.
+        nine:
+          title: 'Schritt 9: Senden der API-Anfrage'
+          intro: Alle Daten wurden gesammelt und aufbereitet. Jetzt können Sie die Daten an die API senden.
+      intro: Die Verifikationssimulation zeigt Ihnen, welche Daten mosparo für den Verifikationsprozess akzeptiert. Sie können die angezeigten Daten mit den Daten vergleichen, die Ihr Verifizierungsprozess erzeugt, um mögliche Probleme zu finden.
+      info:
+        authorizationHeader: Die Autorisierungskopfzeile muss Base64-kodiert sein.
+      errors:
+        noValidationToken: Die Verifikationssimulation ist nicht möglich, da kein Validierungscode für diese Übermittlung gespeichert ist. Das bedeutet, dass die Daten im Formular die mosparo-Validierung nicht bestanden haben, wodurch die Verifizierung unmöglich ist.
   filter:
     options:
       spam: Spam-Einsendungen
@@ -457,6 +551,8 @@ settings:
           successfullyReissued: Die API-Zugangsdaten wurden erfolgreich neu ausgestellt.
           errorOnlyOwner: Nur ein Besitzer des Projektes kann die API-Zugangsdaten neu ausstellen lassen.
 
+    subtitle:
+      developerOptions: Entwickler-Optionen
   projectMember:
     title: Projekt-Mitglieder
     backToList: Zu den Projekt-Mitgliedern
@@ -538,15 +634,61 @@ settings:
       lockoutTimeHelp: In Sekunden
       lockoutMultiplicator: Multiplikator
       lockoutMultiplicatorHelp: Die Anfangssperrzeit wird mit jeder zusätzlichen Anfrage mit diesem Multiplikator erhöht.
-      ipAllowList: Erlaubte IP-Adressen und Subnetze
+      ipAllowList: Immer erlaubte IP-Adressen und Subnetze
       ipAllowListHelp: "Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24"
 
+      overrideLockout: Automatische Sperre überschreiben
+      overrideDelay: Anfrageverzögerung überschreiben
+      overrideMinimumTime: Mindeszeit überschreiben
+      overrideHoneypotField: Honeypot-Feld überschreiben
     message:
       successfullySaved: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
 
-    validation:
-      honeypotFieldNameInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich (-).
-
+      guidelineSuccessfullySaved: Die Sicherheitsrichtlinie wurde erfolgreich gespeichert.
+    guideline:
+      form:
+        guideline:
+          priorityHelp: Legt fest, in welcher Reihenfolge die Richtlinien getestet werden. Die Richtlinie mit der höchsten Priorität wird zuerst getestet.
+          title: Richtlinie
+          priority: Priorität
+          description: Beschreibung
+          name: Name
+        criteria:
+          countryCodesHelp: 'Fügen Sie die Ländercodes (ISO alpha-2) hinzu, für die diese Richtlinie gelten soll. Sie können den Ländercode in den Details der Einsendung sehen. Beispiel: CH'
+          intro: Bitte definieren Sie die Kriterien für diese Richtlinie. Mit den Kriterien können Sie festlegen, für welchen Ursprung diese Sicherheitseinstellungen verwendet werden sollen.
+          asNumbersHelp: 'Fügen Sie die AS-Nummern hinzu, für die diese Richtlinie berücksichtigt werden soll. Sie können die AS-Nummer in den Details der Einsendung sehen. Beispiel: 123456'
+          title: Kriterien
+          asNumbers: AS-Nummern
+          countryCodes: Ländercodes
+          intro2: Die Richtlinie wird für den Benutzer verwendet, sobald eines dieser Kriterien zutrifft. Sie müssen mindestens ein Kriterium hinzufügen, um die Richtlinie zu speichern.
+          subnets: Subnetze
+          subnetsHelp: 'Fügen Sie die Subnetze hinzu, für die diese Richtlinie berücksichtigt werden soll. Sie können IPv4- oder IPv6-Subnetze definieren. Die IP-Adresse sehen Sie in den Details der Anmeldung. Beispiel: 192.168.1.0/24'
+        infoGeoIp2Disabled: GeoIP2 ist nicht verfügbar. Bitte konfigurieren Sie die GeoIP2-Datenbank, damit die Kriterien Ländercodes und AS-Nummern verwendet werden können.
+        settings:
+          title: Sicherheitseinstellungen
+          intro: Bitte aktivieren Sie das Kontrollkästchen für die Einstellungen, die Sie in den Sicherheitseinstellungen überschreiben möchten. Wenn Sie eine Einstellung nicht überschreiben, wird mosparo die Einstellung aus den Projekteinstellungen verwenden.
+      list:
+        name: Name
+        actions: Aktionen
+        priority: Priorität
+      add:
+        title: Richtlinie hinzufügen
+      delete:
+        message:
+          successfullyRemoved: Die Sicherheitsrichtlinie %guidelineName% wurde erfolgreich aus dem Projekt entfernt.
+        title: Sicherheitsrichtlinie %guidelineName% entfernen
+        confirm: Möchten Sie die Sicherheitsrichtlinie %guidelineName% wirklich entfernen?
+      edit:
+        title: Richtlinie %guidelineName% bearbeiten
+    originBasedSecuritySettings:
+      add:
+        title: Richtlinie hinzufügen
+      title: Ursprungsbezogene Sicherheitsrichtlinien
+    generalSecuritySettings:
+      intro: Die allgemeinen Sicherheitseinstellungen gelten für alle Benutzer, für die keine ursprungsbezogene Sicherheitsrichtlinien gelten.
+      action: Allgemeine Sicherheitseinstellungen bearbeiten
+      title: Allgemeine Sicherheitseinstellungen
+    backToSecurity: Zurück zu den Sicherheitseinstellungen
   design:
     title: Darstellung
 
@@ -900,6 +1042,20 @@ administration:
         requests: Anfragen
         minutes: Minuten
       intro: Die Login-Drosselung hilft, die mosparo Login-Seite vor einem Brute-Force-Angriff zu schützen. Indem die Anzahl der Anfragen gezählt und ein Angreifer nach einigen Versuchen blockiert wird, ist ein solcher Angriff sehr zeitaufwändig und nahezu sinnlos.
+    backendAccess:
+      form:
+        ipAllowList: Erlaubte IP-Adressen und Subnetze
+        ipAllowListHelp: 'Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24'
+      title: Backend-Zugriff
+      hintOwnIp: Bitte beachten Sie, dass Sie diese Einstellung nur speichern können, wenn Ihre IP-Adresse (%ipAddress%) ebenfalls in der Liste enthalten ist (als IP-Adresse oder Subnetz). Wenn Sie eine IPv6-Adresse haben, empfiehlt es sich, Ihr Subnetz hinzuzufügen.
+      intro: Wenn Sie mosparo vor unerlaubten Zugriffen aus dem Internet schützen wollen, können Sie festlegen, welche IP-Adressen auf das Backend zugreifen dürfen. Lassen Sie dieses Feld leer, um jedem den Zugriff auf die Login-Seite und das Backend zu ermöglichen.
+    apiAccess:
+      form:
+        ipAllowList: Erlaubte IP-Adressen und Subnetze
+        ipAllowListHelp: 'Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24'
+      title: API-Zugriff
+      intro: Wenn Sie die mosparo API vor unerlaubten Zugriffen aus dem Internet schützen wollen, können Sie angeben, welche IP-Adressen darauf zugreifen dürfen. Lassen Sie dieses Feld leer, um jedem Gerät den Zugriff auf die APIs zu erlauben.
+      hintFrontendApi: Bitte beachten Sie, dass dies nur die Verifizierungs- und Statistik-API einschränkt. Die Frontend-API wird immer öffentlich zugänglich sein.
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
@@ -1213,6 +1369,12 @@ tools:
         type: Typ
         itemsRemove: Entfernen
         spamRatingFactor: Spam-Bewertungsfaktor
+        securitySettings: Sicherheitseinstellungen
+        guidelineNew: Neue Richtlinie
+        priority: Priorität
+        criteria: Kriterien
+        guidelineModify: Anpassung erforderlich
+        guidelineEqual: Keine Anpassung erforderlich
       title: Verfügbare Änderungen
       intro: mosparo hat den Import simuliert und die folgenden Änderungen festgestellt. Bitte überprüfen Sie diese und führen Sie die Änderungen aus, wenn alles in Ordnung ist.
       changes:
@@ -1309,3 +1471,16 @@ tools:
     rulesets: Regel-Pakete
     designSettings: Darstellungseinstellungen
     rulesetsHelp: Enthält alle Regel-Pakete eines Projekts.
+dataTable:
+  name: Name
+  empty: Leer
+  value: Wert
+dateRange:
+  2m: 2 Monate
+  forever: Uneingeschränkt
+  1y: 1 Jahr
+  14d: 14 Tage
+  6m: 6 Monate
+  1m: 1 Monat
+  3m: 3 Monate
+  2y: 2 Jahre

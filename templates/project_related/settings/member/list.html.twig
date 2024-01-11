@@ -14,7 +14,7 @@
                 <i class="ti ti-question-mark"></i>
                 {{ 'action.help'|trans }}
             </a>
-            <a href="{{ path('settings_member_add') }}" class="btn btn-success add-button">
+            <a href="{{ path('settings_member_add', { '_projectId': activeProject.id }) }}" class="btn btn-success add-button">
                 <i class="ti ti-plus"></i>
                 <span>{{ 'settings.projectMember.add.title'|trans }}</span>
             </a>

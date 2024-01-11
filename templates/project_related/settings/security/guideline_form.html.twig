@@ -1,0 +1,91 @@
+{% extends 'project_related/settings/settings_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% if isNew %}
+    {% set title = 'settings.security.guideline.add.title'|trans %}
+{% else %}
+    {% set title = 'settings.security.guideline.edit.title'|trans({ '%guidelineName%': guideline.name }) %}
+{% endif %}
+
+{% block documentTitle %}{{ title }} - {{ 'settings.security.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'settings.security.title'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-xl">
+        {{ form_start(form) }}
+            <div class="row">
+                <div class="col-12 col-lg-4">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ 'settings.security.guideline.form.guideline.title'|trans }}</h3>
+                        </div>
+                        <div class="card-body">
+                            {{ form_row(form.name) }}
+                            {{ form_row(form.description) }}
+                            {{ form_row(form.priority) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8">
+                    {% for error in form.vars.errors %}
+                        <div class="alert alert-danger">
+                            {{ error.message }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ 'settings.security.guideline.form.criteria.title'|trans }}</h3>
+                        </div>
+                        <div class="card-body rule-items">
+                            <p>
+                                {{ 'settings.security.guideline.form.criteria.intro'|trans }}
+                            </p>
+                            <p>
+                                {{ 'settings.security.guideline.form.criteria.intro2'|trans }}
+                            </p>
+
+                            {% if not geoIp2Active %}
+                                <div class="alert alert-info">
+                                    {{ 'settings.security.guideline.form.infoGeoIp2Disabled'|trans }}
+                                </div>
+                            {% endif %}
+
+                            {{ form_row(form.subnets) }}
+
+                            {% if geoIp2Active %}
+                                {{ form_row(form.countryCodes) }}
+                                {{ form_row(form.asNumbers) }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h3 class="h2 mt-4">{{ 'settings.security.guideline.form.settings.title'|trans }}</h3>
+                    <div class="alert alert-info">
+                        {{ 'settings.security.guideline.form.settings.intro'|trans }}
+                    </div>
+
+                    {% include 'project_related/settings/security/form/security_settings.html.twig' with { 'form': form.configValues } %}
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto mt-2 mt-md-0">
+                    <a href="{{ path('settings_security', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                        <i class="ti ti-chevron-left"></i>
+                        {{ 'settings.security.backToSecurity'|trans }}
+                    </a>
+                </div>
+
+                <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="ti ti-device-floppy"></i>
+                        {{ 'action.save'|trans }}
+                    </button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

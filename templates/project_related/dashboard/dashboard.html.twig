@@ -5,6 +5,30 @@
 {% block documentTitle %}{{ 'dashboard.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'dashboard.title'|trans }}{% endblock %}
 
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    {% if dateRangeOptions|length > 1 %}
+        <div class="col-auto ms-auto">
+            <div class="btn-list">
+                <div class="dropdown">
+                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'dashboard.dateRange.dropdown'|trans }}">
+                        <i class="ti ti-calendar-stats"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for dateRangeLabel, value in dateRangeOptions %}
+                            <a href="{{ path('project_dashboard_with_range', {'_projectId': activeProject.id, 'range': value}) }}" class="dropdown-item">
+                                <i class="ti {% if activeRange == value %}ti-check{% else %}ti-calendar-stats{% endif %}"></i>
+                                {{ dateRangeLabel|trans }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block pageBody %}
     <div class="container-xl">
         <div class="row">
@@ -12,7 +36,7 @@
                 <div class="card mb-3">
                     <div class="card-header border-0 p-0">
                         <div class="card-title p-0 flex-fill">
-                            <a href="{{ path('submission_list') }}" class="d-block p-3 text-body dashboard-link">
+                            <a href="{{ path('submission_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <span class="bg-blue text-white avatar">
@@ -45,10 +69,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-4">
+            <div class="col-12 {% if isOwner %}col-md-4{% else %}col-md-6{% endif %}">
                 <div class="card mb-3 flex-fill">
                     <div class="card-title mb-0 p-0 flex-fill">
-                        <a href="{{ path('rule_list') }}" class="d-block p-3 text-body dashboard-link">
+                        <a href="{{ path('rule_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span class="bg-teal text-white avatar">
@@ -68,10 +92,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 {% if isOwner %}col-md-4{% else %}col-md-6{% endif %}">
                 <div class="card mb-3 flex-fill">
                     <div class="card-title mb-0 p-0 flex-fill">
-                        <a href="{{ path('ruleset_list') }}" class="d-block p-3 text-body dashboard-link">
+                        <a href="{{ path('ruleset_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span class="bg-cyan text-white avatar">
@@ -91,26 +115,28 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
-                <div class="card mb-3 flex-fill">
-                    <div class="card-title mb-0 p-0 flex-fill">
-                        <a href="{{ path('settings_general') }}" class="d-block p-3 text-body dashboard-link">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <span class="bg-azure text-white avatar">
-                                        <i class="ti ti-settings"></i>
-                                    </span>
-                                </div>
-                                <div class="col">
-                                    <div class="font-weight-medium">
-                                        {{ 'settings.title'|trans }}
+            {% if isOwner %}
+                <div class="col-12 col-md-4">
+                    <div class="card mb-3 flex-fill">
+                        <div class="card-title mb-0 p-0 flex-fill">
+                            <a href="{{ path('settings_general', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="bg-azure text-white avatar">
+                                            <i class="ti ti-settings"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">
+                                            {{ 'settings.title'|trans }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -241,6 +267,28 @@
                             enabled: false
                         }
                     },
+                    {% if statisticOnlyRangeStartDate != statisticOnlyRangeEndDate %}
+                        annotations: {
+                            xaxis: [
+                                {
+                                    x: {{ statisticOnlyRangeEndDate }},
+                                    borderColor: '#888888',
+                                    label: {
+                                        borderColor: 'transparent',
+                                        text: '{{ 'dashboard.chart.annotation.statisticOnly'|trans }}',
+                                        orientation: 'horizontal',
+                                        textAnchor: 'end',
+                                        offsetY: 15,
+                                        offsetX: -10,
+                                        style: {
+                                            fontSize: '14px',
+                                            background: 'transparent',
+                                        }
+                                    }
+                                },
+                            ]
+                        }
+                    {% endif %}
                 };
 
                 var submissionChart = new ApexCharts($('#submission_chart')[0], chartOptions);

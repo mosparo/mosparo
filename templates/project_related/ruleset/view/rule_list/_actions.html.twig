@@ -1,7 +1,7 @@
 {% trans_default_domain 'mosparo' %}
 
 <div class="d-flex action-buttons-list">
-    <a href="{{ path('ruleset_view_rule', { 'id': row.rulesetCache.ruleset.id, 'ruleUuid': row.uuid }) }}" class="btn btn-info me-2">
+    <a href="{{ path('ruleset_view_rule', { '_projectId': activeProject.id, 'id': row.rulesetCache.ruleset.id, 'ruleUuid': row.uuid }) }}" class="btn btn-info me-2">
         <i class="ti ti-info-circle"></i>
         {{ 'action.view'|trans }}
     </a>

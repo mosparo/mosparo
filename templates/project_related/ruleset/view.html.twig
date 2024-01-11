@@ -93,13 +93,13 @@
                             <i class="ti ti-filter"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a href="{{ path('ruleset_view', { 'id': ruleset.id }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
+                            <a href="{{ path('ruleset_view', { '_projectId': activeProject.id, 'id': ruleset.id }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
                                 <i class="ti ti-check {% if filter != '' %}invisible{% endif %}"></i>
                                 {{ 'rule.filter.options.all'|trans }}
                             </a>
                             <div class="dropdown-divider"></div>
                             {% for ruleType in ruleTypes %}
-                                <a href="{{ path('ruleset_view_filtered', { 'id': ruleset.id, 'filter': ruleType.key }) }}" class="dropdown-item {% if filter == ruleType.key %}active{% endif %} {% if not numberOfRulesByType[ruleType.key] is defined %}disabled{% endif %}">
+                                <a href="{{ path('ruleset_view_filtered', { '_projectId': activeProject.id, 'id': ruleset.id, 'filter': ruleType.key }) }}" class="dropdown-item {% if filter == ruleType.key %}active{% endif %} {% if not numberOfRulesByType[ruleType.key] is defined %}disabled{% endif %}">
                                     <i class="ti {% if filter == ruleType.key %}ti-check{% else %}{{ ruleType.icon }}{% endif %}"></i>
                                     {{ ruleType.name|trans }}
 
@@ -210,7 +210,7 @@
 
         <div class="row mt-3">
             <div class="col-12 col-md-auto">
-                <a href="{{ path('ruleset_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                <a href="{{ path('ruleset_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
                     {{ 'ruleset.backToList'|trans }}
                 </a>

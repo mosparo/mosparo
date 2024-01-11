@@ -32,6 +32,13 @@
                         {{ form_row(form.hosts) }}
                         {{ form_row(form.status) }}
                         {{ form_row(form.spamScore) }}
+                        {{ form_row(form.statisticStorageLimit) }}
+
+                        <hr>
+
+                        <h4>{{ 'settings.general.subtitle.developerOptions'|trans }}</h4>
+                        {{ form_row(form.apiDebugMode) }}
+                        {{ form_row(form.verificationSimulationMode) }}
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -65,7 +72,7 @@
                     <h3 class="card-title">{{ 'settings.general.apiKeys.title'|trans }}</h3>
 
                     <div class="card-actions">
-                        <a href="{{ path('settings_reissue_keys') }}" class="btn btn-warning">
+                        <a href="{{ path('settings_reissue_keys', { '_projectId': activeProject.id }) }}" class="btn btn-warning">
                             <i class="ti ti-refresh"></i>
                             {{ 'settings.general.action.reissue'|trans }}
                         </a>

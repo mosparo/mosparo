@@ -120,7 +120,7 @@
                                                         {{ 'header.noProjectsFound'|trans }}
                                                     </div>
                                                     {% for project in projects %}
-                                                        <a href="{{ path('project_switch', { 'project': project.id }) }}" class="dropdown-item project-item">
+                                                        <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="dropdown-item project-item">
                                                             {% if activeProject and activeProject.id == project.id %}
                                                                 <i class="ti ti-check"></i>
                                                             {% else %}
@@ -145,8 +145,8 @@
                                     </div>
 
                                     {% if activeProject %}
-                                        <li class="nav-item {% if route == 'dashboard' %}active{% endif %}">
-                                            <a class="nav-link" href="{{ path('dashboard') }}">
+                                        <li class="nav-item {% if route == 'project_dashboard' %}active{% endif %}">
+                                            <a class="nav-link" href="{{ path('project_dashboard', {'_projectId': activeProject.id}) }}">
                                                 <i class="ti ti-dashboard"></i>
                                                 <span class="nav-link-title">
                                                     {{ 'dashboard.title'|trans }}
@@ -155,7 +155,7 @@
                                         </li>
 
                                         <li class="nav-item {% if route starts with 'submission_' %}active{% endif %}">
-                                            <a class="nav-link" href="{{ path('submission_list') }}">
+                                            <a class="nav-link" href="{{ path('submission_list', {'_projectId': activeProject.id}) }}">
                                                 <i class="ti ti-mail"></i>
                                                 <span class="nav-link-title">
                                                     {{ 'submission.title'|trans }}
@@ -164,7 +164,7 @@
                                         </li>
 
                                         <li class="nav-item {% if route starts with 'rule_' %}active{% endif %}">
-                                            <a class="nav-link" href="{{ path('rule_list') }}">
+                                            <a class="nav-link" href="{{ path('rule_list', {'_projectId': activeProject.id}) }}">
                                                 <i class="ti ti-tags"></i>
                                                 <span class="nav-link-title">
                                                     {{ 'rule.title'|trans }}
@@ -173,7 +173,7 @@
                                         </li>
 
                                         <li class="nav-item {% if route starts with 'ruleset_' %}active{% endif %}">
-                                            <a class="nav-link" href="{{ path('ruleset_list') }}">
+                                            <a class="nav-link" href="{{ path('ruleset_list', {'_projectId': activeProject.id}) }}">
                                                 <i class="ti ti-stack"></i>
                                                 <span class="nav-link-title">
                                                     {{ 'ruleset.title'|trans }}
@@ -190,19 +190,19 @@
                                                     </span>
                                                 </a>
                                                 <div class="dropdown-menu" data-bs-popper="none">
-                                                    <a class="dropdown-item" href="{{ path('settings_general') }}">
+                                                    <a class="dropdown-item" href="{{ path('settings_general', {'_projectId': activeProject.id}) }}">
                                                         <i class="ti ti-settings"></i>
                                                         {{ 'settings.general.title'|trans }}
                                                     </a>
-                                                    <a class="dropdown-item" href="{{ path('settings_member_list') }}">
+                                                    <a class="dropdown-item" href="{{ path('settings_member_list', {'_projectId': activeProject.id}) }}">
                                                         <i class="ti ti-users"></i>
                                                         {{ 'settings.projectMember.title'|trans }}
                                                     </a>
-                                                    <a class="dropdown-item" href="{{ path('settings_security') }}">
+                                                    <a class="dropdown-item" href="{{ path('settings_security', {'_projectId': activeProject.id}) }}">
                                                         <i class="ti ti-shield-x"></i>
                                                         {{ 'settings.security.title'|trans }}
                                                     </a>
-                                                    <a class="dropdown-item" href="{{ path('settings_design') }}">
+                                                    <a class="dropdown-item" href="{{ path('settings_design', {'_projectId': activeProject.id}) }}">
                                                         <i class="ti ti-color-swatch"></i>
                                                         {{ 'settings.design.title'|trans }}
                                                     </a>
@@ -218,16 +218,16 @@
                                                 </span>
                                             </a>
                                             <div class="dropdown-menu" data-bs-popper="none">
-                                                <a class="dropdown-item" href="{{ path('tools_rule_tester') }}">
+                                                <a class="dropdown-item" href="{{ path('tools_rule_tester', {'_projectId': activeProject.id}) }}">
                                                     <i class="ti ti-test-pipe"></i>
                                                     {{ 'tools.ruleTester.title'|trans }}
                                                 </a>
-                                                <a class="dropdown-item" href="{{ path('tools_export') }}">
+                                                <a class="dropdown-item" href="{{ path('tools_export', {'_projectId': activeProject.id}) }}">
                                                     <i class="ti ti-file-export"></i>
                                                     {{ 'tools.export.title'|trans }}
                                                 </a>
                                                 {% if isOwner %}
-                                                    <a class="dropdown-item" href="{{ path('tools_import') }}">
+                                                    <a class="dropdown-item" href="{{ path('tools_import', {'_projectId': activeProject.id}) }}">
                                                         <i class="ti ti-file-import"></i>
                                                         {{ 'tools.import.title'|trans }}
                                                     </a>

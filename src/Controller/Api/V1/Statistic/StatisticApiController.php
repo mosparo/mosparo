@@ -35,9 +35,24 @@ class StatisticApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);
         }
 
-        // Get the time range (in seconds) and calculate the start date
         $startDate = null;
-        if ($request->query->has('range')) {
+
+        // Get the start date from the parameters
+        if ($request->query->has('startDate')) {
+            try {
+                $startDate = new DateTime($request->query->get('startDate'));
+
+                if ($startDate > (new DateTime())) {
+                    return new JsonResponse(['error' => true, 'errorMessage' => 'The start date cannot be in the future.']);
+                }
+            } catch (\Exception $e) {
+                return new JsonResponse(['error' => true, 'errorMessage' => 'The start date has an invalid format. Excepted format: YYYY-MM-DD']);
+            }
+        }
+
+        // Get the time range (in seconds) and calculate the start date.
+        // We only accept the range parameter if the start date parameter is not set
+        if ($startDate === null && $request->query->has('range')) {
             $range = intval($request->query->get('range'));
 
             if ($range === 0) {
@@ -49,7 +64,7 @@ class StatisticApiController extends AbstractController
                 $interval = new DateInterval('PT' . $range . 'S');
                 $startDate = $startDate->sub($interval);
             } catch (Exception $e) {
-                $startDate = false;
+                $startDate = null;
             }
         }
 

@@ -1,0 +1,147 @@
+{% trans_default_domain 'mosparo' %}
+
+<div class="row">
+    <div class="col">
+        <div class="card mb-3">
+            <div class="card-header card-header-with-override-option">
+                <h3 class="card-title">{{ 'settings.security.minimumTime.title'|trans }}</h3>
+                {% if form.overrideMinimumTime is defined %}
+                    {{ form_widget(form.overrideMinimumTime) }}
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p>
+                    {{ 'settings.security.minimumTime.intro'|trans }}
+                </p>
+
+                <div class="row">
+                    <div class="col mb-3">
+                        {{ form_row(form.minimumTimeActive) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(form.minimumTimeSeconds) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header card-header-with-override-option">
+                <h3 class="card-title">{{ 'settings.security.honeypot.title'|trans }}</h3>
+                {% if form.overrideHoneypotField is defined %}
+                    {{ form_widget(form.overrideHoneypotField) }}
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p>
+                    {{ 'settings.security.honeypot.intro'|trans }}
+                </p>
+
+                <div class="row">
+                    <div class="col mb-3">
+                        {{ form_row(form.honeypotFieldActive) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(form.honeypotFieldName) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header card-header-with-override-option">
+                <h3 class="card-title">{{ 'settings.security.requestDelaying.title'|trans }}</h3>
+                {% if form.overrideDelay is defined %}
+                    {{ form_widget(form.overrideDelay) }}
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p>
+                    {{ 'settings.security.requestDelaying.intro'|trans }}
+                </p>
+                <p>
+                    {{ 'settings.security.requestDelaying.infoIpAddress'|trans }}
+                </p>
+
+                <div class="row">
+                    <div class="col mb-3">
+                        {{ form_row(form.delayActive) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 mb-3">
+                        {{ form_row(form.delayNumberOfRequests) }}
+                    </div>
+                    <div class="col-sm-12 col-lg-6 mb-3">
+                        {{ form_row(form.delayDetectionTimeFrame) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 mb-3 mb-lg-0">
+                        {{ form_row(form.delayTime) }}
+                    </div>
+                    <div class="col-sm-12 col-lg-6">
+                        {{ form_row(form.delayMultiplicator) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header card-header-with-override-option">
+                <h3 class="card-title">{{ 'settings.security.ipLockout.title'|trans }}</h3>
+                {% if form.overrideLockout is defined %}
+                    {{ form_widget(form.overrideLockout) }}
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p>
+                    {{ 'settings.security.ipLockout.intro'|trans }}
+                </p>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form_row(form.lockoutActive) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-12 col-lg-6">
+                        {{ form_row(form.lockoutNumberOfRequests) }}
+                    </div>
+                    <div class="col-sm-12 col-lg-6">
+                        {{ form_row(form.lockoutDetectionTimeFrame) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        {{ form_row(form.lockoutTime) }}
+                    </div>
+                    <div class="col-sm-12 col-lg-6">
+                        {{ form_row(form.lockoutMultiplicator) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if form.ipAllowList is defined %}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'settings.security.ipAllowList.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'settings.security.ipAllowList.intro'|trans }}
+                    </p>
+
+                    {{ form_row(form.ipAllowList) }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

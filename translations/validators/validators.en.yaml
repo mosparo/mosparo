@@ -14,3 +14,18 @@ tools:
   import:
     importFile:
       correctFile: Please upload a correct JSON file.
+
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Your IP address is not allowed by the allow list. Please add your IP address to the list.
+
+ipAllowList:
+  itemInvalid: The item '%item%' is not a valid IP address or subnet.
+
+honeypotField:
+  nameHasInvalidCharacter: Please use only letters, numbers and the dash sign (-).
+
+securityGuideline:
+  atLeastOneCriteriaRequired: The security guideline requires at least one criteria.
+  asNumberNotNumeric: The AS number is not a number.

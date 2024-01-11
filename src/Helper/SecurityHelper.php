@@ -5,12 +5,12 @@ namespace Mosparo\Helper;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use IPLib\Factory;
-use IPLib\Range\Subnet;
 use Mosparo\Entity\Delay;
+use Mosparo\Entity\IpLocalization;
 use Mosparo\Entity\Lockout;
-use Mosparo\Entity\Project;
+use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Util\HashUtil;
+use Mosparo\Util\IpUtil;
 
 class SecurityHelper
 {
@@ -21,36 +21,36 @@ class SecurityHelper
 
     protected ProjectHelper $projectHelper;
 
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper)
+    protected GeoIp2Helper $geoIp2Helper;
+
+    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, GeoIp2Helper $geoIp2Helper)
     {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
+        $this->geoIp2Helper = $geoIp2Helper;
     }
 
-    public function checkIpAddress($ipAddress, $feature)
+    public function checkIpAddress(string $ipAddress, int $feature, array $securitySettings)
     {
-        $project = $this->projectHelper->getActiveProject();
-        $ipAllowList = $project->getConfigValue('ipAllowList');
-
-        if ($this->isIpOnAllowList($ipAddress, $ipAllowList)) {
+        if (IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList'])) {
             return false;
         }
 
         if ($feature === self::FEATURE_DELAY) {
-            $delayActive = $project->getConfigValue('delayActive');
+            $delayActive = $securitySettings['delayActive'];
 
             if ($delayActive) {
-                $delay = $this->checkForDelay($ipAddress, $project);
+                $delay = $this->checkForDelay($ipAddress, $securitySettings);
 
                 if ($delay !== null) {
                     return $delay;
                 }
             }
         } else if ($feature === self::FEATURE_LOCKOUT) {
-            $lockoutActive = $project->getConfigValue('lockoutActive');
+            $lockoutActive = $securitySettings['lockoutActive'];
 
             if ($lockoutActive) {
-                $lockout = $this->checkForLockout($ipAddress, $project);
+                $lockout = $this->checkForLockout($ipAddress, $securitySettings);
 
                 if ($lockout !== null) {
                     return $lockout;
@@ -61,37 +61,14 @@ class SecurityHelper
         return false;
     }
 
-    protected function isIpOnAllowList($ipAddress, $ipAllowList): bool
-    {
-        $items = preg_split('/\r\n|\r|\n/', $ipAllowList);
-        foreach ($items as $item) {
-            if (strpos($item, '/') !== false) {
-                $address = Factory::parseAddressString($ipAddress);
-                $subnet = Subnet::parseString($item);
-
-                if ($address !== null &&
-                    $subnet !== null &&
-                    $address->getAddressType() == $subnet->getAddressType() &&
-                    $subnet->contains($address)
-                ) {
-                    return true;
-                }
-            } else if ($item === $ipAddress) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    protected function checkForDelay($ipAddress, Project $project)
+    protected function checkForDelay(string $ipAddress, array $securitySettings)
     {
         $existingDelay = $this->checkForExistingDelay($ipAddress);
 
-        $delayNumberOfRequests = $project->getConfigValue('delayNumberOfRequests');
-        $delayDetectionTimeFrame = $project->getConfigValue('delayDetectionTimeFrame');
-        $delayTime = $project->getConfigValue('delayTime');
-        $delayMultiplicator = $project->getConfigValue('delayMultiplicator');
+        $delayNumberOfRequests = $securitySettings['delayNumberOfRequests'];
+        $delayDetectionTimeFrame = $securitySettings['delayDetectionTimeFrame'];
+        $delayTime = $securitySettings['delayTime'];
+        $delayMultiplicator = $securitySettings['delayMultiplicator'];
 
         $count = $this->countRequests($ipAddress, $delayDetectionTimeFrame);
         if ($count > $delayNumberOfRequests || $existingDelay !== null) {
@@ -119,14 +96,14 @@ class SecurityHelper
         return null;
     }
 
-    protected function checkForLockout($ipAddress, Project $project)
+    protected function checkForLockout(string $ipAddress, array $securitySettings)
     {
         $existingLockout = $this->checkForExistingLockout($ipAddress);
 
-        $lockoutNumberOfRequests = $project->getConfigValue('lockoutNumberOfRequests');
-        $lockoutDetectionTimeFrame = $project->getConfigValue('lockoutDetectionTimeFrame');
-        $lockoutTime = $project->getConfigValue('lockoutTime');
-        $lockoutMultiplicator = $project->getConfigValue('lockoutMultiplicator');
+        $lockoutNumberOfRequests = $securitySettings['lockoutNumberOfRequests'];
+        $lockoutDetectionTimeFrame = $securitySettings['lockoutDetectionTimeFrame'];
+        $lockoutTime = $securitySettings['lockoutTime'];
+        $lockoutMultiplicator = $securitySettings['lockoutMultiplicator'];
 
         $count = $this->countRequests($ipAddress, $lockoutDetectionTimeFrame);
         if ($count > $lockoutNumberOfRequests || $existingLockout !== null) {
@@ -199,5 +176,52 @@ class SecurityHelper
            ->setParameter('now', new DateTime());
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function determineSecuritySettings(?string $ipAddress): array
+    {
+        if ($ipAddress) {
+            $ipLocalization = $this->geoIp2Helper->locateIpAddress($ipAddress);
+            if ($ipLocalization === false) {
+                $ipLocalization = null;
+            }
+
+            $builder = $this->entityManager->createQueryBuilder();
+            $builder
+                ->select('sg')
+                ->from(SecurityGuideline::class, 'sg')
+                ->orderBy('sg.priority', 'DESC');
+
+            foreach ($builder->getQuery()->getResult() as $securityGuideline) {
+                if ($this->matchSecurityGuideline($securityGuideline, $ipAddress, $ipLocalization)) {
+                    return $securityGuideline->getConfigValues();
+                }
+            }
+        }
+
+        $project = $this->projectHelper->getActiveProject();
+
+        return $project->getSecurityConfigValues();
+    }
+
+    protected function matchSecurityGuideline(SecurityGuideline $securityGuideline, string $ipAddress, ?IpLocalization $ipLocalization = null): bool
+    {
+        foreach ($securityGuideline->getSubnets() as $subnet) {
+            if (IpUtil::isIpInSubnet($subnet, $ipAddress)) {
+                return true;
+            }
+        }
+
+        if ($ipLocalization !== null) {
+            if (in_array($ipLocalization->getCountry(), $securityGuideline->getCountryCodes())) {
+                return true;
+            }
+
+            if (in_array($ipLocalization->getAsNumber(), $securityGuideline->getAsNumbers())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -14,20 +14,20 @@
         <div class="d-none d-lg-block col-lg-2">
             <ul class="nav nav-pills nav-vertical">
                 <li class="nav-item">
-                    <a href="{{ path('tools_rule_tester') }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_rule_tester' %}active{% endif %}">
+                    <a href="{{ path('tools_rule_tester', { '_projectId': activeProject.id }) }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_rule_tester' %}active{% endif %}">
                         <i class="ti ti-test-pipe"></i>
                         {{ 'tools.ruleTester.title'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('tools_export') }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_export' %}active{% endif %}">
+                    <a href="{{ path('tools_export', { '_projectId': activeProject.id }) }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_export' %}active{% endif %}">
                         <i class="ti ti-file-export"></i>
                         {{ 'tools.export.title'|trans }}
                     </a>
                 </li>
                 {% if isOwner %}
                     <li class="nav-item">
-                        <a href="{{ path('tools_import') }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_import' %}active{% endif %}">
+                        <a href="{{ path('tools_import', { '_projectId': activeProject.id }) }}" class="nav-link {% if app.request.attributes.get('_route') == 'tools_import' %}active{% endif %}">
                             <i class="ti ti-file-import"></i>
                             {{ 'tools.import.title'|trans }}
                         </a>
