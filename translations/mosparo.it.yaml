@@ -369,6 +369,7 @@ submission:
         requestSignature: Firma richiesta
         apiEndpointAndRequestDataJson: Endpoint API e dati richiesta
         postData: Dati modulo
+        validationAndFormDataSignature: Firma validazione e dati modulo
       sections:
         one:
           intro: Per verificare un invio devi conoscere il token di invio che identifica l'invio stesso e il token di validazione che dimostra la validità di un invio. Estrai questi due token dai dati del modulo.
@@ -387,6 +388,18 @@ submission:
           intro: Utilizza il token di validazione che hai estratto dai dati del modulo al primo passo e genera una firma. La firma deve essere un hash HMAC SHA256 del token di validazione. Usa la chiave privata del progetto come chiave.
         six:
           title: 'Passo 6: Genera una firma di verifica'
+          intro: Mette insieme le firme della validazione e dei dati del modulo e crea la firma di verifica. La firma è un hash HMAC SHA256 che include le firme della validazione e dei dati del modulo. Utilizza la chiave privata del progetto come chiave.
+        eight:
+          title: 'Passo 8: generare la firma della richiesta'
+          intro: Per assicurarsi che la richiesta sia valida dovrai generare la firma per la richiesta. Prima di tutto converti i dati della richiesta in una stringa JSON. Metti insieme l'endpoint API con la stringa JSON dei dati della richiesta e genera un hash HMAC SHA256 per questa stringa con la chiave privata del progetto come chiave.
+        seven:
+          intro: Dopo che i dati sono stati raccolti e le firme e gli hash sono stati generati è il momento di spedire tutto all'API per la verifica. Per fare questo serve raccogliere le seguenti informazioni.
+          title: 'Passo 7: Raccolta dati richiesta'
+        nine:
+          title: 'Passo 9: Invia la richiesta API'
+          intro: Tutti i dati sono stati raccolti e preparati. Ora puoi inviarli all'API.
+        ten:
+          title: 'Passo 10: verifica la risposta'
       title: Simulazione di validiazione
       intro: La simulazione di verifica mostra i dati che mosparo accetta per il processo di verifica. Puoi confrontare i dati visualizzati con quelli che il tuo procedimento di verifica creerà per individuare eventuali problemi.
       buttons:
@@ -434,6 +447,10 @@ settings:
       title: Chiavi API
       reissueApiKeys:
         title: Riemetti chiavi API
+        message:
+          errorOnlyOwner: Solo il proprietario del progetto può riemettere le chiavi API.
+          successfullyReissued: Le chiavi API sono state riemesse correttamente.
+        confirm: Vuoi veramente riemettere le chiavi API per il progetto %projectName%?
       publicKey: Chiave pubblica
     title: Impostazioni generali
     connectionDetails:
@@ -470,6 +487,8 @@ settings:
     add:
       title: Aggiungi membro al progetto
     backToList: Torna ai membri progetto
+    edit:
+      title: Modifica membro di progetto %projectMemberName%
   backToSettings: Torna alle impostazioni
   security:
     title: Sicurezza
