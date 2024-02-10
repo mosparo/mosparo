@@ -2,7 +2,9 @@
 framework:
     secret: '%env(secret)%'
     #csrf_protection: true
+    annotations: false
     http_method_override: false
+    handle_all_throwables: true
 
     # If you install mosparo behind a reverse proxy, you have to specify the proxy IP address.
     # see https://documentation.mosparo.io/docs/installation/reverse_proxy
