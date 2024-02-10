@@ -521,12 +521,12 @@
         "version": "v2.1.0"
     },
     "symfony/panther": {
-        "version": "1.1",
+        "version": "2.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "1.0",
-            "ref": "877d853a05c6713665a2f4b954734592680abff6"
+            "ref": "292a3236e81f55b545b09b9954ab097248972ab3"
         }
     },
     "symfony/phpunit-bridge": {
