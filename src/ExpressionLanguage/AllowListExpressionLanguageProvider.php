@@ -11,7 +11,7 @@ class AllowListExpressionLanguageProvider implements ExpressionFunctionProviderI
     /**
      * @inheritDoc
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         $securityCompiler = function (array $data, $ipAddress, $allowList): string
         {

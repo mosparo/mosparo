@@ -67,7 +67,7 @@ class EncryptedJson extends Type
      * @return mixed
      * @throws Exception
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (!isset($_ENV['ENABLE_ENCRYPTION']) || $_ENV['ENABLE_ENCRYPTION'] === 'false') {
             return $value;

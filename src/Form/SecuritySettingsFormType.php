@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class SecuritySettingsFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $isGeneralSettings = $options['isGeneralSettings'];
         $addOverrideOptions = $options['addOverrideOptions'];
@@ -62,7 +62,7 @@ class SecuritySettingsFormType extends AbstractType
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'isGeneralSettings' => false,

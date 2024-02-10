@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class IpAddressFormType extends AbstractRuleTypeFormType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $ruleType = $options['rule_type'];
         if ($ruleType === null) {
