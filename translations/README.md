@@ -25,6 +25,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | French                | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), mosparo Core Developers                             |
 | German                | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/)                                   |
 | Greek                 | el            | [OneStage](https://hosted.weblate.org/user/OneStage/)                                                        |
+| Hindi                 | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                            |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                                                            |
 | Italian               | it            | mosparo Core Developers                                                                                      |
 | Japanese              | ja            | Claudia and Melody (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                             |
