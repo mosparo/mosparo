@@ -30,14 +30,20 @@ let searchProject = function () {
 
 $(document).ready(function () {
     let dropdownEl = $('.project-dropdown-toggle');
+    let inputEl = $('.project-dropdown-menu input');
 
     dropdownEl.click(function () {
         if ($(this).hasClass('show')) {
             dropdownEl.dropdown('hide');
         } else {
             dropdownEl.dropdown('show');
-            $('.project-dropdown-menu input').focus();
+            inputEl.focus();
+            if (inputEl.val().trim() === '') {
+                searchProject();
+            }
+
             setFocusOnFirstVisibleProject();
+            $('.dropdown-projects-list .project-item.focus')[0].scrollIntoView({ block: 'nearest' });
         }
     });
 
@@ -49,7 +55,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.project-dropdown-menu input').on('keydown', function (ev) {
+    inputEl.on('keydown', function (ev) {
         if (ev.keyCode === 38 || ev.keyCode === 40 || ev.keyCode === 13) {
             let focusedProject = $('.dropdown-projects-list .project-item.focus');
             if (ev.keyCode === 38) {
@@ -57,20 +63,22 @@ $(document).ready(function () {
                 if (prevProject.length) {
                     focusedProject.removeClass('focus');
                     prevProject.addClass('focus');
-                    prevProject[0].scrollIntoView(true);
+                    prevProject[0].scrollIntoView({ block: 'nearest' });
                 }
             } else if (ev.keyCode === 40) {
                 let nextProject = focusedProject.nextAll(':visible:first');
                 if (nextProject.length) {
                     focusedProject.removeClass('focus');
                     nextProject.addClass('focus');
-                    nextProject[0].scrollIntoView(false);
+                    nextProject[0].scrollIntoView({ block: 'nearest' });
                 }
             } else if (ev.keyCode === 13) {
                 window.location.href = focusedProject.attr('href');
             }
 
-            ev.preventDefault();
+            ev.stopPropagation();
+            ev.preventDefault(false);
+
             return;
         }
 
