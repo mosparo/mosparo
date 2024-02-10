@@ -53,7 +53,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | German               | de            | mosparo Core Developers                                                                                                      |
 | High German (Middle) | gmh           | [OriCat101](https://hosted.weblate.org/user/OriCat101/)                                                                      |
 | Indonesian           | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/)               |
-| Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/), [rglauco](https://hosted.weblate.org/user/rglauco/) |
+| Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/), [rglauco](https://hosted.weblate.org/user/rglauco/), [mpaglia0](https://hosted.weblate.org/user/mpaglia0/) |
 | Russian              | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                                                                          |
 | Ukrainian            | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                                      |
 | Vietnamese           | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                                      |
@@ -61,6 +61,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 ## Validators
 | Language   | Language Code | Contributors                                                |
 |------------|---------------|-------------------------------------------------------------|
+| Croatian   | hr            | [milotype](https://hosted.weblate.org/user/milotype/) |
 | Czech      | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)         |
 | English    | en            | mosparo Core Developers                                     |
 | Estonian   | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)     |
