@@ -20,19 +20,15 @@ webpack_encore:
     # Preload all rendered script and link tags automatically via the HTTP/2 Link header
     # preload: true
 
-    # Set to true to throw an exception if the entrypoints.json file is missing or an entry is missing from the data
-    strict_mode: false
+    # Throw an exception if the entrypoints.json file is missing or an entry is missing from the data
+    # strict_mode: false
 
     # If you have multiple builds:
     # builds:
-        # pass "frontend" as the 3rg arg to the Twig functions
-        # {{ encore_entry_script_tags('entry1', null, 'frontend') }}
-
         # frontend: '%kernel.project_dir%/public/frontend/build'
 
-    # Cache the entrypoints.json (rebuild Symfony's cache when entrypoints.json changes)
-    # Put in config/packages/prod/webpack_encore.yaml
-    # cache: true
+        # pass the build name as the 3rd argument to the Twig functions
+        # {{ encore_entry_script_tags('entry1', null, 'frontend') }}
 
 framework:
     assets:
