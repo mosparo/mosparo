@@ -34,10 +34,9 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            App:
+            Mosparo\Entity:
                 type: attribute
                 is_bundle: false
-                type: annotation
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'Mosparo\Entity'
                 alias: Mosparo
