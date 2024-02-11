@@ -3,9 +3,14 @@
 namespace Mosparo\Controller\Account;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
+use Mosparo\Exception;
 use Mosparo\Util\TokenGenerator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -41,7 +46,7 @@ class TwoFactorController extends AbstractController
 
     #[Route('/start', name: 'account_two_factor_start')]
     #[Route('/start/force', name: 'account_two_factor_start_force')]
-    public function start(Request $request, GoogleAuthenticatorInterface $googleAuthenticator, QrCodeGenerator $qrCodeGenerator): Response
+    public function start(Request $request, GoogleAuthenticatorInterface $googleAuthenticator): Response
     {
         /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
@@ -52,10 +57,11 @@ class TwoFactorController extends AbstractController
             $form = $this->createQrCodeForm();
             $secret = $googleAuthenticator->generateSecret();
             $user->setGoogleAuthenticatorSecret($secret);
-            $qrCode = $qrCodeGenerator->getGoogleAuthenticatorQrCode($user);
-            $form->get('secret')->setData($secret);
 
-            $request->getSession()->set('qrCode', $qrCode->writeString());
+            $form->get('secret')->setData($secret);
+            $request->getSession()->set('twoFactorSecret', $secret);
+
+            $content = $googleAuthenticator->getQRContent($user);
 
             return $this->render('account/two-factor-authentication/start.html.twig', [
                 'form' => $form->createView(),
@@ -65,9 +71,24 @@ class TwoFactorController extends AbstractController
     }
 
     #[Route('/qrcode', name: 'account_two_factor_qrcode')]
-    public function qrcode(Request $request)
+    public function qrcode(Request $request, GoogleAuthenticatorInterface $googleAuthenticator)
     {
-        $response = new Response($request->getSession()->get('qrCode', ''));
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+        $user->setGoogleAuthenticatorSecret($request->getSession()->get('twoFactorSecret', ''));
+
+        if (!$user->getGoogleAuthenticatorSecret()) {
+            throw new Exception('No secret found in session. QR code cannot be rendered.');
+        }
+
+        // Remove the secret from the session
+        $request->getSession()->remove('twoFactorSecret');
+
+        // Generate the QR code image
+        $content = $googleAuthenticator->getQRContent($user);
+        $qrCode = $this->buildQrCodeDataUri($content);
+
+        $response = new Response($qrCode);
 
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'qrcode.png');
         $response->headers->set('Content-Disposition', $disposition);
@@ -210,5 +231,21 @@ class TwoFactorController extends AbstractController
             ]])
             ->add('secret', HiddenType::class)
             ->getForm();
+    }
+
+    protected function buildQrCodeDataUri(string $qrCodeContent): string
+    {
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($qrCodeContent)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
+            ->size(300)
+            ->margin(0)
+            ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
+            ->build();
+
+        return $result->getString();
     }
 }
