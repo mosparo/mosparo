@@ -11,7 +11,7 @@ $accordion-button-icon: url('/assets/images/ui/tabler.svg#accordion-normal');
 $accordion-button-active-icon: url('/assets/images/ui/tabler.svg#accordion-active');
 
 @import '~@tabler/core';
-@import 'node_modules/@tabler/icons/iconfont/tabler-icons.scss';
+@import '~@tabler/icons/iconfont/tabler-icons.scss';
 
 @import '~datatables.net-responsive-bs5';
 @import 'spectrum-colorpicker2/dist/spectrum.css';
