@@ -113,11 +113,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    Mosparo\Doctrine\ProjectRelatedSubscriber:
-        class: Mosparo\Doctrine\ProjectRelatedSubscriber
-        tags:
-            - { name: doctrine.event_subscriber }
-
     Mosparo\Subscriber\SetupSubscriber:
         class: Mosparo\Subscriber\SetupSubscriber
         arguments:

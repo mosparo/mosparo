@@ -5,7 +5,7 @@ namespace Mosparo\Twig;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Helper\ProjectHelper;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Mosparo\Entity\Project;

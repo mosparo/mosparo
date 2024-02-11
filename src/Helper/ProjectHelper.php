@@ -4,7 +4,7 @@ namespace Mosparo\Helper;
 
 use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ProjectHelper
 {
