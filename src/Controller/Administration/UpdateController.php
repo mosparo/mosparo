@@ -22,12 +22,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/administration/update")
- */
+#[Route('/administration/update')]
 class UpdateController extends AbstractController
 {
     protected KernelInterface $kernel;
@@ -66,9 +64,7 @@ class UpdateController extends AbstractController
         $this->updatesEnabled = $updatesEnabled;
     }
 
-    /**
-     * @Route("/", name="administration_update_overview")
-     */
+    #[Route('/', name: 'administration_update_overview')]
     public function overview(Request $request): Response
     {
         $updateChannel = $this->configHelper->getEnvironmentConfigValue('updateChannel', 'stable');
@@ -143,9 +139,7 @@ class UpdateController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/check", name="administration_update_check")
-     */
+    #[Route('/check', name: 'administration_update_check')]
     public function check(Request $request): Response
     {
         try {
@@ -163,9 +157,7 @@ class UpdateController extends AbstractController
         return $this->redirectToRoute('administration_update_overview', ['checkedForUpdates' => 1]);
     }
 
-    /**
-     * @Route("/upgrade/check-requirements", name="administration_upgrade_check_requirements")
-     */
+    #[Route('/upgrade/check-requirements', name: 'administration_upgrade_check_requirements')]
     public function upgradeCheckRequirements(Request $request): Response
     {
         $isUpgradeAvailable = $this->updateHelper->isUpgradeAvailable();
@@ -190,9 +182,7 @@ class UpdateController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/upgrade/execute", name="administration_upgrade_execute")
-     */
+    #[Route('/upgrade/execute', name: 'administration_upgrade_execute')]
     public function executeUpgrade(Request $request): Response
     {
         $session = $request->getSession();
@@ -211,9 +201,7 @@ class UpdateController extends AbstractController
         return $this->redirectToRoute('administration_update_execute');
     }
 
-    /**
-     * @Route("/execute", name="administration_update_execute")
-     */
+    #[Route('/execute', name: 'administration_update_execute')]
     public function execute(Request $request): Response
     {
         $session = $request->getSession();
@@ -238,9 +226,7 @@ class UpdateController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/execute/update", name="administration_update_execute_update")
-     */
+    #[Route('/execute/update', name: 'administration_update_execute_update')]
     public function executeUpdate(Request $request)
     {
         $session = $request->getSession();
@@ -289,9 +275,7 @@ class UpdateController extends AbstractController
         return new JsonResponse(['error' => true, 'errorMessage' => 'An unknown error occurred.']);
     }
 
-    /**
-     * @Route("/finalize", name="administration_update_finalize")
-     */
+    #[Route('/finalize', name: 'administration_update_finalize')]
     public function finalize(Request $request, Filesystem $filesystem): Response
     {
         if ($this->configHelper->getEnvironmentConfigValue('mosparo_installed_version') === Kernel::VERSION) {

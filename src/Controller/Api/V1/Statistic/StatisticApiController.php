@@ -11,11 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/api/v1/statistic")
- */
+#[Route('/api/v1/statistic')]
 class StatisticApiController extends AbstractController
 {
     protected ProjectHelper $projectHelper;
@@ -25,9 +23,7 @@ class StatisticApiController extends AbstractController
         $this->projectHelper = $projectHelper;
     }
 
-    /**
-     * @Route("/by-date", name="statistic_api_by_date")
-     */
+    #[Route('/by-date', name: 'statistic_api_by_date')]
     public function byDate(Request $request, StatisticHelper $statisticHelper): Response
     {
         // If there is no active project, we cannot do anything.

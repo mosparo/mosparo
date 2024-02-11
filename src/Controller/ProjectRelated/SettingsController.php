@@ -25,12 +25,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/project/{_projectId}/settings")
- */
+#[Route('/project/{_projectId}/settings')]
 class SettingsController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
@@ -42,9 +40,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         $this->translator = $translator;
     }
 
-    /**
-     * @Route("/general", name="settings_general")
-     */
+    #[Route('/general', name: 'settings_general')]
     public function general(Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = $this->getActiveProject();
@@ -74,9 +70,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/members", name="settings_member_list")
-     */
+    #[Route('/members', name: 'settings_member_list')]
     public function memberList(Request $request, DataTableFactory $dataTableFactory): Response
     {
         $project = $this->getActiveProject();
@@ -114,10 +108,8 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/members/add", name="settings_member_add")
-     * @Route("/members/{id}/edit", name="settings_member_edit")
-     */
+    #[Route('/members/add', name: 'settings_member_add')]
+    #[Route('/members/{id}/edit', name: 'settings_member_edit')]
     public function memberModify(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember = null): Response
     {
         $isNew = false;
@@ -212,9 +204,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/members/{id}/remove", name="settings_member_remove")
-     */
+    #[Route('/members/{id}/remove', name: 'settings_member_remove')]
     public function memberRemove(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember): Response
     {
         if ($projectMember->getRole() === ProjectMember::ROLE_OWNER) {
@@ -266,9 +256,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/security", name="settings_security")
-     */
+    #[Route('/security', name: 'settings_security')]
     public function security(Request $request, DataTableFactory $dataTableFactory): Response
     {
         $project = $this->getActiveProject();
@@ -306,9 +294,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/security/edit-general", name="settings_security_edit_general")
-     */
+    #[Route('/security/edit-general', name: 'settings_security_edit_general')]
     public function securityEditGeneralForm(Request $request, EntityManagerInterface $entityManager, SecurityGuideline $securityGuideline = null): Response
     {
         $project = $this->getActiveProject();
@@ -344,10 +330,8 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/security/guideline/add", name="settings_security_guideline_add")
-     * @Route("/security/guideline/{id}/edit", name="settings_security_guideline_edit")
-     */
+    #[Route('/security/guideline/add', name: 'settings_security_guideline_add')]
+    #[Route('/security/guideline/{id}/edit', name: 'settings_security_guideline_edit')]
     public function securityGuidelineForm(Request $request, EntityManagerInterface $entityManager, GeoIp2Helper $geoIp2Helper, SecurityGuideline $securityGuideline = null): Response
     {
         $project = $this->getActiveProject();
@@ -393,9 +377,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/security/guideline/{id}/remove", name="settings_security_guideline_remove")
-     */
+    #[Route('/security/guideline/{id}/remove', name: 'settings_security_guideline_remove')]
     public function securityGuidelineRemove(Request $request, EntityManagerInterface $entityManager, SecurityGuideline $securityGuideline): Response
     {
         if ($request->request->has('delete-token')) {
@@ -424,9 +406,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/design", name="settings_design")
-     */
+    #[Route('/design', name: 'settings_design')]
     public function design(Request $request, EntityManagerInterface $entityManager, DesignHelper $designHelper): Response
     {
         $project = $this->getActiveProject();
@@ -475,9 +455,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    /**
-     * @Route("/design/switch-mode", name="settings_design_switch_mode")
-     */
+    #[Route('/design/switch-mode', name: 'settings_design_switch_mode')]
     public function switchDesignMode(Request $request, EntityManagerInterface $entityManager, DesignHelper $designHelper): Response
     {
         $project = $this->getActiveProject();
@@ -491,9 +469,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         return $this->redirectToRoute('settings_design', ['_projectId' => $this->getActiveProject()->getId()]);
     }
 
-    /**
-     * @Route("/reissue-keys", name="settings_reissue_keys")
-     */
+    #[Route('/reissue-keys', name: 'settings_reissue_keys')]
     public function reissueKeys(Request $request, EntityManagerInterface $entityManager): Response
     {
         $activeProject = $this->projectHelper->getActiveProject();

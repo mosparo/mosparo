@@ -14,12 +14,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/administration/settings")
- */
+#[Route('/administration/settings')]
 class SettingsController extends AbstractController
 {
     protected ConfigHelper $configHelper;
@@ -38,9 +36,7 @@ class SettingsController extends AbstractController
         $this->interfaceHelper = $interfaceHelper;
     }
 
-    /**
-     * @Route("/", name="administration_settings")
-     */
+    #[Route('/', name: 'administration_settings')]
     public function settings(Request $request): Response
     {
         $environmentConfig = $this->configHelper->readEnvironmentConfig();

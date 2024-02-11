@@ -15,19 +15,15 @@ use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/project/{_projectId}/submissions")
- */
+#[Route('/project/{_projectId}/submissions')]
 class SubmissionController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
 
-    /**
-     * @Route("/", name="submission_list")
-     * @Route("/filter/{filter}", name="submission_list_filtered")
-     */
+    #[Route('/', name: 'submission_list')]
+    #[Route('/filter/{filter}', name: 'submission_list_filtered')]
     public function index(Request $request, DataTableFactory $dataTableFactory, $filter = ''): Response
     {
         if (!in_array($filter, ['spam', 'valid'])) {
@@ -114,9 +110,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
         ]);
     }
 
-    /**
-     * @Route("/{id}/view", name="submission_view")
-     */
+    #[Route('/{id}/view', name: 'submission_view')]
     public function view(Submission $submission): Response
     {
         $activeProject = $this->projectHelper->getActiveProject();

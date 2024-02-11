@@ -6,14 +6,12 @@ use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/login", name="security_login", condition="ip_on_allow_list_routing(request.getClientIp(), env('backend_access_ip_allow_list'))")
-     */
+    #[Route('/login', name: 'security_login', condition: 'ip_on_allow_list_routing(request.getClientIp(), env("backend_access_ip_allow_list"))')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
@@ -25,9 +23,7 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
-    /**
-     * @Route("/login", name="security_login_unauthorized")
-     */
+    #[Route('/login', name: 'security_login_unauthorized')]
     public function loginAccessDenied(): Response
     {
         /**
@@ -39,9 +35,7 @@ class SecurityController extends AbstractController
         throw new AccessDeniedHttpException('Access denied.');
     }
 
-    /**
-     * @Route("/logout", name="security_logout")
-     */
+    #[Route('/logout', name: 'security_logout')]
     public function logout()
     {
         throw new LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');

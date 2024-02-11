@@ -15,12 +15,10 @@ use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/project/{_projectId}/rules")
- */
+#[Route('/project/{_projectId}/rules')]
 class RuleController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
@@ -38,10 +36,8 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         $this->ruleTypeManager = $ruleTypeManager;
     }
 
-    /**
-     * @Route("/", name="rule_list")
-     * @Route("/filter/{filter}", name="rule_list_filtered")
-     */
+    #[Route('/', name: 'rule_list')]
+    #[Route('/filter/{filter}', name: 'rule_list_filtered')]
     public function index(Request $request, DataTableFactory $dataTableFactory, $filter = ''): Response
     {
         $filteredType = null;
@@ -103,9 +99,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    /**
-     * @Route("/create/choose-type", name="rule_create_choose_type")
-     */
+    #[Route('/create/choose-type', name: 'rule_create_choose_type')]
     public function createChooseType(RuleTypeManager $ruleTypeManager): Response
     {
         return $this->render('project_related/rule/create_choose_type.html.twig', [
@@ -113,9 +107,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    /**
-     * @Route("/create/{type}", name="rule_create_with_type")
-     */
+    #[Route('/create/{type}', name: 'rule_create_with_type')]
     public function createWithType(Request $request, $type, EntityManagerInterface $entityManager, RuleTypeManager $ruleTypeManager): Response
     {
         $ruleType = $ruleTypeManager->getRuleType($type);
@@ -153,9 +145,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="rule_edit")
-     */
+    #[Route('/{id}/edit', name: 'rule_edit')]
     public function edit(Request $request, Rule $rule, EntityManagerInterface $entityManager, RuleTypeManager $ruleTypeManager): Response
     {
         $readOnly = false;
@@ -194,9 +184,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    /**
-     * @Route("/{id}/delete", name="rule_delete")
-     */
+    #[Route('/{id}/delete', name: 'rule_delete')]
     public function delete(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         if ($request->request->has('delete-token')) {

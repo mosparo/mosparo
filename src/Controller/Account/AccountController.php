@@ -12,13 +12,11 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/account")
- */
+#[Route('/account')]
 class AccountController extends AbstractController
 {
     protected EntityManagerInterface $entityManager;
@@ -40,17 +38,13 @@ class AccountController extends AbstractController
         $this->interfaceHelper = $interfaceHelper;
     }
 
-    /**
-     * @Route("/", name="account_overview")
-     */
+    #[Route('/', name: 'account_overview')]
     public function overview(): Response
     {
         return $this->render('account/overview.html.twig');
     }
 
-    /**
-     * @Route("/settings", name="account_settings")
-     */
+    #[Route('/settings', name: 'account_settings')]
     public function settings(Request $request): Response
     {
         /** @var \Mosparo\Entity\User $user */
@@ -117,9 +111,7 @@ class AccountController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/change-password", name="account_change_password")
-     */
+    #[Route('/change-password', name: 'account_change_password')]
     public function changePassword(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])

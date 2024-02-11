@@ -10,12 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/administration/geoip2")
- */
+#[Route('/administration/geoip2')]
 class GeoIp2Controller extends AbstractController
 {
     protected ConfigHelper $configHelper;
@@ -31,9 +29,7 @@ class GeoIp2Controller extends AbstractController
         $this->translator = $translator;
     }
 
-    /**
-     * @Route("/", name="administration_geoip2_settings")
-     */
+    #[Route('/', name: 'administration_geoip2_settings')]
     public function settings(Request $request): Response
     {
         $config = [
@@ -84,9 +80,7 @@ class GeoIp2Controller extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/download", name="administration_geoip2_download")
-     */
+    #[Route('/download', name: 'administration_geoip2_download')]
     public function download(Request $request): Response
     {
         $session = $request->getSession();

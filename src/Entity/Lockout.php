@@ -6,36 +6,24 @@ use Mosparo\Repository\LockoutRepository;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
 
-/**
- * @ORM\Entity(repositoryClass=LockoutRepository::class)
- */
+#[ORM\Entity(repositoryClass: LockoutRepository::class)]
 class Lockout
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="hashed")
-     */
+    #[ORM\Column(type: 'hashed')]
     private ?string $ipAddress;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private ?DateTimeInterface $startedAt;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private ?int $duration;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private ?DateTimeInterface $validUntil;
 
     public function getId(): ?int

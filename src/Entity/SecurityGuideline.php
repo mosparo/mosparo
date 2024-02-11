@@ -7,62 +7,40 @@ use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\SecurityGuidelineRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=SecurityGuidelineRepository::class)
- */
+#[ORM\Entity(repositoryClass: SecurityGuidelineRepository::class)]
 class SecurityGuideline implements ProjectRelatedEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="guid")
-     */
+    #[ORM\Column(type: 'guid')]
     private ?string $uuid;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private ?int $priority = 1;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $subnets = [];
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $countryCodes = [];
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $asNumbers = [];
 
-    /**
-     * @ORM\OneToMany(targetEntity=SecurityGuidelineConfigValue::class, mappedBy="securityGuideline", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: SecurityGuidelineConfigValue::class, mappedBy: 'securityGuideline', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $configValues;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
 
     private array $defaultSecurityConfigValues = [

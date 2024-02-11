@@ -16,13 +16,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/project/{_projectId}/tools")
- */
+#[Route('/project/{_projectId}/tools')]
 class ToolsController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
@@ -34,9 +32,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         $this->translator = $translator;
     }
 
-    /**
-     * @Route("/rule-tester", name="tools_rule_tester")
-     */
+    #[Route('/rule-tester', name: 'tools_rule_tester')]
     public function ruleTester(Request $request, RuleTesterHelper $ruleTesterHelper): Response
     {
         $typeChoices = [
@@ -110,9 +106,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         ]);
     }
 
-    /**
-     * @Route("/export", name="tools_export")
-     */
+    #[Route('/export', name: 'tools_export')]
     public function export(Request $request, ExportHelper $exportHelper): Response
     {
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
@@ -191,9 +185,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         ]);
     }
 
-    /**
-     * @Route("/import", name="tools_import")
-     */
+    #[Route('/import', name: 'tools_import')]
     public function import(Request $request, ImportHelper $importHelper): Response
     {
         $form = $this->createFormBuilder(['handlingExistingRules' => 'override'], ['translation_domain' => 'mosparo'])
@@ -301,9 +293,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         ]);
     }
 
-    /**
-     * @Route("/import/simulate/{token}", name="tools_import_simulate")
-     */
+    #[Route('/import/simulate/{token}', name: 'tools_import_simulate')]
     public function importSimulate(Request $request, ImportHelper $importHelper, $token = ''): Response
     {
         $form = $this->createFormBuilder(['token' => $token], ['translation_domain' => 'mosparo'])

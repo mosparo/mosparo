@@ -17,11 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/api/v1/verification")
- */
+#[Route('/api/v1/verification')]
 class VerificationApiController extends AbstractController
 {
     protected ProjectHelper $projectHelper;
@@ -43,9 +41,7 @@ class VerificationApiController extends AbstractController
         $this->statisticHelper = $statisticHelper;
     }
 
-    /**
-     * @Route("/verify", name="verification_api_verify")
-     */
+    #[Route('/verify', name: 'verification_api_verify')]
     public function verify(Request $request, EntityManagerInterface $entityManager, SubmitTokenRepository $submitTokenRepository): Response
     {
         // If there is no active project, we cannot do anything.

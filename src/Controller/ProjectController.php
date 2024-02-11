@@ -4,6 +4,7 @@ namespace Mosparo\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\User;
@@ -21,13 +22,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Mosparo\Entity\Project;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/project")
- */
+#[Route('/project')]
 class ProjectController extends AbstractController
 {
     protected EntityManagerInterface $entityManager;
@@ -49,10 +47,8 @@ class ProjectController extends AbstractController
         $this->translator = $translator;
     }
 
-    /**
-     * @Route("/", name="project_list")
-     * @Route("/filter/{filter}", name="project_list_filtered")
-     */
+    #[Route('/', name: 'project_list')]
+    #[Route('/filter/{filter}', name: 'project_list_filtered')]
     public function list(DataTableFactory $dataTableFactory, Request $request, $filter = ''): Response
     {
         // Load the view from the user configuration
@@ -177,9 +173,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/switch-view/{view}", name="project_list_switch_view")
-     */
+    #[Route('/switch-view/{view}', name: 'project_list_switch_view')]
     public function switchView($view): Response
     {
         $user = $this->getUser();
@@ -193,9 +187,7 @@ class ProjectController extends AbstractController
         return $this->redirectToRoute('project_list');
     }
 
-    /**
-     * @Route("/create", name="project_create")
-     */
+    #[Route('/create', name: 'project_create')]
     public function create(Request $request): Response
     {
         $project = new Project();
@@ -234,9 +226,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{_projectId}/create-wizard/design", name="project_create_wizard_design")
-     */
+    #[Route('/{_projectId}/create-wizard/design', name: 'project_create_wizard_design')]
     public function createWizardDesign(Request $request): Response
     {
         $project = $this->projectHelper->getActiveProject();
@@ -273,9 +263,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{_projectId}/create-wizard/security", name="project_create_wizard_security")
-     */
+    #[Route('/{_projectId}/create-wizard/security', name: 'project_create_wizard_security')]
     public function createWizardSecurity(Request $request): Response
     {
         $project = $this->projectHelper->getActiveProject();
@@ -313,9 +301,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{_projectId}/create-wizard/connection", name="project_create_wizard_connection")
-     */
+    #[Route('/{_projectId}/create-wizard/connection', name: 'project_create_wizard_connection')]
     public function createWizardConnection(Request $request): Response
     {
         $project = $this->projectHelper->getActiveProject();
@@ -324,9 +310,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{_projectId}/delete", name="project_delete")
-     */
+    #[Route('/{_projectId}/delete', name: 'project_delete')]
     public function delete(Request $request): Response
     {
         $project = $this->projectHelper->getActiveProject();

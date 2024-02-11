@@ -24,11 +24,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/setup")
- */
+#[Route('/setup')]
 class SetupController extends AbstractController
 {
     protected KernelInterface $kernel;
@@ -47,9 +45,7 @@ class SetupController extends AbstractController
         $this->connectionHelper = $connectionHelper;
     }
 
-    /**
-     * @Route("/", name="setup_start")
-     */
+    #[Route('/', name: 'setup_start')]
     public function start(): Response
     {
         if ($this->setupHelper->isInstalled()) {
@@ -59,9 +55,7 @@ class SetupController extends AbstractController
         return $this->render('setup/start.html.twig');
     }
 
-    /**
-     * @Route("/prerequisites", name="setup_prerequisites")
-     */
+    #[Route('/prerequisites', name: 'setup_prerequisites')]
     public function prerequisites(): Response
     {
         if ($this->setupHelper->isInstalled()) {
@@ -77,9 +71,7 @@ class SetupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/database", name="setup_database")
-     */
+    #[Route('/database', name: 'setup_database')]
     public function database(Request $request, EntityManagerInterface $entityManager): Response
     {
         if ($this->setupHelper->isInstalled()) {
@@ -153,9 +145,7 @@ class SetupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/other", name="setup_other")
-     */
+    #[Route('/other', name: 'setup_other')]
     public function other(Request $request): Response
     {
         if ($this->setupHelper->isInstalled()) {
@@ -192,9 +182,7 @@ class SetupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/install", name="setup_install")
-     */
+    #[Route('/install', name: 'setup_install')]
     public function install(Request $request): Response
     {
         if ($this->setupHelper->isInstalled()) {

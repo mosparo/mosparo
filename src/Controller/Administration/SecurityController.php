@@ -16,14 +16,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/administration/security")
- */
+#[Route('/administration/security')]
 class SecurityController extends AbstractController
 {
     protected ConfigHelper $configHelper;
@@ -56,9 +54,7 @@ class SecurityController extends AbstractController
         $this->trustedProxies = $trustedProxies;
     }
 
-    /**
-     * @Route("/", name="administration_security")
-     */
+    #[Route('/', name: 'administration_security')]
     public function security(Request $request): Response
     {
         $this->clientIpAddress = $request->getClientIp();

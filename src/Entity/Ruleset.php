@@ -5,47 +5,31 @@ namespace Mosparo\Entity;
 use Mosparo\Repository\RulesetRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RulesetRepository::class)
- */
+#[ORM\Entity(repositoryClass: RulesetRepository::class)]
 class Ruleset implements ProjectRelatedEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private ?string $url;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $spamRatingFactor = null;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private ?bool $status;
 
-    /**
-     * @ORM\OneToOne(targetEntity=RulesetCache::class, mappedBy="ruleset", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: RulesetCache::class, mappedBy: 'ruleset', cascade: ['persist', 'remove'])]
     private ?RulesetCache $rulesetCache = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
 
     public function getId(): ?int

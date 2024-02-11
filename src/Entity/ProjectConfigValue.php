@@ -3,33 +3,24 @@
 namespace Mosparo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Repository\ProjectConfigValueRepository;
 
-/**
- * @ORM\Entity(repositoryClass=ProjectConfigValueRepository::class)
- */
+#[ORM\Entity(repositoryClass: ProjectConfigValueRepository::class)]
 class ProjectConfigValue implements ProjectRelatedEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="object", nullable=true)
-     */
+    #[ORM\Column(type: 'object', nullable: true)]
     private $value = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="configValues")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'configValues')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Project $project;
 
     public function getId(): ?int

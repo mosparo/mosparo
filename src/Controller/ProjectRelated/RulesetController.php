@@ -19,12 +19,10 @@ use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/project/{_projectId}/rulesets")
- */
+#[Route('/project/{_projectId}/rulesets')]
 class RulesetController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
@@ -53,9 +51,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         $this->translator = $translator;
     }
 
-    /**
-     * @Route("/", name="ruleset_list")
-     */
+    #[Route('/', name: 'ruleset_list')]
     public function index(Request $request): Response
     {
         $table = $this->dataTableFactory->create(['autoWidth' => true])
@@ -93,10 +89,8 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         ]);
     }
 
-    /**
-     * @Route("/add", name="ruleset_add")
-     * @Route("/{id}/edit", name="ruleset_edit")
-     */
+    #[Route('/add', name: 'ruleset_add')]
+    #[Route('/{id}/edit', name: 'ruleset_edit')]
     public function form(Request $request, Ruleset $ruleset = null): Response
     {
         $isNew = false;
@@ -149,9 +143,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         ]);
     }
 
-    /**
-     * @Route("/{id}/delete", name="ruleset_delete")
-     */
+    #[Route('/{id}/delete', name: 'ruleset_delete')]
     public function delete(Request $request, Ruleset $ruleset): Response
     {
         if ($request->request->has('delete-token')) {
@@ -180,10 +172,8 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         ]);
     }
 
-    /**
-     * @Route("/{id}/view", name="ruleset_view")
-     * @Route("/{id}/view/filter/{filter}", name="ruleset_view_filtered")
-     */
+    #[Route('/{id}/view', name: 'ruleset_view')]
+    #[Route('/{id}/view/filter/{filter}', name: 'ruleset_view_filtered')]
     public function view(Request $request, Ruleset $ruleset, $filter = ''): Response
     {
         $hasError = false;
@@ -266,9 +256,7 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
         ]);
     }
 
-    /**
-     * @Route("/{id}/view/rule/{ruleUuid}", name="ruleset_view_rule")
-     */
+    #[Route('/{id}/view/rule/{ruleUuid}', name: 'ruleset_view_rule')]
     public function viewRule(Request $request, Ruleset $ruleset, string $ruleUuid): Response
     {
         $rulesetRuleCacheRepository = $this->entityManager->getRepository(RulesetRuleCache::class);

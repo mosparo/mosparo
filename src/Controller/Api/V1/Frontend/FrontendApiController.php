@@ -23,13 +23,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/api/v1/frontend")
- */
+#[Route('/api/v1/frontend')]
 class FrontendApiController extends AbstractController
 {
     protected ProjectHelper $projectHelper;
@@ -76,9 +74,7 @@ class FrontendApiController extends AbstractController
         $this->statisticHelper = $statisticHelper;
     }
 
-    /**
-     * @Route("/request-submit-token", name="frontend_api_request_submit_token")
-     */
+    #[Route('/request-submit-token', name: 'frontend_api_request_submit_token')]
     public function request(Request $request, EntityManagerInterface $entityManager): Response
     {
         // If there is no active project, we cannot do anything.
@@ -125,9 +121,7 @@ class FrontendApiController extends AbstractController
         ] + $args);
     }
 
-    /**
-     * @Route("/check-form-data", name="frontend_api_check_form_data")
-     */
+    #[Route('/check-form-data', name: 'frontend_api_check_form_data')]
     public function checkFormData(Request $request, EntityManagerInterface $entityManager): Response
     {
         // If there is no active project, we cannot do anything.
