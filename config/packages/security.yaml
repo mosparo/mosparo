@@ -16,6 +16,7 @@ services:
         arguments:
             $globalFactory: '@limiter.ip_login'
             $localFactory: '@limiter.ui_login'
+            $secret: '%kernel.secret%'
 
 security:
     access_decision_manager:
@@ -69,11 +70,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
-        - { path: ^/password, roles: IS_AUTHENTICATED_ANONYMOUSLY, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/logout, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
+        - { path: ^/password, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
-        - { path: ^/administration/update/finalize, roles: IS_AUTHENTICATED_ANONYMOUSLY, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
+        - { path: ^/administration/update/finalize, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/project/create, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" } # Covers also the wizard
         - { path: ^/administration, roles: ROLE_ADMIN, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/, roles: ROLE_USER, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
