@@ -3,14 +3,14 @@
 namespace Mosparo\Command;
 
 use Mosparo\Helper\CleanupHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'mosparo:cleanup-database')]
 class CleanupDatabaseCommand extends Command
 {
-    protected static $defaultName = 'mosparo:cleanup-database';
-
     protected CleanupHelper $cleanupHelper;
 
     public function __construct(CleanupHelper $cleanupHelper)

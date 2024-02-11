@@ -3,14 +3,14 @@
 namespace Mosparo\Command;
 
 use Mosparo\Helper\RulesetHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'mosparo:rulesets:refresh')]
 class RefreshRulesetsCommand extends Command
 {
-    protected static $defaultName = 'mosparo:rulesets:refresh';
-
     protected RulesetHelper $rulesetHelper;
 
     public function __construct(RulesetHelper $rulesetHelper)

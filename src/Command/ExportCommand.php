@@ -5,16 +5,16 @@ namespace Mosparo\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Helper\ExportHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'mosparo:export')]
 class ExportCommand extends Command
 {
-    protected static $defaultName = 'mosparo:export';
-
     protected EntityManagerInterface $entityManager;
 
     protected ExportHelper $exportHelper;

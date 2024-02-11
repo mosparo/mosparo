@@ -7,6 +7,7 @@ use Mosparo\Entity\Project;
 use Mosparo\Exception\ImportException;
 use Mosparo\Helper\ImportHelper;
 use Mosparo\Rule\RuleTypeManager;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\Table;
@@ -18,10 +19,9 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AsCommand(name: 'mosparo:import')]
 class ImportCommand extends Command
 {
-    protected static $defaultName = 'mosparo:import';
-
     protected EntityManagerInterface $entityManager;
 
     protected TranslatorInterface $translator;
