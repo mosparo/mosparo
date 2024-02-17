@@ -152,7 +152,8 @@ class VerificationApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Verification failed.'] + $debugInformation);
         }
 
-        $formData = (array) $request->request->get('formData');
+        $requestData = $request->request->all();
+        $formData = $requestData['formData'] ?? [];
         $verificationSignature = '';
         $verificationResult = $this->verificationHelper->verifyFormData($submission, $formData);
         if ($verificationResult['valid']) {
