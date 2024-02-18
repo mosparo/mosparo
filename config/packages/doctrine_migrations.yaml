@@ -2,5 +2,5 @@ doctrine_migrations:
     migrations_paths:
         # namespace is arbitrary but should be different from Mosparo\Migrations
         # as migrations classes should NOT be autoloaded
-        'DoctrineMigrations': '%kernel.project_dir%/migrations'
+        'DoctrineMigrations': '%kernel.project_dir%/migrations/%env(database_platform)%'
     enable_profiler: false
