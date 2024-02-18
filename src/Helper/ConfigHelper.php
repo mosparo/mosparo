@@ -15,11 +15,21 @@ class ConfigHelper
 
     protected array $environmentConfigValues = [];
 
-    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory)
+    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory, string $envSuffix)
     {
         $this->entityManager = $entityManager;
         $this->fileSystem = $fileSystem;
-        $this->environmentConfigFilePath = $projectDirectory . '/config/env.mosparo.php';
+
+        $fileName = 'env.mosparo';
+
+        // Add the environment config suffix. Mainly used to create the database migrations for
+        // the different database platforms, but you can also use it to use a mosparo installation
+        // with different databases.
+        if ($envSuffix) {
+            $fileName = sprintf('%s.%s', $fileName, $envSuffix);
+        }
+
+        $this->environmentConfigFilePath = $projectDirectory . sprintf('/config/%s.php', $fileName);
 
         if (is_link($this->environmentConfigFilePath)) {
             $realConfigFilePath = realpath($this->environmentConfigFilePath);

@@ -161,6 +161,7 @@ services:
     Mosparo\Helper\ConfigHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+            $envSuffix: '%env(MOSPARO_ENV_SUFFIX)%'
 
     Mosparo\Helper\LocaleHelper:
         arguments:
