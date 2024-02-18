@@ -139,7 +139,7 @@ class ProjectController extends AbstractController
             $builder = $this->entityManager->createQueryBuilder()
                 ->select('IDENTITY(s.project) AS project_id', 'COUNT(s) AS count')
                 ->from(Submission::class, 's')
-                ->where('s.spam = 1')
+                ->where('s.spam = TRUE')
                 ->orWhere('s.valid IS NOT NULL')
                 ->groupBy('s.project');
 

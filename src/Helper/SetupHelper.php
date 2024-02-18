@@ -170,12 +170,15 @@ class SetupHelper
             throw new UserAlreadyExistsException('User "' . $emailAddress . '" already exists.');
         }
 
-        $qb = $repository->createQueryBuilder('u');
-        $qb->select('u.id')
-            ->where('u.roles LIKE :role')
-            ->setParameter(':role', '%"ROLE_ADMIN"%');
-        $adminUsers = $qb->getQuery()->getResult();
-        if (!empty($adminUsers)) {
+        $users = $repository->findAll();
+        $hasAdminUser = false;
+        foreach ($users as $user) {
+            if ($user->hasRole('ROLE_ADMIN')) {
+                $hasAdminUser = true;
+                break;
+            }
+        }
+        if ($hasAdminUser) {
             throw new AdminUserAlreadyExistsException('An admin user exists already.');
         }
 

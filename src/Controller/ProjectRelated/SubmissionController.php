@@ -82,15 +82,15 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
 
                     if ($filter === 'spam') {
                         $builder
-                            ->where('e.spam = 1')
-                            ->orWhere('e.valid = 0');
+                            ->where('e.spam = TRUE')
+                            ->orWhere('e.valid = FALSE');
                     } else if ($filter === 'valid') {
                         $builder
-                            ->where('e.spam = 0')
-                            ->andWhere('e.valid = 1');
+                            ->where('e.spam = FALSE')
+                            ->andWhere('e.valid = TRUE');
                     } else {
                         $builder
-                            ->where('e.spam = 1')
+                            ->where('e.spam = TRUE')
                             ->orWhere('e.valid IS NOT NULL');
                     }
                 },
