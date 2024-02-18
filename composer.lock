@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce01fb08678964fccadc5398a639277e",
+    "content-hash": "36adb20cb8dc12b652372704228ee857",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -767,16 +767,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.11.2",
+            "version": "2.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "fb22c9320383caa2829c32dc3b84c1b5e0f1ceaf"
+                "reference": "492725310ae9a1b5b20d6ae09fb5ae6404616e68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/fb22c9320383caa2829c32dc3b84c1b5e0f1ceaf",
-                "reference": "fb22c9320383caa2829c32dc3b84c1b5e0f1ceaf",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/492725310ae9a1b5b20d6ae09fb5ae6404616e68",
+                "reference": "492725310ae9a1b5b20d6ae09fb5ae6404616e68",
                 "shasum": ""
             },
             "require": {
@@ -866,7 +866,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.11.2"
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.11.3"
             },
             "funding": [
                 {
@@ -882,7 +882,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-06T15:41:25+00:00"
+            "time": "2024-02-10T20:56:20+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
@@ -1938,15 +1938,15 @@
         },
         {
             "name": "gracious/doctrine-encryption-bundle",
-            "version": "3.0.1",
+            "version": "dev-bugfix-datatype",
             "source": {
                 "type": "git",
-                "url": "https://github.com/graciousagency/doctrine-encryption-bundle.git",
+                "url": "https://github.com/mosparo/doctrine-encryption-bundle.git",
                 "reference": "3b98581bea146565e870106d170237a4cc7ddb99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/graciousagency/doctrine-encryption-bundle/zipball/3b98581bea146565e870106d170237a4cc7ddb99",
+                "url": "https://api.github.com/repos/mosparo/doctrine-encryption-bundle/zipball/3b98581bea146565e870106d170237a4cc7ddb99",
                 "reference": "3b98581bea146565e870106d170237a4cc7ddb99",
                 "shasum": ""
             },
@@ -1969,7 +1969,12 @@
                     "Gracious\\DoctrineEncryptionBundle\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "auto-scripts": {
+                    "cache:clear": "symfony-cmd",
+                    "assets:install %PUBLIC_DIR%": "symfony-cmd"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -1986,8 +1991,7 @@
                 "hashing"
             ],
             "support": {
-                "issues": "https://github.com/graciousagency/doctrine-encryption-bundle/issues",
-                "source": "https://github.com/graciousagency/doctrine-encryption-bundle/tree/3.0.1"
+                "source": "https://github.com/mosparo/doctrine-encryption-bundle/tree/bugfix-datatype"
             },
             "time": "2023-04-12T08:24:01+00:00"
         },
@@ -12909,7 +12913,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "gracious/doctrine-encryption-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
