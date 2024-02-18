@@ -10,7 +10,7 @@ use Exception;
 class EncryptedJson extends Type
 {
 
-    const ENCRYPTEDJSON = 'encryptedJon';
+    const ENCRYPTEDJSON = 'encryptedJson';
 
     /**
      * Gets the SQL declaration snippet for a field of this type.
@@ -22,7 +22,7 @@ class EncryptedJson extends Type
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return 'LONGTEXT COMMENT \'(DC2Type:encryptedJson)\'';
+        return $platform->getClobTypeDeclarationSQL($column);
     }
 
     /**
@@ -88,5 +88,13 @@ class EncryptedJson extends Type
 
         $encryptedValue = sodium_crypto_secretbox($preparedValue, $nonce, $key);
         return sodium_bin2hex($nonce) . '|' . sodium_bin2hex($encryptedValue);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    {
+        return true;
     }
 }
