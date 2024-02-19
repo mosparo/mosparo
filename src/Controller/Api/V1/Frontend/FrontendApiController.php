@@ -199,7 +199,6 @@ class FrontendApiController extends AbstractController
 
         // Create the submission
         $submission = new Submission();
-        $submission->setSubmitToken($submitToken);
         $submission->setSubmittedAt(new DateTime());
         $submission->setIgnoredFields($formData['ignoredFields']);
 
@@ -246,6 +245,8 @@ class FrontendApiController extends AbstractController
         if (!$submission->isSpam()) {
             $this->ruleTesterHelper->checkRequest($submission);
         }
+
+        $submission->setSubmitToken($submitToken);
 
         $entityManager->persist($submission);
         $entityManager->flush();
