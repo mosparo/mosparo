@@ -77,6 +77,11 @@ class RulesetController extends AbstractController implements ProjectRelatedInte
             ])
             ->createAdapter(ORMAdapter::class, [
                 'entity' => Ruleset::class,
+                'query' => function (QueryBuilder $builder) {
+                    $builder
+                        ->select('e')
+                        ->from(Ruleset::class, 'e');
+                },
             ])
             ->handleRequest($request);
 

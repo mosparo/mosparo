@@ -3,6 +3,7 @@
 namespace Mosparo\Controller\Administration;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
 use Mosparo\Form\PasswordFormType;
@@ -54,6 +55,11 @@ class UserController extends AbstractController
             ])
             ->createAdapter(ORMAdapter::class, [
                 'entity' => User::class,
+                'query' => function (QueryBuilder $builder) {
+                    $builder
+                        ->select('e')
+                        ->from(User::class, 'e');
+                },
             ])
             ->handleRequest($request);
 
