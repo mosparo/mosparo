@@ -28,6 +28,7 @@
             </div>
         {% endif %}
 
+        {{ form_row(form.system) }}
         {{ form_row(form.host) }}
         {{ form_row(form.port) }}
         {{ form_row(form.database) }}
@@ -41,4 +42,22 @@
             </button>
         </div>
     {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $('#form_system').change(function () {
+                let portField = $('#form_port');
+
+                if ($(this).val() === 'mysql') {
+                    portField.val(3306);
+                } else if ($(this).val() === 'postgres') {
+                    portField.val(5432);
+                }
+            });
+        </script>
+    {% endcspscript %}
 {% endblock %}

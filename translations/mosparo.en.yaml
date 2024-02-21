@@ -1537,11 +1537,20 @@ setup:
     connectionDataInvalid: It was not possible to connect to the database. Please check your settings below and try again.
 
     form:
+      system: System
       host: Host
       port: Port
       database: Database
       user: User
       password: Password
+
+    system:
+      pleaseChoose: Please choose…
+      mysql: MySQL/MariaDB
+      postgres: PostgreSQL
+
+    port:
+      default: Default
 
   other:
     title: Other information

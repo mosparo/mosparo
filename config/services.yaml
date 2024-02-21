@@ -16,7 +16,7 @@ parameters:
 
     env(default_color_mode): 'light'
 
-    env(database_platform): 'mysql'
+    env(database_system): 'mysql'
     env(database_driver): 'pdo_mysql'
     env(database_host): '127.0.0.1'
     env(database_port): '3306'

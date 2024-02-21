@@ -27,7 +27,6 @@ class SetupHelper
         ],
         'phpExtension' => [
             'ctype' => true,
-            'curl' => true,
             'dom' => true,
             'filter' => true,
             'gd' => true,
@@ -38,7 +37,7 @@ class SetupHelper
             'openssl' => true,
             'pcre' => true,
             'pdo' => true,
-            'pdo_mysql' => true,
+            'pdo_mysql|pdo_pgsql' => true,
             'simplexml' => true,
             'tokenizer' => true,
             'xml' => true,
@@ -101,16 +100,30 @@ class SetupHelper
                 }
             } else if ($type === 'phpExtension') {
                 foreach ($prerequisites as $extensionKey => $isRequired) {
-                    $version = phpversion($extensionKey);
-                    if ($version == '' && $isRequired) {
-                        $meetPrerequisites = false;
+                    if (str_contains($extensionKey, '|')) {
+                        $subExtensions = explode('|', $extensionKey);
+                    } else {
+                        $subExtensions = [$extensionKey];
                     }
 
-                    $checkedPrerequisites[$type][$extensionKey] = [
-                        'required' => $isRequired,
-                        'available' => ($version != ''),
-                        'pass' => ($version != ''),
-                    ];
+                    $isExtensionAvailable = false;
+                    foreach ($subExtensions as $subExtensionKey) {
+                        $version = phpversion($subExtensionKey);
+
+                        if ($version) {
+                            $isExtensionAvailable = true;
+                        }
+
+                        $checkedPrerequisites[$type][$subExtensionKey] = [
+                            'required' => $isRequired,
+                            'available' => ($version != ''),
+                            'pass' => ($version != ''),
+                        ];
+                    }
+
+                    if (!$isExtensionAvailable && $isRequired) {
+                        $meetPrerequisites = false;
+                    }
                 }
             } else if ($type === 'writeAccess') {
                 foreach ($prerequisites as $path => $isRequired) {

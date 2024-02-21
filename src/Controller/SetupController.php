@@ -3,6 +3,7 @@
 namespace Mosparo\Controller;
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,9 +80,18 @@ class SetupController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
+        $databaseSystems = [
+            'setup.database.system.mysql' => 'mysql',
+            'setup.database.system.postgres' => 'postgres',
+        ];
+
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
+            ->add('system', ChoiceType::class, [
+                'label' => 'setup.database.form.system',
+                'choices' => $databaseSystems,
+                'placeholder' => 'setup.database.system.pleaseChoose'])
             ->add('host', TextType::class, ['label' => 'setup.database.form.host'])
-            ->add('port', TextType::class, ['label' => 'setup.database.form.port', 'required' => false, 'data' => 3306])
+            ->add('port', TextType::class, ['label' => 'setup.database.form.port', 'required' => false, 'attr' => ['placeholder' => 'setup.database.port.default']])
             ->add('database', TextType::class, ['label' => 'setup.database.form.database'])
             ->add('user', TextType::class, ['label' => 'setup.database.form.user'])
             ->add('password', PasswordType::class, ['label' => 'setup.database.form.password', 'attr' => ['autocomplete' => 'off']])
@@ -90,8 +101,15 @@ class SetupController extends AbstractController
         $connected = false;
         $tablesExist = false;
         if ($form->isSubmitted() && $form->isValid()) {
+            $drivers = [
+                'mysql' => 'pdo_mysql',
+                'postgres' => 'pdo_pgsql',
+            ];
+            $driver = $drivers[$form->get('system')->getData()] ?? '';
+
             $data = [
-                'database_driver' => 'pdo_mysql',
+                'database_system' => $form->get('system')->getData(),
+                'database_driver' => $driver,
                 'database_host' => $form->get('host')->getData(),
                 'database_port' => $form->get('port')->getData(),
                 'database_name' => $form->get('database')->getData(),
@@ -99,26 +117,25 @@ class SetupController extends AbstractController
                 'database_password' => $form->get('password')->getData()
             ];
 
-            $tmpConnection = DriverManager::getConnection([
-                'host' => $data['database_host'] ?? null,
-                'port' => $data['database_port'] ?? null,
-                'dbname' => $data['database_name'] ?? null,
-                'user' => $data['database_user'] ?? null,
-                'password' => $data['database_password'] ?? null,
-                'driver' => $data['database_driver'],
-            ]);
-
             try {
-                $tmpConnection->connect();
-                $connected = $tmpConnection->isConnected();
+                $tmpConnection = DriverManager::getConnection([
+                    'host' => $data['database_host'] ?? null,
+                    'port' => $data['database_port'] ?? null,
+                    'dbname' => $data['database_name'] ?? null,
+                    'user' => $data['database_user'] ?? null,
+                    'password' => $data['database_password'] ?? null,
+                    'driver' => $data['database_driver'],
+                ]);
 
-                $data['database_version'] = $tmpConnection->getNativeConnection()->getAttribute(PDO::ATTR_SERVER_VERSION);
+                // Force the connection
+                $data['database_version'] = $tmpConnection->getServerVersion();
+                $connected = $tmpConnection->isConnected();
 
                 /** @var AbstractSchemaManager $schemaManager */
                 $schemaManager = $tmpConnection->createSchemaManager();
                 $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
                 foreach ($metadata as $classMetadata) {
-                    if ($schemaManager->tablesExist($classMetadata->getTableName())) {
+                    if ($schemaManager->tablesExist([$classMetadata->getTableName()])) {
                         $tablesExist = true;
                         break;
                     }
@@ -127,7 +144,7 @@ class SetupController extends AbstractController
                 if ($connected && !$tablesExist) {
                     $this->configHelper->writeEnvironmentConfig($data);
                 }
-            } catch (ConnectionException $e) {
+            } catch (ConnectionException|Exception $e) {
                 $connected = false;
             }
 
