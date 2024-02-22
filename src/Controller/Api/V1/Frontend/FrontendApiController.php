@@ -215,7 +215,7 @@ class FrontendApiController extends AbstractController
                 }
             }
 
-            if ($hpField['value'] != '') {
+            if (is_array($hpField) && $hpField['value'] != '') {
                 $submission->setSpamRating($activeProject->getSpamScore() + 1);
                 $submission->setSpamDetectionRating($activeProject->getSpamScore());
                 $submission->setSpam(true);
