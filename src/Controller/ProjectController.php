@@ -68,11 +68,10 @@ class ProjectController extends AbstractController
             $searchQuery = $request->query->get('q');
         }
 
-        $filters = $this->entityManager->getFilters();
-        $filterEnabled = false;
-        if ($filters->isEnabled('project_related_filter')) {
-            $filters->disable('project_related_filter');
-            $filterEnabled = true;
+        $activeProject = null;
+        if ($this->projectHelper->hasActiveProject()) {
+            $activeProject = $this->projectHelper->getActiveProject();
+            $this->projectHelper->unsetActiveProject();
         }
 
         // Determine to which projects the user has access. If it's an admin, it has access to all projects
@@ -158,10 +157,8 @@ class ProjectController extends AbstractController
             }
         }
 
-        if ($filterEnabled) {
-            $filters
-                ->enable('project_related_filter')
-                ->setProjectHelper($this->projectHelper);
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
         }
 
         return $this->render('project/list.html.twig', [

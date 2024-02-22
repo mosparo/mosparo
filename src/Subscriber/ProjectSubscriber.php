@@ -61,7 +61,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     public function onConsoleCommand()
     {
-        $this->enableDoctrineFilter();
+        $this->projectHelper->enableDoctrineFilter();
     }
 
     public function onKernelRequest(RequestEvent $event)
@@ -191,8 +191,6 @@ class ProjectSubscriber implements EventSubscriberInterface
         if ($result !== null) {
             $event->setResponse($result);
         }
-
-        $this->enableDoctrineFilter();
     }
 
     protected function checkAccess(Request $request, $activeRoute): ?Response
@@ -251,13 +249,5 @@ class ProjectSubscriber implements EventSubscriberInterface
         }
 
         return null;
-    }
-
-    protected function enableDoctrineFilter()
-    {
-        $this->entityManager
-            ->getFilters()
-            ->enable('project_related_filter')
-            ->setProjectHelper($this->projectHelper);
     }
 }

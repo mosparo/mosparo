@@ -28,7 +28,8 @@ class ProjectRelatedFilter extends SQLFilter
         }
 
         $activeProject = $this->projectHelper->getActiveProject();
-        if ($activeProject === null) {
+        if ($activeProject === null || !$this->hasParameter('projectId')) {
+            dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
             throw new Exception('Access to a project related entity is not allowed without active project.');
         }
 

@@ -53,12 +53,11 @@ class CleanupHelper
         $cleanupStartedAt->set(new DateTime());
         $cache->save($cleanupStartedAt);
 
-        // Disable the project filters for the cleanup
-        $filters = $this->entityManager->getFilters();
-        $filterEnabled = false;
-        if ($filters->isEnabled('project_related_filter')) {
-            $filters->disable('project_related_filter');
-            $filterEnabled = true;
+        // Remove the active project for the cleanup
+        $activeProject = null;
+        if ($this->projectHelper->hasActiveProject()) {
+            $activeProject = $this->projectHelper->getActiveProject();
+            $this->projectHelper->unsetActiveProject();
         }
 
         // Generally, we ignore all exceptions which could happen from here on.
@@ -172,11 +171,9 @@ class CleanupHelper
         // Clear the day statistic
         $this->cleanupDayStatistcs();
 
-        // Enable the project filters after the cleanup
-        if ($filterEnabled) {
-            $filters
-                ->enable('project_related_filter')
-                ->setProjectHelper($this->projectHelper);
+        // Set the active project after the cleanup
+        if ($activeProject !== null) {
+            $this->projectHelper->setActiveProject($activeProject);
         }
 
         $nextCleanupDate = new DateTime();
