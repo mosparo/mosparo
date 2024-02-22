@@ -215,12 +215,21 @@ class SetupHelper
     {
         $data = [];
         foreach ($this->prerequisites['phpExtension'] as $extension => $isRequired) {
-            $versionNumber = phpversion($extension);
-            if (!$versionNumber) {
-                $versionNumber = null;
+            if (str_contains($extension, '|')) {
+                $subExtensions = explode('|', $extension);
+            } else {
+                $subExtensions = [$extension];
             }
 
-            $data[$extension] = $versionNumber;
+            foreach ($subExtensions as $subExtension) {
+                $versionNumber = phpversion($subExtension);
+
+                if (!$versionNumber) {
+                    $versionNumber = null;
+                }
+
+                $data[$subExtension] = $versionNumber;
+            }
         }
 
         return $data;
