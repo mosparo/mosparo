@@ -87,7 +87,7 @@ class CleanupHelper
                         SELECT s.id, st.id AS stId
                         FROM Mosparo\Entity\Submission s
                         JOIN s.submitToken st
-                        WHERE (s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = 0 AND s.valid IS NULL))
+                        WHERE (s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = FALSE AND s.valid IS NULL))
                     ')
                     ->setParameter('limit', (new DateTime())->sub(new DateInterval('P14D')))
                     ->setParameter('limitDay', (new DateTime())->sub(new DateInterval('PT24H')))
