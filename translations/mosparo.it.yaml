@@ -400,6 +400,7 @@ submission:
           intro: Tutti i dati sono stati raccolti e preparati. Ora puoi inviarli all'API.
         ten:
           title: 'Passo 10: verifica la risposta'
+          intro: Mosparo risponderà alla richiesta dall'API con una stringa JSON. Decodifica la stringa JSON e verifica se esiste una chiave %codeStart%valid%codeEnd% e se corrisponde a %codeStart%true%codeEnd%. In caso affermativo accertati che la chiave %codeStart%verificationSignature%codeEnd% sia impostata e corrisponda alla firma di verifica generata al passo 6. In caso affermativo la risposta è valida.
       title: Simulazione di validiazione
       intro: La simulazione di verifica mostra i dati che mosparo accetta per il processo di verifica. Puoi confrontare i dati visualizzati con quelli che il tuo procedimento di verifica creerà per individuare eventuali problemi.
       buttons:
@@ -496,19 +497,33 @@ settings:
     generalSecuritySettings:
       title: Impostazioni di sicurezza generali
       action: Modifica impostazioni generali di sicurezza
+      intro: Le impostazioni di sicurezza generali vengono applicate a tutti gli utenti che non hanno un profilo di sicurezza legato alle origini.
     originBasedSecuritySettings:
       add:
         title: Aggiungi linea guida
+      title: Linee guida di sicurezza legate alle origini.
     guideline:
       form:
         criteria:
           subnets: Sottoreti
           title: Criterio
+          countryCodes: Codici Stati
+          countryCodesHelp: "Aggiungi il codice Stato (ISO alfa-2) per il quali la linea guida dovrà essere considerata. E' possibile visualizzare il codice stato nei dettagli dell'invio. Ad es.: CH"
+          asNumbers: Numero AS
+          asNumbersHelp: "Aggiungi il numero AS per il quale la linea guida dovrà essere considerata. Puoi visualizzare il numero AS dei dettagli dell'invio. Ad es.: 123456"
+          intro: Definire il criterio per questa linea guida. Insieme al criterio è possibile definire per quale origine andrà utilizzata questa linea guida.
+          intro2: La linea guida verrà utilizzata per l'utente quando uno di questi criteri corrisponderà. Per poter salvare la linea guida è necessario aggiungere almeno un criterio.
+          subnetsHelp: "Aggiungere la sottorete per la quale questa linea guida verrà considerata. E' possibile definire una sottorete IPv4 oppure IPv6. Puoi vedere l'indirizzo IP nei dettagli dell'invio. Ad es.: 192.168.1.0/24"
         guideline:
           title: Linea guida
           name: Nome
           description: Descrizione
           priority: Priorità
+          priorityHelp: Definisce in quale ordine verificare le linee guida. La linea guida con valore più alto viene verificata per prima.
+        settings:
+          title: Impostazioni di sicurezza
+          intro: Abilita il flag di sovrascrittura per le impostazioni che dovranno essere sovrascritte dalle impostazioni di sicurezza generali. Se un'impostazione non viene sovrascritta Mosparo utilizzerà quella relativa al progetto.
+        infoGeoIp2Disabled: GeoIP2 non è disponibile. Configura il database GeoIP2 per poter usare il codice Stato e il numero AS come criteri.
       list:
         name: Nome
         priority: Priorità
@@ -517,4 +532,11 @@ settings:
         title: Aggiungi linea guida
       edit:
         title: Modifica linea guida %guidelineName%
+      delete:
+        title: Cancella la linea guida %guidelineName%
+        confirm: Vuoi veramente cancellare la linea guida %guidelineName%?
+        message:
+          successfullyRemoved: La linea guida %guidelineName% è stata cancellata dal progetto.
+    minimumTime:
+      title: Tempo minimo
   title: Impostazioni progetto
