@@ -434,6 +434,8 @@ class DesignHelper
 
     protected function getSimpleModeValues(Project $project, $configValues)
     {
+        $configValues['boxSize'] = $project->getConfigValue('boxSize');
+
         $colorWebsiteBackground = $project->getConfigValue('colorWebsiteBackground');
         $configValues['colorBackground'] = $colorWebsiteBackground;
         $configValues['colorSuccessBackground'] = $colorWebsiteBackground;

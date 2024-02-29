@@ -247,6 +247,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
         }
 
         this.send('/api/v1/frontend/request-submit-token', data, function (response) {
+            if (response.messages) {
+                _this.updateMessages(response.messages);
+            }
+
             if (response.invisible) {
                 _this.switchToInvisible();
             }
@@ -254,7 +258,6 @@ function mosparo(containerId, url, uuid, publicKey, options)
             if (response.submitToken) {
                 _this.containerElement.classList.remove('mosparo__loading');
                 _this.submitTokenElement.value = response.submitToken;
-                _this.updateMessages(response.messages);
 
                 if ('honeypotFieldName' in response && response.honeypotFieldName) {
                     _this.addHoneypotField(response.honeypotFieldName);
@@ -634,7 +637,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
         let loaderTextElement = document.createElement('div');
         loaderTextElement.classList.add('mosparo__loader-text');
-        loaderTextElement.textContent = this.messages.accessibilityCheckingData;
+        loaderTextElement.textContent = this.getMessage('accessibilityCheckingData');
         loaderInnerContainerElement.appendChild(loaderTextElement);
 
         // Execute the event and the callback

@@ -155,12 +155,14 @@
                 </div>
                 <p class="empty-title">{{ 'project.infoNoProjectAvailable'|trans }}</p>
                 <p class="empty-subtitle text-muted">{{ 'project.infoCreateProjectOrRequestAccess'|trans }}</p>
-                <div class="empty-action">
-                    <a href="{{ path('project_create') }}" class="btn btn-primary">
-                        <i class="ti ti-plus"></i>
-                        {{ 'project.create.title'|trans }}
-                    </a>
-                </div>
+                {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
+                    <div class="empty-action">
+                        <a href="{{ path('project_create') }}" class="btn btn-primary">
+                            <i class="ti ti-plus"></i>
+                            {{ 'project.create.title'|trans }}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     {% endif %}
