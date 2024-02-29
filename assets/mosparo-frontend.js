@@ -50,6 +50,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.stateResetted = true;
 
     this.messages = {
+        locale: 'en',
         label: 'I accept that the form entries are checked for spam and stored encrypted for 14 days.',
 
         accessibilityCheckingData: 'We\'re checking your data. Please wait.',
@@ -81,6 +82,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         }
 
         this.containerElement.classList.add('mosparo__container', 'mosparo__' + this.uuid);
+        this.containerElement.setAttribute('lang', this.messages.locale);
 
         // Find the form
         let forms = document.querySelectorAll('form');
@@ -646,6 +648,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.updateMessages = function (messages) {
         this.messages = messages;
 
+        this.containerElement.setAttribute('lang', this.messages.locale);
+
         this.labelElement.textContent = this.getMessage('label');
     }
 
@@ -709,6 +713,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 typeof this.options.customMessages[locale][messageKey] != 'undefined' &&
                 this.options.customMessages[locale][messageKey] != ''
             ) {
+                if (messageKey === 'label') {
+                    this.containerElement.setAttribute('lang', locale);
+                }
+
                 return this.options.customMessages[locale][messageKey];
             }
         }

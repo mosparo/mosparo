@@ -315,15 +315,33 @@ class FrontendApiController extends AbstractController
 
     protected function getTranslations(Request $request): array
     {
+        $usedLocale = null;
         if ($this->translator instanceof LocaleAwareInterface) {
+            $locale = 'en';
             if ($request->request->has('language')) {
-                $this->translator->setLocale($this->localeHelper->fixPreferredLanguage($request->request->get('language')));
+                $locale = $this->localeHelper->fixPreferredLanguage($request->request->get('language'));
             } else if ($request->getPreferredLanguage()) {
-                $this->translator->setLocale($this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage()));
+                $locale = $this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage());
+            }
+
+            $this->translator->setLocale($locale);
+
+            // Try to determine the locale for which we will return the messages. If we don't have the translation
+            // for a locale, mosparo falls back to English.
+            $catalogue = $this->translator->getCatalogue($locale);
+            $usedLocale = $catalogue->getLocale();
+            while (!$catalogue->defines('label', 'frontend')) {
+                if ($cat = $catalogue->getFallbackCatalogue()) {
+                    $catalogue = $cat;
+                    $usedLocale = $catalogue->getLocale();
+                } else {
+                    break;
+                }
             }
         }
 
         return [
+            'locale' => $usedLocale,
             'label' => $this->translator->trans('label', [], 'frontend'),
 
             'accessibilityCheckingData' => $this->translator->trans('accessibility.checkingData', [], 'frontend'),
