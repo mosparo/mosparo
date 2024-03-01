@@ -539,4 +539,112 @@ settings:
           successfullyRemoved: La linea guida %guidelineName% è stata cancellata dal progetto.
     minimumTime:
       title: Tempo minimo
+      intro: La funzione del tempo minimo misura il tempo tra l'inizializzazione di Mosparo (caricamento pagina) e la validazione dell'invio (dopo che il modulo è stato inviato). Se questo tempo è inferiore a quello impostato allora la validazione non è valida. Se il vostro modulo è molto semplice/breve questa funzione andrebbe disabilitata oppure dovreste utilizzare un numero molto basso.
+      introShort: La funzione del tempo minimo misura il tempo tra l'inizializzazione di Mosparo (caricamento pagina) e la validazione dell'invio (dopo che il modulo è stato inviato). Questa funzione è consigliat aper moduli molto lunghi/complessi.
+    form:
+      minimumTimeSeconds: Tempo minimo
+      delayDetectionTimeFrameHelp: In secondi
+      lockoutMultiplicatorHelp: Il tempo di blocco verrà aumentato ad ogni richiesta aggiuntiva.
+      minimumTimeSecondsHelp: In secondi
+      honeypotFieldActive: Abilita campo honeypot
+      minimumTimeActive: Abilita tempo minimo
+      delayNumberOfAllowedRequestsHelp: La quantità di richieste consentite prima che venga applicato il ritardo.
+      delayMultiplicatorHelp: Il tempo di ritardo impostato verrà aumentato ad ogni richiesta aggiuntiva.
+      ipAllowList: Indirizzi IP e sottoreti sempre autorizzate
+      ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
+      lockoutTime: Tempo blocco
+      lockoutTimeHelp: In secondi
+      lockoutMultiplicator: Moltiplicatore
+      delayActive: Abilita ritardo richiesto
+      delayNumberOfAllowedRequests: Numero di richieste consentito
+      honeypotFieldNameHelp: Deve essere il nome di un campo che non sia già presente nel vostro modulo e deve essere un normale nome di campo tipo "url" oppure "indirizzo 2". Usate solo lettere, numeri e il simbolo meno (-). Se lasciato vuoto non verrà aggiunto nessun campo honeypot al vostro modulo.
+      delayMultiplicator: Moltiplicatore
+      lockoutActive: Abilita blocco automatico
+      honeypotFieldName: Nome campo
+      delayTimeHelp: In secondi
+      lockoutNumberOfAllowedRequests: Numero di richieste consentite
+      lockoutNumberOfAllowedRequestsHelp: La quantità di richieste consentite prima che venga applicato il blocco.
+      overrideMinimumTime: Sovrascrivi tempo minimo
+      overrideHoneypotField: Sovrascrivi campo honeypot
+      overrideDelay: Sovrascrivi ritardo richiesto
+      overrideLockout: Sovrascrivi blocco automatico
+    ipLockout:
+      title: Blocco IP
+      intro: Per rendere la vita degli spam bot più difficile, Mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora Mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
+    ipAllowList:
+      intro: Inserisci qui gli indirizzi IP e le sottoreti che dovranno essere esclusi dalle misure di sicurezza impostate qui sopra (Ritardo richiesto e blocco IP)
+      title: IP sbloccati
+    requestDelaying:
+      title: Ritardo richiesto
+      intro: Per rendere più difficile il lavoro ai bots, Mosparo può posticipare la creazione dei token di invio. Senza questo token il modulo non può essere inviato. Un utente vero e proprio visualizzerà il tempo di attesa necessario affinchè il modulo possa essere inviato.
+    honeypot:
+      title: Honeypot
+      intro: Un campo honeypot è un campo invisibile del modulo. Gli utenti non possono vederlo ma gli spam bots probabilmente lo compileranno. Se questo accade significa che il modulo non è stato compilato da un utente vero e proprio.
+    message:
+      successfullySaved: Le impostazioni di sicurezza sono state salvate.
+      guidelineSuccessfullySaved: Le linee guida di sicurezza sono state salvate.
   title: Impostazioni progetto
+  design:
+    form:
+      color:
+        shadowInset: Spostamento ombra
+        checkbox: Segno di spunta
+        websiteAccent: Colore evidenziazioni del sito
+        websiteBackground: Colore sfondo del sito
+        websiteForeground: Colore di primo piano del sito
+        textError: Messaggio errore
+        shadow: Ombra
+        border: Bordo
+        text: Testo
+        checkboxShadow: Ombreggiatura segno di spunta
+        background: Sfondo
+        checkboxAnimatedCircle: Parte animata
+        loaderText: Colore testo durante il caricamento
+        loaderCircle: Colore del cerchio durante il caricamento
+        loaderBackground: Colore sfondo durante il caricamento
+      boxSize: Dimensioni cornice
+      help:
+        boxSize: Seleziona le dimensioni del riquadro.
+        loaderBackground: Definisci il colore di sfondo durante il caricamento. Dovrebbe essere leggermente trasparente per mostrare il tuo sito sullo sfondo.
+        loaderText: Definisci il colore del testo durante il caricamento.
+        loaderCircle: Definisci il colore del cerchio animato durante il caricamento.
+        textError: Questo è il colore del testo che apparirà in caso di errore.
+        showMosparoLogo: Visualizza il loro sotto il messaggio di caricamento.
+        websiteBackground: Seleziona il colore di sfondo del tuo sito. Questo colore verrà utilizzato per calcolare la quantità di contrasto.
+        websiteForeground: Seleziona il colore di primo piano del tuo sito. Questo colore verrà utilizzato per gli elementi principali del riquadro di Mosparo.
+        websiteAccent: Seleziona il colore delle evidenziazioni del tuo sito. Questo colore verrà usato per alcuni elementi del riquadro di Mosparo.
+      showPingAnimation: Visualizza un'animazione per evidenziare il segno di spunta
+      invisibleLogo: Logo
+      invisiblePageOverlay: Sovrapposizione pagina
+      fullPageOverlay: Utilizza sovrapposizione pagina completa
+      showMosparoLogo: Visualizza il logo di Mosparo sotto al segno di spunta
+      boxBorderWidth: Spessore bordo
+      boxRadius: Raggio cornice
+    subtitles:
+      colors:
+        normal: Normale
+        focus: Al passaggio del mouse
+        success: Riuscito
+        failure: Errore
+        loading: Durante il caricamento
+      invisibleSimpleDesign: Design semplificato invisibile
+      colorSettings: Colori
+      dimensionSettings: Dimensioni
+      simpleDesign: Design semplificato
+      colorAndDimensionSettings: Colori e dimensioni
+      preview: Anteprima
+    cr:
+      value: Valore
+      text: Testo
+      textError: Messaggio errore
+      title: Quantità contrasto
+      description: Il valore qui sopra indica il rapporto tra il colore dello sfondo e quello del testo. Le due colonne a fianco indicano quando il valore minimo richiesto dalle linee guida WCAG viene raggiunto.
+    title: Design
+    preview:
+      background: Sfondo anteprima
+    dropdown:
+      title: Modalità design
+      groupTitleVisible: Protezione spam visibile
+      groupTitleInvisible: Protezione spam invisibile
+      simple: Semplice
+      advanced: Avanzata
