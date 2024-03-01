@@ -150,6 +150,22 @@
             mask: url('../images/mosparo_text_logo.svg') no-repeat center;
 
             background: var(--mosparo-text-color, rgb(0, 0, 0));
+
+            forced-color-adjust: none;
+
+            @media (forced-colors: active) {
+                @media (prefers-color-scheme: light) {
+                    -webkit-mask-image: url('../images/mosparo_text_logo.svg#fc=1&pcs=l');
+                    mask-image: url('../images/mosparo_text_logo.svg#fc=1&pcs=l');
+                    background: #000000;
+                }
+
+                @media (prefers-color-scheme: dark) {
+                    -webkit-mask-image: url('../images/mosparo_text_logo.svg#fc=1&pcs=d');
+                    mask-image: url('../images/mosparo_text_logo.svg#fc=1&pcs=d');
+                    background: #FFFFFF;
+                }
+            }
         }
     }
 

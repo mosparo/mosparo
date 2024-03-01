@@ -81,7 +81,14 @@ class DynamicResourcesController extends AbstractController
     #[Route('/logo.svg', name: 'resources_frontend_logo', stateless: true)]
     public function returnTextLogo(Request $request): Response
     {
-        $response = new Response($this->designHelper->getTextLogoContent());
+        $forcedColors = false;
+        $prefersColorScheme = 'u';
+        if ($request->query->get('fc', 0)) {
+            $forcedColors = true;
+            $prefersColorScheme = $request->query->get('pcs', 'l');
+        }
+
+        $response = new Response($this->designHelper->getTextLogoContent($forcedColors, $prefersColorScheme));
 
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'logo.svg');
         $response->headers->set('Content-Disposition', $disposition);
