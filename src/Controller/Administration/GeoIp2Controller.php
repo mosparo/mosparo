@@ -2,7 +2,6 @@
 
 namespace Mosparo\Controller\Administration;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\GeoIp2Helper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
