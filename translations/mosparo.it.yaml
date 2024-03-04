@@ -568,6 +568,9 @@ settings:
       overrideHoneypotField: Sovrascrivi campo honeypot
       overrideDelay: Sovrascrivi ritardo richiesto
       overrideLockout: Sovrascrivi blocco automatico
+      delayDetectionTimeFrame: Tempo di rilevamento
+      delayTime: Ritardo di base
+      lockoutDetectionTimeFrameHelp: In secondi
     ipLockout:
       title: Blocco IP
       intro: Per rendere la vita degli spam bot più difficile, Mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora Mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
@@ -577,6 +580,7 @@ settings:
     requestDelaying:
       title: Ritardo richiesto
       intro: Per rendere più difficile il lavoro ai bots, Mosparo può posticipare la creazione dei token di invio. Senza questo token il modulo non può essere inviato. Un utente vero e proprio visualizzerà il tempo di attesa necessario affinchè il modulo possa essere inviato.
+      infoIpAddress: In quale caso la creazione del token debba essere ritardata, verrà deciso in base al numero di richieste effettuate dall'indirizzo IP. Ad ogni ulteriore richiesta di token, il ritardo sarà prolungato.
     honeypot:
       title: Honeypot
       intro: Un campo honeypot è un campo invisibile del modulo. Gli utenti non possono vederlo ma gli spam bots probabilmente lo compileranno. Se questo accade significa che il modulo non è stato compilato da un utente vero e proprio.
@@ -648,3 +652,35 @@ settings:
       groupTitleInvisible: Protezione spam invisibile
       simple: Semplice
       advanced: Avanzata
+    simpleDesign:
+      introPreview: Sulla destra puoi vedere un'anteprima del blocco Mosparo sul tuo sito.
+    choices:
+      boxSize:
+        small: Piccolo
+        medium: Medio
+        large: Grande
+    message:
+      successfullySaved: Le impostazioni di design sono state salvate.
+      boxRadiusTooLarge: Il logo è visualizzabile solamente se il raggio del bordo è inferiore ad un certo valore.
+tools:
+  ruleTester:
+    result:
+      detectionResult:
+        isSpam: E' spam
+        title: Risultato rilevazione
+        spamRating: Valutazione spam
+        spamDetectionRating: Punteggio spam
+      matchedRules:
+        title: Regole corrispondenti
+      testData:
+        testValue: Valori test
+        enabledRules: Regole abilitate
+        fieldType: Tipo campo
+        title: Dati test
+      title: Risultati test
+    title: Verifica regole
+    description: Verifica come le tue regole intercetteranno lo spam
+    types:
+      userAgent: User-Agent
+      ipAddress: Indirizzo IP
+  title: Strumenti
