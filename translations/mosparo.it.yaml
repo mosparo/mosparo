@@ -571,6 +571,7 @@ settings:
       delayDetectionTimeFrame: Tempo di rilevamento
       delayTime: Ritardo di base
       lockoutDetectionTimeFrameHelp: In secondi
+      lockoutDetectionTimeFrame: Tempo di rilevamento
     ipLockout:
       title: Blocco IP
       intro: Per rendere la vita degli spam bot più difficile, Mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora Mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
@@ -678,9 +679,389 @@ tools:
         fieldType: Tipo campo
         title: Dati test
       title: Risultati test
+      table:
+        noMatchingRules: Nessuna regola intercetta il valore di test.
+        type: Tipo regola
+        value: Valore
+        rating: Valutazione
     title: Verifica regole
     description: Verifica come le tue regole intercetteranno lo spam
     types:
       userAgent: User-Agent
       ipAddress: Indirizzo IP
+      textField: Campo testo (singola linea)
+      textarea: Campo testo (più linee)
+      emailField: Campo email
+      urlField: Campo URL
+    form:
+      valueHelp: Immetti il valore che vuoi testare con le tue regole.
+      typeHelp: Seleziona il tipo di dati. Alcune regole possono essere applicate solo su dati specifici.
+      useRulesHelp: Attiva questo campo per testare le tue regole.
+      useRulesetsHelp: Attiva questo campo per testare il tuo set di regole.
+      title: Impostazioni test
+      useRulesets: Usa set di regole
+      value: Valori test
+      type: Tipo dati
+      useRules: Utilizza regole
   title: Strumenti
+  export:
+    errorMessage:
+      selectAtLeastOneElement: Seleziona almeno un elemento da esportare.
+    title: Esporta
+    includedData: Dati inclusi
+  import:
+    backToImport: Torna all'importazione
+    form:
+      handlingExistingRules: Gestione regole esistenti
+      choice:
+        add: Aggiungi
+        override: Sovrascrivi
+        append: Accoda
+      importFile: File da importare
+    errorMessage:
+      selectAtLeastOneElement: Seleziona almeno un elemento da importare.
+      fileUploadError: Il file non è stato aggiornato correttamente. Verifica il log.
+    simulate:
+      table:
+        oldValue: Valore precedente
+        newValue: Nuovo valore
+        status: Stato
+        add: Aggiungi
+        modify: Modifica
+        items: Oggetti
+        itemsAdd: Aggiungi
+        itemsRemove: Rimuovi
+        itemsModify: Modifica
+        name: Nome
+        type: Tipo
+        url: URL
+        spamRatingFactor: Fattore di valutazione spam
+        priority: Priorità
+        criteria: Criterio
+        securitySettings: Impostazioni di sicurezza
+        guidelineNew: Nuova linea guida
+        guidelineModify: Modifiche richieste
+        guidelineEqual: Nessuna modifica richiesta
+      errorMessage:
+        importFileNotFound: Il file di importazione non esiste.
+        projectNotAvailable: Non riesco a trovare la proprietà con il suo ID.
+        storedRuleNotFound: La regola salvata non è stata trovata.
+        storedRuleItemNotFound: L'oggetto della regola salvata non è stato trovato.
+        storedRulesetNotFound: Il set di regola salvato non è stato trovato.
+        importFileInvalid: Il file di importazione non è valido.
+        noChangesAvailable: Non ci sono modifiche disponibili.
+      title: Modifiche disponibili
+      changes:
+        notActive: Questa sezione non è attiva per questa importazione.
+        notInExport: Questa sezione non è disponibile sul file da importare.
+        noChangesRequired: Per questa sezione non ci sono modifiche da fare perchè tutto è già aggiornato.
+    importData: Dati da importare
+    message:
+      changesSuccessfullyExecuted: Le modifiche sono state applicate.
+    title: Importa
+  eiParts:
+    generalSettings: Impostazioni generali
+    rules: Regole
+    rulesetsHelp: Include tutti i gruppi di regole di un progetto.
+    designSettings: Impostazioni grafiche
+    rulesHelp: Include tutte le regole di un progetto.
+    securitySettings: Impostazioni di sicurezza
+    rulesets: Gruppo di regole
+administration:
+  security:
+    loginThrottling:
+      form:
+        uiLimitHelp: Questo è il numero di richieste che un attaccante può effettuare con una data combinazione di nome utente e indirizzo IP.
+        interval: Intervallo di tempo
+        uiLimit: Numero di richieste per nome utente e indirizzo IP
+        intervalHelp: Il tempo in minuti durante il quale viene valutata una certa quantità di richieste.
+        ipLimit: Numero di richieste per indirizzo IP
+      unit:
+        minutes: Minuti
+        requests: Richieste
+    title: Impostazioni di sicurezza
+    reverseProxy:
+      title: Reverse proxy
+      form:
+        trustedProxies: Elenco dei proxy fidati
+        trustedProxiesIncludeRemoteAddr: Includi REMOTE_ADDR tra i proxy fidati
+    message:
+      savedSuccessfully: Le impostazioni di sicurezza sono state salvate.
+    apiAccess:
+      form:
+        ipAllowList: Indirizzi IP e sottoreti autorizzati
+        ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
+      title: Accesso API
+    backendAccess:
+      form:
+        ipAllowList: Indirizzi IP e sottoreti autorizzati
+        ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
+  geoip2:
+    title: GeoIP2
+    version:
+      typeAsn: 'Numero AS:'
+      titleAvailable: GeoIP2 disponibile
+      typeCountry: 'Paese:'
+      titleNotAvailable: GeoIP2 non disponibile
+    downloadAndUpdate:
+      web:
+        title: Web
+        message:
+          specifyLicenseKey: Immetti una chiave licenza prima di tentare di scaricare il database.
+          successfullyDownloaded: Il database è stato scaricato.
+          errorDownload: C'è stato un errore mentre Mosparo tentava di scaricare il database. %error%
+        action: Scarica il database
+      cli:
+        title: CLI
+        intro: 'Utilizza il seguente comando per scaricare il database con CLI:'
+      title: Scarica e aggiorna automaticamente
+      update:
+        title: Aggiornamento automatico
+    description: Configura l'integrazione con GeoIP2
+    settings:
+      title: Impostazioni
+      licenseKeyField: Chiave licenza
+      getLicenseKey: 'Per ottenere una chiave di licenza occorre un account MaxMind. Vai su questo sito:'
+      useGeoip2Field: Utilizza la localizzazione automatica dell'indirizzo IP
+      message:
+        savedSuccessfully: Le impostazioni sono state salvate correttamente.
+  update:
+    button:
+      updateAvailable: Aggiornamento disponibile
+    check:
+      intro: Se vuoi verificare gli aggiornamenti, fai click sul pulsante qui sotto.
+      title: Stato
+    version:
+      releaseNotes: Note di rilascio
+      titleNotAvailable: Non sono disponibili aggiornamenti
+      titleAvailable: Aggiornamento disponibile
+      messageNotAvailable: Non sono disponibili aggiornamenti per Mosparo. Verifica di nuovo in un secondo momento.
+      lastChecked: 'Ultima verifica:'
+    upgrade:
+      titleAvailable: Aggiornamento disponibile
+    buttons:
+      continue: Continua
+    updateChannel: Canale di aggiornamento
+    finalize:
+      title: Aggiornamento effettuato
+    execute:
+      description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
+      message:
+        successfullyUpdated: Mosparo è stato aggiornato. Puoi procedere e andare al cruscotto.
+      title: Aggiorna Mosparo
+    settings:
+      title: Impostazioni aggiornamento
+      form:
+        channelStable: Stabile
+        channelBeta: Beta
+        channelDevelop: Sviluppo
+    title: Aggiornamento
+    description: Verifica se ci sono nuove versioni e aggiorna la tua installazione di Mosparo.
+    installedVersion: Versione installata
+    availableVersion: Versione disponibile
+  settings:
+    message:
+      savedSuccessfully: Le impostazioni sono state salvate correttamente.
+    localeSettings:
+      form:
+        defaultTimezone: Fuso orario predefinito
+        defaultDateFormat: Formato data predefinito
+        defaultTimeFormat: Formato orario predefinito
+        defaultLocale: Lingua predefinita
+      title: Impostazioni locali
+    mailSettings:
+      form:
+        host: Host
+        user: Utente
+        password: Password
+        fromAddress: Da indirizzo email
+        port: Porta
+        fromName: Da nome
+        useSmtp: Usa un server SMTP per inviare le email
+      title: Impostazioni posta
+    mainSettings:
+      title: Impostazioni principali
+      form:
+        mosparoName: Nome dell'installazione di Mosparo
+    title: Impostazioni sistema
+    interfaceSettings:
+      title: Impostazioni interfaccia
+      form:
+        defaultColorMode: Modalità colore predefinita
+  user:
+    help:
+      password: Lascia questi campi vuoti se non vuoi che venga chiesto un cambio password.
+      canCreateProjects: Permette agli utenti di creare nuovi progetti. Un amministratore può sempre creare progetti.
+    delete:
+      title: Cancella utente %email%
+      message:
+        errorUserIsOwner: L'utente è il proprietario di almeno un progetto. Non puoi cancellare il proprietario di progetti.
+        successfullyDeleted: L'utente %email% è stato cancellato.
+      confirm: Vuoi veramente cancellare l'utente %email%?
+      infoCantSelfDelete: Non puoi cancellare te stesso.
+    form:
+      password: Password
+      sendPasswordResetEmail: Invia all'utente una email per impostare la password
+      email: Email
+      isActiveUser: E' un utente attivo
+      isAdministrator: E' un amministratore
+      canCreateProjects: Può creare progetti
+      message:
+        successfullySaved: L'utente è stato creato correttamente.
+    modify:
+      title: Modifica %email% utente
+    backToOverview: Torna agli utenti
+    description: Gestione utenti di questa istanza di Mosparo
+    roles: Ruoli
+    list:
+      user: Utente
+      roles: Ruoli
+      actions: Azioni
+    title: Utenti
+    create:
+      title: Crea utente
+  system:
+    general:
+      mosparoVersion: Versione Mosparo
+      serverInfo: Server
+      extensions: Estensioni
+      title: Generale
+      phpVersion: Versione PHP
+    title: Informazioni di sistema
+    license:
+      title: Licenza Mosparo
+    usedLibrariesAndResources:
+      license: Licenza
+      title: Risorse e librerie utilizzate
+    website: Sito web
+    projectMembers:
+      title: Membri progetto
+    logo:
+      title: Logo
+      intro: Il logo è stato disegnato da Jan Kosa.
+    description: Recupera tutte le informazioni su Mosparo
+  title: Amministrazione
+account:
+  twoFactor:
+    action:
+      continue: Continua
+      configure: Configura
+      verify: Verifica
+      reconfigure: Riconfigura
+      disable: Disabilita
+    title: Autenticazione a due fattori
+    backupCodes:
+      title: Codici backup
+  settings:
+    form:
+      locale: Lingua
+      timeFormat: Formato ora
+      dateFormat: Formato data
+      timezone: Fuso orario
+    title: Impostazioni utente
+    message:
+      successfullySaved: Le impostazioni sono state salvate
+  changePassword:
+    form:
+      oldPassword: Vecchia password
+    message:
+      successfullyChanged: La password è stata aggiornata.
+    title: Cambia password
+    description: Cambia la password per il tuo account.
+  title: Account
+password:
+  form:
+    password: Password
+    repeatPassword: Ripeti password
+    newPassword: Nuova password
+  email:
+    goodbye: Grazie,
+    greeting: Ciao!
+    resetPasswordButton: Resetta password
+  reset:
+    action: Resetta password
+    title: Resetta la password
+  request:
+    title: Resetta la password
+    form:
+      email: Email
+  backToLogin: Torna al login
+setup:
+  buttons:
+    recheck: Ricontrolla
+    goToLogin: Vai al login
+    continue: Continua
+    install: Installa
+  start:
+    title: Configurazione
+action:
+  remove: Rimuovi
+  checkForUpdate: Controlla aggiornamenti
+  manage: Gestione
+  edit: Modifica
+  help: Aiuto
+  close: Chiudi
+  use: Utilizza
+  configure: Configura
+  test: Prova
+  installUpdate: Installa aggiornamento
+  goToTheDashboard: Vai al cruscotto
+  saveAndContinue: Salva e continua
+  view: Visualizza
+  export: Esporta
+  simulateImport: Simula importazione
+  save: Salva
+  delete: Cancella
+  actions: Azioni
+  importProject: Importa progetto
+  add: Aggiungi
+  executeChanges: Esegui modifiche
+state:
+  inactive: Inattivo
+  ignored: Ignorato
+  yes: Sì
+  active: Attivo
+  no: No
+interface:
+  colorModes:
+    dark: Scuro
+    light: Chiaro
+downloadCheck:
+  cardTitle: Connessione Internet
+  moreInformation: Altre informazioni
+security:
+  login:
+    emailLabel: Indirizzo email
+    youAreLoggedIn: Sei collegato come %username%.
+    passwordLabel: Password
+    title: Login
+  notFound:
+    title: Non trovato
+  logout:
+    title: Logout
+  forgotPassword:
+    title: Password dimenticata
+  twoFactor:
+    title: Autenticazione a due fattori
+roles:
+  user: Utente
+  inactive: Inattivo
+  administrator: Amministratore
+datatable:
+  datatable:
+    loadingRecords: Caricamento…
+    paginate:
+      previous: Precedente
+      next: Prossimo
+      first: Primo
+      last: Ultimo
+    search: 'Cerca:'
+    searchPlaceholder: Ricerca
+general:
+  example: Esempio
+  empty: Vuoto
+  unlimited: Illimitato
+form:
+  choices:
+    systemDefault: Impostazioni predefinite
+    browserLanguage: Lingua browser
