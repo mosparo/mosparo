@@ -685,7 +685,7 @@ tools:
         value: Valore
         rating: Valutazione
     title: Verifica regole
-    description: Verifica come le tue regole intercetteranno lo spam
+    description: Verifica come le tue regole intercetteranno lo spam.
     types:
       userAgent: User-Agent
       ipAddress: Indirizzo IP
@@ -817,7 +817,7 @@ administration:
       title: Scarica e aggiorna automaticamente
       update:
         title: Aggiornamento automatico
-    description: Configura l'integrazione con GeoIP2
+    description: Configura l'integrazione con GeoIP2.
     settings:
       title: Impostazioni
       licenseKeyField: Chiave licenza
@@ -911,7 +911,7 @@ administration:
     modify:
       title: Modifica %email% utente
     backToOverview: Torna agli utenti
-    description: Gestione utenti di questa istanza di mosparo
+    description: Gestione utenti di questa istanza di mosparo.
     roles: Ruoli
     list:
       user: Utente
@@ -939,7 +939,7 @@ administration:
     logo:
       title: Logo
       intro: Il logo è stato disegnato da Jan Kosa.
-    description: Recupera tutte le informazioni su mosparo
+    description: Recupera tutte le informazioni su mosparo.
   title: Amministrazione
 account:
   twoFactor:
@@ -960,7 +960,7 @@ account:
       timezone: Fuso orario
     title: Impostazioni utente
     message:
-      successfullySaved: Le impostazioni sono state salvate
+      successfullySaved: Le impostazioni sono state salvate.
   changePassword:
     form:
       oldPassword: Vecchia password
