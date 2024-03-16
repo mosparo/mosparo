@@ -400,6 +400,7 @@ submission:
           intro: Tutti i dati sono stati raccolti e preparati. Ora puoi inviarli all'API.
         ten:
           title: 'Passo 10: verifica la risposta'
+          intro: Mosparo risponderà alla richiesta dall'API con una stringa JSON. Decodifica la stringa JSON e verifica se esiste una chiave %codeStart%valid%codeEnd% e se corrisponde a %codeStart%true%codeEnd%. In caso affermativo accertati che la chiave %codeStart%verificationSignature%codeEnd% sia impostata e corrisponda alla firma di verifica generata al passo 6. In caso affermativo la risposta è valida.
       title: Simulazione di validiazione
       intro: La simulazione di verifica mostra i dati che mosparo accetta per il processo di verifica. Puoi confrontare i dati visualizzati con quelli che il tuo procedimento di verifica creerà per individuare eventuali problemi.
       buttons:
@@ -496,19 +497,33 @@ settings:
     generalSecuritySettings:
       title: Impostazioni di sicurezza generali
       action: Modifica impostazioni generali di sicurezza
+      intro: Le impostazioni di sicurezza generali vengono applicate a tutti gli utenti che non hanno un profilo di sicurezza legato alle origini.
     originBasedSecuritySettings:
       add:
         title: Aggiungi linea guida
+      title: Linee guida di sicurezza legate alle origini.
     guideline:
       form:
         criteria:
           subnets: Sottoreti
           title: Criterio
+          countryCodes: Codici Stati
+          countryCodesHelp: "Aggiungi il codice Stato (ISO alfa-2) per il quali la linea guida dovrà essere considerata. E' possibile visualizzare il codice stato nei dettagli dell'invio. Ad es.: CH"
+          asNumbers: Numero AS
+          asNumbersHelp: "Aggiungi il numero AS per il quale la linea guida dovrà essere considerata. Puoi visualizzare il numero AS dei dettagli dell'invio. Ad es.: 123456"
+          intro: Definire il criterio per questa linea guida. Insieme al criterio è possibile definire per quale origine andrà utilizzata questa linea guida.
+          intro2: La linea guida verrà utilizzata per l'utente quando uno di questi criteri corrisponderà. Per poter salvare la linea guida è necessario aggiungere almeno un criterio.
+          subnetsHelp: "Aggiungere la sottorete per la quale questa linea guida verrà considerata. E' possibile definire una sottorete IPv4 oppure IPv6. Puoi vedere l'indirizzo IP nei dettagli dell'invio. Ad es.: 192.168.1.0/24"
         guideline:
           title: Linea guida
           name: Nome
           description: Descrizione
           priority: Priorità
+          priorityHelp: Definisce in quale ordine verificare le linee guida. La linea guida con valore più alto viene verificata per prima.
+        settings:
+          title: Impostazioni di sicurezza
+          intro: Abilita il flag di sovrascrittura per le impostazioni che dovranno essere sovrascritte dalle impostazioni di sicurezza generali. Se un'impostazione non viene sovrascritta mosparo utilizzerà quella relativa al progetto.
+        infoGeoIp2Disabled: GeoIP2 non è disponibile. Configura il database GeoIP2 per poter usare il codice Stato e il numero AS come criteri.
       list:
         name: Nome
         priority: Priorità
@@ -517,4 +532,536 @@ settings:
         title: Aggiungi linea guida
       edit:
         title: Modifica linea guida %guidelineName%
+      delete:
+        title: Cancella la linea guida %guidelineName%
+        confirm: Vuoi veramente cancellare la linea guida %guidelineName%?
+        message:
+          successfullyRemoved: La linea guida %guidelineName% è stata cancellata dal progetto.
+    minimumTime:
+      title: Tempo minimo
+      intro: La funzione del tempo minimo misura il tempo tra l'inizializzazione di Mosparo (caricamento pagina) e la validazione dell'invio (dopo che il modulo è stato inviato). Se questo tempo è inferiore a quello impostato allora la validazione non è valida. Se il vostro modulo è molto semplice/breve questa funzione andrebbe disabilitata oppure dovreste utilizzare un numero molto basso.
+      introShort: La funzione del tempo minimo misura il tempo tra l'inizializzazione di mosparo (caricamento pagina) e la validazione dell'invio (dopo che il modulo è stato inviato). Questa funzione è consigliat aper moduli molto lunghi/complessi.
+    form:
+      minimumTimeSeconds: Tempo minimo
+      delayDetectionTimeFrameHelp: In secondi
+      lockoutMultiplicatorHelp: Il tempo di blocco verrà aumentato ad ogni richiesta aggiuntiva.
+      minimumTimeSecondsHelp: In secondi
+      honeypotFieldActive: Abilita campo honeypot
+      minimumTimeActive: Abilita tempo minimo
+      delayNumberOfAllowedRequestsHelp: La quantità di richieste consentite prima che venga applicato il ritardo.
+      delayMultiplicatorHelp: Il tempo di ritardo impostato verrà aumentato ad ogni richiesta aggiuntiva.
+      ipAllowList: Indirizzi IP e sottoreti sempre autorizzate
+      ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
+      lockoutTime: Tempo blocco
+      lockoutTimeHelp: In secondi
+      lockoutMultiplicator: Moltiplicatore
+      delayActive: Abilita ritardo richiesto
+      delayNumberOfAllowedRequests: Numero di richieste consentito
+      honeypotFieldNameHelp: Deve essere il nome di un campo che non sia già presente nel vostro modulo e deve essere un normale nome di campo tipo "url" oppure "indirizzo2". Usate solo lettere, numeri e il simbolo meno (-). Se lasciato vuoto non verrà aggiunto nessun campo honeypot al vostro modulo.
+      delayMultiplicator: Moltiplicatore
+      lockoutActive: Abilita blocco automatico
+      honeypotFieldName: Nome campo
+      delayTimeHelp: In secondi
+      lockoutNumberOfAllowedRequests: Numero di richieste consentite
+      lockoutNumberOfAllowedRequestsHelp: La quantità di richieste consentite prima che venga applicato il blocco.
+      overrideMinimumTime: Sovrascrivi tempo minimo
+      overrideHoneypotField: Sovrascrivi campo honeypot
+      overrideDelay: Sovrascrivi ritardo richiesto
+      overrideLockout: Sovrascrivi blocco automatico
+      delayDetectionTimeFrame: Tempo di rilevamento
+      delayTime: Ritardo di base
+      lockoutDetectionTimeFrameHelp: In secondi
+      lockoutDetectionTimeFrame: Tempo di rilevamento
+    ipLockout:
+      title: Blocco IP
+      intro: Per rendere la vita degli spam bot più difficile, mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
+    ipAllowList:
+      intro: Inserisci qui gli indirizzi IP e le sottoreti che dovranno essere esclusi dalle misure di sicurezza impostate qui sopra (Ritardo richiesto e blocco IP)
+      title: IP sbloccati
+    requestDelaying:
+      title: Ritardo richiesto
+      intro: Per rendere più difficile il lavoro ai bots, mosparo può posticipare la creazione dei token di invio. Senza questo token il modulo non può essere inviato. Un utente vero e proprio visualizzerà il tempo di attesa necessario affinchè il modulo possa essere inviato.
+      infoIpAddress: In quale caso la creazione del token debba essere ritardata, verrà deciso in base al numero di richieste effettuate dall'indirizzo IP. Ad ogni ulteriore richiesta di token, il ritardo sarà prolungato.
+    honeypot:
+      title: Honeypot
+      intro: Un campo honeypot è un campo invisibile del modulo. Gli utenti non possono vederlo ma gli spam bots probabilmente lo compileranno. Se questo accade significa che il modulo non è stato compilato da un utente vero e proprio.
+    message:
+      successfullySaved: Le impostazioni di sicurezza sono state salvate.
+      guidelineSuccessfullySaved: Le linee guida di sicurezza sono state salvate.
   title: Impostazioni progetto
+  design:
+    form:
+      color:
+        shadowInset: Spostamento ombra
+        checkbox: Segno di spunta
+        websiteAccent: Colore evidenziazioni del sito
+        websiteBackground: Colore sfondo del sito
+        websiteForeground: Colore di primo piano del sito
+        textError: Messaggio errore
+        shadow: Ombra
+        border: Bordo
+        text: Testo
+        checkboxShadow: Ombreggiatura segno di spunta
+        background: Sfondo
+        checkboxAnimatedCircle: Parte animata
+        loaderText: Colore testo durante il caricamento
+        loaderCircle: Colore del cerchio durante il caricamento
+        loaderBackground: Colore sfondo durante il caricamento
+      boxSize: Dimensioni cornice
+      help:
+        boxSize: Seleziona le dimensioni del riquadro.
+        loaderBackground: Definisci il colore di sfondo durante il caricamento. Dovrebbe essere leggermente trasparente per mostrare il tuo sito sullo sfondo.
+        loaderText: Definisci il colore del testo durante il caricamento.
+        loaderCircle: Definisci il colore del cerchio animato durante il caricamento.
+        textError: Questo è il colore del testo che apparirà in caso di errore.
+        showMosparoLogo: Visualizza il loro sotto il messaggio di caricamento.
+        websiteBackground: Seleziona il colore di sfondo del tuo sito. Questo colore verrà utilizzato per calcolare la quantità di contrasto.
+        websiteForeground: Seleziona il colore di primo piano del tuo sito. Questo colore verrà utilizzato per gli elementi principali del riquadro di Mosparo.
+        websiteAccent: Seleziona il colore delle evidenziazioni del tuo sito. Questo colore verrà usato per alcuni elementi del riquadro di Mosparo.
+      showPingAnimation: Visualizza un'animazione per evidenziare il segno di spunta
+      invisibleLogo: Logo
+      invisiblePageOverlay: Sovrapposizione pagina
+      fullPageOverlay: Utilizza sovrapposizione pagina completa
+      showMosparoLogo: Visualizza il logo di Mosparo sotto al segno di spunta
+      boxBorderWidth: Spessore bordo
+      boxRadius: Raggio cornice
+    subtitles:
+      colors:
+        normal: Normale
+        focus: Al passaggio del mouse
+        success: Riuscito
+        failure: Errore
+        loading: Durante il caricamento
+      invisibleSimpleDesign: Design semplificato invisibile
+      colorSettings: Colori
+      dimensionSettings: Dimensioni
+      simpleDesign: Design semplificato
+      colorAndDimensionSettings: Colori e dimensioni
+      preview: Anteprima
+    cr:
+      value: Valore
+      text: Testo
+      textError: Messaggio errore
+      title: Quantità contrasto
+      description: Il valore qui sopra indica il rapporto tra il colore dello sfondo e quello del testo. Le due colonne a fianco indicano quando il valore minimo richiesto dalle linee guida WCAG viene raggiunto.
+    title: Design
+    preview:
+      background: Sfondo anteprima
+    dropdown:
+      title: Modalità design
+      groupTitleVisible: Protezione spam visibile
+      groupTitleInvisible: Protezione spam invisibile
+      simple: Semplice
+      advanced: Avanzata
+    simpleDesign:
+      introPreview: Sulla destra puoi vedere un'anteprima del blocco mosparo sul tuo sito.
+    choices:
+      boxSize:
+        small: Piccolo
+        medium: Medio
+        large: Grande
+    message:
+      successfullySaved: Le impostazioni di design sono state salvate.
+      boxRadiusTooLarge: Il logo è visualizzabile solamente se il raggio del bordo è inferiore ad un certo valore.
+tools:
+  ruleTester:
+    result:
+      detectionResult:
+        isSpam: E' spam
+        title: Risultato rilevazione
+        spamRating: Valutazione spam
+        spamDetectionRating: Punteggio spam
+      matchedRules:
+        title: Regole corrispondenti
+      testData:
+        testValue: Valori test
+        enabledRules: Regole abilitate
+        fieldType: Tipo campo
+        title: Dati test
+      title: Risultati test
+      table:
+        noMatchingRules: Nessuna regola intercetta il valore di test.
+        type: Tipo regola
+        value: Valore
+        rating: Valutazione
+    title: Verifica regole
+    description: Verifica come le tue regole intercetteranno lo spam
+    types:
+      userAgent: User-Agent
+      ipAddress: Indirizzo IP
+      textField: Campo testo (singola linea)
+      textarea: Campo testo (più linee)
+      emailField: Campo email
+      urlField: Campo URL
+    form:
+      valueHelp: Immetti il valore che vuoi testare con le tue regole.
+      typeHelp: Seleziona il tipo di dati. Alcune regole possono essere applicate solo su dati specifici.
+      useRulesHelp: Attiva questo campo per testare le tue regole.
+      useRulesetsHelp: Attiva questo campo per testare il tuo set di regole.
+      title: Impostazioni test
+      useRulesets: Usa set di regole
+      value: Valori test
+      type: Tipo dati
+      useRules: Utilizza regole
+  title: Strumenti
+  export:
+    errorMessage:
+      selectAtLeastOneElement: Seleziona almeno un elemento da esportare.
+    title: Esporta
+    includedData: Dati inclusi
+  import:
+    backToImport: Torna all'importazione
+    form:
+      handlingExistingRules: Gestione regole esistenti
+      choice:
+        add: Aggiungi
+        override: Sovrascrivi
+        append: Accoda
+      importFile: File da importare
+    errorMessage:
+      selectAtLeastOneElement: Seleziona almeno un elemento da importare.
+      fileUploadError: Il file non è stato aggiornato correttamente. Verifica il log.
+    simulate:
+      table:
+        oldValue: Valore precedente
+        newValue: Nuovo valore
+        status: Stato
+        add: Aggiungi
+        modify: Modifica
+        items: Oggetti
+        itemsAdd: Aggiungi
+        itemsRemove: Rimuovi
+        itemsModify: Modifica
+        name: Nome
+        type: Tipo
+        url: URL
+        spamRatingFactor: Fattore di valutazione spam
+        priority: Priorità
+        criteria: Criterio
+        securitySettings: Impostazioni di sicurezza
+        guidelineNew: Nuova linea guida
+        guidelineModify: Modifiche richieste
+        guidelineEqual: Nessuna modifica richiesta
+      errorMessage:
+        importFileNotFound: Il file di importazione non esiste.
+        projectNotAvailable: Non riesco a trovare la proprietà con il suo ID.
+        storedRuleNotFound: La regola salvata non è stata trovata.
+        storedRuleItemNotFound: L'oggetto della regola salvata non è stato trovato.
+        storedRulesetNotFound: Il set di regola salvato non è stato trovato.
+        importFileInvalid: Il file di importazione non è valido.
+        noChangesAvailable: Non ci sono modifiche disponibili.
+      title: Modifiche disponibili
+      changes:
+        notActive: Questa sezione non è attiva per questa importazione.
+        notInExport: Questa sezione non è disponibile sul file da importare.
+        noChangesRequired: Per questa sezione non ci sono modifiche da fare perchè tutto è già aggiornato.
+    importData: Dati da importare
+    message:
+      changesSuccessfullyExecuted: Le modifiche sono state applicate.
+    title: Importa
+  eiParts:
+    generalSettings: Impostazioni generali
+    rules: Regole
+    rulesetsHelp: Include tutti i gruppi di regole di un progetto.
+    designSettings: Impostazioni grafiche
+    rulesHelp: Include tutte le regole di un progetto.
+    securitySettings: Impostazioni di sicurezza
+    rulesets: Gruppo di regole
+administration:
+  security:
+    loginThrottling:
+      form:
+        uiLimitHelp: Questo è il numero di richieste che un attaccante può effettuare con una data combinazione di nome utente e indirizzo IP.
+        interval: Intervallo di tempo
+        uiLimit: Numero di richieste per nome utente e indirizzo IP
+        intervalHelp: Il tempo in minuti durante il quale viene valutata una certa quantità di richieste.
+        ipLimit: Numero di richieste per indirizzo IP
+      unit:
+        minutes: Minuti
+        requests: Richieste
+    title: Impostazioni di sicurezza
+    reverseProxy:
+      title: Reverse proxy
+      form:
+        trustedProxies: Elenco dei proxy fidati
+        trustedProxiesIncludeRemoteAddr: Includi REMOTE_ADDR tra i proxy fidati
+    message:
+      savedSuccessfully: Le impostazioni di sicurezza sono state salvate.
+    apiAccess:
+      form:
+        ipAllowList: Indirizzi IP e sottoreti autorizzati
+        ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
+      title: Accesso API
+    backendAccess:
+      form:
+        ipAllowList: Indirizzi IP e sottoreti autorizzati
+        ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
+  geoip2:
+    title: GeoIP2
+    version:
+      typeAsn: 'Numero AS:'
+      titleAvailable: GeoIP2 disponibile
+      typeCountry: 'Paese:'
+      titleNotAvailable: GeoIP2 non disponibile
+    downloadAndUpdate:
+      web:
+        title: Web
+        message:
+          specifyLicenseKey: Immetti una chiave licenza prima di tentare di scaricare il database.
+          successfullyDownloaded: Il database è stato scaricato.
+          errorDownload: C'è stato un errore mentre Mosparo tentava di scaricare il database. %error%
+        action: Scarica il database
+      cli:
+        title: CLI
+        intro: 'Utilizza il seguente comando per scaricare il database con CLI:'
+      title: Scarica e aggiorna automaticamente
+      update:
+        title: Aggiornamento automatico
+    description: Configura l'integrazione con GeoIP2
+    settings:
+      title: Impostazioni
+      licenseKeyField: Chiave licenza
+      getLicenseKey: 'Per ottenere una chiave di licenza occorre un account MaxMind. Vai su questo sito:'
+      useGeoip2Field: Utilizza la localizzazione automatica dell'indirizzo IP
+      message:
+        savedSuccessfully: Le impostazioni sono state salvate correttamente.
+  update:
+    button:
+      updateAvailable: Aggiornamento disponibile
+    check:
+      intro: Se vuoi verificare gli aggiornamenti, fai click sul pulsante qui sotto.
+      title: Stato
+    version:
+      releaseNotes: Note di rilascio
+      titleNotAvailable: Non sono disponibili aggiornamenti
+      titleAvailable: Aggiornamento disponibile
+      messageNotAvailable: Non sono disponibili aggiornamenti per mosparo. Verifica di nuovo in un secondo momento.
+      lastChecked: 'Ultima verifica:'
+    upgrade:
+      titleAvailable: Aggiornamento disponibile
+    buttons:
+      continue: Continua
+    updateChannel: Canale di aggiornamento
+    finalize:
+      title: Aggiornamento effettuato
+    execute:
+      description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
+      message:
+        successfullyUpdated: mosparo è stato aggiornato. Puoi procedere e andare al cruscotto.
+      title: Aggiorna mosparo
+    settings:
+      title: Impostazioni aggiornamento
+      form:
+        channelStable: Stabile
+        channelBeta: Beta
+        channelDevelop: Sviluppo
+    title: Aggiornamento
+    description: Verifica se ci sono nuove versioni e aggiorna la tua installazione di mosparo.
+    installedVersion: Versione installata
+    availableVersion: Versione disponibile
+  settings:
+    message:
+      savedSuccessfully: Le impostazioni sono state salvate correttamente.
+    localeSettings:
+      form:
+        defaultTimezone: Fuso orario predefinito
+        defaultDateFormat: Formato data predefinito
+        defaultTimeFormat: Formato orario predefinito
+        defaultLocale: Lingua predefinita
+      title: Impostazioni locali
+    mailSettings:
+      form:
+        host: Host
+        user: Utente
+        password: Password
+        fromAddress: Da indirizzo email
+        port: Porta
+        fromName: Da nome
+        useSmtp: Usa un server SMTP per inviare le email
+      title: Impostazioni posta
+    mainSettings:
+      title: Impostazioni principali
+      form:
+        mosparoName: Nome dell'installazione di mosparo
+    title: Impostazioni sistema
+    interfaceSettings:
+      title: Impostazioni interfaccia
+      form:
+        defaultColorMode: Modalità colore predefinita
+  user:
+    help:
+      password: Lascia questi campi vuoti se non vuoi che venga chiesto un cambio password.
+      canCreateProjects: Permette agli utenti di creare nuovi progetti. Un amministratore può sempre creare progetti.
+    delete:
+      title: Cancella utente %email%
+      message:
+        errorUserIsOwner: L'utente è il proprietario di almeno un progetto. Non puoi cancellare il proprietario di progetti.
+        successfullyDeleted: L'utente %email% è stato cancellato.
+      confirm: Vuoi veramente cancellare l'utente %email%?
+      infoCantSelfDelete: Non puoi cancellare te stesso.
+    form:
+      password: Password
+      sendPasswordResetEmail: Invia all'utente una email per impostare la password
+      email: Email
+      isActiveUser: E' un utente attivo
+      isAdministrator: E' un amministratore
+      canCreateProjects: Può creare progetti
+      message:
+        successfullySaved: L'utente è stato creato correttamente.
+    modify:
+      title: Modifica %email% utente
+    backToOverview: Torna agli utenti
+    description: Gestione utenti di questa istanza di mosparo
+    roles: Ruoli
+    list:
+      user: Utente
+      roles: Ruoli
+      actions: Azioni
+    title: Utenti
+    create:
+      title: Crea utente
+  system:
+    general:
+      mosparoVersion: Versione mosparo
+      serverInfo: Server
+      extensions: Estensioni
+      title: Generale
+      phpVersion: Versione PHP
+    title: Informazioni di sistema
+    license:
+      title: Licenza mosparo
+    usedLibrariesAndResources:
+      license: Licenza
+      title: Risorse e librerie utilizzate
+    website: Sito web
+    projectMembers:
+      title: Membri progetto
+    logo:
+      title: Logo
+      intro: Il logo è stato disegnato da Jan Kosa.
+    description: Recupera tutte le informazioni su mosparo
+  title: Amministrazione
+account:
+  twoFactor:
+    action:
+      continue: Continua
+      configure: Configura
+      verify: Verifica
+      reconfigure: Riconfigura
+      disable: Disabilita
+    title: Autenticazione a due fattori
+    backupCodes:
+      title: Codici backup
+  settings:
+    form:
+      locale: Lingua
+      timeFormat: Formato ora
+      dateFormat: Formato data
+      timezone: Fuso orario
+    title: Impostazioni utente
+    message:
+      successfullySaved: Le impostazioni sono state salvate
+  changePassword:
+    form:
+      oldPassword: Vecchia password
+    message:
+      successfullyChanged: La password è stata aggiornata.
+    title: Cambia password
+    description: Cambia la password per il tuo account.
+  title: Account
+password:
+  form:
+    password: Password
+    repeatPassword: Ripeti password
+    newPassword: Nuova password
+  email:
+    goodbye: Grazie,
+    greeting: Ciao!
+    resetPasswordButton: Resetta password
+  reset:
+    action: Resetta password
+    title: Resetta la password
+  request:
+    title: Resetta la password
+    form:
+      email: Email
+  backToLogin: Torna al login
+setup:
+  buttons:
+    recheck: Ricontrolla
+    goToLogin: Vai al login
+    continue: Continua
+    install: Installa
+  start:
+    title: Configurazione
+action:
+  remove: Rimuovi
+  checkForUpdate: Controlla aggiornamenti
+  manage: Gestione
+  edit: Modifica
+  help: Aiuto
+  close: Chiudi
+  use: Utilizza
+  configure: Configura
+  test: Prova
+  installUpdate: Installa aggiornamento
+  goToTheDashboard: Vai al cruscotto
+  saveAndContinue: Salva e continua
+  view: Visualizza
+  export: Esporta
+  simulateImport: Simula importazione
+  save: Salva
+  delete: Cancella
+  actions: Azioni
+  importProject: Importa progetto
+  add: Aggiungi
+  executeChanges: Esegui modifiche
+state:
+  inactive: Inattivo
+  ignored: Ignorato
+  yes: Sì
+  active: Attivo
+  no: No
+interface:
+  colorModes:
+    dark: Scuro
+    light: Chiaro
+downloadCheck:
+  cardTitle: Connessione Internet
+  moreInformation: Altre informazioni
+security:
+  login:
+    emailLabel: Indirizzo email
+    youAreLoggedIn: Sei collegato come %username%.
+    passwordLabel: Password
+    title: Login
+  notFound:
+    title: Non trovato
+  logout:
+    title: Logout
+  forgotPassword:
+    title: Password dimenticata
+  twoFactor:
+    title: Autenticazione a due fattori
+roles:
+  user: Utente
+  inactive: Inattivo
+  administrator: Amministratore
+datatable:
+  datatable:
+    loadingRecords: Caricamento…
+    paginate:
+      previous: Precedente
+      next: Prossimo
+      first: Primo
+      last: Ultimo
+    search: 'Cerca:'
+    searchPlaceholder: Ricerca
+general:
+  example: Esempio
+  empty: Vuoto
+  unlimited: Illimitato
+form:
+  choices:
+    systemDefault: Impostazioni predefinite
+    browserLanguage: Lingua browser
