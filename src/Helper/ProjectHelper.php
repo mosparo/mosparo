@@ -107,6 +107,10 @@ class ProjectHelper
 
     public function disableDoctrineFilter()
     {
+        if (!$this->entityManager->getFilters()->isEnabled('project_related_filter')) {
+            return;
+        }
+
         $this->entityManager
             ->getFilters()
             ->disable('project_related_filter');
