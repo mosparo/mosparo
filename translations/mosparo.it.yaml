@@ -790,6 +790,10 @@ administration:
     apiAccess:
       title: Accesso API
     backendAccess: {}
+    ipAllowList:
+      form:
+        ipAllowList: Indirizzi IP e sottoreti autorizzati
+        ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
   geoip2:
     title: GeoIP2
     version:
