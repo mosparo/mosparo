@@ -148,7 +148,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
             // Ignore all requests for general routes like project management, account or administration
             $abortRequest = true;
-            if (preg_match('/^(project|account|security|password|administration)_/', $activeRoute) && $activeRoute !== 'project_dashboard') {
+            if (preg_match('/^(project|account|security|password|administration|cron_jobs)_/', $activeRoute) && $activeRoute !== 'project_dashboard') {
                 $abortRequest = false;
             }
 

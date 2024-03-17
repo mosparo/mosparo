@@ -75,6 +75,27 @@
                 <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
+                            <a href="{{ path('administration_cron_jobs_settings') }}">
+                                <img src="{{ asset('build/images/icons/cron-jobs.svg') }}" alt="" class="illustration-list" />
+                            </a>
+                        </div>
+                        <p class="empty-title">{{ 'administration.cronJobs.title'|trans }}</p>
+                        <p class="empty-subtitle text-muted">
+                            {{ 'administration.cronJobs.description'|trans }}
+                        </p>
+                        <div class="empty-action">
+                            <a href="{{ path('administration_cron_jobs_settings') }}" class="btn btn-primary">
+                                <i class="ti ti-calendar-time"></i>
+                                {{ 'action.configure'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="empty">
+                        <div class="empty-img">
                             <a href="{{ path('administration_geoip2_settings') }}">
                                 <img src="{{ asset('build/images/icons/geoip.svg') }}" alt="" class="illustration-list" />
                             </a>

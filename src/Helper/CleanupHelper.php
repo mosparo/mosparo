@@ -26,7 +26,7 @@ class CleanupHelper
         $this->logger = $logger;
     }
 
-    public function cleanup($maxIterations = 10, $force = false, $ignoreExceptions = true)
+    public function cleanup($maxIterations = 10, $force = false, $ignoreExceptions = true, $timeout = 1.5)
     {
         $cache = new FilesystemAdapter();
         $nextCleanup = $cache->getItem('mosparoNextCleanup');
@@ -133,7 +133,7 @@ class CleanupHelper
                 unset($query);
 
                 // If it took more than 1.5 seconds, stop the cleanup
-                if ($maxIterations > 1 && (microtime(true) - $startTime) > 1.5) {
+                if ($maxIterations > 1 && (microtime(true) - $startTime) > $timeout) {
                     break;
                 }
             }

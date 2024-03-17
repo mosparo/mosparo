@@ -91,6 +91,7 @@ class SetupSubscriber implements EventSubscriberInterface
                 'frontend_api_check_form_data',
                 'verification_api_verify',
                 'statistic_api_daily',
+                'cron_jobs_execute',
             ];
             if (in_array($route, $noRedirectsRoutes)) {
                 return;

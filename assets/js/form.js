@@ -203,6 +203,11 @@ $(document).ready(function () {
 
         let val = parseInt(changeInputField.val());
 
+        let min = 0;
+        if (changeInputField.attr('min')) {
+            min = parseInt(changeInputField.attr('min'));
+        }
+
         let max = 0;
         if (changeInputField.attr('max')) {
             max = parseInt(changeInputField.attr('max'));
@@ -214,8 +219,8 @@ $(document).ready(function () {
             val += 1;
         }
 
-        if (val < 0) {
-            val = 0;
+        if (val < min) {
+            val = min;
         }
 
         if (max > 0 && val > max) {

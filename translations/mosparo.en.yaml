@@ -1042,23 +1042,25 @@ administration:
         replaceForwardedProtoHeader: Name of the custom protocol header
         replaceForwardedProtoHeaderHelp: If required, specify the header's name in which the reverse proxy sends the request protocol.
 
+    ipAllowList:
+      form:
+        ipAllowList: Allowed IP addresses and subnets
+        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+
     backendAccess:
       title: Backend access
       intro: If you want to protect mosparo from unallowed access from the internet, you can specify which IP addresses are allowed to access the backend. Leave this field empty to allow everybody to access the login form and the backend.
       hintOwnIp: Please note that you can only save this setting if your IP address (%ipAddress%) is also included in the list (as IP address or subnet). If you have an IPv6 address, adding your subnet is recommended.
-
-      form:
-        ipAllowList: Allowed IP addresses and subnets
-        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
     apiAccess:
       title: API access
       intro: If you want to protect the mosparo API from unallowed access from the internet, you can specify which IP addresses are allowed to access it. Leave this field empty to allow every client to access the APIs.
       hintFrontendApi: Please note that this limits only the verification and statistic API. The frontend API will always be publicly available.
 
-      form:
-        ipAllowList: Allowed IP addresses and subnets
-        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+    webCronJobAccess:
+      title: Web cron job access
+      intro: If you want to protect the mosparo web cron job from unallowed access from the internet, you can specify which IP addresses are allowed to access it. Leave this field empty to allow every client to access the web cron job.
+      hintWebCronJobDisabled: The web cron job is disabled, and you cannot configure access to it as long as it is disabled.
 
     message:
       savedSuccessfully: The security settings were saved successfully.
@@ -1105,6 +1107,45 @@ administration:
       message:
         successfullyDeleted: The user %email% was deleted successfully.
         errorUserIsOwner: The user is an owner of at least one project. You cannot delete owner of projects.
+
+  cronJobs:
+    title: Cron jobs
+    description: Configure the cron jobs for mosparo.
+
+    setup:
+      title: Setup
+      intro: Please configure the following cron jobs to automate the execution of these tasks.
+
+      titles:
+        address: Address
+        commands: Commands
+        example: Example
+
+      web:
+        title: Execute cron jobs via web request
+        intro: Set up a cron job with the following address to execute it. You can use a local cron job or a remote service.
+        infoWgetPath: Please adjust the path to %wgetBinary% accordingly to your operating system if you use a local cron job.
+
+      cli:
+        title: Execute cron jobs via CLI
+        intro: Set up the following commands as a cronjob to execute the functionality.
+        infoAdjustPaths: Please remember to adjust the paths to the PHP binary and the mosparo CLI command. Your hosting provider's documentation usually provides more information about this part.
+
+    settings:
+      title: Settings
+      intro: Please enable the option below to use the cron jobs via web request.
+      enableWebCronJobs: Enable cron job via web request
+      webCronJobSecretKey: Secret key for web cron job
+      webCronJobSecretKeyHelp: This key protects your web cron job from foreign access. You can use the automatically generated key or enter your own key.
+      webCronJobInterval: Minimum waiting time between cron jobs execution
+      webCronJobIntervalHelp: Defines the minimum time between cronjob executions. This is mainly a security measure to prevent overloading the server.
+      geoIp2RefreshInterval: GeoIP2 refresh interval
+      geoIp2RefreshIntervalHelp: Defines the number of days after which an attempt is made to update the GeoIP2 database. To avoid overloading the GeoIP2 server, the database should only be updated infrequently, for example, once a week.
+
+      hintAccess: You can limit access to the web cron job based on the IP address in the %linkStart%security settings%linkEnd%.
+
+      message:
+        savedSuccessfully: The settings were saved successfully.
 
   geoip2:
     title: GeoIP2
@@ -1580,3 +1621,8 @@ dateRange:
   1y: 1 Year
   2y: 2 Years
   forever: Forever
+
+unit:
+  day: Day
+  days: Days
+  minutes: Minutes

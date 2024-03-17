@@ -32,6 +32,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ path('administration_cron_jobs_settings') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_cron_jobs_settings' %}active{% endif %}">
+                            <i class="ti ti-calendar-time"></i>
+                            {{ 'administration.cronJobs.title'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ path('administration_geoip2_settings') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_geoip2_settings' %}active{% endif %}">
                             <i class="ti ti-map-pin"></i>
                             {{ 'administration.geoip2.title'|trans }}

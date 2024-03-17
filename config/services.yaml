@@ -45,6 +45,7 @@ parameters:
 
     env(backend_access_ip_allow_list): ~
     env(api_access_ip_allow_list): ~
+    env(web_cron_job_access_ip_allow_list): ~
 
 services:
     # default configuration for services in *this* file

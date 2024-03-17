@@ -29,3 +29,7 @@ honeypotField:
 securityGuideline:
   atLeastOneCriteriaRequired: The security guideline requires at least one criteria.
   asNumberNotNumeric: The AS number is not a number.
+
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: The web cron job interval must be at least 5 minutes or more.
+  geoIpRefreshIntervalAtLeast1Day: The GeoIP2 refresh interval must be at least one day or more.
