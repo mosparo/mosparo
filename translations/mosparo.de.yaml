@@ -1043,16 +1043,10 @@ administration:
         minutes: Minuten
       intro: Die Login-Drosselung hilft, die mosparo Login-Seite vor einem Brute-Force-Angriff zu schützen. Indem die Anzahl der Anfragen gezählt und ein Angreifer nach einigen Versuchen blockiert wird, ist ein solcher Angriff sehr zeitaufwändig und nahezu sinnlos.
     backendAccess:
-      form:
-        ipAllowList: Erlaubte IP-Adressen und Subnetze
-        ipAllowListHelp: 'Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24'
       title: Backend-Zugriff
       hintOwnIp: Bitte beachten Sie, dass Sie diese Einstellung nur speichern können, wenn Ihre IP-Adresse (%ipAddress%) ebenfalls in der Liste enthalten ist (als IP-Adresse oder Subnetz). Wenn Sie eine IPv6-Adresse haben, empfiehlt es sich, Ihr Subnetz hinzuzufügen.
       intro: Wenn Sie mosparo vor unerlaubten Zugriffen aus dem Internet schützen wollen, können Sie festlegen, welche IP-Adressen auf das Backend zugreifen dürfen. Lassen Sie dieses Feld leer, um jedem den Zugriff auf die Login-Seite und das Backend zu ermöglichen.
     apiAccess:
-      form:
-        ipAllowList: Erlaubte IP-Adressen und Subnetze
-        ipAllowListHelp: 'Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24'
       title: API-Zugriff
       intro: Wenn Sie die mosparo API vor unerlaubten Zugriffen aus dem Internet schützen wollen, können Sie angeben, welche IP-Adressen darauf zugreifen dürfen. Lassen Sie dieses Feld leer, um jedem Gerät den Zugriff auf die APIs zu erlauben.
       hintFrontendApi: Bitte beachten Sie, dass dies nur die Verifizierungs- und Statistik-API einschränkt. Die Frontend-API wird immer öffentlich zugänglich sein.
