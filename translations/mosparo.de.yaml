@@ -1050,6 +1050,10 @@ administration:
       title: API-Zugriff
       intro: Wenn Sie die mosparo API vor unerlaubten Zugriffen aus dem Internet schützen wollen, können Sie angeben, welche IP-Adressen darauf zugreifen dürfen. Lassen Sie dieses Feld leer, um jedem Gerät den Zugriff auf die APIs zu erlauben.
       hintFrontendApi: Bitte beachten Sie, dass dies nur die Verifizierungs- und Statistik-API einschränkt. Die Frontend-API wird immer öffentlich zugänglich sein.
+    ipAllowList:
+      form:
+        ipAllowListHelp: 'Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24'
+        ipAllowList: Erlaubte IP-Adressen und Subnetze
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
