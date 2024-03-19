@@ -8,3 +8,24 @@ password:
     form:
       constraint:
         notBlank: Palun sisesta oma e-posti aadress.
+securityGuideline:
+  atLeastOneCriteriaRequired: Turvareegel eeldab vähemalt ühte kriteeriumi olemasolu.
+  asNumberNotNumeric: AS-number pole number.
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Sinu seadme ip-aadress pole lubatud aadresside loendis.
+        Palun lisa ta sinna.
+honeypotField:
+  nameHasInvalidCharacter: Palun kasuta vaid tähti, numbreid ja sidekriipsu (-).
+tools:
+  import:
+    importFile:
+      correctFile: Palun laadi üles korrektne json-fail.
+ipAllowList:
+  itemInvalid: „%item%“ ei tundu olema korrektne ip-aadress ega alamvõrk.
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: Cron'is veebi jaoks kirjeldatud ülesannete välp
+    peab olema vähemalt 5 või enam minutit.
+  geoIpRefreshIntervalAtLeast1Day: GeoIP2 andmete uuendamise välp peab olema vähemalt
+    1 või enam päeva.
