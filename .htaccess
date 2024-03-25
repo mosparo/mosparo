@@ -5,6 +5,7 @@
 
     RewriteRule ^build(.*)$ public/build/$1 [L]
     RewriteRule ^bundles(.*)$ public/bundles/$1 [L]
+    RewriteRule ^resources(.*)$ public/resources/$1 [L]
 
     RewriteRule ^robots.txt$ public/robots.txt [L]
 
