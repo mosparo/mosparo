@@ -130,6 +130,11 @@ class Project
         'lockoutTime' => 300,
         'lockoutMultiplicator' => 1.2,
 
+        'equalSubmissionsActive' => false,
+        'equalSubmissionsNumberOfEqualSubmissions' => 3,
+        'equalSubmissionsTimeFrame' => 300,
+        'equalSubmissionsBasedOnIpAddress' => true,
+
         'ipAllowList' => '',
     ];
 

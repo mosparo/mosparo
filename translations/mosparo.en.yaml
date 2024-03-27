@@ -690,6 +690,10 @@ settings:
       title: IP lockout
       intro: To make it even harder for bots, mosparo can automatically block IP addresses temporarily. If an IP address submits many forms, mosparo can automatically count the submissions and block the IP address if a specific number is reached.
 
+    equalSubmissions:
+      title: Block equal submissions
+      intro: An additional security measurement is to block equal submissions. If a user tries to submit the same submission too often in a defined time frame, mosparo will block all future submissions until the time frame expires. Additionally, this check can be limited to the IP address.
+
     ipAllowList:
       title: IP allow list
       intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above (Request delaying and IP lockout).
@@ -697,7 +701,6 @@ settings:
     form:
       minimumTimeActive: Enable minimum time
       minimumTimeSeconds: Minimum time
-      minimumTimeSecondsHelp: In seconds
       honeypotFieldActive: Enable honeypot field
       honeypotFieldName: Field name
       honeypotFieldNameHelp: It has to be a field name which is not already in your form and which is a normal field name like "url" or "address-line-2". Please use only letters, numbers and the dash sign (-). If empty, no honeypot field will be added to the form.
@@ -705,20 +708,22 @@ settings:
       delayNumberOfAllowedRequests: Number of allowed requests
       delayNumberOfAllowedRequestsHelp: The number of allowed requests before the delay come into place.
       delayDetectionTimeFrame: Detection time frame
-      delayDetectionTimeFrameHelp: In seconds
       delayTime: Base delay time
-      delayTimeHelp: In seconds
       delayMultiplicator: Multiplicator
       delayMultiplicatorHelp: The base delay time will be increased with every additional request.
       lockoutActive: Enable automatic lockout
       lockoutNumberOfAllowedRequests: Number of allowed requests
       lockoutNumberOfAllowedRequestsHelp: The number of allowed requests before the lockout come into place.
       lockoutDetectionTimeFrame: Detection time frame
-      lockoutDetectionTimeFrameHelp: In seconds
       lockoutTime: Base lockout time
-      lockoutTimeHelp: In seconds
       lockoutMultiplicator: Multiplicator
       lockoutMultiplicatorHelp: The base lockout time will be increased with every additional request.
+      equalSubmissionsActive: Enable block equal submissions
+      equalSubmissionsNumberOfEqualSubmissions: Number of allowed equal submissions
+      equalSubmissionsNumberOfEqualSubmissionsHelp: The number of allowed equal submissions before the block come into place.
+      equalSubmissionsTimeFrame: Detection time frame
+      equalSubmissionsBasedOnIpAddress: Based on IP address
+      equalSubmissionsBasedOnIpAddressHelp: The detection and blocking will happen on the user's IP address. If disabled, all equal submissions of all users will be counted.
       ipAllowList: Always allowed IP addresses and subnets
       ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
@@ -1626,3 +1631,6 @@ unit:
   day: Day
   days: Days
   minutes: Minutes
+
+unitHelp:
+  inSeconds: In seconds

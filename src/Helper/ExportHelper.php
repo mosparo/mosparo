@@ -158,6 +158,11 @@ class ExportHelper
             'lockoutTime',
             'lockoutMultiplicator',
 
+            'equalSubmissionsActive',
+            'equalSubmissionsNumberOfEqualSubmissions',
+            'equalSubmissionsTimeFrame',
+            'equalSubmissionsBasedOnIpAddress',
+
             'ipAllowList',
         ]);
     }

@@ -129,6 +129,40 @@
             </div>
         </div>
 
+        <div class="card mb-3">
+            <div class="card-header card-header-with-override-option">
+                <h3 class="card-title">{{ 'settings.security.equalSubmissions.title'|trans }}</h3>
+                {% if form.overrideEqualSubmissions is defined %}
+                    {{ form_widget(form.overrideEqualSubmissions) }}
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p>
+                    {{ 'settings.security.equalSubmissions.intro'|trans }}
+                </p>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form_row(form.equalSubmissionsActive) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-12 col-lg-6">
+                        {{ form_row(form.equalSubmissionsNumberOfEqualSubmissions) }}
+                    </div>
+                    <div class="col-sm-12 col-lg-6">
+                        {{ form_row(form.equalSubmissionsTimeFrame) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        {{ form_row(form.equalSubmissionsBasedOnIpAddress) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {% if form.ipAllowList is defined %}
             <div class="card">
                 <div class="card-header">

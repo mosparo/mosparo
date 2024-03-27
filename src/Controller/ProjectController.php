@@ -272,11 +272,14 @@ class ProjectController extends AbstractController
             // Honeypot
             ->add('honeypotFieldActive', CheckboxType::class, ['label' => 'settings.security.form.honeypotFieldActive', 'required' => false])
 
-            // delay
+            // Delay
             ->add('delayActive', CheckboxType::class, ['label' => 'settings.security.form.delayActive', 'required' => false])
 
-            // lockout
+            // Lockout
             ->add('lockoutActive', CheckboxType::class, ['label' => 'settings.security.form.lockoutActive', 'required' => false])
+
+            // Equal submissions
+            ->add('equalSubmissionsActive', CheckboxType::class, ['label' => 'settings.security.form.equalSubmissionsActive', 'required' => false])
 
             ->getForm();
 
