@@ -161,9 +161,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 $jsonContent = json_encode($exportData);
                 $response = new Response();
 
-                $response->headers->set('Content-Type', 'application/json');
                 $response->headers->set('Content-Disposition', 'attachment; filename="' . $exportFileName . '";');
-                $response->headers->set('Content-Length', strlen($jsonContent));
 
                 $response->sendHeaders();
                 $response->setContent($jsonContent);
