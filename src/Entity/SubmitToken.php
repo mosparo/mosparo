@@ -24,9 +24,6 @@ class SubmitToken implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'text')]
     private ?string $pageUrl;
 
-    #[ORM\Column(type: 'string', length: 40, nullable: true)]
-    private ?string $signature = null;
-
     #[ORM\Column(type: 'string', length: 64)]
     private ?string $token;
 
@@ -86,18 +83,6 @@ class SubmitToken implements ProjectRelatedEntityInterface
     public function setPageUrl(string $pageUrl): self
     {
         $this->pageUrl = $pageUrl;
-
-        return $this;
-    }
-
-    public function getSignature(): ?string
-    {
-        return $this->signature;
-    }
-
-    public function setSignature(?string $signature): self
-    {
-        $this->signature = $signature;
 
         return $this;
     }
