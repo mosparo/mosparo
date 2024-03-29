@@ -788,14 +788,8 @@ administration:
     message:
       savedSuccessfully: Le impostazioni di sicurezza sono state salvate.
     apiAccess:
-      form:
-        ipAllowList: Indirizzi IP e sottoreti autorizzati
-        ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
       title: Accesso API
-    backendAccess:
-      form:
-        ipAllowList: Indirizzi IP e sottoreti autorizzati
-        ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
+    backendAccess: {}
   geoip2:
     title: GeoIP2
     version:
