@@ -5,6 +5,7 @@ namespace Mosparo\Controller\Api\V1\Frontend;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
@@ -264,10 +265,10 @@ class FrontendApiController extends AbstractController
 
     protected function createSignature(SubmitToken $submitToken, $formData, Project $activeProject): string
     {
-        $payload = $this->hmacSignatureHelper->prepareData($this->createFormStructure($formData))
-                 . $submitToken->getToken();
+        $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
+        $formData = $requestHelper->prepareFormData($this->createFormStructure($formData));
 
-        return $this->hmacSignatureHelper->createSignature($payload, $activeProject->getPrivateKey());
+        return $requestHelper->createFormDataHmacHash($formData);
     }
 
     protected function createFormStructure(array $data): array

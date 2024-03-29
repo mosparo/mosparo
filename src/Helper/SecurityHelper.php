@@ -178,6 +178,29 @@ class SecurityHelper
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    public function countEqualSubmissions(string $formSignature, int $timeFrame, bool $basedOnIp, ?string $ipAddress): int
+    {
+        $startTime = (new DateTime())->sub(new DateInterval(sprintf('PT%dS', $timeFrame)));
+
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('COUNT(s.id) AS submissions')
+           ->from('Mosparo\Entity\SubmitToken', 'st')
+           ->leftJoin('Mosparo\Entity\Submission', 's', 'WITH', 'st.id = s.submitToken')
+           ->where('s.signature = :formSignature')
+           ->andWhere('st.createdAt > :startTime')
+           ->setParameter('startTime', $startTime)
+           ->setParameter('formSignature', $formSignature);
+
+        if ($basedOnIp && $ipAddress) {
+            $qb->andWhere('st.ipAddress = :ip')
+               ->setParameter('ip', HashUtil::hash($ipAddress));
+        }
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result['submissions'] ?? 0;
+    }
+
     public function determineSecuritySettings(?string $ipAddress): array
     {
         if ($ipAddress) {

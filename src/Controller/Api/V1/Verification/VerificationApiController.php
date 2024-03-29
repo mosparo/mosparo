@@ -160,6 +160,42 @@ class VerificationApiController extends AbstractController
             $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
             $formSignature = $requestHelper->createFormDataHmacHash($formData);
 
+            // Check for equal form submission, if the security feature is enabled
+            if ($securitySettings['equalSubmissionsActive']) {
+                $allowedNumberOfEqualSubmissions = $securitySettings['equalSubmissionsNumberOfEqualSubmissions'];
+                $actualNumberOfEqualSubmissions = $this->securityHelper->countEqualSubmissions(
+                    $formSignature,
+                    $securitySettings['equalSubmissionsTimeFrame'],
+                    $securitySettings['equalSubmissionsBasedOnIpAddress'],
+                    $clientIpAddress
+                );
+
+                $equalSubmissionsGv = new GeneralVerification(
+                    GeneralVerification::EQUAL_SUBMISSIONS,
+                    ($actualNumberOfEqualSubmissions <= $allowedNumberOfEqualSubmissions),
+                    ['allowed' => $allowedNumberOfEqualSubmissions, 'actual' => $actualNumberOfEqualSubmissions]
+                );
+                $submission->addGeneralVerification($equalSubmissionsGv);
+
+                if (!$equalSubmissionsGv->isValid()) {
+                    $submission->setValid($equalSubmissionsGv->isValid());
+
+                    $entityManager->flush();
+
+                    // Prepare the API debug data
+                    $debugInformation = [];
+                    if ($activeProject->isApiDebugMode()) {
+                        $debugInformation['debugInformation'] = [
+                            'reason' => 'too_many_equal_submissions',
+                            'allowedNumberOfEqualSubmissions' => $allowedNumberOfEqualSubmissions,
+                            'actualNumberOfEqualSubmissions' => $actualNumberOfEqualSubmissions,
+                        ];
+                    }
+
+                    return new JsonResponse(['error' => true, 'errorMessage' => 'Verification failed.'] + $debugInformation);
+                }
+            }
+
             $validationSignature = $requestHelper->createHmacHash($submission->getValidationToken());
             $verificationSignature = $requestHelper->createHmacHash($validationSignature . $formSignature);
 
