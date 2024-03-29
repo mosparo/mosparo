@@ -543,9 +543,7 @@ settings:
       introShort: La funzione del tempo minimo misura il tempo tra l'inizializzazione di mosparo (caricamento pagina) e la validazione dell'invio (dopo che il modulo è stato inviato). Questa funzione è consigliat aper moduli molto lunghi/complessi.
     form:
       minimumTimeSeconds: Tempo minimo
-      delayDetectionTimeFrameHelp: In secondi
       lockoutMultiplicatorHelp: Il tempo di blocco verrà aumentato ad ogni richiesta aggiuntiva.
-      minimumTimeSecondsHelp: In secondi
       honeypotFieldActive: Abilita campo honeypot
       minimumTimeActive: Abilita tempo minimo
       delayNumberOfAllowedRequestsHelp: La quantità di richieste consentite prima che venga applicato il ritardo.
@@ -553,7 +551,6 @@ settings:
       ipAllowList: Indirizzi IP e sottoreti sempre autorizzate
       ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
       lockoutTime: Tempo blocco
-      lockoutTimeHelp: In secondi
       lockoutMultiplicator: Moltiplicatore
       delayActive: Abilita ritardo richiesto
       delayNumberOfAllowedRequests: Numero di richieste consentito
@@ -561,7 +558,6 @@ settings:
       delayMultiplicator: Moltiplicatore
       lockoutActive: Abilita blocco automatico
       honeypotFieldName: Nome campo
-      delayTimeHelp: In secondi
       lockoutNumberOfAllowedRequests: Numero di richieste consentite
       lockoutNumberOfAllowedRequestsHelp: La quantità di richieste consentite prima che venga applicato il blocco.
       overrideMinimumTime: Sovrascrivi tempo minimo
@@ -570,7 +566,6 @@ settings:
       overrideLockout: Sovrascrivi blocco automatico
       delayDetectionTimeFrame: Tempo di rilevamento
       delayTime: Ritardo di base
-      lockoutDetectionTimeFrameHelp: In secondi
       lockoutDetectionTimeFrame: Tempo di rilevamento
     ipLockout:
       title: Blocco IP

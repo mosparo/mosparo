@@ -406,7 +406,6 @@ settings:
       intro: Pole honeypot je skryté pole ve formuláři. Lidé ho neuvidí, ale spamovací boti do něj pravděpodobně vyplní nějaký obsah. Pokud se tak stane, víme, že to nebyl člověk, takže můžeme odeslání zablokovat.
     form:
       minimumTimeActive: Minimální aktivní čas
-      delayTimeHelp: V sekundách
       delayMultiplicator: Násobitel
       delayMultiplicatorHelp: Základní doba odložení se s každým dalším požadavkem prodlužuje.
       lockoutActive: Automatické uzamčení aktivní
@@ -414,14 +413,10 @@ settings:
       ipAllowList: Vždy povolené IP adresy a podsítě
       ipAllowListHelp: 'Zadejte jednu IP adresu nebo podsíť na řádek. Příklad: 192.168.1.13 nebo 192.168.1.0/24'
       minimumTimeSeconds: Minimální čas
-      lockoutTimeHelp: V sekundách
       honeypotFieldActive: Pole Honeypot aktivní
       honeypotFieldName: Název pole
-      minimumTimeSecondsHelp: V sekundách
       delayNumberOfAllowedRequests: Počet povolených požadavků
       delayDetectionTimeFrame: Časový rámec detekce
-      delayDetectionTimeFrameHelp: V sekundách
-      lockoutDetectionTimeFrameHelp: V sekundách
       honeypotFieldNameHelp: Musí to být název pole, který se ve formuláři ještě nenachází a který je normálním názvem pole, například "url" nebo "address-line-2". Používejte pouze písmena, číslice a znak pomlčky (-). Pokud je prázdné, nebude do formuláře přidáno žádné pole honeypot.
       delayActive: Povolit zpoždění požadavku
       lockoutNumberOfAllowedRequests: Počet povolených požadavků

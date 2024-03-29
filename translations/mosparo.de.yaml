@@ -612,7 +612,6 @@ settings:
     form:
       minimumTimeActive: Mindestzeit aktivieren
       minimumTimeSeconds: Mindestzeit
-      minimumTimeSecondsHelp: In Sekunden
       honeypotFieldActive: Honeypot-Feld aktivieren
       honeypotFieldName: Feldname
       honeypotFieldNameHelp: Es muss ein Feldname sein, welchen Sie nicht bereits in Ihrem Formular verwenden und welcher ein normales Feld sein könnte, wie zum Beispiel "url" oder "adress-zeile-2". Bitte verwenden Sie nur Buchstaben, Zahlen und den Bindestrich (-). Wenn Sie dieses Feld leer lassen wird die Funktion nicht verwendet.
@@ -620,18 +619,14 @@ settings:
       delayNumberOfAllowedRequests: Anzahl erlaubter Anfragen
       delayNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Anfrageverzögerung aktiv wird.
       delayDetectionTimeFrame: Erkennungszeitraum
-      delayDetectionTimeFrameHelp: In Sekunden
       delayTime: Anfangsverzögerungszeit
-      delayTimeHelp: In Sekunden
       delayMultiplicator: Multiplikator
       delayMultiplicatorHelp: Die Anfagsverzögerungszeit wird mit jeder weiteren Anfrage erhöht.
       lockoutActive: Automatische Sperre aktivieren
       lockoutNumberOfAllowedRequests: Anzahl erlaubter Anfragen
       lockoutNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Sperre aktiv wird.
       lockoutDetectionTimeFrame: Erkennungszeitraum
-      lockoutDetectionTimeFrameHelp: In Sekunden
       lockoutTime: Anfangssperrzeit
-      lockoutTimeHelp: In Sekunden
       lockoutMultiplicator: Multiplikator
       lockoutMultiplicatorHelp: Die Anfangssperrzeit wird mit jeder zusätzlichen Anfrage mit diesem Multiplikator erhöht.
       ipAllowList: Immer erlaubte IP-Adressen und Subnetze
