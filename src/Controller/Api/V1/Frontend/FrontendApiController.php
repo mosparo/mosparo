@@ -118,7 +118,8 @@ class FrontendApiController extends AbstractController
         return new JsonResponse([
             'submitToken' => $submitToken->getToken(),
             'messages' => $this->getTranslations($request),
-            'invisible' => ($submitToken->getProject()->getDesignMode() === 'invisible-simple')
+            'invisible' => ($submitToken->getProject()->getDesignMode() === 'invisible-simple'),
+            'showLogo' => $submitToken->getProject()->getConfigValue('showMosparoLogo') ?? true,
         ] + $args);
     }
 
@@ -347,6 +348,7 @@ class FrontendApiController extends AbstractController
 
             'accessibilityCheckingData' => $this->translator->trans('accessibility.checkingData', [], 'frontend'),
             'accessibilityDataValid' => $this->translator->trans('accessibility.dataValid', [], 'frontend'),
+            'accessibilityProtectedBy' => $this->translator->trans('accessibility.protectedBy', [], 'frontend'),
 
             'errorGotNoToken' => $this->translator->trans('error.gotNoToken', [], 'frontend'),
             'errorInternalError' => $this->translator->trans('error.internalError', [], 'frontend'),

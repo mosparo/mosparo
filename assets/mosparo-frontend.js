@@ -53,8 +53,9 @@ function mosparo(containerId, url, uuid, publicKey, options)
         locale: 'en',
         label: 'I accept that the form entries are checked for spam and stored encrypted for 14 days.',
 
-        accessibilityCheckingData: 'We\'re checking your data. Please wait.',
+        accessibilityCheckingData: 'The spam protection verifies your data. Please wait.',
         accessibilityDataValid: 'Your data are valid. You can submit the form.',
+        accessibilityProtectedBy: 'This form is protected from spam by mosparo.',
 
         errorGotNoToken: 'mosparo returned no submit token.',
         errorInternalError: 'An error occurred. Please try again.',
@@ -153,6 +154,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         // Create the accessible status message
         this.accessibleStatusElement = document.createElement('div');
         this.accessibleStatusElement.classList.add('mosparo__accessible-message');
+        this.accessibleStatusElement.setAttribute('aria-describedby', fieldId);
         contentColumnElement.appendChild(this.accessibleStatusElement);
 
         // Create the submit token field
@@ -253,6 +255,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
             if (response.invisible) {
                 _this.switchToInvisible();
+            } else if (response.showLogo) {
+                _this.addAccessibilityLogo();
             }
 
             if (response.submitToken) {
@@ -572,6 +576,13 @@ function mosparo(containerId, url, uuid, publicKey, options)
         });
     }
 
+    this.addAccessibilityLogo = function () {
+        let accessibleLogo = document.createElement('span');
+        accessibleLogo.classList.add('mosparo__accessible-message');
+        accessibleLogo.textContent = this.getMessage('accessibilityProtectedBy');
+        this.labelElement.appendChild(accessibleLogo);
+    }
+
     this.setHpFieldElementDisabled = function (disabled) {
         if (this.hpFieldElement !== null) {
             this.hpFieldElement.disabled = disabled;
@@ -639,6 +650,15 @@ function mosparo(containerId, url, uuid, publicKey, options)
         loaderTextElement.classList.add('mosparo__loader-text');
         loaderTextElement.textContent = this.getMessage('accessibilityCheckingData');
         loaderInnerContainerElement.appendChild(loaderTextElement);
+
+        let submitButtonEl = this.formElement.querySelector('[type="submit"]');
+        if (submitButtonEl) {
+            if (!submitButtonEl.id) {
+                submitButtonEl.setAttribute('id', 'button_' + this.getRandomHash());
+            }
+
+            this.accessibleStatusElement.setAttribute('aria-describedby', submitButtonEl.id);
+        }
 
         // Execute the event and the callback
         _this.formElement.dispatchEvent(new CustomEvent('switch-to-invisible', { bubbles: true }));
