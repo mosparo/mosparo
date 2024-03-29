@@ -731,6 +731,7 @@ settings:
       overrideHoneypotField: Override honeypot field
       overrideDelay: Override request delay
       overrideLockout: Override automatic lockout
+      overrideEqualSubmissions: Override block equal submissions
 
     message:
       successfullySaved: The security settings were saved successfully.
