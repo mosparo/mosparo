@@ -328,17 +328,19 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
         $projectSecuritySettings = $this->project->getSecurityConfigValues();
 
         $securitySettings = [];
-        foreach ($this->getConfigValues(false) as $key => $value) {
+        foreach ($this->getConfigValues() as $key => $value) {
+            // If the default value is the same as the project value and the security guideline value, skip it
             if (
-                !isset($projectDefaultValues[$key]) ||
-                $value !== $projectDefaultValues[$key] ||
-                (isset($projectSecuritySettings[$key]) && $projectDefaultValues[$key] !== $projectSecuritySettings[$key])
+                isset($projectDefaultValues[$key]) && $value === $projectDefaultValues[$key] &&
+                isset($projectSecuritySettings[$key]) && $projectDefaultValues[$key] === $projectSecuritySettings[$key]
             ) {
-                $securitySettings[] = [
-                    'name' => $key,
-                    'value' => $value,
-                ];
+                continue;
             }
+
+            $securitySettings[] = [
+                'name' => $key,
+                'value' => $value,
+            ];
         }
 
         return [
