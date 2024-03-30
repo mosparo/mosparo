@@ -129,9 +129,9 @@
                             <div>
                                 {% if not submission.valid is null %}
                                     {% if submission.valid %}
-                                        <span class="text-success">{{ 'state.yes'|trans }}</span>
+                                        <span class="text-success"><strong>{{ 'state.yes'|trans }}</strong></span>
                                     {% else %}
-                                        <span class="text-danger">{{ 'state.no'|trans }}</span>
+                                        <span class="text-danger"><strong>{{ 'state.no'|trans }}</strong></span>
                                     {% endif %}
                                 {% else %}
                                     -
