@@ -27,7 +27,7 @@
         "doctrine/orm": "^3.0",
         "endroid/qr-code": "^5.0",
         "geoip2/geoip2": "~2.0",
-        "gracious/doctrine-encryption-bundle": "dev-bugfix-datatype",
+        "gracious/doctrine-encryption-bundle": "^4.0",
         "mlocati/ip-lib": "^1.16",
         "mosparo/php-api-client": "^1.0",
         "mosparo/specifications": "^4.0",
@@ -142,11 +142,5 @@
             "allow-contrib": false,
             "require": "6.4.*"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:mosparo/doctrine-encryption-bundle.git"
-        }
-    ]
+    }
 }
