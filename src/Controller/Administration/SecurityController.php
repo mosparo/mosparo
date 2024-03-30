@@ -174,38 +174,40 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($modifyTrustedSettingsAllowed) {
-                $configValues = [
-                    'login_throttling_ui_limit' => $form->get('loginThrottlingUiLimit')->getData(),
-                    'login_throttling_ip_limit' => $form->get('loginThrottlingIpLimit')->getData(),
-                    'login_throttling_interval' => sprintf('%d minutes', $form->get('loginThrottlingInterval')->getData()),
-                    'login_throttling_interval_numeric' => $form->get('loginThrottlingInterval')->getData(),
+            $configValues = [
+                'login_throttling_ui_limit' => $form->get('loginThrottlingUiLimit')->getData(),
+                'login_throttling_ip_limit' => $form->get('loginThrottlingIpLimit')->getData(),
+                'login_throttling_interval' => sprintf('%d minutes', $form->get('loginThrottlingInterval')->getData()),
+                'login_throttling_interval_numeric' => $form->get('loginThrottlingInterval')->getData(),
 
+                'backend_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('backendAccessIpAllowList')->getData())),
+                'api_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('apiAccessIpAllowList')->getData())),
+            ];
+
+            if ($modifyTrustedSettingsAllowed) {
+                $configValues = array_merge($configValues, [
                     'trusted_proxies' => $this->buildTrustedProxiesString($form->get('trustedProxies')->getData(), $form->get('trustedProxiesIncludeRemoteAddr')->getData()),
                     'trusted_proxies_include_remote_addr' => $form->get('trustedProxiesIncludeRemoteAddr')->getData(),
                     'replace_forwarded_for_header' => $form->get('replaceForwardedForHeader')->getData(),
                     'replace_forwarded_proto_header' => $form->get('replaceForwardedProtoHeader')->getData(),
-
-                    'backend_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('backendAccessIpAllowList')->getData())),
-                    'api_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('apiAccessIpAllowList')->getData())),
-                ];
-
-                if ($isWebCronJobActive) {
-                    $configValues['web_cron_job_access_ip_allow_list'] = implode(',', IpUtil::convertToArray($form->get('webCronJobAccessIpAllowList')->getData()));
-                }
-
-                $this->configHelper->writeEnvironmentConfig($configValues);
-
-                $session = $request->getSession();
-                $session->getFlashBag()->add(
-                    'success',
-                    $this->translator->trans(
-                        'administration.security.message.savedSuccessfully',
-                        [],
-                        'mosparo'
-                    )
-                );
+                ]);
             }
+
+            if ($isWebCronJobActive) {
+                $configValues['web_cron_job_access_ip_allow_list'] = implode(',', IpUtil::convertToArray($form->get('webCronJobAccessIpAllowList')->getData()));
+            }
+
+            $this->configHelper->writeEnvironmentConfig($configValues);
+
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'administration.security.message.savedSuccessfully',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('administration_security');
         }
