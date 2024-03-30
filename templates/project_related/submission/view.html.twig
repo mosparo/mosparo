@@ -232,6 +232,16 @@
                                         <div class="text-muted">{{ 'submission.view.generalVerifications.minimumTime.text'|trans({'%seconds%': generalVerification.data.seconds, '%minimumTimeSeconds%': generalVerification.data.minimumTimeSeconds}) }}</div>
                                     </div>
                                 </div>
+                            {% elseif generalVerification.key == 'equalSubmissions' %}
+                                <div class="d-flex">
+                                    <div>
+                                        <i class="ti ti-equal-double icon alert-icon"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="alert-title">{{ 'submission.view.generalVerifications.equalSubmissions.title'|trans }}</h4>
+                                        <div class="text-muted">{{ 'submission.view.generalVerifications.equalSubmissions.text'|trans({'%actualNumberOfEqualSubmissions%': generalVerification.data.actual, '%allowedNumberOfEqualSubmissions%': generalVerification.data.allowed}) }}</div>
+                                    </div>
+                                </div>
                             {% endif %}
                         </div>
                     {% endif %}

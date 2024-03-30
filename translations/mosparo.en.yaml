@@ -454,6 +454,10 @@ submission:
         title: Submission too fast
         text: The form was submitted too fast. The submitter required only %seconds% seconds, which is less than the minimum time of %minimumTimeSeconds% seconds.
 
+      equalSubmissions:
+        title: Too many equal submissions
+        text: This submission is equal to previous submissions. mosparo found %actualNumberOfEqualSubmissions% equal submissions within the configured time range, more than the allowed number of %allowedNumberOfEqualSubmissions% equal submissions.
+
     verificationSimulation:
       title: Verification simulation
       intro: The verification simulation shows you which data mosparo accepts for the verification process. You can compare the displayed data with the data your verification process will generate to find possible problems.
