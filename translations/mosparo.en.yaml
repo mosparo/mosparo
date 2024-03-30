@@ -683,7 +683,8 @@ settings:
 
     honeypot:
       title: Honeypot
-      intro: A honeypot field is a hidden field in the form. Humans will not be able to see it - but spam bots will probably fill some content in this field. If that happens, we know that it was not a human so we can block the submission.
+      intro: A honeypot field is a hidden field in the form. Humans will not be able to see it - but spam bots will probably fill some content in this field. If that happens, we know it was not a human, so that we can block the submission.
+      infoField: Please enter a name for the honeypot field. The name should be a normal field name that you haven't used in your form yet. mosparo will add the hidden field automatically; you do not have to alter your form.
 
     requestDelaying:
       title: Request delaying
