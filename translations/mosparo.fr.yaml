@@ -309,20 +309,15 @@ settings:
     form:
       delayNumberOfAllowedRequests: Nombre de requêtes autorisées
       delayNumberOfAllowedRequestsHelp: Nombre de requêtes autorisées avant l'apparition du délai.
-      delayDetectionTimeFrameHelp: En secondes
       minimumTimeActive: Temps d'activité minimal
       minimumTimeSeconds: Temps minimal
-      minimumTimeSecondsHelp: En secondes
       honeypotFieldName: Nom du champ
-      delayTimeHelp: En secondes
       delayMultiplicator: Multiplicateur
       lockoutActive: Verrouillage automatique actif
       lockoutNumberOfAllowedRequests: Nombre de requêtes autorisées
       delayMultiplicatorHelp: Le délai par défaut sera augmenté à chaque nouvelle requête.
       lockoutNumberOfAllowedRequestsHelp: Le nombre de requêtes autorisées avant le verrouillage.
-      lockoutDetectionTimeFrameHelp: En secondes
       lockoutTime: Délai de verrouillage par défaut
-      lockoutTimeHelp: En secondes
       lockoutMultiplicator: Multiplicateur
       lockoutMultiplicatorHelp: Le délai de verrouillage par défaut sera augmenté à chaque nouvelle requête.
       ipAllowList: Adresses IP et sous-réseaux autorisés en permanence

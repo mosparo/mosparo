@@ -457,25 +457,20 @@ settings:
       honeypotFieldName: Nama kolom
       lockoutNumberOfAllowedRequestsHelp: Jumlah permintaan yang diizinkan sebelum penguncian diberlakukan.
       lockoutMultiplicator: Pengganda
-      delayDetectionTimeFrameHelp: Dalam hitungan detik
       delayTime: Waktu tunda dasar
-      delayTimeHelp: Dalam hitungan detik
       lockoutNumberOfAllowedRequests: Jumlah permintaan yang diizinkan
       minimumTimeSeconds: Waktu minimal
-      minimumTimeSecondsHelp: Dalam hitungan detik
       delayDetectionTimeFrame: Kerangka waktu deteksi
       delayMultiplicator: Pengganda
       delayNumberOfAllowedRequests: Jumlah permintaan yang diizinkan
       delayNumberOfAllowedRequestsHelp: Jumlah permintaan yang diizinkan sebelum penundaan diterapkan.
       delayMultiplicatorHelp: Waktu tunda dasar akan ditingkatkan dengan setiap permintaan tambahan.
       lockoutDetectionTimeFrame: Kerangka waktu deteksi
-      lockoutTimeHelp: Dalam hitungan detik
       ipAllowList: Selalu izinkan alamat IP dan subnet
       honeypotFieldNameHelp: Itu harus nama kolom yang belum ada dalam formulir Anda dan yang merupakan nama kolom normal seperti "url" atau "address-line-2". Gunakan hanya huruf, angka dan tanda strip (-). Jika kosong, tidak ada kolom honeypot yang akan ditambahkan ke formulir.
       lockoutMultiplicatorHelp: Waktu penguncian dasar akan ditingkatkan dengan setiap permintaan tambahan.
       lockoutTime: Waktu penguncian dasar
       ipAllowListHelp: 'Tentukan satu alamat ip atau subnet per baris. Contoh: 192.168.1.13 atau 192.168.1.0/24'
-      lockoutDetectionTimeFrameHelp: Dalam hitungan detik
       delayActive: Aktifkan penundaan permintaan
       honeypotFieldActive: Aktifkan bidang honeypot
       lockoutActive: Aktifkan penguncian otomatis
