@@ -62,19 +62,19 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Vietnamese           | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                                      |
 
 ## Validators
-| Language   | Language Code | Contributors                                                |
-|------------|---------------|-------------------------------------------------------------|
-| Croatian   | hr            | [milotype](https://hosted.weblate.org/user/milotype/) |
-| Czech      | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)         |
-| English    | en            | mosparo Core Developers                                     |
-| Estonian   | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)     |
-| French     | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/)     |
-| German     | de            | mosparo Core Developers                                     |
-| Indonesian | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)           |
-| Korean     | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/) |
-| Polish     | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)         |
-| Russian    | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)         |
-| Slovak     | sk            | [salka.milan](https://hosted.weblate.org/user/salka.milan/) |
-| Swedish    | sv            | [bittin](https://hosted.weblate.org/user/bittin/)           |
-| Ukrainian  | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)     |
-| Vietnamese | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)     |
+| Language   | Language Code | Contributors                                                                                                   |
+|------------|---------------|----------------------------------------------------------------------------------------------------------------|
+| Croatian   | hr            | [milotype](https://hosted.weblate.org/user/milotype/)                                                          |
+| Czech      | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                            |
+| English    | en            | mosparo Core Developers                                                                                        |
+| Estonian   | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                        |
+| French     | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/)                                                        |
+| German     | de            | mosparo Core Developers                                                                                        |
+| Indonesian | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/) |
+| Korean     | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                                                    |
+| Polish     | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)                                                            |
+| Russian    | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                                                            |
+| Slovak     | sk            | [salka.milan](https://hosted.weblate.org/user/salka.milan/)                                                    |
+| Swedish    | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                              |
+| Ukrainian  | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                        |
+| Vietnamese | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                        |
