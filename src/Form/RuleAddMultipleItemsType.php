@@ -37,7 +37,8 @@ class RuleAddMultipleItemsType extends AbstractType
                 'html5' => true,
                 'scale' => 1,
                 'attr' => [
-                    'min' => 0.1,
+                    'min' => -1000000,
+                    'max' => 1000000,
                     'step' => 'any',
                 ]
             ])

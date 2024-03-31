@@ -278,9 +278,9 @@ rule:
 
     rating:
       title: Rating
-      intro: If an item should get a higher spam rating, you can set an additional spam rating for the item.
+      intro: The rating field allows you to define an item's weight. If you specify a positive number, you can assign a higher value to an item. If you specify a negative number, the item will reduce the total number of points.
       infoCalculationMethod: The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.
-      infoDefaultAndDataType: The rating is a float number from %zero% to %unlimited%. If no rating is defined, the default rating is %one%.
+      infoDefaultAndDataType: The rating is a float number from %minValue% to %maxValue%. If no rating is defined, the default rating is %one%.
       infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
       placeholder: Rating
 

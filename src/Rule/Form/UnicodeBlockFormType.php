@@ -48,7 +48,8 @@ class UnicodeBlockFormType extends AbstractRuleTypeFormType
                 'attr' => [
                     'placeholder' => '1.0',
                     'class' => 'rule-item-rating',
-                    'min' => 0.1,
+                    'min' => -1000000,
+                    'max' => 1000000,
                     'step' => 'any',
                 ]
             ])
