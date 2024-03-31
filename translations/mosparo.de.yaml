@@ -261,9 +261,9 @@ rule:
 
     rating:
       title: Bewertung
-      intro: Wenn ein Eintrag eine stärkere Bewertung erhalten soll, können Sie die Spambewertung pro Eintrag spezifizieren.
+      intro: Mit dem Feld Bewertung können Sie das Gewicht eines Eintrages festlegen. Wenn Sie eine positive Zahl angeben, können Sie einem Eintrag einen höheren Wert zuweisen. Wenn Sie eine negative Zahl für den Eintrag angeben, wird die Gesamtzahl der Punkte verringert.
       infoCalculationMethod: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
-      infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %zero% bis %unlimited%. Wenn keine Bewertung gesetzt ist, wird die Standard-Bewertung %one% verwendet.
+      infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %minValue% und %maxValue%. Wenn keine Bewertung definiert ist, ist die Standardbewertung %one%.
       infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
       placeholder: Bewertung
 
@@ -597,7 +597,7 @@ settings:
       introShort: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung der Einsendung (nach dem das Formular abgesendet wurde). Diese Funktionalität ist hauptsächlich für längere Formulare empfehlenswert.
     honeypot:
       title: Honeypot-Feld
-      intro: Ein Honeypot-Feld ist ein verstecktes Feld innerhalb des Formulars. Menschen sehen das Feld nicht - aber Spam-Bots werden möglicherweise Spam-Inhalt in das Feld einfügen. Wenn das passiert, wissen wir, dass es kein Mensch gewesen sein kann und blockieren die Einsendung.
+      intro: Ein Honeypot-Feld ist ein verstecktes Feld im Formular. Menschen können es nicht sehen - aber Spam-Bots werden wahrscheinlich einige Inhalte in dieses Feld eingeben. Wenn das passiert, wissen wir, dass es kein Mensch war, so dass wir die Übermittlung blockieren können.
 
       infoField: Bitte geben Sie einen Namen für das Honeypot-Feld ein. Der Name sollte ein normaler Feldname sein, welchen Sie nicht in Ihrem Formular verwenden. mosparo fügt das unsichtbare Feld automatisch in Ihrem Formular ein. Sie müssen es nicht manuell anpassen.
     requestDelaying:
