@@ -384,7 +384,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
             if (_this.invisible) {
                 if (response.valid) {
-                    _this.checkboxFieldElement.setAttribute('checked', 'checked');
+                    _this.checkboxFieldElement.checked = true;
 
                     // Execute the event and the callback
                     _this.formElement.dispatchEvent(new CustomEvent('submit-form-invisible', { bubbles: true }));
@@ -518,7 +518,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             return;
         }
 
-        this.checkboxFieldElement.removeAttribute('checked');
+        this.checkboxFieldElement.checked = false;
         this.setHpFieldElementDisabled(false);
         this.containerElement.classList.remove('mosparo__checked');
         this.validationTokenElement.value = '';
