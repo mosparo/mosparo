@@ -206,8 +206,6 @@ class SetupController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        $session = $request->getSession();
-
         // Prepare database and execute the migrations
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
@@ -220,6 +218,14 @@ class SetupController extends AbstractController
         $output = new BufferedOutput();
         $application->run($input, $output);
         $output->fetch();
+
+        return $this->redirectToRoute('setup_install_continuation');
+    }
+
+    #[Route('/install-continuation', name: 'setup_install_continuation')]
+    public function installContinuation(Request $request): Response
+    {
+        $session = $request->getSession();
 
         // Create user
         try {
@@ -241,6 +247,9 @@ class SetupController extends AbstractController
             'command' => 'cache:clear',
             '-n'
         ));
+
+        $application = new Application($this->kernel);
+        $application->setAutoExit(false);
 
         $output = new BufferedOutput();
         $application->run($input, $output);

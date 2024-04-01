@@ -22,6 +22,7 @@ class SetupSubscriber implements EventSubscriberInterface
         'setup_database',
         'setup_other',
         'setup_install',
+        'setup_install_continuation',
     ];
 
     public function __construct(UrlGeneratorInterface $router, $installed, $installedVersion, $debug = false)
