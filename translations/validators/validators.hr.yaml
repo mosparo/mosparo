@@ -24,3 +24,8 @@ honeypotField:
 securityGuideline:
   asNumberNotNumeric: AS broj nije broj.
   atLeastOneCriteriaRequired: Sigurnosna smjernica zahtijeva barem jedan kriterij.
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: Interval web cron posla mora biti barem 5 minuta
+    ili više.
+  geoIpRefreshIntervalAtLeast1Day: Interval GeoIP2 osvježavanja mora biti barem jedan
+    dan ili više.
