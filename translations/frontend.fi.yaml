@@ -3,7 +3,7 @@ accessibility:
   checkingData: Tarkistamme tietosi. Ole hyvä ja odota.
   dataValid: Tietosi on hyväksytty. Voi lähettää lomakkeen.
 error:
-  gotNoToken: Mosparo ei palauttanut lähetysavainta.
+  gotNoToken: mosparo ei palauttanut lähetysavainta.
   internalError: Tapahtui virhe. Ole hyvä ja yritä uudelleen.
   noSubmitTokenAvailable: Lähetysavainta ei ole saatavilla. Lomakketta ei voida varmistaa.
   spamDetected: Tietosi ei läpäissyt suodatinta.
