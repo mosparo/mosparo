@@ -23,6 +23,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Dutch                 | nl            | [Digi92](https://hosted.weblate.org/user/Digi92/), [Astrid](https://hosted.weblate.org/user/Astrid/)         |
 | English               | en            | mosparo Core Developers                                                                                      |
 | Estonian              | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                      |
+| Finnish               | fi            | [teemu.vestovuo](https://hosted.weblate.org/user/teemu.vestovuo/)                                            |
 | French                | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), mosparo Core Developers                             |
 | German                | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/)                                   |
 | Greek                 | el            | [OneStage](https://hosted.weblate.org/user/OneStage/)                                                        |
@@ -49,6 +50,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 ## Backend
 | Language             | Language Code | Contributors                                                                                                                 |
 |----------------------|---------------|------------------------------------------------------------------------------------------------------------------------------|
+| Bulgarian            | bg            | [Supermyskin](https://hosted.weblate.org/user/Supermyskin/)                                                                  |
 | Chinese (Simplified) | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                                                                        |
 | Czech                | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                                          |
 | English              | en            | mosparo Core Developers                                                                                                      |
