@@ -59,7 +59,7 @@ project:
     name: Name
     description: Description
     hosts: Hosts
-    hostsHelp: Please enter all hosts which this project will include.
+    hostsHelp: These hosts are used to respond with the correct security headers (CORS). You must add all domains and subdomains that use this project and all variations (for example, www.example.com and example.com). You can use a star (*) at the start of a host as a wildcard (for example, *.example.com). Using the star as a prefix and not as a global wildcard for all hosts is strongly recommended.
     status: Status
     statusHelp: Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.
     spamScore: Spam score
