@@ -18,7 +18,7 @@ class AllowListExpressionLanguageProvider implements ExpressionFunctionProviderI
             return sprintf('empty(%2$s) || \Mosparo\Util\IpUtil::isIpAllowed(%1$s, %2$s)', $ipAddress, $allowList);
         };
 
-        $securityEvaluator = function (array $data, string $ipAddress, string $allowList): bool
+        $securityEvaluator = function (array $data, $ipAddress, string $allowList): bool
         {
             return IpUtil::isIpAllowed($ipAddress, $allowList);
         };
@@ -28,7 +28,7 @@ class AllowListExpressionLanguageProvider implements ExpressionFunctionProviderI
             return sprintf('empty(%2$s) || \Mosparo\Util\IpUtil::isIpAllowed(%1$s, %2$s)', $ipAddress, $allowList);
         };
 
-        $routingEvaluator = function (string $ipAddress, string $allowList): bool
+        $routingEvaluator = function ($ipAddress, string $allowList): bool
         {
             return IpUtil::isIpAllowed($ipAddress, $allowList);
         };
