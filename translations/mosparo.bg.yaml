@@ -1,0 +1,52 @@
+project:
+  action:
+    goto: Отиди към проект
+    delete: Изтрий проект
+  create:
+    message:
+      successfullyCreatedAndConfigured: Новият проект е успешно създаден и настроен.
+    title: Създай проект
+  title: Проекти
+  backToList: Обратно към проектите
+  list:
+    actions: Действия
+    name: Име
+    status: Статус
+  filter:
+    options:
+      all: Покажи всички
+      active: Покажи активните проекти
+      inactive: Покажи неактивните проекти
+  search:
+    placeholder: Потърси за…
+  createWizard:
+    design:
+      title: Изберете дизайн
+  form:
+    status: Статус
+    name: Име
+    description: Описание
+  roles:
+    owner: Собственик
+  delete:
+    title: Изтрий проект %projectName%
+    confirm: Наистина ли искате да изтриете проекта %projectName%?
+header:
+  pleaseChoose: Моля изберете…
+  noProjectsFound: Няма намерени проекти
+  account: Акаунт
+dashboard:
+  chart:
+    spam: Спам
+rule:
+  title: Правила
+  list:
+    status: Статус
+    type: Тип
+    name: Име
+    actions: Действия
+  createChooseType:
+    title: Изберете тип
+  form:
+    rule:
+      name: Име
