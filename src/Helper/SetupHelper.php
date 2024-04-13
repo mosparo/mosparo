@@ -27,6 +27,7 @@ class SetupHelper
         ],
         'phpExtension' => [
             'ctype' => true,
+            'curl' => false,
             'dom' => true,
             'filter' => true,
             'gd' => true,
@@ -38,14 +39,13 @@ class SetupHelper
             'pcre' => true,
             'pdo' => true,
             'pdo_mysql|pdo_pgsql' => true,
+            'posix' => false,
             'simplexml' => true,
+            'sodium' => false,
             'tokenizer' => true,
             'xml' => true,
-            'zip' => true,
-            'posix' => false,
-            'sodium' => false,
             'Zend OPcache' => false,
-            'curl' => false,
+            'zip' => true,
         ],
         'writeAccess' => [
             '/config/env.mosparo.php' => true,
@@ -166,6 +166,15 @@ class SetupHelper
 
             $prerequisites[$type][$name] = ($minValue !== null) ? $minValue : $required;
         }
+
+        if (isset($prerequisites['phpExtension']['pdo_mysql']) && isset($prerequisites['phpExtension']['pdo_pgsql'])) {
+            $prerequisites['phpExtension']['pdo_mysql|pdo_pgsql'] = true;
+
+            unset($prerequisites['phpExtension']['pdo_mysql']);
+            unset($prerequisites['phpExtension']['pdo_pgsql']);
+        }
+
+        ksort($prerequisites['phpExtension'], SORT_NATURAL | SORT_FLAG_CASE);
 
         return $this->checkPrerequisites($prerequisites);
     }
