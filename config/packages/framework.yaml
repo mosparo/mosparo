@@ -9,7 +9,7 @@ framework:
     # If you install mosparo behind a reverse proxy, you have to specify the proxy IP address.
     # see https://documentation.mosparo.io/docs/installation/reverse_proxy
     trusted_proxies: '%env(resolve:TRUSTED_PROXIES)%'
-    trusted_headers: [ 'x-forwarded-for', 'x-forwarded-proto' ]
+    trusted_headers: [ 'x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-host', 'x-forwarded-prefix' ]
 
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
     # Remove or comment this section to explicitly disable session support.

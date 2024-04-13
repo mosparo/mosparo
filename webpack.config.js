@@ -82,6 +82,11 @@ Encore
 
 var config = Encore.getWebpackConfig();
 
+const CssUrlRelativePlugin = require('css-url-relative-plugin');
+config.plugins.push(new CssUrlRelativePlugin({
+    root: config.output.publicPath
+}));
+
 if (Encore.isProduction()) {
     const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 

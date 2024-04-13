@@ -3,7 +3,11 @@
 <div class="form-group">
     <label class="form-label" for="host">{{ 'settings.general.connectionDetails.host'|trans }}</label>
     <div class="input-group">
-        <input type="text" class="form-control" id="host" value="{{ app.request.getSchemeAndHttpHost() }}" readonly>
+        {% set host = app.request.getSchemeAndHttpHost() %}
+        {% if app.request.getBaseUrl() %}
+            {% set host = host ~ app.request.getBaseUrl() %}
+        {% endif %}
+        <input type="text" class="form-control" id="host" value="{{ host }}" readonly>
         <button class="btn btn-icon-only btn-copy-input-value" type="button">
             <i class="ti ti-copy"></i>
         </button>

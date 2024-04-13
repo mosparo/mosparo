@@ -13,7 +13,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_settings') }}">
-                                <img src="{{ asset('build/images/icons/settings.svg') }}" alt="" class="illustration-list" />
+                                <img src="{{ asset('build/images/icons/settings.svg')|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.settings.title'|trans }}</p>
@@ -34,7 +34,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_security') }}">
-                                <img src="{{ asset('build/images/icons/security.svg') }}" alt="" class="illustration-list" />
+                                <img src="{{ asset('build/images/icons/security.svg')|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.security.title'|trans }}</p>
@@ -55,7 +55,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_user_list') }}">
-                                <img src="{{ asset('build/images/icons/users.svg') }}" alt="" class="illustration-list" />
+                                <img src="{{ asset('build/images/icons/users.svg')|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.user.title'|trans }}</p>
@@ -76,7 +76,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_cron_jobs_settings') }}">
-                                <img src="{{ asset('build/images/icons/cron-jobs.svg') }}" alt="" class="illustration-list" />
+                                <img src="{{ asset('build/images/icons/cron-jobs.svg')|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.cronJobs.title'|trans }}</p>
@@ -97,7 +97,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_geoip2_settings') }}">
-                                <img src="{{ asset('build/images/icons/geoip.svg') }}" alt="" class="illustration-list" />
+                                <img src="{{ asset('build/images/icons/geoip.svg')|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.geoip2.title'|trans }}</p>
@@ -118,7 +118,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_update_overview') }}">
-                                <img src="{{ asset('build/images/icons/update.svg') }}" alt="" class="illustration-list" />
+                                <img src="{{ asset('build/images/icons/update.svg')|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.update.title'|trans }}</p>
@@ -139,7 +139,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('administration_system') }}">
-                                <img src="{{ asset('build/images/icons/system.svg') }}" alt="" class="illustration-list" />
+                                <img src="{{ asset('build/images/icons/system.svg')|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'administration.system.title'|trans }}</p>

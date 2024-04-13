@@ -144,7 +144,7 @@
 {% block stylesheets %}
     {{ parent() }}
 
-    {{ encore_entry_link_tags('apexcharts', null, '', { 'id': 'apexcharts-css' }) }}
+    {{ encore_entry_link_tags('apexcharts', null, '', { 'id': 'apexcharts-css' })|add_path_prefix }}
 {% endblock %}
 
 {% block javascripts %}

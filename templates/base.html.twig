@@ -13,13 +13,13 @@
         <title>{% block documentTitle %}{{ mosparoName }}{% endblock %}</title>
 
         {% block stylesheets %}
-            {{ encore_entry_link_tags('mosparo') }}
+            {{ encore_entry_link_tags('mosparo')|add_path_prefix }}
         {% endblock %}
 
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('build/images/favicons/apple-touch-icon-180x180.png') }}">
-        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/images/favicons/favicon-32x32.ico') }}">
-        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('build/images/favicons/favicon-96x96.png') }}">
-        <meta name="msapplication-square310x310logo" content="{{ asset('build/images/favicons/mstile-310x310.png') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('build/images/favicons/apple-touch-icon-180x180.png')|add_path_prefix }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/images/favicons/favicon-32x32.ico')|add_path_prefix }}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('build/images/favicons/favicon-96x96.png')|add_path_prefix }}">
+        <meta name="msapplication-square310x310logo" content="{{ asset('build/images/favicons/mstile-310x310.png')|add_path_prefix }}">
         <meta name="msapplication-TileColor" content="#1d1d1b">
     </head>
     <body class="{% block bodyClasses %}antialised{% endblock %} {% if colorMode is defined and colorMode == 'dark' %}theme-dark{% endif %}">
@@ -32,8 +32,8 @@
                         </button>
                         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
                             <a href="/">
-                                <img src="{{ asset('build/images/mosparo-logo-bird.svg') }}" width="50" alt="mosparo" class="navbar-brand-image d-block d-sm-none" />
-                                <img src="{{ asset('build/images/mosparo-logo.svg') }}" width="110" alt="mosparo" class="navbar-brand-image d-none d-sm-block" />
+                                <img src="{{ asset('build/images/mosparo-logo-bird.svg')|add_path_prefix }}" width="50" alt="mosparo" class="navbar-brand-image d-block d-sm-none" />
+                                <img src="{{ asset('build/images/mosparo-logo.svg')|add_path_prefix }}" width="110" alt="mosparo" class="navbar-brand-image d-none d-sm-block" />
                             </a>
                         </h1>
                         <div class="navbar-nav header-navbar flex-row order-md-last">
@@ -297,7 +297,7 @@
         {% endblock %}
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('mosparo') }}
+            {{ encore_entry_script_tags('mosparo')|add_path_prefix }}
         {% endblock %}
     </body>
 </html>

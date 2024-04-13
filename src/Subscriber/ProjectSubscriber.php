@@ -123,7 +123,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            $apiEndpoint = $this->router->generate($activeRoute);
+            $apiEndpoint = $this->getApiEndpoint($request, $activeRoute);
             $requestData = array_merge($request->query->all(), $request->request->all());
 
             // Verify the request signature
@@ -249,5 +249,18 @@ class ProjectSubscriber implements EventSubscriberInterface
         }
 
         return null;
+    }
+
+    protected function getApiEndpoint(Request $request, string $activeRoute): string
+    {
+        $apiEndpoint = $this->router->generate($activeRoute);
+
+        // If mosparo is set up with a prefix, remove the prefix from the API URL
+        $prefix = $request->headers->get('x-forwarded-prefix', null);
+        if ($request->isFromTrustedProxy() && $prefix && str_contains($request->getBaseUrl(), $prefix)) {
+            $apiEndpoint = substr($apiEndpoint, strlen('/' . trim($prefix, '/')));
+        }
+
+        return $apiEndpoint;
     }
 }

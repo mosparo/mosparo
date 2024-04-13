@@ -28,7 +28,7 @@
                             <tr>
                                 <td class="email-masthead">
                                     <a href="{{ url('dashboard', {}, false) }}" class="f-fallback email-masthead_name">
-                                        <img src="{{ absolute_url(asset('build/images/non_http/mosparo_logo.png')) }}" class="mosparo-logo" width="372" height="75">
+                                        <img src="{{ absolute_url(asset('build/images/non_http/mosparo_logo.png')|add_path_prefix) }}" class="mosparo-logo" width="372" height="75">
                                     </a>
                                 </td>
                             </tr>
