@@ -30,7 +30,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Hindi                 | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                                                            |
 | Italian               | it            | mosparo Core Developers                                                                                      |
-| Japanese              | ja            | Claudia and Melody (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                             |
+| Japanese              | ja            | [0MAL](https://github.com/0MAL), Claudia and Melody (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                             |
 | Khmer (Central)       | km            | Sourkea (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
 | Korean                | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                                                  |
 | Persian               | fa            | [Gnkalk](https://hosted.weblate.org/user/Gnkalk/)                                                            |
