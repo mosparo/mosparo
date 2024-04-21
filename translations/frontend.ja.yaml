@@ -4,10 +4,10 @@ accessibility:
   dataValid: あなたのデータは有効です。フォームを送信できます。
 error:
   gotNoToken: mosparoは送信トークンを返しませんでした。
-  internalError: ラーが発生しました。もう一度お試しください。
+  internalError: エラーが発生しました。もう一度お試しください。
   noSubmitTokenAvailable: 利用可能な送信トークンがありません。このフォームのバリデーションはできません。
   spamDetected: あなたのデータがスパム対策に引っかかりました。
   lockedOut: ロックアウトされました。%datetime%後に再度お試しください。
   delay: リクエストが遅れています。%seconds% 秒お待ちください。
 hp:
-  fieldTitle: のフィールドは空白のままにしてください。
+  fieldTitle: このフィールドは空白のままにしてください。
