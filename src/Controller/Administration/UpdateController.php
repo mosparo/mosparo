@@ -278,7 +278,8 @@ class UpdateController extends AbstractController
     #[Route('/finalize', name: 'administration_update_finalize')]
     public function finalize(Request $request, Filesystem $filesystem): Response
     {
-        if ($this->configHelper->getEnvironmentConfigValue('mosparo_installed_version') === Kernel::VERSION) {
+        $oldInstalledVersion = $this->configHelper->getEnvironmentConfigValue('mosparo_installed_version');
+        if ($oldInstalledVersion === Kernel::VERSION) {
             return $this->redirectToRoute('dashboard');
         }
 
@@ -326,7 +327,9 @@ class UpdateController extends AbstractController
             $session->remove('upgradeMosparo');
         }
 
-        return $this->render('administration/update/finalize.html.twig');
+        return $this->render('administration/update/finalize.html.twig', [
+            'showHostsAlert' => version_compare($oldInstalledVersion, '1.2.0', '<'),
+        ]);
     }
 
     protected function getAvailableUpdateData(Session $session)
