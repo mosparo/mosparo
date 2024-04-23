@@ -8,7 +8,6 @@ use Mosparo\Entity\Project;
 use Mosparo\Util\HashUtil;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 
@@ -265,7 +264,9 @@ class DesignHelper
         $this->entityManager->flush();
 
         // Set the originally active project again
-        $this->projectHelper->setActiveProject($activeProject);
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
+        }
     }
 
     public function getBoxSizeVariables(): array
