@@ -26,7 +26,7 @@ project:
     name: Name
     description: Beschreibung
     hosts: Hosts
-    hostsHelp: Diese Hosts werden verwendet, um mit den richtigen Sicherheits-Headern (CORS) zu antworten. Sie müssen alle Domänen und Unterdomänen, die dieses Projekt verwenden, sowie alle Varianten (z. B. www.example.com und example.com) hinzufügen. Sie können einen Stern (*) am Anfang eines Hosts als Platzhalter verwenden (z. B. *.example.com). Es wird dringend empfohlen, den Stern als Präfix und nicht als globalen Platzhalter für alle Hosts zu verwenden.
+    hostsHelp: Diese Hosts werden verwendet, um mit den richtigen Sicherheits-Headern (CORS) zu antworten. Ein Host ist eine Domäne (oder Unterdomäne), welche Ihre Website hostet, ohne Protokoll und Pfad (z. B. example.com). Sie müssen alle Domänen und Unterdomänen, die dieses Projekt verwenden, sowie alle Varianten (z. B. www.example.com und example.com) hinzufügen. Sie können einen Stern (*) am Anfang eines Hosts als Platzhalter verwenden (z. B. *.example.com). Es wird dringend empfohlen, den Stern als Präfix und nicht als globalen Platzhalter für alle Hosts zu verwenden.
     status: Status
     statusHelp: Aktiviert oder deaktiviert die Spam-Erkennung. Wenn deaktiviert, das System wird alle Einsendungen speichern jedoch nicht vom Versand abhalten.
     spamScore: Spam-Grenzwert
@@ -972,6 +972,10 @@ administration:
       title: Update ausgeführt
       description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
 
+      hostsAlert:
+        title: 'Version 1.2: Änderung der Herkunftsüberprüfung'
+        intro: Mit Version 1.2 beginnt mosparo, die Herkunft einer Frontend-Anfrage zu verifizieren. Aufgrund dieser Änderung müssen die Hosts in Ihrem Projekt korrekt konfiguriert sein.
+        intro2: Bitte überprüfen Sie Ihre Projekte und Formulare jetzt.
     upgrade:
       updateFirst: Bevor Sie auf die nächste Hauptversion upgraden können, müssen Sie die neuste Version Ihrer bisherigen Hauptversion installieren.
       introAvailable: Eine neue Hauptversion ist verfügbar. Sie können das Update-Tool verwenden, um auf die neuste Hauptversion zu aktualisieren.
