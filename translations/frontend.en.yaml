@@ -1,8 +1,9 @@
 label: I accept that the form entries are checked for spam and stored encrypted for 14 days.
 
 accessibility:
-  checkingData: We're checking your data. Please wait.
+  checkingData: The spam protection verifies your data. Please wait.
   dataValid: Your data are valid. You can submit the form.
+  protectedBy: This form is protected from spam by mosparo.
 
 error:
   gotNoToken: mosparo returned no submit token.
