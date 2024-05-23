@@ -24,3 +24,8 @@ honeypotField:
 securityGuideline:
   asNumberNotNumeric: Číslo AS nie je číslo.
   atLeastOneCriteriaRequired: Bezpečnostná príručka vyžaduje minimálne jedno kritériá.
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: Web cron pracovný interval musí byť aspoň 5 minút
+    alebo viac.
+  geoIpRefreshIntervalAtLeast1Day: GeoIP2 obnovovací interval musí byť aspoň jeden
+    deň alebo viac.
