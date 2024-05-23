@@ -11,7 +11,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Language              | Language Code | Contributors                                                                                                 |
 |-----------------------|---------------|--------------------------------------------------------------------------------------------------------------|
 | Albanian              | sq            | [fim](https://hosted.weblate.org/user/fim/)                                                                  |
-| Arabic                | ar            | [abodinagdat16](https://hosted.weblate.org/user/abodinagdat16/)                                              |
+| Arabic                | ar            | [abodinagdat16](https://hosted.weblate.org/user/abodinagdat16/), [a7medawad](https://hosted.weblate.org/user/a7medawad/) |
 | Bengali               | bn            | [Kominak](https://hosted.weblate.org/user/Kominak/)                                                          |
 | Bulgarian             | bg            | [Supermyskin](https://hosted.weblate.org/user/Supermyskin/)                                                  |
 | Catalan               | ca            | [limusina10](https://hosted.weblate.org/user/limusina10/)                                                    |
@@ -72,6 +72,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Estonian   | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                        |
 | French     | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/)                                                        |
 | German     | de            | mosparo Core Developers                                                                                        |
+| Hindi      | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                  |
 | Indonesian | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/) |
 | Korean     | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                                                    |
 | Polish     | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)                                                            |
