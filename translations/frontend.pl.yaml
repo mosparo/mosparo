@@ -1,7 +1,8 @@
 label: Akceptuję, że wpisy w formularzu są sprawdzane pod kątem spamu oraz są przechowywane zaszyfrowane przez 14 dni.
 accessibility:
-  checkingData: Sprawdzamy twoje dane. Proszę czekać.
+  checkingData: Ochrona przed spamem sprawdza twoje dane. Prosimy czekać.
   dataValid: Twoje dane są prawidłowe. Możesz przesłać formularz.
+  protectedBy: Ten formularz jest chroniony przed spamem przez mosparo.
 error:
   gotNoToken: mosparo nie zwróciło tokena przesyłania.
   internalError: Wystąpił błąd. Proszę spróbować ponownie.
