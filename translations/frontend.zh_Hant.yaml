@@ -7,7 +7,8 @@ error:
   delay: 您的請求已被延遲，請等待%seconds%秒。
   spamDetected: 您的數據已被我們的垃圾郵件防護阻擋。
 accessibility:
-  checkingData: 我們正在檢查您的數據，請稍等。
+  checkingData: 垃圾防護會驗證你的資料。請稍等。
   dataValid: 您的數據有效，您可以提交表單。
+  protectedBy: mosparo 保護了此表單免於垃圾滋擾。
 hp:
   fieldTitle: 請將此區留空白
