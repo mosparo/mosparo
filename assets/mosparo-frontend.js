@@ -565,10 +565,25 @@ function mosparo(containerId, url, uuid, publicKey, options)
         this.hpFieldElement = document.createElement('input');
         this.hpFieldElement.setAttribute('type', 'text');
         this.hpFieldElement.setAttribute('name', fieldName);
-        this.hpFieldElement.setAttribute('style', 'position: absolute !important; left: -1000px !important; top: -1000px !important;');
         this.hpFieldElement.setAttribute('autocomplete', 'one-time-code');
         this.hpFieldElement.setAttribute('tabindex', '-1');
         this.hpFieldElement.setAttribute('title', this.getMessage('hpLeaveEmpty'));
+
+        const styles = {
+            'position': 'absolute',
+            'top': '-9999px',
+            'left': '-9999px',
+            'width': 0,
+            'height': 0,
+            'opacity': 0,
+            'border': 0,
+            'padding': 0,
+            'background': 'transparent',
+        };
+        for (const [property, value] of Object.entries(styles)) {
+            this.hpFieldElement.style.setProperty(property, value, 'important');
+        }
+
         this.formElement.appendChild(this.hpFieldElement);
 
         this.hpFieldElement.addEventListener('change', function () {

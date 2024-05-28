@@ -1,13 +1,13 @@
-label: フォーム内容をスパム検査を行い、14日間暗号化保存することを同意します.
+label: フォームの入力内容がスパムでないかをチェックし14日間暗号化されて保存されることに同意します。
 accessibility:
-  checkingData: 只今データを確認中ですが、少々お待ちください.
-  dataValid: データは有効となっていますが、フォームをご提出してください.
+  checkingData: データをチェックしています。しばらくお待ちください。
+  dataValid: あなたのデータは有効です。フォームを送信できます。
 error:
-  gotNoToken: mosparoは提出番号を応答していません.
-  internalError: エラーが発生していますが、もう一度お試してください.
-  noSubmitTokenAvailable: 有効な提出番号はなかったため、フォームを検証できません.
-  spamDetected: データはスパムメール防止システムをブロックされました.
-  lockedOut: 只今ブロックされましたが、%datetime%てからもう一度お試してください.
-  delay: リクエストに遅れがあります。%seconds% 秒お待ちください.
+  gotNoToken: mosparoは送信トークンを返しませんでした。
+  internalError: エラーが発生しました。もう一度お試しください。
+  noSubmitTokenAvailable: 利用可能な送信トークンがありません。このフォームのバリデーションはできません。
+  spamDetected: あなたのデータがスパム対策に引っかかりました。
+  lockedOut: ロックアウトされました。%datetime%後に再度お試しください。
+  delay: リクエストが遅れています。%seconds% 秒お待ちください。
 hp:
-  fieldTitle: ここはブランクして置いてください
+  fieldTitle: このフィールドは空白のままにしてください。

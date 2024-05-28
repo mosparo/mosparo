@@ -8,6 +8,7 @@ error:
 hp:
   fieldTitle: Palun jäta see väli tühjaks
 accessibility:
-  checkingData: Kontrollime sisestust. Palun oota hetkeks.
+  checkingData: Spämmikaitse kontrollib sisestust. Palun oota hetkeks.
   dataValid: Sinu sisestatu on korrektne. Võid vormi kinnitada.
+  protectedBy: Spämmi eest kaitseb seda sisestusvormi mosparo.
 label: Ma olen nõus, et selle vormi sisestusi kontrollitakse spämmi vältimiseks ning salvestatakse krüptituna 14 päeva jooksul.
