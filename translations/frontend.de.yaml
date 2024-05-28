@@ -1,18 +1,16 @@
-label: Ich akzeptiere, dass die Formulareingaben auf Spam überprüft und für 14 Tage
-  verschlüsselt gespeichert werden.
+label: Ich akzeptiere, dass die Formulareingaben auf Spam überprüft und für 14 Tage verschlüsselt gespeichert werden.
 
 accessibility:
-  checkingData: Wir überprüfen Ihre Daten. Bitte warten Sie.
+  checkingData: Der Spamschutz prüft Ihre Daten. Bitte warten Sie.
   dataValid: Ihre Daten enthalten kein Spam. Sie können das Formular absenden.
 
+  protectedBy: Dieses Formular ist durch mosparo vor Spam geschützt.
 error:
   gotNoToken: mosparo hat keinen Absende-Token ausgestellt.
   internalError: Es trat ein Fehler auf. Bitte wiederholen Sie den Vorgang.
-  noSubmitTokenAvailable: Kein Absende-Token verfügbar. Die Validierung Ihrer Daten
-    ist nicht möglich.
+  noSubmitTokenAvailable: Kein Absende-Token verfügbar. Die Validierung Ihrer Daten ist nicht möglich.
   spamDetected: In Ihren Daten ist Spam enthalten.
-  lockedOut: Sie wurden temporär gesperrt. Bitte versuchen Sie es nach %datetime%
-    erneut.
+  lockedOut: Sie wurden temporär gesperrt. Bitte versuchen Sie es nach %datetime% erneut.
   delay: Ihre Anfrage wurde verzögert. Bitte warten Sie %seconds% Sekunden.
 
 hp:

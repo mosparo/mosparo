@@ -1,9 +1,10 @@
 label: Accetto che i dati inseriti nel modulo vengano controllati per verificare la presenza di spam e conservati in modo criptato per 14 giorni.
 
 accessibility:
-  checkingData: Stiamo controllando i tuoi dati. Attendere prego.
+  checkingData: La protezione antispam verifica i tuoi dati. Attendere prego.
   dataValid: I tuoi dati sono validi. Puoi inviare il formulario.
 
+  protectedBy: Questo modulo è protetto dallo spam da mosparo.
 error:
   gotNoToken: mosparo non ha emesso alcun token di invio.
   internalError: Si è verificato un errore. Per favore riprova.

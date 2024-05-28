@@ -1,7 +1,8 @@
 label: Acepto que las entradas del formulario se comprueben en busca de spam y se almacenen encriptadas durante 14 días.
 accessibility:
-  checkingData: Estamos comprobando sus datos. Por favor, espere.
+  checkingData: La protección contra spam verifica tus datos. Espere por favor.
   dataValid: Sus datos son válidos. Puede enviar el formulario.
+  protectedBy: Este formulario está protegido contra spam por mosparo.
 error:
   gotNoToken: mosparo no devolvió ningún token de envío.
   noSubmitTokenAvailable: No hay token de envío disponible. No es posible validar este formulario.
