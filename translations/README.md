@@ -16,7 +16,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Bulgarian             | bg            | [Supermyskin](https://hosted.weblate.org/user/Supermyskin/)                                                  |
 | Catalan               | ca            | [limusina10](https://hosted.weblate.org/user/limusina10/)                                                    |
 | Chinese (Simplified)  | zh_Hans       | [xqzhuang](https://hosted.weblate.org/user/xqzhuang/)                                                        |
-| Chinese (Traditional) | zh_Hant       | Célia (via [mahonebay](https://hosted.weblate.org/user/mahonebay))                                           |
+| Chinese (Traditional) | zh_Hant       | Célia (via [mahonebay](https://hosted.weblate.org/user/mahonebay)), [hugoalh](https://hosted.weblate.org/user/hugoalh/) |
 | Croatian              | hr            | DMI (via [fim](https://hosted.weblate.org/user/fim/)), [milotype](https://hosted.weblate.org/user/milotype/) |
 | Czech                 | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                          |
 | Danish                | da            | [Digi92](https://hosted.weblate.org/user/Digi92/)                                                            |
@@ -29,7 +29,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Greek                 | el            | [OneStage](https://hosted.weblate.org/user/OneStage/)                                                        |
 | Hindi                 | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                                                            |
-| Italian               | it            | mosparo Core Developers                                                                                      |
+| Italian               | it            | mosparo Core Developers, [albanobattistella](https://hosted.weblate.org/user/albanobattistella/)             |
 | Japanese              | ja            | [0MAL](https://github.com/0MAL), Claudia and Melody (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                             |
 | Khmer (Central)       | km            | Sourkea (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
 | Korean                | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                                                  |
