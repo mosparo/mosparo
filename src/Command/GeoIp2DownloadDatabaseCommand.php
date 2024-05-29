@@ -3,14 +3,14 @@
 namespace Mosparo\Command;
 
 use Mosparo\Helper\GeoIp2Helper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'mosparo:geoip2:download-database')]
 class GeoIp2DownloadDatabaseCommand extends Command
 {
-    protected static $defaultName = 'mosparo:geoip2:download-database';
-
     protected GeoIp2Helper $geoIp2Helper;
 
     public function __construct(GeoIp2Helper $geoIp2Helper)

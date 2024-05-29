@@ -41,10 +41,14 @@ class IpUtil
         return false;
     }
 
-    public static function convertToArray(?string $allowList): array
+    public static function convertToArray($allowList): array
     {
         if (!$allowList) {
             return [];
+        }
+
+        if (is_array($allowList)) {
+            return $allowList;
         }
 
         return preg_split('/\r\n|\r|\n|,/', $allowList);

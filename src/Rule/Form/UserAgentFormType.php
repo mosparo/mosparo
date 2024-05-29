@@ -21,7 +21,7 @@ class UserAgentFormType extends AbstractRuleTypeFormType
         $this->translator = $translator;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $ruleType = $options['rule_type'];
         if ($ruleType === null) {
@@ -46,14 +46,15 @@ class UserAgentFormType extends AbstractRuleTypeFormType
                 'attr' => [
                     'placeholder' => '1.0',
                     'class' => 'rule-item-rating',
-                    'min' => 0.1,
+                    'min' => -1000000,
+                    'max' => 1000000,
                     'step' => 'any',
                 ]
             ])
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 

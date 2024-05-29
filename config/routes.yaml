@@ -1,3 +1,5 @@
-#index:
-#    path: /
-#    controller: Mosparo\Controller\DefaultController::index
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: Mosparo\Controller
+    type: attribute

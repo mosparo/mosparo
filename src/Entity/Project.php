@@ -8,77 +8,52 @@ use Mosparo\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Util\DateRangeUtil;
 
-/**
- * @ORM\Entity(repositoryClass=ProjectRepository::class)
- */
+#[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="guid")
-     */
+    #[ORM\Column(type: 'guid')]
     private ?string $uuid;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
+    #[ORM\Column(type: 'array', nullable: true)]
     private array $hosts = [];
 
-    /**
-     * @ORM\Column(type="string", length=64)
-     */
+    #[ORM\Column(type: 'string', length: 64)]
     private ?string $publicKey;
 
-    /**
-     * @ORM\Column(type="encrypted")
-     */
+    #[ORM\Column(type: 'encrypted')]
     private ?string $privateKey;
 
-    /**
-     * @ORM\Column(type="integer", length=15)
-     */
+    #[ORM\Column(type: 'integer', length: 15)]
     private int $status = 1;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private float $spamScore = 5;
 
-    /**
-     * @ORM\Column(type="string", length=7)
-     */
+    #[ORM\Column(type: 'string', length: 7)]
     private ?string $statisticStorageLimit;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $apiDebugMode = false;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $verificationSimulationMode = false;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ProjectConfigValue::class, mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: ProjectConfigValue::class, mappedBy: 'project', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $configValues;
+
+    #[ORM\OneToMany(targetEntity: ProjectMember::class, mappedBy: 'project', orphanRemoval: true)]
+    private Collection $projectMembers;
 
     /**
      * @var array
@@ -155,13 +130,13 @@ class Project
         'lockoutTime' => 300,
         'lockoutMultiplicator' => 1.2,
 
+        'equalSubmissionsActive' => false,
+        'equalSubmissionsNumberOfEqualSubmissions' => 3,
+        'equalSubmissionsTimeFrame' => 300,
+        'equalSubmissionsBasedOnIpAddress' => true,
+
         'ipAllowList' => '',
     ];
-
-    /**
-     * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="project", orphanRemoval=true)
-     */
-    private Collection $projectMembers;
 
     public function __construct()
     {

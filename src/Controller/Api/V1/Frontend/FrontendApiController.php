@@ -5,6 +5,7 @@ namespace Mosparo\Controller\Api\V1\Frontend;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
@@ -23,13 +24,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/api/v1/frontend")
- */
+#[Route('/api/v1/frontend')]
 class FrontendApiController extends AbstractController
 {
     protected ProjectHelper $projectHelper;
@@ -76,9 +75,7 @@ class FrontendApiController extends AbstractController
         $this->statisticHelper = $statisticHelper;
     }
 
-    /**
-     * @Route("/request-submit-token", name="frontend_api_request_submit_token")
-     */
+    #[Route('/request-submit-token', name: 'frontend_api_request_submit_token')]
     public function request(Request $request, EntityManagerInterface $entityManager): Response
     {
         // If there is no active project, we cannot do anything.
@@ -121,13 +118,12 @@ class FrontendApiController extends AbstractController
         return new JsonResponse([
             'submitToken' => $submitToken->getToken(),
             'messages' => $this->getTranslations($request),
-            'invisible' => ($submitToken->getProject()->getDesignMode() === 'invisible-simple')
+            'invisible' => ($submitToken->getProject()->getDesignMode() === 'invisible-simple'),
+            'showLogo' => $submitToken->getProject()->getConfigValue('showMosparoLogo') ?? true,
         ] + $args);
     }
 
-    /**
-     * @Route("/check-form-data", name="frontend_api_check_form_data")
-     */
+    #[Route('/check-form-data', name: 'frontend_api_check_form_data')]
     public function checkFormData(Request $request, EntityManagerInterface $entityManager): Response
     {
         // If there is no active project, we cannot do anything.
@@ -205,7 +201,6 @@ class FrontendApiController extends AbstractController
 
         // Create the submission
         $submission = new Submission();
-        $submission->setSubmitToken($submitToken);
         $submission->setSubmittedAt(new DateTime());
         $submission->setIgnoredFields($formData['ignoredFields']);
 
@@ -222,7 +217,7 @@ class FrontendApiController extends AbstractController
                 }
             }
 
-            if ($hpField['value'] != '') {
+            if (is_array($hpField) && $hpField['value'] != '') {
                 $submission->setSpamRating($activeProject->getSpamScore() + 1);
                 $submission->setSpamDetectionRating($activeProject->getSpamScore());
                 $submission->setSpam(true);
@@ -253,6 +248,8 @@ class FrontendApiController extends AbstractController
             $this->ruleTesterHelper->checkRequest($submission);
         }
 
+        $submission->setSubmitToken($submitToken);
+
         $entityManager->persist($submission);
         $entityManager->flush();
 
@@ -269,10 +266,10 @@ class FrontendApiController extends AbstractController
 
     protected function createSignature(SubmitToken $submitToken, $formData, Project $activeProject): string
     {
-        $payload = $this->hmacSignatureHelper->prepareData($this->createFormStructure($formData))
-                 . $submitToken->getToken();
+        $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
+        $formData = $requestHelper->prepareFormData($this->createFormStructure($formData));
 
-        return $this->hmacSignatureHelper->createSignature($payload, $activeProject->getPrivateKey());
+        return $requestHelper->createFormDataHmacHash($formData);
     }
 
     protected function createFormStructure(array $data): array
@@ -320,19 +317,38 @@ class FrontendApiController extends AbstractController
 
     protected function getTranslations(Request $request): array
     {
+        $usedLocale = null;
         if ($this->translator instanceof LocaleAwareInterface) {
+            $locale = 'en';
             if ($request->request->has('language')) {
-                $this->translator->setLocale($this->localeHelper->fixPreferredLanguage($request->request->get('language')));
+                $locale = $this->localeHelper->fixPreferredLanguage($request->request->get('language'));
             } else if ($request->getPreferredLanguage()) {
-                $this->translator->setLocale($this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage()));
+                $locale = $this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage());
+            }
+
+            $this->translator->setLocale($locale);
+
+            // Try to determine the locale for which we will return the messages. If we don't have the translation
+            // for a locale, mosparo falls back to English.
+            $catalogue = $this->translator->getCatalogue($locale);
+            $usedLocale = $catalogue->getLocale();
+            while (!$catalogue->defines('label', 'frontend')) {
+                if ($cat = $catalogue->getFallbackCatalogue()) {
+                    $catalogue = $cat;
+                    $usedLocale = $catalogue->getLocale();
+                } else {
+                    break;
+                }
             }
         }
 
         return [
+            'locale' => $usedLocale,
             'label' => $this->translator->trans('label', [], 'frontend'),
 
             'accessibilityCheckingData' => $this->translator->trans('accessibility.checkingData', [], 'frontend'),
             'accessibilityDataValid' => $this->translator->trans('accessibility.dataValid', [], 'frontend'),
+            'accessibilityProtectedBy' => $this->translator->trans('accessibility.protectedBy', [], 'frontend'),
 
             'errorGotNoToken' => $this->translator->trans('error.gotNoToken', [], 'frontend'),
             'errorInternalError' => $this->translator->trans('error.internalError', [], 'frontend'),

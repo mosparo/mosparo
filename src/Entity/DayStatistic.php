@@ -5,38 +5,26 @@ namespace Mosparo\Entity;
 use Mosparo\Repository\DayStatisticRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DayStatisticRepository::class)
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="day_project_idx", columns={"date", "project_id"})})
- */
+#[ORM\Entity(repositoryClass: DayStatisticRepository::class)]
+#[ORM\UniqueConstraint(name: 'day_project_idx', columns: ['date', 'project_id'])]
 class DayStatistic implements ProjectRelatedEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="date")
-     */
+    #[ORM\Column(type: 'date')]
     private \DateTime $date;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private int $numberOfValidSubmissions = 0;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private int $numberOfSpamSubmissions = 0;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
 
     public function __construct()

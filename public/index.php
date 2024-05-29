@@ -19,8 +19,12 @@ if (file_exists($mappingFile)) {
             }
         }
 
+        if ($_SERVER['HTTP_X_FORWARDED_PREFIX']) {
+            $targetUri = '/' . trim($_SERVER['HTTP_X_FORWARDED_PREFIX'], '/') . $targetUri;
+        }
+
         header('Cache-Control: no-cache, public');
-        header('Location: ' . $resourceFiles[$requestUri], true, 307);
+        header('Location: ' . $targetUri, true, 307);
         exit;
     }
 }

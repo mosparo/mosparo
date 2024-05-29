@@ -26,7 +26,7 @@ project:
     name: Name
     description: Beschreibung
     hosts: Hosts
-    hostsHelp: Bitte tragen Sie alle Hosts ein, welche dieses Projekt beinhaltet.
+    hostsHelp: Diese Hosts werden verwendet, um mit den richtigen Sicherheits-Headern (CORS) zu antworten. Ein Host ist eine Domäne (oder Unterdomäne), welche Ihre Website hostet, ohne Protokoll und Pfad (z. B. example.com). Sie müssen alle Domänen und Unterdomänen, die dieses Projekt verwenden, sowie alle Varianten (z. B. www.example.com und example.com) hinzufügen. Sie können einen Stern (*) am Anfang eines Hosts als Platzhalter verwenden (z. B. *.example.com). Es wird dringend empfohlen, den Stern als Präfix und nicht als globalen Platzhalter für alle Hosts zu verwenden.
     status: Status
     statusHelp: Aktiviert oder deaktiviert die Spam-Erkennung. Wenn deaktiviert, das System wird alle Einsendungen speichern jedoch nicht vom Versand abhalten.
     spamScore: Spam-Grenzwert
@@ -261,9 +261,9 @@ rule:
 
     rating:
       title: Bewertung
-      intro: Wenn ein Eintrag eine stärkere Bewertung erhalten soll, können Sie die Spambewertung pro Eintrag spezifizieren.
+      intro: Mit dem Feld Bewertung können Sie das Gewicht eines Eintrages festlegen. Wenn Sie eine positive Zahl angeben, können Sie einem Eintrag einen höheren Wert zuweisen. Wenn Sie eine negative Zahl für den Eintrag angeben, wird die Gesamtzahl der Punkte verringert.
       infoCalculationMethod: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
-      infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %zero% bis %unlimited%. Wenn keine Bewertung gesetzt ist, wird die Standard-Bewertung %one% verwendet.
+      infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %minValue% und %maxValue%. Wenn keine Bewertung definiert ist, ist die Standardbewertung %one%.
       infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
       placeholder: Bewertung
 
@@ -426,6 +426,9 @@ submission:
         text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit beträgt %minimumTimeSeconds% Sekunden.
 
 # Settings
+      equalSubmissions:
+        title: Zu viele gleiche Einsendungen
+        text: Diese Einsendung ist gleich zu vorherigen Einsendungen. mosparo hat %actualNumberOfEqualSubmissions% gleiche Einsendungen innerhalb des konfigurierten Zeitraumes gefunden, mehr als die erlaubten %allowedNumberOfEqualSubmissions% gleichen Einsendungen.
     action:
       openVerificationSimulation: Verifizierungs-Simulation
     verificationSimulation:
@@ -594,8 +597,9 @@ settings:
       introShort: Die Mindestzeit-Funktion misst die Zeit zwischen der Initialisierung der mosparo Checkbox (wenn das Formular geladen wird) und der Validierung der Einsendung (nach dem das Formular abgesendet wurde). Diese Funktionalität ist hauptsächlich für längere Formulare empfehlenswert.
     honeypot:
       title: Honeypot-Feld
-      intro: Ein Honeypot-Feld ist ein verstecktes Feld innerhalb des Formulars. Menschen sehen das Feld nicht - aber Spam-Bots werden möglicherweise Spam-Inhalt in das Feld einfügen. Wenn das passiert, wissen wir, dass es kein Mensch gewesen sein kann und blockieren die Einsendung.
+      intro: Ein Honeypot-Feld ist ein verstecktes Feld im Formular. Menschen können es nicht sehen - aber Spam-Bots werden wahrscheinlich einige Inhalte in dieses Feld eingeben. Wenn das passiert, wissen wir, dass es kein Mensch war, so dass wir die Übermittlung blockieren können.
 
+      infoField: Bitte geben Sie einen Namen für das Honeypot-Feld ein. Der Name sollte ein normaler Feldname sein, welchen Sie nicht in Ihrem Formular verwenden. mosparo fügt das unsichtbare Feld automatisch in Ihrem Formular ein. Sie müssen es nicht manuell anpassen.
     requestDelaying:
       title: Anfrageverzögerung
       intro: Um es einem Bot schwieriger zu machen, kann mosparo die Erstellung von Absende-Tokens verzögern. Ohne Absende-Token kann ein Formular nicht abgesendet werden. Falls ein Mensch diese Mitteilung sieht, wird angezeigt, wie lange der Mensch warten muss, bevor das Formular absendbar ist.
@@ -612,7 +616,6 @@ settings:
     form:
       minimumTimeActive: Mindestzeit aktivieren
       minimumTimeSeconds: Mindestzeit
-      minimumTimeSecondsHelp: In Sekunden
       honeypotFieldActive: Honeypot-Feld aktivieren
       honeypotFieldName: Feldname
       honeypotFieldNameHelp: Es muss ein Feldname sein, welchen Sie nicht bereits in Ihrem Formular verwenden und welcher ein normales Feld sein könnte, wie zum Beispiel "url" oder "adress-zeile-2". Bitte verwenden Sie nur Buchstaben, Zahlen und den Bindestrich (-). Wenn Sie dieses Feld leer lassen wird die Funktion nicht verwendet.
@@ -620,18 +623,14 @@ settings:
       delayNumberOfAllowedRequests: Anzahl erlaubter Anfragen
       delayNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Anfrageverzögerung aktiv wird.
       delayDetectionTimeFrame: Erkennungszeitraum
-      delayDetectionTimeFrameHelp: In Sekunden
       delayTime: Anfangsverzögerungszeit
-      delayTimeHelp: In Sekunden
       delayMultiplicator: Multiplikator
       delayMultiplicatorHelp: Die Anfagsverzögerungszeit wird mit jeder weiteren Anfrage erhöht.
       lockoutActive: Automatische Sperre aktivieren
       lockoutNumberOfAllowedRequests: Anzahl erlaubter Anfragen
       lockoutNumberOfAllowedRequestsHelp: Die Anzahl der erlaubten Anfragen, bevor die Sperre aktiv wird.
       lockoutDetectionTimeFrame: Erkennungszeitraum
-      lockoutDetectionTimeFrameHelp: In Sekunden
       lockoutTime: Anfangssperrzeit
-      lockoutTimeHelp: In Sekunden
       lockoutMultiplicator: Multiplikator
       lockoutMultiplicatorHelp: Die Anfangssperrzeit wird mit jeder zusätzlichen Anfrage mit diesem Multiplikator erhöht.
       ipAllowList: Immer erlaubte IP-Adressen und Subnetze
@@ -641,6 +640,13 @@ settings:
       overrideDelay: Anfrageverzögerung überschreiben
       overrideMinimumTime: Mindeszeit überschreiben
       overrideHoneypotField: Honeypot-Feld überschreiben
+      equalSubmissionsActive: Blockieren gleicher Einsendungen aktivieren
+      equalSubmissionsNumberOfEqualSubmissions: Anzahl erlaubter gleicher Einsendungen
+      equalSubmissionsNumberOfEqualSubmissionsHelp: Die Anzahl der erlaubten gleichen Einsendungen, bevor die Einsendungen blockiert werden.
+      equalSubmissionsBasedOnIpAddress: Basierend auf der IP-Adresse
+      equalSubmissionsBasedOnIpAddressHelp: Die Erkennung und Sperrung erfolgt anhand der IP-Adresse des Nutzers. Wenn diese Funktion deaktiviert ist, werden alle gleichen Einsendungen aller Benutzer gezählt.
+      overrideEqualSubmissions: Blockieren gleicher Einsendungen überschreiben
+      equalSubmissionsTimeFrame: Erkennungszeitraum
     message:
       successfullySaved: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
 
@@ -689,6 +695,9 @@ settings:
       action: Allgemeine Sicherheitseinstellungen bearbeiten
       title: Allgemeine Sicherheitseinstellungen
     backToSecurity: Zurück zu den Sicherheitseinstellungen
+    equalSubmissions:
+      title: Gleiche Einsendungen blockieren
+      intro: Eine zusätzliche Sicherheitsmassnahme ist das Blockieren gleicher Einsendungen. Wenn ein Benutzer innerhalb eines bestimmten Zeitrahmens zu oft versucht, die gleichen Daten abzusenden, blockiert mosparo alle zukünftigen Einsendungen, bis der Zeitrahmen abgelaufen ist. Zusätzlich kann diese Prüfung auf die IP-Adresse beschränkt werden.
   design:
     title: Darstellung
 
@@ -963,6 +972,10 @@ administration:
       title: Update ausgeführt
       description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
 
+      hostsAlert:
+        title: 'Version 1.2: Änderung der Herkunftsüberprüfung'
+        intro: Mit Version 1.2 beginnt mosparo, die Herkunft einer Frontend-Anfrage zu verifizieren. Aufgrund dieser Änderung müssen die Hosts in Ihrem Projekt korrekt konfiguriert sein.
+        intro2: Bitte überprüfen Sie Ihre Projekte und Formulare jetzt.
     upgrade:
       updateFirst: Bevor Sie auf die nächste Hauptversion upgraden können, müssen Sie die neuste Version Ihrer bisherigen Hauptversion installieren.
       introAvailable: Eine neue Hauptversion ist verfügbar. Sie können das Update-Tool verwenden, um auf die neuste Hauptversion zu aktualisieren.
@@ -1043,19 +1056,52 @@ administration:
         minutes: Minuten
       intro: Die Login-Drosselung hilft, die mosparo Login-Seite vor einem Brute-Force-Angriff zu schützen. Indem die Anzahl der Anfragen gezählt und ein Angreifer nach einigen Versuchen blockiert wird, ist ein solcher Angriff sehr zeitaufwändig und nahezu sinnlos.
     backendAccess:
-      form:
-        ipAllowList: Erlaubte IP-Adressen und Subnetze
-        ipAllowListHelp: 'Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24'
       title: Backend-Zugriff
       hintOwnIp: Bitte beachten Sie, dass Sie diese Einstellung nur speichern können, wenn Ihre IP-Adresse (%ipAddress%) ebenfalls in der Liste enthalten ist (als IP-Adresse oder Subnetz). Wenn Sie eine IPv6-Adresse haben, empfiehlt es sich, Ihr Subnetz hinzuzufügen.
       intro: Wenn Sie mosparo vor unerlaubten Zugriffen aus dem Internet schützen wollen, können Sie festlegen, welche IP-Adressen auf das Backend zugreifen dürfen. Lassen Sie dieses Feld leer, um jedem den Zugriff auf die Login-Seite und das Backend zu ermöglichen.
     apiAccess:
-      form:
-        ipAllowList: Erlaubte IP-Adressen und Subnetze
-        ipAllowListHelp: 'Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24'
       title: API-Zugriff
       intro: Wenn Sie die mosparo API vor unerlaubten Zugriffen aus dem Internet schützen wollen, können Sie angeben, welche IP-Adressen darauf zugreifen dürfen. Lassen Sie dieses Feld leer, um jedem Gerät den Zugriff auf die APIs zu erlauben.
       hintFrontendApi: Bitte beachten Sie, dass dies nur die Verifizierungs- und Statistik-API einschränkt. Die Frontend-API wird immer öffentlich zugänglich sein.
+    ipAllowList:
+      form:
+        ipAllowListHelp: 'Geben Sie eine IP-Adresse oder ein Subnetz pro Zeile an. Beispiel: 192.168.1.13 oder 192.168.1.0/24'
+        ipAllowList: Erlaubte IP-Adressen und Subnetze
+    webCronJobAccess:
+      title: Zugriff auf Web-Cronjobs
+      intro: Wenn Sie den mosparo Web-Cronjob vor unerlaubten Zugriffen aus dem Internet schützen wollen, können Sie festlegen, welche IP-Adressen darauf zugreifen dürfen. Lassen Sie dieses Feld leer, um jedem Client den Zugriff auf den Web-Cron-Job zu erlauben.
+      hintWebCronJobDisabled: Der Web-Cronjob ist deaktiviert und Sie können den Zugriff darauf nicht konfigurieren, solange er deaktiviert ist.
+  cronJobs:
+    setup:
+      web:
+        title: Cronjobs via Webanfrage ausführen
+        intro: Richten Sie einen Cronjob mit der folgenden Adresse ein, um ihn auszuführen. Sie können einen lokalen Cronjob oder einen Remote-Dienst verwenden.
+        infoWgetPath: Bitte passen Sie den Pfad zu %wgetBinary% entsprechend Ihrem Betriebssystem an, wenn Sie einen lokalen Cronjob verwenden.
+      cli:
+        title: Cronjobs via CLI ausführen
+        intro: Richten Sie die folgenden Befehle als Cronjob ein, um die Funktionalität auszuführen.
+        infoAdjustPaths: Bitte denken Sie daran, die Pfade zum PHP-Binary und dem mosparo CLI-Befehl anzupassen. Die Dokumentation Ihres Hosting-Anbieters enthält in der Regel weitere Informationen zu diesem Teil.
+      title: Einrichtung
+      intro: Bitte konfigurieren Sie die folgenden Cronjobs, um die Ausführung dieser Aufgaben zu automatisieren.
+      titles:
+        address: Adresse
+        commands: Befehle
+        example: Beispiel
+    settings:
+      intro: Bitte aktivieren Sie die untenstehende Option, um die Cronjobs über Webanfragen zu nutzen.
+      title: Einstellungen
+      enableWebCronJobs: Cronjob über Webanfrage aktivieren
+      webCronJobSecretKey: Geheimer Schlüssel für Web-Cronjob
+      geoIp2RefreshInterval: GeoIP2 Aktualisierungsintervall
+      hintAccess: Sie können den Zugriff auf den Web-Cronjob basierend auf der IP-Adresse in den %linkStart%Sicherheitseinstellungen%linkEnd% beschränken.
+      message:
+        savedSuccessfully: Die Einstellungen wurden erfolgreich gespeichert.
+      webCronJobSecretKeyHelp: Dieser Schlüssel schützt Ihren Web-Cronjob vor fremdem Zugriff. Sie können den automatisch generierten Schlüssel verwenden oder Ihren eigenen Schlüssel eingeben.
+      webCronJobInterval: Mindestwartezeit zwischen der Ausführung der Cronjobs
+      webCronJobIntervalHelp: Legt die Mindestzeit zwischen den Cronjob-Ausführungen fest. Dies ist hauptsächlich eine Sicherheitsmassnahme, um eine Überlastung des Servers zu verhindern.
+      geoIp2RefreshIntervalHelp: Bestimmt die Anzahl der Tage, nach denen versucht wird, die GeoIP2-Datenbank zu aktualisieren. Um eine Überlastung des GeoIP2-Servers zu vermeiden, sollte die Datenbank nur selten, z. B. einmal pro Woche, aktualisiert werden.
+    title: Cronjobs
+    description: Konfigurieren Sie die Cronjobs von mosparo.
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
@@ -1335,6 +1381,13 @@ setup:
       user: Benutzer
       password: Passwort
 
+      system: System
+    system:
+      postgres: PostgreSQL
+      pleaseChoose: Bitte wählen…
+      mysql: MySQL/MariaDB
+    port:
+      default: Standard
   other:
     title: Weitere Informationen
     introduction: Wir brauchen noch ein paar weitere Daten. Bitte füllen Sie die Felder unten aus.
@@ -1484,3 +1537,9 @@ dateRange:
   1m: 1 Monat
   3m: 3 Monate
   2y: 2 Jahre
+unit:
+  day: Tag
+  days: Tage
+  minutes: Minuten
+unitHelp:
+  inSeconds: In Sekunden

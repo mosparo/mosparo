@@ -10,7 +10,7 @@ use zepi\Unicode\UnicodeIndex;
 
 class UnicodeBlockFormType extends AbstractRuleTypeFormType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $ruleType = $options['rule_type'];
         if ($ruleType === null) {
@@ -48,14 +48,15 @@ class UnicodeBlockFormType extends AbstractRuleTypeFormType
                 'attr' => [
                     'placeholder' => '1.0',
                     'class' => 'rule-item-rating',
-                    'min' => 0.1,
+                    'min' => -1000000,
+                    'max' => 1000000,
                     'step' => 'any',
                 ]
             ])
         ;
     }
 
-    public function sortBlocks($keyA, $keyB)
+    public function sortBlocks($keyA, $keyB): int
     {
         $keyA = mb_strtolower($keyA);
         $keyB = mb_strtolower($keyB);

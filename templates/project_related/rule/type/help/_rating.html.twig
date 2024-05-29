@@ -10,8 +10,8 @@
 <p>
     {{
         'rule.type.rating.infoDefaultAndDataType'|trans({
-            '%zero%': '<code>0.0</code>',
-            '%unlimited%': '<code>' ~ 'general.unlimited'|trans ~ '</code>',
+            '%minValue%': '<code>' ~ (-1000000)|number_format ~ '</code>',
+            '%maxValue%': '<code>' ~ (1000000)|number_format ~ '</code>',
             '%one%': '<code>1.0</code>'
         })|raw
     }}

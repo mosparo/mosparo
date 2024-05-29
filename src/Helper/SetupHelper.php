@@ -27,7 +27,7 @@ class SetupHelper
         ],
         'phpExtension' => [
             'ctype' => true,
-            'curl' => true,
+            'curl' => false,
             'dom' => true,
             'filter' => true,
             'gd' => true,
@@ -38,15 +38,14 @@ class SetupHelper
             'openssl' => true,
             'pcre' => true,
             'pdo' => true,
-            'pdo_mysql' => true,
+            'pdo_mysql|pdo_pgsql' => true,
+            'posix' => false,
             'simplexml' => true,
+            'sodium' => false,
             'tokenizer' => true,
             'xml' => true,
-            'zip' => true,
-            'posix' => false,
-            'sodium' => false,
             'Zend OPcache' => false,
-            'curl' => false,
+            'zip' => true,
         ],
         'writeAccess' => [
             '/config/env.mosparo.php' => true,
@@ -101,16 +100,30 @@ class SetupHelper
                 }
             } else if ($type === 'phpExtension') {
                 foreach ($prerequisites as $extensionKey => $isRequired) {
-                    $version = phpversion($extensionKey);
-                    if ($version == '' && $isRequired) {
-                        $meetPrerequisites = false;
+                    if (str_contains($extensionKey, '|')) {
+                        $subExtensions = explode('|', $extensionKey);
+                    } else {
+                        $subExtensions = [$extensionKey];
                     }
 
-                    $checkedPrerequisites[$type][$extensionKey] = [
-                        'required' => $isRequired,
-                        'available' => ($version != ''),
-                        'pass' => ($version != ''),
-                    ];
+                    $isExtensionAvailable = false;
+                    foreach ($subExtensions as $subExtensionKey) {
+                        $version = phpversion($subExtensionKey);
+
+                        if ($version) {
+                            $isExtensionAvailable = true;
+                        }
+
+                        $checkedPrerequisites[$type][$subExtensionKey] = [
+                            'required' => $isRequired,
+                            'available' => ($version != ''),
+                            'pass' => ($version != ''),
+                        ];
+                    }
+
+                    if (!$isExtensionAvailable && $isRequired) {
+                        $meetPrerequisites = false;
+                    }
                 }
             } else if ($type === 'writeAccess') {
                 foreach ($prerequisites as $path => $isRequired) {
@@ -154,6 +167,15 @@ class SetupHelper
             $prerequisites[$type][$name] = ($minValue !== null) ? $minValue : $required;
         }
 
+        if (isset($prerequisites['phpExtension']['pdo_mysql']) && isset($prerequisites['phpExtension']['pdo_pgsql'])) {
+            $prerequisites['phpExtension']['pdo_mysql|pdo_pgsql'] = true;
+
+            unset($prerequisites['phpExtension']['pdo_mysql']);
+            unset($prerequisites['phpExtension']['pdo_pgsql']);
+        }
+
+        ksort($prerequisites['phpExtension'], SORT_NATURAL | SORT_FLAG_CASE);
+
         return $this->checkPrerequisites($prerequisites);
     }
 
@@ -170,12 +192,15 @@ class SetupHelper
             throw new UserAlreadyExistsException('User "' . $emailAddress . '" already exists.');
         }
 
-        $qb = $repository->createQueryBuilder('u');
-        $qb->select('u.id')
-            ->where('u.roles LIKE :role')
-            ->setParameter(':role', '%"ROLE_ADMIN"%');
-        $adminUsers = $qb->getQuery()->getResult();
-        if (!empty($adminUsers)) {
+        $users = $repository->findAll();
+        $hasAdminUser = false;
+        foreach ($users as $user) {
+            if ($user->hasRole('ROLE_ADMIN')) {
+                $hasAdminUser = true;
+                break;
+            }
+        }
+        if ($hasAdminUser) {
             throw new AdminUserAlreadyExistsException('An admin user exists already.');
         }
 
@@ -199,12 +224,21 @@ class SetupHelper
     {
         $data = [];
         foreach ($this->prerequisites['phpExtension'] as $extension => $isRequired) {
-            $versionNumber = phpversion($extension);
-            if (!$versionNumber) {
-                $versionNumber = null;
+            if (str_contains($extension, '|')) {
+                $subExtensions = explode('|', $extension);
+            } else {
+                $subExtensions = [$extension];
             }
 
-            $data[$extension] = $versionNumber;
+            foreach ($subExtensions as $subExtension) {
+                $versionNumber = phpversion($subExtension);
+
+                if (!$versionNumber) {
+                    $versionNumber = null;
+                }
+
+                $data[$subExtension] = $versionNumber;
+            }
         }
 
         return $data;

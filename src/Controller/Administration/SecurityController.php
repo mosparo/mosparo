@@ -16,14 +16,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/administration/security")
- */
+#[Route('/administration/security')]
 class SecurityController extends AbstractController
 {
     protected ConfigHelper $configHelper;
@@ -56,9 +54,7 @@ class SecurityController extends AbstractController
         $this->trustedProxies = $trustedProxies;
     }
 
-    /**
-     * @Route("/", name="administration_security")
-     */
+    #[Route('/', name: 'administration_security')]
     public function security(Request $request): Response
     {
         $this->clientIpAddress = $request->getClientIp();
@@ -82,8 +78,12 @@ class SecurityController extends AbstractController
 
             // API access
             'apiAccessIpAllowList' => implode("\n", IpUtil::convertToArray($environmentConfig['api_access_ip_allow_list'] ?? '')),
+
+            // Cron job access
+            'webCronJobAccessIpAllowList' => implode("\n", IpUtil::convertToArray($environmentConfig['web_cron_job_access_ip_allow_list'] ?? '')),
         ];
 
+        $isWebCronJobActive = $this->configHelper->getEnvironmentConfigValue('webCronJobActive');
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
             // Login throttling
             ->add('loginThrottlingUiLimit', NumberType::class, [
@@ -134,9 +134,9 @@ class SecurityController extends AbstractController
 
             // Backend Access
             ->add('backendAccessIpAllowList', TextareaType::class, [
-                'label' => 'administration.security.backendAccess.form.ipAllowList',
+                'label' => 'administration.security.ipAllowList.form.ipAllowList',
                 'required' => false,
-                'help' => 'administration.security.backendAccess.form.ipAllowListHelp',
+                'help' => 'administration.security.ipAllowList.form.ipAllowListHelp',
                 'attr' => ['class' => 'ip-address-field'],
                 'constraints' => [
                     new Callback([$this, 'validateIpAllowListField']),
@@ -146,10 +146,24 @@ class SecurityController extends AbstractController
 
             // API Access
             ->add('apiAccessIpAllowList', TextareaType::class, [
-                'label' => 'administration.security.apiAccess.form.ipAllowList',
+                'label' => 'administration.security.ipAllowList.form.ipAllowList',
                 'required' => false,
-                'help' => 'administration.security.apiAccess.form.ipAllowListHelp',
+                'help' => 'administration.security.ipAllowList.form.ipAllowListHelp',
                 'attr' => ['class' => 'ip-address-field'],
+                'constraints' => [
+                    new Callback([$this, 'validateIpAllowListField']),
+                ],
+            ])
+
+            // Cron Job Access
+            ->add('webCronJobAccessIpAllowList', TextareaType::class, [
+                'label' => 'administration.security.ipAllowList.form.ipAllowList',
+                'required' => false,
+                'help' => 'administration.security.ipAllowList.form.ipAllowListHelp',
+                'attr' => [
+                    'class' => 'ip-address-field',
+                    'disabled' => !$isWebCronJobActive,
+                ],
                 'constraints' => [
                     new Callback([$this, 'validateIpAllowListField']),
                 ],
@@ -160,34 +174,40 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($modifyTrustedSettingsAllowed) {
-                $configValues = [
-                    'login_throttling_ui_limit' => $form->get('loginThrottlingUiLimit')->getData(),
-                    'login_throttling_ip_limit' => $form->get('loginThrottlingIpLimit')->getData(),
-                    'login_throttling_interval' => sprintf('%d minutes', $form->get('loginThrottlingInterval')->getData()),
-                    'login_throttling_interval_numeric' => $form->get('loginThrottlingInterval')->getData(),
+            $configValues = [
+                'login_throttling_ui_limit' => $form->get('loginThrottlingUiLimit')->getData(),
+                'login_throttling_ip_limit' => $form->get('loginThrottlingIpLimit')->getData(),
+                'login_throttling_interval' => sprintf('%d minutes', $form->get('loginThrottlingInterval')->getData()),
+                'login_throttling_interval_numeric' => $form->get('loginThrottlingInterval')->getData(),
 
+                'backend_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('backendAccessIpAllowList')->getData())),
+                'api_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('apiAccessIpAllowList')->getData())),
+            ];
+
+            if ($modifyTrustedSettingsAllowed) {
+                $configValues = array_merge($configValues, [
                     'trusted_proxies' => $this->buildTrustedProxiesString($form->get('trustedProxies')->getData(), $form->get('trustedProxiesIncludeRemoteAddr')->getData()),
                     'trusted_proxies_include_remote_addr' => $form->get('trustedProxiesIncludeRemoteAddr')->getData(),
                     'replace_forwarded_for_header' => $form->get('replaceForwardedForHeader')->getData(),
                     'replace_forwarded_proto_header' => $form->get('replaceForwardedProtoHeader')->getData(),
-
-                    'backend_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('backendAccessIpAllowList')->getData())),
-                    'api_access_ip_allow_list' => implode(',', IpUtil::convertToArray($form->get('apiAccessIpAllowList')->getData())),
-                ];
-
-                $this->configHelper->writeEnvironmentConfig($configValues);
-
-                $session = $request->getSession();
-                $session->getFlashBag()->add(
-                    'success',
-                    $this->translator->trans(
-                        'administration.security.message.savedSuccessfully',
-                        [],
-                        'mosparo'
-                    )
-                );
+                ]);
             }
+
+            if ($isWebCronJobActive) {
+                $configValues['web_cron_job_access_ip_allow_list'] = implode(',', IpUtil::convertToArray($form->get('webCronJobAccessIpAllowList')->getData()));
+            }
+
+            $this->configHelper->writeEnvironmentConfig($configValues);
+
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'administration.security.message.savedSuccessfully',
+                    [],
+                    'mosparo'
+                )
+            );
 
             return $this->redirectToRoute('administration_security');
         }
@@ -197,6 +217,7 @@ class SecurityController extends AbstractController
             'providers' => ProviderUtil::getReverseProxyProviders(),
             'modifyTrustedSettingsAllowed' => $modifyTrustedSettingsAllowed,
             'clientIpAddress' => $this->clientIpAddress,
+            'isWebCronJobActive' => $isWebCronJobActive,
         ]);
     }
 

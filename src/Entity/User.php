@@ -13,54 +13,39 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity("email")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: '`user`')]
+#[UniqueEntity('email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface, BackupCodeInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\Email
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\Email]
     private ?string $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private ?array $roles = [];
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private string $password;
 
-    /**
-     * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
-     */
+    #[ORM\Column(name: 'googleAuthenticatorSecret', type: 'string', nullable: true)]
     private ?string $googleAuthenticatorSecret = null;
 
-    /**
-     * @ORM\Column(type="encryptedJson")
-     */
+    #[ORM\Column(type: 'encryptedJson')]
     private ?array $backupCodes = [];
 
-    /**
-     * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="user")
-     */
+    #[ORM\OneToMany(targetEntity: ProjectMember::class, mappedBy: 'user')]
     private Collection $projectMemberships;
 
-    /**
-     * @ORM\Column(type="encryptedJson")
-     */
+    #[ORM\Column(type: 'encryptedJson')]
     private ?array $configValues = [];
 
     public function __construct()
@@ -177,7 +162,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;

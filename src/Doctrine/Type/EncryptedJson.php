@@ -3,14 +3,13 @@
 namespace Mosparo\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 
 class EncryptedJson extends Type
 {
 
-    const ENCRYPTEDJSON = 'encryptedJon';
+    const ENCRYPTEDJSON = 'encryptedJson';
 
     /**
      * Gets the SQL declaration snippet for a field of this type.
@@ -22,7 +21,7 @@ class EncryptedJson extends Type
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return 'LONGTEXT COMMENT \'(DC2Type:encryptedJson)\'';
+        return $platform->getClobTypeDeclarationSQL($column);
     }
 
     /**
@@ -55,7 +54,7 @@ class EncryptedJson extends Type
         $decodedValue = json_decode($decryptedValue, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw ConversionException::conversionFailed($decryptedValue, $this->getName());
+            throw new Exception(sprintf('Could not decrypt database value of type "encryptedJson". Error code: %s', json_last_error_msg()));
         }
 
         return $decodedValue;
@@ -65,9 +64,8 @@ class EncryptedJson extends Type
      * @param mixed $value
      * @param AbstractPlatform $platform
      * @return mixed
-     * @throws Exception
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (!isset($_ENV['ENABLE_ENCRYPTION']) || $_ENV['ENABLE_ENCRYPTION'] === 'false') {
             return $value;
@@ -83,7 +81,7 @@ class EncryptedJson extends Type
         $preparedValue = json_encode($value);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw ConversionException::conversionFailedSerialization($value, 'json', json_last_error_msg());
+            throw new Exception(sprintf('Could not encode value to JSON for type "encryptedJson". Error: %s', json_last_error_msg()));
         }
 
         $encryptedValue = sodium_crypto_secretbox($preparedValue, $nonce, $key);

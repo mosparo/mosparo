@@ -8,48 +8,32 @@ use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\RulesetCacheRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RulesetCacheRepository::class)
- */
+#[ORM\Entity(repositoryClass: RulesetCacheRepository::class)]
 class RulesetCache implements ProjectRelatedEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Ruleset::class, inversedBy="rulesetCache", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\OneToOne(targetEntity: Ruleset::class, inversedBy: 'rulesetCache', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Ruleset $ruleset = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private ?DateTimeInterface $refreshedAt = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private ?DateTimeInterface $updatedAt = null;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private ?int $refreshInterval = 86400;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RulesetRuleCache::class, mappedBy="rulesetCache", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: RulesetRuleCache::class, mappedBy: 'rulesetCache', orphanRemoval :true)]
     private Collection $rules;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
 
     public function __construct()

@@ -43,7 +43,7 @@ class DatabaseSessionHandler extends \SessionHandler
     }
 
     #[\ReturnTypeWillChange]
-    public function gc($maxLifetime)
+    public function gc($maxLifetime): int|false
     {
         return $this->sessionHandler->gc($maxLifetime);
     }
@@ -54,7 +54,7 @@ class DatabaseSessionHandler extends \SessionHandler
     }
 
     #[\ReturnTypeWillChange]
-    public function read($sessionId)
+    public function read($sessionId): string|false
     {
         return $this->sessionHandler->read($sessionId);
     }

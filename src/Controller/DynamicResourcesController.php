@@ -12,12 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\UrlHelper;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * @Route("/resources")
- */
+#[Route('/resources')]
 class DynamicResourcesController extends AbstractController
 {
     protected ProjectRepository $projectRepository;
@@ -33,10 +31,8 @@ class DynamicResourcesController extends AbstractController
         $this->urlHelper = $urlHelper;
     }
 
-    /**
-     * @Route("/{projectUuid}.css", name="resources_project_css", stateless=true)
-     * @Route("/{projectUuid}/{styleHash}.css", name="resources_project_hash_css", stateless=true)
-     */
+    #[Route('/{projectUuid}.css', name: 'resources_project_css', stateless: true)]
+    #[Route('/{projectUuid}/{styleHash}.css', name: 'resources_project_hash_css', stateless: true)]
     public function redirectToStyleResource(string $projectUuid): Response
     {
         $project = $this->projectRepository->findOneBy(['uuid' => $projectUuid]);
@@ -71,9 +67,7 @@ class DynamicResourcesController extends AbstractController
         return $redirectResponse;
     }
 
-    /**
-     * @Route("/{projectUuid}/url", name="resources_project_css_url")
-     */
+    #[Route('/{projectUuid}/url', name: 'resources_project_css_url')]
     public function returnStyleResourceUrl(string $projectUuid): Response
     {
         $redirectResponse = $this->redirectToStyleResource($projectUuid);
@@ -84,12 +78,17 @@ class DynamicResourcesController extends AbstractController
         return new Response($this->urlHelper->getAbsoluteUrl($redirectResponse->getTargetUrl()));
     }
 
-    /**
-     * @Route("/logo.svg", name="resources_frontend_logo", stateless=true)
-     */
+    #[Route('/logo.svg', name: 'resources_frontend_logo', stateless: true)]
     public function returnTextLogo(Request $request): Response
     {
-        $response = new Response($this->designHelper->getTextLogoContent());
+        $forcedColors = false;
+        $prefersColorScheme = 'u';
+        if ($request->query->get('fc', 0)) {
+            $forcedColors = true;
+            $prefersColorScheme = $request->query->get('pcs', 'l');
+        }
+
+        $response = new Response($this->designHelper->getTextLogoContent($forcedColors, $prefersColorScheme));
 
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'logo.svg');
         $response->headers->set('Content-Disposition', $disposition);

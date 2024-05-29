@@ -4,38 +4,26 @@ namespace Mosparo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=SecurityGuidelineConfigValueRepository::class)
- */
+#[ORM\Entity(repositoryClass: SecurityGuidelineConfigValueRepository::class)]
 class SecurityGuidelineConfigValue implements ProjectRelatedEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="json", nullable=true)
-     */
+    #[ORM\Column(type: 'json', nullable: true)]
     private $value = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=SecurityGuideline::class, inversedBy="configValues")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: SecurityGuideline::class, inversedBy: 'configValues')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?SecurityGuideline $securityGuideline;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Project $project;
 
     public function getId(): ?int

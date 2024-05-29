@@ -9,7 +9,7 @@
     <div class="container-xl pb-4">
         <div class="row">
             <div class="col text-center">
-                <img src="{{ asset('build/images/icons/project_new.svg') }}" class="mb-5 illustration-detail" alt="" />
+                <img src="{{ asset('build/images/icons/project_new.svg')|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
             </div>
         </div>
 
@@ -57,6 +57,14 @@
                                             </h3>
                                             <p>
                                                 {{ 'settings.security.ipLockout.intro'|trans }}
+                                            </p>
+                                        </div>
+                                        <div class="col-12 col-lg-6 mb-3">
+                                            <h3 class="card-title mb-1">
+                                                {{ form_widget(form.equalSubmissionsActive) }}
+                                            </h3>
+                                            <p>
+                                                {{ 'settings.security.equalSubmissions.intro'|trans }}
                                             </p>
                                         </div>
                                     </div>

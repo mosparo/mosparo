@@ -26,7 +26,7 @@ class CleanupHelper
         $this->logger = $logger;
     }
 
-    public function cleanup($maxIterations = 10, $force = false, $ignoreExceptions = true)
+    public function cleanup($maxIterations = 10, $force = false, $ignoreExceptions = true, $timeout = 1.5)
     {
         $cache = new FilesystemAdapter();
         $nextCleanup = $cache->getItem('mosparoNextCleanup');
@@ -53,12 +53,11 @@ class CleanupHelper
         $cleanupStartedAt->set(new DateTime());
         $cache->save($cleanupStartedAt);
 
-        // Disable the project filters for the cleanup
-        $filters = $this->entityManager->getFilters();
-        $filterEnabled = false;
-        if ($filters->isEnabled('project_related_filter')) {
-            $filters->disable('project_related_filter');
-            $filterEnabled = true;
+        // Remove the active project for the cleanup
+        $activeProject = null;
+        if ($this->projectHelper->hasActiveProject()) {
+            $activeProject = $this->projectHelper->getActiveProject();
+            $this->projectHelper->unsetActiveProject();
         }
 
         // Generally, we ignore all exceptions which could happen from here on.
@@ -87,7 +86,7 @@ class CleanupHelper
                         SELECT s.id, st.id AS stId
                         FROM Mosparo\Entity\Submission s
                         JOIN s.submitToken st
-                        WHERE (s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = 0 AND s.valid IS NULL))
+                        WHERE (s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = FALSE AND s.valid IS NULL))
                     ')
                     ->setParameter('limit', (new DateTime())->sub(new DateInterval('P14D')))
                     ->setParameter('limitDay', (new DateTime())->sub(new DateInterval('PT24H')))
@@ -134,7 +133,7 @@ class CleanupHelper
                 unset($query);
 
                 // If it took more than 1.5 seconds, stop the cleanup
-                if ($maxIterations > 1 && (microtime(true) - $startTime) > 1.5) {
+                if ($maxIterations > 1 && (microtime(true) - $startTime) > $timeout) {
                     break;
                 }
             }
@@ -172,11 +171,9 @@ class CleanupHelper
         // Clear the day statistic
         $this->cleanupDayStatistcs();
 
-        // Enable the project filters after the cleanup
-        if ($filterEnabled) {
-            $filters
-                ->enable('project_related_filter')
-                ->setProjectHelper($this->projectHelper);
+        // Set the active project after the cleanup
+        if ($activeProject !== null) {
+            $this->projectHelper->setActiveProject($activeProject);
         }
 
         $nextCleanupDate = new DateTime();

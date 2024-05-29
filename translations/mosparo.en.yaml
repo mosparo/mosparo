@@ -59,7 +59,7 @@ project:
     name: Name
     description: Description
     hosts: Hosts
-    hostsHelp: Please enter all hosts which this project will include.
+    hostsHelp: These hosts are used to respond with the correct security headers (CORS). A host is a domain (or subdomain) that hosts your website without protocol and path (for example, example.com). You must add all domains and subdomains that use this project and all variations (for example, www.example.com and example.com). You can use a star (*) at the start of a host as a wildcard (for example, *.example.com). Using the star as a prefix and not as a global wildcard for all hosts is recommended.
     status: Status
     statusHelp: Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.
     spamScore: Spam score
@@ -278,9 +278,9 @@ rule:
 
     rating:
       title: Rating
-      intro: If an item should get a higher spam rating, you can set an additional spam rating for the item.
+      intro: The rating field allows you to define an item's weight. If you specify a positive number, you can assign a higher value to an item. If you specify a negative number, the item will reduce the total number of points.
       infoCalculationMethod: The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.
-      infoDefaultAndDataType: The rating is a float number from %zero% to %unlimited%. If no rating is defined, the default rating is %one%.
+      infoDefaultAndDataType: The rating is a float number from %minValue% to %maxValue%. If no rating is defined, the default rating is %one%.
       infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
       placeholder: Rating
 
@@ -453,6 +453,10 @@ submission:
       minimumTime:
         title: Submission too fast
         text: The form was submitted too fast. The submitter required only %seconds% seconds, which is less than the minimum time of %minimumTimeSeconds% seconds.
+
+      equalSubmissions:
+        title: Too many equal submissions
+        text: This submission is equal to previous submissions. mosparo found %actualNumberOfEqualSubmissions% equal submissions within the configured time range, more than the allowed number of %allowedNumberOfEqualSubmissions% equal submissions.
 
     verificationSimulation:
       title: Verification simulation
@@ -679,7 +683,8 @@ settings:
 
     honeypot:
       title: Honeypot
-      intro: A honeypot field is a hidden field in the form. Humans will not be able to see it - but spam bots will probably fill some content in this field. If that happens, we know that it was not a human so we can block the submission.
+      intro: A honeypot field is a hidden field in the form. Humans will not be able to see it - but spam bots will probably fill some content in this field. If that happens, we know it was not a human, so that we can block the submission.
+      infoField: Please enter a name for the honeypot field. The name should be a normal field name that you haven't used in your form yet. mosparo will add the hidden field automatically; you do not have to alter your form.
 
     requestDelaying:
       title: Request delaying
@@ -690,6 +695,10 @@ settings:
       title: IP lockout
       intro: To make it even harder for bots, mosparo can automatically block IP addresses temporarily. If an IP address submits many forms, mosparo can automatically count the submissions and block the IP address if a specific number is reached.
 
+    equalSubmissions:
+      title: Block equal submissions
+      intro: An additional security measurement is to block equal submissions. If a user tries to submit the same submission too often in a defined time frame, mosparo will block all future submissions until the time frame expires. Additionally, this check can be limited to the IP address.
+
     ipAllowList:
       title: IP allow list
       intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above (Request delaying and IP lockout).
@@ -697,7 +706,6 @@ settings:
     form:
       minimumTimeActive: Enable minimum time
       minimumTimeSeconds: Minimum time
-      minimumTimeSecondsHelp: In seconds
       honeypotFieldActive: Enable honeypot field
       honeypotFieldName: Field name
       honeypotFieldNameHelp: It has to be a field name which is not already in your form and which is a normal field name like "url" or "address-line-2". Please use only letters, numbers and the dash sign (-). If empty, no honeypot field will be added to the form.
@@ -705,20 +713,22 @@ settings:
       delayNumberOfAllowedRequests: Number of allowed requests
       delayNumberOfAllowedRequestsHelp: The number of allowed requests before the delay come into place.
       delayDetectionTimeFrame: Detection time frame
-      delayDetectionTimeFrameHelp: In seconds
       delayTime: Base delay time
-      delayTimeHelp: In seconds
       delayMultiplicator: Multiplicator
       delayMultiplicatorHelp: The base delay time will be increased with every additional request.
       lockoutActive: Enable automatic lockout
       lockoutNumberOfAllowedRequests: Number of allowed requests
       lockoutNumberOfAllowedRequestsHelp: The number of allowed requests before the lockout come into place.
       lockoutDetectionTimeFrame: Detection time frame
-      lockoutDetectionTimeFrameHelp: In seconds
       lockoutTime: Base lockout time
-      lockoutTimeHelp: In seconds
       lockoutMultiplicator: Multiplicator
       lockoutMultiplicatorHelp: The base lockout time will be increased with every additional request.
+      equalSubmissionsActive: Enable block equal submissions
+      equalSubmissionsNumberOfEqualSubmissions: Number of allowed equal submissions
+      equalSubmissionsNumberOfEqualSubmissionsHelp: The number of allowed equal submissions before the block come into place.
+      equalSubmissionsTimeFrame: Detection time frame
+      equalSubmissionsBasedOnIpAddress: Based on IP address
+      equalSubmissionsBasedOnIpAddressHelp: The detection and blocking will happen on the user's IP address. If disabled, all equal submissions of all users will be counted.
       ipAllowList: Always allowed IP addresses and subnets
       ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
@@ -726,6 +736,7 @@ settings:
       overrideHoneypotField: Override honeypot field
       overrideDelay: Override request delay
       overrideLockout: Override automatic lockout
+      overrideEqualSubmissions: Override block equal submissions
 
     message:
       successfullySaved: The security settings were saved successfully.
@@ -1042,23 +1053,25 @@ administration:
         replaceForwardedProtoHeader: Name of the custom protocol header
         replaceForwardedProtoHeaderHelp: If required, specify the header's name in which the reverse proxy sends the request protocol.
 
+    ipAllowList:
+      form:
+        ipAllowList: Allowed IP addresses and subnets
+        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+
     backendAccess:
       title: Backend access
       intro: If you want to protect mosparo from unallowed access from the internet, you can specify which IP addresses are allowed to access the backend. Leave this field empty to allow everybody to access the login form and the backend.
       hintOwnIp: Please note that you can only save this setting if your IP address (%ipAddress%) is also included in the list (as IP address or subnet). If you have an IPv6 address, adding your subnet is recommended.
-
-      form:
-        ipAllowList: Allowed IP addresses and subnets
-        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
     apiAccess:
       title: API access
       intro: If you want to protect the mosparo API from unallowed access from the internet, you can specify which IP addresses are allowed to access it. Leave this field empty to allow every client to access the APIs.
       hintFrontendApi: Please note that this limits only the verification and statistic API. The frontend API will always be publicly available.
 
-      form:
-        ipAllowList: Allowed IP addresses and subnets
-        ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
+    webCronJobAccess:
+      title: Web cron job access
+      intro: If you want to protect the mosparo web cron job from unallowed access from the internet, you can specify which IP addresses are allowed to access it. Leave this field empty to allow every client to access the web cron job.
+      hintWebCronJobDisabled: The web cron job is disabled, and you cannot configure access to it as long as it is disabled.
 
     message:
       savedSuccessfully: The security settings were saved successfully.
@@ -1105,6 +1118,45 @@ administration:
       message:
         successfullyDeleted: The user %email% was deleted successfully.
         errorUserIsOwner: The user is an owner of at least one project. You cannot delete owner of projects.
+
+  cronJobs:
+    title: Cron jobs
+    description: Configure the cron jobs for mosparo.
+
+    setup:
+      title: Setup
+      intro: Please configure the following cron jobs to automate the execution of these tasks.
+
+      titles:
+        address: Address
+        commands: Commands
+        example: Example
+
+      web:
+        title: Execute cron jobs via web request
+        intro: Set up a cron job with the following address to execute it. You can use a local cron job or a remote service.
+        infoWgetPath: Please adjust the path to %wgetBinary% accordingly to your operating system if you use a local cron job.
+
+      cli:
+        title: Execute cron jobs via CLI
+        intro: Set up the following commands as a cronjob to execute the functionality.
+        infoAdjustPaths: Please remember to adjust the paths to the PHP binary and the mosparo CLI command. Your hosting provider's documentation usually provides more information about this part.
+
+    settings:
+      title: Settings
+      intro: Please enable the option below to use the cron jobs via web request.
+      enableWebCronJobs: Enable cron job via web request
+      webCronJobSecretKey: Secret key for web cron job
+      webCronJobSecretKeyHelp: This key protects your web cron job from foreign access. You can use the automatically generated key or enter your own key.
+      webCronJobInterval: Minimum waiting time between cron jobs execution
+      webCronJobIntervalHelp: Defines the minimum time between cronjob executions. This is mainly a security measure to prevent overloading the server.
+      geoIp2RefreshInterval: GeoIP2 refresh interval
+      geoIp2RefreshIntervalHelp: Defines the number of days after which an attempt is made to update the GeoIP2 database. To avoid overloading the GeoIP2 server, the database should only be updated infrequently, for example, once a week.
+
+      hintAccess: You can limit access to the web cron job based on the IP address in the %linkStart%security settings%linkEnd%.
+
+      message:
+        savedSuccessfully: The settings were saved successfully.
 
   geoip2:
     title: GeoIP2
@@ -1228,6 +1280,11 @@ administration:
     finalize:
       title: Update executed
       description: The needed changes for this update were executed. Your installation is up to date.
+
+      hostsAlert:
+        title: 'Version 1.2: Change in origin verification'
+        intro: With version 1.2, mosparo starts to verify the origin of a frontend request. Because of this change, the hosts in your project must be set correctly.
+        intro2: Please verify your projects and forms now.
 
   system:
     title: System Information
@@ -1537,11 +1594,20 @@ setup:
     connectionDataInvalid: It was not possible to connect to the database. Please check your settings below and try again.
 
     form:
+      system: System
       host: Host
       port: Port
       database: Database
       user: User
       password: Password
+
+    system:
+      pleaseChoose: Please choose…
+      mysql: MySQL/MariaDB
+      postgres: PostgreSQL
+
+    port:
+      default: Default
 
   other:
     title: Other information
@@ -1571,3 +1637,11 @@ dateRange:
   1y: 1 Year
   2y: 2 Years
   forever: Forever
+
+unit:
+  day: Day
+  days: Days
+  minutes: Minutes
+
+unitHelp:
+  inSeconds: In seconds

@@ -1,0 +1,185 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.cronJobs.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.cronJobs.title'|trans }}{% endblock %}
+
+{% block administrationPageBody %}
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.cronJobs.setup.title'|trans }}</h3>
+                    <div class="card-actions">
+                        <a href="https://documentation.mosparo.io/docs/installation/cron_jobs" class="btn btn-info btn-sm" target="_blank">
+                            <i class="ti ti-question-mark"></i>
+                            {{ 'action.help'|trans }}
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'administration.cronJobs.setup.intro'|trans }}
+                    </p>
+
+                    <div class="accordion cr-accordion" id="cronjob-examples">
+                        {% if isWebCronJobActive %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-web-cronJobs" aria-expanded="true">
+                                        {{ 'administration.cronJobs.setup.web.title'|trans }}
+                                    </button>
+                                </h2>
+                                <div id="collapse-web-cronJobs" class="accordion-collapse collapse show" data-bs-parent="#cronjob-examples">
+                                    <div class="accordion-body pt-0">
+                                        {% set cronjobUrl = url('cron_jobs_execute', {'key': webCronJobSecretKey}) %}
+
+                                        <h4>{{ 'administration.cronJobs.setup.titles.address'|trans }}</h4>
+                                        <p>{{ 'administration.cronJobs.setup.web.intro'|trans }}</p>
+                                        <pre>{{ cronjobUrl }}</pre>
+
+                                        <h4>{{ 'administration.cronJobs.setup.titles.example'|trans }}</h4>
+                                        <pre>{% apply spaceless %}
+*/{{ webCronJobInterval }} * * * * wget -q {{ cronjobUrl }} > /dev/null 2>&1
+{% endapply %}</pre>
+
+                                        <div class="alert alert-info">
+                                            {{ 'administration.cronJobs.setup.web.infoWgetPath'|trans({'%wgetBinary%': '<code>wget</code>'})|raw }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button {% if isWebCronJobActive %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-cli-cronJobs" aria-expanded="true">
+                                    {{ 'administration.cronJobs.setup.cli.title'|trans }}
+                                </button>
+                            </h2>
+                            <div id="collapse-cli-cronJobs" class="accordion-collapse collapse {% if not isWebCronJobActive %}show{% endif %}" data-bs-parent="#cronjob-examples">
+                                <div class="accordion-body pt-0">
+                                    <h4>{{ 'administration.cronJobs.setup.titles.commands'|trans }}</h4>
+                                    <p>{{ 'administration.cronJobs.setup.cli.intro'|trans }}</p>
+
+                                    <pre>{% apply spaceless %}
+php bin/console mosparo:cleanup-database
+php bin/console mosparo:rulesets:refresh
+{% if isGeoIp2Active -%}
+php bin/console mosparo:geoip2:download-database
+{%- endif -%}
+{% endapply %}</pre>
+
+                                    <div class="alert alert-info">
+                                        {{ 'administration.cronJobs.setup.cli.infoAdjustPaths'|trans({'%wgetBinary%': '<code>wget</code>'})|raw }}
+                                    </div>
+
+                                    <h4>{{ 'administration.cronJobs.setup.titles.example'|trans }}</h4>
+                                    <pre>{% apply spaceless %}
+*/15 * * * * php bin/console mosparo:cleanup-database
+0 */2 * * * php bin/console mosparo:rulesets:refresh
+{% if isGeoIp2Active -%}
+{{ random(0, 59) }} {{ random(0, 23) }} * * {{ random(0, 6) }} php bin/console mosparo:geoip2:download-database
+{%- endif -%}
+{% endapply %}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {{ form_start(form) }}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.cronJobs.settings.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ 'administration.cronJobs.settings.intro'|trans }}
+                    </p>
+
+                    {{ form_row(form.webCronJobActive) }}
+                    {{ form_row(form.webCronJobSecretKey) }}
+
+                    <div class="col-12 mb-3">
+                        {{ form_label(form.webCronJobInterval) }}
+                        <div class="input-group mb-2">
+                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                <i class="ti ti-minus"></i>
+                            </button>
+                            {{ form_widget(form.webCronJobInterval, { attr: { class: 'text-center' }}) }}
+                            <span class="input-group-text">{{ 'unit.minutes'|trans }}</span>
+                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                <i class="ti ti-plus"></i>
+                            </button>
+                        </div>
+                        {{ form_errors(form.webCronJobInterval) }}
+                        {{ form_help(form.webCronJobInterval) }}
+                    </div>
+
+                    {% if form.geoIp2RefreshInterval is defined %}
+                        <div class="col-12 mb-3">
+                            {{ form_label(form.geoIp2RefreshInterval) }}
+                            <div class="input-group mb-2">
+                                <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                    <i class="ti ti-minus"></i>
+                                </button>
+                                {{ form_widget(form.geoIp2RefreshInterval, { attr: { class: 'text-center' }}) }}
+                                <span class="input-group-text">{{ 'unit.days'|trans }}</span>
+                                <button class="btn btn-icon-only btn-increase-value" type="button">
+                                    <i class="ti ti-plus"></i>
+                                </button>
+                            </div>
+                            {{ form_errors(form.geoIp2RefreshInterval) }}
+                            {{ form_help(form.geoIp2RefreshInterval) }}
+                        </div>
+                    {% endif %}
+
+                    <div class="alert alert-info">
+                        {{ 'administration.cronJobs.settings.hintAccess'|trans({'%linkStart%': '<a href="' ~ path('administration_security') ~ '#web-cron-job-access">', '%linkEnd%': '</a>'})|raw }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto ms-auto">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="ti ti-device-floppy"></i>
+                        {{ 'action.save'|trans }}
+                    </button>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#form_webCronJobActive').change(function () {
+                    $('#form_webCronJobSecretKey').prop('disabled', !$(this).prop('checked')).prop('required', $(this).prop('checked'));
+                    $('#form_webCronJobInterval').prop('disabled', !$(this).prop('checked')).prop('required', $(this).prop('checked'));
+
+                    {% if form.geoIp2RefreshInterval is defined %}
+                        let fieldGeoIp2RefreshInterval = $('#form_geoIp2RefreshInterval');
+
+                        fieldGeoIp2RefreshInterval.prop('disabled', !$(this).prop('checked')).prop('required', $(this).prop('checked'));
+                        fieldGeoIp2RefreshInterval.change(function () {
+                            if (parseInt($(this).val()) === 1) {
+                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.day'|trans }}');
+                            } else {
+                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.days'|trans }}');
+                            }
+                        }).trigger('change');
+                    {% endif %}
+                }).trigger('change');
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

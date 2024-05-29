@@ -8,3 +8,7 @@ password:
     form:
       constraint:
         notBlank: Silahkan masukan email anda.
+tools:
+  import:
+    importFile:
+      correctFile: Silakan unggah file JSON yang benar.

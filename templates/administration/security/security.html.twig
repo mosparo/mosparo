@@ -2,8 +2,8 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'administration.settings.title'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'administration.settings.title'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'administration.security.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.security.title'|trans }}{% endblock %}
 
 {% block administrationPageBody %}
     {{ form_start(form) }}
@@ -147,6 +147,25 @@
                 </div>
 
                 {{ form_row(form.apiAccessIpAllowList) }}
+            </div>
+        </div>
+
+        <div class="card mb-3" id="web-cron-job-access">
+            <div class="card-header">
+                <h3 class="card-title">{{ 'administration.security.webCronJobAccess.title'|trans }}</h3>
+            </div>
+            <div class="card-body">
+                <p>
+                    {{ 'administration.security.webCronJobAccess.intro'|trans }}
+                </p>
+
+                {% if not isWebCronJobActive %}
+                    <div class="alert alert-info">
+                        {{ 'administration.security.webCronJobAccess.hintWebCronJobDisabled'|trans }}
+                    </div>
+                {% endif %}
+
+                {{ form_row(form.webCronJobAccessIpAllowList) }}
             </div>
         </div>
 

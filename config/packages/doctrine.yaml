@@ -7,10 +7,6 @@ doctrine:
         user: '%env(database_user)%'
         password: '%env(database_password)%'
         server_version: '%env(database_version)%'
-        charset: utf8mb4
-        default_table_options:
-            charset: utf8mb4
-            collate: utf8mb4_unicode_ci
 
         schema_filter: ~^(?!sessions)~
 
@@ -20,18 +16,50 @@ doctrine:
             encryptedArrayCollection: 'Gracious\DoctrineEncryptionBundle\Type\EncryptedArrayCollection'
             hashed: 'Gracious\DoctrineEncryptionBundle\Type\Hashed'
 
+            array: 'Mosparo\Doctrine\Type\ArrayType'
+            object: 'Mosparo\Doctrine\Type\ObjectType'
+
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        #server_version: '16'
+
+        profiling_collect_backtrace: '%kernel.debug%'
+
     orm:
         auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        report_fields_where_declared: true
+        validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            App:
+            Mosparo\Entity:
+                type: attribute
                 is_bundle: false
-                type: annotation
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'Mosparo\Entity'
                 alias: Mosparo
 
         filters:
             project_related_filter: Mosparo\Doctrine\ProjectRelatedFilter
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool
+
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system
 

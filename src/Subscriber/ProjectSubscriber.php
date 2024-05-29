@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 class ProjectSubscriber implements EventSubscriberInterface
@@ -61,7 +61,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     public function onConsoleCommand()
     {
-        $this->enableDoctrineFilter();
+        $this->projectHelper->enableDoctrineFilter();
     }
 
     public function onKernelRequest(RequestEvent $event)
@@ -123,7 +123,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            $apiEndpoint = $this->router->generate($activeRoute);
+            $apiEndpoint = $this->getApiEndpoint($request, $activeRoute);
             $requestData = array_merge($request->query->all(), $request->request->all());
 
             // Verify the request signature
@@ -148,7 +148,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
             // Ignore all requests for general routes like project management, account or administration
             $abortRequest = true;
-            if (preg_match('/^(project|account|security|password|administration)_/', $activeRoute) && $activeRoute !== 'project_dashboard') {
+            if (preg_match('/^(project|account|security|password|administration|cron_jobs)_/', $activeRoute) && $activeRoute !== 'project_dashboard') {
                 $abortRequest = false;
             }
 
@@ -191,8 +191,6 @@ class ProjectSubscriber implements EventSubscriberInterface
         if ($result !== null) {
             $event->setResponse($result);
         }
-
-        $this->enableDoctrineFilter();
     }
 
     protected function checkAccess(Request $request, $activeRoute): ?Response
@@ -253,11 +251,16 @@ class ProjectSubscriber implements EventSubscriberInterface
         return null;
     }
 
-    protected function enableDoctrineFilter()
+    protected function getApiEndpoint(Request $request, string $activeRoute): string
     {
-        $this->entityManager
-            ->getFilters()
-            ->enable('project_related_filter')
-            ->setProjectHelper($this->projectHelper);
+        $apiEndpoint = $this->router->generate($activeRoute);
+
+        // If mosparo is set up with a prefix, remove the prefix from the API URL
+        $prefix = $request->headers->get('x-forwarded-prefix', null);
+        if ($request->isFromTrustedProxy() && $prefix && str_contains($request->getBaseUrl(), $prefix)) {
+            $apiEndpoint = substr($apiEndpoint, strlen('/' . trim($prefix, '/')));
+        }
+
+        return $apiEndpoint;
     }
 }

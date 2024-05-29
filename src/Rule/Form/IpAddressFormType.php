@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class IpAddressFormType extends AbstractRuleTypeFormType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $ruleType = $options['rule_type'];
         if ($ruleType === null) {
@@ -36,7 +36,8 @@ class IpAddressFormType extends AbstractRuleTypeFormType
                 'attr' => [
                     'placeholder' => '1.0',
                     'class' => 'rule-item-rating',
-                    'min' => 0.1,
+                    'min' => -1000000,
+                    'max' => 1000000,
                     'step' => 'any',
                 ]
             ])

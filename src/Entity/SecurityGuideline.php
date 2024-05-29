@@ -7,62 +7,40 @@ use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\SecurityGuidelineRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=SecurityGuidelineRepository::class)
- */
+#[ORM\Entity(repositoryClass: SecurityGuidelineRepository::class)]
 class SecurityGuideline implements ProjectRelatedEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="guid")
-     */
+    #[ORM\Column(type: 'guid')]
     private ?string $uuid;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private ?int $priority = 1;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $subnets = [];
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $countryCodes = [];
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $asNumbers = [];
 
-    /**
-     * @ORM\OneToMany(targetEntity=SecurityGuidelineConfigValue::class, mappedBy="securityGuideline", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: SecurityGuidelineConfigValue::class, mappedBy: 'securityGuideline', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $configValues;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
 
     private array $defaultSecurityConfigValues = [
@@ -196,6 +174,8 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
                 $overridden = $configValues['overrideDelay'] ?? false;
             } else if (str_starts_with($key, 'lockout')) {
                 $overridden = $configValues['overrideLockout'] ?? false;
+            } else if (str_starts_with($key, 'equalSubmissions')) {
+                $overridden = $configValues['overrideEqualSubmissions'] ?? false;
             }
 
             $this->setConfigValue($key, $value, $overridden);
@@ -348,17 +328,19 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
         $projectSecuritySettings = $this->project->getSecurityConfigValues();
 
         $securitySettings = [];
-        foreach ($this->getConfigValues(false) as $key => $value) {
+        foreach ($this->getConfigValues() as $key => $value) {
+            // If the default value is the same as the project value and the security guideline value, skip it
             if (
-                !isset($projectDefaultValues[$key]) ||
-                $value !== $projectDefaultValues[$key] ||
-                (isset($projectSecuritySettings[$key]) && $projectDefaultValues[$key] !== $projectSecuritySettings[$key])
+                isset($projectDefaultValues[$key]) && $value === $projectDefaultValues[$key] &&
+                isset($projectSecuritySettings[$key]) && $projectDefaultValues[$key] === $projectSecuritySettings[$key]
             ) {
-                $securitySettings[] = [
-                    'name' => $key,
-                    'value' => $value,
-                ];
+                continue;
             }
+
+            $securitySettings[] = [
+                'name' => $key,
+                'value' => $value,
+            ];
         }
 
         return [

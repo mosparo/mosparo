@@ -3,6 +3,7 @@
 namespace Mosparo\Controller;
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,16 +20,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/setup")
- */
+#[Route('/setup')]
 class SetupController extends AbstractController
 {
     protected KernelInterface $kernel;
@@ -47,9 +47,7 @@ class SetupController extends AbstractController
         $this->connectionHelper = $connectionHelper;
     }
 
-    /**
-     * @Route("/", name="setup_start")
-     */
+    #[Route('/', name: 'setup_start')]
     public function start(): Response
     {
         if ($this->setupHelper->isInstalled()) {
@@ -59,9 +57,7 @@ class SetupController extends AbstractController
         return $this->render('setup/start.html.twig');
     }
 
-    /**
-     * @Route("/prerequisites", name="setup_prerequisites")
-     */
+    #[Route('/prerequisites', name: 'setup_prerequisites')]
     public function prerequisites(): Response
     {
         if ($this->setupHelper->isInstalled()) {
@@ -77,18 +73,25 @@ class SetupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/database", name="setup_database")
-     */
+    #[Route('/database', name: 'setup_database')]
     public function database(Request $request, EntityManagerInterface $entityManager): Response
     {
         if ($this->setupHelper->isInstalled()) {
             return $this->redirectToRoute('dashboard');
         }
 
+        $databaseSystems = [
+            'setup.database.system.mysql' => 'mysql',
+            'setup.database.system.postgres' => 'postgres',
+        ];
+
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
+            ->add('system', ChoiceType::class, [
+                'label' => 'setup.database.form.system',
+                'choices' => $databaseSystems,
+                'placeholder' => 'setup.database.system.pleaseChoose'])
             ->add('host', TextType::class, ['label' => 'setup.database.form.host'])
-            ->add('port', TextType::class, ['label' => 'setup.database.form.port', 'required' => false, 'data' => 3306])
+            ->add('port', TextType::class, ['label' => 'setup.database.form.port', 'required' => false, 'attr' => ['placeholder' => 'setup.database.port.default']])
             ->add('database', TextType::class, ['label' => 'setup.database.form.database'])
             ->add('user', TextType::class, ['label' => 'setup.database.form.user'])
             ->add('password', PasswordType::class, ['label' => 'setup.database.form.password', 'attr' => ['autocomplete' => 'off']])
@@ -98,8 +101,15 @@ class SetupController extends AbstractController
         $connected = false;
         $tablesExist = false;
         if ($form->isSubmitted() && $form->isValid()) {
+            $drivers = [
+                'mysql' => 'pdo_mysql',
+                'postgres' => 'pdo_pgsql',
+            ];
+            $driver = $drivers[$form->get('system')->getData()] ?? '';
+
             $data = [
-                'database_driver' => 'pdo_mysql',
+                'database_system' => $form->get('system')->getData(),
+                'database_driver' => $driver,
                 'database_host' => $form->get('host')->getData(),
                 'database_port' => $form->get('port')->getData(),
                 'database_name' => $form->get('database')->getData(),
@@ -107,26 +117,25 @@ class SetupController extends AbstractController
                 'database_password' => $form->get('password')->getData()
             ];
 
-            $tmpConnection = DriverManager::getConnection([
-                'host' => $data['database_host'] ?? null,
-                'port' => $data['database_port'] ?? null,
-                'dbname' => $data['database_name'] ?? null,
-                'user' => $data['database_user'] ?? null,
-                'password' => $data['database_password'] ?? null,
-                'driver' => $data['database_driver'],
-            ]);
-
             try {
-                $tmpConnection->connect();
-                $connected = $tmpConnection->isConnected();
+                $tmpConnection = DriverManager::getConnection([
+                    'host' => $data['database_host'] ?? null,
+                    'port' => $data['database_port'] ?? null,
+                    'dbname' => $data['database_name'] ?? null,
+                    'user' => $data['database_user'] ?? null,
+                    'password' => $data['database_password'] ?? null,
+                    'driver' => $data['database_driver'],
+                ]);
 
-                $data['database_version'] = $tmpConnection->getNativeConnection()->getAttribute(PDO::ATTR_SERVER_VERSION);
+                // Force the connection
+                $data['database_version'] = $tmpConnection->getServerVersion();
+                $connected = $tmpConnection->isConnected();
 
                 /** @var AbstractSchemaManager $schemaManager */
                 $schemaManager = $tmpConnection->createSchemaManager();
                 $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
                 foreach ($metadata as $classMetadata) {
-                    if ($schemaManager->tablesExist($classMetadata->getTableName())) {
+                    if ($schemaManager->tablesExist([$classMetadata->getTableName()])) {
                         $tablesExist = true;
                         break;
                     }
@@ -135,7 +144,7 @@ class SetupController extends AbstractController
                 if ($connected && !$tablesExist) {
                     $this->configHelper->writeEnvironmentConfig($data);
                 }
-            } catch (ConnectionException $e) {
+            } catch (ConnectionException|Exception $e) {
                 $connected = false;
             }
 
@@ -153,9 +162,7 @@ class SetupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/other", name="setup_other")
-     */
+    #[Route('/other', name: 'setup_other')]
     public function other(Request $request): Response
     {
         if ($this->setupHelper->isInstalled()) {
@@ -192,16 +199,12 @@ class SetupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/install", name="setup_install")
-     */
+    #[Route('/install', name: 'setup_install')]
     public function install(Request $request): Response
     {
         if ($this->setupHelper->isInstalled()) {
             return $this->redirectToRoute('dashboard');
         }
-
-        $session = $request->getSession();
 
         // Prepare database and execute the migrations
         $application = new Application($this->kernel);
@@ -215,6 +218,14 @@ class SetupController extends AbstractController
         $output = new BufferedOutput();
         $application->run($input, $output);
         $output->fetch();
+
+        return $this->redirectToRoute('setup_install_continuation');
+    }
+
+    #[Route('/install-continuation', name: 'setup_install_continuation')]
+    public function installContinuation(Request $request): Response
+    {
+        $session = $request->getSession();
 
         // Create user
         try {
@@ -236,6 +247,9 @@ class SetupController extends AbstractController
             'command' => 'cache:clear',
             '-n'
         ));
+
+        $application = new Application($this->kernel);
+        $application->setAutoExit(false);
 
         $output = new BufferedOutput();
         $application->run($input, $output);

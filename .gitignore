@@ -4,6 +4,7 @@
 /.env.local.php
 /.env.*.local
 /config/env.mosparo.php
+/config/env.mosparo.*.php
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /public/update-log/

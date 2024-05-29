@@ -11,7 +11,7 @@ Encore
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
     .setPublicPath('/build')
-    // only needed for CDN's or sub-directory deploy
+    // only needed for CDN's or subdirectory deploy
     //.setManifestKeyPrefix('build/')
 
     /*
@@ -81,6 +81,11 @@ Encore
 ;
 
 var config = Encore.getWebpackConfig();
+
+const CssUrlRelativePlugin = require('css-url-relative-plugin');
+config.plugins.push(new CssUrlRelativePlugin({
+    root: config.output.publicPath
+}));
 
 if (Encore.isProduction()) {
     const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');

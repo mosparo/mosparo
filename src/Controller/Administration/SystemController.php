@@ -9,11 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/administration/system")
- */
+#[Route('/administration/system')]
 class SystemController extends AbstractController
 {
     protected SetupHelper $setupHelper;
@@ -32,9 +30,7 @@ class SystemController extends AbstractController
         $this->projectDirectory = $projectDirectory;
     }
 
-    /**
-     * @Route("/", name="administration_system")
-     */
+    #[Route('/', name: 'administration_system')]
     public function systemOverview(Request $request): Response
     {
         return $this->render('administration/system/system.html.twig', [

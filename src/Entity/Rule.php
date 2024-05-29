@@ -8,57 +8,37 @@ use Mosparo\Repository\RuleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Rule\RuleEntityInterface;
 
-/**
- * @ORM\Entity(repositoryClass=RuleRepository::class)
- */
+#[ORM\Entity(repositoryClass: RuleRepository::class)]
 class Rule implements ProjectRelatedEntityInterface, RuleEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="guid")
-     */
+    #[ORM\Column(type: 'guid')]
     private ?string $uuid;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @ORM\Column(type="string", length=30)
-     */
+    #[ORM\Column(type: 'string', length: 30)]
     private ?string $type;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RuleItem::class, mappedBy="rule", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: RuleItem::class, mappedBy: 'rule', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $items;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private int $status = 1;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $spamRatingFactor = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
 
     public function __construct()

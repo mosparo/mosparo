@@ -8,7 +8,6 @@ use Mosparo\Entity\Project;
 use Mosparo\Util\HashUtil;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 
@@ -226,14 +225,26 @@ class DesignHelper
         $this->projectDirectory = $projectDirectory;
     }
 
-    public function getTextLogoContent()
+    public function getTextLogoContent(bool $forcedColors = false, string $prefersColorScheme = 'u'): string
     {
         $path = $this->getBuildFilePath('/build/images/mosparo_text_logo.svg');
         if (!$this->filesystem->exists($path)) {
             return '';
         }
 
-        return file_get_contents($path);
+        $content = file_get_contents($path);
+
+        if ($forcedColors) {
+            $content = str_replace('opacity:0.8;', 'opacity:1.0;', $content);
+
+            if ($prefersColorScheme === 'l') {
+                $content = str_replace('var(--mosparo-text-color, rgb(0, 0, 0))', '#000000', $content);
+            } else if ($prefersColorScheme === 'd') {
+                $content = str_replace('var(--mosparo-text-color, rgb(0, 0, 0))', '#FFFFFF', $content);
+            }
+        }
+
+        return $content;
     }
 
     public function refreshFrontendResourcesForAllProjects()
@@ -253,7 +264,9 @@ class DesignHelper
         $this->entityManager->flush();
 
         // Set the originally active project again
-        $this->projectHelper->setActiveProject($activeProject);
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
+        }
     }
 
     public function getBoxSizeVariables(): array
@@ -571,7 +584,7 @@ class DesignHelper
         $content = str_replace(PHP_EOL, '', $content);
 
         // Include images and replace potential css variables
-        return $this->includeImages($content, $designConfigValues, $defaultConfigValues);
+        return $this->includeImages($content, $designConfigValues);
     }
 
     protected function resolveCssVariables(string $content, array $designConfigValues, array $defaultConfigValues): string
@@ -646,17 +659,16 @@ class DesignHelper
         return $value;
     }
 
-    protected function includeImages(string $content, array $designConfigValues, array $defaultConfigValues): string
+    protected function includeImages(string $content, array $designConfigValues): string
     {
-        $mimeTypes = new MimeTypes();
-
-        preg_match_all('/(url\((.[^)]*)\))/i', $content, $results, PREG_SET_ORDER);
+        preg_match_all('/(url\((.[^#)]*)(\)|\#))/i', $content, $results, PREG_SET_ORDER);
         foreach ($results as $result) {
             if (strpos($result[2], 'mosparo_text_logo') !== false && isset($designConfigValues['showMosparoLogo']) && !$designConfigValues['showMosparoLogo']) {
                 $content = str_replace($result[1], '', $content);
                 continue;
             }
 
+            $content = str_replace($result[2] . '#', '/resources/logo.svg?', $content);
             $content = str_replace($result[2], '/resources/logo.svg', $content);
         }
 

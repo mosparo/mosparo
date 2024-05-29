@@ -16,6 +16,7 @@ parameters:
 
     env(default_color_mode): 'light'
 
+    env(database_system): 'mysql'
     env(database_driver): 'pdo_mysql'
     env(database_host): '127.0.0.1'
     env(database_port): '3306'
@@ -44,6 +45,7 @@ parameters:
 
     env(backend_access_ip_allow_list): ~
     env(api_access_ip_allow_list): ~
+    env(web_cron_job_access_ip_allow_list): ~
 
 services:
     # default configuration for services in *this* file
@@ -113,11 +115,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    Mosparo\Doctrine\ProjectRelatedSubscriber:
-        class: Mosparo\Doctrine\ProjectRelatedSubscriber
-        tags:
-            - { name: doctrine.event_subscriber }
-
     Mosparo\Subscriber\SetupSubscriber:
         class: Mosparo\Subscriber\SetupSubscriber
         arguments:
@@ -166,6 +163,7 @@ services:
     Mosparo\Helper\ConfigHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+            $envSuffix: '%env(MOSPARO_ENV_SUFFIX)%'
 
     Mosparo\Helper\LocaleHelper:
         arguments:

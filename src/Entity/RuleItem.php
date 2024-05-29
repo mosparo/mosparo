@@ -6,48 +6,32 @@ use Mosparo\Repository\RuleItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Rule\RuleItemEntityInterface;
 
-/**
- * @ORM\Entity(repositoryClass=RuleItemRepository::class)
- */
+#[ORM\Entity(repositoryClass: RuleItemRepository::class)]
 class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="guid")
-     */
+    #[ORM\Column(type: 'guid')]
     private ?string $uuid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Rule::class, inversedBy="items")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Rule::class, inversedBy: 'items')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Rule $rule;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $type;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private ?string $value;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $spamRatingFactor = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
 
     public function __construct()

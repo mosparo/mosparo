@@ -15,19 +15,15 @@ use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/project/{_projectId}/submissions")
- */
+#[Route('/project/{_projectId}/submissions')]
 class SubmissionController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
 
-    /**
-     * @Route("/", name="submission_list")
-     * @Route("/filter/{filter}", name="submission_list_filtered")
-     */
+    #[Route('/', name: 'submission_list')]
+    #[Route('/filter/{filter}', name: 'submission_list_filtered')]
     public function index(Request $request, DataTableFactory $dataTableFactory, $filter = ''): Response
     {
         if (!in_array($filter, ['spam', 'valid'])) {
@@ -86,15 +82,15 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
 
                     if ($filter === 'spam') {
                         $builder
-                            ->where('e.spam = 1')
-                            ->orWhere('e.valid = 0');
+                            ->where('e.spam = TRUE')
+                            ->orWhere('e.valid = FALSE');
                     } else if ($filter === 'valid') {
                         $builder
-                            ->where('e.spam = 0')
-                            ->andWhere('e.valid = 1');
+                            ->where('e.spam = FALSE')
+                            ->andWhere('e.valid = TRUE');
                     } else {
                         $builder
-                            ->where('e.spam = 1')
+                            ->where('e.spam = TRUE')
                             ->orWhere('e.valid IS NOT NULL');
                     }
                 },
@@ -114,9 +110,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
         ]);
     }
 
-    /**
-     * @Route("/{id}/view", name="submission_view")
-     */
+    #[Route('/{id}/view', name: 'submission_view')]
     public function view(Submission $submission): Response
     {
         $activeProject = $this->projectHelper->getActiveProject();

@@ -6,6 +6,7 @@ class GeneralVerification
 {
     const MINIMUM_TIME = 'minimumTime';
     const HONEYPOT_FIELD = 'honeypotField';
+    const EQUAL_SUBMISSIONS = 'equalSubmissions';
 
     /**
      * @var string

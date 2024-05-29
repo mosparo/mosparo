@@ -22,6 +22,7 @@ class SetupSubscriber implements EventSubscriberInterface
         'setup_database',
         'setup_other',
         'setup_install',
+        'setup_install_continuation',
     ];
 
     public function __construct(UrlGeneratorInterface $router, $installed, $installedVersion, $debug = false)
@@ -91,6 +92,7 @@ class SetupSubscriber implements EventSubscriberInterface
                 'frontend_api_check_form_data',
                 'verification_api_verify',
                 'statistic_api_daily',
+                'cron_jobs_execute',
             ];
             if (in_array($route, $noRedirectsRoutes)) {
                 return;

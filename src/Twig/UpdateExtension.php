@@ -5,7 +5,7 @@ namespace Mosparo\Twig;
 use Mosparo\Exception;
 use Mosparo\Helper\UpdateHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;

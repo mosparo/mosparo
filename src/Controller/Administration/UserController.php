@@ -3,6 +3,7 @@
 namespace Mosparo\Controller\Administration;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
 use Mosparo\Form\PasswordFormType;
@@ -19,15 +20,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 
-/**
- * @Route("/administration/users")
- */
+#[Route('/administration/users')]
 class UserController extends AbstractController
 {
     protected UserPasswordHasherInterface $userPasswordHasher;
@@ -40,9 +39,7 @@ class UserController extends AbstractController
         $this->translator = $translator;
     }
 
-    /**
-     * @Route("/", name="administration_user_list")
-     */
+    #[Route('/', name: 'administration_user_list')]
     public function index(Request $request, DataTableFactory $dataTableFactory): Response
     {
         $table = $dataTableFactory->create(['autoWidth' => true])
@@ -58,6 +55,11 @@ class UserController extends AbstractController
             ])
             ->createAdapter(ORMAdapter::class, [
                 'entity' => User::class,
+                'query' => function (QueryBuilder $builder) {
+                    $builder
+                        ->select('e')
+                        ->from(User::class, 'e');
+                },
             ])
             ->handleRequest($request);
 
@@ -70,10 +72,8 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/add", name="administration_user_add")
-     * @Route("/{id}/edit", name="administration_user_edit")
-     */
+    #[Route('/add', name: 'administration_user_add')]
+    #[Route('/{id}/edit', name: 'administration_user_edit')]
     public function modifyUser(Request $request, EntityManagerInterface $entityManager, TokenGenerator $tokenGenerator, PasswordHelper $passwordHelper, User $user = null): Response
     {
         $passwordHelp = 'administration.user.help.password';
@@ -228,9 +228,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/delete", name="administration_user_delete")
-     */
+    #[Route('/{id}/delete', name: 'administration_user_delete')]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $isOwnerInProject = false;

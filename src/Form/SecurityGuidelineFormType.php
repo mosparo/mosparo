@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints\Positive;
 
 class SecurityGuidelineFormType extends AbstractType implements EventSubscriberInterface
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $geoIp2Active = $options['geoIp2Active'] ?? false;
 
@@ -95,7 +95,7 @@ class SecurityGuidelineFormType extends AbstractType implements EventSubscriberI
         $builder->addEventSubscriber($this);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => SecurityGuideline::class,
@@ -104,7 +104,7 @@ class SecurityGuidelineFormType extends AbstractType implements EventSubscriberI
         ]);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FormEvents::SUBMIT => 'ensureOneFieldIsSubmitted',

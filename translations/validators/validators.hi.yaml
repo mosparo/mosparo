@@ -1,0 +1,33 @@
+tools:
+  import:
+    importFile:
+      correctFile: कृपया सही JSON फाइल अपलोड करें।
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: अनुमति सूची में आपके IP पते की अनुमति नहीं है। कृपया सूची
+        में अपना IP पता जोड़ें।
+ipAllowList:
+  itemInvalid: वस्तु '%item%' मान्य IP पता या सबनेट नहीं है।
+honeypotField:
+  nameHasInvalidCharacter: कृपया केवल अक्षरों, संख्याओं और डैश चिह्न (-) का उपयोग
+    करें।
+securityGuideline:
+  atLeastOneCriteriaRequired: सुरक्षा दिशानिर्देश के लिए कम से कम एक मानदंड की आवश्यकता
+    होती है।
+  asNumberNotNumeric: AS संख्या कोई संख्या नहीं है।
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: वेब क्रॉन जॉब का अंतराल कम से कम 5 मिनट या अधिक
+    होना चाहिए।
+  geoIpRefreshIntervalAtLeast1Day: GeoIP2 ताजा करने का अंतराल कम से कम एक दिन या अधिक
+    होना चाहिए।
+password:
+  form:
+    constraint:
+      notBlank: कृपया पासवर्ड दर्ज करें।
+      length: आपका पासवर्ड कम से कम {{ limit }} वर्णों का होना चाहिए।
+      passwordMustMatch: पासवर्ड क्षेत्र मेल खाना चाहिए।
+  request:
+    form:
+      constraint:
+        notBlank: अपना ईमेल दर्ज करें।

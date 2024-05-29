@@ -14,6 +14,10 @@ class ProjectRelatedFilter extends SQLFilter
     public function setProjectHelper(ProjectHelper $projectHelper)
     {
         $this->projectHelper = $projectHelper;
+
+        if ($this->projectHelper->getActiveProject()) {
+            $this->setParameter('projectId', $this->projectHelper->getActiveProject()->getId());
+        }
     }
 
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias): string
@@ -24,10 +28,11 @@ class ProjectRelatedFilter extends SQLFilter
         }
 
         $activeProject = $this->projectHelper->getActiveProject();
-        if ($activeProject === null) {
+        if ($activeProject === null || !$this->hasParameter('projectId')) {
+            dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
             throw new Exception('Access to a project related entity is not allowed without active project.');
         }
 
-        return sprintf('%s.project_id = %d', $targetTableAlias, $activeProject->getId());
+        return sprintf('%s.project_id = ' . $this->getParameter('projectId'), $targetTableAlias);
     }
 }

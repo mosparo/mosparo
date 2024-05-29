@@ -3,9 +3,14 @@
 namespace Mosparo\Controller\Account;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
+use Mosparo\Exception;
 use Mosparo\Util\TokenGenerator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -13,12 +18,10 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/account/two-factor")
- */
+#[Route('/account/two-factor')]
 class TwoFactorController extends AbstractController
 {
     protected TranslatorInterface $translator;
@@ -28,9 +31,7 @@ class TwoFactorController extends AbstractController
         $this->translator = $translator;
     }
 
-    /**
-     * @Route("/status", name="account_two_factor_status")
-     */
+    #[Route('/status', name: 'account_two_factor_status')]
     public function status(): Response
     {
         /** @var \Mosparo\Entity\User $user */
@@ -43,11 +44,9 @@ class TwoFactorController extends AbstractController
         return $this->render('account/two-factor-authentication/status.html.twig');
     }
 
-    /**
-     * @Route("/start", name="account_two_factor_start")
-     * @Route("/start/force", name="account_two_factor_start_force")
-     */
-    public function start(Request $request, GoogleAuthenticatorInterface $googleAuthenticator, QrCodeGenerator $qrCodeGenerator): Response
+    #[Route('/start', name: 'account_two_factor_start')]
+    #[Route('/start/force', name: 'account_two_factor_start_force')]
+    public function start(Request $request, GoogleAuthenticatorInterface $googleAuthenticator): Response
     {
         /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
@@ -58,10 +57,11 @@ class TwoFactorController extends AbstractController
             $form = $this->createQrCodeForm();
             $secret = $googleAuthenticator->generateSecret();
             $user->setGoogleAuthenticatorSecret($secret);
-            $qrCode = $qrCodeGenerator->getGoogleAuthenticatorQrCode($user);
-            $form->get('secret')->setData($secret);
 
-            $request->getSession()->set('qrCode', $qrCode->writeString());
+            $form->get('secret')->setData($secret);
+            $request->getSession()->set('twoFactorSecret', $secret);
+
+            $content = $googleAuthenticator->getQRContent($user);
 
             return $this->render('account/two-factor-authentication/start.html.twig', [
                 'form' => $form->createView(),
@@ -70,12 +70,25 @@ class TwoFactorController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/qrcode", name="account_two_factor_qrcode")
-     */
-    public function qrcode(Request $request)
+    #[Route('/qrcode', name: 'account_two_factor_qrcode')]
+    public function qrcode(Request $request, GoogleAuthenticatorInterface $googleAuthenticator)
     {
-        $response = new Response($request->getSession()->get('qrCode', ''));
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+        $user->setGoogleAuthenticatorSecret($request->getSession()->get('twoFactorSecret', ''));
+
+        if (!$user->getGoogleAuthenticatorSecret()) {
+            throw new Exception('No secret found in session. QR code cannot be rendered.');
+        }
+
+        // Remove the secret from the session
+        $request->getSession()->remove('twoFactorSecret');
+
+        // Generate the QR code image
+        $content = $googleAuthenticator->getQRContent($user);
+        $qrCode = $this->buildQrCodeDataUri($content);
+
+        $response = new Response($qrCode);
 
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'qrcode.png');
         $response->headers->set('Content-Disposition', $disposition);
@@ -86,9 +99,7 @@ class TwoFactorController extends AbstractController
         return $response;
     }
 
-    /**
-     * @Route("/verify", name="account_two_factor_verify")
-     */
+    #[Route('/verify', name: 'account_two_factor_verify')]
     public function verify(Request $request): Response
     {
         $form = $this->createQrCodeForm();
@@ -105,9 +116,7 @@ class TwoFactorController extends AbstractController
         return $this->redirectToRoute('account_two_factor_status');
     }
 
-    /**
-     * @Route("/backup-codes", name="account_two_factor_backup_codes")
-     */
+    #[Route('/backup-codes', name: 'account_two_factor_backup_codes')]
     public function backupCodes(Request $request, EntityManagerInterface $entityManager, GoogleAuthenticatorInterface $googleAuthenticator): Response
     {
         $form = $this->createVerifyForm();
@@ -149,9 +158,7 @@ class TwoFactorController extends AbstractController
         return $this->redirectToRoute('account_two_factor_auth');
     }
 
-    /**
-     * @Route("/reset-backup-codes", name="account_two_factor_reset_backup_codes")
-     */
+    #[Route('/reset-backup-codes', name: 'account_two_factor_reset_backup_codes')]
     public function resetBackupCodes(EntityManagerInterface $entityManager): Response
     {
         // Generate the backup codes
@@ -165,9 +172,7 @@ class TwoFactorController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/disable", name="account_two_factor_disable")
-     */
+    #[Route('/disable', name: 'account_two_factor_disable')]
     public function disable(Request $request, EntityManagerInterface $entityManager): Response
     {
         /** @var \Mosparo\Entity\User $user */
@@ -226,5 +231,21 @@ class TwoFactorController extends AbstractController
             ]])
             ->add('secret', HiddenType::class)
             ->getForm();
+    }
+
+    protected function buildQrCodeDataUri(string $qrCodeContent): string
+    {
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($qrCodeContent)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
+            ->size(300)
+            ->margin(0)
+            ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
+            ->build();
+
+        return $result->getString();
     }
 }
