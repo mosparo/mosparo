@@ -340,6 +340,9 @@ submission:
       minimumTime:
         text: Il modulo è stato inviato troppo velocemente. Sono stati impiegati solo %seconds% secondi, che è un tempo inferiore al tempo minimo di %minimumTimeSeconds% secondi.
         title: Invio troppo rapido
+      equalSubmissions:
+        title: Troppe richieste uguali
+        text: Questa richiesta è uguale alla richiesta precedente. Mosparo ha trovato %actualNumberOfEqualSubmissions% richieste uguali all'interno del lasso di tempo configurato, che supera il numero previsto di %allowedNumberOfEqualSubmissions% richieste uguali.
     title: Invio %submissionId%
     spam:
       submittedAt: Sottoposto il
@@ -567,6 +570,13 @@ settings:
       delayDetectionTimeFrame: Tempo di rilevamento
       delayTime: Ritardo di base
       lockoutDetectionTimeFrame: Tempo di rilevamento
+      equalSubmissionsBasedOnIpAddressHelp: Il rilevamento e il blocco verranno limitati all'indirizzo IP dell'utente. Se disabilitato, verranno valutate tutte le richieste di tutti gli utenti.
+      equalSubmissionsActive: Abilita il blocco delle richieste uguali
+      equalSubmissionsNumberOfEqualSubmissions: Quantità delle richieste uguali consentite
+      equalSubmissionsNumberOfEqualSubmissionsHelp: La quantità delle richieste uguali consentite prima che il blocco venga attivato.
+      equalSubmissionsTimeFrame: Tempo di rilevamento
+      equalSubmissionsBasedOnIpAddress: Basato su indirizzo IP
+      overrideEqualSubmissions: Ignorare il blocco delle richieste uguali
     ipLockout:
       title: Blocco IP
       intro: Per rendere la vita degli spam bot più difficile, mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
@@ -580,9 +590,13 @@ settings:
     honeypot:
       title: Honeypot
       intro: Un campo honeypot è un campo invisibile del modulo. Gli utenti non possono vederlo ma gli spam bots probabilmente lo compileranno. Se questo accade significa che il modulo non è stato compilato da un utente vero e proprio.
+      infoField: Inserisci un nome per il campo honeypot. Il nome dovrebbe essere un normalissimo nome di un campo che non hai ancora utilizzato nel tuo form. Mosparo aggiungerà automaticamente questo campo; non devi modificare manualmente il tuo form.
     message:
       successfullySaved: Le impostazioni di sicurezza sono state salvate.
       guidelineSuccessfullySaved: Le linee guida di sicurezza sono state salvate.
+    equalSubmissions:
+      title: Blocca richieste uguali
+      intro: Una misura di sicurezza aggiuntiva per bloccare le richieste uguali. Se un utente tenta di inviare la stessa richiesta troppo spesso all'interno di un certo intervallo di tempo, Mosparo bloccherà tutte le richieste future fino allo scadere dell'intervallo di tempo. Inoltre, questa verifica può essere limitata ad un definito indirizzo IP.
   title: Impostazioni progetto
   design:
     form:
@@ -613,6 +627,7 @@ settings:
         websiteBackground: Seleziona il colore di sfondo del tuo sito. Questo colore verrà utilizzato per calcolare la quantità di contrasto.
         websiteForeground: Seleziona il colore di primo piano del tuo sito. Questo colore verrà utilizzato per gli elementi principali del riquadro di Mosparo.
         websiteAccent: Seleziona il colore delle evidenziazioni del tuo sito. Questo colore verrà usato per alcuni elementi del riquadro di Mosparo.
+        fullPageOverlay: Definisce se oscurare l'intera pagina o solo il modulo per il quale mosparo sta validando i dati.
       showPingAnimation: Visualizza un'animazione per evidenziare il segno di spunta
       invisibleLogo: Logo
       invisiblePageOverlay: Sovrapposizione pagina
@@ -650,6 +665,7 @@ settings:
       advanced: Avanzata
     simpleDesign:
       introPreview: Sulla destra puoi vedere un'anteprima del blocco mosparo sul tuo sito.
+      introColors: Seleziona il colore del tuo sito. Il colore di sfondo è necessario per poter calcolare il corretto ammontare di contrasto. Il colore di primo piano è il colore del testo. Il colore degli accenti è il colore che sarà utilizzato per gli elementi speciali della finestra di mosparo.
     choices:
       boxSize:
         small: Piccolo
@@ -698,12 +714,15 @@ tools:
       value: Valori test
       type: Tipo dati
       useRules: Utilizza regole
+    intro: Inserisci il valore che vuoi testare. Scegli il tipo di dati che vuoi usare per la prova e se vuoi usare regole e insiemi di regole. Il tipo di dati è importante perchè alcune regole vengono applicate solo a certi tipi di dati.
   title: Strumenti
   export:
     errorMessage:
       selectAtLeastOneElement: Seleziona almeno un elemento da esportare.
     title: Esporta
     includedData: Dati inclusi
+    intro: Se vuoi migrare il tuo progetto in una diversa installazione di mosparo oppure se vuoi sincronizzare le impostazioni con un progetto diverso, puoi esportare il progetto con questa funzionalità. Seleziona quali dati vuoi esportare e fai click sul pulsante.
+    infoSensitiveData: I dati sensibili non verranno mai inclusi in un'esportazione. Richieste, token di richiesta, identificatore unico di progetto, chiavi API e i membri del progetto non saranno inclusi nell'esportazione.
   import:
     backToImport: Torna all'importazione
     form:
@@ -712,6 +731,9 @@ tools:
         add: Aggiungi
         override: Sovrascrivi
         append: Accoda
+        addHelp: mosparo aggiungerà le regole esistenti come nuove regole. Le nuove regole avranno un nuovo identificatore.
+        appendHelp: mosparo accoderà gli elementi delle regole sul file alle regole esistenti ma non ne cancellerà alcuno.
+        overrideHelp: Tutte le regole esistenti verranno sovrascritte con le regole che verranno importate dal file. Tutti gli elementi aggiuntivi delle regole verranno cancellati.
       importFile: File da importare
     errorMessage:
       selectAtLeastOneElement: Seleziona almeno un elemento da importare.
@@ -745,15 +767,24 @@ tools:
         storedRulesetNotFound: Il set di regola salvato non è stato trovato.
         importFileInvalid: Il file di importazione non è valido.
         noChangesAvailable: Non ci sono modifiche disponibili.
+        jobDataInvalid: I dati del lavoro per il token non sono validi.
+        wrongSpecificationsVersion: Il file di importazione è stato generato con specifiche diverse dalla versione in uso di questa installazione di mosparo.
+        jobDataFileNotFound: Il file dei dati del lavoro per il token non esiste.
       title: Modifiche disponibili
       changes:
         notActive: Questa sezione non è attiva per questa importazione.
         notInExport: Questa sezione non è disponibile sul file da importare.
         noChangesRequired: Per questa sezione non ci sono modifiche da fare perchè tutto è già aggiornato.
+      noChangesFound: 'I dati del progetto sono gli stessi del file di importazione: non ci sono modifiche da fare.'
+      intro: mosparo ha simulato l'importazione e ha rilevato le seguenti modifiche. Per favore verificale e procedi con le modifiche solo se va tutto bene.
+      notRedoable: Non puoi annullare le modifiche dopo averle eseguite. Puoi esportare il progetto prima di eseguire le modifiche per avere un backup della configurazione.
     importData: Dati da importare
     message:
       changesSuccessfullyExecuted: Le modifiche sono state applicate.
     title: Importa
+    intro: Se vuoi copiare i dati da un altro progetto a questo, seleziona il file da importare e quali dati vuoi importare. Se vuoi importare le regole dovrai decidere come mosparo dovrà gestire quelle esistenti.
+    intro2: Dopo aver selezionato i dati, fai click sul pulsante qui sotto. mosparo analizzerà il file e ti fornirà un sommario di ciò che sarà modificato prima di iniziare l'importazione.
+    infoOverrideData: Le impostazioni, così come i gruppi di regole, verranno sempre sovrascritti nel progetto. I gruppi di regole verranno associati all'URL. Per quanto riguarda le regole, dovrai decidere come mosparo dovrà comportarsi con quelle esistenti.
   eiParts:
     generalSettings: Impostazioni generali
     rules: Regole
@@ -762,6 +793,9 @@ tools:
     rulesHelp: Include tutte le regole di un progetto.
     securitySettings: Impostazioni di sicurezza
     rulesets: Gruppo di regole
+    designSettingsHelp: Include tutte le impostazioni relative alla grafica del progetto.
+    securitySettingsHelp: Include tutte le impostazioni relative alla sicurezza del progetto.
+    generalSettingsHelp: Include le impostazioni generiche di un progetto come il suo nome, la descrizione, l'host e il punteggio per lo spam.
 administration:
   security:
     loginThrottling:
@@ -771,24 +805,36 @@ administration:
         uiLimit: Numero di richieste per nome utente e indirizzo IP
         intervalHelp: Il tempo in minuti durante il quale viene valutata una certa quantità di richieste.
         ipLimit: Numero di richieste per indirizzo IP
+        ipLimitHelp: Questo è il numero di richieste che un indirizzo IP può fare con diversi nomi utente. Questo numero dovrebbe essere più alto di quello relativo alle richieste per nome utente e per indirizzo IP.
       unit:
         minutes: Minuti
         requests: Richieste
+      title: Limitazione login
+      intro: La limitazione del login aiuta a proteggere il login di mosparo da attacchi con forza bruta. Contando il numero di richieste e bloccandole dopo una certa quantità di tentativi, questo tipo di attacco richiederebbe molto tempo e sarebbe quindi insensato.
     title: Impostazioni di sicurezza
     reverseProxy:
       title: Reverse proxy
       form:
         trustedProxies: Elenco dei proxy fidati
         trustedProxiesIncludeRemoteAddr: Includi REMOTE_ADDR tra i proxy fidati
+        trustedProxiesHelp: Definisce i proxy affidabili. Puoi usare degli indirizzi IP semplici o una sottorete di indirizzi IP. Localhost (127.0.0.1) è sempre aggiunto alla lista automaticamente.
+        trustedProxiesIncludeRemoteAddrHelp: Questa opzione aggiunge REMOTE_ADDR alla lista dei proxy fidati. Può essere pericoloso dato che accetta le intestazioni inoltrate da tutti i clients.
+      providerPresets: Impostazioni provider
+      modifyNotAllowed: Queste impostazioni sono sovrascritte nel file di ambiente di mosparo. Non puoi cambiare nulla qui.
+      intro: Se utilizzi un reverse proxy per far funzionare mosparo, dovresti configurare queste impostazioni in modo da far capire a mosparo come identificare l'indirizzo IP del client correttamente.
     message:
       savedSuccessfully: Le impostazioni di sicurezza sono state salvate.
     apiAccess:
       title: Accesso API
-    backendAccess: {}
+    backendAccess:
+      hintOwnIp: Puoi salvare questa impostazione solamente se il tuo indirizzo IP (%ipAddress%) è già incluso nella lista (come indirizzo IP o sottorete). Se hai un indirizzo IPv6 è consigliato aggiungere anche la tua sottorete.
+      title: Accesso dal backend
+      intro: Se vuoi proteggere mosparo da accessi non autorizzati da Internet, puoi specificare degli indirizzi IP che sono autorizzati ad accedere dal backend. Lascia vuoto questo campo se vuoi permettere a chiunque di fare login sia da Internet che dal backend.
     ipAllowList:
       form:
         ipAllowList: Indirizzi IP e sottoreti autorizzati
         ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
+    description: Configura diversi parametri relativi alla sicurezza che verranno applicate alla tua installazione di mosparo.
   geoip2:
     title: GeoIP2
     version:
@@ -872,6 +918,8 @@ administration:
         fromName: Da nome
         useSmtp: Usa un server SMTP per inviare le email
       title: Impostazioni posta
+      help:
+        password: Se scrivi qualcosa in questo campo, il valore esistente verrà sovrascritto.
     mainSettings:
       title: Impostazioni principali
       form:
@@ -881,6 +929,7 @@ administration:
       title: Impostazioni interfaccia
       form:
         defaultColorMode: Modalità colore predefinita
+    description: Configura le impostazioni da applicare alla tua installazione di mosparo.
   user:
     help:
       password: Lascia questi campi vuoti se non vuoi che venga chiesto un cambio password.
