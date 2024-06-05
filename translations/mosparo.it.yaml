@@ -819,6 +819,10 @@ administration:
         trustedProxiesIncludeRemoteAddr: Includi REMOTE_ADDR tra i proxy fidati
         trustedProxiesHelp: Definisce i proxy affidabili. Puoi usare degli indirizzi IP semplici o una sottorete di indirizzi IP. Localhost (127.0.0.1) è sempre aggiunto alla lista automaticamente.
         trustedProxiesIncludeRemoteAddrHelp: Questa opzione aggiunge REMOTE_ADDR alla lista dei proxy fidati. Può essere pericoloso dato che accetta le intestazioni inoltrate da tutti i clients.
+        replaceForwardedForHeader: Nome dell'intestazione dell'indirizzo remoto personalizzato
+        replaceForwardedProtoHeader: Nome dell'intestazione del protocollo personalizzato
+        replaceForwardedForHeaderHelp: Se richiesto, specifica il nome dell'intestazione nella quale il reverse proxy invierà l'indirizzo IP del client.
+        replaceForwardedProtoHeaderHelp: Se richiesto, specifica il nome dell'intestazione nella quale il reverse proxy invierà il protocollo di richiesta.
       providerPresets: Impostazioni provider
       modifyNotAllowed: Queste impostazioni sono sovrascritte nel file di ambiente di mosparo. Non puoi cambiare nulla qui.
       intro: Se utilizzi un reverse proxy per far funzionare mosparo, dovresti configurare queste impostazioni in modo da far capire a mosparo come identificare l'indirizzo IP del client correttamente.
@@ -826,6 +830,7 @@ administration:
       savedSuccessfully: Le impostazioni di sicurezza sono state salvate.
     apiAccess:
       title: Accesso API
+      intro: Se vuoi proteggere l'API di mosparo da accessi indesiderati, puoi specificare quali indirizzi IP sono autorizzati all'accesso. Lascia vuoto questo campo per autorizzare l'accesso di qualsiasi client.
     backendAccess:
       hintOwnIp: Puoi salvare questa impostazione solamente se il tuo indirizzo IP (%ipAddress%) è già incluso nella lista (come indirizzo IP o sottorete). Se hai un indirizzo IPv6 è consigliato aggiungere anche la tua sottorete.
       title: Accesso dal backend
@@ -842,6 +847,8 @@ administration:
       titleAvailable: GeoIP2 disponibile
       typeCountry: 'Paese:'
       titleNotAvailable: GeoIP2 non disponibile
+      messageAvailable: 'Il database di GeoIP2 è stato scaricato ed è attivo. Le seguenti versioni sono attive:'
+      messageDatabaseNotAvailable: Il database di GoIP2 non è stato scaricato oppure si è verificato un errore durante lo scaricamento.
     downloadAndUpdate:
       web:
         title: Web
@@ -850,12 +857,17 @@ administration:
           successfullyDownloaded: Il database è stato scaricato.
           errorDownload: C'è stato un errore mentre Mosparo tentava di scaricare il database. %error%
         action: Scarica il database
+        intro: 'Utilizza questo pulsante per far sì che mosparo scarichi il database:'
       cli:
         title: CLI
         intro: 'Utilizza il seguente comando per scaricare il database con CLI:'
       title: Scarica e aggiorna automaticamente
       update:
         title: Aggiornamento automatico
+        intro: "Per aggiornare automaticamente il database è consigliabile impostare un cron job che lo scarichi automaticamente. Per utilizzare l'aggiornamento automatico impostare un cron job come il seguente:"
+        infoAbsolutePath: Forse dovrai impostare il percorso del file %pathToBinConsole%. Potrebbe essere necessario indicare il percorso assoluto.
+        infoRateLimit: Ricorda che ogni chiave di licenza può fare un numero di scaricamenti limitato. Non usare la funzione di aggiornamento troppo spesso.
+      intro: Dopo aver salvato la chiave di licenza mosparo deve scaricare il database. Puoi farlo direttamente qui o puoi usare una connessione SSH per eseguire il comando.
     description: Configura l'integrazione con GeoIP2.
     settings:
       title: Impostazioni
@@ -864,20 +876,30 @@ administration:
       useGeoip2Field: Utilizza la localizzazione automatica dell'indirizzo IP
       message:
         savedSuccessfully: Le impostazioni sono state salvate correttamente.
+        infoActivationTime: Se hai appena richiesto la tua chiave di licenza tieni presente che serve un po' di tempo affinchè questa sia attiva.
   update:
     button:
       updateAvailable: Aggiornamento disponibile
     check:
       intro: Se vuoi verificare gli aggiornamenti, fai click sul pulsante qui sotto.
       title: Stato
+      message:
+        errorCheckingForUpdates: 'Si è verificato un errore durante il controllo degli aggiornamenti: Errore: %errorMessage%'
     version:
       releaseNotes: Note di rilascio
       titleNotAvailable: Non sono disponibili aggiornamenti
       titleAvailable: Aggiornamento disponibile
       messageNotAvailable: Non sono disponibili aggiornamenti per mosparo. Verifica di nuovo in un secondo momento.
       lastChecked: 'Ultima verifica:'
+      warningUpdate: Fai un backup dei files e del database di mosparo prima dell'aggiornamento. Il processo automatico di aggiornamento non lo farà. Se qualcosa non dovesse funzionare correttamente potresti rendere inutilizzabile la tua installazione di mosparo.
+      messageAvailable: Un nuovo aggiornamento di mosparo è disponibile. Fai click sul pulsante qui sotto se vuoi installarlo.
+      warningUpdatesDisabled: Gli aggiornamenti non sono stati abilitati su questa installazione di mosparo. Verifica la documentazione per vedere come aggiornare diversamente la tua installazione di mosparo.
     upgrade:
       titleAvailable: Aggiornamento disponibile
+      updateFirst: Aggiorna all'ultima versione minore prima di aggiornare alla prossima versione maggiore.
+      installedVersion: Versione maggiore installata
+      availableVersion: Versione maggiore disponibile
+      introAvailable: Una versione maggiore è disponibile. Puoi usare l'aggiornamento automatico.
     buttons:
       continue: Continua
     updateChannel: Canale di aggiornamento
@@ -887,7 +909,9 @@ administration:
       description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
       message:
         successfullyUpdated: mosparo è stato aggiornato. Puoi procedere e andare al cruscotto.
+        updateError: Si è verificato un errore durante l'aggiornamento di mosparo. Verifica il messaggio di errore qui sotto.
       title: Aggiorna mosparo
+      log: Processo
     settings:
       title: Impostazioni aggiornamento
       form:
@@ -898,6 +922,13 @@ administration:
     description: Verifica se ci sono nuove versioni e aggiorna la tua installazione di mosparo.
     installedVersion: Versione installata
     availableVersion: Versione disponibile
+    checkRequirements:
+      action:
+        recheck: Ricontrolla
+      introduction: Prima dell'aggiornamento verifica di avere tutti i requisiti. Con una nuova versione maggiore i requisiti potrebbero cambiare ma dovranno essere tutti soddisfatti prima di poter procedere.
+      missingPrerequisites: Alcuni requisiti non sono soddisfatti. Verifica il sommario qui sotto.
+      title: Verifica requisiti
+      meetPrerequisites: Tutti i requisiti sono soddisfatti. Puoi procedere con l'aggiornamento.
   settings:
     message:
       savedSuccessfully: Le impostazioni sono state salvate correttamente.
@@ -950,6 +981,7 @@ administration:
       canCreateProjects: Può creare progetti
       message:
         successfullySaved: L'utente è stato creato correttamente.
+        errorSendingResetEmail: "L'email con il link non può essere spedita. Errore: %errorMessage%"
     modify:
       title: Modifica %email% utente
     backToOverview: Torna agli utenti
@@ -983,6 +1015,37 @@ administration:
       intro: Il logo è stato disegnato da Jan Kosa.
     description: Recupera tutte le informazioni su mosparo.
   title: Amministrazione
+  cronJobs:
+    setup:
+      titles:
+        commands: Comandi
+        example: Esempio
+        address: Indirizzo
+      web:
+        infoWgetPath: Imposta il percorso per %wgetBinary% sul tuo sistema operativo se usi un cron job locale.
+        title: Esegui i cron jobs con una richiesta web
+        intro: Imposta un cron job con il seguente indirizzo per eseguirlo. Puoi usare un cron job locale o un servizio remoto.
+      title: Impostazioni
+      intro: Configura i seguenti cron jobs per automatizzare l'esecuzione di queste azioni.
+      cli:
+        intro: Imposta i seguenti comandi come cron job per eseguire la funzionalità.
+        infoAdjustPaths: Ricorda di impostare il percorso per i binari di PHP e il comando CLI di mosparo. La documentazione del tuo hosting può esserti di aiuto.
+        title: Esegui i cron job via CLI
+    settings:
+      enableWebCronJobs: Abilita i cron jobs via richiesta web
+      webCronJobIntervalHelp: Definisce il tempo minimo tra le esecuzioni dei cron jobs. Questa è una misura di sicurezza per prevenire sovraccarichi del server.
+      title: Impostazioni
+      intro: Abilita l'opzione qui sotto per usare i cron jobs attraverso una richiesta web.
+      webCronJobSecretKey: Chiave segreta per i cron jobs web
+      webCronJobSecretKeyHelp: Questa chiave protegge il tuo cron job da accessi esterni. Puoi usare la chiave generata automaticamente oppure immetterne una tua.
+      webCronJobInterval: Tempo di attesa minimo tra le esecuzioni dei cron jobs
+      geoIp2RefreshInterval: Intervallo di aggiornamento GeoIP2
+      geoIp2RefreshIntervalHelp: Definisce il numero di giorni di attesa prima di cercare di aggiornare il database di GeoIP2. Per evitare sovraccarichi al server di GeoIP2, il database dovrebbe essere aggiornato non frequentemente, ad esempio solo una volta a settimana.
+      hintAccess: Puoi limitare l'accesso ai cron jobs via web a determinati indirizzi IP in %linkStart%security settings%linkEnd%.
+      message:
+        savedSuccessfully: Le impostazioni sono state salvate correttamente.
+    title: Cron jobs
+    description: Configura i cron jobs per mosparo.
 account:
   twoFactor:
     action:
