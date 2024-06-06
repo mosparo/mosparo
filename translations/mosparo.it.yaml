@@ -590,13 +590,13 @@ settings:
     honeypot:
       title: Honeypot
       intro: Un campo honeypot è un campo invisibile del modulo. Gli utenti non possono vederlo ma gli spam bots probabilmente lo compileranno. Se questo accade significa che il modulo non è stato compilato da un utente vero e proprio.
-      infoField: Inserisci un nome per il campo honeypot. Il nome dovrebbe essere un normalissimo nome di un campo che non hai ancora utilizzato nel tuo form. Mosparo aggiungerà automaticamente questo campo; non devi modificare manualmente il tuo form.
+      infoField: Inserisci un nome per il campo honeypot. Il nome dovrebbe essere un normalissimo nome di un campo che non hai ancora utilizzato nel tuo form. mosparo aggiungerà automaticamente questo campo; non devi modificare manualmente il tuo form.
     message:
       successfullySaved: Le impostazioni di sicurezza sono state salvate.
       guidelineSuccessfullySaved: Le linee guida di sicurezza sono state salvate.
     equalSubmissions:
       title: Blocca richieste uguali
-      intro: Una misura di sicurezza aggiuntiva per bloccare le richieste uguali. Se un utente tenta di inviare la stessa richiesta troppo spesso all'interno di un certo intervallo di tempo, Mosparo bloccherà tutte le richieste future fino allo scadere dell'intervallo di tempo. Inoltre, questa verifica può essere limitata ad un definito indirizzo IP.
+      intro: Una misura di sicurezza aggiuntiva per bloccare le richieste uguali. Se un utente tenta di inviare la stessa richiesta troppo spesso all'interno di un certo intervallo di tempo, mosparo bloccherà tutte le richieste future fino allo scadere dell'intervallo di tempo. Inoltre, questa verifica può essere limitata ad un definito indirizzo IP.
   title: Impostazioni progetto
   design:
     form:
