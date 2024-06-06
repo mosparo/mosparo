@@ -9,5 +9,6 @@ hp:
   fieldTitle: Toto pole nechajte prázdne
 label: Súhlasím s tým, aby sa vstupy z formulára kontrolovali na prítomnosť spamu a aby sa uchovávali zašifrované 14 dní.
 accessibility:
-  checkingData: Kontrolujeme vaše údaje. Počkajte, prosím.
+  checkingData: Ochrana proti spamu kontroluje vaše údaje. Počkajte, prosím.
   dataValid: Vaše údaje sú platné. Formulár môžete odoslať.
+  protectedBy: Tento formulár je chránený proti spamu pomocou mosparo.
