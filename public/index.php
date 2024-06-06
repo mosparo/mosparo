@@ -19,7 +19,7 @@ if (file_exists($mappingFile)) {
             }
         }
 
-        if ($_SERVER['HTTP_X_FORWARDED_PREFIX']) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_PREFIX']) && $_SERVER['HTTP_X_FORWARDED_PREFIX']) {
             $targetUri = '/' . trim($_SERVER['HTTP_X_FORWARDED_PREFIX'], '/') . $targetUri;
         }
 
