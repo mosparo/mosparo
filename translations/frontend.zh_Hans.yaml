@@ -8,6 +8,6 @@ error:
 hp:
   fieldTitle: 将此字段留空
 accessibility:
-  checkingData: 我们正在检查您的数据，请稍等。
+  checkingData: 垃圾邮件保护系统正在验证您的数据。请稍候。
   dataValid: 您的数据有效，可以提交表单。
 label: 我接受对表单条目进行垃圾邮件检查并加密存储 14 天。
