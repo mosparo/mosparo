@@ -5,6 +5,7 @@ namespace Mosparo\Controller\Administration;
 use Mosparo\Helper\ConnectionHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Kernel;
+use Mosparo\Util\PathUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +46,7 @@ class SystemController extends AbstractController
 
     protected function getLicenseContent(): string
     {
-        $filePath = $this->projectDirectory . '/LICENSE';
+        $filePath = PathUtil::prepareFilePath($this->projectDirectory . '/LICENSE');
         if (!$this->fileSystem->exists($filePath)) {
             return 'LICENSE file not found. <br>See https://github.com/mosparo/mosparo/blob/master/LICENSE.';
         }

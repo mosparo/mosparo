@@ -6,6 +6,7 @@ use Mosparo\Exception;
 use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
 use Mosparo\Specifications\Specifications;
+use Mosparo\Util\PathUtil;
 use Opis\JsonSchema\Validator;
 use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -196,7 +197,7 @@ class UpdateHelper
      */
     public function getUpdateLogFileDirectory(): string
     {
-        $directory = $this->projectDirectory . '/public/update-log';
+        $directory = PathUtil::prepareFilePath($this->projectDirectory . '/public/update-log');
         if (!$this->fileSystem->exists($directory)) {
             $this->fileSystem->mkdir($directory);
         }
@@ -218,7 +219,7 @@ class UpdateHelper
 
         $fileUrl = '/update-log' . $fileName;
 
-        return [$filePath, $fileUrl];
+        return [PathUtil::prepareFilePath($filePath), $fileUrl];
     }
 
     /**
@@ -321,11 +322,11 @@ class UpdateHelper
     public function updateMosparo(array $versionData): bool
     {
         try {
-            $destinationPath = $this->projectDirectory;
+            $destinationPath = PathUtil::prepareFilePath($this->projectDirectory);
 
             // This is a special hack to prevent updating the development instance
             if ($this->env === 'dev') {
-                $destinationPath = sys_get_temp_dir() . '/mosparo-test';
+                $destinationPath = PathUtil::prepareFilePath(sys_get_temp_dir() . '/mosparo-test');
 
                 if (!$this->fileSystem->exists($destinationPath)) {
                     $this->fileSystem->mkdir($destinationPath);
@@ -492,7 +493,7 @@ class UpdateHelper
      */
     protected function loadPublicKey(): string
     {
-        $path = $this->projectDirectory . '/config/keys/updates.mosparo.io_public_key.pem';
+        $path = PathUtil::prepareFilePath($this->projectDirectory . '/config/keys/updates.mosparo.io_public_key.pem');
 
         return file_get_contents($path);
     }
@@ -646,7 +647,7 @@ class UpdateHelper
      */
     protected function downloadUpdate(string $url): string
     {
-        $updateFileData = $this->projectDirectory . '/var/updates/update-' . uniqid() . '.zip';
+        $updateFileData = PathUtil::prepareFilePath($this->projectDirectory . '/var/updates/update-' . uniqid() . '.zip');
         if (!$this->fileSystem->exists(dirname($updateFileData))) {
             $this->fileSystem->mkdir(dirname($updateFileData));
         }
@@ -671,7 +672,7 @@ class UpdateHelper
             throw new Exception(sprintf('Could not open update file. Error: %s', $res));
         }
 
-        $updateDir = $this->projectDirectory . '/var/updates/update-extracted-' . uniqid();
+        $updateDir = PathUtil::prepareFilePath($this->projectDirectory . '/var/updates/update-extracted-' . uniqid());
         if (!$this->fileSystem->exists($updateDir)) {
             $this->fileSystem->mkdir($updateDir);
         }
@@ -705,12 +706,12 @@ class UpdateHelper
         }
 
         $hashes = [];
-        $lines = explode(PHP_EOL, $content);
+        $lines = explode("\n", $content);
         foreach ($lines as $line) {
             $data = explode('  ', $line);
             if (count($data) === 2) {
                 $path = ltrim($data[1], '.');
-                $hashes[$path] = $data[0];
+                $hashes[PathUtil::prepareFilePath($path, true)] = $data[0];
             }
         }
 
@@ -739,7 +740,6 @@ class UpdateHelper
         } catch (Exception $e) {
             throw new Exception('Cannot generate the list with files.', 0, $e);
         }
-
 
         $files = array_unique(array_merge($sourceFiles, $destinationFiles));
 
@@ -797,53 +797,55 @@ class UpdateHelper
     protected function getFileList(string $path, array $hashes = []): array
     {
         $checkHash = !empty($hashes);
+
+        $ignoredPaths = [
+            PathUtil::prepareFilePath('/var', true),
+            PathUtil::prepareFilePath('/config/env.mosparo.php', true),
+            PathUtil::prepareFilePath('/web.config', true),
+            PathUtil::prepareFilePath('/public/web.config', true),
+            PathUtil::prepareFilePath('/var/updates/update-', true),
+            PathUtil::prepareFilePath('/var/cache/prod', true),
+        ];
+
+        $recursiveDirectoryIterator = new \RecursiveDirectoryIterator($path);
+        $recursiveCallbackFilterIterator = new \RecursiveCallbackFilterIterator(
+            $recursiveDirectoryIterator,
+            function (\SplFileInfo $fileInfo) use ($path, $ignoredPaths) {
+                $relativeFilePath = PathUtil::prepareFilePath(substr($fileInfo->getPathname(), strlen($path)), true);
+
+                foreach ($ignoredPaths as $ignoredPath) {
+                    if (str_starts_with($relativeFilePath, PathUtil::prepareFilePath($ignoredPath, true))) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        );
+        $recursiveIteratorIterator = new \RecursiveIteratorIterator($recursiveCallbackFilterIterator);
+
+
         $files = [];
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-        foreach ($iterator as $file) {
+        foreach ($recursiveIteratorIterator as $file) {
             if ($file->getFilename() === '.' || $file->getFilename() === '..' || $file->isLink() || $file->isDir()) {
                 continue;
             }
 
             $relativeFilePath = substr($file->getPathname(), strlen($path));
-            $ignore = $this->ignoreFile($relativeFilePath);
 
-            if (!$ignore) {
-                if ($checkHash) {
-                    $hash = $this->createFileHash($file->getPathname(), 'sha256');
-                    $sourceHash = $hashes[$relativeFilePath] ?? false;
+            if ($checkHash) {
+                $hash = $this->createFileHash($file->getPathname(), 'sha256');
+                $sourceHash = $hashes[PathUtil::prepareFilePath($relativeFilePath, true)] ?? false;
 
-                    if ($sourceHash === false || $hash !== $sourceHash) {
-                        throw new Exception(sprintf('Hash of file "%s" is not correct.', $relativeFilePath));
-                    }
+                if ($sourceHash === false || $hash !== $sourceHash) {
+                    throw new Exception(sprintf('Hash of file "%s" is not correct.', $relativeFilePath));
                 }
-
-                $files[] = $relativeFilePath;
             }
+
+            $files[] = $relativeFilePath;
         }
 
         return $files;
-    }
-
-    /**
-     * Returns true if a file should be ignored.
-     *
-     * @param string $filePath
-     * @return bool
-     */
-    protected function ignoreFile(string $filePath): bool
-    {
-        $ignoredDirectories = [
-            '/var',
-            '/config/env.mosparo.php',
-        ];
-
-        foreach ($ignoredDirectories as $dir) {
-            if (strpos($filePath, $dir) === 0) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -857,10 +859,10 @@ class UpdateHelper
     {
         $ignoredDirectories = [
             [
-                'path' => '/public',
+                'path' => PathUtil::prepareFilePath('/public'),
                 'exclude' => [
-                    '/public/build',
-                    '/public/bundles',
+                    PathUtil::prepareFilePath('/public/build'),
+                    PathUtil::prepareFilePath('/public/bundles'),
                 ],
             ],
         ];
@@ -877,10 +879,10 @@ class UpdateHelper
             }
         }
 
-        // Ignore all dot files and directories in the root directory. If another softwar creates a
+        // Ignore all dot files and directories in the root directory. If another software creates a
         // dot file or directory, an update would otherwise remove the file or directory.
         $firstTwoChars = substr($filePath, 0, 2);
-        if ($firstTwoChars == '/.') {
+        if ($firstTwoChars == PathUtil::prepareFilePath('/.')) {
             return true;
         }
 
@@ -995,7 +997,7 @@ class UpdateHelper
     {
         clearstatcache();
 
-        $destinationPath = rtrim($destinationPath, '/');
+        $destinationPath = rtrim($destinationPath, '/\\');
 
         foreach ($changes as $change) {
             // Skip all non-copy changes
@@ -1005,12 +1007,13 @@ class UpdateHelper
 
             $filePath = $change['destination'];
             $relativeFilePath = substr($filePath, strlen($destinationPath));
+            $lcRelativeFilePath = PathUtil::prepareFilePath($relativeFilePath, true);
 
-            if (!isset($hashes[$relativeFilePath])) {
+            if (!isset($hashes[$lcRelativeFilePath])) {
                 throw new Exception(sprintf('No hash found for file "%s".', $relativeFilePath));
             }
 
-            $sourceHash = $hashes[$relativeFilePath];
+            $sourceHash = $hashes[$lcRelativeFilePath];
             $destinationHash = $this->createFileHash($filePath, 'sha256');
 
             if ($sourceHash !== $destinationHash) {
@@ -1037,7 +1040,7 @@ class UpdateHelper
         foreach ($directoryIterator as $item) {
             // We cannot delete the cached Container because that leads to missing classes, so we exclude these files
             // from this custom cache clear method.
-            if ($item->isDot() || strpos($item->getPathname(), '/Container') !== false) {
+            if ($item->isDot() || strpos($item->getPathname(), PathUtil::prepareFilePath('/Container')) !== false) {
                 continue;
             }
 

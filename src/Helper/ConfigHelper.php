@@ -3,6 +3,7 @@
 namespace Mosparo\Helper;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Util\PathUtil;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ConfigHelper
@@ -29,15 +30,17 @@ class ConfigHelper
             $fileName = sprintf('%s.%s', $fileName, $envSuffix);
         }
 
-        $this->environmentConfigFilePath = $projectDirectory . sprintf('/config/%s.php', $fileName);
+        $environmentConfigFilePath = $projectDirectory . sprintf('/config/%s.php', $fileName);
 
-        if (is_link($this->environmentConfigFilePath)) {
-            $realConfigFilePath = realpath($this->environmentConfigFilePath);
+        if (is_link($environmentConfigFilePath)) {
+            $realConfigFilePath = realpath($environmentConfigFilePath);
 
             if ($realConfigFilePath) {
-                $this->environmentConfigFilePath = $realConfigFilePath;
+                $environmentConfigFilePath = $realConfigFilePath;
             }
         }
+
+        $this->environmentConfigFilePath = PathUtil::prepareFilePath($environmentConfigFilePath);
     }
 
     public function getEnvironmentConfigValue($name, $defaultValue = false)

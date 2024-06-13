@@ -6,6 +6,7 @@ use DirectoryIterator;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Util\HashUtil;
+use Mosparo\Util\PathUtil;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -281,7 +282,7 @@ class DesignHelper
 
     public function getBuildFilePath(string $relativePath): string
     {
-        return $this->projectDirectory . '/public' . $relativePath;
+        return PathUtil::prepareFilePath($this->projectDirectory . '/public' . $relativePath);
     }
 
     public function getBaseCssFileName(): ?string
@@ -309,7 +310,7 @@ class DesignHelper
             $designConfigHash = $project->getConfigValue('designConfigHash');
         }
 
-        return $this->projectDirectory . '/public/resources/' . $project->getUuid() . '/' . $designConfigHash . '.css';
+        return PathUtil::prepareFilePath($this->projectDirectory . '/public/resources/' . $project->getUuid() . '/' . $designConfigHash . '.css');
     }
 
     public function generateCssCache(Project $project)

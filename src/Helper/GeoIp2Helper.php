@@ -8,6 +8,7 @@ use Exception;
 use GeoIp2\Database\Reader;
 use Mosparo\Entity\IpLocalization;
 use Mosparo\Util\HashUtil;
+use Mosparo\Util\PathUtil;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use tronovav\GeoIP2Update\Client;
@@ -32,7 +33,7 @@ class GeoIp2Helper
         $this->configHelper = $configHelper;
         $this->cleanupHelper = $cleanupHelper;
         $this->filesystem = $filesystem;
-        $this->downloadDirectory = $downloadDirectory;
+        $this->downloadDirectory = PathUtil::prepareFilePath($downloadDirectory);
     }
 
     public function isGeoIp2Active()
