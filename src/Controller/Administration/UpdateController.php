@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -245,6 +246,12 @@ class UpdateController extends AbstractController
         if ($versionData['number'] == Kernel::VERSION) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Version already installed.']);
         }
+
+        // Without this empty and never used response header bag, it's possible that depending
+        // on the operating system (for example, Windows/IIS) the class is not available after
+        // the update. Creating an object here will load the class into the cache before the
+        // update is executed.
+        $responseHeaderBag = new ResponseHeaderBag();
 
         $this->updateHelper->setOutputHandler(function (UpdateMessage $message) use ($temporaryLogFile) {
             $message = json_encode([
