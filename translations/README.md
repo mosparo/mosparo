@@ -26,7 +26,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Finnish               | fi            | [teemu.vestovuo](https://hosted.weblate.org/user/teemu.vestovuo/)                                            |
 | French                | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), mosparo Core Developers                             |
 | German                | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/)                                   |
-| Greek                 | el            | [OneStage](https://hosted.weblate.org/user/OneStage/)                                                        |
+| Greek                 | el            | [OneStage](https://hosted.weblate.org/user/OneStage/), [stavrosP](https://hosted.weblate.org/user/stavrosP/) |
 | Hindi                 | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/)                                                            |
 | Italian               | it            | mosparo Core Developers, [albanobattistella](https://hosted.weblate.org/user/albanobattistella/)             |
@@ -38,7 +38,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Portuguese            | pt            | Northon (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                        |
 | Romanian              | ro            | [Speedyu](https://hosted.weblate.org/user/Speedyu/)                                                          |
 | Russian               | ru            | [Senya0](https://hosted.weblate.org/user/Senya0/), [Andrej730](https://hosted.weblate.org/user/Andrej730/)   |
-| Slovak                | sk            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                          |
+| Slovak                | sk            | [pBrambi](https://hosted.weblate.org/user/pBrambi/), [puki247](https://hosted.weblate.org/user/puki247/)     |
 | Slovenian             | sl            | Alona and Lesly (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                |
 | Spanish               | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)                                              |
 | Swedish               | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                            |
