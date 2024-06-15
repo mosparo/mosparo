@@ -1,6 +1,7 @@
 header:
   pleaseChoose: Veuillez sélectionner…
   account: Compte
+  noProjectsFound: Aucun projet trouvé
 project:
   backToList: Revenir aux projets
   delete:
@@ -8,13 +9,17 @@ project:
       successfullyDeleted: Le projet %projectName% a bien été supprimé.
     title: Supprimer le projet %projectName%
     confirm: Voulez-vous vraiment supprimer le projet %projectName% ?
+    disconnectFirst: Veuillez vous assurer que vous avez déconnecté votre site web ou l'intégration avec ce projet avant de le supprimer.
   title: Projets
   action:
     manage: Gérer le projet
     delete: Supprimer le projet
     goto: Aller au projet
+    id: ID du projet
   create:
     title: Créer un projet
+    message:
+      successfullyCreatedAndConfigured: Le nouveau projet a été créé et configuré avec succès.
   form:
     status: État
     name: Nom
@@ -24,17 +29,40 @@ project:
     statusHelp: Activer ou désactiver la détection des spams. Si désactivé, le système enregistrera toutes les soumissions mais n'en empêchera aucune.
     spamScore: Score de spam
     spamScoreHelp: Définit le nombre à partir duquel une soumission sera classée comme spam. Si l'évaluation d'une soumission est supérieure à ce nombre, la soumission est considérée comme du spam.
+    apiDebugModeHelp: Si le mode de débogage de l'API est activé, l'API de vérification renvoie davantage d'informations sur le processus de vérification. Ces informations peuvent être utiles pour comprendre pourquoi une vérification a échoué. Utilisez cette option pour faciliter l'intégration de mosparo dans votre formulaire.
+    verificationSimulationModeHelp: Vous pouvez simuler le processus de vérification si le mode de simulation de vérification est activé. Ouvrez les détails de la soumission et cliquez sur le bouton dans le coin supérieur droit. L'outil de simulation vous montrera à quoi doit ressembler votre demande et quelles sont les données attendues par mosparo pour vérifier la soumission.
+    apiDebugMode: Mode de débogage de l'API
+    verificationSimulationMode: Mode de simulation de vérification
   infoNoProjectAvailable: Aucun projet disponible
   infoCreateProjectOrRequestAccess: Créez un nouveau projet ou demandez l'accès à un autre projet.
   roles:
     reader: Lecteur
     editor: Éditeur
     owner: Propriétaire
+  filter:
+    options:
+      all: Afficher tout
+      active: Afficher les projets actifs
+      inactive: Afficher les projets inactifs
+    dropdown: Filtrer la liste des projets
+  list:
+    name: Nom
+    status: Statut
+    actions: Actions
+  search:
+    placeholder: Rechercher…
+  createWizard:
+    design:
+      title: Sélectionner un modèle
 dashboard:
   title: Tableau de bord
   chart:
     spam: Spam
     valid: Valide
+    annotation:
+      statisticOnly: Statistiques uniquement
+  dateRange:
+    dropdown: Sélectionner la plage de dates visibles
 rule:
   list:
     name: Nom
@@ -50,6 +78,7 @@ rule:
       placeholder: info@exemple.com
       email:
         title: Adresse e-mail
+        intro: Saisissez une adresse électronique qui n'est pas autorisée à soumettre une demande.
     unicodeBlock:
       label: Bloc unicode
       title: Bloc unicode
@@ -73,6 +102,7 @@ rule:
       placeholder: exemple.com
       domain:
         title: Domaine
+        intro: Saisissez un domaine qui n'est pas autorisé à soumettre une demande. Si vous saisissez un domaine, toutes les adresses électroniques de ce domaine seront également prises en compte.
     ipAddress:
       title: Adresse IP
       shortIntro: Permet de filtrer par adresses IP et sous-réseaux
@@ -81,14 +111,17 @@ rule:
       placeholder: 0.0.0.0
       ipAddress:
         title: Adresse IP
+        intro: Saisissez une adresse IP qui n'est pas autorisée à effectuer des soumissions.
       subnet:
         title: Sous-réseau
+        intro: Entrez un sous-réseau avec un masque qui n'est pas autorisé à faire des soumissions.
     provider:
       title: Fournisseur
       action:
         configureGeoip2: Configuration de GeoIP2
       country:
         title: Pays
+      shortIntro: Permet de filtrer les informations spécifiques au fournisseur
     userAgent:
       title: Agent utilisateur
       text:
@@ -113,6 +146,7 @@ rule:
       name: Nom
       status: État
       spamRatingFactor: Facteur d'évaluation des spams
+      spamRatingFactorHelp: Le facteur d'évaluation du spam vous permet de définir un facteur qui renforce ou affaiblit les entrées de cette règle. Si la valeur est supérieure à 1,0, les entrées sont renforcées, si la valeur est inférieure à 1,0, les entrées sont affaiblies.
     ruleType: Type de règle
     items:
       title: Éléments
@@ -128,6 +162,7 @@ rule:
   backToList: Revenir aux règles
   createChooseType:
     title: Sélectionner un type
+    intro: Veuillez choisir le type de règle que vous souhaitez créer. Les types disponibles sont utilisés pour différents champs et ne peuvent pas être modifiés pour une règle par la suite.
   create:
     title: Créer une règle
     message:
@@ -141,6 +176,10 @@ rule:
     confirm: Voulez-vous vraiment supprimer la règle %ruleName% ?
     message:
       successfullyDeleted: La règle %ruleName% a bien été supprimée.
+  filter:
+    dropdown: Filtrer la liste des règles
+    options:
+      all: Afficher tout
 submission:
   view:
     verification:
