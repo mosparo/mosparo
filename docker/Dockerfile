@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 ARG MOSPARO_VERSION
 
@@ -17,7 +17,7 @@ LABEL org.opencontainers.image.authors="mosparo Core Developers" \
       org.opencontainers.image.title="mosparo" \
       org.opencontainers.image.description="The Modern Spam Protection for your form." \
       org.opencontainers.image.documentation="https://documentation.mosparo.io/" \
-      org.opencontainers.image.base.name="php:8.2.1-fpm" \
+      org.opencontainers.image.base.name="php:8.3-fpm" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://github.com/mosparo/mosparo" \
       org.opencontainers.image.vendor="mosparo Core Developers" \

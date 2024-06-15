@@ -1,6 +1,6 @@
 # With this Dockerfile it is possible to build the image for a version released on the develop release channel
 
-FROM php:8.2.1-fpm
+FROM php:8.3-fpm
 
 ARG MOSPARO_VERSION
 
