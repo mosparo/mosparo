@@ -1,7 +1,8 @@
 label: Form girişlerinin spam olup olmadığının kontrol edildiğini ve 14 gün boyunca şifrelenmiş olarak saklandığını kabul ediyorum.
 accessibility:
-  checkingData: Verilerinizi kontrol ediyoruz. Lütfen bekleyin.
+  checkingData: Spam koruması verilerinizi kontrol ediyor. Lütfen bekleyin.
   dataValid: Verileriniz geçerlidir. Formu gönderebilirsiniz.
+  protectedBy: Bu form mosparo tarafından spamdan korunuyor.
 error:
   gotNoToken: mosparo gönderilen jetonu iade etmedi.
   internalError: Bir hata oluştu. Lütfen tekrar deneyin.
