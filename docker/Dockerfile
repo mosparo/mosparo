@@ -58,7 +58,7 @@ RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION
 
 ADD config/nginx.conf /etc/nginx/sites-enabled/default
 ADD config/mosparo.cron /etc/cron.d/mosparo
-ADD scripts/run.sh /usr/bin/run
+ADD --chmod=0755 scripts/run.sh /usr/bin/run
 
 RUN crontab /etc/cron.d/mosparo
 
