@@ -9,6 +9,6 @@ label: Prihvaćam da se unosi obrasca provjeravaju na spam i pohranjuju šifrira
 accessibility:
   checkingData: Provjeravamo vaše podatke. Molimo pričekajte.
   dataValid: Vaši podaci ne sadrže spam. Možete poslati obrazac.
-  protectedBy: „mosparo” štiti ovaj obrazac od spama.
+  protectedBy: mosparo štiti ovaj obrazac od spama.
 hp:
   fieldTitle: Ostavite ovo polje za unos prazno
