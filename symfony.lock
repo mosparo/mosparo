@@ -735,9 +735,6 @@
     "theseer/tokenizer": {
         "version": "1.2.0"
     },
-    "tronovav/geoip2-update": {
-        "version": "v2.1.15"
-    },
     "twig/extra-bundle": {
         "version": "v3.3.0"
     },

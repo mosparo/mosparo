@@ -33,25 +33,34 @@ class GeoIp2Controller extends AbstractController
     {
         $config = [
             'geoipActive' => $this->configHelper->getEnvironmentConfigValue('geoipActive', false),
-            'geoipLicenseKey' => $this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', '')
+            'geoipAccountId' => $this->configHelper->getEnvironmentConfigValue('geoipAccountId', ''),
+            'geoipLicenseKey' => $this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', ''),
         ];
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
-            ->add('geoipActive', CheckboxType::class, ['label' => 'administration.geoip2.settings.useGeoip2Field', 'required' => false])
-            ->add('geoipLicenseKey', TextType::class, ['label' => 'administration.geoip2.settings.licenseKeyField', 'required' => false])
+            ->add('geoipActive', CheckboxType::class, [
+                'label' => 'administration.geoip2.settings.useGeoip2Field',
+                'required' => false,
+            ])
+            ->add('geoipAccountId', TextType::class, [
+                'label' => 'administration.geoip2.settings.accountIdField',
+                'help' => 'administration.geoip2.settings.accountIdHelp',
+                'required' => false,
+            ])
+            ->add('geoipLicenseKey', TextType::class, [
+                'label' => 'administration.geoip2.settings.licenseKeyField',
+                'help' => 'administration.geoip2.settings.licenseKeyHelp',
+                'required' => false,
+            ])
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Save the config value
-            $licenseKey = $form->get('geoipLicenseKey')->getData();
-            if ($licenseKey === null) {
-                $licenseKey = '';
-            }
-
             $this->configHelper->writeEnvironmentConfig([
                 'geoipActive' => $form->get('geoipActive')->getData(),
-                'geoipLicenseKey' => $licenseKey
+                'geoipAccountId' => (string) $form->get('geoipAccountId')->getData(),
+                'geoipLicenseKey' => (string) $form->get('geoipLicenseKey')->getData(),
             ]);
 
             $session = $request->getSession();

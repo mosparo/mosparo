@@ -11,7 +11,7 @@ use Mosparo\Util\HashUtil;
 use Mosparo\Util\PathUtil;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use tronovav\GeoIP2Update\Client;
+use danielsreichenbach\GeoIP2Update\Client;
 
 class GeoIp2Helper
 {
@@ -43,9 +43,12 @@ class GeoIp2Helper
 
     public function downloadDatabase()
     {
+        $accountId = $this->configHelper->getEnvironmentConfigValue('geoipAccountId', '');
         $licenseKey = $this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', '');
-        if (trim($licenseKey) === '') {
-            return false;
+        if (!trim($accountId) || !trim($licenseKey)) {
+            return [
+                'Account ID or license key not specified.',
+            ];
         }
 
         $this->cleanupHelper->cleanupIpLocalizationCache();
@@ -62,6 +65,7 @@ class GeoIp2Helper
         }
 
         $client = new Client(array(
+            'account_id' => $accountId,
             'license_key' => $licenseKey,
             'dir' => $this->downloadDirectory,
             'editions' => array('GeoLite2-ASN', 'GeoLite2-Country'),

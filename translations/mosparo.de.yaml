@@ -874,9 +874,12 @@ administration:
 
     settings:
       title: Einstellungen
-      getLicenseKey: "Sie brauchen einen MaxMind-Account um einen Lizenz-Schlüssel zu erhalten. Besuchen Sie bitte folgende Website:"
+      getLicenseKey: "Sie brauchen ein MaxMind-Konto um einen Lizenz-Schlüssel zu erhalten. Besuchen Sie bitte folgende Website:"
       useGeoip2Field: Die automatische IP-Adressen-Lokalisierung verwenden
+      accountIdField: Konto-ID
+      accountIdHelp: Sie finden Ihre Konto-ID unter "Kontoinformationen" in Ihrem MaxMind-Konto.
       licenseKeyField: Lizenz-Schlüssel
+      licenseKeyHelp: Um einen Lizenzschlüssel zu erhalten, melden Sie sich in Ihrem MaxMind-Konto an und fordern Sie unter "Lizenzschlüssel verwalten" einen neuen an.
 
       message:
         savedSuccessfully: Die Einstellungen wurden erfolgreich gespeichert.

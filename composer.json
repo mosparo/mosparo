@@ -22,6 +22,7 @@
         "ext-xml": "*",
         "ext-zip": "*",
         "composer/package-versions-deprecated": "1.11.99.1",
+        "danielsreichenbach/geoip2-update": "^2.5",
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.0",
@@ -70,11 +71,10 @@
         "symfony/webpack-encore-bundle": "^1.14",
         "symfony/yaml": "6.4.*",
         "symfonycasts/reset-password-bundle": "^1.16",
-        "tronovav/geoip2-update": "^2.1",
         "twig/cssinliner-extra": "^3.4",
         "twig/extra-bundle": "^3.4",
         "twig/intl-extra": "^3.3",
-        "twig/twig": "^2.12|^3.0",
+        "twig/twig": "3.8.0",
         "zepi/unicode": "^1.0"
     },
     "require-dev": {

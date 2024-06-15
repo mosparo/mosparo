@@ -1166,7 +1166,10 @@ administration:
       title: Settings
       getLicenseKey: "To get a license key, you need a MaxMind account. Please visit the following site:"
       useGeoip2Field: Use the automatic IP address localization
+      accountIdField: Account ID
+      accountIdHelp: You can find your account ID under "Account Information" in your MaxMind account.
       licenseKeyField: License key
+      licenseKeyHelp: To get a license key, log into your MaxMind account and request a new one under "Manage License Keys".
 
       message:
         savedSuccessfully: The settings were saved successfully.
