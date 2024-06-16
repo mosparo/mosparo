@@ -5,6 +5,19 @@
 {% block documentTitle %}{{ 'administration.update.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'administration.update.title'|trans }}{% endblock %}
 
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/administration/updates" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
 {% block administrationPageBody %}
     <div class="row">
         <div class="col-12 col-lg-6 mb-3">

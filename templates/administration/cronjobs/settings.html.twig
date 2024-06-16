@@ -5,18 +5,25 @@
 {% block documentTitle %}{{ 'administration.cronJobs.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{{ 'administration.cronJobs.title'|trans }}{% endblock %}
 
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/installation/cron_jobs" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
 {% block administrationPageBody %}
     <div class="row">
         <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">{{ 'administration.cronJobs.setup.title'|trans }}</h3>
-                    <div class="card-actions">
-                        <a href="https://documentation.mosparo.io/docs/installation/cron_jobs" class="btn btn-info btn-sm" target="_blank">
-                            <i class="ti ti-question-mark"></i>
-                            {{ 'action.help'|trans }}
-                        </a>
-                    </div>
                 </div>
                 <div class="card-body">
                     <p>

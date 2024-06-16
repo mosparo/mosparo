@@ -10,6 +10,10 @@
 
     <div class="col-auto ms-auto">
         <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/administration/users" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
             <a href="{{ path('administration_user_add') }}" class="btn btn-success add-button">
                 <i class="ti ti-plus"></i>
                 <span>{{ 'administration.user.create.title'|trans }}</span>
