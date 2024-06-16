@@ -25,7 +25,7 @@ project:
     name: Nom
     description: Description
     hosts: Hôtes
-    hostsHelp: Veuillez indiquer tous les hôtes que ce projet inclura.
+    hostsHelp: Ces hôtes sont utilisés pour répondre avec les bons en-têtes de sécurité (CORS). Un hôte est un domaine (ou un sous-domaine) qui héberge votre site web sans protocole ni chemin (par exemple, exemple.com). Vous devez ajouter tous les domaines et sous-domaines qui utilisent ce projet et toutes les variantes (par exemple, www.example.com et example.com). Vous pouvez utiliser une étoile (*) au début d'un hôte comme joker (par exemple, *.example.com). Il est recommandé d'utiliser l'étoile comme préfixe et non comme caractère générique global pour tous les hôtes.
     statusHelp: Activer ou désactiver la détection des spams. Si désactivé, le système enregistrera toutes les soumissions mais n'en empêchera aucune.
     spamScore: Score de spam
     spamScoreHelp: Définit le nombre à partir duquel une soumission sera classée comme spam. Si l'évaluation d'une soumission est supérieure à ce nombre, la soumission est considérée comme du spam.
@@ -33,6 +33,8 @@ project:
     verificationSimulationModeHelp: Vous pouvez simuler le processus de vérification si le mode de simulation de vérification est activé. Ouvrez les détails de la soumission et cliquez sur le bouton dans le coin supérieur droit. L'outil de simulation vous montrera à quoi doit ressembler votre demande et quelles sont les données attendues par mosparo pour vérifier la soumission.
     apiDebugMode: Mode de débogage de l'API
     verificationSimulationMode: Mode de simulation de vérification
+    statisticStorageLimit: Stockage des statistiques
+    statisticStorageLimitHelp: Définit la durée pendant laquelle mosparo doit conserver les statistiques dans la base de données. Cette option n'a aucun lien avec la durée de stockage des soumissions, après laquelle les soumissions sont supprimées de la base de données (14 jours).
   infoNoProjectAvailable: Aucun projet disponible
   infoCreateProjectOrRequestAccess: Créez un nouveau projet ou demandez l'accès à un autre projet.
   roles:
@@ -54,6 +56,17 @@ project:
   createWizard:
     design:
       title: Sélectionner un modèle
+      infoAdvancedMode: Après l'assistant, vous pouvez passer au mode avancé ou invisible dans les réglages de conception. Le mode avancé vous permet d'adapter précisément le design à votre site web, tandis que le mode invisible n'affichera pas de boîte de mosparo visible.
+      introStartWizard: Votre projet a été créé avec succès. Pour commencer à l'utiliser, veuillez sélectionner le modèle et continuer.
+    connection:
+      introConnection: Pour utiliser mosparo avec un site web, vous devez ajouter l'intégration au site web et ensuite connecter le site web avec ce projet mosparo. Pour cette étape, veuillez copier et coller les informations suivantes dans le champ approprié de l'intégration.
+      title: Détails de la connexion
+      savedSuccessfully: Les réglages de conception et de sécurité ont été sauvegardés avec succès. Le projet est maintenant prêt à être utilisé sur un site web.
+      infoSettings: Après cet assistant, vous pouvez trouver ces détails de connexion dans les réglages du projet.
+    security:
+      infoSettings: Vous pouvez activer, désactiver ou régler ces fonctions de sécurité dans les paramètres de sécurité après l'assistant.
+      title: Activer les fonctions de sécurité
+      introSecurity: Veuillez choisir les dispositifs de sécurité que vous souhaitez activer.
 dashboard:
   title: Tableau de bord
   chart:
@@ -85,12 +98,21 @@ rule:
       shortIntro: Filtre l'entrée en fonction des caractères utilisées.
       block:
         title: Bloc
+        intro: Veuillez sélectionner l'un des blocs qui doit être évalué en conséquence lors de la saisie. Saisissez ensuite la note correspondante.
+        hintExtended: Veuillez noter qu'il existe des extensions et des ajouts à certains blocs, qui doivent également être ajoutés en tant qu'entrée de règle.
+        explanationCounting: Lors de la validation, chaque bloc n'est compté qu'une seule fois, même si plusieurs caractères d'un même bloc ont été utilisés.
+        exampleCounting: Supposons que vous saisissiez une entrée de règle dans le bloc "Smileys" avec une note de 3 points. Dans une soumission, l'utilisateur utilise 5 smileys. La soumission est maintenant évaluée à 3 points parce qu'un smiley a été utilisé.
+      intro: Le type de règle de bloc Unicode permet d'évaluer l'utilisation de certains caractères.
     website:
       label: URL/Domaine
       title: Site Web
       placeholder: https://exemple.com
       url:
         title: URL
+        intro: Entrez une URL qui n'est pas autorisée à soumettre une demande.
+        infoProtocol: Il est recommandé de commencer l'URL par le protocole ou par deux barres obliques pour les URL indépendants du protocole. Si la valeur ne commence pas par le protocole, la règle pourrait correspondre à des URL erronées.
+      intro: Le type de règle "site web" permet de filtrer les URL.
+      shortIntro: Permet de filtrer par site web spécifique
     rating:
       title: Évaluation
       placeholder: Évaluation
@@ -121,15 +143,28 @@ rule:
         configureGeoip2: Configuration de GeoIP2
       country:
         title: Pays
+        intro: Entrez un code de pays ISO qui n'est pas autorisé à faire des soumissions. Toutes les adresses IP enregistrées dans ce pays seront marquées comme spam.
+        infoCountryBlock: Si vous ajoutez un pays à la règle, cela signifie que personne de ce pays ne peut soumettre un formulaire. Bien que cela semble intéressant d'un côté, cela pourrait empêcher un utilisateur réel de soumettre un formulaire. Soyez prudent avec cette option. La localisation correcte des adresses IP n'est jamais garantie.
       shortIntro: Permet de filtrer les informations spécifiques au fournisseur
+      asNumber:
+        title: Numéro AS
+        intro: Entrez un numéro AS qui n'est pas autorisé à faire des soumissions. Toutes les adresses IP appartenant à ce numéro AS seront bloquées.
+      intro: Le type de règle fournisseur permet de filtrer les numéros AS et les codes pays.
+      infoGeoip2: Pour utiliser le type de fournisseur, il est nécessaire de configurer la base de données MindMax GeoLite2, sinon les éléments du fournisseur n'auront aucun effet.
+      label: Numéro AS/pays
     userAgent:
       title: Agent utilisateur
       text:
         title: Texte
+        intro: Saisissez un mot qui doit être classé comme spam. Vous pouvez utiliser l'étoile %star% comme caractère générique. La fonctionnalité de correspondance recherchera %value%, il n'est donc pas nécessaire d'ajouter le caractère générique au début ou à la fin de la valeur.
       regex:
         title: Expression régulière
         validation:
           invalidRegexPattern: 'Le modèle saisi est invalide. Erreur : %error%'
+        intro: Saisissez un motif d'expression régulière qui correspondra à un mot non autorisé. Le motif doit être conforme aux exigences de PHP en matière d'expressions régulières.
+      intro: Le type de règle "agent utilisateur" permet de filtrer les mots et les expressions régulières dans l'agent utilisateur de l'utilisateur.
+      shortIntro: Permet de filtrer en fonction de mots ou de motifs spécifiques dans l'agent utilisateur
+      label: Agent utilisateur (Mot/Modèle)
     word:
       title: Mot
       label: Mot/Modèle
