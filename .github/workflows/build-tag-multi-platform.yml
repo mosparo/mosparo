@@ -40,6 +40,6 @@ jobs:
         with:
           context: docker/
           platforms: linux/amd64,linux/arm64
-          tags: mosparo/mosparo:${{ github.ref }}
+          tags: mosparo/mosparo:v1.2.2
           build-args: |
-            MOSPARO_VERSION=${{ github.ref }}
+            MOSPARO_VERSION=v1.2.2
