@@ -1,9 +1,10 @@
 label: J'accepte que les données saisies dans le formulaire soient vérifiées pour éviter les spams et stockées sous forme chiffrées pendant 14 jours.
 
 accessibility:
-  checkingData: Nous vérifions vos données. Veuillez patienter.
+  checkingData: La protection anti-spam vérifie vos données. Veuillez patienter.
   dataValid: Vos données sont valides. Vous pouvez envoyer le formulaire.
 
+  protectedBy: Ce formulaire est protégé contre le spam par mosparo.
 error:
   gotNoToken: mosparo n'a pas renvoyé de jeton de soumission.
   internalError: Une erreur s’est produite. Veuillez réessayer.
