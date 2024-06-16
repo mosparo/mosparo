@@ -1289,6 +1289,11 @@ administration:
         intro: With version 1.2, mosparo starts to verify the origin of a frontend request. Because of this change, the hosts in your project must be set correctly.
         intro2: Please verify your projects and forms now.
 
+      geoIp2Info:
+        title: 'Version 1.2.2: MaxMind Account ID required'
+        intro: Your MaxMind account ID and license key are required to download the GeoIP2 database.
+        intro2: Please check the GeoIP2 configuration and enter your account ID.
+
   system:
     title: System Information
     description: Find all the information about mosparo.

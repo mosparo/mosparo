@@ -31,6 +31,26 @@
         </div>
     {% endif %}
 
+    {% if showGeoIp2Info %}
+        <div class="alert alert-info mt-4">
+            <div class="alert-title">
+                {{ 'administration.update.finalize.geoIp2Info.title'|trans }}
+            </div>
+            <p class="text-muted">
+                {{ 'administration.update.finalize.geoIp2Info.intro'|trans }}
+            </p>
+            <p class="text-muted">
+                <strong>{{ 'administration.update.finalize.geoIp2Info.intro2'|trans }}</strong>
+            </p>
+            <div class="d-flex justify-content-end">
+                <a href="https://documentation.mosparo.io/docs/administration/geoip" target="_blank" class="btn btn-info">
+                    <i class="ti ti-question-mark"></i>
+                    {{ 'action.help'|trans }}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="form-footer">
         <a href="{{ path('dashboard') }}" class="btn btn-primary w-100">
             {{ 'setup.buttons.continue'|trans }}

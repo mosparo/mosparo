@@ -334,8 +334,17 @@ class UpdateController extends AbstractController
             $session->remove('upgradeMosparo');
         }
 
+        $showGeoIp2Info = false;
+        if ($this->configHelper->getEnvironmentConfigValue('geoipActive', false)) {
+            $showGeoIp2Info = (
+                version_compare($oldInstalledVersion, '1.2.2', '<') ||
+                !$this->configHelper->getEnvironmentConfigValue('geoipAccountId', '')
+            );
+        }
+
         return $this->render('administration/update/finalize.html.twig', [
             'showHostsAlert' => version_compare($oldInstalledVersion, '1.2.0', '<'),
+            'showGeoIp2Info' => $showGeoIp2Info,
         ]);
     }
 

@@ -979,6 +979,11 @@ administration:
         title: 'Version 1.2: Änderung der Herkunftsüberprüfung'
         intro: Mit Version 1.2 beginnt mosparo, die Herkunft einer Frontend-Anfrage zu verifizieren. Aufgrund dieser Änderung müssen die Hosts in Ihrem Projekt korrekt konfiguriert sein.
         intro2: Bitte überprüfen Sie Ihre Projekte und Formulare jetzt.
+
+      geoIp2Info:
+        title: 'Version 1.2.2: MaxMind Konto-ID erforderlich'
+        intro: Ihre MaxMind-Konto-ID und Ihr Lizenzschlüssel sind erforderlich, um die GeoIP2-Datenbank herunterzuladen.
+        intro2: Bitte überprüfen Sie die GeoIP2-Konfiguration und geben Sie Ihre Konto-ID ein.
     upgrade:
       updateFirst: Bevor Sie auf die nächste Hauptversion upgraden können, müssen Sie die neuste Version Ihrer bisherigen Hauptversion installieren.
       introAvailable: Eine neue Hauptversion ist verfügbar. Sie können das Update-Tool verwenden, um auf die neuste Hauptversion zu aktualisieren.
