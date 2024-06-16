@@ -1,6 +1,7 @@
 name: Docker Multi-Platform Build and Push
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
