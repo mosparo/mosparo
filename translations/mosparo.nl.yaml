@@ -1,1 +1,34 @@
-{}
+project:
+  filter:
+    options:
+      inactive: Toon inactieve projecten
+      all: Laat alles zien
+      active: Toon actieve projecten
+    dropdown: Filter de lijst met projecten
+  search:
+    placeholder: Zoeken…
+  action:
+    id: Project ID
+    delete: Verwijder project
+    manage: Beheer project
+    goto: Ga naar project
+  createWizard:
+    design:
+      introStartWizard: Uw project is succesvol aangemaakt. Selecteer en ontwerp verder te gaan.
+      title: Selecteer design
+  title: Projecten
+  infoNoProjectAvailable: Geen projecten beschikbaar
+  list:
+    name: Naam
+    status: Status
+    actions: Acties
+  backToList: Terug naar projecten
+  infoCreateProjectOrRequestAccess: Maak een nieuw project aan of vraag toegang tot een ander project aan.
+  create:
+    title: Maak project aan
+    message:
+      successfullyCreatedAndConfigured: Het nieuwe project is succesvol aangemaakt en geconfigureerd.
+header:
+  noProjectsFound: Geen objecten gevonden
+  pleaseChoose: Maak een keuze…
+  account: Account
