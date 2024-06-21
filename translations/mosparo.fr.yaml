@@ -116,6 +116,10 @@ rule:
     rating:
       title: Évaluation
       placeholder: Évaluation
+      infoValueEqualZero: Si l'évaluation est fixée à %zero%, l'élément ne sera pas détecté comme étant du spam puisque la valeur de l'évaluation du spam sera de toute façon %zero%.
+      infoCalculationMethod: La valeur de l'évaluation du spam est calculée en multipliant l'évaluation de l'élément et le facteur d'évaluation du spam défini dans la règle.
+      infoDefaultAndDataType: La note est un nombre flottant compris entre %minValue% et %maxValue%. Si aucune valeur n'est définie, la valeur par défaut est %one%.
+      intro: Le champ cote vous permet de définir le poids d'un article. Si vous indiquez un nombre positif, vous pouvez attribuer une valeur plus élevée à un élément. Si vous indiquez un nombre négatif, l'élément réduira le nombre total de points.
     domain:
       title: Domaine
       shortIntro: Permet de filtrer par domaines spécifiques
@@ -170,10 +174,14 @@ rule:
       label: Mot/Modèle
       text:
         title: Texte
+        intro: Saisissez un mot qui doit être classé comme spam. Vous pouvez utiliser l'étoile %star% comme caractère générique. La fonctionnalité de correspondance recherchera %value%, il n'est donc pas nécessaire d'ajouter le caractère générique au début ou à la fin de la valeur.
       regex:
         title: Expression régulière
         validation:
           invalidRegexPattern: 'Le modèle saisi est invalide. Erreur : %error%'
+        intro: Saisissez un motif d'expression régulière qui correspondra à un mot non autorisé. Le motif doit être conforme aux exigences de PHP en matière d'expressions régulières.
+      intro: Le type de règle « mot » permet de filtrer les mots et les expressions régulières.
+      shortIntro: Permet de filtrer par mots ou modèles spécifiques
   form:
     rule:
       title: Règle
@@ -220,6 +228,7 @@ submission:
     verification:
       minimumTime:
         timeDifferenceInSeconds: '%seconds% secondes'
+        requiredTime: Délai requis
       verifiedAt: Vérifié le
       title: Vérification
       isValid: Est valide
@@ -252,9 +261,12 @@ submission:
       submittedAt: Envoyé le
     ignoredFields:
       title: Champs ignorés
+      intro: Les champs suivants n'ont pas été transmis en raison de leur type (par exemple, les champs de mot de passe ou de téléchargement de fichiers).
     generalVerifications:
       minimumTime:
         title: Envoi trop rapide
+    action:
+      openVerificationSimulation: Simulation de vérification
   list:
     valid: Valide
     submittedAt: Envoyé le
@@ -268,6 +280,12 @@ submission:
     verifiedAt: Vérifié le
   title: Envois
   backToList: Revenir aux envois
+  filter:
+    options:
+      all: Toutes les soumissions
+      spam: Soumissions de spam
+      valid: Soumissions valides
+    dropdown: Filtrer la liste des soumissions
 ruleset:
   view:
     title: Voir l'ensemble de règles %rulesetName%
@@ -289,6 +307,27 @@ ruleset:
       type: Type
       value: Valeur
       rating: Évaluation
+    list:
+      rules:
+        name: Nom
+        type: Type
+        spamRatingFactor: Facteur d'évaluation du spam
+        numberOfRuleItems: Nombre d'articles
+        actions: Actions
+      ruleItems:
+        type: Type
+        spamRatingFactor: Facteur d'évaluation du spam
+        value: Valeur
+    rule:
+      details:
+        spamRatingFactor: Facteur d'évaluation du spam
+        title: Détails de la règle
+        name: Nom
+        type: Type
+      title: Voir la règle %ruleName%
+      items:
+        title: Éléments inclus
+      backToRuleset: Retour à l'ensemble des règles
   title: Ensembles de règles
   backToList: Revenir aux ensembles de règles
   message:
@@ -310,6 +349,7 @@ ruleset:
     spamRatingFactor: Facteur d'évaluation des spams
     message:
       successfullySaved: L'ensemble de règles a bien été enregistré.
+    spamRatingFactorHelp: Le facteur d'évaluation du spam vous permet de définir un facteur qui renforce ou affaiblit toutes les règles de ce jeu de règles. Si la valeur est supérieure à 1,0, les règles seront renforcées, si la valeur est inférieure à 1,0, les règles seront affaiblies.
   delete:
     title: Supprimer l'ensemble de règles %rulesetName%
     confirm: Voulez-vous vraiment supprimer l'ensemble de règles %rulesetName% ?
