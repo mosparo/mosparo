@@ -138,11 +138,22 @@ class CleanupHelper
                 }
             }
 
-            // Delete the submissions without submit token
+            // Delete the submissions without an assigned submit token
             $query = $this->entityManager->createQuery('
                     DELETE Mosparo\Entity\Submission s
                     WHERE s.submitToken IS NULL
                     AND (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.lastSubmission = s.id) = 0
+                ');
+            $query->execute();
+            unset($query);
+
+            // Delete the submissions where the submit token does no longer exist
+            // This situation should not happen normally, but this query will clean up the database in case it happens.
+            // This query is not limited by the time like other queries because if the submit token is missing,
+            // the submission is incomplete and will throw an exception in the administration interface.
+            $query = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\Submission s
+                    WHERE (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.id = s.submitToken) = 0
                 ');
             $query->execute();
             unset($query);
