@@ -32,7 +32,7 @@ class SecurityHelper
 
     public function checkIpAddress(string $ipAddress, int $feature, array $securitySettings)
     {
-        if (IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList'])) {
+        if (trim($securitySettings['ipAllowList']) && IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList'])) {
             return false;
         }
 
