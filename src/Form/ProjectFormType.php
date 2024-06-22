@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Sequentially;
 
 class ProjectFormType extends AbstractType
 {
@@ -30,6 +32,19 @@ class ProjectFormType extends AbstractType
                 'entry_options' => [
                     'attr' => [
                         'placeholder' => 'example.com'
+                    ],
+                    'constraints' => [
+                        new Sequentially([
+                            new Regex([
+                                'pattern' => '#^[a-z0-9]+://#',
+                                'match' => false,
+                                'message' => 'hosts.hostContainsProtocol',
+                            ]),
+                            new Regex([
+                                'pattern' => '#^([a-z0-9\-\.\*]+)$#',
+                                'message' => 'hosts.hostContainsInvalidCharacter',
+                            ]),
+                        ])
                     ]
                 ]
             ])
