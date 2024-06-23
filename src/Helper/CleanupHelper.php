@@ -114,12 +114,26 @@ class CleanupHelper
                 $query->execute();
                 unset($query);
 
+                // If  a submit token was used in multiple submissions, but only one was verified, the SELECT query
+                // above might think that the submit token is not required anymore. But the verified submission
+                // is not deletable yet and requires the submit token, so we must keep that one.
+                $query = $this->entityManager->createQuery('
+                        SELECT st.id 
+                        FROM Mosparo\Entity\Submission s
+                        JOIN s.submitToken st
+                        WHERE st.id IN (:deletableSubmitTokenIds)
+                    ')
+                    ->setParameter('deletableSubmitTokenIds', $deletableSubmitTokenIds, ArrayParameterType::INTEGER);
+                $result = array_unique($query->getSingleColumnResult());
+                unset($query);
+                $reallyDeletableSubmitTokenIds = array_diff($deletableSubmitTokenIds, $result);
+
                 // Delete the submit tokens
                 $query = $this->entityManager->createQuery('
                         DELETE Mosparo\Entity\SubmitToken st
                         WHERE st.id IN (:deletableSubmitTokenIds)
                     ')
-                    ->setParameter('deletableSubmitTokenIds', $deletableSubmitTokenIds, ArrayParameterType::INTEGER);
+                    ->setParameter('deletableSubmitTokenIds', $reallyDeletableSubmitTokenIds, ArrayParameterType::INTEGER);
                 $query->execute();
                 unset($query);
 
@@ -138,11 +152,22 @@ class CleanupHelper
                 }
             }
 
-            // Delete the submissions without submit token
+            // Delete the submissions without an assigned submit token
             $query = $this->entityManager->createQuery('
                     DELETE Mosparo\Entity\Submission s
                     WHERE s.submitToken IS NULL
                     AND (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.lastSubmission = s.id) = 0
+                ');
+            $query->execute();
+            unset($query);
+
+            // Delete the submissions where the submit token does no longer exist
+            // This situation should not happen normally, but this query will clean up the database in case it happens.
+            // This query is not limited by the time like other queries because if the submit token is missing,
+            // the submission is incomplete and will throw an exception in the administration interface.
+            $query = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\Submission s
+                    WHERE (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.id = s.submitToken OR st.lastSubmission = s.id) = 0
                 ');
             $query->execute();
             unset($query);
