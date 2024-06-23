@@ -114,12 +114,26 @@ class CleanupHelper
                 $query->execute();
                 unset($query);
 
+                // If  a submit token was used in multiple submissions, but only one was verified, the SELECT query
+                // above might think that the submit token is not required anymore. But the verified submission
+                // is not deletable yet and requires the submit token, so we must keep that one.
+                $query = $this->entityManager->createQuery('
+                        SELECT st.id 
+                        FROM Mosparo\Entity\Submission s
+                        JOIN s.submitToken st
+                        WHERE st.id IN (:deletableSubmitTokenIds)
+                    ')
+                    ->setParameter('deletableSubmitTokenIds', $deletableSubmitTokenIds, ArrayParameterType::INTEGER);
+                $result = array_unique($query->getSingleColumnResult());
+                unset($query);
+                $reallyDeletableSubmitTokenIds = array_diff($deletableSubmitTokenIds, $result);
+
                 // Delete the submit tokens
                 $query = $this->entityManager->createQuery('
                         DELETE Mosparo\Entity\SubmitToken st
                         WHERE st.id IN (:deletableSubmitTokenIds)
                     ')
-                    ->setParameter('deletableSubmitTokenIds', $deletableSubmitTokenIds, ArrayParameterType::INTEGER);
+                    ->setParameter('deletableSubmitTokenIds', $reallyDeletableSubmitTokenIds, ArrayParameterType::INTEGER);
                 $query->execute();
                 unset($query);
 
