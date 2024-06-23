@@ -1,6 +1,7 @@
 accessibility:
-  checkingData: Kita sedang mengecek data anda. Silakan menunggu.
+  checkingData: Perlindungan spam memverifikasi data Anda. Harap tunggu.
   dataValid: Datamu valid. Kau bisa menyerahkan formulirnya.
+  protectedBy: Formulir ini dilindungi dari spam oleh mosparo.
 error:
   gotNoToken: Ketika kesalahan ini muncul, mosparo tidak secara tepat mengembalikan tanda terimanya. Ini bisa menjadi kesalahan umum dengan mosparo atau masalah dengan pengaturan keamanan.
   internalError: Sebuah kesalahan terjadi. Tolong coba lagi.
