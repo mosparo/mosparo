@@ -153,7 +153,7 @@ class CleanupHelper
             // the submission is incomplete and will throw an exception in the administration interface.
             $query = $this->entityManager->createQuery('
                     DELETE Mosparo\Entity\Submission s
-                    WHERE (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.id = s.submitToken) = 0
+                    WHERE (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.id = s.submitToken OR st.lastSubmission = s.id) = 0
                 ');
             $query->execute();
             unset($query);
