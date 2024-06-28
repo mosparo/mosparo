@@ -245,6 +245,7 @@ submission:
         invalid: Échec de la vérification
         notVerified: Non vérifié
         hasPoints: Points
+        honeypot: Pot de miel
       value: Valeur
       rating: Évaluation
       fieldMustBeEmpty: Le champ doit être vierge
@@ -253,6 +254,8 @@ submission:
         ipAddress: Adresse IP
         userAgent: Agent utilisateur
         country: Pays
+        asNumber: Numéro AS
+        asOrganization: Organisation AS
     title: Envoi %submissionId%
     spam:
       title: Spam
@@ -265,8 +268,69 @@ submission:
     generalVerifications:
       minimumTime:
         title: Envoi trop rapide
+        text: Le formulaire a été soumis trop rapidement. L'expéditeur n'a demandé que %seconds% secondes, ce qui est inférieur au délai minimum de %minimumTimeSeconds% secondes.
+      equalSubmissions:
+        title: Trop de soumissions égales
+        text: Cette soumission est égale aux soumissions précédentes. mosparo a trouvé %actualNumberOfEqualSubmissions% de soumissions égales dans l'intervalle de temps configuré, plus que le nombre autorisé de %allowedNumberOfEqualSubmissions% de soumissions égales.
     action:
       openVerificationSimulation: Simulation de vérification
+    verificationSimulation:
+      labels:
+        hashedFormData: Données du formulaire hachées
+        formData: Données du formulaire
+        submitToken: Soumettre un jeton
+        validationToken: Jeton de validation
+        preparedFormData: Données de formulaire préparées
+        formDataJson: Données du formulaire en JSON
+        privateKey: Clé privée
+        headers: En-têtes
+        postData: Données publications
+        response: Réponse
+      hints:
+        formData: Les données du formulaire soumises par votre formulaire.
+        submitToken: Soumettre le jeton de l'étape 1.
+        validationToken: Jeton de validation de l'étape 1.
+        hashedFormData: Les hachages des données du formulaire préparé à l'étape 2.
+        privateKey: Clé privée du projet.
+        publicKey: Clé publique du projet.
+        formDataJson: Données de formulaire hachées de l'étape 3 sous forme de chaîne JSON.
+        formDataSignature: Signature des données du formulaire à l'étape 4.
+        hashedFormDataPlain: Données du formulaire haché de l'étape 3.
+        apiEndpoint: Le point de terminaison de l'API de vérification.
+        requestSignature: Demander la signature à l'étape 8.
+        requestDataJson: Demander les données de l'étape 7 sous forme de chaîne JSON.
+        requestDataPlain: Demander les données de l'étape 7.
+        response: Réponse de l'API.
+        preparedFormData: Les données du formulaire de l'étape 1 après la préparation.
+        validationSignature: Signature de validation de l'étape 5.
+        verificationSignature: Signature de vérification de l'étape 6.
+      sections:
+        one:
+          intro: Pour vérifier une soumission, vous devez connaître le jeton de soumission, qui identifie une soumission, et le jeton de validation, qui prouve la validité de la soumission. Extrayez ces deux jetons des données du formulaire.
+          title: 'Étape 1 : Extraire le jeton de soumission et de validation'
+        three:
+          title: 'Étape 3 : Générer les hachages'
+          intro: Pour la vérification, mosparo accepte les données du formulaire sous forme de hachages SHA256. Pour ce faire, les hachages SHA256 des données du formulaire doivent être calculés.
+        four:
+          title: 'Étape 4 : Générer la signature des données du formulaire'
+          intro: Vous devez générer la signature des données du formulaire pour vous assurer qu'elles n'ont pas été manipulées. La signature est un hachage HMAC SHA256 des hachages des données du formulaire (étape 2), encodé en JSON. Utilisez la clé privée du projet comme clé.
+        five:
+          title: 'Étape 5 : Générer la signature de validation'
+          intro: Utilisez le jeton de validation que vous avez extrait des données du formulaire lors de la première étape et générez sa signature. La signature est un hachage HMAC SHA256 du jeton de validation. Utilisez la clé privée du projet comme clé.
+        six:
+          title: 'Étape 6 : Générer la signature de vérification'
+          intro: Combinez la signature de validation et la signature des données du formulaire et créez la signature de vérification. La signature est un hachage HMAC SHA256 combinant les signatures de validation et de données de formulaire. Utilisez la clé privée du projet comme clé.
+        seven:
+          title: 'Étape 7 : Collecte des données de la demande'
+          intro: Une fois que toutes les données ont été collectées et que les signatures et les hachages ont été générés, il est temps de les envoyer à l'API pour vérification. Pour cela, veuillez collecter les informations suivantes.
+        eight:
+          title: 'Étape 8 : Générer la signature de la demande'
+          intro: Pour vous assurer que la demande est valide, vous devez générer la signature de la demande. Commencez par convertir les données de la demande en une chaîne JSON. Combinez le point de terminaison de l'API avec la chaîne JSON des données de la demande et générez le hachage HMAC SHA256 pour cette chaîne avec la clé privée du projet comme clé.
+        nine:
+          title: "Étape 9 : Envoyer la demande d'API"
+        two:
+          intro: Avant d'envoyer les données à l'API de vérification, vous devez préparer les données du formulaire. Les champs mosparo (commençant par %codeStart%_mosparo_%codeEnd%) doivent être supprimés des données du formulaire. Ensuite, veuillez remplacer tous les sauts de ligne CRLF par des sauts de ligne LF et changer tous les noms de champs en lettres minuscules. Triez les données du formulaire par nom dans l'ordre alphabétique (A-Z).
+          title: 'Étape 2 : Préparer les données du formulaire'
   list:
     valid: Valide
     submittedAt: Envoyé le
@@ -407,7 +471,7 @@ settings:
       title: Clés d'API
       publicKey: Clé publique
       privateKey: Clé privée
-    title: Paramètres généraux
+    title: Réglages généraux
     message:
       successfullySaved: Les paramètres ont bien été enregistrés.
     action:
@@ -419,6 +483,8 @@ settings:
       title: Informations de connexion
       host: Hôte
       uuid: Numéro d'identification unique
+    subtitle:
+      developerOptions: Options pour les développeurs
   security:
     form:
       delayNumberOfAllowedRequests: Nombre de requêtes autorisées
