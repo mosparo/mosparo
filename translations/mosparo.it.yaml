@@ -91,7 +91,7 @@ rule:
       description: Descrizione
       name: Nome
       status: Stato
-      title: Ruolo
+      title: Regola
       spamRatingFactorHelp: Con il fattore di valutazione spam puoi definire un fattore per inasprire o addolcire la valutazione di questa regola. Se il valore è maggiore di 1.0 la valutazione è inasprita, se il valore è inferiore a 1.0 la valutazione è addolcita.
       spamRatingFactor: Fattore di valutazione spam
     addMultipleItems:
@@ -504,7 +504,7 @@ settings:
     originBasedSecuritySettings:
       add:
         title: Aggiungi linea guida
-      title: Linee guida di sicurezza legate alle origini.
+      title: Linee guida di sicurezza legate alle origini
     guideline:
       form:
         criteria:
@@ -581,7 +581,7 @@ settings:
       title: Blocco IP
       intro: Per rendere la vita degli spam bot più difficile, mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
     ipAllowList:
-      intro: Inserisci qui gli indirizzi IP e le sottoreti che dovranno essere esclusi dalle misure di sicurezza impostate qui sopra (Ritardo richiesto e blocco IP)
+      intro: Inserisci qui gli indirizzi IP e le sottoreti che dovranno essere esclusi dalle misure di sicurezza impostate qui sopra (Ritardo richiesto e blocco IP).
       title: IP sbloccati
     requestDelaying:
       title: Ritardo richiesto
