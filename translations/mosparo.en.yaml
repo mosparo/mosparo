@@ -1113,7 +1113,7 @@ administration:
     delete:
       title: Delete user %email%
       confirm: Do you really want to delete the user %email%?
-      infoCantSelfDelete: You can\'t delete yourself.
+      infoCantSelfDelete: You can't delete yourself.
 
       message:
         successfullyDeleted: The user %email% was deleted successfully.
@@ -1187,7 +1187,7 @@ administration:
 
     downloadAndUpdate:
       title: Download & automatic update
-      intro: After you\'ve saved the license key, mosparo needs to download the database. You can do that here directly or you can use a SSH connection to execute the command.
+      intro: After you've saved the license key, mosparo needs to download the database. You can do that here directly or you can use a SSH connection to execute the command.
 
       web:
         title: Web
@@ -1452,7 +1452,7 @@ password:
   emailSent:
     title: Password reset email sent
     infoEmailWithLink: If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in %time%.
-    infoSpamFolder: If you don\'t receive an email please check your spam folder or %linkStart%try again%linkEnd%.
+    infoSpamFolder: If you don't receive an email please check your spam folder or %linkStart%try again%linkEnd%.
 
   reset:
     title: Reset your password
