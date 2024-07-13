@@ -107,6 +107,7 @@ rule:
 header:
   pleaseChoose: Vui lòng chọn…
   account: Tài khoản
+  noProjectsFound: Không tìm thấy dự án
 project:
   title: Dự án
   infoNoProjectAvailable: Không có dự án nào
@@ -115,8 +116,11 @@ project:
     delete: Xóa dự án
     manage: Quản lý dự án
     goto: Đi tới dự án
+    id: ID dự án
   create:
     title: Tạo dự án
+    message:
+      successfullyCreatedAndConfigured: Dự án mới đã được tạo và cấu hình thành công.
   form:
     name: Tên
     description: Mô tả
@@ -136,6 +140,20 @@ project:
     owner: Chủ sở hữu/Owner
     editor: Biên tập viên/Editor
   backToList: Quay lại dự án
+  list:
+    name: Tên
+    status: Trạng thái
+    actions: Hành động
+  filter:
+    dropdown: Bộ lọc danh sách dự án
+    options:
+      all: Hiện tất cả
+  search:
+    placeholder: Tìm kiếm…
+  createWizard:
+    design:
+      introStartWizard: Dự án của bạn đã được tạo thành công. Để bắt đầu sử dụng, vui lòng chọn thiết kế.
+      title: Chọn thiết kế
 dashboard:
   chart:
     valid: Hợp lệ
