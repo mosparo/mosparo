@@ -1112,7 +1112,7 @@ administration:
     description: Konfigurieren Sie die Cronjobs von mosparo.
 downloadCheck:
   cardTitle: Internet-Verbindung
-  intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. mosparo verbindet sich nur durch Ihre Interaktion mit dem Internet. Sie benötigen eine aktive Internetverbindung, um Updates und Regel-Pakete herunterzuladen.
+  intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. Ist eine Internetverbindung vorhanden, sucht mosparo automatisch nach Updates, indem die Versionsdatei von der mosparo-Website heruntergeladen wird. Auch für das Herunterladen von Updates, der GeoIP2-Datenbanken und Regel-Pakete benötigen Sie eine aktive Internetverbindung.
   downloadIsPossible: Die PHP-Einstellungen ermöglichen das Herunterladen von Regel-Paketen und Updates. Eine Anpassung ist nicht erforderlich.
   downloadIsNotPossible: Die PHP-Einstellungen lassen den Download von Updates oder Regel-Paketen nicht zu. Wenn Sie die Regel-Pakete- oder die Update-Funktionalität nutzen möchten, passen Sie bitte Ihre PHP-Konfiguration entsprechend an.
   curlIsEnabledButFunctionsAreDisabled: Die Erweiterung %extensionName% ist aktiviert, aber die benötigten Funktionen (%functionNames%) sind deaktiviert. Wir empfehlen, die Erweiterung generell zu deaktivieren oder die benötigten Funktionen zu aktivieren.

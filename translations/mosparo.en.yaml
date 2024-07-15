@@ -1329,7 +1329,7 @@ administration:
 # Download check
 downloadCheck:
   cardTitle: Internet connection
-  intro: An outgoing internet connection is not a requirement for mosparo. mosparo only connects to the internet with your interaction. You need an active internet connection to download updates and rulesets.
+  intro: An outgoing internet connection is not a requirement for mosparo. If an internet connection is available, mosparo automatically checks for updates by loading the version file from the mosparo website. You also need an active internet connection to download updates, the GeoIP2 databases, and rulesets.
   downloadIsPossible: The PHP settings allow downloads of rulesets and updates. No adjustment is required.
   downloadIsNotPossible: The PHP settings do not allow the download of updates or rulesets. If you want to use the rulesets or update functionality, please adjust your PHP configuration accordingly.
   curlIsEnabledButFunctionsAreDisabled: The extension %extensionName% is enabled, but the required functions (%functionNames%) are disabled. We recommend disabling the extension in general or enabling the needed functions.
