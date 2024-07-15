@@ -11,7 +11,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Language              | Language Code | Contributors                                                                                                                                                                  |
 |-----------------------|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Albanian              | sq            | [fim](https://hosted.weblate.org/user/fim/)                                                                                                                                   |
-| Arabic                | ar            | [abodinagdat16](https://hosted.weblate.org/user/abodinagdat16/), [a7medawad](https://hosted.weblate.org/user/a7medawad/)                                                      |
+| Arabic                | ar            | [abodinagdat16](https://hosted.weblate.org/user/abodinagdat16/), [a7medawad](https://hosted.weblate.org/user/a7medawad/), [Rhaqbany](https://hosted.weblate.org/user/Rhaqbany/) |
 | Bengali               | bn            | [Kominak](https://hosted.weblate.org/user/Kominak/)                                                                                                                           |
 | Bulgarian             | bg            | [Supermyskin](https://hosted.weblate.org/user/Supermyskin/)                                                                                                                   |
 | Catalan               | ca            | [limusina10](https://hosted.weblate.org/user/limusina10/)                                                                                                                     |
@@ -58,11 +58,12 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | French               | fr            | [baudouin](https://hosted.weblate.org/user/baudouin/), [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), [css31](https://hosted.weblate.org/user/css31/)                     |
 | German               | de            | mosparo Core Developers                                                                                                                                                             |
 | High German (Middle) | gmh           | [OriCat101](https://hosted.weblate.org/user/OriCat101/)                                                                                                                             |
+| Hindi                | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                                                                                       |
 | Indonesian           | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/)                                                                      |
 | Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/), [rglauco](https://hosted.weblate.org/user/rglauco/), [mpaglia0](https://hosted.weblate.org/user/mpaglia0/) |
 | Russian              | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                                                                                                                                 |
 | Ukrainian            | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                                                                                             |
-| Vietnamese           | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                                                                                             |
+| Vietnamese           | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/), [vocweb](https://hosted.weblate.org/user/vocweb/)                                                                          |
 
 ## Validators
 | Language   | Language Code | Contributors                                                                                                   |
