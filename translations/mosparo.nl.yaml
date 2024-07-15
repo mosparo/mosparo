@@ -16,6 +16,16 @@ project:
     design:
       introStartWizard: Uw project is succesvol aangemaakt. Selecteer en ontwerp verder te gaan.
       title: Selecteer design
+      infoAdvancedMode: Na de wizard kunt u in de ontwerpinstellingen overschakelen naar de geavanceerde of onzichtbare modus. Met de geavanceerde modus kunt u het ontwerp precies aanpassen aan uw website, terwijl de onzichtbare modus geen zichtbare mosparo box weergeeft.
+    security:
+      title: Beveiligingsfuncties inschakelen
+      infoSettings: U kunt deze beveiligingsfuncties in- en uitschakelen of aanpassen in de beveiligingsinstellingen na de wizard.
+      introSecurity: Selecteer de beveiligingsfuncties die u wilt inschakelen.
+    connection:
+      title: Verbindingsgegevens
+      savedSuccessfully: Het ontwerp en de beveiligingsinstellingen zijn succesvol opgeslagen. Het project is nu klaar om op een website gebruikt te worden.
+      introConnection: Om mosparo op een website te gebruiken, moet u de integratie aan de website toevoegen en vervolgens de website verbinden met dit mosparo project. Voor deze stap kopieert en plakt u de volgende gegevens in het juiste veld in de integratie.
+      infoSettings: Na het doorlopen van de wizard vindt u deze verbindingsgegevens in de projectinstellingen.
   title: Projecten
   infoNoProjectAvailable: Geen projecten beschikbaar
   list:
@@ -28,7 +38,56 @@ project:
     title: Maak project aan
     message:
       successfullyCreatedAndConfigured: Het nieuwe project is succesvol aangemaakt en geconfigureerd.
+  form:
+    name: Naam
+    hosts: Hosten
+    status: Status
+    statusHelp: Activeer of deactiveer de spamdetectie. Indien inactief, zal het systeem alle inzendingen opslaan, maar geen enkele inzending voorkomen.
+    spamScore: Spam score
+    spamScoreHelp: Definieert het nummer vanaf waar een inzending als spam wordt beoordeeld. Als de beoordeling van een inzending boven dit nummer ligt, wordt de inzending als spam beoordeeld.
+    statisticStorageLimit: Statistische opslag
+    statisticStorageLimitHelp: Definieert hoe lang mosparo de statistieken in de database moet bewaren. Deze optie heeft geen verbinding met het opslagbereik van de inzendingen, waarna de inzendingen uit de database worden verwijderd (14 dagen).
+    apiDebugMode: API debug modus
+    apiDebugModeHelp: Als de API-debugmodus is ingeschakeld, geeft de verificatie-API meer informatie over het verificatieproces terug. Deze informatie kan relevant zijn om te begrijpen waarom een verificatie is mislukt. Gebruik deze optie om mosparo in uw formulier te integreren.
+    verificationSimulationMode: Verificatiesimulatiemodus
+    description: Beschrijving
+    hostsHelp: Deze hosts worden gebruikt om te reageren met de juiste beveiligingsheaders (CORS). Een host is een domein (of subdomein) waar uw website op draait zonder protocol en pad (bijvoorbeeld example.com). U moet alle domeinen en subdomeinen toevoegen die dit project gebruiken en alle variaties (bijvoorbeeld www.example.com en example.com). U kunt een sterretje (*) aan het begin van een host gebruiken als joker (bijvoorbeeld *.example.com).
+    verificationSimulationModeHelp: U kunt het verificatieproces simuleren als de verificatiesimulatiemodus is ingeschakeld. Open de indieningsdetails en klik op de knop in de rechterbovenhoek. De simulatietool laat u zien hoe uw verzoek eruit moet zien en welke gegevens mosparo verwacht om de indiening te verifiëren.
+  delete:
+    title: Project %projectName% verwijderen
+    confirm: Weet u zeker dar u het project %projectName% wilt verwijderen?
+    disconnectFirst: Zorg ervoor dat u de verbinding tussen uw website of integratie en dit project verbreekt voordat u het project verwijdert.
+    message:
+      successfullyDeleted: Het project %projectName% is succesvol verwijderd.
+  roles:
+    reader: Lezer
+    editor: Editor
+    owner: Eigenaar
 header:
   noProjectsFound: Geen objecten gevonden
   pleaseChoose: Maak een keuze…
   account: Account
+dashboard:
+  title: Dashboard
+  dateRange:
+    dropdown: Selecteer zichtbaar datumbereik
+  chart:
+    valid: Geldig
+    spam: Spam
+    annotation:
+      statisticOnly: Alleen analytics
+rule:
+  backToList: Terug naar de regels
+  list:
+    name: Naam
+    type: Type
+    status: Status
+    actions: Acties
+  createChooseType:
+    title: Kies een type
+    intro: Kies het type regel dat u wilt maken. De beschikbare typen worden gebruikt voor verschillende velden en kunnen later niet worden gewijzigd voor een andere regel.
+  create:
+    title: Maak een regel aan
+    message:
+      successfullyCreated: De nieuwe regels is aangemaakt.
+  title: Regels
