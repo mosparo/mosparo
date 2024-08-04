@@ -9,7 +9,7 @@ class Kernel extends BaseKernel
 {
     const MAJOR_VERSION = '1.2';
 
-    const VERSION = '1.2.4';
+    const VERSION = '1.2.5';
 
     use MicroKernelTrait;
 }
