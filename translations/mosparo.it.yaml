@@ -18,7 +18,7 @@ project:
     description: Descrizione
     hosts: Host
     spamScore: Punteggio spam
-    hostsHelp: Inserisci tutti gli host che questo progetto includerà.
+    hostsHelp: Questi host sono utilizzati per rispondere con le intestazioni di sicurezza corrette (CORS). Un host è un dominio (o sottodominio) che ospita il sito web senza protocollo e percorso (ad esempio, example.com). È necessario aggiungere tutti i domini e sottodomini che utilizzano questo progetto e tutte le varianti (ad esempio, www.example.com e example.com). È possibile utilizzare un asterisco (*) all'inizio di un host come carattere jolly (ad esempio, *.example.com). Si consiglia di utilizzare l'asterisco come prefisso e non come carattere jolly globale per tutti gli host.
     statusHelp: Attiva o disattiva il rilevamento dello spam. Se inattivo, il sistema registrerà tutti gli invii ma non impedirà alcun invio.
     verificationSimulationMode: Modalità di verifica simulata
     verificationSimulationModeHelp: Puoi simulare il processo di verifica abilitando la modalità di verifica simulata. Vai ai dettagli dell'invio e fai click sul pulsante in alto a destra. Lo strumento di simulazione ti mostrerà come dovrebbe risultare la richiesta e quali dati mosparo di aspetta per verificare l'invio.
@@ -205,11 +205,11 @@ rule:
       intro: La regola siti web permette di filtrare per URLs.
     rating:
       infoCalculationMethod: La valutazione spam sarà calcolata moltiplicando la valutazione dell'oggetto per il fattore di valutazione che è stato definito nella regola.
-      infoDefaultAndDataType: La valutazione è un numero flottante da %zero" a %unlimited%. Se non viene definita una valutazione, il valore predefinito sarà %one%.
+      infoDefaultAndDataType: La valutazione è un numero compreso tra %minValue% e %maxValue%. Se non viene definita alcuna valutazione, quella predefinita è %one%.
       infoValueEqualZero: Se la valutazione è impostata a %zero% l'oggetto non verrà identificato come spam dato che il valore della valutazione sarà %zero% in ogni caso.
       placeholder: Valutazione
       title: Valutazione
-      intro: Se un oggetto deve avere una valutazione spam più alta puoi impostare una valutazione addizionale.
+      intro: Il campo valutazione consente di definire il peso di un articolo. Se si specifica un numero positivo, è possibile assegnare un valore più alto a un elemento. Se si specifica un numero negativo, l'elemento ridurrà il numero totale di punti.
   filter:
     dropdown: Filtra l'elenco dei ruoli
     options:
@@ -831,6 +831,7 @@ administration:
     apiAccess:
       title: Accesso API
       intro: Se vuoi proteggere l'API di mosparo da accessi indesiderati, puoi specificare quali indirizzi IP sono autorizzati all'accesso. Lascia vuoto questo campo per autorizzare l'accesso di qualsiasi client.
+      hintFrontendApi: Si noti che questo limita solo le API di verifica e statistica. L'API di frontend sarà sempre disponibile pubblicamente.
     backendAccess:
       hintOwnIp: Puoi salvare questa impostazione solamente se il tuo indirizzo IP (%ipAddress%) è già incluso nella lista (come indirizzo IP o sottorete). Se hai un indirizzo IPv6 è consigliato aggiungere anche la tua sottorete.
       title: Accesso dal backend
@@ -840,6 +841,10 @@ administration:
         ipAllowList: Indirizzi IP e sottoreti autorizzati
         ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
     description: Configura diversi parametri relativi alla sicurezza che verranno applicate alla tua installazione di mosparo.
+    webCronJobAccess:
+      intro: Se si desidera proteggere il cron job di mosparo da accessi non consentiti da Internet, è possibile specificare quali indirizzi IP sono autorizzati ad accedervi. Lasciare questo campo vuoto per consentire a tutti i client di accedere al cron job.
+      hintWebCronJobDisabled: Il cron job è disattivato e non è possibile configurare l'accesso ad esso finché resta in questo stato.
+      title: Accesso web ai cron jobs
   geoip2:
     title: GeoIP2
     version:
@@ -877,6 +882,9 @@ administration:
       message:
         savedSuccessfully: Le impostazioni sono state salvate correttamente.
         infoActivationTime: Se hai appena richiesto la tua chiave di licenza tieni presente che serve un po' di tempo affinchè questa sia attiva.
+      accountIdHelp: L'ID dell'utente si trova alla voce “Informazioni sull'utente” del proprio utente MaxMind.
+      accountIdField: ID utente
+      licenseKeyHelp: Per ottenere una chiave di licenza, accedere al proprio utente MaxMind e richiederne una nuova alla voce “Gestione delle chiavi di licenza”.
   update:
     button:
       updateAvailable: Aggiornamento disponibile
@@ -905,6 +913,15 @@ administration:
     updateChannel: Canale di aggiornamento
     finalize:
       title: Aggiornamento effettuato
+      description: Le modifiche necessarie per questo aggiornamento sono state eseguite. L'installazione è aggiornata.
+      hostsAlert:
+        title: "Versione 1.2: modifica della verifica dell'origine"
+        intro: Con la versione 1.2, mosparo inizia a verificare l'origine di una richiesta di frontend. A causa di questo cambiamento, gli host del progetto devono essere impostati correttamente.
+        intro2: Si prega di verificare subito i progetti e i moduli.
+      geoIp2Info:
+        title: "Versione 1.2.2: Richiesto l'ID dell'utente MaxMind"
+        intro: L'ID dell'utente MaxMind e la chiave di licenza sono necessari per scaricare il database GeoIP2.
+        intro2: Controllare la configurazione di GeoIP2 e inserire il proprio ID utente.
     execute:
       description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
       message:
@@ -918,6 +935,9 @@ administration:
         channelStable: Stabile
         channelBeta: Beta
         channelDevelop: Sviluppo
+      message:
+        savedSuccessfully: Il canale di aggiornamento è stato salvato con successo.
+        infoDevelopChannel: I canali develop e beta contengono versioni non testate e instabili che non sono pronte per l'uso in produzione. Non utilizzatele in un ambiente di produzione.
     title: Aggiornamento
     description: Verifica se ci sono nuove versioni e aggiorna la tua installazione di mosparo.
     installedVersion: Versione installata
@@ -925,6 +945,7 @@ administration:
     checkRequirements:
       action:
         recheck: Ricontrolla
+        upgrade: Aggiorna a %newMajorVersion%
       introduction: Prima dell'aggiornamento verifica di avere tutti i requisiti. Con una nuova versione maggiore i requisiti potrebbero cambiare ma dovranno essere tutti soddisfatti prima di poter procedere.
       missingPrerequisites: Alcuni requisiti non sono soddisfatti. Verifica il sommario qui sotto.
       title: Verifica requisiti
@@ -982,6 +1003,7 @@ administration:
       message:
         successfullySaved: L'utente è stato creato correttamente.
         errorSendingResetEmail: "L'email con il link non può essere spedita. Errore: %errorMessage%"
+        errorCreatingResetToken: "Si è verificato un errore tecnico durante la creazione dell'e-mail. Errore: %errorMessage%"
     modify:
       title: Modifica %email% utente
     backToOverview: Torna agli utenti
@@ -1007,12 +1029,17 @@ administration:
     usedLibrariesAndResources:
       license: Licenza
       title: Risorse e librerie utilizzate
+      backend: Backend / Librerie PHP
+      intro: Vorremmo ringraziare tutti gli sviluppatori open source per il loro incredibile lavoro.
+      frontend: Frontend / Visuale
     website: Sito web
     projectMembers:
       title: Membri progetto
+      intro: 'Queste persone hanno reso mosparo ciò che è: un software installato sul vostro hosting web.'
     logo:
       title: Logo
       intro: Il logo è stato disegnato da Jan Kosa.
+      license: Il logo è concesso in licenza %linkStart%Creative Commons Attribution-NoDerivatives 4.0 International License%linkEnd%.
     description: Recupera tutte le informazioni su mosparo.
   title: Amministrazione
   cronJobs:
@@ -1054,18 +1081,38 @@ account:
       verify: Verifica
       reconfigure: Riconfigura
       disable: Disabilita
+      resetBackupCodes: Ripristino dei codici di backup
     title: Autenticazione a due fattori
     backupCodes:
       title: Codici backup
+      infoResetBackupCodes: Ogni codice di backup può essere utilizzato una sola volta. È necessario reimpostare i codici di backup non appena se ne utilizza uno.
+      intro: Salva questi codici in un luogo sicuro. Se hai perso l'accesso al tuo dispositivo, potrai effettuare il login con questi codici di backup.
+    error:
+      verificationFailed: La verifica dell'autenticazione a due fattori non è riuscita. Ripetere la procedura.
+    description: Configurare l'autenticazione a due fattori per il proprio utente.
+    verify:
+      title: Verifica autenticazione a due fattori
+      intro: Inserire il codice visibile nell'app di autenticazione nel campo sottostante e verificare la configurazione.
+    message:
+      successfullyDisabled: L'autenticazione a due fattori è stata disattivata con successo per il tuo utente.
+    status:
+      intro: Il tuo utente è protetto dall'autenticazione a due fattori.
+    start:
+      title: Imposta autenticazione a due fattori
+      intro: Eseguire la scansione di questo codice QR con l'app di autenticazione sul proprio smartphone. È possibile utilizzare Google Authenticator, Microsoft Authenticator o applicazioni simili.
+      textManually: Invece di scansionare il codice QR, è possibile inserire manualmente il seguente codice nell'app di autenticazione.
+      qrCodeAlt: L'immagine mostra il codice QR, che deve essere scansionato con l'app di autenticazione sullo smartphone.
   settings:
     form:
       locale: Lingua
       timeFormat: Formato ora
       dateFormat: Formato data
       timezone: Fuso orario
+      colorMode: Modalità colore
     title: Impostazioni utente
     message:
       successfullySaved: Le impostazioni sono state salvate.
+    description: Modificare le impostazioni generali dell'utente.
   changePassword:
     form:
       oldPassword: Vecchia password
@@ -1074,6 +1121,7 @@ account:
     title: Cambia password
     description: Cambia la password per il tuo account.
   title: Account
+  backToOverview: Torna alla panoramica
 password:
   form:
     password: Password
@@ -1083,14 +1131,31 @@ password:
     goodbye: Grazie,
     greeting: Ciao!
     resetPasswordButton: Resetta password
+    subject: Richiesta di reimpostazione della password
+    help: Se hai problemi con il pulsante qui sopra, copia e incolla l'URL qui sotto nel tuo browser web.
+    infoLinkExpiration: Questo link scadrà tra %time%.
+    infoClickButton: Per reimpostare la password, fare clic sul pulsante sottostante e seguire le istruzioni.
   reset:
     action: Resetta password
     title: Resetta la password
+    message:
+      successfullyReset: La password è stata reimpostata con successo.
+    error:
+      errorOccurred: Si è verificato un problema nella convalida della richiesta di ripristino. %errore%
+      tokenNotFound: Nessun token di reimpostazione della password trovato nell'URL o nella sessione.
   request:
     title: Resetta la password
     form:
       email: Email
+    intro: Inserisci il tuo indirizzo e-mail e ti invieremo un link per reimpostare la password.
+    action: Inviare l'e-mail di reimpostazione della password
+    message:
+      failedToSendEmail: "A causa di un errore tecnico, non è stato possibile inviare l'e-mail. Riprovare più tardi. Messaggio di errore: %errorMessage%"
   backToLogin: Torna al login
+  emailSent:
+    title: Email di reimpostazione della password inviata
+    infoSpamFolder: Se non ricevi l'e-mail, controlla la cartella spam oppure %linkStart% tenta di nuovo%linkEnd%.
+    infoEmailWithLink: Se esiste un account corrispondente al tuo indirizzo e-mail, è stata inviata un'e-mail contenente un link da utilizzare per reimpostare la password. Questo link scadrà tra %time%.
 setup:
   buttons:
     recheck: Ricontrolla
@@ -1099,6 +1164,61 @@ setup:
     install: Installa
   start:
     title: Configurazione
+    introduction: Questa configurazione vi guiderà attraverso il processo di configurazione di mosparo.
+  prerequisites:
+    meetPrerequisites: Tutti i requisiti sono soddisfatti. È possibile procedere con la configurazione.
+    types:
+      general: Generale
+      phpExtension: Estensioni PHP
+      internetConnection: Connessione Internet
+      writeAccess: Accesso in scrittura
+    results:
+      writable: Scrivibile
+      notWritable: Non scrivibile
+      minPhpVersion:
+        available: 'Disponibile:'
+        required: 'Richiesto:'
+      available: Disponibile
+      missing: Mancante
+      okay: Okay
+      notOkay: Non Okay
+    subtypes:
+      minPhpVersion: Versione minima PHP
+    title: Requisiti
+    introduction: mosparo necessita di alcuni requisiti per poter funzionare correttamente. Prima di poterlo configurare, questi requisiti devono essere soddisfatti.
+    missingPrerequisites: Mancano alcuni requisiti. Si prega di controllare il riepilogo qui sotto.
+    installOptionalExtensions: Alcune estensioni opzionali non sono installate. Si consiglia di installarle prima di procedere.
+    optional: facoltativo
+  other:
+    form:
+      password: Password
+      emailAddress: Indirizzo email
+      name: Nome di mosparo
+      subtitleCreateYourUser: Crea il tuo utente
+    title: Altre informazioni
+    introduction: Abbiamo bisogno di altri valori. Compilare i campi sottostanti.
+  install:
+    title: Installazione completa
+    description: L'installazione è stata completata con successo. È ora possibile effettuare il login con il proprio utente.
+  database:
+    title: Database
+    mosparoTablesExistInDatabase: Sono state trovate tabelle di mosparo nel database specificato. Utilizzare un altro database o eliminare le tabelle.
+    system:
+      postgres: PostgreSQL
+      pleaseChoose: Prego, selezionare…
+      mysql: MySQL/MariaDB
+    form:
+      user: Utente
+      system: Sistema
+      host: Host
+      port: Porta
+      database: Database
+      password: Password
+    introduction: Inserite i dati del vostro database MySQL.
+    useEmptyDatabase: Utilizzare un database vuoto o un database in cui non esistono tabelle di mosparo.
+    connectionDataInvalid: Non è stato possibile connettersi al database. Controllare le impostazioni seguenti e riprovare.
+    port:
+      default: Predefinita
 action:
   remove: Rimuovi
   checkForUpdate: Controlla aggiornamenti
@@ -1121,6 +1241,8 @@ action:
   importProject: Importa progetto
   add: Aggiungi
   executeChanges: Esegui modifiche
+  skipWizard: Salta la procedura guidata
+  checkRequirements: Verifica dei requisiti
 state:
   inactive: Inattivo
   ignored: Ignorato
@@ -1134,6 +1256,10 @@ interface:
 downloadCheck:
   cardTitle: Connessione Internet
   moreInformation: Altre informazioni
+  downloadIsPossible: Le impostazioni PHP consentono di scaricare i set di regole e gli aggiornamenti. Non è necessaria alcuna configurazione.
+  intro: Una connessione Internet in uscita non è un requisito per mosparo. Se è disponibile una connessione a Internet, mosparo controlla automaticamente la presenza di aggiornamenti caricando il file della versione dal sito web di mosparo. È necessaria una connessione Internet attiva per scaricare gli aggiornamenti, i database GeoIP2 e i set di regole.
+  downloadIsNotPossible: Le impostazioni PHP non consentono di scaricare aggiornamenti o set di regole. Se si desidera utilizzare i set di regole o la funzionalità di aggiornamento, è necessario modificare la configurazione PHP di conseguenza.
+  curlIsEnabledButFunctionsAreDisabled: L'estensione %extensionName% è abilitata, ma le funzioni necessarie (%functionNames%) sono disabilitate. Si consiglia di disabilitare l'estensione in generale o di abilitare le funzioni necessarie.
 security:
   login:
     emailLabel: Indirizzo email
@@ -1148,6 +1274,9 @@ security:
     title: Password dimenticata
   twoFactor:
     title: Autenticazione a due fattori
+    intro: Inserire il codice dell'applicazione di autenticazione a due fattori.
+  noAccess:
+    title: Nessun accesso
 roles:
   user: Utente
   inactive: Inattivo
@@ -1162,11 +1291,43 @@ datatable:
       last: Ultimo
     search: 'Cerca:'
     searchPlaceholder: Ricerca
+    aria:
+      sortDescending: ": attivare l'ordinamento decrescente delle colonne"
+      sortAscending: ": attivare l'ordinamento ascendente delle colonne"
+    lengthMenu: Show _MENU_ entries
+    zeroRecords: Nessun record corrispondente trovato
+    emptyTable: Nessun dato disponibile nella tabella
+    processing: Sto elaborando…
+    info: Showing _START_ to _END_ of _TOTAL_ entries
+    infoEmpty: Visualizzando da 0 a 0 di 0 voci
+    infoFiltered: (filtered from _MAX_ total entries)
 general:
   example: Esempio
   empty: Vuoto
   unlimited: Illimitato
+  infoUndo: Non è possibile annullare questo processo.
 form:
   choices:
     systemDefault: Impostazioni predefinite
     browserLanguage: Lingua browser
+  clearField: Pulisci campi
+  addMultipleItems: Aggiungi più elementi
+dataTable:
+  empty: Vuoto
+  value: Valore
+  name: Nome
+dateRange:
+  14d: 14 giorni
+  1m: 1 mese
+  2m: 2 mesi
+  3m: 3 mesi
+  6m: 6 mesi
+  1y: 1 anno
+  2y: 2 anni
+  forever: Illimitato
+unit:
+  minutes: Minuti
+  day: Giorno
+  days: Giorni
+unitHelp:
+  inSeconds: In secondi
