@@ -842,9 +842,9 @@ administration:
         ipAllowListHelp: 'Specifica uno o più indirizzi IP o sottoreti per ogni riga. Esempio: 192.168.1.13 or 192.168.1.0/24'
     description: Configura diversi parametri relativi alla sicurezza che verranno applicate alla tua installazione di mosparo.
     webCronJobAccess:
+      title: Accesso web ai cron jobs
       intro: Se si desidera proteggere il cron job di mosparo da accessi non consentiti da Internet, è possibile specificare quali indirizzi IP sono autorizzati ad accedervi. Lasciare questo campo vuoto per consentire a tutti i client di accedere al cron job.
       hintWebCronJobDisabled: Il cron job è disattivato e non è possibile configurare l'accesso ad esso finché resta in questo stato.
-      title: Accesso web ai cron jobs
   geoip2:
     title: GeoIP2
     version:
@@ -882,8 +882,8 @@ administration:
       message:
         savedSuccessfully: Le impostazioni sono state salvate correttamente.
         infoActivationTime: Se hai appena richiesto la tua chiave di licenza tieni presente che serve un po' di tempo affinchè questa sia attiva.
-      accountIdHelp: L'ID dell'utente si trova alla voce “Informazioni sull'utente” del proprio utente MaxMind.
       accountIdField: ID utente
+      accountIdHelp: L'ID dell'utente si trova alla voce “Informazioni sull'utente” del proprio utente MaxMind.
       licenseKeyHelp: Per ottenere una chiave di licenza, accedere al proprio utente MaxMind e richiederne una nuova alla voce “Gestione delle chiavi di licenza”.
   update:
     button:
@@ -913,15 +913,15 @@ administration:
     updateChannel: Canale di aggiornamento
     finalize:
       title: Aggiornamento effettuato
-      description: Le modifiche necessarie per questo aggiornamento sono state eseguite. L'installazione è aggiornata.
-      hostsAlert:
-        title: "Versione 1.2: modifica della verifica dell'origine"
-        intro: Con la versione 1.2, mosparo inizia a verificare l'origine di una richiesta di frontend. A causa di questo cambiamento, gli host del progetto devono essere impostati correttamente.
-        intro2: Si prega di verificare subito i progetti e i moduli.
       geoIp2Info:
         title: "Versione 1.2.2: Richiesto l'ID dell'utente MaxMind"
-        intro: L'ID dell'utente MaxMind e la chiave di licenza sono necessari per scaricare il database GeoIP2.
         intro2: Controllare la configurazione di GeoIP2 e inserire il proprio ID utente.
+        intro: L'ID dell'utente MaxMind e la chiave di licenza sono necessari per scaricare il database GeoIP2.
+      description: Le modifiche necessarie per questo aggiornamento sono state eseguite. L'installazione è aggiornata.
+      hostsAlert:
+        intro: Con la versione 1.2, mosparo inizia a verificare l'origine di una richiesta di frontend. A causa di questo cambiamento, gli host del progetto devono essere impostati correttamente.
+        title: "Versione 1.2: modifica della verifica dell'origine"
+        intro2: Si prega di verificare subito i progetti e i moduli.
     execute:
       description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
       message:
@@ -936,8 +936,8 @@ administration:
         channelBeta: Beta
         channelDevelop: Sviluppo
       message:
-        savedSuccessfully: Il canale di aggiornamento è stato salvato con successo.
         infoDevelopChannel: I canali develop e beta contengono versioni non testate e instabili che non sono pronte per l'uso in produzione. Non utilizzatele in un ambiente di produzione.
+        savedSuccessfully: Il canale di aggiornamento è stato salvato con successo.
     title: Aggiornamento
     description: Verifica se ci sono nuove versioni e aggiorna la tua installazione di mosparo.
     installedVersion: Versione installata
@@ -1029,9 +1029,9 @@ administration:
     usedLibrariesAndResources:
       license: Licenza
       title: Risorse e librerie utilizzate
-      backend: Backend / Librerie PHP
       intro: Vorremmo ringraziare tutti gli sviluppatori open source per il loro incredibile lavoro.
       frontend: Frontend / Visuale
+      backend: Backend / Librerie PHP
     website: Sito web
     projectMembers:
       title: Membri progetto
@@ -1085,23 +1085,23 @@ account:
     title: Autenticazione a due fattori
     backupCodes:
       title: Codici backup
-      infoResetBackupCodes: Ogni codice di backup può essere utilizzato una sola volta. È necessario reimpostare i codici di backup non appena se ne utilizza uno.
       intro: Salva questi codici in un luogo sicuro. Se hai perso l'accesso al tuo dispositivo, potrai effettuare il login con questi codici di backup.
-    error:
-      verificationFailed: La verifica dell'autenticazione a due fattori non è riuscita. Ripetere la procedura.
-    description: Configurare l'autenticazione a due fattori per il proprio utente.
-    verify:
-      title: Verifica autenticazione a due fattori
-      intro: Inserire il codice visibile nell'app di autenticazione nel campo sottostante e verificare la configurazione.
-    message:
-      successfullyDisabled: L'autenticazione a due fattori è stata disattivata con successo per il tuo utente.
+      infoResetBackupCodes: Ogni codice di backup può essere utilizzato una sola volta. È necessario reimpostare i codici di backup non appena se ne utilizza uno.
     status:
       intro: Il tuo utente è protetto dall'autenticazione a due fattori.
     start:
-      title: Imposta autenticazione a due fattori
       intro: Eseguire la scansione di questo codice QR con l'app di autenticazione sul proprio smartphone. È possibile utilizzare Google Authenticator, Microsoft Authenticator o applicazioni simili.
-      textManually: Invece di scansionare il codice QR, è possibile inserire manualmente il seguente codice nell'app di autenticazione.
       qrCodeAlt: L'immagine mostra il codice QR, che deve essere scansionato con l'app di autenticazione sullo smartphone.
+      textManually: Invece di scansionare il codice QR, è possibile inserire manualmente il seguente codice nell'app di autenticazione.
+      title: Imposta autenticazione a due fattori
+    description: Configurare l'autenticazione a due fattori per il proprio utente.
+    message:
+      successfullyDisabled: L'autenticazione a due fattori è stata disattivata con successo per il tuo utente.
+    error:
+      verificationFailed: La verifica dell'autenticazione a due fattori non è riuscita. Ripetere la procedura.
+    verify:
+      title: Verifica autenticazione a due fattori
+      intro: Inserire il codice visibile nell'app di autenticazione nel campo sottostante e verificare la configurazione.
   settings:
     form:
       locale: Lingua
@@ -1132,25 +1132,25 @@ password:
     greeting: Ciao!
     resetPasswordButton: Resetta password
     subject: Richiesta di reimpostazione della password
+    infoClickButton: Per reimpostare la password, fare clic sul pulsante sottostante e seguire le istruzioni.
     help: Se hai problemi con il pulsante qui sopra, copia e incolla l'URL qui sotto nel tuo browser web.
     infoLinkExpiration: Questo link scadrà tra %time%.
-    infoClickButton: Per reimpostare la password, fare clic sul pulsante sottostante e seguire le istruzioni.
   reset:
     action: Resetta password
     title: Resetta la password
-    message:
-      successfullyReset: La password è stata reimpostata con successo.
     error:
       errorOccurred: Si è verificato un problema nella convalida della richiesta di ripristino. %errore%
       tokenNotFound: Nessun token di reimpostazione della password trovato nell'URL o nella sessione.
+    message:
+      successfullyReset: La password è stata reimpostata con successo.
   request:
     title: Resetta la password
     form:
       email: Email
-    intro: Inserisci il tuo indirizzo e-mail e ti invieremo un link per reimpostare la password.
-    action: Inviare l'e-mail di reimpostazione della password
     message:
       failedToSendEmail: "A causa di un errore tecnico, non è stato possibile inviare l'e-mail. Riprovare più tardi. Messaggio di errore: %errorMessage%"
+    action: Inviare l'e-mail di reimpostazione della password
+    intro: Inserisci il tuo indirizzo e-mail e ti invieremo un link per reimpostare la password.
   backToLogin: Torna al login
   emailSent:
     title: Email di reimpostazione della password inviata
@@ -1167,58 +1167,58 @@ setup:
     introduction: Questa configurazione vi guiderà attraverso il processo di configurazione di mosparo.
   prerequisites:
     meetPrerequisites: Tutti i requisiti sono soddisfatti. È possibile procedere con la configurazione.
+    results:
+      writable: Scrivibile
+      notOkay: Non Okay
+      notWritable: Non scrivibile
+      minPhpVersion:
+        available: 'Disponibile:'
+        required: 'Richiesto:'
+      missing: Mancante
+      available: Disponibile
+      okay: Okay
     types:
       general: Generale
       phpExtension: Estensioni PHP
       internetConnection: Connessione Internet
       writeAccess: Accesso in scrittura
-    results:
-      writable: Scrivibile
-      notWritable: Non scrivibile
-      minPhpVersion:
-        available: 'Disponibile:'
-        required: 'Richiesto:'
-      available: Disponibile
-      missing: Mancante
-      okay: Okay
-      notOkay: Non Okay
-    subtypes:
-      minPhpVersion: Versione minima PHP
-    title: Requisiti
+    optional: facoltativo
     introduction: mosparo necessita di alcuni requisiti per poter funzionare correttamente. Prima di poterlo configurare, questi requisiti devono essere soddisfatti.
+    title: Requisiti
     missingPrerequisites: Mancano alcuni requisiti. Si prega di controllare il riepilogo qui sotto.
     installOptionalExtensions: Alcune estensioni opzionali non sono installate. Si consiglia di installarle prima di procedere.
-    optional: facoltativo
-  other:
+    subtypes:
+      minPhpVersion: Versione minima PHP
+  database:
+    title: Database
+    introduction: Inserite i dati del vostro database MySQL.
     form:
       password: Password
-      emailAddress: Indirizzo email
+      host: Host
+      port: Porta
+      system: Sistema
+      database: Database
+      user: Utente
+    system:
+      pleaseChoose: Prego, selezionare…
+      mysql: MySQL/MariaDB
+      postgres: PostgreSQL
+    port:
+      default: Predefinita
+    mosparoTablesExistInDatabase: Sono state trovate tabelle di mosparo nel database specificato. Utilizzare un altro database o eliminare le tabelle.
+    connectionDataInvalid: Non è stato possibile connettersi al database. Controllare le impostazioni seguenti e riprovare.
+    useEmptyDatabase: Utilizzare un database vuoto o un database in cui non esistono tabelle di mosparo.
+  other:
+    form:
       name: Nome di mosparo
       subtitleCreateYourUser: Crea il tuo utente
+      emailAddress: Indirizzo email
+      password: Password
     title: Altre informazioni
     introduction: Abbiamo bisogno di altri valori. Compilare i campi sottostanti.
   install:
     title: Installazione completa
     description: L'installazione è stata completata con successo. È ora possibile effettuare il login con il proprio utente.
-  database:
-    title: Database
-    mosparoTablesExistInDatabase: Sono state trovate tabelle di mosparo nel database specificato. Utilizzare un altro database o eliminare le tabelle.
-    system:
-      postgres: PostgreSQL
-      pleaseChoose: Prego, selezionare…
-      mysql: MySQL/MariaDB
-    form:
-      user: Utente
-      system: Sistema
-      host: Host
-      port: Porta
-      database: Database
-      password: Password
-    introduction: Inserite i dati del vostro database MySQL.
-    useEmptyDatabase: Utilizzare un database vuoto o un database in cui non esistono tabelle di mosparo.
-    connectionDataInvalid: Non è stato possibile connettersi al database. Controllare le impostazioni seguenti e riprovare.
-    port:
-      default: Predefinita
 action:
   remove: Rimuovi
   checkForUpdate: Controlla aggiornamenti
@@ -1241,8 +1241,8 @@ action:
   importProject: Importa progetto
   add: Aggiungi
   executeChanges: Esegui modifiche
-  skipWizard: Salta la procedura guidata
   checkRequirements: Verifica dei requisiti
+  skipWizard: Salta la procedura guidata
 state:
   inactive: Inattivo
   ignored: Ignorato
@@ -1257,9 +1257,9 @@ downloadCheck:
   cardTitle: Connessione Internet
   moreInformation: Altre informazioni
   downloadIsPossible: Le impostazioni PHP consentono di scaricare i set di regole e gli aggiornamenti. Non è necessaria alcuna configurazione.
-  intro: Una connessione Internet in uscita non è un requisito per mosparo. Se è disponibile una connessione a Internet, mosparo controlla automaticamente la presenza di aggiornamenti caricando il file della versione dal sito web di mosparo. È necessaria una connessione Internet attiva per scaricare gli aggiornamenti, i database GeoIP2 e i set di regole.
   downloadIsNotPossible: Le impostazioni PHP non consentono di scaricare aggiornamenti o set di regole. Se si desidera utilizzare i set di regole o la funzionalità di aggiornamento, è necessario modificare la configurazione PHP di conseguenza.
   curlIsEnabledButFunctionsAreDisabled: L'estensione %extensionName% è abilitata, ma le funzioni necessarie (%functionNames%) sono disabilitate. Si consiglia di disabilitare l'estensione in generale o di abilitare le funzioni necessarie.
+  intro: Una connessione Internet in uscita non è un requisito per mosparo. Se è disponibile una connessione a Internet, mosparo controlla automaticamente la presenza di aggiornamenti caricando il file della versione dal sito web di mosparo. È necessaria una connessione Internet attiva per scaricare gli aggiornamenti, i database GeoIP2 e i set di regole.
 security:
   login:
     emailLabel: Indirizzo email
@@ -1291,16 +1291,16 @@ datatable:
       last: Ultimo
     search: 'Cerca:'
     searchPlaceholder: Ricerca
-    aria:
-      sortDescending: ": attivare l'ordinamento decrescente delle colonne"
-      sortAscending: ": attivare l'ordinamento ascendente delle colonne"
-    lengthMenu: Show _MENU_ entries
-    zeroRecords: Nessun record corrispondente trovato
-    emptyTable: Nessun dato disponibile nella tabella
-    processing: Sto elaborando…
-    info: Showing _START_ to _END_ of _TOTAL_ entries
-    infoEmpty: Visualizzando da 0 a 0 di 0 voci
     infoFiltered: (filtered from _MAX_ total entries)
+    info: Showing _START_ to _END_ of _TOTAL_ entries
+    lengthMenu: Show _MENU_ entries
+    infoEmpty: Visualizzando da 0 a 0 di 0 voci
+    zeroRecords: Nessun record corrispondente trovato
+    processing: Sto elaborando…
+    aria:
+      sortAscending: ": attivare l'ordinamento ascendente delle colonne"
+      sortDescending: ": attivare l'ordinamento decrescente delle colonne"
+    emptyTable: Nessun dato disponibile nella tabella
 general:
   example: Esempio
   empty: Vuoto
@@ -1310,14 +1310,9 @@ form:
   choices:
     systemDefault: Impostazioni predefinite
     browserLanguage: Lingua browser
-  clearField: Pulisci campi
   addMultipleItems: Aggiungi più elementi
-dataTable:
-  empty: Vuoto
-  value: Valore
-  name: Nome
+  clearField: Pulisci campi
 dateRange:
-  14d: 14 giorni
   1m: 1 mese
   2m: 2 mesi
   3m: 3 mesi
@@ -1325,9 +1320,14 @@ dateRange:
   1y: 1 anno
   2y: 2 anni
   forever: Illimitato
+  14d: 14 giorni
 unit:
-  minutes: Minuti
-  day: Giorno
   days: Giorni
+  day: Giorno
+  minutes: Minuti
+dataTable:
+  name: Nome
+  value: Valore
+  empty: Vuoto
 unitHelp:
   inSeconds: In secondi
