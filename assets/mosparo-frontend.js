@@ -19,13 +19,15 @@ function mosparo(containerId, url, uuid, publicKey, options)
         language: null,
 
         // Callbacks
+        onBeforeGetFormData: null,
+        onGetFieldValue: null,
         onCheckForm: null,
         onResetState: null,
         onAbortSubmit: null,
         onSwitchToInvisible: null,
         onValidateFormInvisible: null,
         onSubmitFormInvisible: null,
-        doSubmitFormInvisible: null
+        doSubmitFormInvisible: null,
     };
     this.options = {...this.defaultOptions, ...options};
     this.invisible = false;
@@ -295,7 +297,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 ev.stopImmediatePropagation();
 
                 // Execute the event and the callback
-                _this.formElement.dispatchEvent(new CustomEvent('validate-form-invisible', {bubbles: true}));
+                _this.formElement.dispatchEvent(new CustomEvent('validate-form-invisible', { bubbles: true }));
 
                 if (_this.options.onValidateFormInvisible !== null) {
                     _this.options.onValidateFormInvisible();
@@ -424,6 +426,13 @@ function mosparo(containerId, url, uuid, publicKey, options)
     }
 
     this.getFormData = function () {
+        // Execute the event and the callback
+        this.formElement.dispatchEvent(new CustomEvent('before-get-form-data', { bubbles: true }));
+
+        if (this.options.onBeforeGetFormData !== null) {
+            this.options.onBeforeGetFormData(this.formElement);
+        }
+
         let fields = [];
         let ignoredFields = [];
         let processedFields = [];
@@ -463,7 +472,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
             fieldPath += '.' + name;
 
-            let value = el.value;
+            let value = _this.getFieldValue(el);
+
             if (name.indexOf('[]') === name.length - 2) {
                 name = name.substring(0, name.length - 2);
                 if (value === '') {
@@ -511,6 +521,21 @@ function mosparo(containerId, url, uuid, publicKey, options)
         });
 
         return { fields: fields, ignoredFields: ignoredFields };
+    }
+
+    this.getFieldValue = function (el) {
+        // Dispatch the event before getting the field value
+        el.dispatchEvent(new CustomEvent('before-get-field-value', { bubbles: true }));
+
+        // Get the field value
+        let value = el.value;
+
+        // Execute the callback to filter the value
+        if (this.options.onGetFieldValue !== null) {
+            value = this.options.onGetFieldValue(el, value);
+        }
+
+        return value;
     }
 
     this.resetState = function () {
