@@ -41,10 +41,22 @@ when@prod:
     monolog:
         handlers:
             main:
+                type: fingers_crossed
+                action_level: error
+                handler: main_grouped
+                excluded_http_codes: [ 404, 405 ]
+                buffer_size: 50
+            main_grouped:
+                type: group
+                members: [ main_file, main_stream ]
+            main_file:
                 type: rotating_file
                 path: '%kernel.logs_dir%/%kernel.environment%.log'
-                level: error
                 max_files: 10
+            main_stream:
+                type: stream
+                path: php://stderr
+
             console:
                 type: console
                 process_psr_3_messages: false
