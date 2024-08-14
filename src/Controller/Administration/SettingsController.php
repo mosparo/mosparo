@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/administration/settings')]
@@ -59,7 +60,16 @@ class SettingsController extends AbstractController
             'mailerFromName' => $environmentConfig['mailer_from_name'] ?? '',
         ];
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
-            ->add('mosparoName', TextType::class, ['label' => 'administration.settings.mainSettings.form.mosparoName'])
+            ->add('mosparoName', TextType::class, [
+                'label' => 'administration.settings.mainSettings.form.mosparoName',
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/:|%3A|%3a/',
+                        'match' => false,
+                        'message' => 'settings.mosparoName.colonNotAllowed',
+                    ]),
+                ],
+            ])
             ->add('defaultLocale', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultLocale', 'choices' => $this->localeHelper->findAvailableLanguages(), 'attr' => ['class' => 'form-select']])
             ->add('defaultDateFormat', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultDateFormat', 'choices' => $this->localeHelper->getDateFormats(), 'attr' => ['class' => 'form-select']])
             ->add('defaultTimeFormat', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultTimeFormat', 'choices' => $this->localeHelper->getTimeFormats(), 'attr' => ['class' => 'form-select']])
