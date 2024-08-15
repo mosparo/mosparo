@@ -1,1 +1,14 @@
-{}
+label: Prihvatam da se unosi u obrascu proveravaju na neželjenu poštu i čuvaju šifrovani 14 dana.
+accessibility:
+  checkingData: Zaštita od neželjene pošte proverava vaše podatke. Molimo sačekajte.
+  dataValid: Vaši podaci su validni. Možete poslati obrazac.
+  protectedBy: Ovaj obrazac je zaštićen od neželjene pošte pomoću mosparo-a.
+error:
+  gotNoToken: mosparo nije vratio token za slanje.
+  internalError: Došlo je do greške. Pokušajte ponovo.
+  noSubmitTokenAvailable: Nije dostupan token za slanje. Validacija ovog obrasca nije moguća.
+  spamDetected: Vaše podatke je uhvatila naša zaštita od neželjene pošte.
+  lockedOut: Zaključani ste. Pokušajte ponovo posle %datetime%.
+  delay: Vaš zahtev je odložen. Molimo sačekajte %seconds% sekundi.
+hp:
+  fieldTitle: Ostavite ovo polje praznim
