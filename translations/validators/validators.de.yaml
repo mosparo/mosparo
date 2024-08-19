@@ -1,3 +1,7 @@
+settings:
+  mosparoName:
+    colonNotAllowed: Der Doppelpunkt (:) ist im Namen der mosparo-Installation nicht erlaubt.
+
 password:
   form:
     constraint:

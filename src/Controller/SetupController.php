@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Regex;
 
 #[Route('/setup')]
 class SetupController extends AbstractController
@@ -172,7 +173,16 @@ class SetupController extends AbstractController
         }
 
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
-            ->add('name', TextType::class, ['label' => 'setup.other.form.name'])
+            ->add('name', TextType::class, [
+                'label' => 'setup.other.form.name',
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/:|%3A|%3a/',
+                        'match' => false,
+                        'message' => 'settings.mosparoName.colonNotAllowed',
+                    ]),
+                ],
+            ])
             ->add('emailAddress', TextType::class, ['label' => 'setup.other.form.emailAddress'])
             ->add('password', PasswordFormType::class, [
                 'label' => 'setup.other.form.password',

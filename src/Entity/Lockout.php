@@ -62,6 +62,11 @@ class Lockout
 
     public function setDuration(int $duration): self
     {
+        // Limit the duration to one year to prevent an out-of-range error.
+        if ($duration > (365 * 86400)) {
+            $duration = (365 * 86400);
+        }
+
         $this->duration = $duration;
 
         return $this;

@@ -1,3 +1,7 @@
+settings:
+  mosparoName:
+    colonNotAllowed: The colon (:) is not allowed in the name of the mosparo installation.
+
 password:
   form:
     constraint:
