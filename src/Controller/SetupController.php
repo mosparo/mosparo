@@ -83,6 +83,7 @@ class SetupController extends AbstractController
         $databaseSystems = [
             'setup.database.system.mysql' => 'mysql',
             'setup.database.system.postgres' => 'postgres',
+            'setup.database.system.sqlite' => 'sqlite',
         ];
 
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
@@ -104,6 +105,7 @@ class SetupController extends AbstractController
             $drivers = [
                 'mysql' => 'pdo_mysql',
                 'postgres' => 'pdo_pgsql',
+                'sqlite' => 'pdo_sqlite',
             ];
             $driver = $drivers[$form->get('system')->getData()] ?? '';
 

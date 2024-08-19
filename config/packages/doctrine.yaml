@@ -8,6 +8,8 @@ doctrine:
         password: '%env(database_password)%'
         server_version: '%env(database_version)%'
 
+        path: '%kernel.project_dir%/var/data/data.sqlite'
+
         schema_filter: ~^(?!sessions)~
 
         types:
