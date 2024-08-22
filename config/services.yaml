@@ -24,6 +24,7 @@ parameters:
     env(database_user): 'root'
     env(database_password): ~
     env(database_version): '1.0'
+    env(database_path): '%kernel.project_dir%/var/data/data.sqlite'
 
     env(mailer_transport): 'sendmail'
     env(mailer_host): '127.0.0.1'

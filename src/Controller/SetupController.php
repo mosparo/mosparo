@@ -81,11 +81,19 @@ class SetupController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        $databaseSystems = [
-            'setup.database.system.mysql' => 'mysql',
-            'setup.database.system.postgres' => 'postgres',
-            'setup.database.system.sqlite' => 'sqlite',
-        ];
+        $databaseSystems = [];
+
+        if ($this->setupHelper->hasPhpExtension('pdo_mysql')) {
+            $databaseSystems['setup.database.system.mysql'] = 'mysql';
+        }
+
+        if ($this->setupHelper->hasPhpExtension('pdo_pgsql')) {
+            $databaseSystems['setup.database.system.postgres'] = 'postgres';
+        }
+
+        if ($this->setupHelper->hasPhpExtension('pdo_sqlite')) {
+            $databaseSystems['setup.database.system.sqlite'] = 'sqlite';
+        }
 
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->add('system', ChoiceType::class, [

@@ -1596,7 +1596,7 @@ setup:
 
   database:
     title: Database
-    introduction: Please enter the details of your MySQL database.
+    introduction: Please choose the database system and configure your database connection.
     useEmptyDatabase: Please use an empty database or a database in which no tables of mosparo exist.
     mosparoTablesExistInDatabase: Tables of mosparo were found in the specified database. Please use another database or delete the tables.
     connectionDataInvalid: It was not possible to connect to the database. Please check your settings below and try again.
@@ -1613,6 +1613,7 @@ setup:
       pleaseChoose: Please choose…
       mysql: MySQL/MariaDB
       postgres: PostgreSQL
+      sqlite: SQLite
 
     port:
       default: Default
