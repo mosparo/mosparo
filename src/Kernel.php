@@ -7,9 +7,9 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 class Kernel extends BaseKernel
 {
-    const MAJOR_VERSION = '1.2';
+    const MAJOR_VERSION = '1.3';
 
-    const VERSION = '1.2.6';
+    const VERSION = '1.3.0';
 
     use MicroKernelTrait;
 }
