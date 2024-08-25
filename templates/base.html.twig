@@ -196,6 +196,10 @@
                                                         <i class="ti ti-settings"></i>
                                                         {{ 'settings.general.title'|trans }}
                                                     </a>
+                                                    <a class="dropdown-item" href="{{ path('settings_advanced', {'_projectId': activeProject.id}) }}">
+                                                        <i class="ti ti-tools"></i>
+                                                        {{ 'settings.advanced.title'|trans }}
+                                                    </a>
                                                     <a class="dropdown-item" href="{{ path('settings_member_list', {'_projectId': activeProject.id}) }}">
                                                         <i class="ti ti-users"></i>
                                                         {{ 'settings.projectMember.title'|trans }}

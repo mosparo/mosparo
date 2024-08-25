@@ -7,6 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Entity\User;
+use Mosparo\Form\AdvancedProjectFormType;
 use Mosparo\Form\DesignSettingsFormType;
 use Mosparo\Form\ExtendedProjectFormType;
 use Mosparo\Form\SecurityGuidelineFormType;
@@ -65,6 +66,36 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         }
 
         return $this->render('project_related/settings/general.html.twig', [
+            'form' => $form->createView(),
+            'project' => $project,
+        ]);
+    }
+
+    #[Route('/advanced', name: 'settings_advanced')]
+    public function advanced(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $project = $this->getActiveProject();
+
+        $form = $this->createForm(AdvancedProjectFormType::class, $project);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'settings.general.message.successfullySaved',
+                    [],
+                    'mosparo'
+                )
+            );
+
+            return $this->redirectToRoute('settings_advanced', ['_projectId' => $this->getActiveProject()->getId()]);
+        }
+
+        return $this->render('project_related/settings/advanced.html.twig', [
             'form' => $form->createView(),
             'project' => $project,
         ]);

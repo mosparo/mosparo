@@ -554,8 +554,13 @@ settings:
           successfullyReissued: Die API-Zugangsdaten wurden erfolgreich neu ausgestellt.
           errorOnlyOwner: Nur ein Besitzer des Projektes kann die API-Zugangsdaten neu ausstellen lassen.
 
+  advanced:
+    title: Erweiterte Einstellungen
+
     subtitle:
+      statisticsOptions: Statistik-Optionen
       developerOptions: Entwickler-Optionen
+
   projectMember:
     title: Projekt-Mitglieder
     backToList: Zu den Projekt-Mitgliedern

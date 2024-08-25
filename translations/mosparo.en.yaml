@@ -555,9 +555,6 @@ settings:
   general:
     title: General settings
 
-    subtitle:
-      developerOptions: Developer options
-
     message:
       successfullySaved: The settings were saved successfully.
 
@@ -585,6 +582,13 @@ settings:
         message:
           successfullyReissued: The API keys were reissued successfully.
           errorOnlyOwner: Only an owner of the project can reissue the API keys.
+
+  advanced:
+    title: Advanced settings
+
+    subtitle:
+      statisticsOptions: Statistic options
+      developerOptions: Developer options
 
   projectMember:
     title: Project members
