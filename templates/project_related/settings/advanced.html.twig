@@ -30,6 +30,28 @@
                         {{ form_row(form.statisticStorageLimit) }}
                     </div>
                 </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'settings.advanced.subtitle.languageOptions'|trans }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            {{ form_label(form.languageSource) }}
+                            {% for child in form.languageSource.children %}
+                                {{ form_widget(child) }}
+                                <div class="form-text mb-2 help-text">
+                                    {% if child.vars.value == 0 %}
+                                        {{ 'languageSource.browserFallback.help'|trans }}
+                                    {% elseif child.vars.value == 1 %}
+                                        {{ 'languageSource.browserHtmlFallback.help'|trans }}
+                                    {% elseif child.vars.value == 2 %}
+                                        {{ 'languageSource.htmlBrowserFallback.help'|trans }}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-lg-6 mb-3">
                 <div class="card">

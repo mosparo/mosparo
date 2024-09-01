@@ -11,6 +11,7 @@ use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\SubmitToken;
+use Mosparo\Enum\LanguageSource;
 use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\CleanupHelper;
@@ -317,26 +318,19 @@ class FrontendApiController extends AbstractController
 
     protected function getTranslations(Request $request): array
     {
-        $usedLocale = null;
+        $usedLocale = 'en';
         if ($this->translator instanceof LocaleAwareInterface) {
-            $locale = 'en';
-            if ($request->request->has('language')) {
-                $locale = $this->localeHelper->fixPreferredLanguage($request->request->get('language'));
-            } else if ($request->getPreferredLanguage()) {
-                $locale = $this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage());
-            }
+            $locales = $this->findCorrectLocales($request);
 
-            $this->translator->setLocale($locale);
+            foreach ($locales as $locale) {
+                $this->translator->setLocale($locale);
 
-            // Try to determine the locale for which we will return the messages. If we don't have the translation
-            // for a locale, mosparo falls back to English.
-            $catalogue = $this->translator->getCatalogue($locale);
-            $usedLocale = $catalogue->getLocale();
-            while (!$catalogue->defines('label', 'frontend')) {
-                if ($cat = $catalogue->getFallbackCatalogue()) {
-                    $catalogue = $cat;
-                    $usedLocale = $catalogue->getLocale();
-                } else {
+                // Try to determine the locale for which we will return the messages. If we don't have the translation
+                // for a locale, mosparo falls back to English.
+                $catalogue = $this->translator->getCatalogue($locale);
+
+                if ($catalogue->defines('label', 'frontend')) {
+                    $usedLocale = $locale;
                     break;
                 }
             }
@@ -359,5 +353,55 @@ class FrontendApiController extends AbstractController
 
             'hpLeaveEmpty' => $this->translator->trans('hp.fieldTitle', [], 'frontend'),
         ];
+    }
+
+    protected function findCorrectLocales(Request $request): array
+    {
+        $project = $this->projectHelper->getActiveProject();
+        $locales = ['en']; // The default locale, always fallback to this
+        $browserLocale = null;
+        $staticLocale = null;
+        $htmlLocale = null;
+
+        if ($request->getPreferredLanguage()) {
+            $browserLocale = $this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage());
+        }
+
+        if ($request->request->has('language') && $request->request->get('language')) {
+            $staticLocale = $this->localeHelper->fixPreferredLanguage($request->request->get('language'));
+        }
+
+        if ($request->request->has('htmlLanguage') && $request->request->get('htmlLanguage')) {
+            $htmlLocale = $request->request->get('htmlLanguage');
+        }
+
+        if ($staticLocale) {
+            $this->addLocales($locales, $staticLocale);
+        } else if ($project->getLanguageSource() === LanguageSource::BROWSER_FALLBACK) {
+            $this->addLocales($locales, $browserLocale);
+        } else if ($project->getLanguageSource() === LanguageSource::BROWSER_HTML_FALLBACK) {
+            $this->addLocales($locales, $htmlLocale);
+            $this->addLocales($locales, $browserLocale);
+        } else if ($project->getLanguageSource() === LanguageSource::HTML_BROWSER_FALLBACK) {
+            $this->addLocales($locales, $browserLocale);
+            $this->addLocales($locales, $htmlLocale);
+        }
+
+        return array_filter($locales);
+    }
+
+    protected function addLocales(&$locales, $locale)
+    {
+        if (strlen($locale) > 2) {
+            $fallbackLocale = substr($locale, 0, 2);
+
+            if (!in_array($fallbackLocale, $locales)) {
+                array_unshift($locales, $fallbackLocale);
+            }
+        }
+
+        if (!in_array($locale, $locales)) {
+            array_unshift($locales, $locale);
+        }
     }
 }

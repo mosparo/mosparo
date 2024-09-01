@@ -3,10 +3,12 @@
 namespace Mosparo\Form;
 
 use Mosparo\Entity\Project;
+use Mosparo\Enum\LanguageSource;
 use Mosparo\Util\DateRangeUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,6 +22,10 @@ class AdvancedProjectFormType extends AbstractType
                 'attr' => ['class' => 'form-select'],
                 'choices' => DateRangeUtil::getChoiceOptions(),
                 'help' => 'project.form.statisticStorageLimitHelp'
+            ])
+            ->add('languageSource', EnumType::class, [
+                'class' => LanguageSource::class,
+                'expanded' => true,
             ])
             ->add('apiDebugMode', CheckboxType::class, [
                 'label' => 'project.form.apiDebugMode',

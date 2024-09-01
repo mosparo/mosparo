@@ -243,7 +243,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
         let data = {
             pageTitle: document.title,
-            pageUrl: document.location.href
+            pageUrl: document.location.href,
+            htmlLanguage: document.documentElement.lang,
         };
 
         if (this.options.language !== null) {

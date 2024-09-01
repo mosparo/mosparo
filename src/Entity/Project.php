@@ -4,6 +4,7 @@ namespace Mosparo\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Mosparo\Enum\LanguageSource;
 use Mosparo\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Util\DateRangeUtil;
@@ -34,7 +35,7 @@ class Project
     #[ORM\Column(type: 'encrypted')]
     private ?string $privateKey;
 
-    #[ORM\Column(type: 'integer', length: 15)]
+    #[ORM\Column(type: 'smallint')]
     private int $status = 1;
 
     #[ORM\Column(type: 'float')]
@@ -48,6 +49,9 @@ class Project
 
     #[ORM\Column(type: 'boolean')]
     private bool $verificationSimulationMode = false;
+
+    #[ORM\Column(type: 'smallint', enumType: LanguageSource::class)]
+    private LanguageSource $languageSource = LanguageSource::BROWSER_FALLBACK;
 
     #[ORM\OneToMany(targetEntity: ProjectConfigValue::class, mappedBy: 'project', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $configValues;
@@ -277,6 +281,18 @@ class Project
     public function setVerificationSimulationMode(bool $verificationSimulationMode): self
     {
         $this->verificationSimulationMode = $verificationSimulationMode;
+
+        return $this;
+    }
+
+    public function getLanguageSource(): LanguageSource
+    {
+        return $this->languageSource;
+    }
+
+    public function setLanguageSource(LanguageSource $languageSource): self
+    {
+        $this->languageSource = $languageSource;
 
         return $this;
     }

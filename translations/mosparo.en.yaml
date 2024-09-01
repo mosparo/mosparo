@@ -588,6 +588,7 @@ settings:
 
     subtitle:
       statisticsOptions: Statistic options
+      languageOptions: Language options
       developerOptions: Developer options
 
   projectMember:
@@ -1658,3 +1659,16 @@ unit:
 
 unitHelp:
   inSeconds: In seconds
+
+languageSource:
+  browserFallback:
+    label: Use browser language
+    help: Use the browser language for the mosparo frontend box. If mosparo has no translations for this language, fall back to English.
+
+  browserHtmlFallback:
+    label: Use browser language, fallback to website language
+    help: Use the browser language for the mosparo frontend box. If mosparo has no translations for this language, use the website's language. If this language is unavailable too, fall back to English.
+
+  htmlBrowserFallback:
+    label: Use website language, fallback to browser language
+    help: Use the website's language for the mosparo frontend box. If mosparo has no translations for this language, use the browser's language. If this language is unavailable too, fall back to English.
