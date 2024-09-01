@@ -483,8 +483,6 @@ settings:
       title: Informations de connexion
       host: Hôte
       uuid: Numéro d'identification unique
-    subtitle:
-      developerOptions: Options pour les développeurs
   security:
     form:
       delayNumberOfAllowedRequests: Nombre de requêtes autorisées
