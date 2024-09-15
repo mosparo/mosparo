@@ -242,6 +242,16 @@
                                         <div class="text-muted">{{ 'submission.view.generalVerifications.equalSubmissions.text'|trans({'%actualNumberOfEqualSubmissions%': generalVerification.data.actual, '%allowedNumberOfEqualSubmissions%': generalVerification.data.allowed}) }}</div>
                                     </div>
                                 </div>
+                            {% elseif generalVerification.key == 'proofOfWork' %}
+                                <div class="d-flex">
+                                    <div>
+                                        <i class="ti ti-cpu icon alert-icon"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="alert-title">{{ 'submission.view.generalVerifications.proofOfWork.title'|trans }}</h4>
+                                        <div class="text-muted">{{ 'submission.view.generalVerifications.proofOfWork.text'|trans }}</div>
+                                    </div>
+                                </div>
                             {% endif %}
                         </div>
                     {% endif %}

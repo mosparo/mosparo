@@ -454,6 +454,10 @@ submission:
         title: Submission too fast
         text: The form was submitted too fast. The submitter required only %seconds% seconds, which is less than the minimum time of %minimumTimeSeconds% seconds.
 
+      proofOfWork:
+        title: Proof of work incorrect
+        text: mosparo received the wrong result for the proof of work verification method. This usually means that someone tried to bypass the proof of work mechanism.
+
       equalSubmissions:
         title: Too many equal submissions
         text: This submission is equal to previous submissions. mosparo found %actualNumberOfEqualSubmissions% equal submissions within the configured time range, more than the allowed number of %allowedNumberOfEqualSubmissions% equal submissions.
@@ -700,6 +704,12 @@ settings:
       title: IP lockout
       intro: To make it even harder for bots, mosparo can automatically block IP addresses temporarily. If an IP address submits many forms, mosparo can automatically count the submissions and block the IP address if a specific number is reached.
 
+    proofOfWork:
+      title: Proof of Work mechanism
+      intro: The proof of work mechanism lets the browser automatically calculate many hashes to find the correct result. The browser needs time to solve this calculation, which a spam bot does not like to spend.
+      subtitle: Dynamic complexity
+      introDynamicComplexity: With the dynamic complexity, the automatic puzzle is generated with a more extensive number range, which means that the browser needs to calculate more and waste more time. If the dynamic complexity is based on the IP address, only clients with many submissions in a specified time range will have more complex puzzles.
+
     equalSubmissions:
       title: Block equal submissions
       intro: An additional security measurement is to block equal submissions. If a user tries to submit the same submission too often in a defined time frame, mosparo will block all future submissions until the time frame expires. Additionally, this check can be limited to the IP address.
@@ -728,6 +738,15 @@ settings:
       lockoutTime: Base lockout time
       lockoutMultiplicator: Multiplicator
       lockoutMultiplicatorHelp: The base lockout time will be increased with every additional request.
+      proofOfWorkActive: Enable proof of work
+      proofOfWorkComplexity: Complexity
+      proofOfWorkDynamicComplexityActive: Enable dynamic complexity
+      proofOfWorkDynamicComplexityMaxComplexity: Maximum complexity
+      proofOfWorkDynamicComplexityNumberOfSubmissions: Number of submissions to reach maximum complexity
+      proofOfWorkDynamicComplexityNumberOfSubmissionsHelp: Defines the number of submissions needed within the configured detection time frame to reach the maximum complexity number.
+      proofOfWorkDynamicComplexityTimeFrame: Detection time frame
+      proofOfWorkDynamicComplexityBasedOnIpAddress: Based on IP address
+      proofOfWorkDynamicComplexityBasedOnIpAddressHelp: The detection will happen on the user's IP address. If disabled, all submissions of all users within the time frame will be counted.
       equalSubmissionsActive: Enable block equal submissions
       equalSubmissionsNumberOfEqualSubmissions: Number of allowed equal submissions
       equalSubmissionsNumberOfEqualSubmissionsHelp: The number of allowed equal submissions before the block come into place.
@@ -741,11 +760,19 @@ settings:
       overrideHoneypotField: Override honeypot field
       overrideDelay: Override request delay
       overrideLockout: Override automatic lockout
+      overrideProofOfWork: Override proof of work
       overrideEqualSubmissions: Override block equal submissions
 
     message:
       successfullySaved: The security settings were saved successfully.
       guidelineSuccessfullySaved: The security guideline was saved successfully.
+
+    crypto:
+      numberRange: Number range
+      maximumTimeToSolve: Max time to solve
+      speed: Speed
+      rangeSizeHelp: The larger the number range, the more calculations a browser has to perform. It's recommended not to use a too large number range because it takes time for the user to submit the form.
+      cryptoSpeedHelp: These values are tested and calculated on your device. Other devices can be faster or slower. These numbers should give you an indication, but they do not show the exact duration for every user.
 
   design:
     title: Design
@@ -1656,6 +1683,8 @@ unit:
   day: Day
   days: Days
   minutes: Minutes
+  secondsShort: sec
+  hashesPerSecondShort: hashes/sec
 
 unitHelp:
   inSeconds: In seconds

@@ -1,5 +1,55 @@
 {% trans_default_domain 'mosparo' %}
 
+{% macro complexityRow(field) %}
+    <div class="col-sm-12 col-lg-6">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6">
+                <div class="form-group">
+                    {{ form_label(field) }}
+                    <div class="input-group">
+                        <button class="btn btn-icon-only btn-decrease-value" type="button">
+                            <i class="ti ti-minus"></i>
+                        </button>
+                        {{ form_widget(field) }}
+                        <button class="btn btn-icon-only btn-increase-value" type="button">
+                            <i class="ti ti-plus"></i>
+                        </button>
+                    </div>
+                    {{ form_help(field) }}
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <label class="form-label">{{ 'settings.security.crypto.numberRange'|trans }}</label>
+                <input type="text" class="form-control max-number always-disabled text-center" value="" autocomplete="off" disabled>
+            </div>
+        </div>
+        <div class="form-text mb-0 help-text">{{ 'settings.security.crypto.rangeSizeHelp'|trans }}</div>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6">
+                <label class="form-label">{{ 'settings.security.crypto.maximumTimeToSolve'|trans }}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control max-estimated-time-to-solve always-disabled text-end" value="" autocomplete="off" disabled>
+                    <span class="input-group-text">
+                        {{ 'unit.secondsShort'|trans }}
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <label class="form-label">{{ 'settings.security.crypto.speed'|trans }}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control crypto-speed always-disabled text-end" value="" autocomplete="off" disabled>
+                    <span class="input-group-text">
+                        {{ 'unit.hashesPerSecondShort'|trans }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-text mb-0 help-text">{{ 'settings.security.crypto.cryptoSpeedHelp'|trans }}</div>
+    </div>
+{% endmacro %}
+
 <div class="row">
     <div class="col">
         <div class="card mb-3">
@@ -127,6 +177,64 @@
                     </div>
                     <div class="col-sm-12 col-lg-6">
                         {{ form_row(form.lockoutMultiplicator) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header card-header-with-override-option">
+                <h3 class="card-title">{{ 'settings.security.proofOfWork.title'|trans }}</h3>
+                {% if form.overrideProofOfWork is defined %}
+                    {{ form_widget(form.overrideProofOfWork) }}
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <div class="d-none"><div id="dummy-mosparo-box"></div></div>
+                <p>
+                    {{ 'settings.security.proofOfWork.intro'|trans }}
+                </p>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form_row(form.proofOfWorkActive) }}
+                    </div>
+                </div>
+
+                <div class="row proof-of-work-data-row mb-3">
+                    {{ _self.complexityRow(form.proofOfWorkComplexity) }}
+                </div>
+
+                <div class="sub-card-body">
+                    <h4>{{ 'settings.security.proofOfWork.subtitle'|trans }}</h4>
+
+                    <p>
+                        {{ 'settings.security.proofOfWork.introDynamicComplexity'|trans }}
+                    </p>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            {{ form_row(form.proofOfWorkDynamicComplexityActive) }}
+                        </div>
+                    </div>
+
+                    <div class="row proof-of-work-data-row mb-3">
+                        {{ _self.complexityRow(form.proofOfWorkDynamicComplexityMaxComplexity) }}
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-12 col-lg-6">
+                            {{ form_row(form.proofOfWorkDynamicComplexityNumberOfSubmissions) }}
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            {{ form_row(form.proofOfWorkDynamicComplexityTimeFrame) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            {{ form_row(form.proofOfWorkDynamicComplexityBasedOnIpAddress) }}
+                        </div>
                     </div>
                 </div>
             </div>

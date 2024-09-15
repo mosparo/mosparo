@@ -89,3 +89,9 @@
         {{ form_end(form) }}
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% include 'project_related/settings/security/form/scripts.html.twig' %}
+{% endblock %}

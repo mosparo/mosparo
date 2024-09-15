@@ -50,6 +50,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.isLocked = false;
     this.checkedFormData = null;
     this.stateResetted = true;
+    this.proofOfWorkNumber = null;
 
     this.messages = {
         locale: 'en',
@@ -263,11 +264,20 @@ function mosparo(containerId, url, uuid, publicKey, options)
             }
 
             if (response.submitToken) {
-                _this.containerElement.classList.remove('mosparo__loading');
                 _this.submitTokenElement.value = response.submitToken;
 
                 if ('honeypotFieldName' in response && response.honeypotFieldName) {
                     _this.addHoneypotField(response.honeypotFieldName);
+                }
+
+                if ('proofOfWorkResult' in response && response.proofOfWorkResult) {
+                    let targetHash = response.proofOfWorkResult;
+                    let maxNumber = response.proofOfWorkMaxNumber;
+
+                    _this.isLocked = true;
+                    _this.solvePoWPuzzle(response.submitToken, targetHash, maxNumber);
+                } else {
+                    _this.containerElement.classList.remove('mosparo__loading');
                 }
             } else if (response.security) {
                 _this.processSecurityResponse(response);
@@ -346,6 +356,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
             formData: formData,
             submitToken: this.submitTokenElement.value
         };
+
+        if (this.proofOfWorkNumber) {
+            data.proofOfWorkNumber = this.proofOfWorkNumber;
+        }
 
         this.checkedFormData = formData;
 
@@ -786,6 +800,32 @@ function mosparo(containerId, url, uuid, publicKey, options)
         }
 
         return this.messages[messageKey];
+    }
+
+    this.generateHash = async function (data) {
+        let encData = new TextEncoder().encode(data);
+
+        let hBuf = await crypto.subtle.digest('SHA-256', encData);
+        let hArr = Array.from(new Uint8Array(hBuf));
+
+        return hArr.map((bytes) => bytes.toString(16).padStart(2, '0')).join('');
+    }
+
+    this.solvePoWPuzzle = async function(submitToken, targetHash, maxNumber) {
+        let selectedNumber = null;
+
+        for (let i = 0; i < maxNumber; i++) {
+            let hash = await this.generateHash(submitToken + i);
+
+            if (hash === targetHash) {
+                selectedNumber = i;
+                break;
+            }
+        }
+
+        this.proofOfWorkNumber = selectedNumber;
+        this.containerElement.classList.remove('mosparo__loading');
+        this.isLocked = false;
     }
 
     this.debug = function (message) {

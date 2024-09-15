@@ -47,6 +47,15 @@ class SecuritySettingsFormType extends AbstractType
             ->add('lockoutTime', IntegerType::class, ['label' => 'settings.security.form.lockoutTime', 'help' => 'unitHelp.inSeconds'])
             ->add('lockoutMultiplicator', NumberType::class, ['label' => 'settings.security.form.lockoutMultiplicator', 'help' => 'settings.security.form.lockoutMultiplicatorHelp', 'html5' => true, 'scale' => 1, 'attr' => ['min' => 0.1, 'step' => 'any']])
 
+            // Proof of work
+            ->add('proofOfWorkActive', CheckboxType::class, ['label' => 'settings.security.form.proofOfWorkActive', 'required' => false, 'attr' => ['class' => 'card-field-switch proof-of-work-active']])
+            ->add('proofOfWorkComplexity', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkComplexity', 'required' => false, 'attr' => ['class' => 'text-center complexity-field', 'min' => 2, 'max' => 7]])
+            ->add('proofOfWorkDynamicComplexityActive', CheckboxType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityActive', 'required' => false, 'attr' => ['class' => 'sub-card-field-switch']])
+            ->add('proofOfWorkDynamicComplexityMaxComplexity', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityMaxComplexity', 'required' => false, 'attr' => ['class' => 'text-center complexity-field', 'min' => 2, 'max' => 7]])
+            ->add('proofOfWorkDynamicComplexityNumberOfSubmissions', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityNumberOfSubmissions', 'required' => false, 'help' => 'settings.security.form.proofOfWorkDynamicComplexityNumberOfSubmissionsHelp'])
+            ->add('proofOfWorkDynamicComplexityTimeFrame', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityTimeFrame', 'required' => false, 'help' => 'unitHelp.inSeconds'])
+            ->add('proofOfWorkDynamicComplexityBasedOnIpAddress', CheckboxType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityBasedOnIpAddress', 'help' => 'settings.security.form.proofOfWorkDynamicComplexityBasedOnIpAddressHelp', 'required' => false, ])
+
             // equal submissions
             ->add('equalSubmissionsActive', CheckboxType::class, ['label' => 'settings.security.form.equalSubmissionsActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
             ->add('equalSubmissionsNumberOfEqualSubmissions', IntegerType::class, ['label' => 'settings.security.form.equalSubmissionsNumberOfEqualSubmissions', 'help' => 'settings.security.form.equalSubmissionsNumberOfEqualSubmissionsHelp'])
@@ -65,6 +74,7 @@ class SecuritySettingsFormType extends AbstractType
                 ->add('overrideHoneypotField', CheckboxType::class, ['label' => 'settings.security.form.overrideHoneypotField', 'required' => false, 'attr' => ['class' => 'full-card-field-switch']])
                 ->add('overrideDelay', CheckboxType::class, ['label' => 'settings.security.form.overrideDelay', 'required' => false, 'attr' => ['class' => 'full-card-field-switch']])
                 ->add('overrideLockout', CheckboxType::class, ['label' => 'settings.security.form.overrideLockout', 'required' => false, 'attr' => ['class' => 'full-card-field-switch']])
+                ->add('overrideProofOfWork', CheckboxType::class, ['label' => 'settings.security.form.overrideProofOfWork', 'required' => false, 'attr' => ['class' => 'full-card-field-switch']])
                 ->add('overrideEqualSubmissions', CheckboxType::class, ['label' => 'settings.security.form.overrideEqualSubmissions', 'required' => false, 'attr' => ['class' => 'full-card-field-switch']]);
         }
     }

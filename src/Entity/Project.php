@@ -134,6 +134,14 @@ class Project
         'lockoutTime' => 300,
         'lockoutMultiplicator' => 1.2,
 
+        'proofOfWorkActive' => false,
+        'proofOfWorkComplexity' => 5,
+        'proofOfWorkDynamicComplexityActive' => true,
+        'proofOfWorkDynamicComplexityMaxComplexity' => 7,
+        'proofOfWorkDynamicComplexityNumberOfSubmissions' => 30,
+        'proofOfWorkDynamicComplexityTimeFrame' => 300,
+        'proofOfWorkDynamicComplexityBasedOnIpAddress' => true,
+
         'equalSubmissionsActive' => false,
         'equalSubmissionsNumberOfEqualSubmissions' => 3,
         'equalSubmissionsTimeFrame' => 300,

@@ -278,6 +278,9 @@ class ProjectController extends AbstractController
             // Lockout
             ->add('lockoutActive', CheckboxType::class, ['label' => 'settings.security.form.lockoutActive', 'required' => false])
 
+            // Proof of work
+            ->add('proofOfWorkActive', CheckboxType::class, ['label' => 'settings.security.form.proofOfWorkActive', 'required' => false])
+
             // Equal submissions
             ->add('equalSubmissionsActive', CheckboxType::class, ['label' => 'settings.security.form.equalSubmissionsActive', 'required' => false])
 
