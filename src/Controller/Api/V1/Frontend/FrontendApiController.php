@@ -115,7 +115,7 @@ class FrontendApiController extends AbstractController
         $entityManager->persist($submitToken);
 
         $args = [];
-        if ($securitySettings['honeypotFieldActive']) {
+        if ($securitySettings['honeypotFieldActive'] && !$isIpOnAllowList) {
             $args['honeypotFieldName'] = $securitySettings['honeypotFieldName'];
         }
 
@@ -224,7 +224,7 @@ class FrontendApiController extends AbstractController
         $submission->setIgnoredFields($formData['ignoredFields']);
 
         // Check for the honeypot field
-        if ($securitySettings['honeypotFieldActive']) {
+        if ($securitySettings['honeypotFieldActive'] && !$isIpOnAllowList) {
             $hpFieldName = $securitySettings['honeypotFieldName'];
             $hpField = false;
 
