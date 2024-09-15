@@ -113,7 +113,6 @@ class FrontendApiController extends AbstractController
         $submitToken->setPageUrl($request->request->get('pageUrl'));
 
         $entityManager->persist($submitToken);
-        $entityManager->flush();
 
         $args = [];
         if ($securitySettings['honeypotFieldActive']) {
@@ -129,10 +128,6 @@ class FrontendApiController extends AbstractController
 
             $args['proofOfWorkResult'] = $proofOfWorkResult;
             $args['proofOfWorkMaxNumber'] = $maxNumber;
-
-
-
-            $args['proofOfWorkNumber'] = $number;  // @TODO: remove this because this is only temporary
         }
 
         $entityManager->flush();
