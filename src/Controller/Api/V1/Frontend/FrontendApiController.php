@@ -254,7 +254,7 @@ class FrontendApiController extends AbstractController
         }
 
         // Check the proof of work result
-        if ($securitySettings['proofOfWorkActive'] ?? false && !$isIpOnAllowList) {
+        if ($securitySettings['proofOfWorkActive'] && !$isIpOnAllowList) {
             $number = intval($request->request->get('proofOfWorkNumber', 0));
             $proofOfWorkResult = hash('sha256', $submitToken->gettoken() . $number);
 
