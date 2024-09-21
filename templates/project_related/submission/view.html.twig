@@ -98,11 +98,7 @@
                         <div class="mb-3">
                             <h4 class="mb-0">{{ 'submission.view.spam.spamRating'|trans }}</h4>
                             <div>
-                                {% if submission.spam or submission.spamRating > submission.spamDetectionRating %}
-                                    <span class="text-danger">
-                                {% else %}
-                                    <span class="text-success">
-                                {% endif %}
+                                <span class="{% if submission.spam or submission.spamRating > submission.spamDetectionRating %}text-danger{% else %}text-success{% endif %}">
                                     {{ submission.spamRating }} / {{ submission.spamDetectionRating }}
                                 </span>
                             </div>
@@ -385,11 +381,7 @@
                                     <div class="col-sm-12 col-md-4">
                                         <div class="row">
                                             <div class="col-12 text-end">
-                                                {% if totalPoints > 0 %}
-                                                    <span class="text-danger submission-spam-value">
-                                                {% else %}
-                                                    <span class="text-muted">
-                                                {% endif %}
+                                                <span class="{% if totalPoints > 0 %}text-danger submission-spam-value{% else %}text-muted{% endif %}">
                                                     {{ 'submission.view.data.points'|trans({ '%totalPoints%': totalPoints }) }}
                                                 </span>
                                             </div>
@@ -415,11 +407,7 @@
                                                                 <tr>
                                                                     <td><code>{{ match.value|format_rule_value(match.uuid, app.request.locale) }}</code></td>
                                                                     <td class="text-center">
-                                                                        {% if match.rating > 0 %}
-                                                                            <span class="text-danger">
-                                                                        {% else %}
-                                                                            <span class="text-success">
-                                                                        {% endif %}
+                                                                        <span class="{% if match.rating > 0 %}text-danger{% else %}text-success{% endif %}">
                                                                             {{ match.rating }}
                                                                         </span>
                                                                     </td>
