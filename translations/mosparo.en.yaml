@@ -450,17 +450,30 @@ submission:
         country: Country
 
     generalVerifications:
+      title: General verifications
+
+      features:
+        proofOfWork: Proof of work
+        minimumTime: Minimum time
+        equalSubmissions: Equal submissions
+
       minimumTime:
         title: Submission too fast
         text: The form was submitted too fast. The submitter required only %seconds% seconds, which is less than the minimum time of %minimumTimeSeconds% seconds.
+        minimumTime: 'Minimum time:'
+        measuredTime: 'Measured time:'
 
       proofOfWork:
         title: Proof of work incorrect
         text: mosparo received the wrong result for the proof of work verification method. This usually means that someone tried to bypass the proof of work mechanism.
+        expectedHash: 'Expected hash:'
+        generatedHash: 'Generated hash:'
 
       equalSubmissions:
         title: Too many equal submissions
         text: This submission is equal to previous submissions. mosparo found %actualNumberOfEqualSubmissions% equal submissions within the configured time range, more than the allowed number of %allowedNumberOfEqualSubmissions% equal submissions.
+        maximumAllowed: 'Maximum allowed:'
+        counted: 'Counted:'
 
     verificationSimulation:
       title: Verification simulation
@@ -1685,6 +1698,12 @@ unit:
   minutes: Minutes
   secondsShort: sec
   hashesPerSecondShort: hashes/sec
+  second: Second
+  seconds: Seconds
+  secondsShort: Sec
+  hashesPerSecondShort: Hashes/Sec
+  submission: Submission
+  submissions: Submissions
 
 unitHelp:
   inSeconds: In seconds

@@ -148,22 +148,73 @@
                                 {% endif %}
                             </div>
                         </div>
-                        {% if minimumTimeActive and minimumTimeGv %}
-                            <div class="mt-3">
-                                <h4 class="mb-0">{{ 'submission.view.verification.minimumTime.requiredTime'|trans }}</h4>
-                                <div>
-                                    {% if minimumTimeGv.valid %}
-                                        <span class="text-success">
-                                    {% else %}
-                                        <span class="text-danger">
-                                    {% endif %}
-                                        {{ 'submission.view.verification.minimumTime.timeDifferenceInSeconds'|trans({'%seconds%': minimumTimeGv.data.seconds}) }}
-                                    </span>
-                                </div>
-                            </div>
-                        {% endif %}
                     </div>
                 </div>
+
+                {% if submission.generalVerifications %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-checks"></i>
+                                {{ 'submission.view.generalVerifications.title'|trans }}
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            {% for generalVerification in submission.generalVerifications %}
+                                <div class="row {% if not loop.last %}mb-3{% endif %}">
+                                    <div class="col-12">
+                                        <h4 class="mb-1">
+                                            <span class="{% if generalVerification.valid %}text-success{% else %}text-danger{% endif %}">
+                                                {% if generalVerification.valid %}
+                                                    <i class="ti ti-check"></i>
+                                                {% else %}
+                                                    <i class="ti ti-x"></i>
+                                                {% endif %}
+                                                {{ ('submission.view.generalVerifications.features.' ~ generalVerification.key)|trans }}
+                                            </span>
+                                        </h4>
+                                    </div>
+
+                                    {% if generalVerification.key == 'minimumTime' %}
+                                        <div class="col-6 mb-1">{{ 'submission.view.generalVerifications.minimumTime.minimumTime'|trans }}</div>
+                                        <div class="col-6 mb-1">
+                                            <strong>{{ generalVerification.data.minimumTimeSeconds }}</strong> {{ (generalVerification.data.minimumTimeSeconds == 1 ? 'unit.second' : 'unit.seconds')|trans }}
+                                        </div>
+
+                                        <div class="col-6">{{ 'submission.view.generalVerifications.minimumTime.measuredTime'|trans }}</div>
+                                        <div class="col-6">
+                                            <span class="{% if generalVerification.valid %}text-success{% else %}text-danger{% endif %}">
+                                                <strong>{{ generalVerification.data.seconds }}</strong> {{ (generalVerification.data.seconds == 1 ? 'unit.second' : 'unit.seconds')|trans }}
+                                            </span>
+                                        </div>
+                                    {% elseif generalVerification.key == 'equalSubmissions' %}
+                                        <div class="col-6 mb-1">{{ 'submission.view.generalVerifications.equalSubmissions.maximumAllowed'|trans }}</div>
+                                        <div class="col-6 mb-1">
+                                            <strong>{{ generalVerification.data.allowed }}</strong> {{ (generalVerification.data.allowed == 1 ? 'unit.submission' : 'unit.submissions')|trans }}
+                                        </div>
+
+                                        <div class="col-6">{{ 'submission.view.generalVerifications.equalSubmissions.counted'|trans }}</div>
+                                        <div class="col-6">
+                                            <span class="{% if generalVerification.valid %}text-success{% else %}text-danger{% endif %}">
+                                                <strong>{{ generalVerification.data.actual }}</strong> {{ (generalVerification.data.actual == 1 ? 'unit.submission' : 'unit.submissions')|trans }}
+                                            </span>
+                                        </div>
+                                    {% elseif generalVerification.key == 'proofOfWork' %}
+                                        <div class="col-6 mb-1">{{ 'submission.view.generalVerifications.proofOfWork.expectedHash'|trans }}</div>
+                                        <div class="col-6 mb-1">
+                                            <code class="d-block text-truncate">{{ generalVerification.data.expectedHash }}</code>
+                                        </div>
+
+                                        <div class="col-6">{{ 'submission.view.generalVerifications.proofOfWork.generatedHash'|trans }}</div>
+                                        <div class="col-6">
+                                            <code class="d-block text-truncate {% if generalVerification.valid %}text-success{% else %}text-danger{% endif %}">{{ generalVerification.data.generatedHash }}</code>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
 
                 <div class="card mb-3">
                     <div class="card-header">
