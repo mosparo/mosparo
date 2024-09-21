@@ -1696,8 +1696,6 @@ unit:
   day: Day
   days: Days
   minutes: Minutes
-  secondsShort: sec
-  hashesPerSecondShort: hashes/sec
   second: Second
   seconds: Seconds
   secondsShort: Sec
