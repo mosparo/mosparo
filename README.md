@@ -90,7 +90,6 @@ To install mosparo from the source, clone the repository and execute Composer an
 
 - git
 - Composer
-- Yarn
 - Node.js (18)
 
 #### Installation
@@ -109,11 +108,11 @@ composer install
 ```
 4. Install the yarn dependencies
 ```bash
-yarn install
+npm install
 ```
 5. Build the frontend resources
 ```bash
-yarn encore dev
+npm run dev
 ```
 6. Open your browser and access the virtual host (for example, by accessing the subdomain in your browser)
 7. Follow the installation wizard to install mosparo
