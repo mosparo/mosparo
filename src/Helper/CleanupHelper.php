@@ -45,6 +45,15 @@ class CleanupHelper
             }
         }
 
+        // Log the start of the cleanup process
+        $this->logger->info(sprintf(
+            'Start cleanup process (Max iterations: %d; Force: %b; Ignore exceptions: %b, Timeout: %01.1fs)',
+            $maxIterations,
+            $force,
+            $ignoreExceptions,
+            $timeout
+        ));
+
         $maxPerIteration = 2500;
         $notFinished = true;
         $startTime = microtime(true);
@@ -187,6 +196,11 @@ class CleanupHelper
             // If the cleanup process was finished, perform the next cleanup in 6 hours
             $nextCleanupDate->add(new DateInterval('PT6H'));
         }
+
+        $this->logger->info(sprintf(
+            'Cleanup process completed after %ds.',
+            (new DateTime())->getTimestamp() - $cleanupStartedAt->get()->getTimestamp()
+        ));
 
         $nextCleanup->set($nextCleanupDate);
         $cache->save($nextCleanup);
