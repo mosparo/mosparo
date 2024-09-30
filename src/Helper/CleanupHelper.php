@@ -154,35 +154,13 @@ class CleanupHelper
                 }
             }
 
-            // Delete the submissions without an assigned submit token
-            $query = $this->entityManager->createQuery('
-                    DELETE Mosparo\Entity\Submission s
-                    WHERE s.submitToken IS NULL
-                    AND (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.lastSubmission = s.id) = 0
-                ');
-            $query->execute();
-            unset($query);
+            // Cleanup incomplete submissions and submit tokens
+            $this->deleteSubmissionsWithoutAssignedSubmitTokens();
+            $this->deleteSubmissionArtefacts();
+            $this->deleteSubmitTokensWithoutSubmissions();
 
-            // Delete the submissions where the submit token does no longer exist
-            // This situation should not happen normally, but this query will clean up the database in case it happens.
-            // This query is not limited by the time like other queries because if the submit token is missing,
-            // the submission is incomplete and will throw an exception in the administration interface.
-            $query = $this->entityManager->createQuery('
-                    DELETE Mosparo\Entity\Submission s
-                    WHERE (SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st WHERE st.id = s.submitToken OR st.lastSubmission = s.id) = 0
-                ');
-            $query->execute();
-            unset($query);
-
-            // Delete the submit tokens without submission and older than one day
-            $query = $this->entityManager->createQuery('
-                    DELETE Mosparo\Entity\SubmitToken st
-                    WHERE st.createdAt < :limit
-                    AND (SELECT COUNT(s.id) FROM Mosparo\Entity\Submission s WHERE s.submitToken = st.id) = 0
-                ')
-                ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT24H')));
-            $query->execute();
-            unset($query);
+            // Clear the day statistic
+            $this->cleanupDayStatistcs();
         } catch (\Exception $e) {
             // Throw the exception if we should not ignore exceptions.
             if (!$ignoreExceptions) {
@@ -194,9 +172,6 @@ class CleanupHelper
             // Since there was an error, let's try that again in 10 minutes
             $notFinished = true;
         }
-
-        // Clear the day statistic
-        $this->cleanupDayStatistcs();
 
         // Set the active project after the cleanup
         if ($activeProject !== null) {
@@ -220,6 +195,11 @@ class CleanupHelper
         $cache->save($cleanupStartedAt);
     }
 
+    /**
+     * Cleanup the day statistics objects
+     *
+     * @return void
+     */
     public function cleanupDayStatistcs()
     {
         $projects = $this->entityManager->getRepository(Project::class)->findAll();
@@ -244,7 +224,14 @@ class CleanupHelper
         unset($project);
     }
 
-    public function cleanupProjectEntities($project)
+    /**
+     * Cleanup all the project entities. This is used
+     * when a project is deleted.
+     *
+     * @param \Mosparo\Entity\Project $project
+     * @return void
+     */
+    public function cleanupProjectEntities(Project $project)
     {
         // Delete all rule items
         $qb = $this->entityManager->createQueryBuilder();
@@ -339,10 +326,148 @@ class CleanupHelper
         unset($qb);
     }
 
+    /**
+     * Cleanup the IP localization cache. This will be executed after the
+     * GeoIP2 database is refreshed.
+     *
+     * @return void
+     */
     public function cleanupIpLocalizationCache()
     {
         $qb = $this->entityManager->createQueryBuilder();
         $qb->delete('Mosparo\Entity\IpLocalization', 'il')
             ->getQuery()->execute();
+    }
+
+    /**
+     * Delete all submissions without an assigned submit token
+     * and without submit tokens referencing the submission.
+     *
+     * @return void
+     */
+    protected function deleteSubmissionsWithoutAssignedSubmitTokens()
+    {
+        $maxResults = 50;
+
+        // The limiter prevents possible endless loops.
+        for ($limiter = 0; $limiter < 1000; $limiter++) {
+            $query = $this->entityManager->createQuery('
+                    SELECT s.id
+                    FROM Mosparo\Entity\Submission s
+                    WHERE s.submitToken IS NULL
+                    AND NOT EXISTS (
+                        SELECT 1 FROM Mosparo\Entity\SubmitToken st WHERE st.lastSubmission = s.id
+                    )
+                ')
+                ->setMaxResults($maxResults);
+            $submissionIds = $query->getResult();
+            if (!$submissionIds) {
+                break;
+            }
+
+            $deleteQuery = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\Submission s
+                    WHERE s.id IN (:ids)
+                ')
+                ->setParameter('ids', $submissionIds);
+            $deleteQuery->execute();
+            unset($deleteQuery);
+
+            if (count($submissionIds) < $maxResults) {
+                break;
+            }
+        }
+
+        unset($query);
+        unset($submissionIds);
+    }
+
+    /**
+     * Delete the submissions where the submit token does no longer exist
+     * This situation should not happen normally, but this query will clean up the database in case it happens.
+     * This query is not limited by the time like other queries because if the submit token is missing,
+     * the submission is incomplete and will throw an exception in the administration interface.
+     *
+     * @return void
+     */
+    protected function deleteSubmissionArtefacts(): void
+    {
+        $maxResults = 50;
+
+        // The limiter prevents possible endless loops.
+        for ($limiter = 0; $limiter < 1000; $limiter++) {
+            $query = $this->entityManager->createQuery('
+                    SELECT s.id
+                    FROM Mosparo\Entity\Submission s
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM Mosparo\Entity\SubmitToken st
+                        WHERE st.id = s.submitToken OR st.lastSubmission = s.id
+                    )
+                ')
+                ->setMaxResults($maxResults);
+            $submissionIds = $query->getResult();
+            if (!$submissionIds) {
+                break;
+            }
+
+            $deleteQuery = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\Submission s
+                    WHERE s.id IN (:ids)
+                ')
+                ->setParameter('ids', $submissionIds);
+            $deleteQuery->execute();
+            unset($deleteQuery);
+
+            if (count($submissionIds) < $maxResults) {
+                break;
+            }
+        }
+
+        unset($query);
+        unset($submissionIds);
+    }
+
+    /**
+     * Delete all submit tokens which are not connected with a
+     * submission and are older than one day.
+     *
+     * @return void
+     */
+    protected function deleteSubmitTokensWithoutSubmissions()
+    {
+        $maxResults = 50;
+
+        // The limiter prevents possible endless loops.
+        for ($limiter = 0; $limiter < 1000; $limiter++) {
+            $query = $this->entityManager->createQuery('
+                    SELECT st.id
+                    FROM Mosparo\Entity\SubmitToken st
+                    WHERE st.createdAt < :limit
+                    AND NOT EXISTS (
+                        SELECT 1 FROM Mosparo\Entity\Submission s WHERE s.submitToken = st.id
+                    )
+                ')
+                ->setParameter('limit', (new DateTime())->sub(new DateInterval('PT24H')))
+                ->setMaxResults($maxResults);
+            $submitTokenIds = $query->getResult();
+            if (!$submitTokenIds) {
+                break;
+            }
+
+            $deleteQuery = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\SubmitToken st
+                    WHERE st.id IN (:ids)
+                ')
+                ->setParameter('ids', $submitTokenIds);
+            $deleteQuery->execute();
+            unset($deleteQuery);
+
+            if (count($submitTokenIds) < $maxResults) {
+                break;
+            }
+        }
+
+        unset($query);
+        unset($submitTokenIds);
     }
 }
