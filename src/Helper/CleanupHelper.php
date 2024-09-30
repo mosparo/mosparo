@@ -32,7 +32,7 @@ class CleanupHelper
         $nextCleanup = $cache->getItem('mosparoNextCleanup');
         $cleanupStartedAt = $cache->getItem('mosparoCleanupStartedAt');
 
-        // If the force parameter is set, we execute the cleanup anyways
+        // If the force parameter is set, we execute the cleanup anyway
         if ($nextCleanup->get() !== null && !$force) {
             // Return, if the next cleanup date is in the future
             if ($nextCleanup->get() > new DateTime()) {
@@ -66,7 +66,8 @@ class CleanupHelper
         try {
             // Delete expired delays
             $qb = $this->entityManager->createQueryBuilder();
-            $qb->delete('Mosparo\Entity\Delay', 'd')
+            $qb
+                ->delete('Mosparo\Entity\Delay', 'd')
                 ->where('d.validUntil < :now')
                 ->setParameter('now', new DateTime())
                 ->getQuery()->execute();
@@ -74,7 +75,8 @@ class CleanupHelper
 
             // Delete expired lockouts
             $qb = $this->entityManager->createQueryBuilder();
-            $qb->delete('Mosparo\Entity\Lockout', 'l')
+            $qb
+                ->delete('Mosparo\Entity\Lockout', 'l')
                 ->where('l.validUntil < :now')
                 ->setParameter('now', new DateTime())
                 ->getQuery()->execute();
