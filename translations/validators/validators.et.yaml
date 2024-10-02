@@ -35,3 +35,6 @@ hosts:
   hostContainsInvalidCharacter: Sisestatud serveri aadressis on keelatud tähemärke.
     Serveri nimes võivad olla vaid täppideta tähed (a-z), numbrid (0-9), sidekriipsud,
     punktid ja tärnid (*).
+settings:
+  mosparoName:
+    colonNotAllowed: Koolon (:) pole lubatud mosparo paigalduse nimes.
