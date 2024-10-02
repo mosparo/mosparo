@@ -1191,7 +1191,7 @@ setup:
       minPhpVersion: Versione minima PHP
   database:
     title: Database
-    introduction: Inserite i dati del vostro database MySQL.
+    introduction: Inserisci i dati di connessione per il tuo database.
     form:
       password: Password
       host: Host
