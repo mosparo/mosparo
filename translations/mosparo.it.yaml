@@ -461,8 +461,6 @@ settings:
       uuid: Numero identificativo unico
       title: Dettagli connessione
       host: Host
-    subtitle:
-      developerOptions: Opzioni sviluppatore
     message:
       successfullySaved: Le impostazioni sono state salvate correttamente.
     action:
