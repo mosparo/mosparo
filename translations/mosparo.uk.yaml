@@ -347,6 +347,60 @@ submission:
     ignoredFields:
       title: Ігноровані поля
       intro: Наступні поля не були передані через їхній тип (наприклад, пароль або поля для завантаження файлів).
+    generalVerifications:
+      equalSubmissions:
+        title: Занадто багато однакових заявок
+        text: Ця заявка ідентична попереднім. mosparo знайшов %actualNumberOfEqualSubmissions% однакових заявок протягом заданого діапазону часу, що перевищує допустиму кількість –%allowedNumberOfEqualSubmissions% однакових заявок.
+      minimumTime:
+        text: Форму було відправлено занадто швидко. Відправнику знадобилося лише %seconds% секунд, що менше мінімального часу – %minimumTimeSeconds% секунд.
+        title: Надто швидке відправлення
+    verificationSimulation:
+      title: Симуляція перевірки
+      buttons:
+        customIntegration: Власна інтерграція
+        apiDocumentation: API документації
+      info:
+        authorizationHeader: Заголовок авторизації повинен бути в кодуванні Base64.
+      labels:
+        formData: Дані форми
+        submitToken: Токен підтвердження
+        validationToken: Токен перевірки
+        preparedFormData: Підготовлені дані форми
+        hashedFormData: Хешовані дані форми
+        formDataJson: Дані форми як JSON
+        privateKey: Приватний ключ
+        validationAndFormDataSignature: Перевірка та підписання даних форми
+        verificationSignature: Підпис для перевірки
+        apiEndpoint: Кінцева точка API
+        apiEndpointAndRequestDataJson: Кінцева точка API та дані запиту
+        requestSignature: Запит на підпис
+        username: Ім'я користувача
+        password: Пароль
+        method: Метод
+        postData: Дані про публікацію
+        formDataSignature: Підпис даних форми
+        validationSignature: Підпис для перевірки
+        requestData: Запит даних
+        authorization: Авторизація
+        headers: Заголовки
+        response: Відповідь
+      hints:
+        requestSignature: Запит на підпис з 8 кроку.
+        formData: Дані, надіслані у вашій формі.
+        validationToken: Токен перевірки з 1 кроку.
+        preparedFormData: Введіть дані з 1 кроку після підготовки.
+        hashedFormData: Хеші для підготовлених даних форми з 2 кроку.
+        privateKey: Приватний ключ від проєкту.
+        publicKey: Публічний ключ від проєкту.
+        submitToken: Токен підтвердження з 1 кроку.
+        formDataSignature: Сформуйте підпис даних з 4 кроку.
+        hashedFormDataPlain: Хешовані дані форми з 3 кроку.
+        apiEndpoint: Перевірка кінцевої точки API.
+        formDataJson: Хешовані дані форми з 3 кроку у вигляді JSON-рядка.
+        validationSignature: Підтвердження підпису з 5 кроку.
+      errors:
+        noValidationToken: Симуляція перевірки неможлива, оскільки для цієї заявки не зберігається токен перевірки. Це означає, що дані у формі не пройшли перевірку mosparo, що унеможливлює перевірку.
+      intro: Симуляція перевірки показує, які дані mosparo приймає для процесу перевірки. Ви можете порівняти показані дані з даними, які згенерує ваш процес перевірки, щоби виявити можливі проблеми.
   filter:
     options:
       all: Усі подання
