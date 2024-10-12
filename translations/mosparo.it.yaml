@@ -343,6 +343,9 @@ submission:
       equalSubmissions:
         title: Troppe richieste uguali
         text: Questa richiesta è uguale alla richiesta precedente. mosparo ha trovato %actualNumberOfEqualSubmissions% richieste uguali all'interno del lasso di tempo configurato, che supera il numero previsto di %allowedNumberOfEqualSubmissions% richieste uguali.
+      title: Verifiche generali
+      features:
+        minimumTime: Tempo minimo
     title: Invio %submissionId%
     spam:
       submittedAt: Sottoposto il
