@@ -1,7 +1,7 @@
 label: I accept that the form entries are checked for spam and stored encrypted for 14 days.
 
 accessibility:
-  checkingData: The spam protection is now verifying your data. Please wait.
+  checkingData: The spam protection is verifying your data. Please wait.
   dataValid: Your data is valid. You can now submit the form.
   protectedBy: This form is protected from spam by mosparo.
 
