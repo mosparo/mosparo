@@ -22,7 +22,7 @@
         <meta name="msapplication-square310x310logo" content="{{ asset('build/images/favicons/mstile-310x310.png')|add_path_prefix }}">
         <meta name="msapplication-TileColor" content="#1d1d1b">
     </head>
-    <body class="{% block bodyClasses %}antialised{% endblock %} {% if colorMode is defined and colorMode == 'dark' %}theme-dark{% endif %}">
+    <body class="{% block bodyClasses %}antialised{% endblock %}" data-bs-theme="{% if colorMode is defined and colorMode == 'dark' %}dark{% endif %}">
         {% block body %}
             <div class="wrapper">
                 <header class="navbar navbar-expand-lg navbar-light d-print-none">
