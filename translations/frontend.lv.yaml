@@ -2,13 +2,13 @@ error:
   noSubmitTokenAvailable: Submit token nav pieejams. Šīs veidlapas validācija nav iespējama.
   internalError: Notika kļūda. Lūdzu, mēģiniet vēlreiz.
   gotNoToken: mosparo neatgrieza submit token.
-  spamDetected: Jūsu datus noķēra mūsu surogātpasta aizsardzība.
+  spamDetected: Jūsu datus notvēra mūsu surogātpasta aizsardzība.
   lockedOut: Bloķēts. Lūdzu, mēģiniet vēlreiz pēc %datetime%.
   delay: Jūsu pieprasījums tika aizkavēts. Lūdzu, pagaidiet %seconds% sekunžu.
 label: Es atļauju apskatīt savus datus priekš surogātiem, un ka tas ir saglabāts šifrēts 14 dienas.
 accessibility:
-  checkingData: Aizsardzība pret surogātpastu pārbauda jūsu datus. Lūdzu, uzgaidiet.
-  dataValid: Jūsu dati ir derīgi. Jūs varat iesniegt veidlapu.
+  checkingData: Surogātpasta aizsardzība pārbauda jūsu datus. Lūdzu, uzgaidiet.
+  dataValid: Jūsu dati ir derīgi. Tagad varat iesniegt veidlapu.
   protectedBy: Šo veidlapu no surogātpasta aizsargā mosparo.
 hp:
   fieldTitle: Atstājiet šo lauku tukšu
