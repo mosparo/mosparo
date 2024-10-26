@@ -12,7 +12,7 @@ project:
     name: Název
     description: Popis
     status: Stav
-    hostsHelp: Zadejte prosím všechny hostitele, které bude projekt zahrnovat.
+    hostsHelp: Tyto hostitelé se používají k zajištění správných bezpečnostních hlaviček (CORS). Host je doména (nebo subdoména), která hostuje Vaše webové stránky bez protokolu a cesty (priklad.cz). Musíte přidat všechny domény a subdomény, které tento projekt používají a všechny jeho varianty (například www.priklad.cz a priklad.cz). Můžete použít hvězdu (*) na začátku hostitele jako zástupný znak (například *.priklad.cz). Doporučujeme použít zástupný znak pro pokrytí všech variant domény.
     statusHelp: Aktivace nebo deaktivace detekce spamu. Pokud je neaktivní, systém zaznamená všechny požadavky, ale nezabrání žádnému odeslání.
     spamScore: Skóre spamu
     spamScoreHelp: Definuje číslo, od kterého bude podání hodnoceno jako spam. Pokud je hodnocení poždavku vyšší než toto číslo, je požadavek vyhodnocena jako spam.
@@ -20,6 +20,8 @@ project:
     verificationSimulationModeHelp: Pokud je povolen režim simulace ověření, můžete proces ověření simulovat. Otevřete podrobnosti o záznamu a klikněte na tlačítko v pravém horním rohu. Simulační nástroj vám ukáže, jak by vaše žádost měla vypadat a které údaje mosparo očekává pro ověření podání.
     apiDebugModeHelp: Pokud je povolen režim ladění rozhraní API, vrátí rozhraní API pro ověřování více informací o procesu ověřování. Tyto informace mohou být důležité pro pochopení důvodu neúspěšného ověření. Tuto možnost použijte pro usnadnění integrace nástroje mosparo do vašeho formuláře.
     apiDebugMode: Režim ladění API
+    statisticStorageLimit: Úložiště statistik
+    statisticStorageLimitHelp: Definuje, jak dlouho uchovává mosparo statistiky v databázi. Tato možnost není propojena s úložným prostorem prodání, po kterém se podání z databáze maže.
   roles:
     reader: Čtenář
     editor: Editor
@@ -69,7 +71,11 @@ dashboard:
   chart:
     valid: Platné
     spam: Spam
+    annotation:
+      statisticOnly: Pouze statistika
   title: Nástěnka
+  dateRange:
+    dropdown: Vyberte viditelný rozsah dat
 rule:
   list:
     name: Název
@@ -207,9 +213,9 @@ rule:
     rating:
       title: Hodnocení
       placeholder: Hodnocení
-      intro: Pokud má položka vyšší hodnocení spamu, můžete pro ni nastavit další hodnocení spamu.
+      intro: Pole hodnocení umožňuje určit váhu položky. Pokud zadáte kladné číslo, můžete položce přiřadit vyšší hodnotu. Pokud zadáte záporné číslo, snížíte položce celkový počet bodů.
       infoCalculationMethod: Hodnocení spamu se vypočítá vynásobením hodnocení položky a faktoru hodnocení spamu, který je definován v pravidle.
-      infoDefaultAndDataType: Hodnocení je pohyblivé číslo od %zero% do %unlimited%. Pokud není rating definován, je výchozí rating %one%.
+      infoDefaultAndDataType: Hodnocení je pohyblivé číslo od %minValue% do %maxValue%. Není-li hodnoceí definováno, je výchozí hodnocení %one%.
       infoValueEqualZero: Pokud je hodnocení nastaveno na %zero%, položka nebude detekována jako spam, protože hodnota hodnocení spamu bude v každém případě %zero%.
   title: Pravidla
   backToList: Zpět na pravidla
@@ -344,6 +350,8 @@ submission:
       minimumTime:
         title: Záznam odeslán příliš rychle
         text: Formulář byl odeslán příliš rychle. Zadavatel požadoval pouze %seconds% sekund, což je méně než minimální čas %minimumTimeSeconds% sekund.
+      equalSubmissions:
+        title: Příliš mnoho stejných podání
     verificationSimulation:
       labels:
         headers: Záhlaví
