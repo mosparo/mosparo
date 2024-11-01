@@ -1,5 +1,5 @@
 error:
-  spamDetected: Vaše údaje zachytila naša ochrana proti spamu.
+  spamDetected: Vaše údaje boli prichytené našou ochranou proti spamu.
   internalError: Vyskytla sa chyba. Prosím, skúste to znova.
   gotNoToken: mosparo nevrátil žiadny token odoslania.
   noSubmitTokenAvailable: Nie je k dispozícii žiadny token na odoslanie. Overenie tohto formulára nie je možné.
@@ -9,6 +9,6 @@ hp:
   fieldTitle: Toto pole nechajte prázdne
 label: Súhlasím s tým, aby sa vstupy z formulára kontrolovali na prítomnosť spamu a aby sa uchovávali zašifrované 14 dní.
 accessibility:
-  checkingData: Ochrana proti spamu kontroluje vaše údaje. Počkajte, prosím.
-  dataValid: Vaše údaje sú platné. Formulár môžete odoslať.
+  checkingData: Ochrana nevyžiadanej pošty overuje vaše údaje. Prosím, počkajte.
+  dataValid: Vaše údaje sú platné. Teraz môžete predložiť formulár.
   protectedBy: Tento formulár je chránený proti spamu pomocou mosparo.
