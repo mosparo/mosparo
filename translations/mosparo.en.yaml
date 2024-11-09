@@ -4,15 +4,58 @@ header:
   noProjectsFound: No projects found
   account: Account
 
+projectGroup:
+  mainGroup: Main group
+  action:
+    edit: Edit group
+    delete: Delete group
+    openMainGroup: Go back to main group
+    openParentGroupName: Go back to %name%
+    openParentGroup: Open parent group
+    openGroup: Open group
+    backToList: Back to projects list
+
+  create:
+    title: Create project group
+
+  edit:
+    title: Edit project group %projectGroupName%
+
+  form:
+    name: Name
+    description: Description
+    parentGroup: Parent group
+
+    tooltip:
+      activeGroup: You're editing this group.
+
+    message:
+      successfullySaved: The project group %projectGroupName% was saved successfully.
+
+  delete:
+    title: Delete project group %projectGroupName%
+    confirm: Do you really want to delete the project group %projectGroupName%?
+    reassignChildren: All project groups and projects in this project group will be assigned automatically to the parent project group.
+
+    message:
+      successfullyDeleted: The project group %projectGroupName% was deleted successfully.
+
+projectGroupSelector:
+  noGroupsAvailable: No groups available.
+  noProjectsAvailable: No projects available
+
 # Projects
 project:
   title: Projects
-  backToList: Back to projects
+  searchTitle: Projects for %searchQuery%
+  backToList: Back to projects list
   infoNoProjectAvailable: No projects available
   infoCreateProjectOrRequestAccess: Create a new project or request access to another project.
+  infoNoProjectsInThisGroup: There are no projects in this group.
 
   list:
     name: Name
+    projects: Projects
     status: Status
     actions: Actions
 
@@ -27,10 +70,11 @@ project:
     placeholder: Search for…
 
   action:
-    manage: Manage project
+    manage: Manage projects
     id: Project ID
     delete: Delete project
     goto: Go to project
+    create: Create
 
   create:
     title: Create project
@@ -58,6 +102,8 @@ project:
   form:
     name: Name
     description: Description
+    projectGroup: Project group
+    projectGroupHelp: You can use project groups to organize your projects. Select the project group in which you want to store this project.
     hosts: Hosts
     hostsHelp: These hosts are used to respond with the correct security headers (CORS). A host is a domain (or subdomain) that hosts your website without protocol and path (for example, example.com). You must add all domains and subdomains that use this project and all variations (for example, www.example.com and example.com). You can use a star (*) at the start of a host as a wildcard (for example, *.example.com). Using the star as a prefix and not as a global wildcard for all hosts is recommended.
     status: Status

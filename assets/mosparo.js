@@ -25,3 +25,4 @@ import './js/ui.js';
 import './js/form.js';
 import './js/color.js';
 import './js/table.js';
+import './js/project.js';

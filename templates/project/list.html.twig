@@ -4,9 +4,28 @@
 
 {% block documentTitle %}{{ 'project.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}
-    {% if projects|length > 0 %}
-        {{ 'project.title'|trans }}
+    <span>
+        {% if searchQuery %}
+            {{ 'project.searchTitle'|trans({'%searchQuery%': '<cite>' ~ searchQuery ~ '</cite>'})|raw }}
+        {% else %}
+            {{ 'project.title'|trans }}
+        {% endif %}
+    </span>
+{% endblock %}
+
+{% macro breadcrumbItem(item, first, baseQuery) %}
+    {% if item %}
+        {{ _self.breadcrumbItem(item.parent, false, baseQuery) }}
+        <li class="breadcrumb-item {% if first %}active{% endif %}"><a href="{{ path('project_list_group', baseQuery|merge({'projectGroup': item.id})) }}">{{ item.name }}</a></li>
+    {% else %}
+        <li class="breadcrumb-item {% if first %}active{% endif %}"><a href="{{ path('project_list_root', baseQuery) }}">{{ 'projectGroup.mainGroup'|trans }}</a></li>
     {% endif %}
+{% endmacro %}
+
+{% block breadcrumbs  %}
+    <ol class="breadcrumb" aria-label="breadcrumbs">
+        {{ _self.breadcrumbItem(projectGroup, true, baseQuery) }}
+    </ol>
 {% endblock %}
 
 {% block pageTitleColumn %}
@@ -16,10 +35,16 @@
         <div class="btn-list">
             <form>
                 <div class="input-group">
+                    {% if projectGroup %}
+                        {% set currentPath = path('project_list_group', {'projectGroup': projectGroup.id}) %}
+                    {% else %}
+                        {% set currentPath = path('project_list_root') %}
+                    {% endif %}
+
                     <div class="input-group input-group-flat input-with-clear-button w-auto">
                         <input type="text" class="form-control" name="q" placeholder="{{ 'project.search.placeholder'|trans }}" value="{{ searchQuery }}">
                         <span class="input-group-text">
-                            <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="{{ 'form.clearField'|trans }}" data-bs-original-title="{{ 'form.clearField'|trans }}">
+                            <a href="{{ currentPath }}" class="link-secondary" data-bs-toggle="tooltip" aria-label="{{ 'form.clearField'|trans }}" data-bs-original-title="{{ 'form.clearField'|trans }}">
                                 <i class="ti ti-x"></i>
                             </a>
                         </span>
@@ -36,16 +61,16 @@
                         <i class="ti ti-filter"></i>
                     </button>
                     <div class="dropdown-menu">
-                        <a href="{{ path('project_list', { 'q': searchQuery }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
+                        <a href="{{ path('project_list_' ~ routeSuffix, baseQuery|merge({ 'projectGroup': projectGroup ? projectGroup.id : null })) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
                             <i class="ti ti-check {% if filter != '' %}invisible{% endif %}"></i>
                             {{ 'project.filter.options.all'|trans }}
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="{{ path('project_list_filtered', { 'filter': 'active', 'q': searchQuery }) }}" class="dropdown-item {% if filter == 'active' %}active{% endif %}">
+                        <a href="{{ path('project_list_filtered_' ~ routeSuffix, baseQuery|merge({ 'projectGroup': projectGroup ? projectGroup.id : null, 'filter': 'active' })) }}" class="dropdown-item {% if filter == 'active' %}active{% endif %}">
                             <i class="ti ti-check {% if filter != 'active' %}invisible{% endif %}"></i>
                             {{ 'project.filter.options.active'|trans }}
                         </a>
-                        <a href="{{ path('project_list_filtered', { 'filter': 'inactive', 'q': searchQuery }) }}" class="dropdown-item {% if filter == 'inactive' %}active{% endif %}">
+                        <a href="{{ path('project_list_filtered_' ~ routeSuffix, baseQuery|merge({ 'projectGroup': projectGroup ? projectGroup.id : null, 'filter': 'inactive' })) }}" class="dropdown-item {% if filter == 'inactive' %}active{% endif %}">
                             <i class="ti ti-check {% if filter != 'inactive' %}invisible{% endif %}"></i>
                             {{ 'project.filter.options.inactive'|trans }}
                         </a>
@@ -63,91 +88,339 @@
             </div>
 
             {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
-                <a href="{{ path('project_create') }}" class="btn btn-primary add-button">
-                    <i class="ti ti-plus"></i>
-                    <span>{{ 'project.create.title'|trans }}</span>
-                </a>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary add-button dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="ti ti-plus"></i>
+                        {{ 'project.action.create'|trans }}
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ path('project_create_' ~ routeSuffix, {'projectGroup': projectGroup ? projectGroup.id : null}) }}">
+                            <i class="ti ti-cube-plus"></i>
+                            <span>{{ 'project.create.title'|trans }}</span>
+                        </a>
+                        <a class="dropdown-item" href="{{ path('project_group_create', {'parentGroup': projectGroup ? projectGroup.id : null}) }}">
+                            <i class="ti ti-folder-plus"></i>
+                            <span>{{ 'projectGroup.create.title'|trans }}</span>
+                        </a>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>
 {% endblock %}
 
 {% block pageBody %}
-    {# Uses the project list which is registred by the Mosparo\Twig\ProjectExtension globally #}
-    {% if projects|length > 0 %}
+    {% set requiredIcons = [] %}
+    <div class="container-xl">
         {% if view == 'boxes' %}
-            <div class="container-xl">
-                <div class="row">
-                    {% for project in projects|filter(project => searchQuery|lower in project.name|lower) %}
-                        <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
-                            <div class="card card-md mb-3 w-100">
-                                <div class="card-body d-flex flex-column">
-                                    <div class="text-center">
-                                        {% if numberOfSubmissionsByProject[project.id] is defined and numberOfSubmissionsByProject[project.id] %}
-                                            <img src="{{ asset('build/images/icons/project_full.svg')|add_path_prefix }}" class="mb-4 illustration-list" alt="" />
-                                        {% else %}
-                                            <img src="{{ asset('build/images/icons/project_empty.svg')|add_path_prefix }}" class="mb-4 illustration-list" alt="" />
-                                        {% endif %}
+            <div class="row">
+                {% if projectGroup %}
+                    {% if projectGroup.parent %}
+                        {% set previousPath = path('project_list_group', baseQuery|merge({'projectGroup': projectGroup.parent.id})) %}
+                    {% else %}
+                        {% set previousPath = path('project_list_root', baseQuery) %}
+                    {% endif %}
+                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
+                        <div class="card card-md card-link mb-3 w-100">
+                            <a href="{{ previousPath }}" class="card-body d-flex flex-column">
+                                <div class="text-center">
+                                    <svg class="mb-4 illustration-list" viewBox="0 0 24 24" stroke="#000000" xmlns="http://www.w3.org/2000/svg">
+                                        <use href="#folder_up" />
+                                        {% set requiredIcons = requiredIcons|merge(['folder_up']) %}
+                                    </svg>
+                                </div>
+
+                                <h2 class="card-title text-center mb-2">
+                                    {% if projectGroup.parent %}
+                                        {{ 'projectGroup.action.openParentGroupName'|trans({'%name%': projectGroup.parent.name}) }}
+                                    {% else %}
+                                        {{ 'projectGroup.action.openMainGroup'|trans }}
+                                    {% endif %}
+                                </h2>
+
+                                <p class="text-center flex-fill"></p>
+                            </a>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{{ previousPath }}" class="btn btn-secondary w-100">
+                                            <i class="ti ti-folder"></i>
+                                            {{ 'projectGroup.action.openParentGroup'|trans }}
+                                        </a>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% for node in treeNode.children %}
+                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
+                        <div class="card card-md card-link mb-3 w-100">
+                            <a href="{{ path('project_list_group', baseQuery|merge({'projectGroup': node.projectGroup.id})) }}" class="card-body d-flex flex-column">
+                                <div class="text-center">
+                                    <svg class="mb-4 illustration-list" viewBox="0 0 24 24" stroke="#000000" xmlns="http://www.w3.org/2000/svg">
+                                        <use href="#folder_open" />
+                                        {% set requiredIcons = requiredIcons|merge(['folder_open']) %}
+                                    </svg>
+                                </div>
 
-                                    <h2 class="card-title text-center mb-2">{{ project.name }}</h2>
+                                <h2 class="card-title text-center mb-2">{{ node.projectGroup.name }}</h2>
 
-                                    <p class="text-center flex-fill">
-                                        {{ project.description }}
-                                    </p>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="btn btn-secondary w-100">
-                                                <i class="ti ti-folder"></i>
-                                                {{ 'project.action.goto'|trans }}
-                                            </a>
-                                        </div>
+                                <p class="text-center flex-fill"></p>
+                            </a>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{{ path('project_list_group', baseQuery|merge({'projectGroup': node.projectGroup.id})) }}" class="btn btn-secondary w-100">
+                                            <i class="ti ti-folder"></i>
+                                            {{ 'projectGroup.action.openGroup'|trans }}
+                                        </a>
+                                    </div>
+                                    {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
                                         <div class="col-auto dropdown">
                                             <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
                                                 <i class="ti ti-settings"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <div class="dropdown-item disabled">
-                                                    {{ 'project.action.id'|trans }}
-                                                    <span class="ms-auto">{{ project.id }}</span>
-                                                </div>
-                                                {% if can_user_manage_project(project) %}
-                                                    <div class="dropdown-divider"></div>
-                                                    <a href="{{ path('project_delete', { '_projectId': project.id }) }}" class="dropdown-item text-red">
-                                                        <i class="ti ti-circle-minus"></i>
-                                                        {{ 'project.action.delete'|trans }}
-                                                    </a>
-                                                {% endif %}
+                                                <a href="{{ path('project_group_edit', { 'id': node.projectGroup.id }) }}" class="dropdown-item">
+                                                    <i class="ti ti-pencil"></i>
+                                                    {{ 'projectGroup.action.edit'|trans }}
+                                                </a>
+                                                <a href="{{ path('project_group_delete', { 'id': node.projectGroup.id }) }}" class="dropdown-item text-red">
+                                                    <i class="ti ti-folder-x"></i>
+                                                    {{ 'projectGroup.action.delete'|trans }}
+                                                </a>
                                             </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {% for project in treeNode.projects %}
+                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
+                        <div class="card card-md card-link mb-3 w-100 clickable-card">
+                            <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="card-body d-flex flex-column">
+                                <div class="text-center">
+                                    <svg class="mb-4 illustration-list" viewBox="0 0 24 24" stroke="#000000" xmlns="http://www.w3.org/2000/svg">
+                                        {% set iconSuffix = 'normal' %}
+                                        {% if not project.status %}
+                                            {% set iconSuffix = 'inactive' %}
+                                        {% endif %}
+                                        {% if numberOfSubmissionsByProject[project.id] is defined and numberOfSubmissionsByProject[project.id] %}
+                                            {% set iconSuffix = iconSuffix ~ '_submission' %}
+                                        {% endif %}
+                                        <use href="#cube_{{ iconSuffix }}" />
+                                        {% set requiredIcons = requiredIcons|merge(['cube_' ~ iconSuffix]) %}
+                                    </svg>
+                                </div>
+
+                                <h2 class="card-title text-center mb-2">{{ project.name }}</h2>
+
+                                <p class="text-center flex-fill">
+                                    {{ project.description }}
+                                </p>
+                            </a>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="btn btn-secondary w-100">
+                                            <i class="ti ti-cube"></i>
+                                            {{ 'project.action.goto'|trans }}
+                                        </a>
+                                    </div>
+                                    <div class="col-auto dropdown">
+                                        <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
+                                            <i class="ti ti-settings"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <div class="dropdown-item disabled">
+                                                {{ 'project.action.id'|trans }}
+                                                <span class="ms-auto">{{ project.id }}</span>
+                                            </div>
+                                            {% if can_user_manage_project(project) %}
+                                                <div class="dropdown-divider"></div>
+                                                <a href="{{ path('project_delete', { '_projectId': project.id }) }}" class="dropdown-item text-red">
+                                                    <i class="ti ti-circle-minus"></i>
+                                                    {{ 'project.action.delete'|trans }}
+                                                </a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    {% else %}
-                        <div class="col-xs-12">
-                            <div class="alert alert-info">
-                                {{ 'header.noProjectsFound'|trans }}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             </div>
-        {% elseif view == 'table' %}
-            <div class="container-xl">
-                <div class="row">
-                    <div class="col">
-                        <div class="card">
-                            <div id="projects">
 
-                            </div>
-                        </div>
+            <svg viewBox="0 0 24 24" class="d-none">
+                <defs>
+                    {% if 'folder_up' in requiredIcons %}
+                        <g id="folder_up">
+                            <path d="M12 19h-7a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v3.5" /><path d="M19 22v-6" /><path d="M22 19l-3 -3l-3 3" />
+                        </g>
+                    {% endif %}
+                    {% if 'folder_open' in requiredIcons %}
+                        <g id="folder_open">
+                            <path id="el" d="M5 19l2.757 -7.351a1 1 0 0 1 .936 -.649h12.307a1 1 0 0 1 .986 1.164l-.996 5.211a2 2 0 0 1 -1.964 1.625h-14.026a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v2" />
+                        </g>
+                    {% endif %}
+                    {% if 'cube_normal' in requiredIcons %}
+                        <g id="cube_normal">
+                            <path d="M21 16.008v-8.018a1.98 1.98 0 0 0 -1 -1.717l-7 -4.008a2.016 2.016 0 0 0 -2 0l-7 4.008c-.619 .355 -1 1.01 -1 1.718v8.018c0 .709 .381 1.363 1 1.717l7 4.008a2.016 2.016 0 0 0 2 0l7 -4.008c.619 -.355 1 -1.01 1 -1.718z" /><path d="M12 22v-10" /><path d="M12 12l8.73 -5.04" /><path d="M3.27 6.96l8.73 5.04" />
+                        </g>
+                    {% endif %}
+                    {% if 'cube_inactive' in requiredIcons %}
+                        <g id="cube_inactive">
+                            <path d="M6 17.6l-2 -1.1v-2.5" /><path d="M4 10v-2.5l2 -1.1" /><path d="M10 4.1l2 -1.1l2 1.1" /><path d="M18 6.4l2 1.1v2.5" /><path d="M20 14v2.5l-2 1.12" /><path d="M14 19.9l-2 1.1l-2 -1.1" /><path d="M12 12l2 -1.1" /><path d="M18 8.6l2 -1.1" /><path d="M12 12l0 2.5" /><path d="M12 18.5l0 2.5" /><path d="M12 12l-2 -1.12" /><path d="M6 8.6l-2 -1.1" />
+                        </g>
+                    {% endif %}
+                    {% if 'cube_normal_submission' in requiredIcons %}
+                        <g id="cube_normal_submission">
+                            <path d="M21 12.5V8c0-.7-.4-1.4-1-1.7l-7-4c-.6-.4-1.4-.4-2 0l-7 4c-.6.4-1 1-1 1.7v8c0 .7.4 1.4 1 1.7l7 4c.6.4 1.4.4 2 0M12 22V12M12 12l8.7-5M3.3 7l8.7 5"/><path d="M15 15.8c0-.5.4-.9.9-.9H22c.5 0 .9.4.9.9v4.4c0 .5-.4.9-.9.9h-6.1c-.5 0-.9-.4-.9-.9v-4.4Z"/><path d="m15 15.8 3.9 2.6 3.9-2.6"/>
+                        </g>
+                    {% endif %}
+                    {% if 'cube_inactive_submission' in requiredIcons %}
+                        <g id="cube_inactive_submission">
+                            <path d="M15 15.8c0-.5.4-.9.9-.9H22c.5 0 .9.4.9.9v4.4c0 .5-.4.9-.9.9h-6.1c-.5 0-.9-.4-.9-.9v-4.4Z"/><path d="m15 15.8 3.9 2.6 3.9-2.6M5.2 18.3l-2.3-1.2v-2.8M3 9.7V6.9l2.3-1.2M9.7 3.1 12 1.9l2.3 1.2M18.8 5.7l2.3 1.2v2.8M12.9 21.7l-.9.5L9.7 21M12 12l2.3-1.2M18.8 8.2 21.1 7M12 12v2.8M12 19.3v2.8M12 12l-2.3-1.3M5.2 8.2 2.9 7"/>
+                        </g>
+                    {% endif %}
+                </defs>
+            </svg>
+        {% elseif view == 'table' %}
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <table class="table table-striped table-hover table-vcenter card-table m-0">
+                            {% if projectGroup or treeNode.children|length %}
+                                <thead>
+                                    <tr>
+                                        <th width="70%">{{ 'project.list.name'|trans }}</th>
+                                        <th></th>
+                                        <th width="1%">{{ 'project.list.actions'|trans }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if projectGroup %}
+                                        {% if projectGroup.parent %}
+                                            {% set previousPath = path('project_list_group', baseQuery|merge({'projectGroup': projectGroup.parent.id})) %}
+                                        {% else %}
+                                            {% set previousPath = path('project_list_root', baseQuery) %}
+                                        {% endif %}
+                                        <tr class="clickable-table-row" data-href="{{ previousPath }}">
+                                            <td>
+                                                <i class="ti ti-folder-up project-table-icon"></i>
+                                                {% if projectGroup.parent %}
+                                                    {{ 'projectGroup.action.openParentGroupName'|trans({'%name%': projectGroup.parent.name}) }}
+                                                {% else %}
+                                                    {{ 'projectGroup.action.openMainGroup'|trans }}
+                                                {% endif %}
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    {% endif %}
+                                    {% for node in treeNode.children %}
+                                        <tr class="clickable-table-row" data-href="{{ path('project_list_group', baseQuery|merge({'projectGroup': node.projectGroup.id})) }}">
+                                            <td>
+                                                <i class="ti ti-folder-open project-table-icon"></i>
+                                                {{ node.projectGroup.name }}
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                <div class="d-flex justify-content-end">
+                                                    {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
+                                                        <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
+                                                            <i class="ti ti-settings"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a href="{{ path('project_group_edit', { 'id': node.projectGroup.id }) }}" class="dropdown-item">
+                                                                <i class="ti ti-pencil"></i>
+                                                                {{ 'projectGroup.action.edit'|trans }}
+                                                            </a>
+                                                            <a href="{{ path('project_group_delete', { 'id': node.projectGroup.id }) }}" class="dropdown-item text-red">
+                                                                <i class="ti ti-folder-x"></i>
+                                                                {{ 'projectGroup.action.delete'|trans }}
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            {% endif %}
+                            <thead>
+                                <tr>
+                                    <th width="70%">{{ 'project.list.projects'|trans }}</th>
+                                    <th>{{ 'project.list.status'|trans }}</th>
+                                    <th width="1%">{{ 'project.list.actions'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for project in treeNode.projects %}
+                                    <tr class="clickable-table-row" data-href="{{ path('project_dashboard', { '_projectId': project.id }) }}">
+                                        <td>
+                                            {% if project.status %}
+                                                <i class="ti ti-cube project-table-icon"></i>
+                                            {% else %}
+                                                <i class="ti ti-cube-3d-sphere project-table-icon"></i>
+                                            {% endif %}
+
+                                            {{ project.name }}
+                                        </td>
+                                        <td>
+                                            {% if project.status == true %}
+                                                <span class="text-success"><strong>{{ 'state.active'|trans }}</strong></span>
+                                            {% elseif project.status == false %}
+                                                <span class="text-danger"><strong>{{ 'state.inactive'|trans }}</strong></span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="btn btn-secondary w-100 me-2">
+                                                    <i class="ti ti-cube"></i>
+                                                    {{ 'project.action.goto'|trans }}
+                                                </a>
+                                                <button type="button" class="btn btn-ghost-white btn-icon-only dropdown-toggle" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-settings"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <div class="dropdown-item disabled">
+                                                        {{ 'project.action.id'|trans }}
+                                                        <span class="ms-auto">{{ project.id }}</span>
+                                                    </div>
+                                                    {% if can_user_manage_project(project) %}
+                                                        <div class="dropdown-divider"></div>
+                                                        <a href="{{ path('project_delete', { '_projectId': project.id }) }}" class="dropdown-item text-red">
+                                                            <i class="ti ti-circle-minus"></i>
+                                                            {{ 'project.action.delete'|trans }}
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr class="table-info">
+                                        <td colspan="3" class="text-center">
+                                            <i class="ti ti-info-circle"></i>
+                                            {{ 'project.infoNoProjectsInThisGroup'|trans }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         {% endif %}
-    {% else %}
+    </div>
+
+    {% if false %}
         <div class="container-xl d-flex flex-column justify-content-center">
             <div class="empty">
                 <div class="empty-img">
@@ -157,7 +430,7 @@
                 <p class="empty-subtitle text-muted">{{ 'project.infoCreateProjectOrRequestAccess'|trans }}</p>
                 {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
                     <div class="empty-action">
-                        <a href="{{ path('project_create') }}" class="btn btn-primary">
+                        <a href="{{ path('project_create_' ~ routeSuffix, {'projectGroup': projectGroup ? projectGroup.id : null}) }}" class="btn btn-primary">
                             <i class="ti ti-plus"></i>
                             {{ 'project.create.title'|trans }}
                         </a>
@@ -165,41 +438,5 @@
                 {% endif %}
             </div>
         </div>
-    {% endif %}
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-
-    {% if view == 'table' %}
-        <!-- Insert this at the end of your body element, but before the closing tag -->
-        <script src="{{ asset('bundles/datatables/js/datatables.js')|add_path_prefix }}"></script>
-        {% cspscript %}
-            <script>
-                $(function() {
-                    $('#projects').initDataTables($.extend({}, {{ datatable_settings(datatable) }}, {
-                            url: function () {
-                                let url = window.location.origin + window.location.pathname;
-
-                                {% if searchQuery %}
-                                    url += '?q={{ searchQuery }}'
-                                {% endif %}
-
-                                return url;
-                            }
-                        }), {
-                            autoWidth: false,
-                            searching: false,
-                            info: false,
-                            responsive: true,
-                            columnDefs: [
-                                { width: "70%", targets: 0 },
-                                { width: "1%", targets: 2 }
-                            ]
-                        }
-                    );
-                });
-            </script>
-        {% endcspscript %}
     {% endif %}
 {% endblock %}

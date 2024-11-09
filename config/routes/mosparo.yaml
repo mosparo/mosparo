@@ -1,5 +1,5 @@
 dashboard:
-  alias: project_list
+  alias: project_list_root
 
 mosparo_root:
   path: /

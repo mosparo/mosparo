@@ -14,6 +14,7 @@ use Mosparo\Form\SecurityGuidelineFormType;
 use Mosparo\Form\SecuritySettingsFormType;
 use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\GeoIp2Helper;
+use Mosparo\Helper\ProjectGroupHelper;
 use Mosparo\Util\TokenGenerator;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\NumberColumn;
@@ -42,11 +43,16 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     }
 
     #[Route('/general', name: 'settings_general')]
-    public function general(Request $request, EntityManagerInterface $entityManager): Response
+    public function general(Request $request, EntityManagerInterface $entityManager, ProjectGroupHelper $projectGroupHelper): Response
     {
         $project = $this->getActiveProject();
 
-        $form = $this->createForm(ExtendedProjectFormType::class, $project);
+        $tree = $projectGroupHelper->getFullProjectGroupTreeForUser();
+        $tree->sort();
+
+        $form = $this->createForm(ExtendedProjectFormType::class, $project, [
+            'tree' => $tree
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

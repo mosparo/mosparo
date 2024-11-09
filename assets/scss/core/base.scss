@@ -53,9 +53,18 @@
 }
 
 .dropdown-projects-list {
-    max-height: 18rem;
+    .project-group-tree {
+        max-height: 18rem;
 
-    overflow-y: auto;
+        overflow-y: auto;
+
+        border-radius: 0;
+        border-width: 0;
+    }
+
+    .active-project {
+        font-weight: bold;
+    }
 
     .dropdown-item.focus {
         color: var(--tblr-dropdown-link-hover-color);
@@ -89,7 +98,14 @@
 }
 
 .illustration-list {
-    height: 128px;
+    height: 8rem;
+}
+
+svg.illustration-list {
+    fill: none;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .illustration-detail {
@@ -116,6 +132,14 @@ pre {
     background: #fdfdfe;
     color: unset;
     border: 1px solid rgba(98,105,118,.16);
+}
+
+.informative-tooltip-icon {
+    font-size: 1.5rem;
+    margin: 0 0.25rem;
+    cursor: help;
+
+    color: rgb(var(--tblr-info-rgb));
 }
 
 .theme-dark {

@@ -20,6 +20,10 @@ class Project
     #[ORM\Column(type: 'guid')]
     private ?string $uuid;
 
+    #[ORM\ManyToOne(targetEntity: ProjectGroup::class, inversedBy: 'projects')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?ProjectGroup $projectGroup = null;
+
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
@@ -166,6 +170,18 @@ class Project
     public function getUuid(): ?string
     {
         return $this->uuid;
+    }
+
+    public function getProjectGroup(): ?ProjectGroup
+    {
+        return $this->projectGroup;
+    }
+
+    public function setProjectGroup(?ProjectGroup $projectGroup): self
+    {
+        $this->projectGroup = $projectGroup;
+
+        return $this;
     }
 
     public function getName(): ?string

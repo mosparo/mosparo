@@ -101,3 +101,55 @@
         {% endfor %}
     </div>
 {%- endblock -%}
+
+{% macro project_group_tree_node(form, node, active_group) %}
+    {% for child in node.children %}
+        <li class="project-group-node">
+            <div class="project-group-node-header">
+                <div class="project-group-node-icon {% if child.children|length %}clickable{% endif %}">
+                    {% if child.children|length %}
+                        <i class="ti ti-chevron-right"></i>
+                    {% else %}
+                        <i class="ti ti-folder"></i>
+                    {% endif %}
+                </div>
+                <div class="project-group-node-label">
+                    {{ form_widget(find_project_group_form_field(form, child.projectGroup)) }}
+                    {% if child.projectGroup == active_group %}
+                        <i class="ti ti-info-circle informative-tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ 'projectGroup.form.tooltip.activeGroup'|trans|escape('html_attr') }}"></i>
+                    {% endif %}
+                </div>
+            </div>
+            {% if child.children|length %}
+                <ul class="project-group-node-children">
+                    {{ _self.project_group_tree_node(form, child, active_group) }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}
+
+{% block project_group_selector_widget %}
+    <ul class="project-group-tree">
+        <li class="project-group-node">
+            <div class="project-group-node-root">
+                <div class="project-group-node-icon">
+                    <i class="ti ti-folder-root"></i>
+                </div>
+                <div class="project-group-node-label">
+                    {{ form_widget(find_project_group_form_field(form, null)) }}
+                </div>
+            </div>
+            {% if tree.children|length %}
+                <ul class="project-group-node-children project-group-node-root-children">
+                    {{ _self.project_group_tree_node(form, tree, active_group) }}
+                </ul>
+            {% else %}
+                <div class="project-group-node-info">
+                    <i class="ti ti-info-circle"></i>
+                    {{ 'projectGroupSelector.noGroupsAvailable'|trans }}
+                </div>
+            {% endif %}
+        </li>
+    </ul>
+{% endblock %}

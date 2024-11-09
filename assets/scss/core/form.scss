@@ -99,3 +99,133 @@ input[type="number"] {
 textarea.ip-address-field {
     font-family: monospace;
 }
+
+.project-group-tree {
+    display: block;
+
+    border: 1px solid var(--tblr-border-color);
+    border-radius: 4px;
+
+    &,
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .project-group-node {
+        .project-group-node-root {
+            background: var(--tblr-body-bg);
+            border-bottom: 1px solid var(--tblr-border-color);
+        }
+
+        .project-group-node-root,
+        .project-group-node-header {
+            padding: 0.25rem 0.75rem;
+
+            display: flex;
+            align-items: center;
+
+            .project-group-node-icon {
+                width: 2rem;
+
+                flex: 0;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .ti {
+                    font-size: 1.25rem;
+                    height: 1.25rem;
+                    display: block;
+                }
+            }
+
+            .clickable {
+                cursor: pointer;
+            }
+
+            .project-group-node-label {
+                padding: 0.325rem 0.5rem;
+
+                flex: 1;
+
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        .project-group-node-children.project-group-node-root-children {
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .project-group-node-children:not(.project-group-node-root-children) {
+            margin-left: 2.5rem;
+
+            position: relative;
+
+            display: none;
+
+            &:before {
+                content: '';
+                display: block;
+
+                width: 2px;
+
+                position: absolute;
+                top: 0;
+                left: -1.2rem;
+                bottom: 0.25rem;
+
+                background: var(--tblr-border-color);
+            }
+        }
+
+        &.open {
+            & > .project-group-node-children {
+                display: block;
+            }
+
+            & > .project-group-node-header {
+                .project-group-node-icon.clickable {
+                    transform: rotateZ(90deg);
+                }
+            }
+        }
+
+        .form-check {
+            margin-bottom: 0;
+
+            .active-group + label {
+                font-weight: bold;
+            }
+        }
+
+        .project-group-node-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--tblr-info-bg-subtle);
+            color: var(--tblr-table-color);
+
+            padding: 0.625rem;
+
+            i {
+                font-size: 1.25rem;
+                margin-right: 0.25rem;
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--tblr-dropdown-link-color);
+        }
+    }
+}
+
+.project-group-node-header:hover {
+    color: var(--tblr-dropdown-link-hover-color);
+    background-color: var(--tblr-dropdown-link-hover-bg);
+}

@@ -5,6 +5,7 @@ namespace Mosparo\Twig;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Helper\ProjectHelper;
+use Mosparo\Twig\Tree\ProjectTreeNode;
 use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -29,7 +30,9 @@ class ProjectExtension extends AbstractExtension implements GlobalsInterface
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('can_user_manage_project', [$this, 'canUserManageProject'])
+            new TwigFunction('can_user_manage_project', [$this, 'canUserManageProject']),
+            new TwigFunction('get_by_user_accessible_projects', [$this, 'getByUserAccessibleProjects']),
+            new TwigFunction('get_by_user_accessible_project_tree', [$this, 'getByUserAccessibleProjectTree']),
         ];
     }
 
@@ -42,27 +45,21 @@ class ProjectExtension extends AbstractExtension implements GlobalsInterface
         return $this->projectHelper->hasRequiredRole([ProjectMember::ROLE_OWNER], $project);
     }
 
+    public function getByUserAccessibleProjectTree(): ProjectTreeNode
+    {
+        return $this->projectHelper->getByUserAccessibleProjectTree();
+    }
+
+    public function getByUserAccessibleProjects(): array
+    {
+        return $this->projectHelper->getByUserAccessibleProjects();
+    }
+
     public function getGlobals(): array
     {
         if ($this->security->getUser() === null) {
             return [];
         }
-
-        $projectRepository = $this->entityManager->getRepository(Project::class);
-        $projects = [];
-
-        // Admins have access to all projects
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            $projects = $projectRepository->findBy([], ['name' => 'ASC']);
-        } else {
-            /** @var \Mosparo\Entity\User $user */
-            $user = $this->security->getUser();
-            foreach ($user->getProjectMemberships() as $membership) {
-                $projects[] = $membership->getProject();
-            }
-        }
-
-        usort($projects, [$this, 'sortProjects']);
 
         $canManage = false;
         $isOwner = false;
@@ -81,7 +78,6 @@ class ProjectExtension extends AbstractExtension implements GlobalsInterface
             'activeProject' => $activeProject,
             'isOwner' => $isOwner,
             'canManage' => $canManage,
-            'projects' => $projects
         ];
     }
 

@@ -321,8 +321,10 @@ $(document).ready(function () {
         }).trigger('change');
 
         link.click(function (ev) {
-            input.val('').trigger('change');
-            ev.preventDefault();
+            if (link.attr('href') === '#') {
+                input.val('').trigger('change');
+                ev.preventDefault();
+            }
         });
     });
 });

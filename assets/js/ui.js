@@ -8,8 +8,8 @@ let setFocusOnFirstVisibleProject = function () {
 let searchProject = function () {
     let query = $('.project-dropdown-menu input').val().toLowerCase();
 
-    $('.project-dropdown-menu .project-item').each(function () {
-        let name = $(this).find('.project-name').text().toLowerCase();
+    $('.project-dropdown-menu .project-group-node').each(function () {
+        let name = $(this).children('.project-group-node-header').children('.project-group-node-label').text().toLowerCase();
 
         if (name.indexOf(query) !== -1) {
             $(this).removeClass('d-none');
@@ -17,6 +17,10 @@ let searchProject = function () {
             $(this).addClass('d-none');
         }
     });
+
+    let visibleNodes = $('.project-dropdown-menu .project-group-node:not(.d-none)');
+    visibleNodes.find('.project-group-node').removeClass('d-none');
+    visibleNodes.parents().removeClass('d-none');
 
     if ($('.project-dropdown-menu .project-item:visible').length) {
         setFocusOnFirstVisibleProject();

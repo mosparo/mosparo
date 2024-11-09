@@ -2,16 +2,22 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'project.create.title'|trans }} - {{ parent() }}{% endblock %}
+{% if isNew %}
+    {% set title = 'projectGroup.create.title'|trans %}
+{% else %}
+    {% set title = 'projectGroup.edit.title'|trans({ '%projectGroupName%': projectGroup.name }) %}
+{% endif %}
+
+{% block documentTitle %}{{ title }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
-{% set routeSuffix = project.projectGroup ? 'group' : 'root' %}
+{% set routeSuffix = projectGroup.parent ? 'group' : 'root' %}
 
 {% block pageBody %}
     <div class="container-tight pb-4">
         <div class="row">
             <div class="col text-center">
-                <img src="{{ asset('build/images/icons/project_new.svg')|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+                <img src="{{ asset('build/images/icons/project-group.svg')|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
             </div>
         </div>
 
@@ -20,21 +26,20 @@
                 <div class="col">
                     <div class="card card-md">
                         <div class="card-body">
-                            <h2 class="card-title text-center mb-4">{{ 'project.create.title'|trans }}</h2>
+                            <h2 class="card-title text-center mb-4">{{ title }}</h2>
 
                             {{ form_row(form.name) }}
                             {{ form_row(form.description) }}
-                            {{ form_row(form.hosts) }}
-                            {{ form_row(form.projectGroup) }}
+                            {{ form_row(form.parent) }}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-12 col-md-auto mt-2 mt-md-0">
-                    <a href="{{ path('project_list_' ~ routeSuffix, {'projectGroup': project.projectGroup ? project.projectGroup.id : null}) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <a href="{{ path('project_list_' ~ routeSuffix, {'projectGroup': projectGroup.parent ? projectGroup.parent.id : null}) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
-                        {{ 'project.backToList'|trans }}
+                        {{ 'projectGroup.action.backToList'|trans }}
                     </a>
                 </div>
                 <div class="col-12 col-md-auto ms-auto order-first order-md-last">

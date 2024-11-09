@@ -5,6 +5,7 @@ namespace Mosparo\Helper;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
+use Mosparo\Twig\Tree\ProjectTreeNode;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class ProjectHelper
@@ -13,12 +14,17 @@ class ProjectHelper
 
     protected Security $security;
 
+    protected ProjectGroupHelper $projectGroupHelper;
+
     protected ?Project $activeProject = null;
 
-    public function __construct(EntityManagerInterface $entityManager, Security $security)
+    protected ?ProjectTreeNode $tree = null;
+
+    public function __construct(EntityManagerInterface $entityManager, Security $security, ProjectGroupHelper $projectGroupHelper)
     {
         $this->entityManager = $entityManager;
         $this->security = $security;
+        $this->projectGroupHelper = $projectGroupHelper;
     }
 
     public function setActiveProject(Project $activeProject)
@@ -95,6 +101,54 @@ class ProjectHelper
         }
 
         return false;
+    }
+
+    public function getByUserAccessibleProjectTree(): ProjectTreeNode
+    {
+        if ($this->tree) {
+            return $this->tree;
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $projectRepository = $this->entityManager->getRepository(Project::class);
+            $rootProjects = $projectRepository->findBy(['projectGroup' => null], ['name' => 'ASC']);
+
+            $tree = $this->projectGroupHelper->getFullProjectGroupTreeForUser();
+
+            foreach ($rootProjects as $project) {
+                $tree->addProject($project);
+            }
+        } else {
+            $projects = $this->getByUserAccessibleProjects();
+            $tree = $this->projectGroupHelper->getProjectTreeForProjects($projects);
+        }
+
+        $tree->sort();
+
+        $this->tree = $tree;
+
+        return $tree;
+    }
+
+    public function getByUserAccessibleProjects(): array
+    {
+        $projects = [];
+
+        if ($this->security->getUser() === null) {
+            return [];
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $projectRepository = $this->entityManager->getRepository(Project::class);
+            $projects = $projectRepository->findBy([], ['name' => 'ASC']);
+        } else {
+            $user = $this->security->getUser();
+            foreach ($user->getProjectMemberships() as $membership) {
+                $projects[] = $membership->getProject();
+            }
+        }
+
+        return $projects;
     }
 
     public function enableDoctrineFilter()

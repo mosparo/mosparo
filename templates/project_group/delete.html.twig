@@ -2,16 +2,16 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'project.delete.title'|trans({ '%projectName%': project.name }) }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'projectGroup.delete.title'|trans({ '%projectGroupName%': projectGroup.name }) }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
-{% set routeSuffix = project.projectGroup ? 'group' : 'root' %}
+{% set routeSuffix = projectGroup.parent ? 'group' : 'root' %}
 
 {% block pageBody %}
     <div class="container-tight pb-4">
         <div class="row">
             <div class="col text-center">
-                <img src="{{ asset('build/images/icons/project_full.svg')|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+                <img src="{{ asset('build/images/icons/project-group.svg')|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
             </div>
         </div>
 
@@ -20,11 +20,11 @@
                 <div class="col">
                     <div class="card card-md">
                         <div class="card-body">
-                            <h2 class="card-title text-center mb-4">{{ 'project.delete.title'|trans({ '%projectName%': project.name }) }}</h2>
+                            <h2 class="card-title text-center mb-4">{{ 'projectGroup.delete.title'|trans({ '%projectGroupName%': projectGroup.name }) }}</h2>
 
                             <div class="alert alert-important alert-danger">
                                 <p>
-                                    {{ 'project.delete.confirm'|trans({ '%projectName%': '<strong>' ~ project.name|escape ~ '</strong>' })|raw }}
+                                    {{ 'projectGroup.delete.confirm'|trans({ '%projectGroupName%': '<strong>' ~ projectGroup.name|escape ~ '</strong>' })|raw }}
                                 </p>
                                 <p>
                                     {{ 'general.infoUndo'|trans }}
@@ -32,20 +32,20 @@
                             </div>
 
                             <div class="alert alert-danger">
-                                <p>{{ 'project.delete.disconnectFirst'|trans }}</p>
+                                <p>{{ 'projectGroup.delete.reassignChildren'|trans }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <input type="hidden" name="delete-token" value="{{ csrf_token('delete-project') }}"/>
+            <input type="hidden" name="delete-token" value="{{ csrf_token('delete-project-group') }}"/>
 
             <div class="row mt-3">
                 <div class="col-12 col-md-auto mt-2 mt-md-0">
-                    <a href="{{ path('project_list_' ~ routeSuffix, {'projectGroup': project.projectGroup ? project.projectGroup.id : null}) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <a href="{{ path('project_list_' ~ routeSuffix, {'projectGroup': projectGroup.parent ? projectGroup.parent.id : null}) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
-                        {{ 'project.backToList'|trans }}
+                        {{ 'projectGroup.action.backToList'|trans }}
                     </a>
                 </div>
                 <div class="col-12 col-md-auto ms-auto order-first order-md-last">
