@@ -309,46 +309,4 @@ class ProjectController extends AbstractController
             'project' => $project,
         ]);
     }
-
-    protected function findVisibleProjects(?ProjectGroup $projectGroup, string $searchQuery, string $filter, array $allowedProjectIds): array
-    {
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb
-            ->select('e')
-            ->from(Project::class, 'e');
-
-        if ($projectGroup) {
-            $qb
-                ->where('e.projectGroup = :projectGroup')
-                ->setParameter('projectGroup', $projectGroup);
-        } else {
-            $qb
-                ->where('e.projectGroup IS NULL');
-        }
-
-        if ($filter === 'active') {
-            $qb
-                ->andWhere('e.status = 1');
-        } else if ($filter === 'inactive') {
-            $qb
-                ->andWhere('e.status = 0');
-        }
-
-        if ($searchQuery) {
-            $qb
-                ->andWhere('e.name LIKE :searchQuery')
-                ->setParameter('searchQuery', '%' . $searchQuery . '%');
-        }
-
-        // Limit the possible projects to the ones the user has access to
-        if ($allowedProjectIds) {
-            $qb
-                ->andWhere('e.id IN (:projects)')
-                ->setParameter('projects', $allowedProjectIds);
-        }
-
-        $qb->orderBy('e.name', 'ASC');
-
-        return $qb->getQuery()->getResult();
-    }
 }
