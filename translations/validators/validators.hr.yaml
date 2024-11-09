@@ -29,3 +29,6 @@ webCronJob:
     ili više.
   geoIpRefreshIntervalAtLeast1Day: Interval GeoIP2 osvježavanja mora biti barem jedan
     dan ili više.
+settings:
+  mosparoName:
+    colonNotAllowed: Dvotočka (:) se ne smije koristiti u imenu mosparo instalacije.

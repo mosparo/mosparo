@@ -994,8 +994,6 @@ settings:
       title: API कुंजी
       publicKey: सार्वजनिक कुंजी
       privateKey: निजी कुंजी
-    subtitle:
-      developerOptions: डेवलपर विकल्प
     message:
       successfullySaved: सेटिंग सफलतापूर्वक सहेजी गई।
     action:
