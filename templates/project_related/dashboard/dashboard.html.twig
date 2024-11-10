@@ -159,15 +159,17 @@
                     colors: ['#56B344', '#D63939'],
                     shade: 'light',
                     tooltipTheme: 'light',
+                    axisColor: '#000000',
                 };
 
-                if ($('body').hasClass('theme-dark')) {
+                if ($('body').data('bs-theme') === 'dark') {
                     colors = {
-                        background: '#1d273b',
+                        background: '#182433',
                         fill: ['#1d3b21', '#3b1d1d'],
                         colors: ['#56B344', '#D63939'],
                         shade: 'dark',
                         tooltipTheme: 'dark',
+                        axisColor: '#ffffff',
                     };
                 }
 
@@ -246,6 +248,9 @@
                             padding: 0,
                             datetimeFormatter: {
                                 day: '{{ chartDateFormat }}'
+                            },
+                            style: {
+                                colors: colors.axisColor
                             }
                         },
                         tooltip: {
@@ -262,6 +267,9 @@
                             show: true,
                             offsetX: 0,
                             offsetY: 3,
+                            style: {
+                                colors: colors.axisColor
+                            }
                         },
                         tooltip: {
                             enabled: false

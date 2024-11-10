@@ -15,6 +15,8 @@
 }
 
 .theme-dark {
+[data-bs-theme=dark],
+body[data-bs-theme=dark] [data-bs-theme=light] {
     .dashboard-link {
         &:hover {
             background-color: rgb(36, 49, 74);

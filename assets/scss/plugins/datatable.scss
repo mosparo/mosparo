@@ -87,7 +87,8 @@
     }
 }
 
-.theme-dark {
+[data-bs-theme=dark],
+body[data-bs-theme=dark] [data-bs-theme=light] {
     .processing-container.visible {
         background: rgba(26, 34, 52, 0.8);
     }
