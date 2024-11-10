@@ -165,6 +165,8 @@ body[data-bs-theme=dark] [data-bs-theme=light] {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+
+        mask-image: unset !important;
     }
 
     &.asc:after {
