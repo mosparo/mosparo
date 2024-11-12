@@ -276,7 +276,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'error',
+                    'success',
                     $this->translator->trans(
                         'settings.projectMember.delete.message.successfullyRemoved',
                         ['%projectMemberName%' => $projectMember->getUser()->getEmail()],
@@ -426,7 +426,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'error',
+                    'success',
                     $this->translator->trans(
                         'settings.security.guideline.delete.message.successfullyRemoved',
                         ['%guidelineName%' => $securityGuideline->getName()],
@@ -537,7 +537,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'warning',
+                    'success',
                     $this->translator->trans(
                         'settings.general.apiKeys.reissueApiKeys.message.successfullyReissued',
                         [],
