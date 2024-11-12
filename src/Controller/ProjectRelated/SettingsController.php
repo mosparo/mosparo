@@ -9,7 +9,7 @@ use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Entity\User;
 use Mosparo\Form\AdvancedProjectFormType;
 use Mosparo\Form\DesignSettingsFormType;
-use Mosparo\Form\ExtendedProjectFormType;
+use Mosparo\Form\ProjectFormType;
 use Mosparo\Form\SecurityGuidelineFormType;
 use Mosparo\Form\SecuritySettingsFormType;
 use Mosparo\Helper\DesignHelper;
@@ -50,7 +50,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         $tree = $projectGroupHelper->getFullProjectGroupTreeForUser();
         $tree->sort();
 
-        $form = $this->createForm(ExtendedProjectFormType::class, $project, [
+        $form = $this->createForm(ProjectFormType::class, $project, [
             'tree' => $tree
         ]);
         $form->handleRequest($request);

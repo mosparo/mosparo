@@ -650,6 +650,7 @@ settings:
     title: Advanced settings
 
     subtitle:
+      spamDetectionOptions: Spam detection options
       statisticsOptions: Statistic options
       languageOptions: Language options
       developerOptions: Developer options

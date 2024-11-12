@@ -24,10 +24,11 @@
             <div class="col-12 col-lg-6 mb-3">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h3 class="card-title">{{ 'settings.advanced.subtitle.statisticsOptions'|trans }}</h3>
+                        <h3 class="card-title">{{ 'settings.advanced.subtitle.spamDetectionOptions'|trans }}</h3>
                     </div>
                     <div class="card-body">
-                        {{ form_row(form.statisticStorageLimit) }}
+                        {{ form_row(form.status) }}
+                        {{ form_row(form.spamScore) }}
                     </div>
                 </div>
                 <div class="card mb-3">
@@ -54,6 +55,14 @@
                 </div>
             </div>
             <div class="col-12 col-lg-6 mb-3">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'settings.advanced.subtitle.statisticsOptions'|trans }}</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.statisticStorageLimit) }}
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">{{ 'settings.advanced.subtitle.developerOptions'|trans }}</h3>
