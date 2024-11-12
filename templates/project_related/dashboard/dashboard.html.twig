@@ -160,6 +160,8 @@
                     shade: 'light',
                     tooltipTheme: 'light',
                     axisColor: '#000000',
+                    annotationsLineColor: '#888888',
+                    annotationsLabelColor: '#888888',
                 };
 
                 if ($('body').data('bs-theme') === 'dark') {
@@ -170,6 +172,8 @@
                         shade: 'dark',
                         tooltipTheme: 'dark',
                         axisColor: '#ffffff',
+                        annotationsLineColor: '#BBBBBB',
+                        annotationsLabelColor: '#BBBBBB',
                     };
                 }
 
@@ -280,7 +284,7 @@
                             xaxis: [
                                 {
                                     x: {{ statisticOnlyRangeEndDate }},
-                                    borderColor: '#888888',
+                                    borderColor: colors.annotationsLineColor,
                                     label: {
                                         borderColor: 'transparent',
                                         text: '{{ 'dashboard.chart.annotation.statisticOnly'|trans }}',
@@ -291,6 +295,7 @@
                                         style: {
                                             fontSize: '14px',
                                             background: 'transparent',
+                                            color: colors.annotationsLabelColor
                                         }
                                     }
                                 },

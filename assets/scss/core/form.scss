@@ -229,3 +229,10 @@ textarea.ip-address-field {
     color: var(--tblr-dropdown-link-hover-color);
     background-color: var(--tblr-dropdown-link-hover-bg);
 }
+
+[data-bs-theme=dark],
+body[data-bs-theme=dark] [data-bs-theme=light] {
+    .form-select {
+        --tblr-form-select-bg-img: #{$form-select-indicator};
+    }
+}
