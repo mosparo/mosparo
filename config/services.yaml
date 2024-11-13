@@ -208,6 +208,10 @@ services:
         arguments:
             $trustedProxies: '%kernel.trusted_proxies%'
 
+    Mosparo\Controller\HealthController:
+        arguments:
+            $mosparoInstalled: '%env(mosparo_installed)%'
+
     Mosparo\ExpressionLanguage\AllowListExpressionLanguageProvider:
         tags:
             - { name: security.expression_language_provider }
