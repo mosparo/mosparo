@@ -39,6 +39,7 @@ project:
     apiDebugModeHelp: Wenn der API-Debug-Modus aktiviert ist, gibt die Verifizierungs-API weitere Informationen über den Verifizierungsprozess zurück. Diese Informationen können wichtig sein, um zu verstehen, warum eine Verifizierung fehlgeschlagen ist. Verwenden Sie diese Option, wenn Sie versuchen, mosparo in Ihr Formular zu integrieren und dabei Probleme auftreten.
     statisticStorageLimitHelp: Legt fest, wie lange mosparo die Statistiken in der Datenbank aufbewahren soll. Diese Option hat keinen Zusammenhang mit dem Speicherbereich der Einsendungen, nach dem die Einsendungen aus der Datenbank gelöscht werden (14 Tage).
     statisticStorageLimit: Speichern der Statistik
+    languageSource: Sprachquelle
     projectGroup: Projektgruppe
     projectGroupHelp: Sie können Projektgruppen verwenden, um Ihre Projekte zu organisieren. Wählen Sie die Projektgruppe, in der Sie dieses Projekt speichern möchten.
   delete:

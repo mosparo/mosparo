@@ -41,6 +41,7 @@ class AdvancedProjectFormType extends AbstractType
                 'help' => 'project.form.statisticStorageLimitHelp'
             ])
             ->add('languageSource', EnumType::class, [
+                'label' => 'project.form.languageSource',
                 'class' => LanguageSource::class,
                 'expanded' => true,
             ])
