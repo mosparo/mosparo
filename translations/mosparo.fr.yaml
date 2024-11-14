@@ -886,3 +886,10 @@ form:
   choices:
     systemDefault: Paramètre par défaut
     browserLanguage: Langue du navigateur
+tools:
+  ruleTester:
+    form:
+      title: Paramètres de test
+    title: Testeur de règles
+    description: Testez comment vos règles détecteront le spam.
+  title: Outils

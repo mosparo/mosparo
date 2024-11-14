@@ -32,3 +32,8 @@ webCronJob:
 settings:
   mosparoName:
     colonNotAllowed: Kolón (:) nie je povolený v mene inštalácie mosparo.
+hosts:
+  hostContainsProtocol: Tento hostiteľ obsahuje protokol. Prosím, zadajte hostiteľa
+    bez protokolu (napríklad.com namiesto https://example.com).
+  hostContainsInvalidCharacter: Tento hostiteľ obsahuje neplatné znaky. V tejto oblasti
+    sú povolené iba znaky (a-z), čísla (0HPLC, dashes, bodky a hviezda (*).
