@@ -104,7 +104,7 @@
                                         </a>
                                         <div class="dropdown-menu project-dropdown-menu">
                                             {% set projectTree = get_by_user_accessible_project_tree() %}
-                                            {% if projectTree %}
+                                            <div class="project-dropdown-top-part">
                                                 <div class="dropdown-item dropdown-item-with-input">
                                                     <div class="input-group input-group-flat input-with-clear-button w-100">
                                                         <span class="input-group-text">
@@ -118,96 +118,99 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="dropdown-divider my-0"></div>
-                                                <div class="dropdown-projects-list">
-                                                    {% macro project_group_tree_node(node) %}
-                                                        <li class="project-group-node">
-                                                            <div class="project-group-node-header">
-                                                                <div class="project-group-node-icon clickable">
-                                                                    <i class="ti ti-chevron-right"></i>
-                                                                </div>
-                                                                <div class="project-group-node-label clickable">
-                                                                    {{ node.projectGroup.name }}
-                                                                </div>
+                                            </div>
+                                            <div class="dropdown-projects-list">
+                                                {% macro project_group_tree_node(node) %}
+                                                    <li class="project-group-node">
+                                                        <div class="project-group-node-header">
+                                                            <div class="project-group-node-icon clickable">
+                                                                <i class="ti ti-chevron-right"></i>
                                                             </div>
+                                                            <div class="project-group-node-label clickable">
+                                                                {{ node.projectGroup.name }}
+                                                            </div>
+                                                        </div>
 
-                                                            <ul class="project-group-node-children">
-                                                                {% if node.children|length or node.projects|length %}
-                                                                    {% if node.children|length %}
-                                                                        {% for subNode in node.children %}
-                                                                            {{ _self.project_group_tree_node(subNode) }}
-                                                                        {% endfor %}
-                                                                    {% endif %}
-
-                                                                    {% if node.projects|length %}
-                                                                        {% for project in node.projects %}
-                                                                            {{ _self.project_tree_node(project) }}
-                                                                        {% endfor %}
-                                                                    {% endif %}
-                                                                {% else %}
-                                                                    <li class="project-group-node">
-                                                                        <div class="project-group-node-header text-muted">
-                                                                            <div class="project-group-node-icon">
-                                                                                <i class="ti ti-box-off"></i>
-                                                                            </div>
-                                                                            <div class="project-group-node-label">
-                                                                                {{ 'projectGroupSelector.noProjectsAvailable'|trans }}
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
+                                                        <ul class="project-group-node-children">
+                                                            {% if node.children|length or node.projects|length %}
+                                                                {% if node.children|length %}
+                                                                    {% for subNode in node.children %}
+                                                                        {{ _self.project_group_tree_node(subNode) }}
+                                                                    {% endfor %}
                                                                 {% endif %}
-                                                            </ul>
-                                                        </li>
-                                                    {% endmacro %}
 
-                                                    {% macro project_tree_node(project) %}
-                                                        <li class="project-group-node {% if project == activeProject %}active-project{% endif %}">
-                                                            <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="project-group-node-header">
-                                                                <div class="project-group-node-icon">
-                                                                    {% if project == activeProject %}
-                                                                        <i class="ti ti-check"></i>
-                                                                    {% else %}
-                                                                        <i class="ti ti-cube"></i>
-                                                                    {% endif %}
-                                                                </div>
-                                                                <div class="project-group-node-label">
-                                                                    {{ project.name }}
-                                                                </div>
-                                                            </a>
-                                                        </li>
-                                                    {% endmacro %}
+                                                                {% if node.projects|length %}
+                                                                    {% for project in node.projects %}
+                                                                        {{ _self.project_tree_node(project) }}
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            {% else %}
+                                                                <li class="project-group-node disabled">
+                                                                    <div class="project-group-node-header text-muted">
+                                                                        <div class="project-group-node-icon">
+                                                                            <i class="ti ti-box-off"></i>
+                                                                        </div>
+                                                                        <div class="project-group-node-label">
+                                                                            {{ 'projectGroupSelector.noProjectsAvailable'|trans }}
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            {% endif %}
+                                                        </ul>
+                                                    </li>
+                                                {% endmacro %}
 
-                                                    <ul class="project-group-tree">
+                                                {% macro project_tree_node(project) %}
+                                                    <li class="project-group-node {% if project == activeProject %}active-project{% endif %}">
+                                                        <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="project-group-node-header">
+                                                            <div class="project-group-node-icon">
+                                                                {% if project == activeProject %}
+                                                                    <i class="ti ti-check"></i>
+                                                                {% else %}
+                                                                    <i class="ti ti-cube"></i>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="project-group-node-label">
+                                                                {{ project.name }}
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                {% endmacro %}
+
+                                                <ul class="project-group-tree">
+                                                    {% if projectTree %}
                                                         {% for node in projectTree.children %}
                                                             {{ _self.project_group_tree_node(node) }}
                                                         {% endfor %}
                                                         {% for project in projectTree.projects %}
                                                             {{ _self.project_tree_node(project) }}
                                                         {% endfor %}
+                                                    {% endif %}
 
-                                                        <li class="no-search-results-found justify-content-center disabled d-none">
+                                                    <li class="project-group-node no-search-results-found {% if projectTree %}d-none{% endif %}">
+                                                        <div class="project-group-node-info">
                                                             <i class="ti ti-info-circle"></i>
                                                             {{ 'header.noProjectsFound'|trans }}
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="dropdown-divider mt-0"></div>
-                                            {% endif %}
-                                            <a href="{{ path('project_list_root') }}" class="dropdown-item">
-                                                <i class="ti ti-folders"></i>
-                                                {{ 'project.action.manage'|trans }}
-                                            </a>
-                                            {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
-                                                <a href="{{ path('project_create_root') }}" class="dropdown-item">
-                                                    <i class="ti ti-cube-plus"></i>
-                                                    {{ 'project.create.title'|trans }}
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="project-dropdown-bottom-part">
+                                                <a href="{{ path('project_list_root') }}" class="dropdown-item">
+                                                    <i class="ti ti-folders"></i>
+                                                    {{ 'project.action.manage'|trans }}
                                                 </a>
-                                                <a href="{{ path('project_group_create') }}" class="dropdown-item">
-                                                    <i class="ti ti-folder-plus"></i>
-                                                    {{ 'projectGroup.create.title'|trans }}
-                                                </a>
-                                            {% endif %}
-                                            <div class="dropdown-divider d-block d-lg-none"></div>
+                                                {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
+                                                    <a href="{{ path('project_create_root') }}" class="dropdown-item">
+                                                        <i class="ti ti-cube-plus"></i>
+                                                        {{ 'project.create.title'|trans }}
+                                                    </a>
+                                                    <a href="{{ path('project_group_create') }}" class="dropdown-item">
+                                                        <i class="ti ti-folder-plus"></i>
+                                                        {{ 'projectGroup.create.title'|trans }}
+                                                    </a>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
 

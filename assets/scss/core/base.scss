@@ -44,17 +44,25 @@
 
 .project-dropdown-menu {
     width: 21.25rem;
+    overflow: hidden;
+    padding: 0;
 
     .project-name {
         max-width: 100%;
         text-overflow: ellipsis;
         overflow: hidden;
     }
+
+    .project-dropdown-top-part,
+    .project-dropdown-bottom-part {
+        position: relative;
+        z-index: 10;
+
+        box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.2);
+    }
 }
 
 .dropdown-projects-list {
-    box-shadow: 0 -2px 10px 0px inset rgba(0, 0, 0, 0.20);
-
     .project-group-tree {
         max-height: 18rem;
 
@@ -76,14 +84,6 @@
 
 .dropdown-item-with-input {
     padding: 0;
-
-    &:first-child {
-        margin-top: -0.25rem;
-    }
-
-    & + .dropdown-divider {
-        margin-top: 0;
-    }
 
     input,
     .input-group-text {
@@ -122,6 +122,13 @@ svg.illustration-list {
 body[data-bs-theme=dark] [data-bs-theme=light] {
     .mosparo-logo-container {
         filter: brightness(0) invert(1);
+    }
+
+    .project-dropdown-menu {
+        .project-dropdown-top-part,
+        .project-dropdown-bottom-part {
+            box-shadow: 0 0 7px 0 #000000;
+        }
     }
 }
 

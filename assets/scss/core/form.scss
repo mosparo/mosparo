@@ -225,7 +225,8 @@ textarea.ip-address-field {
     }
 }
 
-.project-group-node-header:hover:not(.text-muted) {
+.project-group-node-header:hover:not(.text-muted),
+.project-group-node.focus > .project-group-node-header:not(.text-muted) {
     color: var(--tblr-dropdown-link-hover-color);
     background-color: var(--tblr-dropdown-link-hover-bg);
 }
