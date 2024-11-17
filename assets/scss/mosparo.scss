@@ -9,6 +9,9 @@ $form-select-indicator: url('/assets/images/ui/tabler.svg#select');
 $btn-close-bg: url('/assets/images/ui/tabler.svg#close');
 $accordion-button-icon: url('/assets/images/ui/tabler.svg#accordion-normal');
 $accordion-button-active-icon: url('/assets/images/ui/tabler.svg#accordion-active');
+$accordion-button-icon-dark: url('/assets/images/ui/tabler.svg#accordion-normal-dark');
+$accordion-button-active-icon-dark: url('/assets/images/ui/tabler.svg#accordion-active-dark');
+$badge-color: #ffffff;
 
 @import '~@tabler/core';
 @import '~@tabler/icons-webfont/dist/tabler-icons-outline.scss';

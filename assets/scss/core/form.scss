@@ -237,3 +237,8 @@ body[data-bs-theme=dark] [data-bs-theme=light] {
         --tblr-form-select-bg-img: #{$form-select-indicator};
     }
 }
+
+[data-bs-theme=dark] .accordion-button::after {
+    --tblr-accordion-btn-icon: #{$accordion-button-icon-dark};
+    --tblr-accordion-btn-active-icon: #{$accordion-button-active-icon-dark};
+}

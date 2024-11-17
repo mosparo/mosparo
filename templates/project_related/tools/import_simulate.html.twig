@@ -43,7 +43,7 @@
                                                 </span>
                                                 {% if changes.generalSettings is defined %}
                                                     {%  set numberOfChanges = changes.generalSettings|length %}
-                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
                                                 {% endif %}
                                             </a>
                                         </li>
@@ -55,7 +55,7 @@
                                                 </span>
                                                 {% if changes.designSettings is defined %}
                                                     {%  set numberOfChanges = changes.designSettings|length %}
-                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
                                                 {% endif %}
                                             </a>
                                         </li>
@@ -67,7 +67,7 @@
                                                 </span>
                                                 {% if changes.securitySettings is defined and changes.securityGuidelines is defined %}
                                                     {%  set numberOfChanges = changes.securitySettings|length + changes.securityGuidelines|length %}
-                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
                                                 {% endif %}
                                             </a>
                                         </li>
@@ -79,7 +79,7 @@
                                                 </span>
                                                 {% if changes.rules is defined %}
                                                     {%  set numberOfChanges = changes.rules|length %}
-                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
                                                 {% endif %}
                                             </a>
                                         </li>
@@ -91,7 +91,7 @@
                                                 </span>
                                                 {% if changes.rulesets is defined %}
                                                     {%  set numberOfChanges = changes.rulesets|length %}
-                                                    <span class="badge {% if numberOfChanges %}bg-azure{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
                                                 {% endif %}
                                             </a>
                                         </li>
