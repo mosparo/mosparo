@@ -120,6 +120,10 @@ svg.illustration-list {
 
 [data-bs-theme=dark],
 body[data-bs-theme=dark] [data-bs-theme=light] {
+    .illustration-list {
+        stroke: #dce1e7 !important;
+    }
+
     .mosparo-logo-container {
         filter: brightness(0) invert(1);
     }
