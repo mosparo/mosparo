@@ -359,6 +359,8 @@ class FrontendApiController extends AbstractController
         if ($this->translator instanceof LocaleAwareInterface) {
             $locales = $this->findCorrectLocales($request);
 
+            dump($locales);
+
             foreach ($locales as $locale) {
                 $this->translator->setLocale($locale);
 
@@ -395,7 +397,7 @@ class FrontendApiController extends AbstractController
     protected function findCorrectLocales(Request $request): array
     {
         $project = $this->projectHelper->getActiveProject();
-        $locales = ['en']; // The default locale, always fallback to this
+        $locales = [];
         $browserLocale = null;
         $staticLocale = null;
         $htmlLocale = null;
@@ -423,6 +425,8 @@ class FrontendApiController extends AbstractController
             $this->addLocales($locales, $browserLocale);
             $this->addLocales($locales, $htmlLocale);
         }
+
+        $locales[] = 'en'; // The default locale, always fallback to this
 
         return array_filter($locales);
     }
