@@ -15,7 +15,7 @@ project:
     manage: Projekte verwalten
     delete: Projekt löschen
     goto: Zum Projekt
-
+    settings: Einstellungen
     id: Projekt-ID
     create: Erstellen
   create:

@@ -243,6 +243,10 @@
                                                 </div>
                                                 {% if can_user_manage_project(project) %}
                                                     <div class="dropdown-divider"></div>
+                                                    <a href="{{ path('settings_general', { '_projectId': project.id }) }}" class="dropdown-item">
+                                                        <i class="ti ti-settings"></i>
+                                                        {{ 'project.action.settings'|trans }}
+                                                    </a>
                                                     <a href="{{ path('project_delete', { '_projectId': project.id }) }}" class="dropdown-item text-red">
                                                         <i class="ti ti-circle-minus"></i>
                                                         {{ 'project.action.delete'|trans }}
@@ -398,6 +402,10 @@
                                                         </div>
                                                         {% if can_user_manage_project(project) %}
                                                             <div class="dropdown-divider"></div>
+                                                            <a href="{{ path('settings_general', { '_projectId': project.id }) }}" class="dropdown-item">
+                                                                <i class="ti ti-settings"></i>
+                                                                {{ 'project.action.settings'|trans }}
+                                                            </a>
                                                             <a href="{{ path('project_delete', { '_projectId': project.id }) }}" class="dropdown-item text-red">
                                                                 <i class="ti ti-circle-minus"></i>
                                                                 {{ 'project.action.delete'|trans }}
