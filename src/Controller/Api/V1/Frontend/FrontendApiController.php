@@ -359,8 +359,6 @@ class FrontendApiController extends AbstractController
         if ($this->translator instanceof LocaleAwareInterface) {
             $locales = $this->findCorrectLocales($request);
 
-            dump($locales);
-
             foreach ($locales as $locale) {
                 $this->translator->setLocale($locale);
 
