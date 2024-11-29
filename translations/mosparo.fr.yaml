@@ -286,6 +286,13 @@ submission:
         headers: En-têtes
         postData: Données publications
         response: Réponse
+        formDataSignature: Signature des données du formulaire
+        validationSignature: Signature de validation
+        requestSignature: Demander la signature
+        authorization: Autorisation
+        username: Nom d'utilisateur
+        password: Mot de passe
+        method: Méthode
       hints:
         formData: Les données du formulaire soumises par votre formulaire.
         submitToken: Soumettre le jeton de l'étape 1.
@@ -328,9 +335,22 @@ submission:
           intro: Pour vous assurer que la demande est valide, vous devez générer la signature de la demande. Commencez par convertir les données de la demande en une chaîne JSON. Combinez le point de terminaison de l'API avec la chaîne JSON des données de la demande et générez le hachage HMAC SHA256 pour cette chaîne avec la clé privée du projet comme clé.
         nine:
           title: "Étape 9 : Envoyer la demande d'API"
+          intro: Toutes les données ont été collectées et préparées. Vous pouvez maintenant envoyer les données à l'API.
         two:
           intro: Avant d'envoyer les données à l'API de vérification, vous devez préparer les données du formulaire. Les champs mosparo (commençant par %codeStart%_mosparo_%codeEnd%) doivent être supprimés des données du formulaire. Ensuite, veuillez remplacer tous les sauts de ligne CRLF par des sauts de ligne LF et changer tous les noms de champs en lettres minuscules. Triez les données du formulaire par nom dans l'ordre alphabétique (A-Z).
           title: 'Étape 2 : Préparer les données du formulaire'
+        ten:
+          intro: mosparo répondra à votre requête API avec une chaîne JSON. Décodez la chaîne JSON et vérifiez si une clé %codeStart%valid%codeEnd% existe et est définie sur %codeStart%true%codeEnd%. Si c'est le cas, assurez-vous que la clé %codeStart%verificationSignature%codeEnd% est également définie et qu'elle est égale à la signature de vérification générée à l'étape 6. Si c'est le cas, la réponse est valide.
+          title: 'Étape 10 : Vérifier la réponse'
+      intro: La simulation de vérification vous montre quelles données mosparo accepte pour le processus de vérification. Vous pouvez comparer les données affichées avec les données que votre processus de vérification va générer pour trouver d'éventuels problèmes.
+      errors:
+        noValidationToken: La simulation de vérification est impossible car aucun jeton de validation n'est stocké pour cette soumission. Cela signifie que les données du formulaire n'ont pas passé la validation mosparo, ce qui rend la vérification impossible.
+      title: Simulation de vérification
+      buttons:
+        customIntegration: Intégration personnalisée
+        apiDocumentation: Documentation de l'API
+      info:
+        authorizationHeader: L'en-tête d'autorisation doit être codé en Base64.
   list:
     valid: Valide
     submittedAt: Envoyé le
@@ -502,13 +522,77 @@ settings:
       lockoutMultiplicatorHelp: Le délai de verrouillage par défaut sera augmenté à chaque nouvelle requête.
       ipAllowList: Adresses IP et sous-réseaux autorisés en permanence
       ipAllowListHelp: 'Spécifiez une adresse IP ou sous-réseau par ligne. Par exemple : 19.168.1.13 ou 192.168.1.0/24'
+      honeypotFieldActive: Activation du champ pot de miel
+      lockoutDetectionTimeFrame: Période de détection
+      delayActive: Activation du délai de demande
+      delayTime: Retard de base
+      equalSubmissionsActive: Activer les soumissions égales en bloc
+      honeypotFieldNameHelp: Il doit s'agir d'un nom de champ qui ne figure pas déjà dans votre formulaire et qui est un nom de champ normal comme "url" ou "address-line-2". N'utilisez que des lettres, des chiffres et le signe tiret (-). S'il est vide, aucun champ de type "pot de miel" ne sera ajouté au formulaire.
+      delayDetectionTimeFrame: Période de détection
     title: Sécurité
     ipLockout:
       title: Verrouillage d'IP
+      intro: Pour rendre les choses encore plus difficiles pour les robots, mosparo peut automatiquement bloquer temporairement les adresses IP. Si une adresse IP soumet de nombreux formulaires, mosparo peut automatiquement compter les soumissions et bloquer l'adresse IP si un nombre spécifique est atteint.
     ipAllowList:
       title: Liste blanche d'IP
     message:
       successfullySaved: Les paramètres de sécurité ont bien été enregistrés.
+    generalSecuritySettings:
+      intro: Les paramètres de sécurité généraux s'appliquent à tous les utilisateurs qui ne correspondent pas à une ligne directrice de sécurité basée sur l'origine.
+      title: Paramètres de sécurité généraux
+      action: Modifier les paramètres généraux de sécurité
+    guideline:
+      form:
+        criteria:
+          countryCodesHelp: 'Ajoutez les codes de pays (ISO alpha-2) pour lesquels cette ligne directrice devrait être considérée. Vous pouvez voir le code du pays dans les détails de la soumission. Exemple : CH'
+          title: Critères
+          intro: Veuillez définir les critères de cette ligne directrice. Les critères vous permettent de définir pour quelle origine ces paramètres de sécurité doivent être utilisés.
+          intro2: La ligne directrice sera utilisée pour l'utilisateur dès que l'un de ces critères correspondra. Vous devez ajouter au moins un critère pour enregistrer la ligne directrice.
+          subnets: Sous-réseaux
+          subnetsHelp: "Ajoutez les sous-réseaux pour lesquels cette ligne directrice doit être prise en compte. Vous pouvez définir des sous-réseaux IPv4 ou IPv6. Vous pouvez voir l'adresse IP dans les détails de la soumission. Exemple : 192.168.1.0/24"
+          countryCodes: Codes des pays
+          asNumbers: Numéros d'AS
+          asNumbersHelp: "Ajouter les numéros d'AS pour lesquels cette ligne directrice devrait être considérée. Vous pouvez voir le numéro AS dans les détails de la soumission. Exemple : 123456"
+        settings:
+          title: Paramètres de sécurité
+          intro: Veuillez cocher la case "remplacer" pour les paramètres que vous souhaitez remplacer dans les paramètres de sécurité généraux. Si vous ne modifiez pas un paramètre, mosparo utilisera celui des paramètres du projet.
+        guideline:
+          title: Lignes directrices
+          name: Nom
+          description: Description
+          priority: Priorité
+          priorityHelp: Définit l'ordre dans lequel les lignes directrices seront testées. La ligne directrice la plus élevée sera testée en premier.
+        infoGeoIp2Disabled: GeoIP2 n'est pas disponible. Veuillez configurer la base de données GeoIP2 pour utiliser les critères des codes pays et des numéros AS.
+      list:
+        name: Nom
+        priority: Priorité
+        actions: Actions
+      add:
+        title: Ajouter une ligne directrice
+      edit:
+        title: Modifier la ligne directrice %guidelineName%
+      delete:
+        title: Supprimer la ligne directrice de sécurité %guidelineName%
+        confirm: Voulez-vous vraiment supprimer la ligne directrice de sécurité %guidelineName% ?
+        message:
+          successfullyRemoved: La ligne directrice de sécurité %guidelineName% a été supprimée avec succès du projet.
+    minimumTime:
+      intro: La fonctionnalité de temps minimum mesure le temps écoulé entre l'initialisation de la case à cocher mosparo (lors du chargement de la page) et la validation de la soumission (après que le formulaire a été soumis). Si ce temps est inférieur au nombre saisi ci-dessous, la validation n'est pas valide. Si vous avez un formulaire court, cette vérification devrait être désactivée ou vous devriez utiliser un nombre très bas.
+      title: Durée minimale
+      introShort: La fonctionnalité de temps minimum mesure le temps écoulé entre l'initialisation de la case à cocher mosparo (lors du chargement de la page) et la validation de la soumission (après l'envoi du formulaire). Cette fonctionnalité est principalement recommandée pour les formulaires plus longs.
+    backToSecurity: Retour aux paramètres de sécurité
+    originBasedSecuritySettings:
+      title: Lignes directrices en matière de sécurité fondées sur l'origine
+      add:
+        title: Ajouter une ligne directrice
+    honeypot:
+      intro: Un champ "pot de miel" est un champ caché dans le formulaire. Les humains ne pourront pas le voir, mais les robots spammeurs rempliront probablement ce champ. Dans ce cas, nous savons qu'il ne s'agit pas d'un humain, ce qui nous permet de bloquer la soumission.
+      infoField: Veuillez saisir un nom pour le champ "pot de miel". Le nom doit être un nom de champ normal que vous n'avez pas encore utilisé dans votre formulaire. mosparo ajoutera le champ caché automatiquement ; vous ne devez pas modifier votre formulaire.
+      title: Pot de miel
+    requestDelaying:
+      title: Demande de report
+      intro: Pour compliquer la tâche des robots, mosparo peut retarder la création de jetons de soumission. Sans jeton de soumission, un formulaire ne peut pas être soumis. L'utilisateur verra combien de temps il doit attendre jusqu'à ce que le formulaire puisse être soumis.
+      infoIpAddress: Dans ce cas, la création du jeton doit être retardée, ce qui sera décidé en fonction du nombre de demandes effectuées par l'adresse IP. Pour chaque demande de jeton supplémentaire, le délai sera prolongé.
   title: Paramètres du projet
   backToSettings: Revenir aux paramètres
   projectMember:
