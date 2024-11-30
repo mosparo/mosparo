@@ -1,11 +1,11 @@
 accessibility:
-  checkingData: Nós estamos verificando seus dados. Por favor, aguarde.
-  dataValid: Seus dados são válidos. Você pode enviar o formulário.
+  checkingData: A proteção contra spam está verificando seus dados. Por favor, aguarde.
+  dataValid: Seus dados são válidos. Agora você pode enviar o formulário.
   protectedBy: Este formulário está protegido contra spam pela mosparo.
 error:
   internalError: Ocorreu um erro. Por favor, tente outra vez.
   gotNoToken: mosparo não retornou nenhum token enviado.
-  spamDetected: Há spam em seus dados.
+  spamDetected: Seus dados foram identificados pela nossa proteção contra spam.
   noSubmitTokenAvailable: Nenhum token de envio disponível. Não é possível fazer a validação deste formulário.
   lockedOut: Você foi temporariamente bloqueado. Por favor, tente novamente após %datetime%.
   delay: Seu pedido foi adiado. Por favor, aguarde %seconds% segundos.
