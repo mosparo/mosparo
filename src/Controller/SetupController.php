@@ -91,8 +91,17 @@ class SetupController extends AbstractController
             $databaseSystems['setup.database.system.postgres'] = 'postgres';
         }
 
-        if ($this->setupHelper->hasPhpExtension('pdo_sqlite')) {
-            $databaseSystems['setup.database.system.sqlite'] = 'sqlite';
+        $sqliteVersionMismatch = false;
+        $sqliteVersionNumber = null;
+        if ($this->setupHelper->hasPhpExtension('pdo_sqlite') && class_exists('SQLite3')) {
+            $sqliteVersion = \SQLite3::version();
+
+            if (version_compare($sqliteVersion['versionString'], '3.16.0', 'ge')) {
+                $databaseSystems['setup.database.system.sqlite'] = 'sqlite';
+            } else {
+                $sqliteVersionMismatch = true;
+                $sqliteVersionNumber = $sqliteVersion['versionString'];
+            }
         }
 
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
@@ -169,7 +178,9 @@ class SetupController extends AbstractController
             'form' => $form->createView(),
             'submitted' => $form->isSubmitted(),
             'connected' => $connected,
-            'tablesExist' => $tablesExist
+            'tablesExist' => $tablesExist,
+            'sqliteVersionMismatch' => $sqliteVersionMismatch,
+            'sqliteVersionNumber' => $sqliteVersionNumber,
         ]);
     }
 

@@ -1430,6 +1430,7 @@ setup:
     useEmptyDatabase: Bitte verwenden Sie eine leere Datenbank bzw. eine Datenbank, in welcher keine Tabellen von mosparo existieren.
     mosparoTablesExistInDatabase: In der angegebenen Datenbank wurden Tabellen von mosparo gefunden. Bitte verwenden Sie eine andere Datenbank oder löschen Sie die Tabellen.
     connectionDataInvalid: Es war nicht möglich, eine Verbindung mit der Datenbank herzustellen. Bitte prüfen Sie Ihre Einstellungen und versuchen Sie es erneut.
+    sqliteVersionMismatch: mosparo benötigt mindestens die SQLite-Bibliothek 3.16.0, aber Sie haben die Version %versionNumber% installiert. Sie können SQLite nicht zur Installation von mosparo verwenden.
 
     form:
       host: Host

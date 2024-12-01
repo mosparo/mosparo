@@ -28,6 +28,12 @@
             </div>
         {% endif %}
 
+        {% if sqliteVersionMismatch %}
+            <div class="alert alert-orange">
+                {{ 'setup.database.sqliteVersionMismatch'|trans({'%versionNumber%': sqliteVersionNumber}) }}
+            </div>
+        {% endif %}
+
         {{ form_row(form.system) }}
         {{ form_row(form.host) }}
         {{ form_row(form.port) }}
