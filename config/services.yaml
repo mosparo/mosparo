@@ -81,6 +81,14 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    mosparo.cache.service:
+        class: Symfony\Contracts\Cache\CacheInterface
+        factory: [ 'Mosparo\Factory\CacheFactory', 'getCache' ]
+        arguments:
+            $cacheAdapter: '%env(MOSPARO_CACHE_ADAPTER)%'
+            $redisUrl: '%env(REDIS_URL)%'
+            $memcachedUrl: '%env(MEMCACHED_URL)%'
+
     Mosparo\Session\DatabaseSessionHandler:
         arguments:
             $connection: '@database_connection'
@@ -166,6 +174,10 @@ services:
             $projectDirectory: '%kernel.project_dir%'
             $envSuffix: '%env(MOSPARO_ENV_SUFFIX)%'
 
+    Mosparo\Helper\CleanupHelper:
+        arguments:
+            $cache: '@mosparo.cache.service'
+
     Mosparo\Helper\LocaleHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
@@ -216,7 +228,3 @@ services:
         tags:
             - { name: security.expression_language_provider }
             - { name: routing.expression_language_provider }
-
-    #Mosparo\Security\RequestMatcher:
-    #    arguments:
-    #        $allowList: '%env(TRUSTED_IPS)%'

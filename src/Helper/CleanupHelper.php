@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Util\DateRangeUtil;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class CleanupHelper
 {
@@ -19,18 +19,20 @@ class CleanupHelper
 
     protected LoggerInterface $logger;
 
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, LoggerInterface $logger)
+    protected CacheInterface $cache;
+
+    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, LoggerInterface $logger, CacheInterface $cache)
     {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->logger = $logger;
+        $this->cache = $cache;
     }
 
     public function cleanup($maxIterations = 10, $force = false, $ignoreExceptions = true, $timeout = 1.5)
     {
-        $cache = new FilesystemAdapter();
-        $nextCleanup = $cache->getItem('mosparoNextCleanup');
-        $cleanupStartedAt = $cache->getItem('mosparoCleanupStartedAt');
+        $nextCleanup = $this->cache->getItem('mosparoNextCleanup');
+        $cleanupStartedAt = $this->cache->getItem('mosparoCleanupStartedAt');
 
         // If the force parameter is set, we execute the cleanup anyways
         if ($nextCleanup->get() !== null && !$force) {
@@ -51,7 +53,7 @@ class CleanupHelper
 
         // Lock the cleanup
         $cleanupStartedAt->set(new DateTime());
-        $cache->save($cleanupStartedAt);
+        $this->cache->save($cleanupStartedAt);
 
         // Remove the active project for the cleanup
         $activeProject = null;
@@ -212,10 +214,10 @@ class CleanupHelper
         }
 
         $nextCleanup->set($nextCleanupDate);
-        $cache->save($nextCleanup);
+        $this->cache->save($nextCleanup);
 
         $cleanupStartedAt->set(null);
-        $cache->save($cleanupStartedAt);
+        $this->cache->save($cleanupStartedAt);
     }
 
     public function cleanupDayStatistcs()
