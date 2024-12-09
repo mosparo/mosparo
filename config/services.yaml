@@ -177,6 +177,7 @@ services:
     Mosparo\Helper\CleanupHelper:
         arguments:
             $cache: '@mosparo.cache.service'
+            $cleanupGracePeriodEnabled: '%env(MOSPARO_CLEANUP_GRACE_PERIOD_ENABLED)%'
 
     Mosparo\Helper\LocaleHelper:
         arguments:
