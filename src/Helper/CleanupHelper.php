@@ -40,7 +40,8 @@ class CleanupHelper
 
         // If the force parameter is set, we execute the cleanup anyways
         if ($nextCleanup->get() !== null && !$force) {
-            $cleanupStart = $nextCleanup->get();
+            // Clone the DateTime object to keep the original time because we manipulate the time later (see below).
+            $cleanupStart = clone $nextCleanup->get();
 
             // Add the cleanup grace period - if enabled - to the regular cleanup time but not the
             // additional cleanup (see below).
