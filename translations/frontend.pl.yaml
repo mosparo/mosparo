@@ -1,6 +1,6 @@
 label: Akceptuję, że wpisy w formularzu są sprawdzane pod kątem spamu oraz są przechowywane zaszyfrowane przez 14 dni.
 accessibility:
-  checkingData: Ochrona przed spamem sprawdza twoje dane. Prosimy czekać.
+  checkingData: Ochrona przed spamem sprawdza twoje dane.
   dataValid: Twoje dane są prawidłowe. Możesz przesłać formularz.
   protectedBy: Ten formularz jest chroniony przed spamem przez mosparo.
 error:
