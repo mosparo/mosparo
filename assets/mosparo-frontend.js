@@ -665,7 +665,10 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
         this.countdownSeconds--;
 
-        this.errorMessageElement.querySelectorAll('span')[0].textContent = this.countdownSeconds;
+        let timeField = this.errorMessageElement.querySelectorAll('span');
+        if (timeField.length) {
+            timeField[0].textContent = this.countdownSeconds;
+        }
     }
 
     this.switchToInvisible = function () {
