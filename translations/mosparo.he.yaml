@@ -1,0 +1,560 @@
+header:
+  noProjectsFound: לא נמצאו פרוייקטים
+  account: חשבון
+  pleaseChoose: נא לבחור…
+project:
+  title: פרוייקטים
+  list:
+    name: שם
+    status: מצב
+    actions: פעולות
+  filter:
+    dropdown: סינון רשימת הפרוייקטים
+    options:
+      all: הצגת הכל
+      active: הצגת פרוייקטים פעילים
+      inactive: הצגת פרוייקטים שאינם פעילים
+  search:
+    placeholder: חיפוש של…
+  action:
+    manage: ניהול פרוייקט
+    delete: מחיקת פרוייקט
+    goto: מעבר לפרוייקט
+    id: מזהה פרוייקט
+  create:
+    message:
+      successfullyCreatedAndConfigured: הפרוייקט החדש נוצר והוגדר בהצלחה.
+    title: יצירת פרוייקט
+  createWizard:
+    connection:
+      title: פרטי קישור
+      savedSuccessfully: העיצוב והגדרות האבטחה נשמרו. הפרוייקט מוכן לשימוש באתר.
+      introConnection: כדי להשתמש ב mosparo באתר, יש להטמיעו באתר ואז לקשר את האתר עם פרוייקט ה mosparo. לצורך זה יש להעתיק את המידע להלן ולהדביקו בשדה הנכון בהטמעה.
+      infoSettings: לאחר סיום פעולת האשף, יהיה ניתן לראות את פרטי הקישור בהגדרות הפרוייקט.
+    design:
+      title: בחירת עיצוב
+      introStartWizard: הפרוייקט נוצר בהצלחה. על מנת להשמישו יש לבחור עיצוב ולהמשיך.
+      infoAdvancedMode: לאחר סיום השימוש באשף, באפשרותך לעבור למצב מתקדם או בלתי נראה באמצעות הגדרות העיצוב. מצב מתקדם מאפשר התאמה מדוייקת לאתר בעוד שמצב בלתי נראה לא יציג תיבה נראית לעין של mosparo.
+    security:
+      title: הפעלת תכונות אבטחה
+      introSecurity: נא לבחור את תכונות האבטחה שברצונך להפעיל.
+      infoSettings: באפשרות להפעיל, לבטל או לכוונן את תכונות האבטחה לאחר סיום הפעלת האשף.
+  form:
+    name: שם
+    hosts: ''
+    description: תיאור
+    status: מצב
+    statusHelp: הפעלת וביטול מנגנון ההגנה מספאם. במצב מבוטל המערכת תבצע רישום של הגשות הטפסים אך לא תמנע שום הגשה.
+    spamScore: סף ספאם
+    spamScoreHelp: הגדרת המספר שהחל ממנו התוכן יוגדר כספאם. אם דירוג ההגשה גבוה ממספר זה ההגשה מסווגת כספאם.
+    statisticStorageLimit: אחסון סטטיסטי
+    statisticStorageLimitHelp: הגדרת משך שמירת סטטיסטיקה במסד הנתונים של mosparo. אין להגדרה זו קשר למשך אחסון המידע, שלאחריו מידע הגשות הטפסים נמחק ממסד הנתונים (14 ימים).
+    verificationSimulationMode: מצב דימוי אימות
+    verificationSimulationModeHelp: ניתן לדמות את תהליך האימות אם מצב דימוי אימות מופעל. יש לפתוח את הגדרות ההגשה בפינה הימנית העליונה. כלי הדימוי יציג לך איך הבקשה שלך אמורה להיראות ולאיזה מידע מצפה mosparo לצורך אימות הבקשה.
+  delete:
+    title: מחיקת הפרוייקט %projectName%
+    confirm: האם בוודאות ברצונך למחוק את הפרוייקט %projectName%?
+    disconnectFirst: נא לוודא שהאתר או הקישור נותק מהפרוייקט הזה בטרם מחיקתו.
+    message:
+      successfullyDeleted: הפרוייקט %projectName% נמחק בהצלחה.
+  roles:
+    reader: קורא
+    editor: עורך
+    owner: בעלים
+  backToList: חזרה לפרוייקטים
+  infoNoProjectAvailable: אין פרוייקטים זמינים
+  infoCreateProjectOrRequestAccess: יצירת פרוייקט חדש או בקשת גישה לפרוייקט קיים.
+dashboard:
+  title: לוח מחוונים
+  chart:
+    valid: תקין
+    spam: ספאם
+    annotation:
+      statisticOnly: סטטיסטיקה בלבד
+  dateRange:
+    dropdown: בחירת טווח המידע המוצג
+rule:
+  create:
+    title: יצירת חוק
+    message:
+      successfullyCreated: החוק החדש נוצר בהצלחה.
+  edit:
+    title: עריכת חוק %ruleName%
+    message:
+      successfullySaved: החוק נשמר בהצלחה.
+  form:
+    rule:
+      title: חוק
+      spamRatingFactor: פקטור דירוג ספאם
+      description: תיאור
+      name: שם
+      status: מצב
+      spamRatingFactorHelp: באמצעות פקטור דירוג הספאם באפשרותך להגדיר פקטור המחזק או מחליש את המוגדר בחוק. ערכים מעל 1.0 מחוזקים, ערכים מתחת ל 1.0 מוחלשים.
+    items:
+      title: פריטים
+      type: סוג
+      rating: דירוג
+    addMultipleItems:
+      label: תווית
+      items: פריטים
+      rating: דירוג
+      itemsHelp: יש להוסיף פריט אחד בשורה.
+      ratingHelp: כשאינו מוגדר ערך ברירת המחדל הוא 1.0. אם הערך מוגדר ל0.0, הפריטים לא ידורגו כפריטי ספאם.
+    ruleType: סוג חוק
+  delete:
+    title: מחיקת חוק %ruleName%
+    message:
+      successfullyDeleted: החוק %ruleName% נמחק בהצלחה.
+    confirm: האם בוודאות ברצונך למחוק את החוק %ruleName%?
+  filter:
+    dropdown: סינון רשימת החוקים
+    options:
+      all: הצגת הכל
+  type:
+    domain:
+      shortIntro: אפשור סינון לפי domains
+    email:
+      shortIntro: ניתן לסנן לפי כתובות דואל מוגדרות
+      email:
+        title: כתובת דואל
+        intro: יש להזין כתובת דואל שאינה מורשית להגיש טופס.
+      title: דואל
+      intro: חוק הדואל מאפשר סינון לפי כתובות דואל.
+      label: כתובת דואל
+    ipAddress:
+      title: כתובת IP
+      shortIntro: מאפשר סינון לפי כתובת רשת ותתי רשתות
+      intro: חוק כתובת IP מאפשר סינון על פי כתובת IP או תת רשת.
+      ipAddress:
+        title: כתובת IP
+        intro: יש להזין כתובת IP שאינה מורשית להגשת טפסים.
+      subnet:
+        intro: יש להזין כתובת תת רשת שאינה מורשית להגשת טפסים.
+        title: תת רשת
+    word:
+      text:
+        title: מלל
+      shortIntro: איפשור סינון לפי מילים וביטויים
+      title: מילה
+    rating:
+      title: דירוג
+      infoValueEqualZero: אם הדירוג הוא %zero%, הפריט לא יזוהה כספאם בגלל שציון הספאם תמיד יהיה %zero%.
+      infoDefaultAndDataType: הדירוג הוא מספר עשרוני בין %minValue% ל %maxValue%. אם לא מוגדר ערכך ברירת החדל היא %one%.
+      infoCalculationMethod: דירוג הספאם יחושב על ידי מכפלת דירוג הפריט בפקטור הדירוג המוגדר בחוק.
+      placeholder: דירוג
+      intro: שדה הדירוג מאפשר להגדיר את משקל הפריט. מספר חיובי מגדיל את המשקל. מספר שלילי מקטין את הניקוד.
+    website:
+      shortIntro: איפשר סינון לפי אתרים
+      title: אתר
+    provider:
+      action:
+        configureGeoip2: הגדרות GeoIP2
+      country:
+        title: מדינה
+      title: ספק
+  list:
+    name: שם
+    type: סוג
+    status: מצב
+    actions: פעולות
+  backToList: חזרה לחוקים
+  title: חוקים
+  createChooseType:
+    title: בחירת סוג
+    intro: נא למלא את סוג החוק שברצונך ליצור. הסוגים הזמינים משמשים בשדות שונים ללא ניתן לשנותם עבור חוק מאוחר יותר.
+ruleset:
+  title: אוסף חוקים
+  backToList: חזרה לאוסף החוקים
+  list:
+    name: שם
+    actions: פעולות
+    status: מצב
+    refreshedAt: רוענן לאחרונה ב
+    updatedAt: עודכן ב
+  add:
+    title: הוספת אוסף חוקים
+  edit:
+    title: עריכת אוסף החוקים %rulesetName%
+  form:
+    status: מצב
+    message:
+      successfullySaved: החוק נשמר בהצלחה.
+    name: שם
+    spamRatingFactor: פקטור דירוג ספאם
+    spamRatingFactorHelp: באמצעות פקטור דירוג הספאם ניתן להגדיר גורם מחזק או מחליש לכל הכללים של חוק זה. אם הערך גדול מ- 1.0, החוקים יתחזקו, אם הערך הוא פחות מ- 1.0, החוקים יוחלשו.
+  view:
+    details:
+      title: פרטי אוסף החוקים
+      status: מצב
+      lastUpdatedAt: עדכון אחרון
+      spamRatingFactor: פקטור דירוג ספאם
+      lastRefreshedAt: רענון אחרון
+      numberOfIncludedRules: מספר החוקים הכלולים
+    includedRules:
+      title: חוקים כלולים
+      ruleDetails: פרטי חוק
+      name: שם
+      description: תיאור
+      items: פריטים
+      type: סוג
+      value: ערך
+      spamRatingFactor: פקטור דירוג ספאם
+      rating: דירוג
+    list:
+      rules:
+        name: שם
+        actions: פעולות
+        type: סוג
+        spamRatingFactor: פקטור דירוג ספאם
+        numberOfRuleItems: מספר פריטים
+      ruleItems:
+        spamRatingFactor: פקטור דירוג ספאם
+        type: סוג
+        value: ערך
+    rule:
+      title: צפיה בחוק %ruleName%
+      details:
+        title: פרטי חוק
+        name: שם
+        type: סוג
+        spamRatingFactor: פקטור דירוג ספאם
+      items:
+        title: פריטים כלולים
+      backToRuleset: חזרה לאוסף החוקים
+    title: הצגת אוסף החוקים %rulesetName%
+  message:
+    errorWhileUpdating: 'חלה תקלה בעדכון אוסף החוקים:'
+  delete:
+    confirm: האם בוודאות ברצונך למחוק את אוסף החוקים %rulesetName%?
+    title: מחיקת אוסף חוקים %rulesetName%
+settings:
+  security:
+    guideline:
+      form:
+        guideline:
+          priority: עדיפות
+          title: הנחיה
+          name: שם
+          description: תיאור
+          priorityHelp: הגדרה אילו הנחיות ייבדקו. ההנחיה הגבוהה ביותר תיבדק ראשונה.
+        criteria:
+          subnets: תתי רשתות
+          countryCodes: קודי מדינות
+          title: קריטריון
+          intro: נא להגדיר את הקריטריון לבדיקת ההנחיה. בקריטריון ניתן להגדיר את המקור לפיו יבחרו הגדרות האבטחה.
+          intro2: ההנחיה תשמש למשתמש ברגע שאחד מהקריטריונים יתאים. עליך להוסיף לפחות קריטריון אחד כדי לשמור את ההנחיה.
+          subnetsHelp: 'יש להוסיף את תתי הרשתות שעבורן יש להתייחס להנחיה זו. ניתן להגדיר רשתות IPv4 או IPv6. ניתן לראות את כתובת ה- IP בפרטי ההגשה. לדוגמה: 192.168.1.0/24'
+          countryCodesHelp: 'יש להוסיף את הקודים של המדינות (ISO alpha-2) שעבורם יש להתייחס למדריך זה. ניתן לראות את קוד המדינה בפרטי ההגשה. לדוגמה: IL'
+        settings:
+          title: הגדרות אבטחה
+          intro: נא לסמן את תיבת הסימון דריסה עבור ההגדרות שברצונך לעקוף מהגדרות האבטחה הכלליות. אם לא הוגדר לעקוף הגדרה, mosparo ישתמש אחד מהגדרות הפרויקט.
+      delete:
+        title: הסרת הנחיית האבטחה %guidelineName%
+        message:
+          successfullyRemoved: הנחיית האבטחה %guidelineName% הוסרה מהפרוייקט בהצלחה.
+        confirm: האם בוודאות ברצונך להסיר את הנחיית האבטחה %guidelineName%?
+      list:
+        actions: פעולות
+        name: שם
+        priority: עדיפות
+      add:
+        title: הוספת הנחיה
+      edit:
+        title: עריכת ההנחיה %guidelineName%
+    minimumTime:
+      title: זמן מינימלי
+      intro: פונקציונליות הזמן המינימלי תמדוד את הזמן בין מימוש תיבת הסימון mosparo (כאשר הדף נטען) לבין אימות ההגשה (לאחר הגשת הטופס). אם הזמן הזה נמוך יותר מהמספר המוזן מטה, האימות ייכשל. אם יש לך טופס קצר, בדיקה זו צריכה להיות מבוטלת או שצריך להזין מספר נמוך מאוד.
+      introShort: פונקציונליות הזמן המינימלי תמדוד את הזמן בין מימוש תיבת הסימון mosparo (כאשר הדף נטען) לבין אימות ההגשה (לאחר הגשת הטופס). פונקציונליות זו מומלצת בעיקר לטפסים ארוכים יותר.
+    requestDelaying:
+      title: עיכוב בקשות
+      intro: כדי להקשות על בוטים, mosparo יכול לעכב את יצירת טוקנים להגשה. ללא טוקן הגשה, לא ניתן להגיש טופס. המשתמש יראה כמה זמן הוא צריך לחכות עד שהטופס יוכל להיות מוגש.
+      infoIpAddress: באילו מקרים יצירת הטוקן צריכה להתעכב, יקבע בהתאמה למספר הבקשות שכתובת ה-IP ביצעה. עם כל בקשה נוספת, העיכוב יוגדל.
+    ipLockout:
+      title: נעילת IP
+      intro: כדי להקשות על בוטים, Mosparo יכול לחסום באופן אוטומטי כתובות IP באופן זמני. אם כתובת IP שולחת טפסים רבים, mosparo יכול באופן אוטומטי לספור את ההגשה ולחסום את כתובת ה- IP אם כמות מסוימת הגיעה.
+    form:
+      delayMultiplicator: מכפיל
+      lockoutNumberOfAllowedRequests: מספר הבקשות המותר
+      lockoutDetectionTimeFrame: חלון זמן הבדיקה
+      equalSubmissionsActive: אפשור חסימת הגשות זהות
+      equalSubmissionsNumberOfEqualSubmissionsHelp: מספר ההגשות המותר לפני שמנגנון החסימה מופעל.
+      delayNumberOfAllowedRequestsHelp: מספר הבקשות המותר לפני הפעלת מנגנון העיכוב.
+      honeypotFieldNameHelp: חייב להיות שם שדה אשר אינו בשימוש בטופס, ולהיראות כשם שדה רגיל כמו "url" או "address-line-2". נא להשתמש רק באותיות, מספרים וסימן מקף (-). אם ריק, שום שדה honeypot לא יתווסף לטופס.
+      delayActive: אפשור עיכוב בקשות
+      delayDetectionTimeFrame: חלון זמן הבדיקה
+      delayTime: זמן עיכוב התחלתי
+      lockoutNumberOfAllowedRequestsHelp: מספר הבקשות המותר לפני הפעלת הנעילה.
+      delayMultiplicatorHelp: הזמן ההתחלתי יגדל עם כל בקשה נוספת.
+      lockoutActive: אפשור נעילה אוטומטית
+      lockoutTime: זמן נעילה התחלתי
+      lockoutMultiplicatorHelp: זמן נעילת ההתחלתי יוגדל עם כל בקשה נוספת.
+      equalSubmissionsNumberOfEqualSubmissions: מספר הצעות זהות מותר
+      lockoutMultiplicator: מכפיל
+      equalSubmissionsTimeFrame: חלון זמן הבדיקה
+      equalSubmissionsBasedOnIpAddress: מבוסס על כתובת IP
+      overrideMinimumTime: דריסת זמן מינימלי
+      equalSubmissionsBasedOnIpAddressHelp: זיהוי וחסימה יופעלו כלפי כתובת IP של המשתמש. אם מבוטל, כל ההגשות הזהות של כל המשתמשים ייספרו.
+      ipAllowListHelp: 'יש לציין כתובת IP אחת או תת רשת לכל שורה. דוגמאות: 192.168.1.13 או 192.168.1.0/24'
+      overrideHoneypotField: דריסת שדה Honeypot
+      ipAllowList: כתובות IP ותתי רשתות שמאופשרות תמיד
+      overrideDelay: דריסת עיכוב בקשות
+      delayNumberOfAllowedRequests: מספר הבקשות המותר
+      honeypotFieldActive: אפשור שדה honeypot
+      minimumTimeActive: איפשור זמן מינימלי
+      minimumTimeSeconds: זמן מינימלי
+      honeypotFieldName: שם השדה
+    honeypot:
+      infoField: יש להזין שם לשדה הhoneypot. השם צריך להיות שם שדה רגיל שעדיין לא השתמשת בו. mosparo יוסיף את השדה הנסתר באופן אוטומטי; לא צריך לשנות את הטופס.
+      intro: שדה honeypot הוא שדה חבוי בטופס. בני אדם לא יוכלו לראות אותו – אבל בוטים כנראה ימלאו תוכן כלשהו בשדה זה. אם זה קורה, נזהה שזה לא אדם, כך שנוכל לחסום את ההגשה.
+    equalSubmissions:
+      title: חסימת הגשות זהות
+      intro: אמצעי אבטחה נוסף היא חסימת הגשה זהה. אם משתמש מנסה להגיש את אותה התוכן לעתים קרובות מדי במסגרת זמן מוגדרת, Mosparo יחסום את כל ההגשה העתידית עד שמסגרת הזמן תפוג. בנוסף, בדיקה זו יכולה להיות מוגבלת לכתובת IP.
+    ipAllowList:
+      intro: יש להזין כתובות IP ותתי רשתות שיוחרגו מאצעי האבטחה שהוגדרו לעיל (עיכוב בקשות ונעילת IP).
+      title: רשימת כתובות IP מותרות
+  design:
+    simpleDesign:
+      introPreview: בצד ימין מוצגת תצוגה מקדימה של תיבת mosparo באתר שלך.
+tools:
+  ruleTester:
+    description: בדיקה כיצד הכללים שלך יזהו ספאם.
+    form:
+      title: הגדרות הבדיקה
+      value: ערך לבדיקה
+      valueHelp: יש להזין את הערך שאתו יבדקו החוקים שלך.
+      typeHelp: בחירת את סוג הנתונים. סוגים מסוימים של חוקים חלים רק על סוגי נתונים ספציפיים.
+      useRulesHelp: יש להפעיל שדה זה כדי לבדוק את החוקים שלך.
+      useRulesets: שימוש בחוקים
+      type: סוג נתונים
+      useRules: שימוש בחוקים
+      useRulesetsHelp: הפעלת שדה זה תבדוק את החוקים שלך.
+    types:
+      textField: שדה טקסט (שורה אחת)
+      textarea: שדה טקסט (מרובה שורות)
+      emailField: שדה דואל
+      urlField: שדה URL
+      ipAddress: כתובת IP
+    result:
+      testData:
+        title: נתוני בדיקה
+        fieldType: סוג שדה
+        enabledRules: חוקים מאופשרים
+        testValue: ערך לבדיקה
+      detectionResult:
+        title: תוצאות הזיהוי
+        spamDetectionRating: ציון ספאם
+        spamRating: דירוג ספאם
+        isSpam: זוהה כספאם
+      table:
+        type: סוג חוק
+        noMatchingRules: שום חוק לאהתאים לערך הנבחן.
+        rating: דירוג
+        value: ערך
+      title: תוצאות
+      matchedRules:
+        title: חוקים מתאימים
+    title: בדיקת חוקים
+    intro: יש להזין את הערך הנבדק. צריך לבחור את סוג נתונים בהם הבדיקה תשתמש ואם ייבדקו גם חוקים ואוספי חוקים. סוג הנתונים חשוב כי סוגים מסוימים של חוקים חלים רק על סוגי נתונים ספציפיים.
+  export:
+    title: יצוא
+    includedData: מידע כלול
+    infoSensitiveData: נתונים רגישים לעולם לא ייכללו בייצוא. הרשאות, טוקנים, מזהה הפרויקט הייחודי, מפתחות ה- API, וחברי הפרויקט לא ייוצאו.
+    errorMessage:
+      selectAtLeastOneElement: יש לבחור לפחות אלמנט אחד שברצונך לייצא.
+    intro: אם ברצונך להעביר את הפרויקט שלך להתקנת mosparo אחרת או לסנכרן את ההגדרות עם פרויקט אחר, באפשרותך לייצא את הפרויקט עם פונקציונליות זו. יש לבחור איזה מידע לייצא וללחוץ על הכפתור.
+  import:
+    title: יבוא
+    infoOverrideData: ההגדרות, כמו גם החוקים, תמיד יהיו יידרסו בפרויקט. אוסף החוקים יתואם מול כתובת האתר. לגבי החוקים, עליך לבחור מה צריך לעשות עם חוקים קיימים.
+    form:
+      handlingExistingRules: טיפול בחוקים הקיימים
+      choice:
+        override: דריסה
+        append: הוספה
+        appendHelp: mosparo יוסיף את פריטי החוק מהקובץ לחוקים הקיימים, אך לא ימחק פריטים כלל.
+        addHelp: mosparo יוסיף חוקים קיימים כחוקים חדשים. החוקים החדשים יקבלו מזהה חדש.
+        overrideHelp: כל החוקים הקיימים יידרסו עם החוק מקובץ היבוא. כל החוקים הנוספים יימחקו.
+        add: הוספה
+      importFile: קובץ לייבוא
+    message:
+      changesSuccessfullyExecuted: השינויים בוצעו בהצלחה.
+    errorMessage:
+      fileUploadError: הקובץ לא הועלה כראוי. נא לבדוק את הלוג.
+      selectAtLeastOneElement: יש לפחות אלמנט אחד שרצוי לייבא.
+    simulate:
+      intro: mosparo דימה את הייבוא וזיהה את השינויים הבאים. נא לבדוק אותם ולבצע את השינויים אם הכל בסדר.
+      noChangesFound: הפרויקט כבר דומה לנתונים בקובץ היבוא, ואין שינויים זמינים.
+      table:
+        oldValue: ערך ישן
+        newValue: ערך חדש
+        url: כתובת URL
+        modify: שינוי
+        itemsModify: שינוי
+        guidelineNew: הנחיה חדשה
+        guidelineEqual: לא נדרש שינוי
+        type: סוג
+        name: שם
+        status: מצב
+        add: הוספה
+        items: פריטים
+        itemsAdd: הוספה
+        spamRatingFactor: פקטור דירוג ספאם
+        criteria: קריטריון
+        itemsRemove: הסרה
+        guidelineModify: שינוי נדרש
+        priority: עדיפות
+        securitySettings: הגדרות אבטחה
+      errorMessage:
+        projectNotAvailable: לא ניתן למצוא פרויקט על ידי id.
+        storedRuleNotFound: החוק המאוחסן לא נמצא.
+        storedRulesetNotFound: לא נמצאו חוקים מאוחסנים.
+        importFileInvalid: קובץ הייבוא אינו תקין.
+        importFileNotFound: קובץ הייבוא אינו קיים.
+        storedRuleItemNotFound: פריט החוק המאוחסן לא נמצא.
+        wrongSpecificationsVersion: קובץ היבוא נוצר עם גרסת מפרטים שונה מאשר זו ש mosparo משתמש בה.
+        noChangesAvailable: אין שינויים זמינים.
+      title: שינויים זמינים
+      notRedoable: לא ניתן לתקן את השינויים האלה ברגע שביצעת אותם. אפשר לייצא את הפרויקט לפני ביצוע השינויים כדי שיהיה לך גיבוי תצורה.
+      changes:
+        notInExport: סעיף זה אינו זמין בקובץ היבוא.
+        notActive: סעיף זה אינו פעיל לייבוא זה.
+        noChangesRequired: עבור סעיף זה אין שינויים הנדרשים מאחר שהכל כבר מעודכן.
+    intro: אם ברצונך להעתיק את הנתונים מפרויקט אחר לתוך זה, עליך לבחור את הקובץ לייבוא ואיזה נתונים ממנו לייבא. על מנת לייבא חוקים, נא לבחור כיצד mosparo צריך להתמודד עם חוקים קיימים.
+    intro2: לאחר שבחרת את כל הנתונים, יש ללחוץ על הכפתור למטה. mosparo ינתח את הקובץ ויציג לך סיכום של מה שישתנה לפני שמשהו ייובא.
+    importData: נתונים לייבוא
+    backToImport: חזרה לייבוא
+  eiParts:
+    generalSettingsHelp: כולל את ההגדרות הכלליות של פרויקט כמו השם, התיאור, המארחים וכן ציון הספאם.
+    designSettingsHelp: כולל את כל ההגדרות הקשורות לתכנון פרויקט.
+    designSettings: הגדרות תכנון
+    securitySettings: הגדרות אבטחה
+    rulesHelp: כולל את כל חוקי הפרויקט.
+    rulesets: אוסף חוקים
+    generalSettings: הגדרות כלליות
+    securitySettingsHelp: כולל את כל ההגדרות הקשורות לאבטחת הפרויקט.
+    rules: חוקים
+    rulesetsHelp: כולל את כל החוקים של פרויקט.
+  title: כלים
+administration:
+  settings:
+    description: הגדרות שונות החלות על ההתקנה של mosparo.
+    mainSettings:
+      form:
+        mosparoName: שם ההתקנה של mosparo
+      title: הגדרות עיקריות
+    localeSettings:
+      form:
+        defaultLocale: שפת ברירת מחדל
+        defaultDateFormat: תבנית ברירת מחדל לתאריך
+        defaultTimezone: ברירת מחדל לאזור זמן
+        defaultTimeFormat: תבנית ברירת מחדל לשעה
+      title: הגדרות אזוריות
+    interfaceSettings:
+      title: הגדרות ממשק
+      form:
+        defaultColorMode: תבנית ברירת מחדל לצבעים
+    mailSettings:
+      form:
+        port: מבואה
+        user: שם משתמש
+        password: סיסמה
+        fromAddress: כתובת ממנה יישלח דוא"ל
+        fromName: שם השולח
+        host: כתובת השרת
+        useSmtp: שימוש בשרת SMTP כדי לשלוח הודעות דוא"ל
+      title: הגדרות דואל
+      help:
+        password: אם יוזן משהו בשדה זה, הערך הקיים יידרס.
+    title: הגדרות מערכת
+    message:
+      savedSuccessfully: ההגדרות נשמרו בהצלחה.
+  security:
+    loginThrottling:
+      title: משנק אימות
+      form:
+        ipLimit: מספר בקשות לכתובת IP
+        ipLimitHelp: זהו מספר הבקשות שכתובת IP יכולה לעשות על שמות משתמש משתנים. מספר זה צריך להיות גבוה יותר ממספר הבקשות עבור שם משתמש וכתובת IP.
+        intervalHelp: הזמן בדקות עבורו נבדק מספר הבקשות.
+        interval: טווח הזמן
+        uiLimit: מספר בקשות לשם משתמש וכתובת IP
+        uiLimitHelp: זהו מספר הבקשות שתוקף יכול ליצור בשילוב של שם משתמש וכתובת IP.
+      unit:
+        minutes: דקות
+        requests: בקשות
+      intro: משנק האימות מסייע להגן על הכניסה אל mosparo באמצעות התקפת brute force. באמצעות ספירת מספר הבקשות וחסימת תוקף לאחר כמה ניסיונות, התקפה כזו תיקח הרבה זמן והיא כמעט חסרת היגיון.
+    reverseProxy:
+      providerPresets: הגדרות ספק
+      modifyNotAllowed: הגדרות אלה נמצאות בקובץ התצורה של Mosparo. אי אפשר לשנות כאן הגדרות.
+      intro: אם שירות mosparo מותקן מאחורי reverse proxy, עליך להגדיר הגדרות אלו כך ש mosparo יוכל לזהות את כתובת ה- IP של הלקוח כראוי.
+      form:
+        trustedProxies: רשימת שרתי פרוקסי מהימנים
+        trustedProxiesHelp: כאן מוגדרים כל שרתי הפרוקסי המהימנים (trusted proxies). הם יכולים להיות מוגדרים ככתובת IP פשוטה או כתת רשת של כתובות IP. המארח המקומי (127.0.0.1) תמיד מתווסף לרשימה באופן אוטומטי.
+    apiAccess:
+      hintFrontendApi: Please note that this limits only the verification and statistic API. The frontend API will always be publicly available.
+      intro: אם ברצונך להגן על mosparo API מפני גישה בלתי מורשית מהאינטרנט, באפשרותך לציין מאילו כתובות IP מותרות לגשת ל-API. השארת שדה זה ריק תאפשר לכולם גישה.
+    description: הגדרות שונות הקשורות לאבטחה החלות על התקנת mosparo שלך.
+    title: הגדרות אבטחה
+    ipAllowList:
+      form:
+        ipAllowList: כתובות IP ותתי רשתות
+        ipAllowListHelp: 'יש לציין כתובת IP או תת רשת אחת לכל שורה. דוגמאות: 192.168.1.13 או 192.168.1.0/24'
+    backendAccess:
+      intro: אם ברצונך להגן על mosparo מפני גישה בלתי מורשית מהאינטרנט, באפשרותך לציין מאילו כתובות IP מותרות לגשת ל-Backend. השארת שדה זה ריק תאפשר לכולם גישה.
+      hintOwnIp: 'נא לשים לב: ניתן לשמור על הגדרה זו רק אם כתובת ה- IP שלך (%ipaddress%) נכללת ברשימה (ככתובת IP או תת רשת). אם יש לך כתובת IPv6, הוספת תת הרשת שלך מומלצת.'
+    webCronJobAccess:
+      intro: אם ברצונך להגן על mosparo web cron job מפני גישה בלתי מורשית מהאינטרנט, באפשרותך לציין מאילו כתובות IP מותרות לגשת ל-web cron job. השארת שדה זה ריק תאפשר לכולם גישה.
+    message:
+      savedSuccessfully: הגדרות האבטחה נשמרו בהצלחה.
+  user:
+    description: ניהול המשתמשים בהתקנה זו של mosparo.
+    backToOverview: חזרה למשתמשים
+    create:
+      title: הקמת משתמש
+    modify:
+      title: שינוי משתמש %email%
+    form:
+      email: דואל
+      isActiveUser: משתמש פעיל
+      canCreateProjects: יכולת יצירת פרוייקטים
+      message:
+        successfullySaved: החשבון נשמר בהצלחה.
+        errorCreatingResetToken: 'הייתה תקלה טכנית בעת יצירת הדואר האלקטרוני. תקלה: %errorMessage%'
+        errorSendingResetEmail: 'הדואר האלקטרוני עם הקישור לא ניתן לשליחה. תקלה: %errorMessage%'
+      sendPasswordResetEmail: שליחת דואל כדי להגדיר את הסיסמה
+      password: סיסמה
+      isAdministrator: הרשאות ניהול
+    help:
+      password: ניתן להשאיר שדות אלה ריקים אם אין צורך בשינוי סיסמה.
+      canCreateProjects: מאפשר למשתמש ליצור פרויקטים חדשים. בעלי הרשאות ניהול יכולים תמיד ליצור פרויקטים.
+    delete:
+      title: מחיקת משתמש %email%
+      infoCantSelfDelete: אין אפשרות למחוק את עצמך.
+      message:
+        successfullyDeleted: '%email% נמחק בהצלחה.'
+        errorUserIsOwner: אי אפשר למחוק את משתמשים בעלי פרויקטים.
+      confirm: האם באמת ברצונך למחוק את %email%?
+    title: משתמשים
+    list:
+      roles: תפקידים
+      user: שם משתמש
+      actions: פעולות
+    roles: תפקידים
+  cronJobs:
+    title: משימות מתוזמנות
+    setup:
+      titles:
+        example: דוגמה
+        address: כתובת
+        commands: פקודות
+      title: התקנה
+    settings:
+      title: הגדרות
+      geoIp2RefreshInterval: GeoIP2 רענון
+      message:
+        savedSuccessfully: ההגדרות נשמרו בהצלחה.
+  geoip2:
+    settings:
+      title: הגדרות
+      accountIdField: מזהה חשבון
+    title: GeoIP2
+    description: הגדרות האינטגרציה עם GeoIP2.
+  title: ניהול
