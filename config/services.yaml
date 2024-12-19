@@ -194,6 +194,8 @@ services:
         arguments:
             $entrypointLookupCollection: '@webpack_encore.entrypoint_lookup_collection'
             $projectDirectory: '%kernel.project_dir%'
+            $cache: '@mosparo.cache.service'
+            $prepareCssFilesInSharedCache: '%env(MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE)%'
 
     Mosparo\Helper\MailHelper:
         arguments:
@@ -224,6 +226,11 @@ services:
     Mosparo\Controller\HealthController:
         arguments:
             $mosparoInstalled: '%env(mosparo_installed)%'
+
+    Mosparo\Controller\DynamicResourcesController:
+        arguments:
+            $cache: '@mosparo.cache.service'
+            $prepareCssFilesInSharedCache: '%env(MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE)%'
 
     Mosparo\ExpressionLanguage\AllowListExpressionLanguageProvider:
         tags:
