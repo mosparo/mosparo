@@ -56,15 +56,17 @@ We have therefore defined our main objective: to collect only data that is neces
   - openssl
   - pcre
   - pdo
-  - pdo_mysql or pdo_pgsql
+  - pdo_mysql, pdo_pgsql or pdo_sqlite
   - simplexml
   - tokenizer
   - xml
   - zip
+  - memcached (optional)
   - posix (optional)
+  - redis (optional)
   - sodium (optional)
   - Zend OPcache (optional)
-- A MySQL (MySQL or MariaDB) or PostgreSQL database
+- A MySQL (MySQL or MariaDB) or PostgreSQL database, or you can use SQLite to store it in a file
 - Less than 100 MB of disk space
 - A domain or subdomain
 
@@ -77,8 +79,9 @@ The installation is straightforward. There are different installation methods, b
 1. Download the latest release from our website or the releases page on GitHub.
 2. Extract the file
 3. Create a new web host in your hosting control panel (like a new subdomain)
-   1. If possible, point the document root of the web host to the subdirectory 'public'
+   1. If possible, point the document root of the web host to the subdirectory `public`
 4. Upload all the files in the extracted directory to this new virtual host
+   - macOS/Linux: Please be aware of hidden files (for example, `.env`). You must upload all the files, including the hidden ones.
 5. Open your browser and access the virtual host (for example, by accessing the subdomain in your browser)
 6. Follow the installation wizard to install mosparo
 
