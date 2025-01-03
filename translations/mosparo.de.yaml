@@ -682,7 +682,7 @@ settings:
       proofOfWorkDynamicComplexityBasedOnIpAddressHelp: Die Erkennung erfolgt anhand der IP-Adresse des Nutzers. Wenn diese Funktion deaktiviert ist, werden alle Einsendungen aller Benutzer innerhalb des Zeitraums gezählt.
       proofOfWorkDynamicComplexityActive: Dynamische Komplexität aktivieren
       proofOfWorkDynamicComplexityMaxComplexity: Maximale Komplexität
-      proofOfWorkDynamicComplexityNumberOfSubmissions: Anzahl der Einreichungen zum Erreichen der maximalen Komplexität
+      proofOfWorkDynamicComplexityNumberOfSubmissions: Anzahl der Einsendungen zum Erreichen der maximalen Komplexität
       proofOfWorkActive: Arbeitsnachweis aktivieren
       proofOfWorkComplexity: Komplexität
     message:
