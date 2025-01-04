@@ -223,7 +223,7 @@ services:
         arguments:
             $trustedProxies: '%kernel.trusted_proxies%'
 
-    Mosparo\Controller\HealthController:
+    Mosparo\Controller\Api\V1\Health\HealthApiController:
         arguments:
             $mosparoInstalled: '%env(mosparo_installed)%'
 

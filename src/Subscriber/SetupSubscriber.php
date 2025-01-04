@@ -23,7 +23,7 @@ class SetupSubscriber implements EventSubscriberInterface
         'setup_other',
         'setup_install',
         'setup_install_continuation',
-        'mosparo_health', // The health check should return that everything is okay, even if mosparo has not been installed yet.
+        'health_api_check', // The health check should return that everything is okay, even if mosparo has not been installed yet.
     ];
 
     public function __construct(UrlGeneratorInterface $router, $installed, $installedVersion, $debug = false)
@@ -94,7 +94,7 @@ class SetupSubscriber implements EventSubscriberInterface
                 'verification_api_verify',
                 'statistic_api_daily',
                 'cron_jobs_execute',
-                'mosparo_health',
+                'health_api_check',
             ];
             if (in_array($route, $noRedirectsRoutes)) {
                 return;

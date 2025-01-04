@@ -67,7 +67,7 @@ ADD config/nginx.conf /etc/nginx/sites-enabled/default
 ADD config/mosparo.cron /etc/cron.d/mosparo
 ADD --chmod=0755 scripts/run.sh /usr/bin/run
 
-HEALTHCHECK --interval=1m --timeout=5s CMD curl -s --fail-with-body http://localhost/health || exit 1
+HEALTHCHECK --interval=1m --timeout=5s CMD curl -s --fail-with-body http://localhost/api/v1/health/check || exit 1
 
 RUN crontab /etc/cron.d/mosparo
 

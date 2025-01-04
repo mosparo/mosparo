@@ -41,9 +41,6 @@ security:
         resources:
             pattern: ^/resources/(.*)
             security: false
-        health:
-            pattern: ^/health$
-            security: false
         setup:
             pattern: ^/(setup|upgrade)/(.*)
             security: false

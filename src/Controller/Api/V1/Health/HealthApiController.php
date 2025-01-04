@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Controller;
+namespace Mosparo\Controller\Api\V1\Health;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
@@ -8,7 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-class HealthController extends AbstractController
+#[Route('/api/v1/health')]
+class HealthApiController extends AbstractController
 {
     protected bool $mosparoInstalled;
 
@@ -17,7 +18,7 @@ class HealthController extends AbstractController
         $this->mosparoInstalled = (bool) $mosparoInstalled;
     }
 
-    #[Route('/health', name: 'mosparo_health', stateless: true, condition: 'ip_on_allow_list_routing(request.getClientIp(), env("MOSPARO_HEALTH_ALLOW_LIST"))')]
+    #[Route('/check', name: 'health_api_check', methods: ['GET'], condition: 'ip_on_allow_list_routing(request.getClientIp(), env("MOSPARO_HEALTH_ALLOW_LIST"))', stateless: true)]
     public function healthAction(EntityManagerInterface $entityManager)
     {
         $status = 200;
