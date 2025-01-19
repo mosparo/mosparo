@@ -1,0 +1,34 @@
+settings:
+  mosparoName:
+    colonNotAllowed: மோச்பரோ நிறுவலின் பெயரில் பெருங்குடல் (:) அனுமதிக்கப்படவில்லை.
+password:
+  form:
+    constraint:
+      notBlank: கடவுச்சொல்லை உள்ளிடவும்.
+      length: உங்கள் கடவுச்சொல் குறைந்தபட்சம் {{ limit }} எழுத்துக்களாக இருக்க வேண்டும்.
+      passwordMustMatch: கடவுச்சொல் புலங்கள் பொருந்த வேண்டும்.
+  request:
+    form:
+      constraint:
+        notBlank: உங்கள் மின்னஞ்சலை உள்ளிடவும்.
+tools:
+  import:
+    importFile:
+      correctFile: சரியான சாதொபொகு கோப்பைப் பதிவேற்றவும்.
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: உங்கள் ஐபி முகவரி இசைவு பட்டியலால் அனுமதிக்கப்படவில்லை. உங்கள் ஐபி முகவரியை பட்டியலில் சேர்க்கவும்.
+ipAllowList:
+  itemInvalid: "'%உருப்படி%' உருப்படி சரியான ஐபி முகவரி அல்லது சப்நெட் அல்ல."
+honeypotField:
+  nameHasInvalidCharacter: தயவுசெய்து கடிதங்கள், எண்கள் மற்றும் கோடு அடையாளம் (-) மட்டுமே பயன்படுத்தவும்.
+securityGuideline:
+  atLeastOneCriteriaRequired: பாதுகாப்பு வழிகாட்டுதலுக்கு குறைந்தது ஒரு அளவுகோல்கள் தேவை.
+  asNumberNotNumeric: அச் எண் ஒரு எண் அல்ல.
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: வலை கிரான் வேலை இடைவெளி குறைந்தது 5 நிமிடங்கள் அல்லது அதற்கு மேற்பட்டதாக இருக்க வேண்டும்.
+  geoIpRefreshIntervalAtLeast1Day: GEOIP2 புதுப்பிப்பு இடைவெளி குறைந்தது ஒரு நாள் அல்லது அதற்கு மேற்பட்டதாக இருக்க வேண்டும்.
+hosts:
+  hostContainsProtocol: இந்த ஓச்டில் ஒரு நெறிமுறை உள்ளது. நெறிமுறை இல்லாமல் ஓச்டை உள்ளிடவும் (எடுத்துக்காட்டாக, https://example.com க்கு பதிலாக எடுத்துக்காட்டு.காம்).
+  hostContainsInvalidCharacter: இந்த ஓச்டில் தவறான எழுத்துக்கள் உள்ளன. இந்த துறையில், எழுத்துக்கள் (A-Z), எண்கள் (0-9), கோடுகள், புள்ளிகள் மற்றும் விண்மீன் (*) மட்டுமே அனுமதிக்கப்படுகின்றன.

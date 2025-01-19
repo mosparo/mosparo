@@ -1,1 +1,14 @@
-{}
+label: Elfogadom, hogy az űrlap bejegyzéseit ellenőrizzük, hogy nem tartalmaz-e spam, és 14 napig titkosítva tároljuk.
+accessibility:
+  dataValid: Az Ön adatai érvényesek. Most beküldheti az űrlapot.
+  checkingData: A spamvédelem ellenőrzi az Ön adatait. Kérjük, várjon.
+  protectedBy: Ezt az űrlapot a mosparo védi a spam ellen.
+error:
+  noSubmitTokenAvailable: Nem áll rendelkezésre küldési token. Ennek az űrlapnak az érvényesítése nem lehetséges.
+  spamDetected: Adatait elkapta a spam elleni védelem.
+  lockedOut: Ki vagy zárva. Kérjük, próbálja újra %datetime%.
+  delay: Kérése késett. Kérjük, várjon %seconds% másodpercet.
+  gotNoToken: A mosparo nem adott vissza küldési tokent.
+  internalError: Hiba történt. Kérjük, próbálja újra.
+hp:
+  fieldTitle: Hagyja üresen ezt a mezőt
