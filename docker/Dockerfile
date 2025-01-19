@@ -69,7 +69,7 @@ ADD --chmod=0755 scripts/run.sh /usr/bin/run
 
 HEALTHCHECK --interval=1m --timeout=5s CMD curl -s --fail-with-body http://localhost/api/v1/health/check || exit 1
 
-RUN crontab /etc/cron.d/mosparo
+RUN crontab -u www-data /etc/cron.d/mosparo
 
 VOLUME /mosparo-data
 
