@@ -29,6 +29,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Greek                 | el            | [OneStage](https://hosted.weblate.org/user/OneStage/), [stavrosP](https://hosted.weblate.org/user/stavrosP/)                                                                    |
 | Hindi                 | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                                                                                   |
 | Hebrew                | he            | [royerez](https://hosted.weblate.org/user/royerez/)                                                                                                                             |
+| Hungarian             | hu            | [StrangerGithuber](https://hosted.weblate.org/user/StrangerGithuber/)                                                                                                           |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [krisnaadiprayoga](https://hosted.weblate.org/user/krisnaadiprayoga/), [Eji](https://hosted.weblate.org/user/Eji/)           |
 | Italian               | it            | mosparo Core Developers, [albanobattistella](https://hosted.weblate.org/user/albanobattistella/)                                                                                |
 | Japanese              | ja            | [0MAL](https://github.com/0MAL), Claudia and Melody (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                                               |
@@ -40,11 +41,12 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Portuguese            | pt            | Northon (via [mahonebay](https://hosted.weblate.org/user/mahonebay/)), [moneiro](https://hosted.weblate.org/user/moneiro/), [thomasmbmoraes](https://hosted.weblate.org/user/thomasmbmoraes/) |
 | Romanian              | ro            | [Speedyu](https://hosted.weblate.org/user/Speedyu/)                                                                                                                             |
 | Russian               | ru            | [Senya0](https://hosted.weblate.org/user/Senya0/), [Andrej730](https://hosted.weblate.org/user/Andrej730/), [John_Titor](https://hosted.weblate.org/user/John_Titor/)           |
-| Serbian               | sr            | [Whiteowle0](https://hosted.weblate.org/user/Whiteowle0/)                                                                                                                        |
+| Serbian               | sr            | [Whiteowle0](https://hosted.weblate.org/user/Whiteowle0/)                                                                                                                       |
 | Slovak                | sk            | [pBrambi](https://hosted.weblate.org/user/pBrambi/), [puki247](https://hosted.weblate.org/user/puki247/), [salka.milan](https://hosted.weblate.org/user/salka.milan/)           |
 | Slovenian             | sl            | Alona and Lesly (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                                                                                   |
 | Spanish               | es            | [gallegonovato](https://hosted.weblate.org/user/gallegonovato/)                                                                                                                 |
 | Swedish               | sv            | [bittin](https://hosted.weblate.org/user/bittin/), [tygyh](https://hosted.weblate.org/user/tygyh/)                                                                              |
+| Tamil                 | ta            | [TamilNeram](https://hosted.weblate.org/user/TamilNeram/)                                                                                                                       |
 | Thai                  | th            | [ntk.6639](https://hosted.weblate.org/user/ntk.6639/)                                                                                                                           |
 | Turkish               | tr            | [emircanydn](https://hosted.weblate.org/user/emircanydn/), [user0020](https://hosted.weblate.org/user/user0020/), [goknarbahceli](https://hosted.weblate.org/user/goknarbahceli/) |
 | Ukrainian             | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                                                                                         |
@@ -66,6 +68,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Indonesian           | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/)                                                                      |
 | Italian              | it            | [albanobattistella](https://hosted.weblate.org/user/albanobattistella/), [rglauco](https://hosted.weblate.org/user/rglauco/), [mpaglia0](https://hosted.weblate.org/user/mpaglia0/) |
 | Russian              | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                                                                                                                                 |
+| Swedish              | sv            | [StrangerGithuber](https://hosted.weblate.org/user/StrangerGithuber/)                                                                                                               |
 | Ukrainian            | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                                                                                             |
 | Vietnamese           | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/), [vocweb](https://hosted.weblate.org/user/vocweb/)                                                                          |
 
@@ -85,5 +88,6 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Russian    | ru            | [RayBoot](https://hosted.weblate.org/user/RayBoot/)                                                            |
 | Slovak     | sk            | [salka.milan](https://hosted.weblate.org/user/salka.milan/)                                                    |
 | Swedish    | sv            | [bittin](https://hosted.weblate.org/user/bittin/)                                                              |
+| Tamil      | ta            | [TamilNeram](https://hosted.weblate.org/user/TamilNeram/)                                                      |
 | Ukrainian  | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                        |
 | Vietnamese | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                        |
