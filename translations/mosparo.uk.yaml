@@ -522,8 +522,6 @@ settings:
         confirm: Ви дійсно хочете перевидати API-ключі для проєкту %projectName%?
     help:
       integrateMosparo: Інтегрувати mosparo
-    subtitle:
-      developerOptions: Параметри розробника
     connectionDetails:
       uuid: Унікальний ідентифікаційний номер
       title: Подробиці з'єднання
