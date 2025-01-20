@@ -7,12 +7,14 @@ use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Entity\User;
+use Mosparo\Form\AdvancedProjectFormType;
 use Mosparo\Form\DesignSettingsFormType;
-use Mosparo\Form\ExtendedProjectFormType;
+use Mosparo\Form\ProjectFormType;
 use Mosparo\Form\SecurityGuidelineFormType;
 use Mosparo\Form\SecuritySettingsFormType;
 use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\GeoIp2Helper;
+use Mosparo\Helper\ProjectGroupHelper;
 use Mosparo\Util\TokenGenerator;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\NumberColumn;
@@ -41,11 +43,16 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     }
 
     #[Route('/general', name: 'settings_general')]
-    public function general(Request $request, EntityManagerInterface $entityManager): Response
+    public function general(Request $request, EntityManagerInterface $entityManager, ProjectGroupHelper $projectGroupHelper): Response
     {
         $project = $this->getActiveProject();
 
-        $form = $this->createForm(ExtendedProjectFormType::class, $project);
+        $tree = $projectGroupHelper->getFullProjectGroupTreeForUser();
+        $tree->sort();
+
+        $form = $this->createForm(ProjectFormType::class, $project, [
+            'tree' => $tree
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -65,6 +72,36 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         }
 
         return $this->render('project_related/settings/general.html.twig', [
+            'form' => $form->createView(),
+            'project' => $project,
+        ]);
+    }
+
+    #[Route('/advanced', name: 'settings_advanced')]
+    public function advanced(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $project = $this->getActiveProject();
+
+        $form = $this->createForm(AdvancedProjectFormType::class, $project);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'settings.general.message.successfullySaved',
+                    [],
+                    'mosparo'
+                )
+            );
+
+            return $this->redirectToRoute('settings_advanced', ['_projectId' => $this->getActiveProject()->getId()]);
+        }
+
+        return $this->render('project_related/settings/advanced.html.twig', [
             'form' => $form->createView(),
             'project' => $project,
         ]);
@@ -239,7 +276,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'error',
+                    'success',
                     $this->translator->trans(
                         'settings.projectMember.delete.message.successfullyRemoved',
                         ['%projectMemberName%' => $projectMember->getUser()->getEmail()],
@@ -389,7 +426,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'error',
+                    'success',
                     $this->translator->trans(
                         'settings.security.guideline.delete.message.successfullyRemoved',
                         ['%guidelineName%' => $securityGuideline->getName()],
@@ -500,7 +537,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
-                    'warning',
+                    'success',
                     $this->translator->trans(
                         'settings.general.apiKeys.reissueApiKeys.message.successfullyReissued',
                         [],

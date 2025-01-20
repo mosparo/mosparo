@@ -3,19 +3,20 @@
 namespace Mosparo\Form;
 
 use Mosparo\Entity\Project;
+use Mosparo\Enum\LanguageSource;
 use Mosparo\Util\DateRangeUtil;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ExtendedProjectFormType extends ProjectFormType
+class AdvancedProjectFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
-
         $builder
             ->add('status', ChoiceType::class, [
                 'label' => 'project.form.status',
@@ -38,6 +39,11 @@ class ExtendedProjectFormType extends ProjectFormType
                 'attr' => ['class' => 'form-select'],
                 'choices' => DateRangeUtil::getChoiceOptions(),
                 'help' => 'project.form.statisticStorageLimitHelp'
+            ])
+            ->add('languageSource', EnumType::class, [
+                'label' => 'project.form.languageSource',
+                'class' => LanguageSource::class,
+                'expanded' => true,
             ])
             ->add('apiDebugMode', CheckboxType::class, [
                 'label' => 'project.form.apiDebugMode',

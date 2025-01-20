@@ -30,17 +30,10 @@
                         {{ form_row(form.name) }}
                         {{ form_row(form.description) }}
                         {{ form_row(form.hosts) }}
-                        {{ form_row(form.status) }}
-                        {{ form_row(form.spamScore) }}
-                        {{ form_row(form.statisticStorageLimit) }}
-
-                        <hr>
-
-                        <h4>{{ 'settings.general.subtitle.developerOptions'|trans }}</h4>
-                        {{ form_row(form.apiDebugMode) }}
-                        {{ form_row(form.verificationSimulationMode) }}
+                        {{ form_row(form.projectGroup) }}
                     </div>
                 </div>
+
                 <div class="row mt-3">
                     <div class="col-12 col-md-auto ms-auto">
                         <button type="submit" class="btn btn-primary w-100">

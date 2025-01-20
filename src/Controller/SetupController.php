@@ -81,10 +81,28 @@ class SetupController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        $databaseSystems = [
-            'setup.database.system.mysql' => 'mysql',
-            'setup.database.system.postgres' => 'postgres',
-        ];
+        $databaseSystems = [];
+
+        if ($this->setupHelper->hasPhpExtension('pdo_mysql')) {
+            $databaseSystems['setup.database.system.mysql'] = 'mysql';
+        }
+
+        if ($this->setupHelper->hasPhpExtension('pdo_pgsql')) {
+            $databaseSystems['setup.database.system.postgres'] = 'postgres';
+        }
+
+        $sqliteVersionMismatch = false;
+        $sqliteVersionNumber = null;
+        if ($this->setupHelper->hasPhpExtension('pdo_sqlite') && class_exists('SQLite3')) {
+            $sqliteVersion = \SQLite3::version();
+
+            if (version_compare($sqliteVersion['versionString'], '3.16.0', 'ge')) {
+                $databaseSystems['setup.database.system.sqlite'] = 'sqlite';
+            } else {
+                $sqliteVersionMismatch = true;
+                $sqliteVersionNumber = $sqliteVersion['versionString'];
+            }
+        }
 
         $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->add('system', ChoiceType::class, [
@@ -105,6 +123,7 @@ class SetupController extends AbstractController
             $drivers = [
                 'mysql' => 'pdo_mysql',
                 'postgres' => 'pdo_pgsql',
+                'sqlite' => 'pdo_sqlite',
             ];
             $driver = $drivers[$form->get('system')->getData()] ?? '';
 
@@ -159,7 +178,9 @@ class SetupController extends AbstractController
             'form' => $form->createView(),
             'submitted' => $form->isSubmitted(),
             'connected' => $connected,
-            'tablesExist' => $tablesExist
+            'tablesExist' => $tablesExist,
+            'sqliteVersionMismatch' => $sqliteVersionMismatch,
+            'sqliteVersionNumber' => $sqliteVersionNumber,
         ]);
     }
 

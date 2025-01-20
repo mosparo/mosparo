@@ -75,7 +75,22 @@ $(document).ready(function () {
 
     $('.card-field-switch').on('change', function () {
         let cardBody = $(this).parents('.card-body');
-        let fields = cardBody.find('input, textarea, select').not($(this));
+        let fields = cardBody.find('input, textarea, select').not($(this)).not('.always-disabled');
+        let status = $(this).is(':checked');
+        let disabled = $(this).is(':disabled');
+
+        if (status && !disabled) {
+            fields.prop('disabled', false);
+        } else {
+            fields.prop('disabled', true);
+        }
+
+        cardBody.find('.sub-card-field-switch').trigger('change');
+    }).trigger('change');
+
+    $('.sub-card-field-switch').on('change', function () {
+        let cardBody = $(this).parents('.sub-card-body');
+        let fields = cardBody.find('input, textarea, select').not($(this)).not('.always-disabled');
         let status = $(this).is(':checked');
         let disabled = $(this).is(':disabled');
 
@@ -88,7 +103,7 @@ $(document).ready(function () {
 
     $('.full-card-field-switch').on('change', function () {
         let cardBody = $(this).parents('.card').find('.card-body');
-        let fields = cardBody.find('input, textarea, select');
+        let fields = cardBody.find('input, textarea, select').not('.always-disabled');
         let status = $(this).is(':checked');
 
         if (status) {
@@ -306,8 +321,10 @@ $(document).ready(function () {
         }).trigger('change');
 
         link.click(function (ev) {
-            input.val('').trigger('change');
-            ev.preventDefault();
+            if (link.attr('href') === '#') {
+                input.val('').trigger('change');
+                ev.preventDefault();
+            }
         });
     });
 });

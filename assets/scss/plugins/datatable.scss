@@ -77,17 +77,22 @@
 
     z-index: 5;
 
+    container-type: size;
+
     .dataTables_processing {
         display: block !important;
 
         position: sticky;
-        top: calc(50% - 1rem);
+        top: 0;
+
+        padding: min(calc(50vh - 1rem), calc(50cqh - 1rem)) 0;
 
         text-align: center;
     }
 }
 
-.theme-dark {
+[data-bs-theme=dark],
+body[data-bs-theme=dark] [data-bs-theme=light] {
     .processing-container.visible {
         background: rgba(26, 34, 52, 0.8);
     }
@@ -160,6 +165,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+
+        mask-image: unset !important;
     }
 
     &.asc:after {

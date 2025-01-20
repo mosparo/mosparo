@@ -45,8 +45,15 @@ RUN apt-get update && \
         autoconf \
         cron \
         wget \
-        nginx  && \
-    docker-php-ext-install -j$(nproc) gd intl opcache pdo_mysql pdo_pgsql zip && \
+        nginx \
+        libsqlite3-dev \
+        libmemcached-dev \
+        libssl-dev \
+        zlib1g-dev && \
+    docker-php-ext-install -j$(nproc) gd intl opcache pdo_mysql pdo_pgsql pdo_sqlite zip && \
+    pecl install redis-6.1.0 && \
+    pecl install memcached-3.3.0 && \
+    docker-php-ext-enable redis memcached && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
@@ -60,7 +67,9 @@ ADD config/nginx.conf /etc/nginx/sites-enabled/default
 ADD config/mosparo.cron /etc/cron.d/mosparo
 ADD --chmod=0755 scripts/run.sh /usr/bin/run
 
-RUN crontab /etc/cron.d/mosparo
+HEALTHCHECK --interval=1m --timeout=5s CMD curl -s --fail-with-body http://localhost/api/v1/health/check || exit 1
+
+RUN crontab -u www-data /etc/cron.d/mosparo
 
 VOLUME /mosparo-data
 

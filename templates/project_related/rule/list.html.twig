@@ -32,7 +32,7 @@
                             {{ ruleType.name|trans }}
 
                             {% if numberOfRulesByType[ruleType.key] is defined %}
-                                ({{ numberOfRulesByType[ruleType.key] }})
+                                <span class="badge bg-primary ms-2">{{ numberOfRulesByType[ruleType.key] }}</span>
                             {% endif %}
                         </a>
                     {% endfor %}

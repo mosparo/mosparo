@@ -28,6 +28,12 @@
             </div>
         {% endif %}
 
+        {% if sqliteVersionMismatch %}
+            <div class="alert alert-orange">
+                {{ 'setup.database.sqliteVersionMismatch'|trans({'%versionNumber%': sqliteVersionNumber}) }}
+            </div>
+        {% endif %}
+
         {{ form_row(form.system) }}
         {{ form_row(form.host) }}
         {{ form_row(form.port) }}
@@ -51,11 +57,22 @@
         <script>
             $('#form_system').change(function () {
                 let portField = $('#form_port');
+                let databaseFields = $('#form_host, #form_port, #form_database, #form_user, #form_password');
+                let databaseFieldsGroup = databaseFields.parents('.form-group');
 
-                if ($(this).val() === 'mysql') {
-                    portField.val(3306);
-                } else if ($(this).val() === 'postgres') {
-                    portField.val(5432);
+                if ($(this).val() === 'sqlite') {
+                    databaseFields.prop('required', false).prop('disabled', true);
+                    databaseFieldsGroup.hide();
+                } else {
+                    databaseFields.prop('disabled', false);
+                    databaseFields.not(portField).prop('required', true);
+                    databaseFieldsGroup.show();
+
+                    if ($(this).val() === 'mysql') {
+                        portField.val(3306);
+                    } else if ($(this).val() === 'postgres') {
+                        portField.val(5432);
+                    }
                 }
             });
         </script>

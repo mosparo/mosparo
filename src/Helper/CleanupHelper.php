@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Util\DateRangeUtil;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class CleanupHelper
 {
@@ -19,23 +19,43 @@ class CleanupHelper
 
     protected LoggerInterface $logger;
 
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, LoggerInterface $logger)
+    protected CacheInterface $cache;
+
+    protected bool $cleanupGracePeriodEnabled;
+
+    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, LoggerInterface $logger, CacheInterface $cache, bool $cleanupGracePeriodEnabled = false)
     {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->logger = $logger;
+        $this->cache = $cache;
+        $this->cleanupGracePeriodEnabled = $cleanupGracePeriodEnabled;
     }
 
     public function cleanup($maxIterations = 10, $force = false, $ignoreExceptions = true, $timeout = 1.5)
     {
-        $cache = new FilesystemAdapter();
-        $nextCleanup = $cache->getItem('mosparoNextCleanup');
-        $cleanupStartedAt = $cache->getItem('mosparoCleanupStartedAt');
+        $nextCleanup = $this->cache->getItem('mosparoNextCleanup');
+        $additionalCleanup = $this->cache->getItem('mosparoAdditionalCleanup');
+        $cleanupStartedAt = $this->cache->getItem('mosparoCleanupStartedAt');
 
-        // If the force parameter is set, we execute the cleanup anyway
+        // If the force parameter is set, we execute the cleanup anyways
         if ($nextCleanup->get() !== null && !$force) {
+            // Clone the DateTime object to keep the original time because we manipulate the time later (see below).
+            $cleanupStart = clone $nextCleanup->get();
+
+            // Add the cleanup grace period - if enabled - to the regular cleanup time but not the
+            // additional cleanup (see below).
+            if ($this->cleanupGracePeriodEnabled) {
+                $cleanupStart->add(new DateInterval('PT24H'));
+            }
+
+            // Check if there is an additional cleanup needed from the last cleanup run.
+            if ($additionalCleanup->get() !== null) {
+                $cleanupStart = $additionalCleanup->get();
+            }
+
             // Return, if the next cleanup date is in the future
-            if ($nextCleanup->get() > new DateTime()) {
+            if ($cleanupStart > new DateTime()) {
                 return;
             }
 
@@ -60,7 +80,7 @@ class CleanupHelper
 
         // Lock the cleanup
         $cleanupStartedAt->set(new DateTime());
-        $cache->save($cleanupStartedAt);
+        $this->cache->save($cleanupStartedAt);
 
         // Remove the active project for the cleanup
         $activeProject = null;
@@ -187,26 +207,27 @@ class CleanupHelper
             $this->projectHelper->setActiveProject($activeProject);
         }
 
-        $nextCleanupDate = new DateTime();
+        $additionalCleanupDate = null;
         if ($notFinished) {
             // Execute the next cleanup in 10 minutes
             // We give the (database) server these 10 minutes to relax after deleting so many rows.
-            $nextCleanupDate->add(new DateInterval('PT10M'));
-        } else {
-            // If the cleanup process was finished, perform the next cleanup in 6 hours
-            $nextCleanupDate->add(new DateInterval('PT6H'));
+            $additionalCleanupDate = (new DateTime())->add(new DateInterval('PT10M'));
         }
+
+        $additionalCleanup->set($additionalCleanupDate);
+        $this->cache->save($additionalCleanup);
+
+        // The next regular cleanup will be performed in 6 hours
+        $nextCleanup->set((new DateTime())->add(new DateInterval('PT6H')));
+        $this->cache->save($nextCleanup);
 
         $this->logger->info(sprintf(
             'Cleanup process completed after %ds.',
             (new DateTime())->getTimestamp() - $cleanupStartedAt->get()->getTimestamp()
         ));
 
-        $nextCleanup->set($nextCleanupDate);
-        $cache->save($nextCleanup);
-
         $cleanupStartedAt->set(null);
-        $cache->save($cleanupStartedAt);
+        $this->cache->save($cleanupStartedAt);
     }
 
     /**

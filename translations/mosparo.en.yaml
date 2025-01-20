@@ -4,15 +4,58 @@ header:
   noProjectsFound: No projects found
   account: Account
 
+projectGroup:
+  mainGroup: Main group
+  action:
+    edit: Edit group
+    delete: Delete group
+    openMainGroup: Go back to main group
+    openParentGroupName: Go back to %name%
+    openParentGroup: Open parent group
+    openGroup: Open group
+    backToList: Back to projects list
+
+  create:
+    title: Create project group
+
+  edit:
+    title: Edit project group %projectGroupName%
+
+  form:
+    name: Name
+    description: Description
+    parentGroup: Parent group
+
+    tooltip:
+      activeGroup: You're editing this group.
+
+    message:
+      successfullySaved: The project group %projectGroupName% was saved successfully.
+
+  delete:
+    title: Delete project group %projectGroupName%
+    confirm: Do you really want to delete the project group %projectGroupName%?
+    reassignChildren: All project groups and projects in this project group will be assigned automatically to the parent project group.
+
+    message:
+      successfullyDeleted: The project group %projectGroupName% was deleted successfully.
+
+projectGroupSelector:
+  noGroupsAvailable: No groups available.
+  noProjectsAvailable: No projects available
+
 # Projects
 project:
   title: Projects
-  backToList: Back to projects
+  searchTitle: Projects for %searchQuery%
+  backToList: Back to projects list
   infoNoProjectAvailable: No projects available
   infoCreateProjectOrRequestAccess: Create a new project or request access to another project.
+  infoNoProjectsInThisGroup: There are no projects in this group.
 
   list:
     name: Name
+    projects: Projects
     status: Status
     actions: Actions
 
@@ -27,10 +70,12 @@ project:
     placeholder: Search for…
 
   action:
-    manage: Manage project
+    manage: Manage projects
     id: Project ID
+    settings: Settings
     delete: Delete project
     goto: Go to project
+    create: Create
 
   create:
     title: Create project
@@ -58,6 +103,8 @@ project:
   form:
     name: Name
     description: Description
+    projectGroup: Project group
+    projectGroupHelp: You can use project groups to organize your projects. Select the project group in which you want to store this project.
     hosts: Hosts
     hostsHelp: These hosts are used to respond with the correct security headers (CORS). A host is a domain (or subdomain) that hosts your website without protocol and path (for example, example.com). You must add all domains and subdomains that use this project and all variations (for example, www.example.com and example.com). You can use a star (*) at the start of a host as a wildcard (for example, *.example.com). Using the star as a prefix and not as a global wildcard for all hosts is recommended.
     status: Status
@@ -66,6 +113,7 @@ project:
     spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.
     statisticStorageLimit: Statistic storage
     statisticStorageLimitHelp: Defines how long mosparo should keep the statistics in the database. This option has no connection to the storage range of the submissions, after which the submissions get deleted from the database (14 days).
+    languageSource: Language source
     apiDebugMode: API debug mode
     apiDebugModeHelp: If the API debug mode is enabled, the verification API will return more information about the verification process. This information can be relevant to understand why a verification failed. Use this option to help integrate mosparo into your form.
     verificationSimulationMode: Verification simulation mode
@@ -450,13 +498,30 @@ submission:
         country: Country
 
     generalVerifications:
+      title: General verifications
+
+      features:
+        proofOfWork: Proof of work
+        minimumTime: Minimum time
+        equalSubmissions: Equal submissions
+
       minimumTime:
         title: Submission too fast
         text: The form was submitted too fast. The submitter required only %seconds% seconds, which is less than the minimum time of %minimumTimeSeconds% seconds.
+        minimumTime: 'Minimum time:'
+        measuredTime: 'Measured time:'
+
+      proofOfWork:
+        title: Proof of work incorrect
+        text: mosparo received the wrong result for the proof of work verification method. This usually means that someone tried to bypass the proof of work mechanism.
+        expectedHash: 'Expected hash:'
+        generatedHash: 'Generated hash:'
 
       equalSubmissions:
         title: Too many equal submissions
         text: This submission is equal to previous submissions. mosparo found %actualNumberOfEqualSubmissions% equal submissions within the configured time range, more than the allowed number of %allowedNumberOfEqualSubmissions% equal submissions.
+        maximumAllowed: 'Maximum allowed:'
+        counted: 'Counted:'
 
     verificationSimulation:
       title: Verification simulation
@@ -555,9 +620,6 @@ settings:
   general:
     title: General settings
 
-    subtitle:
-      developerOptions: Developer options
-
     message:
       successfullySaved: The settings were saved successfully.
 
@@ -585,6 +647,15 @@ settings:
         message:
           successfullyReissued: The API keys were reissued successfully.
           errorOnlyOwner: Only an owner of the project can reissue the API keys.
+
+  advanced:
+    title: Advanced settings
+
+    subtitle:
+      spamDetectionOptions: Spam detection options
+      statisticsOptions: Statistic options
+      languageOptions: Language options
+      developerOptions: Developer options
 
   projectMember:
     title: Project members
@@ -695,6 +766,12 @@ settings:
       title: IP lockout
       intro: To make it even harder for bots, mosparo can automatically block IP addresses temporarily. If an IP address submits many forms, mosparo can automatically count the submissions and block the IP address if a specific number is reached.
 
+    proofOfWork:
+      title: Proof of Work mechanism
+      intro: The proof of work mechanism lets the browser automatically calculate many hashes to find the correct result. The browser needs time to solve this calculation, which a spam bot does not like to spend.
+      subtitle: Dynamic complexity
+      introDynamicComplexity: With the dynamic complexity, the automatic puzzle is generated with a more extensive number range, which means that the browser needs to calculate more and waste more time. If the dynamic complexity is based on the IP address, only clients with many submissions in a specified time range will have more complex puzzles.
+
     equalSubmissions:
       title: Block equal submissions
       intro: An additional security measurement is to block equal submissions. If a user tries to submit the same submission too often in a defined time frame, mosparo will block all future submissions until the time frame expires. Additionally, this check can be limited to the IP address.
@@ -723,6 +800,15 @@ settings:
       lockoutTime: Base lockout time
       lockoutMultiplicator: Multiplicator
       lockoutMultiplicatorHelp: The base lockout time will be increased with every additional request.
+      proofOfWorkActive: Enable proof of work
+      proofOfWorkComplexity: Complexity
+      proofOfWorkDynamicComplexityActive: Enable dynamic complexity
+      proofOfWorkDynamicComplexityMaxComplexity: Maximum complexity
+      proofOfWorkDynamicComplexityNumberOfSubmissions: Number of submissions to reach maximum complexity
+      proofOfWorkDynamicComplexityNumberOfSubmissionsHelp: Defines the number of submissions needed within the configured detection time frame to reach the maximum complexity number.
+      proofOfWorkDynamicComplexityTimeFrame: Detection time frame
+      proofOfWorkDynamicComplexityBasedOnIpAddress: Based on IP address
+      proofOfWorkDynamicComplexityBasedOnIpAddressHelp: The detection will happen on the user's IP address. If disabled, all submissions of all users within the time frame will be counted.
       equalSubmissionsActive: Enable block equal submissions
       equalSubmissionsNumberOfEqualSubmissions: Number of allowed equal submissions
       equalSubmissionsNumberOfEqualSubmissionsHelp: The number of allowed equal submissions before the block come into place.
@@ -736,11 +822,19 @@ settings:
       overrideHoneypotField: Override honeypot field
       overrideDelay: Override request delay
       overrideLockout: Override automatic lockout
+      overrideProofOfWork: Override proof of work
       overrideEqualSubmissions: Override block equal submissions
 
     message:
       successfullySaved: The security settings were saved successfully.
       guidelineSuccessfullySaved: The security guideline was saved successfully.
+
+    crypto:
+      numberRange: Number range
+      maximumTimeToSolve: Max time to solve
+      speed: Speed
+      rangeSizeHelp: The larger the number range, the more calculations a browser has to perform. It's recommended not to use a too large number range because it takes time for the user to submit the form.
+      cryptoSpeedHelp: These values are tested and calculated on your device. Other devices can be faster or slower. These numbers should give you an indication, but they do not show the exact duration for every user.
 
   design:
     title: Design
@@ -1596,10 +1690,11 @@ setup:
 
   database:
     title: Database
-    introduction: Please enter the connection data for your database.
+    introduction: Please choose the database system and configure your database connection.
     useEmptyDatabase: Please use an empty database or a database in which no tables of mosparo exist.
     mosparoTablesExistInDatabase: Tables of mosparo were found in the specified database. Please use another database or delete the tables.
     connectionDataInvalid: It was not possible to connect to the database. Please check your settings below and try again.
+    sqliteVersionMismatch: mosparo requires at least SQLite library 3.16.0, but you have version %versionNumber% installed. You cannot use SQLite to install mosparo.
 
     form:
       system: System
@@ -1613,6 +1708,7 @@ setup:
       pleaseChoose: Please choose…
       mysql: MySQL/MariaDB
       postgres: PostgreSQL
+      sqlite: SQLite
 
     port:
       default: Default
@@ -1650,6 +1746,25 @@ unit:
   day: Day
   days: Days
   minutes: Minutes
+  second: Second
+  seconds: Seconds
+  secondsShort: Sec
+  hashesPerSecondShort: Hashes/Sec
+  submission: Submission
+  submissions: Submissions
 
 unitHelp:
   inSeconds: In seconds
+
+languageSource:
+  browserFallback:
+    label: Use browser language
+    help: Use the browser language for the mosparo frontend box. If mosparo has no translations for this language, fall back to English.
+
+  browserHtmlFallback:
+    label: Use browser language, fallback to website language
+    help: Use the browser language for the mosparo frontend box. If mosparo has no translations for this language, use the website's language. If this language is unavailable too, fall back to English.
+
+  htmlBrowserFallback:
+    label: Use website language, fallback to browser language
+    help: Use the website's language for the mosparo frontend box. If mosparo has no translations for this language, use the browser's language. If this language is unavailable too, fall back to English.

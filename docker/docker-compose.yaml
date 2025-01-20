@@ -25,6 +25,7 @@ services:
       - MOSPARO_ENABLE_WEBSERVER=1
       # If you want to run the cron jobs in a seperated container, uncomment the following lines
       #- MOSPARO_ENABLE_CRON=0
+      #- MOSPARO_CLEANUP_GRACE_PERIOD_ENABLED=1
     volumes:
       - mosparo_data:/mosparo-data
   # If you want to run the cron jobs in a seperated container, uncomment the following lines

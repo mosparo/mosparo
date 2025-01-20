@@ -53,7 +53,7 @@ security:
             form_login:
                 login_path: security_login
                 check_path: security_login
-                default_target_path: project_list
+                default_target_path: project_list_root
             logout:
                 path: security_logout
                 csrf_parameter: token

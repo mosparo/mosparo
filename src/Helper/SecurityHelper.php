@@ -131,7 +131,7 @@ class SecurityHelper
         return null;
     }
 
-    protected function countRequests($ipAddress, $timeFrame)
+    public function countRequests($ipAddress, $timeFrame)
     {
         $startTime = new DateTime();
         $startTime->sub(new DateInterval('PT' . $timeFrame . 'S'));
@@ -144,6 +144,23 @@ class SecurityHelper
            ->andWhere('st.createdAt > :startTime')
            ->setParameter(':ip', HashUtil::hash($ipAddress))
            ->setParameter(':startTime', $startTime);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result['requests'] ?? 0;
+    }
+
+    public function countRequestsInTimeFrame($timeFrame)
+    {
+        $startTime = new DateTime();
+        $startTime->sub(new DateInterval('PT' . $timeFrame . 'S'));
+
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('count(st.id) AS requests')
+            ->from('Mosparo\Entity\SubmitToken', 'st')
+            ->leftJoin('Mosparo\Entity\Submission', 's', 'WITH', 'st.id = s.submitToken')
+            ->andWhere('st.createdAt > :startTime')
+            ->setParameter(':startTime', $startTime);
 
         $result = $qb->getQuery()->getOneOrNullResult();
 

@@ -85,7 +85,9 @@
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    {{ numberOfRules }}
+                                    <span class="badge bg-teal">
+                                        {{ numberOfRules }}
+                                    </span>
                                 </div>
                             </div>
                         </a>
@@ -108,7 +110,9 @@
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    {{ numberOfRulesets }}
+                                    <span class="badge bg-cyan">
+                                        {{ numberOfRulesets }}
+                                    </span>
                                 </div>
                             </div>
                         </a>
@@ -159,15 +163,21 @@
                     colors: ['#56B344', '#D63939'],
                     shade: 'light',
                     tooltipTheme: 'light',
+                    axisColor: '#000000',
+                    annotationsLineColor: '#888888',
+                    annotationsLabelColor: '#888888',
                 };
 
-                if ($('body').hasClass('theme-dark')) {
+                if ($('body').data('bs-theme') === 'dark') {
                     colors = {
-                        background: '#1d273b',
+                        background: '#182433',
                         fill: ['#1d3b21', '#3b1d1d'],
                         colors: ['#56B344', '#D63939'],
                         shade: 'dark',
                         tooltipTheme: 'dark',
+                        axisColor: '#ffffff',
+                        annotationsLineColor: '#BBBBBB',
+                        annotationsLabelColor: '#BBBBBB',
                     };
                 }
 
@@ -246,6 +256,9 @@
                             padding: 0,
                             datetimeFormatter: {
                                 day: '{{ chartDateFormat }}'
+                            },
+                            style: {
+                                colors: colors.axisColor
                             }
                         },
                         tooltip: {
@@ -262,6 +275,9 @@
                             show: true,
                             offsetX: 0,
                             offsetY: 3,
+                            style: {
+                                colors: colors.axisColor
+                            }
                         },
                         tooltip: {
                             enabled: false
@@ -272,7 +288,7 @@
                             xaxis: [
                                 {
                                     x: {{ statisticOnlyRangeEndDate }},
-                                    borderColor: '#888888',
+                                    borderColor: colors.annotationsLineColor,
                                     label: {
                                         borderColor: 'transparent',
                                         text: '{{ 'dashboard.chart.annotation.statisticOnly'|trans }}',
@@ -283,6 +299,7 @@
                                         style: {
                                             fontSize: '14px',
                                             background: 'transparent',
+                                            color: colors.annotationsLabelColor
                                         }
                                     }
                                 },

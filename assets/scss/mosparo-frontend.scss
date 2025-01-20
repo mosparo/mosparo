@@ -6,6 +6,14 @@
 
     box-shadow: 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-shadow-color, rgba(170, 170, 170, 0.3)), inset 0 0 var(--mosparo-shadow-blur-radius, 12px) var(--mosparo-shadow-spread-radius, 3px) var(--mosparo-shadow-inset-color, transparent);
 
+    min-width: var(--mosparo-container-min-width, 300px);
+    max-width: var(--mosparo-container-max-width, 500px);
+
+    display: flex;
+    position: var(--mosparo-container-position, relative);
+
+    user-select: none;
+
     &,
     .mosparo__label,
     .mosparo__error-message {
@@ -22,14 +30,6 @@
     .mosparo__label {
         display: var(--mosparo-content-display, block);
     }
-
-    min-width: var(--mosparo-container-min-width, 300px);
-    max-width: var(--mosparo-container-max-width, 500px);
-
-    display: flex;
-    position: var(--mosparo-container-position, relative);
-
-    user-select: none;
 
     *,
     *:before,

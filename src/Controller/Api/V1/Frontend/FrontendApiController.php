@@ -11,6 +11,7 @@ use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\SubmitToken;
+use Mosparo\Enum\LanguageSource;
 use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\CleanupHelper;
@@ -19,7 +20,9 @@ use Mosparo\Helper\HmacSignatureHelper;
 use Mosparo\Helper\RuleTesterHelper;
 use Mosparo\Helper\SecurityHelper;
 use Mosparo\Helper\StatisticHelper;
+use Mosparo\Util\IpUtil;
 use Mosparo\Util\TokenGenerator;
+use Mosparo\Verification\GeneralVerification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,6 +102,8 @@ class FrontendApiController extends AbstractController
             return $this->prepareSecurityResponse($request, $securityResult, true);
         }
 
+        $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
+
         $submitToken = new SubmitToken();
         $submitToken->setIpAddress($request->getClientIp());
         $submitToken->setCreatedAt(new DateTime());
@@ -108,12 +113,24 @@ class FrontendApiController extends AbstractController
         $submitToken->setPageUrl($request->request->get('pageUrl'));
 
         $entityManager->persist($submitToken);
-        $entityManager->flush();
 
         $args = [];
-        if ($securitySettings['honeypotFieldActive']) {
+        if ($securitySettings['honeypotFieldActive'] && !$isIpOnAllowList) {
             $args['honeypotFieldName'] = $securitySettings['honeypotFieldName'];
         }
+
+        if ($securitySettings['proofOfWorkActive'] && !$isIpOnAllowList) {
+            $maxNumber = $this->findMaximumNumberForProofOfWorkRange($request, $securitySettings);
+            $number = mt_rand(1, $maxNumber);
+
+            $proofOfWorkResult = hash('sha256', $submitToken->gettoken() . $number);
+            $submitToken->setProofOfWorkResult($proofOfWorkResult);
+
+            $args['proofOfWorkResult'] = $proofOfWorkResult;
+            $args['proofOfWorkMaxNumber'] = $maxNumber;
+        }
+
+        $entityManager->flush();
 
         return new JsonResponse([
             'submitToken' => $submitToken->getToken(),
@@ -142,6 +159,8 @@ class FrontendApiController extends AbstractController
         if ($securityResult instanceof Lockout) {
             return $this->prepareSecurityResponse($request, $securityResult);
         }
+
+        $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
 
         $activeProject = $this->projectHelper->getActiveProject();
 
@@ -205,7 +224,7 @@ class FrontendApiController extends AbstractController
         $submission->setIgnoredFields($formData['ignoredFields']);
 
         // Check for the honeypot field
-        if ($securitySettings['honeypotFieldActive']) {
+        if ($securitySettings['honeypotFieldActive'] && !$isIpOnAllowList) {
             $hpFieldName = $securitySettings['honeypotFieldName'];
             $hpField = false;
 
@@ -231,6 +250,25 @@ class FrontendApiController extends AbstractController
                     ]
                 ]];
                 $submission->setMatchedRuleItems($matchedRuleItems);
+            }
+        }
+
+        // Check the proof of work result
+        if ($securitySettings['proofOfWorkActive'] && !$isIpOnAllowList) {
+            $number = intval($request->request->get('proofOfWorkNumber', 0));
+            $proofOfWorkResult = hash('sha256', $submitToken->gettoken() . $number);
+
+            $proofOfWorkGv = new GeneralVerification(
+                GeneralVerification::PROOF_OF_WORK,
+                ($submitToken->getProofOfWorkResult() === $proofOfWorkResult),
+                ['expectedHash' => $submitToken->getProofOfWorkResult(), 'generatedHash' => $proofOfWorkResult]
+            );
+            $submission->addGeneralVerification($proofOfWorkGv);
+
+            if (!$proofOfWorkGv->isValid()) {
+                $submission->setSpamRating($activeProject->getSpamScore() + 1);
+                $submission->setSpamDetectionRating($activeProject->getSpamScore());
+                $submission->setSpam(true);
             }
         }
 
@@ -317,26 +355,19 @@ class FrontendApiController extends AbstractController
 
     protected function getTranslations(Request $request): array
     {
-        $usedLocale = null;
+        $usedLocale = 'en';
         if ($this->translator instanceof LocaleAwareInterface) {
-            $locale = 'en';
-            if ($request->request->has('language')) {
-                $locale = $this->localeHelper->fixPreferredLanguage($request->request->get('language'));
-            } else if ($request->getPreferredLanguage()) {
-                $locale = $this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage());
-            }
+            $locales = $this->findCorrectLocales($request);
 
-            $this->translator->setLocale($locale);
+            foreach ($locales as $locale) {
+                $this->translator->setLocale($locale);
 
-            // Try to determine the locale for which we will return the messages. If we don't have the translation
-            // for a locale, mosparo falls back to English.
-            $catalogue = $this->translator->getCatalogue($locale);
-            $usedLocale = $catalogue->getLocale();
-            while (!$catalogue->defines('label', 'frontend')) {
-                if ($cat = $catalogue->getFallbackCatalogue()) {
-                    $catalogue = $cat;
-                    $usedLocale = $catalogue->getLocale();
-                } else {
+                // Try to determine the locale for which we will return the messages. If we don't have the translation
+                // for a locale, mosparo falls back to English.
+                $catalogue = $this->translator->getCatalogue($locale);
+
+                if ($catalogue->defines('label', 'frontend')) {
+                    $usedLocale = $locale;
                     break;
                 }
             }
@@ -359,5 +390,94 @@ class FrontendApiController extends AbstractController
 
             'hpLeaveEmpty' => $this->translator->trans('hp.fieldTitle', [], 'frontend'),
         ];
+    }
+
+    protected function findCorrectLocales(Request $request): array
+    {
+        $project = $this->projectHelper->getActiveProject();
+        $locales = [];
+        $browserLocale = null;
+        $staticLocale = null;
+        $htmlLocale = null;
+
+        if ($request->getPreferredLanguage()) {
+            $browserLocale = $this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage());
+        }
+
+        if ($request->request->has('language') && $request->request->get('language')) {
+            $staticLocale = $this->localeHelper->fixPreferredLanguage($request->request->get('language'));
+        }
+
+        if ($request->request->has('htmlLanguage') && $request->request->get('htmlLanguage')) {
+            $htmlLocale = $request->request->get('htmlLanguage');
+        }
+
+        if ($staticLocale) {
+            $this->addLocales($locales, $staticLocale);
+        } else if ($project->getLanguageSource() === LanguageSource::BROWSER_FALLBACK) {
+            $this->addLocales($locales, $browserLocale);
+        } else if ($project->getLanguageSource() === LanguageSource::BROWSER_HTML_FALLBACK) {
+            $this->addLocales($locales, $htmlLocale);
+            $this->addLocales($locales, $browserLocale);
+        } else if ($project->getLanguageSource() === LanguageSource::HTML_BROWSER_FALLBACK) {
+            $this->addLocales($locales, $browserLocale);
+            $this->addLocales($locales, $htmlLocale);
+        }
+
+        $locales[] = 'en'; // The default locale, always fallback to this
+
+        return array_filter($locales);
+    }
+
+    protected function addLocales(&$locales, $locale)
+    {
+        if (strlen($locale) > 2) {
+            $fallbackLocale = substr($locale, 0, 2);
+
+            if (!in_array($fallbackLocale, $locales)) {
+                array_unshift($locales, $fallbackLocale);
+            }
+        }
+
+        if (!in_array($locale, $locales)) {
+            array_unshift($locales, $locale);
+        }
+    }
+
+    protected function isIpOnAllowList(string $ipAddress, array $securitySettings)
+    {
+        return trim($securitySettings['ipAllowList']) && IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList']);
+    }
+
+    protected function findMaximumNumberForProofOfWorkRange(Request $request, array $securitySettings): int
+    {
+        $normalMaxNumber = (10 ** $securitySettings['proofOfWorkComplexity']) - 1;
+
+        if (!$securitySettings['proofOfWorkDynamicComplexityActive']) {
+            return $normalMaxNumber;
+        }
+
+        $dcMaxNumber = (10 ** $securitySettings['proofOfWorkDynamicComplexityMaxComplexity']) - 1;
+        $delta = $dcMaxNumber - $normalMaxNumber;
+
+        $numberOfMaxSubmissions = $securitySettings['proofOfWorkDynamicComplexityNumberOfSubmissions'];
+
+        if ($securitySettings['proofOfWorkDynamicComplexityBasedOnIpAddress']) {
+            $actualNumberOfSubmissions = $this->securityHelper->countRequests(
+                $request->getClientIp(),
+                $securitySettings['proofOfWorkDynamicComplexityTimeFrame']
+            );
+        } else {
+            $actualNumberOfSubmissions = $this->securityHelper->countRequestsInTimeFrame(
+                $securitySettings['proofOfWorkDynamicComplexityTimeFrame'],
+            );
+        }
+
+        $percentage = (100 / $numberOfMaxSubmissions) * $actualNumberOfSubmissions;
+        if ($percentage > 100) {
+            $percentage = 100;
+        }
+
+        return $normalMaxNumber + (($delta / 100) * $percentage);
     }
 }

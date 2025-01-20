@@ -174,6 +174,8 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
                 $overridden = $configValues['overrideDelay'] ?? false;
             } else if (str_starts_with($key, 'lockout')) {
                 $overridden = $configValues['overrideLockout'] ?? false;
+            } else if (str_starts_with($key, 'proofOfWork')) {
+                $overridden = $configValues['overrideProofOfWork'] ?? false;
             } else if (str_starts_with($key, 'equalSubmissions')) {
                 $overridden = $configValues['overrideEqualSubmissions'] ?? false;
             }

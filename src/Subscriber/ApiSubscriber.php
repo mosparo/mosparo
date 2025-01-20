@@ -83,7 +83,7 @@ class ApiSubscriber implements EventSubscriberInterface
         }
     }
 
-    protected function removeProtocol($origin)
+    protected function removeProtocol(string $origin): string
     {
         if (strpos($origin, 'http://') === 0) {
             return substr($origin, 7);
@@ -96,9 +96,13 @@ class ApiSubscriber implements EventSubscriberInterface
         return $origin;
     }
 
-    protected function isOriginAllowed(Request $request, Project $project)
+    protected function isOriginAllowed(Request $request, Project $project): bool
     {
-        $originHost = $this->removeProtocol($request->headers->get('Origin'));
+        $originHost = $this->removeProtocol($request->headers->get('Origin', ''));
+
+        if (!$originHost) {
+            return false;
+        }
 
         foreach ($project->getHosts() as $host) {
             if ($host === $originHost) {
@@ -111,7 +115,7 @@ class ApiSubscriber implements EventSubscriberInterface
         return false;
     }
 
-    protected function matchingOrigin(string $host, string $originHost)
+    protected function matchingOrigin(string $host, string $originHost): bool
     {
         // Global wildcard, this should not be used at all
         if ($host === '*') {

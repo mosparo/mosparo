@@ -9,9 +9,12 @@ $form-select-indicator: url('/assets/images/ui/tabler.svg#select');
 $btn-close-bg: url('/assets/images/ui/tabler.svg#close');
 $accordion-button-icon: url('/assets/images/ui/tabler.svg#accordion-normal');
 $accordion-button-active-icon: url('/assets/images/ui/tabler.svg#accordion-active');
+$accordion-button-icon-dark: url('/assets/images/ui/tabler.svg#accordion-normal-dark');
+$accordion-button-active-icon-dark: url('/assets/images/ui/tabler.svg#accordion-active-dark');
+$badge-color: #ffffff;
 
 @import '~@tabler/core';
-@import '~@tabler/icons/iconfont/tabler-icons.scss';
+@import '~@tabler/icons-webfont/dist/tabler-icons-outline.scss';
 
 @import '~datatables.net-responsive-bs5';
 @import 'spectrum-colorpicker2/dist/spectrum.css';
@@ -19,6 +22,7 @@ $accordion-button-active-icon: url('/assets/images/ui/tabler.svg#accordion-activ
 /* Mosparo Core */
 @import 'core/base.scss';
 @import 'core/navigation.scss';
+@import 'core/project.scss';
 @import 'core/rule.scss';
 @import 'core/submission.scss';
 @import 'core/form.scss';

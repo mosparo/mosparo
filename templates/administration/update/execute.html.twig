@@ -166,17 +166,37 @@
 
             function checkLogFile()
             {
-                $.get('{{ temporaryLogFileUrl }}', function (responseText) {
-                    let newMessages = extractNewMessage(responseText);
+                jQuery.ajax({
+                    type: 'GET',
+                    url: '{{ temporaryLogFileUrl }}',
+                    success: function (responseText) {
+                        let newMessages = extractNewMessage(responseText);
 
-                    for (let index in newMessages) {
-                        processMessage(newMessages[index]);
-                    }
+                        for (let index in newMessages) {
+                            processMessage(newMessages[index]);
+                        }
 
-                    if (isRunning) {
-                        setTimeout(checkLogFile, calculateCheckInterval());
-                    }
-                });
+                        if (isRunning) {
+                            setTimeout(checkLogFile, calculateCheckInterval());
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        if (xhr.status === 404) {
+                            // Ignore the 404 error, which can occur until the update process has created the file.
+                            setTimeout(checkLogFile, calculateCheckInterval());
+                        } else {
+                            isRunning = false;
+
+                            markRunningAsCompleted('error');
+
+                            let statusItem = $('<li></li>').addClass('error').text(textStatus + '(' + xhr.status + ')');
+                            $('.update-log-list').append(statusItem);
+
+                            $('.alert-in-progress').addClass('d-none');
+                            $('.alert-update-error').removeClass('d-none');
+                        }
+                    },
+                })
             }
 
             setTimeout(checkLogFile, 250);

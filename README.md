@@ -56,15 +56,17 @@ We have therefore defined our main objective: to collect only data that is neces
   - openssl
   - pcre
   - pdo
-  - pdo_mysql or pdo_pgsql
+  - pdo_mysql, pdo_pgsql or pdo_sqlite
   - simplexml
   - tokenizer
   - xml
   - zip
+  - memcached (optional)
   - posix (optional)
+  - redis (optional)
   - sodium (optional)
   - Zend OPcache (optional)
-- A MySQL (MySQL or MariaDB) or PostgreSQL database
+- A MySQL (MySQL or MariaDB) or PostgreSQL database, or you can use SQLite to store it in a file
 - Less than 100 MB of disk space
 - A domain or subdomain
 

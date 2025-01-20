@@ -158,6 +158,14 @@ class ExportHelper
             'lockoutTime',
             'lockoutMultiplicator',
 
+            'proofOfWorkActive',
+            'proofOfWorkComplexity',
+            'proofOfWorkDynamicComplexityActive',
+            'proofOfWorkDynamicComplexityMaxComplexity',
+            'proofOfWorkDynamicComplexityNumberOfSubmissions',
+            'proofOfWorkDynamicComplexityTimeFrame',
+            'proofOfWorkDynamicComplexityBasedOnIpAddress',
+
             'equalSubmissionsActive',
             'equalSubmissionsNumberOfEqualSubmissions',
             'equalSubmissionsTimeFrame',

@@ -5,6 +5,8 @@
 {% block documentTitle %}{{ 'project.create.title'|trans }} &rsaquo; {{ 'project.createWizard.connection.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
 
+{% set routeSuffix = project.projectGroup ? 'group' : 'root' %}
+
 {% block pageBody %}
     <div class="container-xl pb-4">
         <div class="row">
@@ -53,7 +55,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-12 col-md-auto mt-2 mt-md-0 order-last order-md-first">
-                        <a href="{{ path('project_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                        <a href="{{ path('project_list_' ~ routeSuffix, {'projectGroup': project.projectGroup ? project.projectGroup.id : null}) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                             <i class="ti ti-chevron-left"></i>
                             {{ 'project.backToList'|trans }}
                         </a>
@@ -66,7 +68,7 @@
                     </div>
                     <div class="col-12 col-md-auto order-first order-md-last">
                         <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="btn btn-primary w-100">
-                            <i class="ti ti-folder"></i>
+                            <i class="ti ti-cube"></i>
                             {{ 'action.goToTheDashboard'|trans }}
                         </a>
                     </div>

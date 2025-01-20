@@ -1,0 +1,53 @@
+<script src="{{ asset('build/mosparo-frontend.js')|add_path_prefix }}"></script>
+
+{% cspscript %}
+    <script>
+        var cryptoSpeed = 0.0;
+
+        $(function() {
+            let measureBrowserCryptoSpeed = function () {
+                let mosparoObj = new mosparo('dummy-mosparo-box', '', '', '', {designMode: true});
+                let startTime = performance.now();
+
+                for (let counter = 1; counter < 10000; counter++) {
+                    mosparoObj.generateHash(counter);
+                }
+
+                let difference = performance.now() - startTime;
+
+                cryptoSpeed = 10000 / difference;
+                $('.crypto-speed').val(Math.round(((cryptoSpeed * 100) / 100) * 1000));
+
+                $('.proof-of-work-data-row').trigger('change');
+            }
+
+            $('.proof-of-work-active').change(function () {
+                if ($(this).is(':checked')) {
+                    measureBrowserCryptoSpeed();
+                }
+            }).trigger('change');
+
+            $('.proof-of-work-data-row').each(function () {
+                let inputEl = $(this).find('input.complexity-field');
+                let maxNumberEl = $(this).find('.max-number');
+                let maxEstTimeEl = $(this).find('.max-estimated-time-to-solve');
+
+                if (!inputEl) {
+                    return;
+                }
+
+                inputEl.on('change keydown', function () {
+                    let val = $(this).val();
+                    let maxNumber = (10 ** val) - 1;
+
+                    maxNumberEl.val('1 - ' + maxNumber);
+
+                    if (cryptoSpeed > 0) {
+                        let maxEstTime = Math.round(maxNumber / cryptoSpeed) / 1000;
+                        maxEstTimeEl.val(maxEstTime);
+                    }
+                }).trigger('change');
+            });
+        });
+    </script>
+{% endcspscript %}

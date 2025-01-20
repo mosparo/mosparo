@@ -7,7 +7,7 @@ header:
   noProjectsFound: Keine Projekte gefunden
 project:
   title: Projekte
-  backToList: Zu den Projekten
+  backToList: Zurück zur Projektliste
   infoNoProjectAvailable: Kein Projekt verfügbar
   infoCreateProjectOrRequestAccess: Erstellen Sie ein neues Projekt oder beantragen Sie Zugriff zu einem.
 
@@ -15,8 +15,9 @@ project:
     manage: Projekte verwalten
     delete: Projekt löschen
     goto: Zum Projekt
-
+    settings: Einstellungen
     id: Projekt-ID
+    create: Erstellen
   create:
     title: Projekt erstellen
 
@@ -38,6 +39,9 @@ project:
     apiDebugModeHelp: Wenn der API-Debug-Modus aktiviert ist, gibt die Verifizierungs-API weitere Informationen über den Verifizierungsprozess zurück. Diese Informationen können wichtig sein, um zu verstehen, warum eine Verifizierung fehlgeschlagen ist. Verwenden Sie diese Option, wenn Sie versuchen, mosparo in Ihr Formular zu integrieren und dabei Probleme auftreten.
     statisticStorageLimitHelp: Legt fest, wie lange mosparo die Statistiken in der Datenbank aufbewahren soll. Diese Option hat keinen Zusammenhang mit dem Speicherbereich der Einsendungen, nach dem die Einsendungen aus der Datenbank gelöscht werden (14 Tage).
     statisticStorageLimit: Speichern der Statistik
+    languageSource: Sprachquelle
+    projectGroup: Projektgruppe
+    projectGroupHelp: Sie können Projektgruppen verwenden, um Ihre Projekte zu organisieren. Wählen Sie die Projektgruppe, in der Sie dieses Projekt speichern möchten.
   delete:
     title: Projekt %projectName% löschen
     confirm: Wollen Sie das Projekt %projectName% wirklich löschen?
@@ -71,6 +75,7 @@ project:
     name: Name
     status: Status
     actions: Aktionen
+    projects: Projekte
   filter:
     options:
       all: Alle anzeigen
@@ -79,6 +84,8 @@ project:
     dropdown: Liste der Projekte filtern
   search:
     placeholder: Suchen nach…
+  searchTitle: Projekte für %searchQuery%
+  infoNoProjectsInThisGroup: Es gibt keine Projekte in dieser Gruppe.
 dashboard:
   title: Übersicht
   chart:
@@ -426,9 +433,23 @@ submission:
         text: Das Formular wurde zu schnell abgesendet. Das Formular wurde innerhalb %seconds% Sekunden ausgefüllt und abgesendet. Die konfigurierte Mindestzeit beträgt %minimumTimeSeconds% Sekunden.
 
 # Settings
+        measuredTime: 'Gemessene Zeit:'
+        minimumTime: 'Mindestzeit:'
       equalSubmissions:
         title: Zu viele gleiche Einsendungen
         text: Diese Einsendung ist gleich zu vorherigen Einsendungen. mosparo hat %actualNumberOfEqualSubmissions% gleiche Einsendungen innerhalb des konfigurierten Zeitraumes gefunden, mehr als die erlaubten %allowedNumberOfEqualSubmissions% gleichen Einsendungen.
+        maximumAllowed: 'Maximal erlaubt:'
+        counted: 'Gezählt:'
+      features:
+        equalSubmissions: Gleiche Einsendungen
+        proofOfWork: Arbeitsnachweis
+        minimumTime: Mindestzeit
+      title: Allgemeine Überprüfungen
+      proofOfWork:
+        text: mosparo hat ein falsches Ergebnis für die Verifikationsmethode des Arbeitsnachweises erhalten. Dies bedeutet normalerweise, dass jemand versucht hat, den Arbeitsnachweis zu umgehen.
+        expectedHash: 'Erwarteter Hash:'
+        generatedHash: 'Generierter Hash:'
+        title: Arbeitsnachweis ungültig
     action:
       openVerificationSimulation: Verifizierungs-Simulation
     verificationSimulation:
@@ -554,8 +575,15 @@ settings:
           successfullyReissued: Die API-Zugangsdaten wurden erfolgreich neu ausgestellt.
           errorOnlyOwner: Nur ein Besitzer des Projektes kann die API-Zugangsdaten neu ausstellen lassen.
 
+  advanced:
+    title: Erweiterte Einstellungen
+
     subtitle:
+      statisticsOptions: Statistik-Optionen
       developerOptions: Entwickler-Optionen
+
+      languageOptions: Sprach-Optionen
+      spamDetectionOptions: Spamerkennungs-Optionen
   projectMember:
     title: Projekt-Mitglieder
     backToList: Zu den Projekt-Mitgliedern
@@ -647,6 +675,16 @@ settings:
       equalSubmissionsBasedOnIpAddressHelp: Die Erkennung und Sperrung erfolgt anhand der IP-Adresse des Nutzers. Wenn diese Funktion deaktiviert ist, werden alle gleichen Einsendungen aller Benutzer gezählt.
       overrideEqualSubmissions: Blockieren gleicher Einsendungen überschreiben
       equalSubmissionsTimeFrame: Erkennungszeitraum
+      proofOfWorkDynamicComplexityTimeFrame: Erkennungszeitraum
+      proofOfWorkDynamicComplexityNumberOfSubmissionsHelp: Legt die Anzahl der Einsendungen fest, die innerhalb des konfigurierten Erkennungszeitrahmens erforderlich sind, um die maximale Komplexität zu erreichen.
+      proofOfWorkDynamicComplexityBasedOnIpAddress: Basierend auf der IP-Adresse
+      overrideProofOfWork: Arbeitsnachweis überschreiben
+      proofOfWorkDynamicComplexityBasedOnIpAddressHelp: Die Erkennung erfolgt anhand der IP-Adresse des Nutzers. Wenn diese Funktion deaktiviert ist, werden alle Einsendungen aller Benutzer innerhalb des Zeitraums gezählt.
+      proofOfWorkDynamicComplexityActive: Dynamische Komplexität aktivieren
+      proofOfWorkDynamicComplexityMaxComplexity: Maximale Komplexität
+      proofOfWorkDynamicComplexityNumberOfSubmissions: Anzahl der Einsendungen zum Erreichen der maximalen Komplexität
+      proofOfWorkActive: Arbeitsnachweis aktivieren
+      proofOfWorkComplexity: Komplexität
     message:
       successfullySaved: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
 
@@ -698,6 +736,17 @@ settings:
     equalSubmissions:
       title: Gleiche Einsendungen blockieren
       intro: Eine zusätzliche Sicherheitsmassnahme ist das Blockieren gleicher Einsendungen. Wenn ein Benutzer innerhalb eines bestimmten Zeitrahmens zu oft versucht, die gleichen Daten abzusenden, blockiert mosparo alle zukünftigen Einsendungen, bis der Zeitrahmen abgelaufen ist. Zusätzlich kann diese Prüfung auf die IP-Adresse beschränkt werden.
+    proofOfWork:
+      title: Arbeitsnachweis-Mechanismus
+      intro: Der Arbeitsnachweis-Mechanismus (Proof of Work) lässt den Browser automatisch viele Hashes berechnen, um das richtige Ergebnis zu finden. Der Browser benötigt für diese Berechnung Zeit, die ein Spam-Bot nicht gerne aufwendet.
+      subtitle: Dynamische Komplexität
+      introDynamicComplexity: Bei der dynamischen Komplexität wird das automatische Rätsel mit einem größeren Zahlenbereich generiert, was bedeutet, dass der Browser mehr berechnen muss und mehr Zeit verschwendet. Wenn die dynamische Komplexität auf der IP-Adresse basiert, haben nur Clients mit vielen Einsendungen in einem bestimmten Zeitbereich komplexere Rätsel.
+    crypto:
+      numberRange: Zahlenbereich
+      maximumTimeToSolve: Max. Zeit zur Lösung
+      speed: Geschwindigkeit
+      rangeSizeHelp: Je grösser der Zahlenbereich ist, desto mehr Berechnungen muss der Browser durchführen. Es wird empfohlen, keinen zu grossen Zahlenbereich zu verwenden, da es Zeit kostet, bis der Benutzer das Formular abschicken kann.
+      cryptoSpeedHelp: Diese Werte wurden auf Ihrem Gerät getestet und berechnet. Andere Geräte können schneller oder langsamer sein. Diese Zahlen sollten Ihnen einen Anhaltspunkt geben, aber sie zeigen nicht die genaue Dauer für jeden Nutzer.
   design:
     title: Darstellung
 
@@ -1377,10 +1426,11 @@ setup:
 
   database:
     title: Datenbank
-    introduction: Bitte geben Sie die Verbindungsdaten zu Ihrer Datebank ein.
+    introduction: Bitte wählen Sie das Datenbanksystem und konfigurieren Sie Ihre Datenbankverbindung.
     useEmptyDatabase: Bitte verwenden Sie eine leere Datenbank bzw. eine Datenbank, in welcher keine Tabellen von mosparo existieren.
     mosparoTablesExistInDatabase: In der angegebenen Datenbank wurden Tabellen von mosparo gefunden. Bitte verwenden Sie eine andere Datenbank oder löschen Sie die Tabellen.
     connectionDataInvalid: Es war nicht möglich, eine Verbindung mit der Datenbank herzustellen. Bitte prüfen Sie Ihre Einstellungen und versuchen Sie es erneut.
+    sqliteVersionMismatch: mosparo benötigt mindestens die SQLite-Bibliothek 3.16.0, aber Sie haben die Version %versionNumber% installiert. Sie können SQLite nicht zur Installation von mosparo verwenden.
 
     form:
       host: Host
@@ -1391,9 +1441,10 @@ setup:
 
       system: System
     system:
-      postgres: PostgreSQL
       pleaseChoose: Bitte wählen…
       mysql: MySQL/MariaDB
+      postgres: PostgreSQL
+      sqlite: SQLite
     port:
       default: Standard
   other:
@@ -1549,5 +1600,52 @@ unit:
   day: Tag
   days: Tage
   minutes: Minuten
+  secondsShort: Sek.
+  hashesPerSecondShort: Hashes/Sek.
+  submission: Einsendung
+  submissions: Einsendungen
+  second: Sekunde
+  seconds: Sekunden
 unitHelp:
   inSeconds: In Sekunden
+languageSource:
+  browserHtmlFallback:
+    help: Verwende die Browsersprache für die mosparo-Box. Wenn mosparo keine Übersetzungen für diese Sprache anbietet, verwende die Sprache der Website. Wenn auch diese Sprache nicht verfügbar ist, greife auf Englisch zurück.
+    label: Browsersprache verwenden, Zurückfallen auf Website-Sprache
+  htmlBrowserFallback:
+    label: Sprache der Website verwenden, Zurückfallen auf Browsersprache
+    help: Verwende die Sprache der Website für die mosparo-Box. Wenn mosparo keine Übersetzungen für diese Sprache hat, verwende die Sprache des Browsers. Wenn auch diese Sprache nicht verfügbar ist, greife auf Englisch zurück.
+  browserFallback:
+    label: Browsersprache verwenden
+    help: Verwende die Sprache des Browsers für die mosparo-Box. Wenn mosparo keine Übersetzungen für diese Sprache hat, greife auf Englisch zurück.
+projectGroup:
+  mainGroup: Hauptgruppe
+  action:
+    edit: Gruppe bearbeiten
+    delete: Gruppe löschen
+    openParentGroupName: Zurück zu %name%
+    openParentGroup: Übergeordnete Gruppe öffnen
+    backToList: Zurück zur Projektliste
+    openMainGroup: Zurück zur Hauptgruppe
+    openGroup: Gruppe öffnen
+  create:
+    title: Projektgruppe erstellen
+  form:
+    parentGroup: Übergeordnete Gruppe
+    tooltip:
+      activeGroup: Sie bearbeiten diese Gruppe.
+    message:
+      successfullySaved: Die Projektgruppe %projectGroupName% wurde erfolgreich gespeichert.
+    name: Name
+    description: Beschreibung
+  delete:
+    title: Projektgruppe %projectGroupName% löschen
+    confirm: Möchten Sie die Projektgruppe %projectGroupName% wirklich löschen?
+    reassignChildren: Alle Projektgruppen und Projekte in dieser Projektgruppe werden automatisch der übergeordneten Projektgruppe zugeordnet.
+    message:
+      successfullyDeleted: Die Projektgruppe %projectGroupName% wurde erfolgreich gelöscht.
+  edit:
+    title: Projektgruppe %projectGroupName% bearbeiten
+projectGroupSelector:
+  noProjectsAvailable: Keine Projekte vorhanden
+  noGroupsAvailable: Keine Gruppen verfügbar.

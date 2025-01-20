@@ -37,6 +37,7 @@
         "opis/json-schema": "^2.2",
         "paragonie/sodium_compat": "^1.17",
         "phpdocumentor/reflection-docblock": "^5.2",
+        "predis/predis": "^2.3",
         "rkr/wildcards": "1.*",
         "scheb/2fa-backup-code": "^6.12",
         "scheb/2fa-bundle": "^6.12",

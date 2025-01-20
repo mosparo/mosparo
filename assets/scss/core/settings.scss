@@ -22,7 +22,8 @@
     }
 }
 
-.theme-dark {
+[data-bs-theme=dark],
+body[data-bs-theme=dark] [data-bs-theme=light] {
     .card-header-with-actions {
         @media only screen and (max-width: 500px) {
             & {

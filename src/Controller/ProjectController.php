@@ -3,20 +3,17 @@
 namespace Mosparo\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\Project;
+use Mosparo\Entity\ProjectGroup;
 use Mosparo\Entity\ProjectMember;
-use Mosparo\Entity\Submission;
 use Mosparo\Entity\User;
 use Mosparo\Form\DesignSettingsFormType;
 use Mosparo\Form\ProjectFormType;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\DesignHelper;
+use Mosparo\Helper\ProjectGroupHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Util\TokenGenerator;
-use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
-use Omines\DataTablesBundle\Column\TextColumn;
-use Omines\DataTablesBundle\Column\TwigColumn;
 use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -47,9 +44,11 @@ class ProjectController extends AbstractController
         $this->translator = $translator;
     }
 
-    #[Route('/', name: 'project_list')]
-    #[Route('/filter/{filter}', name: 'project_list_filtered')]
-    public function list(DataTableFactory $dataTableFactory, Request $request, $filter = ''): Response
+    #[Route('/', name: 'project_list_root')]
+    #[Route('/group/{projectGroup}', name: 'project_list_group')]
+    #[Route('/filter/{filter}', name: 'project_list_filtered_root')]
+    #[Route('/group/{projectGroup}/filter/{filter}', name: 'project_list_filtered_group')]
+    public function list(DataTableFactory $dataTableFactory, Request $request, $filter = '', ProjectGroup $projectGroup = null): Response
     {
         // Load the view from the user configuration
         $user = $this->getUser();
@@ -62,10 +61,21 @@ class ProjectController extends AbstractController
             }
         }
 
+        $tree = clone $this->projectHelper->getByUserAccessibleProjectTree();
+        $routeSuffix = 'root';
+
+        // Find the subtree for the requested project group
+        if ($projectGroup) {
+            $tree = $tree->findChildForProjectGroup($projectGroup);
+            $routeSuffix = 'group';
+        }
+
         // Determine the search query
         $searchQuery = '';
         if ($request->query->has('q') && trim($request->query->get('q'))) {
             $searchQuery = $request->query->get('q');
+
+            $tree->findNodesForSearchTerm($searchQuery);
         }
 
         $activeProject = null;
@@ -74,99 +84,34 @@ class ProjectController extends AbstractController
             $this->projectHelper->unsetActiveProject();
         }
 
-        // Determine to which projects the user has access. If it's an admin, it has access to all projects
-        $allowedProjectIds = [];
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            foreach ($this->getUser()->getProjectMemberships() as $membership) {
-                $allowedProjectIds[] = $membership->getProject()->getId();
-            }
-        }
-
-        // Table view
-        $table = null;
-        if ($view === 'table') {
-            $table = $dataTableFactory->create(['autoWidth' => true])
-                ->add('name', TextColumn::class, ['label' => 'project.list.name'])
-                ->add('status', TwigColumn::class, [
-                    'label' => 'project.list.status',
-                    'template' => 'project/list/_status.html.twig'
-                ])
-                ->add('actions', TwigColumn::class, [
-                    'label' => 'project.list.actions',
-                    'className' => 'buttons',
-                    'template' => 'project/list/_actions.html.twig'
-                ])
-                ->createAdapter(ORMAdapter::class, [
-                    'entity' => Project::class,
-                    'query' => function (QueryBuilder $builder) use ($filter, $searchQuery, $allowedProjectIds) {
-                        $builder
-                            ->select('e')
-                            ->from(Project::class, 'e');
-
-                        if ($filter === 'active') {
-                            $builder
-                                ->andWhere('e.status = 1');
-                        } else if ($filter === 'inactive') {
-                            $builder
-                                ->andWhere('e.status = 0');
-                        }
-
-                        if ($searchQuery) {
-                            $builder
-                                ->andWhere('e.name LIKE :searchQuery')
-                                ->setParameter('searchQuery', '%' . $searchQuery . '%');
-                        }
-
-                        // Limit the possible projects to the ones the user has access to
-                        if ($allowedProjectIds) {
-                            $builder
-                                ->andWhere('e.id IN (:projects)')
-                                ->setParameter('projects', $allowedProjectIds);
-                        }
-                    },
-                ])
-                ->handleRequest($request);
-
-            if ($table->isCallback()) {
-                return $table->getResponse();
-            }
-        }
-
         // Box view
         $numberOfSubmissionsByProject = null;
-        if ($view === 'boxes') {
-            $builder = $this->entityManager->createQueryBuilder()
-                ->select('IDENTITY(s.project) AS project_id', 'COUNT(s) AS count')
-                ->from(Submission::class, 's')
-                ->where('s.spam = TRUE')
-                ->orWhere('s.valid IS NOT NULL')
-                ->groupBy('s.project');
-
-            // Limit the possible projects to the ones the user has access to
-            if ($allowedProjectIds) {
-                $builder
-                    ->andWhere('s.project IN (:projects)')
-                    ->setParameter('projects', $allowedProjectIds);
-            }
-
-            $numberOfSubmissions = $builder->getQuery();
-
-            $numberOfSubmissionsByProject = [];
-            foreach ($numberOfSubmissions->getResult() as $row) {
-                $numberOfSubmissionsByProject[$row['project_id']] = $row['count'];
-            }
-        }
 
         if ($activeProject) {
             $this->projectHelper->setActiveProject($activeProject);
         }
 
+        $baseQuery = [];
+        $listQuery = [];
+        if ($projectGroup) {
+            $listQuery['projectGroup'] = $projectGroup->getId();
+        }
+
+        if ($searchQuery) {
+            $baseQuery['q'] = $searchQuery;
+            $listQuery['q'] = $searchQuery;
+        }
+
         return $this->render('project/list.html.twig', [
+            'treeNode' => $tree,
             'numberOfSubmissionsByProject' => $numberOfSubmissionsByProject,
             'view' => $view,
-            'datatable' => $table,
+            'projectGroup' => $projectGroup,
             'filter' => $filter,
             'searchQuery' => $searchQuery,
+            'baseQuery' => $baseQuery,
+            'listQuery' => http_build_query($listQuery),
+            'routeSuffix' => $routeSuffix,
         ]);
     }
 
@@ -181,15 +126,24 @@ class ProjectController extends AbstractController
             $this->entityManager->flush();
         }
 
-        return $this->redirectToRoute('project_list');
+        return $this->redirectToRoute('project_list_root');
     }
 
-    #[Route('/create', name: 'project_create')]
-    public function create(Request $request): Response
+    #[Route('/create', name: 'project_create_root')]
+    #[Route('/group/{projectGroup}/create', name: 'project_create_group')]
+    public function create(Request $request, ProjectGroupHelper $projectGroupHelper, ProjectGroup $projectGroup = null): Response
     {
         $project = new Project();
+        if ($projectGroup) {
+            $project->setProjectGroup($projectGroup);
+        }
 
-        $form = $this->createForm(ProjectFormType::class, $project);
+        $tree = $projectGroupHelper->getFullProjectGroupTreeForUser();
+        $tree->sort();
+
+        $form = $this->createForm(ProjectFormType::class, $project, [
+            'tree' => $tree
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -278,6 +232,9 @@ class ProjectController extends AbstractController
             // Lockout
             ->add('lockoutActive', CheckboxType::class, ['label' => 'settings.security.form.lockoutActive', 'required' => false])
 
+            // Proof of work
+            ->add('proofOfWorkActive', CheckboxType::class, ['label' => 'settings.security.form.proofOfWorkActive', 'required' => false])
+
             // Equal submissions
             ->add('equalSubmissionsActive', CheckboxType::class, ['label' => 'settings.security.form.equalSubmissionsActive', 'required' => false])
 
@@ -319,6 +276,8 @@ class ProjectController extends AbstractController
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-project', $submittedToken)) {
+                $projectGroup = $project->getProjectGroup();
+
                 // Remove the cached resources
                 $this->designHelper->clearCssCache($project);
 
@@ -338,7 +297,11 @@ class ProjectController extends AbstractController
                     )
                 );
 
-                return $this->redirectToRoute('project_list');
+                if ($projectGroup) {
+                    return $this->redirectToRoute('project_list_group', ['projectGroup' => $projectGroup]);
+                } else {
+                    return $this->redirectToRoute('project_list_root');
+                }
             }
         }
 

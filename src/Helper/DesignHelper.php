@@ -10,6 +10,7 @@ use Mosparo\Util\PathUtil;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 
 class DesignHelper
@@ -208,7 +209,11 @@ class DesignHelper
 
     protected Filesystem $filesystem;
 
+    protected CacheInterface $cache;
+
     protected string $projectDirectory;
+
+    protected bool $prepareCssFilesInSharedCache;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -216,14 +221,18 @@ class DesignHelper
         EntrypointLookupCollection $entrypointLookupCollection,
         UrlGeneratorInterface $router,
         Filesystem $filesystem,
-        string $projectDirectory
+        CacheInterface $cache,
+        string $projectDirectory,
+        bool $prepareCssFilesInSharedCache
     ) {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->entrypointLookupCollection = $entrypointLookupCollection;
         $this->router = $router;
         $this->filesystem = $filesystem;
+        $this->cache = $cache;
         $this->projectDirectory = $projectDirectory;
+        $this->prepareCssFilesInSharedCache = $prepareCssFilesInSharedCache;
     }
 
     public function getTextLogoContent(bool $forcedColors = false, string $prefersColorScheme = 'u'): string
@@ -328,10 +337,12 @@ class DesignHelper
         if ($result) {
             $project->setConfigValue('designConfigHash', $designConfigHash);
 
-            // Update the mapping file
-            $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
-            $cssUri = $this->router->generate('resources_project_hash_css', ['projectUuid' => $project->getUuid(), 'styleHash' => $designConfigHash]);
-            $this->addMapping($projectUri, $cssUri);
+            if (!$this->prepareCssFilesInSharedCache) {
+                // Update the mapping file
+                $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
+                $cssUri = $this->router->generate('resources_project_hash_css', ['projectUuid' => $project->getUuid(), 'styleHash' => $designConfigHash]);
+                $this->addMapping($projectUri, $cssUri);
+            }
         }
     }
 
@@ -342,14 +353,19 @@ class DesignHelper
             return;
         }
 
-        // Delete the project directory in the cache directory
-        $cssFilePath = $this->getCssFilePath($project, $designConfigHash);
-        $directoryPath = dirname($cssFilePath);
-        $this->filesystem->remove($directoryPath);
+        if (!$this->prepareCssFilesInSharedCache) {
+            $this->cache->delete('design_' . $project->getUuid() . '_content');
+            $this->cache->delete('design_' . $project->getUuid() . '_hash');
+        } else {
+            // Delete the project directory in the cache directory
+            $cssFilePath = $this->getCssFilePath($project, $designConfigHash);
+            $directoryPath = dirname($cssFilePath);
+            $this->filesystem->remove($directoryPath);
 
-        // Remove the url from the mapping file
-        $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
-        $this->removeMapping($projectUri);
+            // Remove the url from the mapping file
+            $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
+            $this->removeMapping($projectUri);
+        }
     }
 
     public function prepareCssVariables(Project $project): array
@@ -539,30 +555,43 @@ class DesignHelper
 
         $content = $this->prepareCssCache($project, $designConfigValues, $cssBaseFilePath);
 
-        // Path for CSS cache
-        $cssFilePath = $this->getCssFilePath($project, $designConfigHash);
-        $directoryPath = dirname($cssFilePath);
+        if ($this->prepareCssFilesInSharedCache) {
+            // Store the CSS content in the shared cache (filesystem, memcached, redis)
+            $cacheContent = $this->cache->getItem('design_' . $project->getUuid() . '_content');
+            $cacheContent->set($content);
+            $this->cache->save($cacheContent);
 
-        try {
-            // Create the project directory, if it does not exist
-            if (!$this->filesystem->exists($directoryPath)) {
-                $this->filesystem->mkdir($directoryPath, 0755);
-            }
+            $cacheHash = $this->cache->getItem('design_' . $project->getUuid() . '_hash');
+            $cacheHash->set($designConfigHash);
+            $this->cache->save($cacheHash);
+        } else {
+            // Store the CSS content in a CSS file in the /public/ directory
 
-            // Write the CSS file
-            $this->filesystem->dumpFile($cssFilePath, $content);
+            // Path for CSS cache
+            $cssFilePath = $this->getCssFilePath($project, $designConfigHash);
+            $directoryPath = dirname($cssFilePath);
 
-            // Cleanup the cache directory
-            $directoryIterator = new DirectoryIterator($directoryPath);
-            foreach ($directoryIterator as $file) {
-                if ($file->isDot() || $file->getPathname() == $cssFilePath) {
-                    continue;
+            try {
+                // Create the project directory, if it does not exist
+                if (!$this->filesystem->exists($directoryPath)) {
+                    $this->filesystem->mkdir($directoryPath, 0755);
                 }
 
-                $this->filesystem->remove($file->getPathname());
+                // Write the CSS file
+                $this->filesystem->dumpFile($cssFilePath, $content);
+
+                // Cleanup the cache directory
+                $directoryIterator = new DirectoryIterator($directoryPath);
+                foreach ($directoryIterator as $file) {
+                    if ($file->isDot() || $file->getPathname() == $cssFilePath) {
+                        continue;
+                    }
+
+                    $this->filesystem->remove($file->getPathname());
+                }
+            } catch (IOExceptionInterface $e) {
+                return false;
             }
-        } catch (IOExceptionInterface $e) {
-            return false;
         }
 
         return true;

@@ -48,7 +48,13 @@ class ProjectFormType extends AbstractType
                     ]
                 ]
             ])
-        ;
+            ->add('projectGroup', ProjectGroupSelectorType::class, [
+                'label' => 'project.form.projectGroup',
+                'help' => 'project.form.projectGroupHelp',
+                'required' => false,
+                'expanded' => true,
+                'tree' => $options['tree'] ?? null,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -56,6 +62,7 @@ class ProjectFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Project::class,
             'translation_domain' => 'mosparo',
+            'tree' => null,
         ]);
     }
 }

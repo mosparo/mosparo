@@ -174,7 +174,7 @@ class ProjectSubscriber implements EventSubscriberInterface
             // If the project does not exist we have to clean the session value and return to the project list
             if ($activeProject === null || (!$this->security->isGranted('ROLE_ADMIN') && !$activeProject->isProjectMember($this->security->getUser()))) {
                 if ($abortRequest) {
-                    $event->setResponse(new RedirectResponse($this->router->generate('project_list')));
+                    $event->setResponse(new RedirectResponse($this->router->generate('project_list_root')));
                 }
 
                 return;

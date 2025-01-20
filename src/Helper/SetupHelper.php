@@ -38,7 +38,7 @@ class SetupHelper
             'openssl' => true,
             'pcre' => true,
             'pdo' => true,
-            'pdo_mysql|pdo_pgsql' => true,
+            'pdo_mysql|pdo_pgsql|pdo_sqlite' => true,
             'posix' => false,
             'simplexml' => true,
             'sodium' => false,
@@ -242,5 +242,12 @@ class SetupHelper
         }
 
         return $data;
+    }
+
+    public function hasPhpExtension($key): bool
+    {
+        $version = phpversion($key);
+
+        return ($version !== false);
     }
 }

@@ -1,0 +1,30 @@
+.project-table-icon {
+    font-size: 1.5rem;
+    vertical-align: middle;
+
+    margin-right: 0.5rem;
+}
+
+.clickable-table-row,
+.clickable-card {
+    cursor: pointer;
+}
+
+.table-hover .table-info {
+    pointer-events: none;
+}
+
+.table-info .ti {
+    font-size: 1.25rem;
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: -3px;
+}
+
+.card-link a.card-body {
+    text-decoration: none;
+
+    &:hover {
+        background: var(--tblr-card-cap-bg);
+    }
+}

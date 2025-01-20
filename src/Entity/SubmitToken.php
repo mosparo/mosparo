@@ -27,6 +27,9 @@ class SubmitToken implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'string', length: 64)]
     private ?string $token;
 
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private ?string $proofOfWorkResult;
+
     #[ORM\Column(type: 'datetime')]
     private ?DateTimeInterface $createdAt;
 
@@ -95,6 +98,18 @@ class SubmitToken implements ProjectRelatedEntityInterface
     public function setToken(string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getProofOfWorkResult(): ?string
+    {
+        return $this->proofOfWorkResult;
+    }
+
+    public function setProofOfWorkResult(string $proofOfWorkResult): self
+    {
+        $this->proofOfWorkResult = $proofOfWorkResult;
 
         return $this;
     }

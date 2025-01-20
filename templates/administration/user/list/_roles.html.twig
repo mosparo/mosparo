@@ -1,9 +1,9 @@
 {% trans_default_domain 'mosparo' %}
 
 {% if 'ROLE_ADMIN' in value %}
-    <span class="text-pink">{{ 'roles.administrator'|trans }}</span>
+    <span class="status status-pink">{{ 'roles.administrator'|trans }}</span>
 {% elseif 'ROLE_USER' in value %}
-    <span class="text-indigo">{{ 'roles.user'|trans }}</span>
+    <span class="status status-teal">{{ 'roles.user'|trans }}</span>
 {% else %}
-    <span class="text-muted">{{ 'roles.inactive'|trans }}</span>
+    <span class="status">{{ 'roles.inactive'|trans }}</span>
 {% endif %}
