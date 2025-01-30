@@ -23,6 +23,7 @@ project:
 header:
   pleaseChoose: 请选择…
   account: 账号
+  noProjectsFound: 找不到项目
 general:
   infoUndo: 此操作不可撤回。
   example: 例子
@@ -88,3 +89,12 @@ rule:
       successfullyCreated: 新角色已成功创建。
   form:
     ruleType: 角色类型
+projectGroup:
+  mainGroup: 主要类别
+  action:
+    edit: 编辑类别
+    delete: 删除此类别
+    openMainGroup: 返回到主类别
+    openParentGroup: 打开上一类别
+    openGroup: 打开此类别
+    backToList: 返回项目类别列表
