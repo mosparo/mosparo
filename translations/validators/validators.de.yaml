@@ -35,5 +35,5 @@ securityGuideline:
 
 hosts:
   hostContainsProtocol: Dieser Host enthält ein Protokoll. Bitte geben Sie den Host ohne Protokoll ein (zum Beispiel example.com anstelle von https://example.com).
-  hostContainsInvalidCharacter: Dieser Host enthält mindestens ein ungültiges Zeichen. In diesem Feld sind nur Buchstaben (a-z), Zahlen (0-9), Bindestriche, Punkte und der Stern (*) erlaubt.
+  hostContainsInvalidCharacter: Dieser Host enthält mindestens ein ungültiges Zeichen. In diesem Feld sind nur Buchstaben (a-z), Zahlen (0-9), Bindestriche, Punkte, Doppelpunkte und der Stern (*) erlaubt.
 
