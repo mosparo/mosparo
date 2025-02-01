@@ -106,6 +106,20 @@ class SetupHelper
                         $subExtensions = [$extensionKey];
                     }
 
+                    $hasMultiple = false;
+                    $oneAvailable = false;
+                    if (count($subExtensions) > 1) {
+                        $hasMultiple = true;
+                        foreach ($subExtensions as $subExtensionKey) {
+                            $version = phpversion($subExtensionKey);
+
+                            if ($version) {
+                                $oneAvailable = true;
+                                break;
+                            }
+                        }
+                    }
+
                     $isExtensionAvailable = false;
                     foreach ($subExtensions as $subExtensionKey) {
                         $version = phpversion($subExtensionKey);
@@ -115,7 +129,7 @@ class SetupHelper
                         }
 
                         $checkedPrerequisites[$type][$subExtensionKey] = [
-                            'required' => $isRequired,
+                            'required' => ($hasMultiple && $oneAvailable && $version == '') ? false : $isRequired,
                             'available' => ($version != ''),
                             'pass' => ($version != ''),
                         ];
@@ -167,11 +181,12 @@ class SetupHelper
             $prerequisites[$type][$name] = ($minValue !== null) ? $minValue : $required;
         }
 
-        if (isset($prerequisites['phpExtension']['pdo_mysql']) && isset($prerequisites['phpExtension']['pdo_pgsql'])) {
-            $prerequisites['phpExtension']['pdo_mysql|pdo_pgsql'] = true;
+        if (isset($prerequisites['phpExtension']['pdo_mysql']) && isset($prerequisites['phpExtension']['pdo_pgsql']) && isset($prerequisites['phpExtension']['pdo_sqlite'])) {
+            $prerequisites['phpExtension']['pdo_mysql|pdo_pgsql|pdo_sqlite'] = true;
 
             unset($prerequisites['phpExtension']['pdo_mysql']);
             unset($prerequisites['phpExtension']['pdo_pgsql']);
+            unset($prerequisites['phpExtension']['pdo_sqlite']);
         }
 
         ksort($prerequisites['phpExtension'], SORT_NATURAL | SORT_FLAG_CASE);
