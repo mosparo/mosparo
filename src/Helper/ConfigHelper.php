@@ -16,31 +16,35 @@ class ConfigHelper
 
     protected array $environmentConfigValues = [];
 
-    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory, string $envSuffix)
+    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory, string $configFilePath, string $envSuffix)
     {
         $this->entityManager = $entityManager;
         $this->fileSystem = $fileSystem;
 
-        $fileName = 'env.mosparo';
+        if ($configFilePath) {
+            $this->environmentConfigFilePath = PathUtil::prepareFilePath($configFilePath);
+        } else {
+            $fileName = 'env.mosparo';
 
-        // Add the environment config suffix. Mainly used to create the database migrations for
-        // the different database platforms, but you can also use it to use a mosparo installation
-        // with different databases.
-        if ($envSuffix) {
-            $fileName = sprintf('%s.%s', $fileName, $envSuffix);
-        }
-
-        $environmentConfigFilePath = $projectDirectory . sprintf('/config/%s.php', $fileName);
-
-        if (is_link($environmentConfigFilePath)) {
-            $realConfigFilePath = realpath($environmentConfigFilePath);
-
-            if ($realConfigFilePath) {
-                $environmentConfigFilePath = $realConfigFilePath;
+            // Add the environment config suffix. Mainly used to create the database migrations for
+            // the different database platforms, but you can also use it to use a mosparo installation
+            // with different databases.
+            if ($envSuffix) {
+                $fileName = sprintf('%s.%s', $fileName, $envSuffix);
             }
-        }
 
-        $this->environmentConfigFilePath = PathUtil::prepareFilePath($environmentConfigFilePath);
+            $environmentConfigFilePath = $projectDirectory . sprintf('/config/%s.php', $fileName);
+
+            if (is_link($environmentConfigFilePath)) {
+                $realConfigFilePath = realpath($environmentConfigFilePath);
+
+                if ($realConfigFilePath) {
+                    $environmentConfigFilePath = $realConfigFilePath;
+                }
+            }
+
+            $this->environmentConfigFilePath = PathUtil::prepareFilePath($environmentConfigFilePath);
+        }
     }
 
     public function getEnvironmentConfigValue($name, $defaultValue = false)

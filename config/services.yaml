@@ -172,6 +172,7 @@ services:
     Mosparo\Helper\ConfigHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+            $configFilePath: '%env(MOSPARO_CONFIG_FILE_PATH)%'
             $envSuffix: '%env(MOSPARO_ENV_SUFFIX)%'
 
     Mosparo\Helper\CleanupHelper:
