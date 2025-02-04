@@ -27,6 +27,8 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
 
+        options: '%dbal_options%' # Defined in config/database-configuration.php
+
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true

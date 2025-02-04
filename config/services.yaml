@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'database-configuration.php' }
+
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
