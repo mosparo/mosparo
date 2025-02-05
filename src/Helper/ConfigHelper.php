@@ -14,12 +14,15 @@ class ConfigHelper
 
     protected string $environmentConfigFilePath;
 
+    protected string $projectDirectory;
+
     protected array $environmentConfigValues = [];
 
     public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory, string $configFilePath, string $envSuffix)
     {
         $this->entityManager = $entityManager;
         $this->fileSystem = $fileSystem;
+        $this->projectDirectory = $projectDirectory;
 
         if ($configFilePath) {
             $this->environmentConfigFilePath = PathUtil::prepareFilePath($configFilePath);
@@ -45,6 +48,17 @@ class ConfigHelper
 
             $this->environmentConfigFilePath = PathUtil::prepareFilePath($environmentConfigFilePath);
         }
+    }
+
+    public function getEnvironmentConfigFilePath($removeProjectDir = false): string
+    {
+        $configFilePath = $this->environmentConfigFilePath;
+
+        if ($removeProjectDir && strpos($configFilePath, $this->projectDirectory) === 0) {
+            $configFilePath = substr($configFilePath, strlen($this->projectDirectory));
+        }
+
+        return $configFilePath;
     }
 
     public function getEnvironmentConfigValue($name, $defaultValue = false)

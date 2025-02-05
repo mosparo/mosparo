@@ -142,6 +142,19 @@ class SetupHelper
             } else if ($type === 'writeAccess') {
                 foreach ($prerequisites as $path => $isRequired) {
                     $fullPath = $this->projectDirectory . $path;
+
+                    if ($path === '/config/env.mosparo.php') {
+                        $configFileFullPath = $this->configHelper->getEnvironmentConfigFilePath(true);
+                        if ($configFileFullPath !== $path) {
+                            $fullPath = $this->configHelper->getEnvironmentConfigFilePath();
+                            $path = $configFileFullPath;
+                        }
+                    }
+
+                    if ($fullPath !== $path) {
+                        $path = substr($path, 1);
+                    }
+
                     if (file_exists($fullPath)) {
                         $isWritable = is_writable($fullPath);
                     } else {
