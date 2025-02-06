@@ -67,6 +67,8 @@ RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION
 
 RUN sed -i '/user www-data;/d' /etc/nginx/nginx.conf \
     && sed -i 's,/run/nginx.pid,/tmp/nginx.pid,' /etc/nginx/nginx.conf \
+    && sed -i 's,/var/log/nginx/access.log,/dev/stdout,' /etc/nginx/nginx.conf \
+    && sed -i 's,/var/log/nginx/error.log,/dev/stdout,' /etc/nginx/nginx.conf \
     && sed -i '/user = www-data/d' /usr/local/etc/php-fpm.d/www.conf \
     && sed -i '/group = www-data/d' /usr/local/etc/php-fpm.d/www.conf \
     && sed -i "/^http {/a \    proxy_temp_path /tmp/proxy_temp;\n    client_body_temp_path /tmp/client_temp;\n    fastcgi_temp_path /tmp/fastcgi_temp;\n    uwsgi_temp_path /tmp/uwsgi_temp;\n    scgi_temp_path /tmp/scgi_temp;\n" /etc/nginx/nginx.conf \
