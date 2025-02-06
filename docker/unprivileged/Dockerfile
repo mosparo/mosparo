@@ -73,12 +73,16 @@ RUN sed -i '/user www-data;/d' /etc/nginx/nginx.conf \
     && mkdir -p /var/cache/nginx \
     && mkdir -p /mosparo/public/resources \
     && mkdir -p /mosparo/var \
+    && mkdir -p /mosparo-config \
     && chown -R $UID:0 /var/cache/nginx \
     && chmod -R g+w /var/cache/nginx \
     && chown -R $UID:0 /etc/nginx \
     && chmod -R g+w /etc/nginx \
     && chown -R $UID:0 /mosparo \
-    && chmod -R g+w /mosparo
+    && chmod -R g+w /mosparo \
+    && touch /mosparo-config/.keepdir \
+    && chown -R $UID:0 /mosparo-config \
+    && chmod -R g+w /mosparo-config
 
 ADD config/nginx.conf /etc/nginx/sites-enabled/default
 ADD --chmod=0755 scripts/run.sh /usr/bin/run

@@ -24,6 +24,7 @@ services:
     environment:
       - MOSPARO_RUN_NGINX=1
       - MOSPARO_RUN_PHP_FPM=1
+      - MOSPARO_CONFIG_FILE_PATH=/mosparo-config/env.mosparo.php
       #- MOSPARO_CLEANUP_GRACE_PERIOD_ENABLED=1
     volumes:
       - mosparo_config:/mosparo-config
