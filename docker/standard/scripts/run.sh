@@ -6,6 +6,7 @@ set -o history -o histexpand
 [ -d /mosparo/var ] && rm -rf /mosparo/var
 [ -d /mosparo-data/resources ] || mkdir /mosparo-data/resources
 [ -d /mosparo-data/var ] || mkdir /mosparo-data/var
+[ -d /mosparo-data/var/data ] || mkdir /mosparo-data/var/data
 [ -f /mosparo-data/env.mosparo.php ] || echo "<?php return [];" > /mosparo-data/env.mosparo.php
 chown -R www-data: /mosparo-data/
 [ -L /mosparo/public/resources ] || ln -s /mosparo-data/resources/ /mosparo/public/resources

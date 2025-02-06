@@ -5,6 +5,8 @@ set -o history -o histexpand
 
 rm -rf /mosparo/var/cache/prod
 
+[ -d /mosparo/var/data ] || mkdir /mosparo/var/data
+
 if [ $MOSPARO_RUN_PHP_FPM -eq 1 ]; then
   php-fpm -D -R
 fi
