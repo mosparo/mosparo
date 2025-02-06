@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\User;
 use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -152,7 +153,12 @@ class SetupHelper
                     }
 
                     if ($fullPath !== $path) {
-                        $path = substr($path, 1);
+                        $path = ltrim($path, '/\\');
+                    }
+
+                    $fs = new Filesystem();
+                    if ($fs->readlink($fullPath)) {
+                        $fullPath = $fs->readlink($fullPath);
                     }
 
                     if (file_exists($fullPath)) {

@@ -5,6 +5,7 @@ namespace Mosparo\Helper;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Util\PathUtil;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 
 class ConfigHelper
 {
@@ -54,8 +55,8 @@ class ConfigHelper
     {
         $configFilePath = $this->environmentConfigFilePath;
 
-        if ($removeProjectDir && strpos($configFilePath, $this->projectDirectory) === 0) {
-            $configFilePath = substr($configFilePath, strlen($this->projectDirectory));
+        if ($removeProjectDir && Path::isBasePath($this->projectDirectory, $configFilePath)) {
+            $configFilePath = Path::makeRelative($configFilePath, $this->projectDirectory);
         }
 
         return $configFilePath;
