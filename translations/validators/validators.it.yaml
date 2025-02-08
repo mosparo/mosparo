@@ -1,1 +1,41 @@
-{}
+securityGuideline:
+  asNumberNotNumeric: Il numero AS non è un numero.
+  atLeastOneCriteriaRequired: Le linee guida di sicurezza richiedono almeno un criterio.
+password:
+  form:
+    constraint:
+      notBlank: Inserisci una password.
+      length: La tua password deve contenere almeno {{ limit }} caratteri.
+      passwordMustMatch: I campi password devono coincidere.
+  request:
+    form:
+      constraint:
+        notBlank: Inserisci il tuo indirizzo email.
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Il tuo indirizzo IP non è consentito dalla lista di autorizzazioni.
+        Inserisci il tuo indirizzo IP alla lista.
+ipAllowList:
+  itemInvalid: L'elemento '%item%' non è un indirizzo IP o una subnet valida.
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: L'intervallo del web cron job deve essere di
+    almeno 5 minuti o più.
+  geoIpRefreshIntervalAtLeast1Day: L'intervallo di aggiornamento di GeoIP2 deve essere
+    di almeno un giorno o più.
+hosts:
+  hostContainsProtocol: Questo host contiene un protocollo. Inserisci l'host senza
+    protocollo (ad esempio, esempio.com invece di https://esempio.com).
+  hostContainsInvalidCharacter: Questo host contiene caratteri non validi. In questo
+    campo sono consentiti solo caratteri (a-z), numeri (0-9), trattini, punti, e l'asterisco
+    (*).
+settings:
+  mosparoName:
+    colonNotAllowed: I due punti (:) non sono consentiti nel nome dell'installazione
+      di mosparo.
+tools:
+  import:
+    importFile:
+      correctFile: Inserisci un file JSON corretto.
+honeypotField:
+  nameHasInvalidCharacter: Usa solo lettere, numeri e il trattino (-).
