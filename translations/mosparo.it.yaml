@@ -1,13 +1,15 @@
 project:
   infoNoProjectAvailable: Nessun progetto disponibile
   title: Progetti
-  backToList: Ritorna ai progetti
+  backToList: Torna all'elenco progetti
   infoCreateProjectOrRequestAccess: Crea un nuovo progetto o richiedi l'accesso a un altro progetto.
   action:
     delete: Elimina progetto
     goto: Vai al progetto
-    manage: Gestisci progetto
+    manage: Gestisci progetti
     id: ID progetto
+    settings: Impostazioni
+    create: Crea
   create:
     title: Crea progetto
     message:
@@ -27,6 +29,9 @@ project:
     apiDebugMode: Modalità debug API
     statisticStorageLimit: Archivio statistiche
     spamScoreHelp: Definisce il numero dal quale un invio verrà considerato spam. Se la valutazione dell'invio supererà questo numero, l'invio verrà considerato spam.
+    languageSource: Fonte della lingua
+    projectGroup: Gruppo di progetti
+    projectGroupHelp: Puoi utilizzare i gruppi di progetti per organizzare i tuoi progetti. Seleziona il gruppo di progetti nel quale vuoi archiviare questo progetto.
   delete:
     confirm: Vuoi davvero eliminare il progetto %projectName%?
     title: Elimina progetto %projectName%
@@ -51,6 +56,7 @@ project:
     name: Nome
     actions: Azioni
     status: Stato
+    projects: Progetti
   filter:
     options:
       all: Mostra tutto
@@ -63,6 +69,8 @@ project:
     reader: Lettore
     owner: Proprietario
     editor: Editore
+  searchTitle: Progetti per %searchQuery%
+  infoNoProjectsInThisGroup: Non ci sono progetti in questo gruppo.
 header:
   pleaseChoose: Prego, selezionare…
   account: Account
@@ -340,12 +348,23 @@ submission:
       minimumTime:
         text: Il modulo è stato inviato troppo velocemente. Sono stati impiegati solo %seconds% secondi, che è un tempo inferiore al tempo minimo di %minimumTimeSeconds% secondi.
         title: Invio troppo rapido
+        minimumTime: 'Tempo minimo:'
+        measuredTime: 'Tempo misurato:'
       equalSubmissions:
         title: Troppe richieste uguali
         text: Questa richiesta è uguale alla richiesta precedente. mosparo ha trovato %actualNumberOfEqualSubmissions% richieste uguali all'interno del lasso di tempo configurato, che supera il numero previsto di %allowedNumberOfEqualSubmissions% richieste uguali.
+        maximumAllowed: 'Massimo consentito:'
+        counted: 'Contato:'
       title: Verifiche generali
       features:
         minimumTime: Tempo minimo
+        proofOfWork: Proof of work
+        equalSubmissions: Invii uguali
+      proofOfWork:
+        title: Proof of work non valido
+        generatedHash: 'Hash generato:'
+        text: mosparo ha ricevuto un risultato errato per il metodo di verifica del proof of work. Questo solitamente significa che qualcuno ha tentato di aggirare il meccanismo di proof of work.
+        expectedHash: 'Hash previsto:'
     title: Invio %submissionId%
     spam:
       submittedAt: Sottoposto il
@@ -578,6 +597,16 @@ settings:
       equalSubmissionsTimeFrame: Tempo di rilevamento
       equalSubmissionsBasedOnIpAddress: Basato su indirizzo IP
       overrideEqualSubmissions: Ignorare il blocco delle richieste uguali
+      overrideProofOfWork: Sovrascrivi proof of work
+      proofOfWorkDynamicComplexityActive: Abilita complessità dinamica
+      proofOfWorkActive: Abilita proof of work
+      proofOfWorkComplexity: Complessità
+      proofOfWorkDynamicComplexityMaxComplexity: Complessità massima
+      proofOfWorkDynamicComplexityTimeFrame: Intervallo di tempo per il rilevamento
+      proofOfWorkDynamicComplexityNumberOfSubmissions: Numero di invii per raggiungere la complessità massima
+      proofOfWorkDynamicComplexityNumberOfSubmissionsHelp: Definisce il numero di invii all'interno dell'intervallo di tempo configurato necessari per raggiungere il numero di complessità massimo.
+      proofOfWorkDynamicComplexityBasedOnIpAddress: Basato sull'indirizzo IP
+      proofOfWorkDynamicComplexityBasedOnIpAddressHelp: Il rilevamento avverrà in base all'indirizzo IP dell'utente. Se disabilitato, tutti gli invii di tutti gli utenti all'interno dell'intervallo di tempo verranno conteggiati.
     ipLockout:
       title: Blocco IP
       intro: Per rendere la vita degli spam bot più difficile, mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
@@ -598,6 +627,17 @@ settings:
     equalSubmissions:
       title: Blocca richieste uguali
       intro: Una misura di sicurezza aggiuntiva per bloccare le richieste uguali. Se un utente tenta di inviare la stessa richiesta troppo spesso all'interno di un certo intervallo di tempo, mosparo bloccherà tutte le richieste future fino allo scadere dell'intervallo di tempo. Inoltre, questa verifica può essere limitata ad un definito indirizzo IP.
+    crypto:
+      numberRange: Intervallo numerico
+      maximumTimeToSolve: Tempo massimo per la risoluzione
+      speed: Velocità
+      cryptoSpeedHelp: Questi valori sono testati e calcolati sul tuo dispositivo. Altri dispositivi possono essere più veloci o più lenti. Questi numeri servono solo come indicazione, ma non indicano la durata esatta per ogni utente.
+      rangeSizeHelp: Maggiore è l'intervallo numerico, più calcoli deve eseguire il browser. Si consiglia di non utilizzare un intervallo numerico troppo ampio, poiché potrebbe richiedere troppo tempo per l'utente prima di poter inviare il modulo.
+    proofOfWork:
+      introDynamicComplexity: Con la complessità dinamica, il puzzle automatico è generato con un intervallo numerico più ampio, il che significa che il browser deve eseguire più calcoli e impiegare più tempo. Se la complessità dinamica è basata sull'indirizzo IP, solo i clienti con un numero elevato di invii in uno specifico intervallo di tempo riceveranno puzzle più complessi.
+      title: Meccanismo di Proof of Work
+      intro: Il meccanismo di proof of work permette al browser di calcolare automaticamente molti hash per trovare il risultato corretto. Il browser ha bisogno di tempo per completare questo calcolo, un tempo che uno spam bot non è disposto a spendere.
+      subtitle: Complessità dinamica
   title: Impostazioni progetto
   design:
     form:
@@ -675,6 +715,13 @@ settings:
     message:
       successfullySaved: Le impostazioni di design sono state salvate.
       boxRadiusTooLarge: Il logo è visualizzabile solamente se il raggio del bordo è inferiore ad un certo valore.
+  advanced:
+    subtitle:
+      spamDetectionOptions: Opzioni di rilevamento dello spam
+      developerOptions: Opzioni sviluppatore
+      statisticsOptions: Opzioni statistiche
+      languageOptions: Opzioni lingua
+    title: Impostazioni avanzate
 tools:
   ruleTester:
     result:
@@ -1192,7 +1239,7 @@ setup:
       minPhpVersion: Versione minima PHP
   database:
     title: Database
-    introduction: Inserite i dati del vostro database MySQL.
+    introduction: Scegli il sistema di database e configura la connessione al database.
     form:
       password: Password
       host: Host
@@ -1204,11 +1251,13 @@ setup:
       pleaseChoose: Prego, selezionare…
       mysql: MySQL/MariaDB
       postgres: PostgreSQL
+      sqlite: SQLite
     port:
       default: Predefinita
     mosparoTablesExistInDatabase: Sono state trovate tabelle di mosparo nel database specificato. Utilizzare un altro database o eliminare le tabelle.
     connectionDataInvalid: Non è stato possibile connettersi al database. Controllare le impostazioni seguenti e riprovare.
     useEmptyDatabase: Utilizzare un database vuoto o un database in cui non esistono tabelle di mosparo.
+    sqliteVersionMismatch: mosparo richiede almeno la libreria SQLite 3.16.0, ma hai installato la versione %versionNumber%. Non puoi utilizzare SQLite per installare mosparo.
   other:
     form:
       name: Nome di mosparo
@@ -1326,9 +1375,56 @@ unit:
   days: Giorni
   day: Giorno
   minutes: Minuti
+  secondsShort: Sec
+  hashesPerSecondShort: Hash/Sec
+  second: Secondo
+  submission: Invio
+  submissions: Invii
+  seconds: Secondi
 dataTable:
   name: Nome
   value: Valore
   empty: Vuoto
 unitHelp:
   inSeconds: In secondi
+projectGroup:
+  form:
+    message:
+      successfullySaved: Il gruppo di progetti %projectGroupName% è stato salvato correttamente.
+    tooltip:
+      activeGroup: Stai modificando questo gruppo.
+    name: Nome
+    description: Descrizione
+    parentGroup: Gruppo genitore
+  action:
+    delete: Elimina gruppo
+    edit: Modifica gruppo
+    openMainGroup: Torna al gruppo principale
+    openParentGroupName: Torna a %name%
+    openParentGroup: Apri il gruppo genitore
+    openGroup: Apri gruppo
+    backToList: Torna all'elenco progetti
+  mainGroup: Gruppo principale
+  delete:
+    reassignChildren: Tutti i gruppi di progetti in questo gruppo di progetto verranno assegnati automaticamente al gruppo di progetti genitore.
+    title: Elimina gruppo di progetti %projectGroupName%
+    confirm: Vuoi davvero eliminare il gruppo di progetti %projectGroupName%?
+    message:
+      successfullyDeleted: Il gruppo di progetti %projectGroupName% è stato eliminato correttamente.
+  create:
+    title: Crea un gruppo di progetti
+  edit:
+    title: Modifica gruppo di progetti %projectGroupName%
+projectGroupSelector:
+  noGroupsAvailable: Nessun gruppo disponibile.
+  noProjectsAvailable: Nessun progetto disponibile
+languageSource:
+  browserHtmlFallback:
+    help: Usa la lingua del browser per la finestra frontend di mosparo. Se mosparo non ha traduzioni per questa lingua, utilizza la lingua del sito web. Se anche questa non è disponibile, verrà utilizzato l'inglese come alternativa.
+    label: Usa la lingua del browser, fallback alla lingua del sito web
+  browserFallback:
+    help: Usa la lingua del browser per la finestra frontend di mosparo. Se mosparo non ha traduzioni per questa lingua, verrà utilizzato l'inglese come alternativa.
+    label: Usa lingua del browser
+  htmlBrowserFallback:
+    label: Usa la lingua del sito, fallback sulla lingua del browser
+    help: Usa la lingua del sito web per la finestra frontend di mosparo. Se mosparo non ha traduzioni per questa lingua, utilizza la lingua del browser. Se anche questa non è disponibile, verrà utilizzato l'inglese come alternativa.
