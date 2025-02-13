@@ -1320,6 +1320,7 @@ action:
   saveAndContinue: Speichern und Weiter
   skipWizard: Assistent überspringen
   checkRequirements: Voraussetzungen prüfen
+  moreInformation: Mehr Informationen
 
 # General values
   export: Exportieren
@@ -1431,6 +1432,7 @@ setup:
     mosparoTablesExistInDatabase: In der angegebenen Datenbank wurden Tabellen von mosparo gefunden. Bitte verwenden Sie eine andere Datenbank oder löschen Sie die Tabellen.
     connectionDataInvalid: Es war nicht möglich, eine Verbindung mit der Datenbank herzustellen. Bitte prüfen Sie Ihre Einstellungen und versuchen Sie es erneut.
     sqliteVersionMismatch: mosparo benötigt mindestens die SQLite-Bibliothek 3.16.0, aber Sie haben die Version %versionNumber% installiert. Sie können SQLite nicht zur Installation von mosparo verwenden.
+    mysqlEncryption: Um eine verschlüsselte Verbindung zu Ihrem MySQL-Server einzurichten, können Sie die notwendigen Informationen mithilfe von Umgebungsvariablen definieren. Mehr Informationen finden Sie in unserer Dokumentation.
 
     form:
       host: Host

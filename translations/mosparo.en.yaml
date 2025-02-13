@@ -1589,6 +1589,7 @@ action:
   importProject: Import project
   simulateImport: Simulate import
   executeChanges: Execute changes
+  moreInformation: More information
 
 # General values
 general:
@@ -1695,6 +1696,7 @@ setup:
     mosparoTablesExistInDatabase: Tables of mosparo were found in the specified database. Please use another database or delete the tables.
     connectionDataInvalid: It was not possible to connect to the database. Please check your settings below and try again.
     sqliteVersionMismatch: mosparo requires at least SQLite library 3.16.0, but you have version %versionNumber% installed. You cannot use SQLite to install mosparo.
+    mysqlEncryption: To set up an encrypted connection to your MySQL server, you can define the necessary information using the environment variables. Please see our documentation for more details.
 
     form:
       system: System
