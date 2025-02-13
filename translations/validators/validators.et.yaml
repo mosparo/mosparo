@@ -28,7 +28,7 @@ webCronJob:
   geoIpRefreshIntervalAtLeast1Day: GeoIP2 andmete uuendamise välp peab olema vähemalt 1 või enam päeva.
 hosts:
   hostContainsProtocol: Sisestatud serveri aadressis on kirjas ka protokoll. Palun sisesta aadress ilma protokollita (näiteks https://saidinimi.com asemel saidinimi.com).
-  hostContainsInvalidCharacter: Sisestatud serveri aadressis on keelatud tähemärke. Serveri nimes võivad olla vaid täppideta tähed (a-z), numbrid (0-9), sidekriipsud, punktid ja tärnid (*).
+  hostContainsInvalidCharacter: Sisestatud serveri aadressis on keelatud tähemärke. Serveri nimes võivad olla vaid täppideta tähed (a-z), numbrid (0-9), sidekriipsud, punktid, koolonid ja tärnid (*).
 settings:
   mosparoName:
     colonNotAllowed: Koolon (:) pole lubatud mosparo paigalduse nimes.

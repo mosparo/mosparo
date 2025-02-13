@@ -28,7 +28,7 @@ securityGuideline:
   asNumberNotNumeric: Номер AS не є числом.
 hosts:
   hostContainsProtocol: Цей хост містить протокол. Введіть хост без протоколу (наприклад, example.com замість https://example.com).
-  hostContainsInvalidCharacter: Цей хост містить неприпустимі символи. У цьому полі дозволені лише символи (a-z), цифри (0-9), дефіси, крапки та зірочка (*).
+  hostContainsInvalidCharacter: Цей хост містить неприпустимі символи. У цьому полі дозволені лише символи (a-z), цифри (0-9), дефіси, крапки, двокрапки та зірочка (*).
 webCronJob:
   geoIpRefreshIntervalAtLeast1Day: Інтервал оновлення GeoIP2 повинен становити щонайменше один день або більше.
   webCronJobIntervalAtLeast5Minutes: Інтервал між завданнями вебкрону має становити щонайменше 5 хвилин або більше.
