@@ -1258,6 +1258,7 @@ setup:
     connectionDataInvalid: Non è stato possibile connettersi al database. Controllare le impostazioni seguenti e riprovare.
     useEmptyDatabase: Utilizzare un database vuoto o un database in cui non esistono tabelle di mosparo.
     sqliteVersionMismatch: mosparo richiede almeno la libreria SQLite 3.16.0, ma hai installato la versione %versionNumber%. Non puoi utilizzare SQLite per installare mosparo.
+    mysqlEncryption: Per impostare una connessione criptata con il tuo server MySQL, puoi definire le informazioni necessarie utilizzando le variabili di ambiente. Per maggiori dettagli guarda la nostra documentazione.
   other:
     form:
       name: Nome di mosparo
@@ -1293,6 +1294,7 @@ action:
   executeChanges: Esegui modifiche
   checkRequirements: Verifica dei requisiti
   skipWizard: Salta la procedura guidata
+  moreInformation: Altre informazioni
 state:
   inactive: Inattivo
   ignored: Ignorato
