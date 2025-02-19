@@ -786,13 +786,13 @@ function mosparo(containerId, url, uuid, publicKey, options)
             }
         }
 
-        for (let idx in languages) {
-            let locale = languages[idx].replace('-', '_');
+        for (let locale of languages) {
+            locale = locale.replace('-', '_');
 
             if (
                 typeof this.options.customMessages[locale] != 'undefined' &&
                 typeof this.options.customMessages[locale][messageKey] != 'undefined' &&
-                this.options.customMessages[locale][messageKey] != ''
+                this.options.customMessages[locale][messageKey]
             ) {
                 if (messageKey === 'label') {
                     this.containerElement.setAttribute('lang', locale);
