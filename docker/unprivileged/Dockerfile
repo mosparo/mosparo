@@ -88,8 +88,9 @@ RUN sed -i '/user www-data;/d' /etc/nginx/nginx.conf \
 
 ADD config/nginx.conf /etc/nginx/sites-enabled/default
 ADD --chmod=0755 scripts/run.sh /usr/bin/run
+ADD --chmod=0755 scripts/health.sh /usr/bin/mosparo-health-check
 
-HEALTHCHECK --interval=1m --timeout=5s CMD curl -s --fail-with-body http://localhost/api/v1/health/check || exit 1
+HEALTHCHECK --interval=1m --timeout=5s CMD /usr/bin/mosparo-health-check
 
 USER $UID
 
