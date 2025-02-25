@@ -1,12 +1,13 @@
 label: Hyväksyn, että lomakkeen merkinnät tarkistetaan roskapostin varalta ja säilytetään salattuna 14 päivän ajan.
 accessibility:
-  checkingData: Tarkistamme tietosi. Ole hyvä ja odota.
-  dataValid: Tietosi on hyväksytty. Voi lähettää lomakkeen.
+  checkingData: Roskapostisuojaus tarkistaa tietosi. Ole hyvä ja odota.
+  dataValid: Tietosi ovat kelvollisia. Voit nyt lähettää lomakkeen.
+  protectedBy: Tämä lomake on suojattu roskapostilta mosparolla.
 error:
   gotNoToken: mosparo ei palauttanut lähetysavainta.
   internalError: Tapahtui virhe. Ole hyvä ja yritä uudelleen.
   noSubmitTokenAvailable: Lähetysavainta ei ole saatavilla. Lomakketta ei voida varmistaa.
-  spamDetected: Tietosi ei läpäissyt suodatinta.
+  spamDetected: Tietosi jäi roskapostisuojaltamme kiinni.
   lockedOut: Pääsysi on evätty. Yritä uudelleen %datetime% jälkeen.
   delay: Pyyntösi on myöhästynyt. Odota %seconds% sekuntia.
 hp:
