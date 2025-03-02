@@ -44,4 +44,4 @@ hosts:
 webCronJob:
   webCronJobIntervalAtLeast5Minutes: Das Job-Intervall muss mindestens 5 Minuten betragen.
   geoIpRefreshIntervalAtLeast1Day: Das GeoIP2 Aktualisierungs-Intervall muss mindestens
-    1'nen Tag betragen.
+    einen Tag betragen.
