@@ -91,6 +91,7 @@ services:
             $cacheAdapter: '%env(MOSPARO_CACHE_ADAPTER)%'
             $redisUrl: '%env(REDIS_URL)%'
             $memcachedUrl: '%env(MEMCACHED_URL)%'
+            $filesystemCachePath: '%env(FILESYSTEM_CACHE_PATH)%'
 
     Mosparo\Session\DatabaseSessionHandler:
         arguments:
