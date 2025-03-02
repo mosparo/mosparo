@@ -23,7 +23,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Dutch                 | nl            | [Digi92](https://hosted.weblate.org/user/Digi92/), [Astrid](https://hosted.weblate.org/user/Astrid/), [Ratingthomas](https://hosted.weblate.org/user/Ratingthomas/)             |
 | English               | en            | mosparo Core Developers, [ziqiangao54](https://hosted.weblate.org/user/ziqiangao54/), [thesimonmanuel](https://hosted.weblate.org/user/thesimonmanuel/)                         |
 | Estonian              | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                                                                                         |
-| Finnish               | fi            | [teemu.vestovuo](https://hosted.weblate.org/user/teemu.vestovuo/)                                                                                                               |
+| Finnish               | fi            | [teemu.vestovuo](https://hosted.weblate.org/user/teemu.vestovuo/), [tigg](https://hosted.weblate.org/user/tigg/)                                                                |
 | French                | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), [css31](https://hosted.weblate.org/user/css31/), mosparo Core Developers                                               |
 | German                | de            | mosparo Core Developers, [Edanas](https://hosted.weblate.org/user/Edanas/)                                                                                                      |
 | Greek                 | el            | [OneStage](https://hosted.weblate.org/user/OneStage/), [stavrosP](https://hosted.weblate.org/user/stavrosP/)                                                                    |
@@ -61,7 +61,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Dutch                | nl            | [Ratingthomas](https://hosted.weblate.org/user/Ratingthomas/)                                                                                                                                                        |
 | English              | en            | mosparo Core Developers, [ziqiangao54](https://hosted.weblate.org/user/ziqiangao54/)                                                                                                                                 |
 | French               | fr            | [baudouin](https://hosted.weblate.org/user/baudouin/), [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), [css31](https://hosted.weblate.org/user/css31/), [krismas](https://hosted.weblate.org/user/krismas/) |
-| German               | de            | mosparo Core Developers                                                                                                                                                                                              |
+| German               | de            | mosparo Core Developers, [winterrific](https://hosted.weblate.org/user/winterrific/)                                                                                                                                 |
 | High German (Middle) | gmh           | [OriCat101](https://hosted.weblate.org/user/OriCat101/)                                                                                                                                                              |
 | Hebrew               | he            | [royerez](https://hosted.weblate.org/user/royerez/)                                                                                                                                                                  |
 | Hindi                | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                                                                                                                        |
@@ -81,7 +81,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | English    | en            | mosparo Core Developers                                                                                        |
 | Estonian   | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                        |
 | French     | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/)                                                        |
-| German     | de            | mosparo Core Developers                                                                                        |
+| German     | de            | mosparo Core Developers, [winterrific](https://hosted.weblate.org/user/winterrific/)                           |
 | Hindi      | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/)                                                  |
 | Indonesian | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [rezaalmanda](https://hosted.weblate.org/user/rezaalmanda/) |
 | Italian    | it            | [NicolaBortoletto](https://hosted.weblate.org/user/NicolaBortoletto/)                                          |
