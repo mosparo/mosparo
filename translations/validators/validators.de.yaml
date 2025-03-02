@@ -1,6 +1,7 @@
 settings:
   mosparoName:
-    colonNotAllowed: Der Doppelpunkt (:) ist im Namen der mosparo-Installation nicht erlaubt.
+    colonNotAllowed: Der Doppelpunkt (:) ist im Namen der mosparo-Installation nicht
+      erlaubt.
 
 password:
   form:
@@ -34,6 +35,13 @@ securityGuideline:
   atLeastOneCriteriaRequired: Die Sicherheitsleitlinie benötigt mindestens ein Kriterium.
 
 hosts:
-  hostContainsProtocol: Dieser Host enthält ein Protokoll. Bitte geben Sie den Host ohne Protokoll ein (zum Beispiel example.com anstelle von https://example.com).
-  hostContainsInvalidCharacter: Dieser Host enthält mindestens ein ungültiges Zeichen. In diesem Feld sind nur Buchstaben (a-z), Zahlen (0-9), Bindestriche, Punkte und der Stern (*) erlaubt.
+  hostContainsProtocol: Dieser Host enthält ein Protokoll. Bitte geben Sie den Host
+    ohne Protokoll ein (zum Beispiel example.com anstelle von https://example.com).
+  hostContainsInvalidCharacter: Dieser Host enthält mindestens ein ungültiges Zeichen.
+    In diesem Feld sind nur Buchstaben (a-z), Zahlen (0-9), Bindestriche, Punkte und
+    der Stern (*) erlaubt.
 
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: Das Job-Intervall muss mindestens 5 Minuten betragen.
+  geoIpRefreshIntervalAtLeast1Day: Das GeoIP2 Aktualisierungs-Intervall muss mindestens
+    einen Tag betragen.
