@@ -35,5 +35,5 @@ hosts:
   hostContainsInvalidCharacter: Dieser Host enthält mindestens ein ungültiges Zeichen. In diesem Feld sind nur Buchstaben (a-z), Zahlen (0-9), Bindestriche, Punkte, Doppelpunkte und der Stern (*) erlaubt.
 
 webCronJob:
-  geoIpRefreshIntervalAtLeast1Day: Das GeoIP2 Aktualisierungs-Intervall muss mindestens 1'nen Tag betragen.
+  geoIpRefreshIntervalAtLeast1Day: Das GeoIP2 Aktualisierungs-Intervall muss mindestens einen Tag betragen.
   webCronJobIntervalAtLeast5Minutes: Das Job-Intervall muss mindestens 5 Minuten betragen.
