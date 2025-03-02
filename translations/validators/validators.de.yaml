@@ -21,14 +21,11 @@ tools:
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: Ihre IP-Adresse ist in der Liste der erlaubten IP-Adressen
-        nicht enthalten. Bitte fügen Sie Ihre IP-Adresse der Liste hinzu.
+      ownIpNotInAllowList: Ihre IP-Adresse ist in der Liste der erlaubten IP-Adressen nicht enthalten. Bitte fügen Sie Ihre IP-Adresse der Liste hinzu.
 ipAllowList:
-  itemInvalid: Der Eintrag „%item“ ist keine gültige IP-Adresse bzw. kein gültiges
-    Subnetz.
+  itemInvalid: Der Eintrag „%item“ ist keine gültige IP-Adresse bzw. kein gültiges Subnetz.
 honeypotField:
-  nameHasInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich
-    (-).
+  nameHasInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich (-).
 securityGuideline:
   asNumberNotNumeric: Die AS-Nummer ist keine Nummer.
   atLeastOneCriteriaRequired: Die Sicherheitsleitlinie benötigt mindestens ein Kriterium.
@@ -37,3 +34,6 @@ hosts:
   hostContainsProtocol: Dieser Host enthält ein Protokoll. Bitte geben Sie den Host ohne Protokoll ein (zum Beispiel example.com anstelle von https://example.com).
   hostContainsInvalidCharacter: Dieser Host enthält mindestens ein ungültiges Zeichen. In diesem Feld sind nur Buchstaben (a-z), Zahlen (0-9), Bindestriche, Punkte, Doppelpunkte und der Stern (*) erlaubt.
 
+webCronJob:
+  geoIpRefreshIntervalAtLeast1Day: Das GeoIP2 Aktualisierungs-Intervall muss mindestens einen Tag betragen.
+  webCronJobIntervalAtLeast5Minutes: Das Job-Intervall muss mindestens 5 Minuten betragen.
