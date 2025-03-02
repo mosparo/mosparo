@@ -1,6 +1,7 @@
 FROM php:8.3-fpm
 
 ARG MOSPARO_VERSION
+ARG MOSPARO_CHANNEL=stable
 
 ENV TERM xterm
 
@@ -60,9 +61,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get remove ${PHPIZE_DEPS} -y
 
-RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-stable-${MOSPARO_VERSION}.zip" && \
-    unzip "mosparo-stable-${MOSPARO_VERSION}.zip" && \
-    rm "mosparo-stable-${MOSPARO_VERSION}.zip"
+RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    unzip "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    rm "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip"
 
 ADD config/nginx.conf /etc/nginx/sites-enabled/default
 ADD config/mosparo.cron /etc/cron.d/mosparo

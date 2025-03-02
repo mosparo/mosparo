@@ -1,6 +1,7 @@
 FROM php:8.3-fpm
 
 ARG MOSPARO_VERSION
+ARG MOSPARO_CHANNEL=stable
 
 ARG UID=33
 ARG GID=33
@@ -61,9 +62,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get remove ${PHPIZE_DEPS} -y
 
-RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-stable-${MOSPARO_VERSION}.zip" && \
-    unzip "mosparo-stable-${MOSPARO_VERSION}.zip" && \
-    rm "mosparo-stable-${MOSPARO_VERSION}.zip"
+RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    unzip "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    rm "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip"
 
 RUN sed -i '/user www-data;/d' /etc/nginx/nginx.conf \
     && sed -i 's,/run/nginx.pid,/tmp/nginx.pid,' /etc/nginx/nginx.conf \
