@@ -159,3 +159,26 @@ dashboard:
     valid: Hợp lệ
     spam: Spam
   title: Bảng điều khiển/Dashboard
+projectGroup:
+  action:
+    delete: Xóa nhóm
+    openParentGroupName: Về %name%
+    openGroup: Mở nhóm
+    backToList: Về lại trang dự án
+    openParentGroup: Mở nhóm mẹ
+    edit: Chỉnh sửa nhóm
+    openMainGroup: Về lại nhóm chính
+  create:
+    title: Tạo 1 nhóm cho dự án
+  edit:
+    title: Chính sửa nhóm cho dự án %projectGroupName%
+  form:
+    name: Tên
+    description: Mô tả
+    parentGroup: Nhóm mẹ
+    tooltip:
+      activeGroup: Bạn đang chỉnh sửa nhóm này.
+    message:
+      successfullySaved: Dự án của nhóm %projectGroupName% lưu thành công.
+  delete:
+    title: Xóa Dự án nhóm %projectGroupName%
