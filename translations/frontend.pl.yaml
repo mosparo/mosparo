@@ -1,13 +1,13 @@
 label: Akceptuję, że wpisy w formularzu są sprawdzane pod kątem spamu oraz są przechowywane zaszyfrowane przez 14 dni.
 accessibility:
   checkingData: Ochrona przed spamem sprawdza twoje dane. Prosimy czekać.
-  dataValid: Twoje dane są prawidłowe. Możesz przesłać formularz.
+  dataValid: Twoje dane są prawidłowe. Możesz teraz przesłać formularz.
   protectedBy: Ten formularz jest chroniony przed spamem przez mosparo.
 error:
   gotNoToken: mosparo nie zwróciło tokena przesyłania.
   internalError: Wystąpił błąd. Proszę spróbować ponownie.
   noSubmitTokenAvailable: Brak dostępnego tokenu przesyłania. Walidacja tego formularza nie jest możliwa.
-  spamDetected: Twoje dane zostały wykryte przez naszą ochronę antyspamową.
+  spamDetected: Twoje dane zostały przechwycone przez naszą ochronę antyspamową.
   lockedOut: Została nałożona na Ciebie blokada. Spróbuj ponownie po %datetime%.
   delay: Twoje żądanie zostało opóźnione. Proszę poczekać %seconds% sekund.
 hp:
