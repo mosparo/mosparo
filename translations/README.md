@@ -32,12 +32,12 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Hungarian             | hu            | [StrangerGithuber](https://hosted.weblate.org/user/StrangerGithuber/)                                                                                                           |
 | Indonesian            | id            | [clxf12](https://hosted.weblate.org/user/clxf12/), [krisnaadiprayoga](https://hosted.weblate.org/user/krisnaadiprayoga/), [Eji](https://hosted.weblate.org/user/Eji/)           |
 | Italian               | it            | mosparo Core Developers, [albanobattistella](https://hosted.weblate.org/user/albanobattistella/), [NicolaBortoletto](https://hosted.weblate.org/user/NicolaBortoletto/)         |
-| Japanese              | ja            | [0MAL](https://github.com/0MAL), Claudia and Melody (via [mahonebay](https://hosted.weblate.org/user/mahonebay/))                                                               |
+| Japanese              | ja            | [0MAL](https://github.com/0MAL), Claudia and Melody (via [mahonebay](https://hosted.weblate.org/user/mahonebay/)), [TachibanaSaza](https://github.com/TachibanaSaza)            |
 | Khmer (Central)       | km            | Sourkea (via [mahonebay](https://hosted.weblate.org/user/mahonebay/)), [pc_nerd](https://hosted.weblate.org/user/pc_nerd/)                                                      |
 | Korean                | ko            | [MarongHappy](https://hosted.weblate.org/user/MarongHappy/)                                                                                                                     |
 | Latvian               | lv            | [sophie](https://hosted.weblate.org/user/fucksophie/), [GGLVXD](https://hosted.weblate.org/user/GGLVXD/)                                                                        |
 | Persian               | fa            | [Gnkalk](https://hosted.weblate.org/user/Gnkalk/)                                                                                                                               |
-| Polish                | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/)                                                                                                                             |
+| Polish                | pl            | [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm/), [Kityn](https://hosted.weblate.org/user/Kityn/)                                                                            |
 | Portuguese            | pt            | Northon (via [mahonebay](https://hosted.weblate.org/user/mahonebay/)), [moneiro](https://hosted.weblate.org/user/moneiro/), [thomasmbmoraes](https://hosted.weblate.org/user/thomasmbmoraes/) |
 | Romanian              | ro            | [Speedyu](https://hosted.weblate.org/user/Speedyu/)                                                                                                                             |
 | Russian               | ru            | [Senya0](https://hosted.weblate.org/user/Senya0/), [Andrej730](https://hosted.weblate.org/user/Andrej730/), [John_Titor](https://hosted.weblate.org/user/John_Titor/)           |
@@ -50,7 +50,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Thai                  | th            | [ntk.6639](https://hosted.weblate.org/user/ntk.6639/)                                                                                                                           |
 | Turkish               | tr            | [emircanydn](https://hosted.weblate.org/user/emircanydn/), [user0020](https://hosted.weblate.org/user/user0020/), [goknarbahceli](https://hosted.weblate.org/user/goknarbahceli/) |
 | Ukrainian             | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                                                                                         |
-| Vietnamese            | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/)                                                                                                                         |
+| Vietnamese            | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/), [itsjustchipoverhere](https://hosted.weblate.org/user/itsjustchipoverhere/)                                            |
 
 ## Backend
 | Language             | Language Code | Contributors                                                                                                                                                                                                         |
@@ -71,7 +71,7 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 | Swedish              | sv            | [StrangerGithuber](https://hosted.weblate.org/user/StrangerGithuber/)                                                                                                                                                |
 | Tamil                | ta            | [TamilNeram](https://hosted.weblate.org/user/TamilNeram/)                                                                                                                                                            |
 | Ukrainian            | uk            | [kefir2105](https://hosted.weblate.org/user/kefir2105/)                                                                                                                                                              |
-| Vietnamese           | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/), [vocweb](https://hosted.weblate.org/user/vocweb/)                                                                                                           |
+| Vietnamese           | vi            | [dinhitcom](https://hosted.weblate.org/user/dinhitcom/), [vocweb](https://hosted.weblate.org/user/vocweb/), [itsjustchipoverhere](https://hosted.weblate.org/user/itsjustchipoverhere/) |
 
 ## Validators
 | Language   | Language Code | Contributors                                                                                                   |
