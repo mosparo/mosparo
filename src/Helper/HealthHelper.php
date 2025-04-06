@@ -14,9 +14,9 @@ class HealthHelper
 
     protected bool $mosparoInstalled;
 
-    protected string $installedVersion;
+    protected ?string $installedVersion;
 
-    public function __construct(EntityManagerInterface $entityManager, bool $bypassHealthcheck, bool $mosparoInstalled, string $installedVersion)
+    public function __construct(EntityManagerInterface $entityManager, bool $bypassHealthcheck, bool $mosparoInstalled, ?string $installedVersion)
     {
         $this->entityManager = $entityManager;
         $this->bypassHealthcheck = $bypassHealthcheck;
