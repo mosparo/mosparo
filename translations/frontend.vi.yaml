@@ -1,6 +1,7 @@
 accessibility:
   dataValid: Dữ liệu của bạn hợp lệ. Bạn có thể gửi biểu mẫu.
   checkingData: Chúng tôi đang kiểm tra dữ liệu của bạn. Vui lòng đợi.
+  protectedBy: Biểu mẫu này được bảo vệ khỏi spam bởi mosparo.
 error:
   noSubmitTokenAvailable: Không có submit token khả dụng. Không thể xác thực biểu mẫu này.
   spamDetected: Dữ liệu của bạn đã bị phát hiện bởi tính năng chống spam.
