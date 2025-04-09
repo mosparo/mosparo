@@ -1,15 +1,15 @@
 label: I accept that the form entries are checked for spam and stored encrypted for 14 days.
 
 accessibility:
-  checkingData: The spam protection verifies your data. Please wait.
-  dataValid: Your data are valid. You can submit the form.
+  checkingData: The spam protection is verifying your data. Please wait.
+  dataValid: Your data is valid. You can now submit the form.
   protectedBy: This form is protected from spam by mosparo.
 
 error:
   gotNoToken: mosparo returned no submit token.
   internalError: An error occurred. Please try again.
   noSubmitTokenAvailable: No submit token available. Validation of this form is not possible.
-  spamDetected: Your data got catched by our spam protection.
+  spamDetected: Your data was caught by our spam protection.
   lockedOut: You are locked out. Please try again after %datetime%.
   delay: Your request was delayed. Please wait for %seconds% seconds.
 

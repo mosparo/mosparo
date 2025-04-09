@@ -2,6 +2,7 @@ label: フォームの入力内容がスパムでないかをチェックし14�
 accessibility:
   checkingData: データをチェックしています。しばらくお待ちください。
   dataValid: あなたのデータは有効です。フォームを送信できます。
+  protectedBy: このフォームはmosparoによってスパムから保護されています。
 error:
   gotNoToken: mosparoは送信トークンを返しませんでした。
   internalError: エラーが発生しました。もう一度お試しください。

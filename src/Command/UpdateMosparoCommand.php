@@ -231,12 +231,17 @@ class UpdateMosparoCommand extends Command
                     $name = $this->getTypeName($type, $subType);
                     $color = 'green';
                     $icon = '✅ ';
-                    if ($data['required'] && !$data['pass']) {
+                    $suffix = '';
+                    if (!$data['pass']) {
                         $color = 'red';
                         $icon = '❌ ';
                     }
 
-                    $output->writeln(sprintf('<fg=%s>%s%s</>', $color, $icon, $name));
+                    if (!$data['required']) {
+                        $suffix = ' <fg=blue>(optional)</>';
+                    }
+
+                    $output->writeln(sprintf('<fg=%s>%s%s</>%s', $color, $icon, $name, $suffix));
 
                     if ($type === 'general' && $subType === 'minPhpVersion' && $data['required'] && !$data['pass']) {
                         $output->writeln('');

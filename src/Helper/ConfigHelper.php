@@ -5,6 +5,7 @@ namespace Mosparo\Helper;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Util\PathUtil;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 
 class ConfigHelper
 {
@@ -14,33 +15,51 @@ class ConfigHelper
 
     protected string $environmentConfigFilePath;
 
+    protected string $projectDirectory;
+
     protected array $environmentConfigValues = [];
 
-    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory, string $envSuffix)
+    public function __construct(EntityManagerInterface $entityManager, Filesystem $fileSystem, string $projectDirectory, string $configFilePath, string $envSuffix)
     {
         $this->entityManager = $entityManager;
         $this->fileSystem = $fileSystem;
+        $this->projectDirectory = $projectDirectory;
 
-        $fileName = 'env.mosparo';
+        if ($configFilePath) {
+            $this->environmentConfigFilePath = PathUtil::prepareFilePath($configFilePath);
+        } else {
+            $fileName = 'env.mosparo';
 
-        // Add the environment config suffix. Mainly used to create the database migrations for
-        // the different database platforms, but you can also use it to use a mosparo installation
-        // with different databases.
-        if ($envSuffix) {
-            $fileName = sprintf('%s.%s', $fileName, $envSuffix);
-        }
-
-        $environmentConfigFilePath = $projectDirectory . sprintf('/config/%s.php', $fileName);
-
-        if (is_link($environmentConfigFilePath)) {
-            $realConfigFilePath = realpath($environmentConfigFilePath);
-
-            if ($realConfigFilePath) {
-                $environmentConfigFilePath = $realConfigFilePath;
+            // Add the environment config suffix. Mainly used to create the database migrations for
+            // the different database platforms, but you can also use it to use a mosparo installation
+            // with different databases.
+            if ($envSuffix) {
+                $fileName = sprintf('%s.%s', $fileName, $envSuffix);
             }
+
+            $environmentConfigFilePath = $projectDirectory . sprintf('/config/%s.php', $fileName);
+
+            if (is_link($environmentConfigFilePath)) {
+                $realConfigFilePath = realpath($environmentConfigFilePath);
+
+                if ($realConfigFilePath) {
+                    $environmentConfigFilePath = $realConfigFilePath;
+                }
+            }
+
+            $this->environmentConfigFilePath = PathUtil::prepareFilePath($environmentConfigFilePath);
+        }
+    }
+
+    public function getEnvironmentConfigFilePath($removeProjectDir = false): string
+    {
+        $configFilePath = $this->environmentConfigFilePath;
+
+        if ($removeProjectDir && Path::isBasePath($this->projectDirectory, $configFilePath)) {
+            $configFilePath = Path::makeRelative($configFilePath, $this->projectDirectory);
         }
 
-        $this->environmentConfigFilePath = PathUtil::prepareFilePath($environmentConfigFilePath);
+        return $configFilePath;
     }
 
     public function getEnvironmentConfigValue($name, $defaultValue = false)

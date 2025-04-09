@@ -90,7 +90,6 @@ rule:
   form:
     ruleType: 角色类型
 projectGroup:
-  mainGroup: 主要类别
   action:
     edit: 编辑类别
     delete: 删除此类别
@@ -98,3 +97,4 @@ projectGroup:
     openParentGroup: 打开上一类别
     openGroup: 打开此类别
     backToList: 返回项目类别列表
+  mainGroup: 主要类别

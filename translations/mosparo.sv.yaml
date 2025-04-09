@@ -1,1 +1,37 @@
-{}
+project:
+  backToList: Tillbaka till projekt
+  infoNoProjectAvailable: Inga projekt tillgängliga
+  title: Projekt
+  list:
+    name: Namn
+    status: Status
+    actions: Åtgärder
+  filter:
+    dropdown: Filtrera listan över projekt
+    options:
+      all: Visa alla
+      inactive: Visa inaktiva projekt
+      active: Visa aktiva projekt
+  search:
+    placeholder: Leta efter…
+  action:
+    id: Projekt-ID
+    goto: Gå till projektet
+    delete: Ta bort projekt
+    manage: Hantera projekt
+  create:
+    title: Skapa projekt
+    message:
+      successfullyCreatedAndConfigured: Det nya projektet skapades och konfigurerades framgångsrikt.
+  createWizard:
+    design:
+      title: Välj design
+      infoAdvancedMode: Efter guiden kan du växla till det avancerade eller osynliga läget i designinställningarna. Det avancerade läget låter dig anpassa designen exakt till din webbplats, medan det osynliga läget inte kommer att visa en synlig mosparo-ruta.
+      introStartWizard: Ditt projekt skapades framgångsrikt. För att börja använda den, välj design och fortsätt.
+    security:
+      title: Aktivera säkerhetsfunktioner
+  infoCreateProjectOrRequestAccess: Skapa ett nytt projekt eller begär åtkomst till ett annat projekt.
+header:
+  noProjectsFound: Inga projekt hittades
+  account: Konto
+  pleaseChoose: Vänligen välj…

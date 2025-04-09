@@ -1,0 +1,106 @@
+FROM php:8.3-fpm
+
+ARG MOSPARO_VERSION
+ARG MOSPARO_CHANNEL=stable
+
+ARG UID=33
+ARG GID=33
+
+ENV TERM xterm
+
+# Docker related
+ENV MOSPARO_RUN_PHP_FPM 1
+ENV MOSPARO_RUN_NGINX 1
+
+# mosparo related
+ENV MOSPARO_UPDATES_ENABLED 0
+ENV TRUSTED_PROXIES '127.0.0.1,REMOTE_ADDR'
+
+# OCI annotations to image
+LABEL org.opencontainers.image.authors="mosparo Core Developers" \
+      org.opencontainers.image.title="mosparo-unprivileged" \
+      org.opencontainers.image.description="The Modern Spam Protection for your form." \
+      org.opencontainers.image.documentation="https://documentation.mosparo.io/" \
+      org.opencontainers.image.base.name="php:8.3-fpm" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://github.com/mosparo/mosparo" \
+      org.opencontainers.image.vendor="mosparo Core Developers" \
+      org.opencontainers.image.version="${MOSPARO_VERSION}" \
+      org.opencontainers.image.url="https://github.com/mosparo/mosparo"
+
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /mosparo
+
+RUN apt-get update && \
+    apt-get install -y \
+        ${PHPIZE_DEPS} \
+        apt-utils  \
+        debconf-utils \
+        apt-transport-https \
+        build-essential \
+        libicu-dev \
+        locales \
+        zip \
+        libzip-dev \
+        libpng-dev \
+        libpq-dev \
+        unzip \
+        autoconf \
+        wget \
+        nginx \
+        libsqlite3-dev \
+        libmemcached-dev \
+        libssl-dev \
+        zlib1g-dev && \
+    docker-php-ext-install -j$(nproc) gd intl opcache pdo_mysql pdo_pgsql pdo_sqlite zip && \
+    pecl install redis-6.1.0 && \
+    pecl install memcached-3.3.0 && \
+    docker-php-ext-enable redis memcached && \
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    apt-get remove ${PHPIZE_DEPS} -y
+
+RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    unzip "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    rm "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip"
+
+RUN sed -i '/user www-data;/d' /etc/nginx/nginx.conf \
+    && sed -i 's,/run/nginx.pid,/tmp/nginx.pid,' /etc/nginx/nginx.conf \
+    && sed -i 's,/var/log/nginx/access.log,/dev/stdout,' /etc/nginx/nginx.conf \
+    && sed -i 's,/var/log/nginx/error.log,/dev/stdout,' /etc/nginx/nginx.conf \
+    && sed -i '/user = www-data/d' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i '/group = www-data/d' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i "/^http {/a \    proxy_temp_path /tmp/proxy_temp;\n    client_body_temp_path /tmp/client_temp;\n    fastcgi_temp_path /tmp/fastcgi_temp;\n    uwsgi_temp_path /tmp/uwsgi_temp;\n    scgi_temp_path /tmp/scgi_temp;\n" /etc/nginx/nginx.conf \
+    && mkdir -p /var/cache/nginx \
+    && mkdir -p /mosparo/public/resources \
+    && mkdir -p /mosparo/var \
+    && mkdir -p /mosparo-config \
+    && chown -R $UID:0 /var/cache/nginx \
+    && chmod -R g+w /var/cache/nginx \
+    && chown -R $UID:0 /etc/nginx \
+    && chmod -R g+w /etc/nginx \
+    && chown -R $UID:0 /mosparo \
+    && chmod -R g+w /mosparo \
+    && touch /mosparo-config/.keepdir \
+    && chown -R $UID:0 /mosparo-config \
+    && chmod -R g+w /mosparo-config
+
+ADD config/nginx.conf /etc/nginx/sites-enabled/default
+ADD --chmod=0755 scripts/run.sh /usr/bin/run
+ADD --chmod=0755 scripts/health.sh /usr/bin/mosparo-health-check
+
+HEALTHCHECK --interval=1m --timeout=5s CMD /usr/bin/mosparo-health-check
+
+USER $UID
+
+VOLUME /mosparo-config/
+VOLUME /mosparo/public/resources
+VOLUME /mosparo/var
+
+EXPOSE 8080
+
+ENTRYPOINT []
+
+CMD ["/usr/bin/run"]

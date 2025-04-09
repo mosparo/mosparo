@@ -14,8 +14,7 @@ securityGuideline:
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: Sinu seadme ip-aadress pole lubatud aadresside loendis.
-        Palun lisa ta sinna.
+      ownIpNotInAllowList: Sinu seadme ip-aadress pole lubatud aadresside loendis. Palun lisa ta sinna.
 honeypotField:
   nameHasInvalidCharacter: Palun kasuta vaid tähti, numbreid ja sidekriipsu (-).
 tools:
@@ -25,16 +24,11 @@ tools:
 ipAllowList:
   itemInvalid: „%item%“ ei tundu olema korrektne ip-aadress ega alamvõrk.
 webCronJob:
-  webCronJobIntervalAtLeast5Minutes: Cron'is veebi jaoks kirjeldatud ülesannete välp
-    peab olema vähemalt 5 või enam minutit.
-  geoIpRefreshIntervalAtLeast1Day: GeoIP2 andmete uuendamise välp peab olema vähemalt
-    1 või enam päeva.
+  webCronJobIntervalAtLeast5Minutes: Cron'is veebi jaoks kirjeldatud ülesannete välp peab olema vähemalt 5 või enam minutit.
+  geoIpRefreshIntervalAtLeast1Day: GeoIP2 andmete uuendamise välp peab olema vähemalt 1 või enam päeva.
 hosts:
-  hostContainsProtocol: Sisestatud serveri aadressis on kirjas ka protokoll. Palun
-    sisesta aadress ilma protokollita (näiteks https://saidinimi.com asemel saidinimi.com).
-  hostContainsInvalidCharacter: Sisestatud serveri aadressis on keelatud tähemärke.
-    Serveri nimes võivad olla vaid täppideta tähed (a-z), numbrid (0-9), sidekriipsud,
-    punktid ja tärnid (*).
+  hostContainsProtocol: Sisestatud serveri aadressis on kirjas ka protokoll. Palun sisesta aadress ilma protokollita (näiteks https://saidinimi.com asemel saidinimi.com).
+  hostContainsInvalidCharacter: Sisestatud serveri aadressis on keelatud tähemärke. Serveri nimes võivad olla vaid täppideta tähed (a-z), numbrid (0-9), sidekriipsud, punktid, koolonid ja tärnid (*).
 settings:
   mosparoName:
     colonNotAllowed: Koolon (:) pole lubatud mosparo paigalduse nimes.

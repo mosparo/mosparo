@@ -1,0 +1,23 @@
+settings:
+  mosparoName:
+    colonNotAllowed: El carácter dos puntos (:) no está permitido en el nombre de la instalación de mosparo.
+password:
+  request:
+    form:
+      constraint:
+        notBlank: Por favor introduzca su dirección de correo electrónico.
+  form:
+    constraint:
+      notBlank: Por favor introduzca una contraseña.
+      length: Su password debe contener por lo menos {{ limit }} carácteres.
+      passwordMustMatch: Los campos de contraseña deben coincidir.
+tools:
+  import:
+    importFile:
+      correctFile: Por favor, suba un fichero JSON válido.
+honeypotField:
+  nameHasInvalidCharacter: Por favor utilice sólo letras, números y el carácter guión (-).
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Su dirección IP no está permitida en la lista de permitidas. Por favor añada su dirección IP a la lista.

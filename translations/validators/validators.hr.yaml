@@ -15,8 +15,7 @@ tools:
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: Tvoja IP adresa nije dopuštena u popisu dopuštenih. Dodaj
-        svoju IP adresu u popis.
+      ownIpNotInAllowList: Tvoja IP adresa nije dopuštena u popisu dopuštenih. Dodaj svoju IP adresu u popis.
 ipAllowList:
   itemInvalid: Stavka „%item%” nije valjana IP adresa ili podmreža.
 honeypotField:
@@ -25,10 +24,8 @@ securityGuideline:
   asNumberNotNumeric: AS broj nije broj.
   atLeastOneCriteriaRequired: Sigurnosna smjernica zahtijeva barem jedan kriterij.
 webCronJob:
-  webCronJobIntervalAtLeast5Minutes: Interval web cron posla mora biti barem 5 minuta
-    ili više.
-  geoIpRefreshIntervalAtLeast1Day: Interval GeoIP2 osvježavanja mora biti barem jedan
-    dan ili više.
+  webCronJobIntervalAtLeast5Minutes: Interval web cron posla mora biti barem 5 minuta ili više.
+  geoIpRefreshIntervalAtLeast1Day: Interval GeoIP2 osvježavanja mora biti barem jedan dan ili više.
 settings:
   mosparoName:
     colonNotAllowed: Dvotočka (:) se ne smije koristiti u imenu mosparo instalacije.

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Doctrine\DatabaseConfigurationBuilder;
 use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
 use Mosparo\Form\PasswordFormType;
@@ -145,6 +146,7 @@ class SetupController extends AbstractController
                     'user' => $data['database_user'] ?? null,
                     'password' => $data['database_password'] ?? null,
                     'driver' => $data['database_driver'],
+                    'driverOptions' => DatabaseConfigurationBuilder::getDatabaseConfiguration(),
                 ]);
 
                 // Force the connection

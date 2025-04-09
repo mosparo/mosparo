@@ -5,10 +5,10 @@ error:
   gotNoToken: mosparo沒有回應提交代碼。
   noSubmitTokenAvailable: 沒有有效的提交代碼。無法驗證此表單。
   delay: 您的請求已被延遲，請等待%seconds%秒。
-  spamDetected: 您的數據已被我們的垃圾郵件防護阻擋。
+  spamDetected: 您的資料被我們的垃圾郵件防護系統攔截了。
 accessibility:
-  checkingData: 垃圾防護會驗證你的資料。請稍等。
-  dataValid: 您的數據有效，您可以提交表單。
+  checkingData: 垃圾郵件防護正在驗證您的資料。請稍候。
+  dataValid: 您的資料有效。您現在可以提交表單。
   protectedBy: mosparo 保護了此表單免於垃圾滋擾。
 hp:
   fieldTitle: 請將此區留空白

@@ -10,7 +10,7 @@ use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 
 class CacheFactory
 {
-    public static function getCache(string $cacheAdapter = null, string $redisUrl = null, string $memcachedUrl = null): AbstractAdapter
+    public static function getCache(string $cacheAdapter = null, string $redisUrl = null, string $memcachedUrl = null, string $filesystemCachePath = null): AbstractAdapter
     {
         $cacheAdapter = $cacheAdapter ?: 'filesystem';
 
@@ -26,7 +26,11 @@ class CacheFactory
                 $memcachedConnection = MemcachedAdapter::createConnection($memcachedUrl ?? 'memcached://localhost');
                 return new MemcachedAdapter($memcachedConnection);
             case 'filesystem':
-                return new FilesystemAdapter();
+                if ($filesystemCachePath) {
+                    return new FilesystemAdapter('', 0, $filesystemCachePath);
+                } else {
+                    return new FilesystemAdapter();
+                }
             default:
                 throw new \InvalidArgumentException("Unsupported cache adapter type: $cacheAdapter");
         }

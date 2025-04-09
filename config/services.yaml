@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'database-configuration.php' }
+
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -88,6 +91,7 @@ services:
             $cacheAdapter: '%env(MOSPARO_CACHE_ADAPTER)%'
             $redisUrl: '%env(REDIS_URL)%'
             $memcachedUrl: '%env(MEMCACHED_URL)%'
+            $filesystemCachePath: '%env(FILESYSTEM_CACHE_PATH)%'
 
     Mosparo\Session\DatabaseSessionHandler:
         arguments:
@@ -172,6 +176,7 @@ services:
     Mosparo\Helper\ConfigHelper:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
+            $configFilePath: '%env(MOSPARO_CONFIG_FILE_PATH)%'
             $envSuffix: '%env(MOSPARO_ENV_SUFFIX)%'
 
     Mosparo\Helper\CleanupHelper:
@@ -223,9 +228,11 @@ services:
         arguments:
             $trustedProxies: '%kernel.trusted_proxies%'
 
-    Mosparo\Controller\Api\V1\Health\HealthApiController:
+    Mosparo\Helper\HealthHelper:
         arguments:
-            $mosparoInstalled: '%env(mosparo_installed)%'
+            $bypassHealthcheck: '%env(bool:MOSPARO_BYPASS_HEALTH_CHECK)%'
+            $mosparoInstalled: '%env(bool:mosparo_installed)%'
+            $installedVersion: '%env(mosparo_installed_version)%'
 
     Mosparo\Controller\DynamicResourcesController:
         arguments:

@@ -1,11 +1,11 @@
 accessibility:
-  checkingData: Perlindungan spam memverifikasi data Anda. Harap tunggu.
-  dataValid: Datamu valid. Kau bisa menyerahkan formulirnya.
+  checkingData: Perlindungan spam sedang memverifikasi data Anda. Harap tunggu.
+  dataValid: Data Anda valid. Sekarang Anda dapat mengirimkan formulir.
   protectedBy: Formulir ini dilindungi dari spam oleh mosparo.
 error:
   gotNoToken: Ketika kesalahan ini muncul, mosparo tidak secara tepat mengembalikan tanda terimanya. Ini bisa menjadi kesalahan umum dengan mosparo atau masalah dengan pengaturan keamanan.
   internalError: Sebuah kesalahan terjadi. Tolong coba lagi.
-  spamDetected: Datamu rusak karena perlindungan kami.
+  spamDetected: Data Anda terdeteksi oleh perlindungan spam kami.
   delay: Permintaanmu tertunda. Silakan tunggu %seconds% detik.
   lockedOut: Kau telah terkunci. Silakan coba lagi setelah %datetime%.
   noSubmitTokenAvailable: Gagal memasukan token. Validasi bentuk ini tidak dimungkin.

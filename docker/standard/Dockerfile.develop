@@ -1,0 +1,72 @@
+# With this Dockerfile it is possible to build the image for a version released on the develop release channel
+
+FROM php:8.3-fpm
+
+ARG MOSPARO_VERSION
+
+ENV TERM xterm
+
+# Docker related
+ENV MOSPARO_ENABLE_WEBSERVER 1
+ENV MOSPARO_ENABLE_CRON 1
+
+# mosparo related
+ENV MOSPARO_UPDATES_ENABLED 0
+ENV TRUSTED_PROXIES '127.0.0.1,REMOTE_ADDR'
+
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /mosparo
+
+RUN apt-get update && \
+    apt-get install -y \
+        ${PHPIZE_DEPS} \
+        apt-utils  \
+        debconf-utils \
+        apt-transport-https \
+        build-essential \
+        libicu-dev \
+        locales \
+        zip \
+        libzip-dev \
+        libpng-dev \
+        libpq-dev \
+        unzip \
+        autoconf \
+        sudo \
+        cron \
+        wget \
+        nginx \
+        libsqlite3-dev \
+        libmemcached-dev \
+        libssl-dev \
+        zlib1g-dev && \
+    docker-php-ext-install -j$(nproc) gd intl opcache pdo_mysql pdo_pgsql pdo_sqlite zip && \
+    pecl install redis-6.1.0 && \
+    pecl install memcached-3.3.0 && \
+    docker-php-ext-enable redis memcached && \
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    apt-get remove ${PHPIZE_DEPS} -y
+
+RUN wget "https://updates.mosparo.io/packages/develop/mosparo-develop-${MOSPARO_VERSION}.zip" && \
+    unzip "mosparo-develop-${MOSPARO_VERSION}.zip" && \
+    rm "mosparo-develop-${MOSPARO_VERSION}.zip"
+
+ADD config/nginx.conf /etc/nginx/sites-enabled/default
+ADD config/mosparo.cron /etc/cron.d/mosparo
+ADD --chmod=0755 scripts/run.sh /usr/bin/run
+ADD --chmod=0755 scripts/health.sh /usr/bin/mosparo-health-check
+
+HEALTHCHECK --interval=1m --timeout=5s CMD /usr/bin/mosparo-health-check
+
+RUN crontab -u www-data /etc/cron.d/mosparo
+
+VOLUME /mosparo-data
+
+EXPOSE 80
+
+ENTRYPOINT []
+
+CMD ["/usr/bin/run"]

@@ -41,7 +41,7 @@ class ProjectFormType extends AbstractType
                                 'message' => 'hosts.hostContainsProtocol',
                             ]),
                             new Regex([
-                                'pattern' => '#^([a-z0-9\-\.\*]+)$#',
+                                'pattern' => '#^([a-z0-9\-\.\*\:]+)$#',
                                 'message' => 'hosts.hostContainsInvalidCharacter',
                             ]),
                         ])

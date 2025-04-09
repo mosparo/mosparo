@@ -1,7 +1,7 @@
 label: Prihvatam da se unosi u obrascu proveravaju na neželjenu poštu i čuvaju šifrovani 14 dana.
 accessibility:
   checkingData: Zaštita od neželjene pošte proverava vaše podatke. Molimo sačekajte.
-  dataValid: Vaši podaci su validni. Možete poslati obrazac.
+  dataValid: Vaši podaci su validni. Sada možete poslati obrazac.
   protectedBy: Ovaj obrazac je zaštićen od neželjene pošte pomoću mosparo-a.
 error:
   gotNoToken: mosparo nije vratio token za slanje.
