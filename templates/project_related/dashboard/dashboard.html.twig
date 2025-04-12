@@ -65,6 +65,9 @@
                     <div class="position-relative">
                         <div class="dashboard-submission-chart" id="submission_chart"></div>
                     </div>
+                    {% if lastDatabaseCleanup %}
+                        <div class="card-footer text-muted"><strong>{{ 'cleanup.lastDatabaseCleanup'|trans }}</strong> {{ lastDatabaseCleanup|date }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>

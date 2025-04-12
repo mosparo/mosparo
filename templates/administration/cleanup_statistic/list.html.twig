@@ -1,0 +1,50 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.cleanupStatistic.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.cleanupStatistic.title'|trans }}{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/administration/cleanup_statistic" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block administrationPageBody %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div id="cleanup_statistic">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js')|add_path_prefix }}"></script>
+    {% cspscript %}
+        <script>
+            $(function() {
+                $('#cleanup_statistic').initDataTables({{ datatable_settings(datatable) }}, {
+                    autoWidth: false,
+                    searching: false,
+                    info: false,
+                    columnDefs: []
+                });
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

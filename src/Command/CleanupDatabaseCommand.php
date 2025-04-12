@@ -2,6 +2,7 @@
 
 namespace Mosparo\Command;
 
+use Mosparo\Enum\CleanupExecutor;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\ProjectHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -36,7 +37,7 @@ class CleanupDatabaseCommand extends Command
         $this->projectHelper->unsetActiveProject();
 
         // Execute the cleanup process
-        $this->cleanupHelper->cleanup(1000000, true, false);
+        $this->cleanupHelper->cleanup(1000000, true, false, 0, CleanupExecutor::CLEANUP_COMMAND);
 
         return Command::SUCCESS;
     }

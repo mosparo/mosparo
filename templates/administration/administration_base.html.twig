@@ -44,6 +44,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ path('administration_cleanup_statistic') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_cleanup_statistic' %}active{% endif %}">
+                            <i class="ti ti-history"></i>
+                            {{ 'administration.cleanupStatistic.title'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ path('administration_update_overview') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_update_overview' %}active{% endif %}">
                             <i class="ti ti-refresh"></i>
                             {{ 'administration.update.title'|trans }}

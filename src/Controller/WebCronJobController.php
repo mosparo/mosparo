@@ -4,6 +4,7 @@ namespace Mosparo\Controller;
 
 use DateTime;
 use DateInterval;
+use Mosparo\Enum\CleanupExecutor;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\GeoIp2Helper;
@@ -97,7 +98,7 @@ class WebCronJobController extends AbstractController
         $start = time();
 
         // Execute the cleanup process
-        $this->cleanupHelper->cleanup(1000000, true, false, $maxTimeCleanup);
+        $this->cleanupHelper->cleanup(1000000, true, false, $maxTimeCleanup, CleanupExecutor::WEB_CRON_JOB);
 
         // Download the rulesets, only execute this if we have more than 10% of the max execution time available.
         if ((time() - $start) < ($maxExecutionTime * 0.9)) {

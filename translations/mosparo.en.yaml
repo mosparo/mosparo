@@ -1420,6 +1420,18 @@ administration:
 
     website: Website
 
+  cleanupStatistic:
+    title: Cleanup statistic
+    description: Check when the submit tokens and submissions were cleared from the database.
+
+    list:
+      dateTime: Date and time
+      cleanupExecutor: Executor
+      submitTokens: Submit tokens
+      submissions: Submission
+      executionTime: Execution time
+      cleanupStatus: Status
+
 # Download check
 downloadCheck:
   cardTitle: Internet connection
@@ -1770,3 +1782,29 @@ languageSource:
   htmlBrowserFallback:
     label: Use website language, fallback to browser language
     help: Use the website's language for the mosparo frontend box. If mosparo has no translations for this language, use the browser's language. If this language is unavailable too, fall back to English.
+
+cleanup:
+  lastDatabaseCleanup: 'Last database cleanup:'
+
+cleanupStatus:
+  unknown:
+    label: Unknown
+
+  incomplete:
+    label: Incomplete
+
+  complete:
+    label: Complete
+
+cleanupExecutor:
+  unknown:
+    label: Unknown
+
+  cleanupCommand:
+    label: Cleanup command
+
+  frontendApi:
+    label: Frontend API
+
+  webCronJob:
+    label: Web cron job

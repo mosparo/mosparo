@@ -6,13 +6,19 @@ use DateInterval;
 use DateTime;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Entity\CleanupStatistic;
 use Mosparo\Entity\Project;
+use Mosparo\Enum\CleanupExecutor;
+use Mosparo\Enum\CleanupStatus;
 use Mosparo\Util\DateRangeUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 class CleanupHelper
 {
+    const DURATION_REGULAR = 'PT6H';
+    const DURATION_ADDITIONAL = 'PT10M';
+
     protected EntityManagerInterface $entityManager;
 
     protected ProjectHelper $projectHelper;
@@ -32,16 +38,20 @@ class CleanupHelper
         $this->cleanupGracePeriodEnabled = $cleanupGracePeriodEnabled;
     }
 
-    public function cleanup($maxIterations = 10, $force = false, $ignoreExceptions = true, $timeout = 1.5)
+    public function cleanup($maxIterations = 10, $force = false, $ignoreExceptions = true, $timeout = 1.5, $cleanupExecutor = CleanupExecutor::UNKNOWN)
     {
         $nextCleanup = $this->cache->getItem('mosparoNextCleanup');
         $additionalCleanup = $this->cache->getItem('mosparoAdditionalCleanup');
         $cleanupStartedAt = $this->cache->getItem('mosparoCleanupStartedAt');
 
         // If the force parameter is set, we execute the cleanup anyways
-        if ($nextCleanup->get() !== null && !$force) {
+        if (!$force) {
             // Clone the DateTime object to keep the original time because we manipulate the time later (see below).
-            $cleanupStart = clone $nextCleanup->get();
+            if ($nextCleanup->get() !== null) {
+                $cleanupStart = clone $nextCleanup->get();
+            } else {
+                $cleanupStart = $this->getLastDatabaseCleanup()->add(new DateInterval(self::DURATION_REGULAR));
+            }
 
             // Add the cleanup grace period - if enabled - to the regular cleanup time but not the
             // additional cleanup (see below).
@@ -49,7 +59,8 @@ class CleanupHelper
                 $cleanupStart->add(new DateInterval('PT24H'));
             }
 
-            // Check if there is an additional cleanup needed from the last cleanup run.
+            // Check if there is an additional cleanup needed from the last cleanup run. It will override all
+            // the other times.
             if ($additionalCleanup->get() !== null) {
                 $cleanupStart = $additionalCleanup->get();
             }
@@ -73,6 +84,9 @@ class CleanupHelper
             $ignoreExceptions,
             $timeout
         ));
+
+        $cleanupStatistic = (new CleanupStatistic())
+            ->setCleanupExecutor($cleanupExecutor);
 
         $maxPerIteration = 2500;
         $notFinished = true;
@@ -177,16 +191,25 @@ class CleanupHelper
                 $query->execute();
                 unset($query);
 
-                // If it took more than 1.5 seconds, stop the cleanup
-                if ($maxIterations > 1 && (microtime(true) - $startTime) > $timeout) {
+                $cleanupStatistic
+                    ->increaseNumberOfDeletedSubmitTokens(count($reallyDeletableSubmitTokenIds))
+                    ->increaseNumberOfDeletedSubmissions(count($deletableSubmissionIds));
+
+                // If it took more than the allowed timeout, stop the cleanup.
+                if ($timeout > 0 && $maxIterations > 1 && (microtime(true) - $startTime) > $timeout) {
+                    $this->logger->info(sprintf(
+                        'Cleanup process aborted after %.2fs because the timeout of %ds was reached.',
+                        (microtime(true) - $startTime),
+                        $timeout
+                    ));
                     break;
                 }
             }
 
             // Cleanup incomplete submissions and submit tokens
-            $this->deleteSubmissionsWithoutAssignedSubmitTokens();
-            $this->deleteSubmissionArtefacts();
-            $this->deleteSubmitTokensWithoutSubmissions();
+            $this->deleteSubmissionsWithoutAssignedSubmitTokens($cleanupStatistic);
+            $this->deleteSubmissionArtefacts($cleanupStatistic);
+            $this->deleteSubmitTokensWithoutSubmissions($cleanupStatistic);
 
             // Clear the day statistic
             $this->cleanupDayStatistcs();
@@ -202,6 +225,15 @@ class CleanupHelper
             $notFinished = true;
         }
 
+        // Count the submit tokens and submissions for the statistic
+        $query = $this->entityManager->createQuery('SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st');
+        $cleanupStatistic->setNumberOfStoredSubmitTokens($query->getSingleScalarResult());
+        unset($query);
+
+        $query = $this->entityManager->createQuery('SELECT COUNT(s.id) FROM Mosparo\Entity\Submission s');
+        $cleanupStatistic->setNumberOfStoredSubmissions($query->getSingleScalarResult());
+        unset($query);
+
         // Set the active project after the cleanup
         if ($activeProject !== null) {
             $this->projectHelper->setActiveProject($activeProject);
@@ -211,20 +243,29 @@ class CleanupHelper
         if ($notFinished) {
             // Execute the next cleanup in 10 minutes
             // We give the (database) server these 10 minutes to relax after deleting so many rows.
-            $additionalCleanupDate = (new DateTime())->add(new DateInterval('PT10M'));
+            $additionalCleanupDate = (new DateTime())->add(new DateInterval(self::DURATION_ADDITIONAL));
+            $cleanupStatistic->setCleanupStatus(CleanupStatus::INCOMPLETE);
+        } else {
+            $cleanupStatistic->setCleanupStatus(CleanupStatus::COMPLETE);
         }
 
         $additionalCleanup->set($additionalCleanupDate);
         $this->cache->save($additionalCleanup);
 
         // The next regular cleanup will be performed in 6 hours
-        $nextCleanup->set((new DateTime())->add(new DateInterval('PT6H')));
+        $nextCleanup->set((new DateTime())->add(new DateInterval(self::DURATION_REGULAR)));
         $this->cache->save($nextCleanup);
 
+        $executionTime = microtime(true) - $startTime;
         $this->logger->info(sprintf(
-            'Cleanup process completed after %ds.',
-            (new DateTime())->getTimestamp() - $cleanupStartedAt->get()->getTimestamp()
+            'Cleanup process completed after %.2fs.',
+            $executionTime
         ));
+
+        // Store the cleanup statistic object
+        $cleanupStatistic->setExecutionTime($executionTime);
+        $this->entityManager->persist($cleanupStatistic);
+        $this->entityManager->flush();
 
         $cleanupStartedAt->set(null);
         $this->cache->save($cleanupStartedAt);
@@ -380,7 +421,7 @@ class CleanupHelper
      *
      * @return void
      */
-    protected function deleteSubmissionsWithoutAssignedSubmitTokens()
+    protected function deleteSubmissionsWithoutAssignedSubmitTokens(CleanupStatistic $cleanupStatistic)
     {
         $maxResults = 50;
 
@@ -408,6 +449,8 @@ class CleanupHelper
             $deleteQuery->execute();
             unset($deleteQuery);
 
+            $cleanupStatistic->increaseNumberOfDeletedSubmissions(count($submissionIds));
+
             if (count($submissionIds) < $maxResults) {
                 break;
             }
@@ -425,7 +468,7 @@ class CleanupHelper
      *
      * @return void
      */
-    protected function deleteSubmissionArtefacts(): void
+    protected function deleteSubmissionArtefacts(CleanupStatistic $cleanupStatistic): void
     {
         $maxResults = 50;
 
@@ -453,6 +496,8 @@ class CleanupHelper
             $deleteQuery->execute();
             unset($deleteQuery);
 
+            $cleanupStatistic->increaseNumberOfDeletedSubmissions(count($submissionIds));
+
             if (count($submissionIds) < $maxResults) {
                 break;
             }
@@ -468,7 +513,7 @@ class CleanupHelper
      *
      * @return void
      */
-    protected function deleteSubmitTokensWithoutSubmissions()
+    protected function deleteSubmitTokensWithoutSubmissions(CleanupStatistic $cleanupStatistic)
     {
         $maxResults = 50;
 
@@ -497,6 +542,8 @@ class CleanupHelper
             $deleteQuery->execute();
             unset($deleteQuery);
 
+            $cleanupStatistic->increaseNumberOfDeletedSubmitTokens(count($submitTokenIds));
+
             if (count($submitTokenIds) < $maxResults) {
                 break;
             }
@@ -504,5 +551,19 @@ class CleanupHelper
 
         unset($query);
         unset($submitTokenIds);
+    }
+
+    public function getLastDatabaseCleanup(): ?DateTime
+    {
+        $query = $this->entityManager
+            ->createQuery('SELECT cs.dateTime FROM Mosparo\Entity\CleanupStatistic cs ORDER BY cs.dateTime DESC')
+            ->setMaxResults(1);
+        $results = $query->getSingleColumnResult();
+
+        if (!$results) {
+            return null;
+        }
+
+        return new DateTime(current($results));
     }
 }
