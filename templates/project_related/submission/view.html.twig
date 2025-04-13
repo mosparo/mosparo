@@ -368,12 +368,12 @@
                                             <ul>
                                                 {% for subValue in field.value %}
                                                     <li>
-                                                        <code>{{ subValue|nl2br }}</code>
+                                                        <code class="submission-data">{{ subValue|mark_invisible_characters }}</code>
                                                     </li>
                                                 {% endfor %}
                                             </ul>
                                         {% elseif field.value is defined and not field.value is iterable and field.value|trim != '' %}
-                                            <code>{{ field.value|nl2br }}</code>
+                                            <code class="submission-data">{{ field.value|mark_invisible_characters }}</code>
                                         {% else %}
                                             <em>{{ 'general.empty'|trans }}</em>
                                         {% endif %}

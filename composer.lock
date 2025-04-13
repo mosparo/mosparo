@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d7a7a0d1f76c4a79c82bb5d5d7e61075",
+    "content-hash": "524e8eb8066e142620cddc9a6802ecb5",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -10209,16 +10209,16 @@
         },
         {
             "name": "zepi/unicode",
-            "version": "v1.0.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zepi/unicode.git",
-                "reference": "2c6c0ed2d541f56e95fb52a0f824ebb744db5526"
+                "reference": "b54b2299657fdc92af603172d96ab462c0358026"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zepi/unicode/zipball/2c6c0ed2d541f56e95fb52a0f824ebb744db5526",
-                "reference": "2c6c0ed2d541f56e95fb52a0f824ebb744db5526",
+                "url": "https://api.github.com/repos/zepi/unicode/zipball/b54b2299657fdc92af603172d96ab462c0358026",
+                "reference": "b54b2299657fdc92af603172d96ab462c0358026",
                 "shasum": ""
             },
             "require": {
@@ -10248,9 +10248,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zepi/unicode/issues",
-                "source": "https://github.com/zepi/unicode/tree/v1.0.0"
+                "source": "https://github.com/zepi/unicode/tree/v2.0.0"
             },
-            "time": "2022-09-23T18:08:29+00:00"
+            "time": "2025-04-13T17:27:11+00:00"
         }
     ],
     "packages-dev": [

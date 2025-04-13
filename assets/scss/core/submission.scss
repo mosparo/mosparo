@@ -139,3 +139,22 @@
 
     cursor: help;
 }
+
+.submission-data {
+    white-space: pre;
+
+    u {
+        border: 1px solid rgba(255, 50, 50, 0.75);
+        display: inline-block;
+        min-width: 4px;
+        text-decoration: none;
+
+        &.space {
+            border-color: rgba(255, 0, 255, 0.75);
+        }
+
+        & + u {
+            margin-left: 1px;
+        }
+    }
+}
