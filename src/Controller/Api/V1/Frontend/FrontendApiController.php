@@ -284,7 +284,7 @@ class FrontendApiController extends AbstractController
 
         // Check the data
         if (!$submission->isSpam()) {
-            $this->ruleTesterHelper->checkRequest($submission);
+            $this->ruleTesterHelper->checkRequest($submission, $securitySettings);
         }
 
         $submission->setSubmitToken($submitToken);

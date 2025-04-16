@@ -4,6 +4,7 @@ namespace Mosparo\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -66,6 +67,25 @@ class SecuritySettingsFormType extends AbstractType
         if ($isGeneralSettings) {
             $builder
                 ->add('ipAllowList', TextareaType::class, ['label' => 'settings.security.form.ipAllowList', 'required' => false, 'help' => 'settings.security.form.ipAllowListHelp', 'attr' => ['class' => 'ip-address-field']]);
+        } else {
+            $builder
+                ->add('overrideSpamDetection', CheckboxType::class, ['label' => 'settings.security.form.overrideSpamDetection', 'required' => false, 'attr' => ['class' => 'full-card-field-switch']])
+                ->add('spamStatus', ChoiceType::class, [
+                    'label' => 'project.form.status',
+                    'attr' => ['class' => 'form-select'],
+                    'choices' => ['state.inactive' => 0, 'state.active' => 1],
+                    'help' => 'project.form.statusHelp',
+                ])
+                ->add('spamScore', NumberType::class, [
+                    'label' => 'project.form.spamScore',
+                    'help' => 'project.form.spamScoreHelp',
+                    'html5' => true,
+                    'scale' => 1,
+                    'attr' => [
+                        'min' => 0.1,
+                        'step' => 'any',
+                    ],
+                ]);
         }
 
         if ($addOverrideOptions) {

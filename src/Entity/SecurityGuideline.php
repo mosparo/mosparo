@@ -44,10 +44,13 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
     private ?Project $project;
 
     private array $defaultSecurityConfigValues = [
+        'overrideSpamDetection' => false,
         'overrideMinimumTime' => false,
         'overrideHoneypotField' => false,
         'overrideDelay' => false,
         'overrideLockout' => false,
+        'overrideProofOfWork' => false,
+        'overrideEqualSubmissions' => false,
     ];
 
     public function __construct()
@@ -254,6 +257,10 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
                 $defaultValues[$key] = $projectConfigValue;
             }
         }
+
+        // Add the spam status and spam score default values from the project
+        $defaultValues['spamStatus'] = $this->getProject()->getStatus();
+        $defaultValues['spamScore'] = $this->getProject()->getSpamScore();
 
         return $defaultValues;
     }

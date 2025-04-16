@@ -735,8 +735,8 @@ settings:
           asNumbersHelp: "Add the AS numbers for which this guideline should be considered. You can see the AS number in the submission details. Example: 123456"
 
         settings:
-          title: Security settings
-          intro: Please check the override checkbox for the settings you want to override from the general security settings. If you do not override a setting, mosparo will use the one from the project settings.
+          title: Override settings
+          intro: Please check the override checkbox for the settings you want to override from the project or general security settings. If you do not override a setting, mosparo will use the one from the project or general security settings. If you configure the same value as in the project or general security settings, the custom value is removed from the security policy.
 
         infoGeoIp2Disabled: GeoIP2 is not available. Please configure the GeoIP2 database to use the country codes and AS numbers criteria.
 
@@ -746,6 +746,11 @@ settings:
 
         message:
           successfullyRemoved: The security guideline %guidelineName% was removed successfully from the project.
+
+    spamDetection:
+      title: Spam detection
+      intro: Define if the spam protection should be enabled for this security guideline and which spam score should be used to identify spam.
+      intro2: If you do not override the spam detection settings, the settings from the project will be used.
 
     minimumTime:
       title: Minimum Time
@@ -818,6 +823,7 @@ settings:
       ipAllowList: Always allowed IP addresses and subnets
       ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
+      overrideSpamDetection: Override spam detection
       overrideMinimumTime: Override minimum time
       overrideHoneypotField: Override honeypot field
       overrideDelay: Override request delay

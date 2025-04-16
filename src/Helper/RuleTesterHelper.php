@@ -118,12 +118,12 @@ class RuleTesterHelper
         $submission = new Submission();
         $submission->setData($data);
 
-        $this->checkRequest($submission, null, $useRules, $useRulesets);
+        $this->checkRequest($submission, [], null, $useRules, $useRulesets);
 
         return $submission;
     }
 
-    public function checkRequest(Submission $submission, $type = null, $useRules = true, $useRulesets = true)
+    public function checkRequest(Submission $submission, array $securitySettings = [], $type = null, $useRules = true, $useRulesets = true): void
     {
         $ruleArgs = ['status' => 1];
         if ($type !== null) {
@@ -140,10 +140,10 @@ class RuleTesterHelper
         $results = $this->checkRules($submission->getData());
 
         // Analyze the results
-        $this->analyzeResults($submission, $results);
+        $this->analyzeResults($submission, $results, $securitySettings);
     }
 
-    protected function loadRules(array $ruleArgs, $useRules = true, $useRulesets = true)
+    protected function loadRules(array $ruleArgs, $useRules = true, $useRulesets = true): void
     {
         $this->rules = [];
         if ($useRules) {
@@ -244,7 +244,7 @@ class RuleTesterHelper
         return false;
     }
 
-    protected function loadRuleTesters()
+    protected function loadRuleTesters(): void
     {
         foreach ($this->rules as $rule) {
             if (isset($this->ruleTesters[$rule->getType()])) {
@@ -259,7 +259,7 @@ class RuleTesterHelper
         }
     }
 
-    protected function analyzeResults(Submission $submission, $results)
+    protected function analyzeResults(Submission $submission, array $results, array $securitySettings = []): void
     {
         $score = 0;
 
@@ -271,11 +271,18 @@ class RuleTesterHelper
 
         $activeProject = $this->projectHelper->getActiveProject();
 
+        $spamStatus = $activeProject->getStatus();
+        $spamScore = $activeProject->getSpamScore();
+        if ($securitySettings['overrideSpamDetection'] ?? false) {
+            $spamStatus = $securitySettings['spamStatus'] ?? $spamStatus;
+            $spamScore = $securitySettings['spamScore'] ?? $spamScore;
+        }
+
         $submission->setSpamRating($score);
-        $submission->setSpamDetectionRating($activeProject->getSpamScore());
+        $submission->setSpamDetectionRating($spamScore);
         $submission->setMatchedRuleItems($results);
 
-        if ($score >= $submission->getSpamDetectionRating() && $activeProject->getStatus()) {
+        if ($score >= $submission->getSpamDetectionRating() && $spamStatus) {
             $submission->setSpam(true);
         } else {
             $submission->setSpam(false);
