@@ -544,8 +544,8 @@ settings:
           priority: Priorità
           priorityHelp: Definisce in quale ordine verificare le linee guida. La linea guida con valore più alto viene verificata per prima.
         settings:
-          title: Impostazioni di sicurezza
-          intro: Abilita il flag di sovrascrittura per le impostazioni che dovranno essere sovrascritte dalle impostazioni di sicurezza generali. Se un'impostazione non viene sovrascritta mosparo utilizzerà quella relativa al progetto.
+          title: Impostazioni di sovrascrittura
+          intro: Seleziona la casella di sovrascrittura per le impostazioni che desideri sovrascrivere rispetto a quelle del progetto o delle impostazioni di sicurezza generali. Se non sovrascrivi un'impostazione, mosparo utilizzerà quella del progetto o delle impostazioni generali. Se configuri lo stesso valore presente nel progetto o nelle impostazioni generali, il valore personalizzato verrà rimosso dalla politica di sicurezza.
         infoGeoIp2Disabled: GeoIP2 non è disponibile. Configura il database GeoIP2 per poter usare il codice Stato e il numero AS come criteri.
       list:
         name: Nome
@@ -607,6 +607,7 @@ settings:
       proofOfWorkDynamicComplexityBasedOnIpAddress: Basato sull'indirizzo IP
       overrideProofOfWork: Sovrascrivi proof of work
       proofOfWorkDynamicComplexityBasedOnIpAddressHelp: Il rilevamento avverrà in base all'indirizzo IP dell'utente. Se disabilitato, tutti gli invii di tutti gli utenti all'interno dell'intervallo di tempo verranno conteggiati.
+      overrideSpamDetection: Sovrascrivi rilevamento spam
     ipLockout:
       title: Blocco IP
       intro: Per rendere la vita degli spam bot più difficile, mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
@@ -638,6 +639,10 @@ settings:
       speed: Velocità
       rangeSizeHelp: Maggiore è l'intervallo numerico, più calcoli deve eseguire il browser. Si consiglia di non utilizzare un intervallo numerico troppo ampio, poiché potrebbe richiedere troppo tempo per l'utente prima di poter inviare il modulo.
       cryptoSpeedHelp: Questi valori sono testati e calcolati sul tuo dispositivo. Altri dispositivi possono essere più veloci o più lenti. Questi numeri servono solo come indicazione, ma non indicano la durata esatta per ogni utente.
+    spamDetection:
+      title: Rilevamento dello spam
+      intro: Definisci se la protezione antispam deve essere abilitata per questa regola di sicurezza e quale punteggio spam deve essere utilizzato per identificare lo spam.
+      intro2: Se non sovrascrivi le impostazioni di rilevamento dello spam, saranno utilizzate le impostazioni del progetto.
   title: Impostazioni progetto
   design:
     form:
@@ -1121,6 +1126,16 @@ administration:
         savedSuccessfully: Le impostazioni sono state salvate correttamente.
     title: Cron jobs
     description: Configura i cron jobs per mosparo.
+  cleanupStatistic:
+    list:
+      dateTime: Data e ora
+      cleanupExecutor: Esecutore
+      submitTokens: Token di invio
+      submissions: Invio
+      executionTime: Tempo di esecuzione
+      cleanupStatus: Stato
+    description: Controlla quando i token di invio e le richieste sono stati rimossi dal database.
+    title: Statistiche di pulizia
 account:
   twoFactor:
     action:
@@ -1430,3 +1445,21 @@ languageSource:
   htmlBrowserFallback:
     label: Usa la lingua del sito, fallback sulla lingua del browser
     help: Usa la lingua del sito web per la finestra frontend di mosparo. Se mosparo non ha traduzioni per questa lingua, utilizza la lingua del browser. Se anche questa non è disponibile, verrà utilizzato l'inglese come alternativa.
+cleanupStatus:
+  unknown:
+    label: Sconosciuto
+  complete:
+    label: Completo
+  incomplete:
+    label: Incompleto
+cleanupExecutor:
+  unknown:
+    label: Sconosciuto
+  cleanupCommand:
+    label: Comando di pulizia
+  frontendApi:
+    label: API per il frontend
+  webCronJob:
+    label: Compito cron web
+cleanup:
+  lastDatabaseCleanup: 'Ultima pulizia del database:'
