@@ -15,7 +15,8 @@ tools:
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: Vaša IP adresa nie je povolená do zoznamu povolení. Pridajte svoju IP adresu do zoznamu.
+      ownIpNotInAllowList: Vaša IP adresa nie je povolená do zoznamu povolení. Pridajte
+        svoju IP adresu do zoznamu.
 ipAllowList:
   itemInvalid: Položka "%item%" nie je platná IP adresa alebo podnet.
 honeypotField:
@@ -24,8 +25,12 @@ securityGuideline:
   asNumberNotNumeric: Číslo AS nie je číslo.
   atLeastOneCriteriaRequired: Bezpečnostná príručka vyžaduje minimálne jedno kritériá.
 webCronJob:
-  webCronJobIntervalAtLeast5Minutes: Web cron pracovný interval musí byť aspoň 5 minút alebo viac.
-  geoIpRefreshIntervalAtLeast1Day: GeoIP2 obnovovací interval musí byť aspoň jeden deň alebo viac.
+  webCronJobIntervalAtLeast5Minutes: Web cron pracovný interval musí byť aspoň 5 minút
+    alebo viac.
+  geoIpRefreshIntervalAtLeast1Day: GeoIP2 obnovovací interval musí byť aspoň jeden
+    deň alebo viac.
 hosts:
-  hostContainsProtocol: Tento hostiteľ obsahuje protokol. Prosím, zadajte hostiteľa bez protokolu (napríklad.com namiesto https://example.com).
-  hostContainsInvalidCharacter: Tento hostiteľ obsahuje neplatné znaky. V tejto oblasti sú povolené iba znaky (a-z), čísla (0HPLC, dashes, bodky a hviezda (*).
+  hostContainsProtocol: Tento hostiteľ obsahuje protokol. Prosím, zadajte hostiteľa
+    bez protokolu (napríklad.com namiesto https://example.com).
+  hostContainsInvalidCharacter: Tento hostiteľ obsahuje neplatné znaky. V tejto oblasti
+    sú povolené iba znaky (a-z), čísla (0HPLC, dashes, bodky a hviezda (*).
