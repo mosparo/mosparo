@@ -1460,6 +1460,6 @@ cleanupExecutor:
   frontendApi:
     label: API per il frontend
   webCronJob:
-    label: Compito cron web
+    label: Cron job web
 cleanup:
   lastDatabaseCleanup: 'Ultima pulizia del database:'
