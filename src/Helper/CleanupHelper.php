@@ -325,33 +325,33 @@ class CleanupHelper
             ->getQuery()->execute();
         unset($qb);
 
-        // Delete all rulesets rule item cache
+        // Delete all rule packages rule item cache
         $qb = $this->entityManager->createQueryBuilder();
-        $qb->delete('Mosparo\Entity\RulesetRuleItemCache', 'rsric')
+        $qb->delete('Mosparo\Entity\RulePackageRuleItemCache', 'rsric')
             ->where('rsric.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
         unset($qb);
 
-        // Delete all rulesets rule cache
+        // Delete all rule packages rule cache
         $qb = $this->entityManager->createQueryBuilder();
-        $qb->delete('Mosparo\Entity\RulesetRuleCache', 'rsrc')
+        $qb->delete('Mosparo\Entity\RulePackageRuleCache', 'rsrc')
             ->where('rsrc.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
         unset($qb);
 
-        // Delete all rulesets cache
+        // Delete all rule packages cache
         $qb = $this->entityManager->createQueryBuilder();
-        $qb->delete('Mosparo\Entity\RulesetCache', 'rsc')
+        $qb->delete('Mosparo\Entity\RulePackageCache', 'rsc')
             ->where('rsc.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();
         unset($qb);
 
-        // Delete all rulesets
+        // Delete all rule packages
         $qb = $this->entityManager->createQueryBuilder();
-        $qb->delete('Mosparo\Entity\Ruleset', 'rs')
+        $qb->delete('Mosparo\Entity\RulePackage', 'rs')
             ->where('rs.project = :project')
             ->setParameter('project', $project)
             ->getQuery()->execute();

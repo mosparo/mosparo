@@ -370,9 +370,9 @@ submission:
       spam: Soumissions de spam
       valid: Soumissions valides
     dropdown: Filtrer la liste des soumissions
-ruleset:
+rulePackage:
   view:
-    title: Voir l'ensemble de règles %rulesetName%
+    title: Voir l'ensemble de règles %rulePackageName%
     details:
       title: Informations sur l'ensemble de règles
       url: URL
@@ -411,7 +411,7 @@ ruleset:
       title: Voir la règle %ruleName%
       items:
         title: Éléments inclus
-      backToRuleset: Retour à l'ensemble des règles
+      backToRulePackage: Retour à l'ensemble des règles
   title: Ensembles de règles
   backToList: Revenir aux ensembles de règles
   message:
@@ -425,7 +425,7 @@ ruleset:
   add:
     title: Ajouter un ensemble de règles
   edit:
-    title: Modifier l'ensemble de règles %rulesetName%
+    title: Modifier l'ensemble de règles %rulePackageName%
   form:
     name: Nom
     url: URL
@@ -435,10 +435,10 @@ ruleset:
       successfullySaved: L'ensemble de règles a bien été enregistré.
     spamRatingFactorHelp: Le facteur d'évaluation du spam vous permet de définir un facteur qui renforce ou affaiblit toutes les règles de ce jeu de règles. Si la valeur est supérieure à 1,0, les règles seront renforcées, si la valeur est inférieure à 1,0, les règles seront affaiblies.
   delete:
-    title: Supprimer l'ensemble de règles %rulesetName%
-    confirm: Voulez-vous vraiment supprimer l'ensemble de règles %rulesetName% ?
+    title: Supprimer l'ensemble de règles %rulePackageName%
+    confirm: Voulez-vous vraiment supprimer l'ensemble de règles %rulePackageName% ?
     message:
-      successfullyDeleted: L'ensemble de règles %rulesetName% a bien été supprimé.
+      successfullyDeleted: L'ensemble de règles %rulePackageName% a bien été supprimé.
 settings:
   design:
     form:

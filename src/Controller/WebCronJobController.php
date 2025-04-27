@@ -9,7 +9,7 @@ use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\GeoIp2Helper;
 use Mosparo\Helper\ProjectHelper;
-use Mosparo\Helper\RulesetHelper;
+use Mosparo\Helper\RulePackageHelper;
 use Mosparo\Util\IpUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -26,16 +26,16 @@ class WebCronJobController extends AbstractController
 
     protected CleanupHelper $cleanupHelper;
 
-    protected RulesetHelper $rulesetHelper;
+    protected RulePackageHelper $rulePackageHelper;
 
     protected GeoIp2Helper $geoIp2Helper;
 
-    public function __construct(ConfigHelper $configHelper, ProjectHelper $projectHelper, CleanupHelper $cleanupHelper, RulesetHelper $rulesetHelper, GeoIp2Helper $geoIp2Helper)
+    public function __construct(ConfigHelper $configHelper, ProjectHelper $projectHelper, CleanupHelper $cleanupHelper, RulePackageHelper $rulePackageHelper, GeoIp2Helper $geoIp2Helper)
     {
         $this->configHelper = $configHelper;
         $this->projectHelper = $projectHelper;
         $this->cleanupHelper = $cleanupHelper;
-        $this->rulesetHelper = $rulesetHelper;
+        $this->rulePackageHelper = $rulePackageHelper;
         $this->geoIp2Helper = $geoIp2Helper;
     }
 
@@ -100,9 +100,9 @@ class WebCronJobController extends AbstractController
         // Execute the cleanup process
         $this->cleanupHelper->cleanup(1000000, true, false, $maxTimeCleanup, CleanupExecutor::WEB_CRON_JOB);
 
-        // Download the rulesets, only execute this if we have more than 10% of the max execution time available.
+        // Download the rule packages, only execute this if we have more than 10% of the max execution time available.
         if ((time() - $start) < ($maxExecutionTime * 0.9)) {
-            $this->rulesetHelper->downloadAll();
+            $this->rulePackageHelper->fetchAll();
         }
 
         // Update the GeoIP2 database, only execute this if we have more than 10% of the max execution time available.

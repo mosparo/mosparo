@@ -1,0 +1,8 @@
+{% extends 'project_related/rule/form.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'rule.create.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'rule.title'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}{{ 'rule.create.title'|trans }}{% endblock %}
+

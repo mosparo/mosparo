@@ -135,7 +135,7 @@ class AccountController extends AbstractController
             /** @var \Mosparo\Entity\User $user */
             $user = $this->getUser();
 
-            // RuleSet the new password and save the user
+            // Set the new password and save the user
             $passwordField = $form->get('newPassword');
             $user->setPassword($this->userPasswordHasher->hashPassword(
                 $user,

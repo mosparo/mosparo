@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'rulePackage.addChooseType.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-narrow pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset('build/images/icons/rule_package.svg')|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">{{ 'rulePackage.addChooseType.title'|trans }}</h2>
+
+                        <p>{{ 'rulePackage.addChooseType.intro'|trans }}</p>
+
+                        {% for category in categories %}
+                            <h3 class="mt-3 mb-0">{{ category.info.title|trans }}</h3>
+                            <p>{{ category.info.description|trans }}</p>
+                            <div class="row">
+                                {% for rulePackageType in category.types %}
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <a href="{{ path('rule_package_add_with_type', { '_projectId': activeProject.id, 'type': rulePackageType.key }) }}" class="btn btn-outline-green w-100 h-100 flex-column align-items-start justify-content-start rule-type-button">
+                                            <div class="h2">
+                                                <i class="{{ rulePackageType.icon }}"></i>
+                                                {{ rulePackageType.title|trans }}
+                                            </div>
+                                            <p>
+                                                {{ rulePackageType.description|trans }}
+                                            </p>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto">
+                <a href="{{ path('rule_package_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'rulePackage.backToList'|trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

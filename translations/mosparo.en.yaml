@@ -332,48 +332,59 @@ rule:
       infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
       placeholder: Rating
 
-# Ruleset
-ruleset:
-  title: Rulesets
-  backToList: Back to rulesets
+# Rule package
+rulePackage:
+  title: Rule packages
+  backToList: Back to rule packages
 
   message:
-    errorWhileUpdating: 'An error occurred while updating the ruleset:'
+    errorWhileUpdating: 'An error occurred while updating the rule package:'
 
   list:
     name: Name
+    type: Type
     status: Status
     refreshedAt: Refreshed at
     updatedAt: Updated at
     actions: Actions
 
+  addChooseType:
+    title: Choose type
+    intro: Please choose which type of rule package you want to add. You can choose between automatic and manual types. The automatic types will update the rule package automatically, while the manual ones must be updated by an external action or tool.
+
   add:
-    title: Add ruleset
+    title: Add rule package
 
   edit:
-    title: Edit ruleset %rulesetName%
+    title: Edit rule package %rulePackageName%
 
   form:
     name: Name
-    url: URL
+    sourceUrl: Source URL
+    sourceUrlHelp: Specify the URL from which mosparo can download the rule package.
+    sourceFile: Source file
+    sourceFileHelp: Specify the absolute file path at which the rule package file is stored.
     status: Status
     spamRatingFactor: Spam rating factor
-    spamRatingFactorHelp: With the spam rating factor you can define a factor that strengthens or weakens all rules of this ruleset. If the value is greater than 1.0, the rules will be strengthened, if the value is less than 1.0, the rules will be weakened.
+    spamRatingFactorHelp: With the spam rating factor you can define a factor that strengthens or weakens all rules of this rule package. If the value is greater than 1.0, the rules will be strengthened, if the value is less than 1.0, the rules will be weakened.
 
     message:
-      successfullySaved: The ruleset was saved successfully.
+      successfullySaved: The rule package was saved successfully.
 
   view:
-    title: View ruleset %rulesetName%
+    title: View rule package %rulePackageName%
 
     details:
-      title: Ruleset details
-      url: URL
+      title: Rule package details
+      source: Source
+      sourceManualImport: Manual import
       status: Status
       spamRatingFactor: Spam rating factor
       lastRefreshedAt: Last refreshed at
       lastUpdatedAt: Last updated at
       numberOfIncludedRules: Number of included rules
+      importFirst: This rule package does not contain any data. Please import the rule package data manually.
+      noRulePackageCache: There is no rule package cache stored for this rule package. This means that the download was not successful or something else went wrong.
 
     includedRules:
       title: Included rules
@@ -411,14 +422,14 @@ ruleset:
       items:
         title: Included items
 
-      backToRuleset: Back to ruleset
+      backToRulePackage: Back to rule package
 
   delete:
-    title: Delete ruleset %rulesetName%
-    confirm: Do you really want to delete the ruleset %rulesetName%?
+    title: Delete rule package %rulePackageName%
+    confirm: Do you really want to delete the rule package %rulePackageName%?
 
     message:
-      successfullyDeleted: The ruleset %rulesetName% was deleted successfully.
+      successfullyDeleted: The rule package %rulePackageName% was deleted successfully.
 
 # Submission
 submission:
@@ -935,7 +946,7 @@ tools:
   ruleTester:
     title: Rule tester
     description: Test how your rules will detect spam.
-    intro: Enter the value you want to test. Choose which data type you want to use for the test and if you want to use rules and rulesets. The data type is important because some rule types only apply to specific data types.
+    intro: Enter the value you want to test. Choose which data type you want to use for the test and if you want to use rules and rule packages. The data type is important because some rule types only apply to specific data types.
 
     form:
       title: Test settings
@@ -945,8 +956,8 @@ tools:
       typeHelp: Select the data type. Some rule types do only apply to specific data types.
       useRules: Use rules
       useRulesHelp: Activate this field to test your rules.
-      useRulesets: Use rulesets
-      useRulesetsHelp: Activate this field to test your rulesets.
+      useRulePackages: Use rule packages
+      useRulePackagesHelp: Activate this field to test your rule packages.
 
     types:
       textField: Text field (Single-line)
@@ -994,7 +1005,7 @@ tools:
     intro: If you want to copy the data from another project into this one, please choose the file to import and which data you want to import. If you import the rules, please choose how mosparo should handle existing rules.
     intro2: After you've selected all the data, please click the button below. mosparo will analyze the file and gives you a summary of what will be changed before anything is imported.
     importData: Data to import
-    infoOverrideData: The settings, as well as the rulesets, will always be overridden in the project. The ruleset will be matched against the URL. For the rules, you have to choose what mosparo should do with existing rules.
+    infoOverrideData: The settings, as well as the rule packages, will always be overridden in the project. The rule package will be matched against the type, name and origin. For the rules, you have to choose what mosparo should do with existing rules.
 
     backToImport: Back to import
 
@@ -1059,7 +1070,7 @@ tools:
         noChangesAvailable: There are no changes are available.
         storedRuleNotFound: The stored rule was not found.
         storedRuleItemNotFound: The stored rule item was not found.
-        storedRulesetNotFound: The stored ruleset was not found.
+        storedRulePackageNotFound: The stored rule package was not found.
 
   eiParts:
     generalSettings: General settings
@@ -1070,8 +1081,8 @@ tools:
     securitySettingsHelp: Includes all settings related to the security of a project.
     rules: Rules
     rulesHelp: Includes all rules of a project.
-    rulesets: Rulesets
-    rulesetsHelp: Includes all rulesets of a project.
+    rulePackages: Rule packages
+    rulePackagesHelp: Includes all rule packages of a project.
 
 # Administration
 administration:
@@ -1441,9 +1452,9 @@ administration:
 # Download check
 downloadCheck:
   cardTitle: Internet connection
-  intro: An outgoing internet connection is not a requirement for mosparo. If an internet connection is available, mosparo automatically checks for updates by loading the version file from the mosparo website. You also need an active internet connection to download updates, the GeoIP2 databases, and rulesets.
-  downloadIsPossible: The PHP settings allow downloads of rulesets and updates. No adjustment is required.
-  downloadIsNotPossible: The PHP settings do not allow the download of updates or rulesets. If you want to use the rulesets or update functionality, please adjust your PHP configuration accordingly.
+  intro: An outgoing internet connection is not a requirement for mosparo. If an internet connection is available, mosparo automatically checks for updates by loading the version file from the mosparo website. You also need an active internet connection to download updates, the GeoIP2 databases, and rule packages.
+  downloadIsPossible: The PHP settings allow downloads of rule packages and updates. No adjustment is required.
+  downloadIsNotPossible: The PHP settings do not allow the download of updates or rule packages. If you want to use the rule packages or update functionality, please adjust your PHP configuration accordingly.
   curlIsEnabledButFunctionsAreDisabled: The extension %extensionName% is enabled, but the required functions (%functionNames%) are disabled. We recommend disabling the extension in general or enabling the needed functions.
   moreInformation: More information
 
@@ -1814,3 +1825,33 @@ cleanupExecutor:
 
   webCronJob:
     label: Web cron job
+
+rulePackageType:
+  category:
+    automatically:
+      label: Automatically
+      description: If you want mosparo to automatically import the rule package, use one of the following types.
+
+    manually:
+      label: Manually
+      description: Use one of the manual types if you want to import the rule package manually or execute the import with a cron job.
+
+  automaticallyFromUrl:
+    label: Automatically from URL
+    description: mosparo automatically loads the rule package from the URL over the internet connection.
+
+  automaticallyFromFile:
+    label: Automatically from file
+    description: mosparo automatically loads the rule package from the specified file path on your server.
+
+  manuallyViaCli:
+    label: Manually via CLI
+    description: Execute the CLI command to import the rule package manually when you change it.
+
+  manuallyViaApi:
+    label: Manually via API
+    description: Import the rule package with your tools or mosparo RPG over mosparo's API.
+
+unknown:
+  label: Unknown
+

@@ -49,8 +49,8 @@
                                     {% if testData.useRules %}
                                         <span class="badge bg-lime">{{ 'tools.ruleTester.form.useRules'|trans }}</span>
                                     {% endif %}
-                                    {% if testData.useRulesets %}
-                                        <span class="badge bg-purple">{{ 'tools.ruleTester.form.useRulesets'|trans }}</span>
+                                    {% if testData.useRulePackages %}
+                                        <span class="badge bg-purple">{{ 'tools.ruleTester.form.useRulePackages'|trans }}</span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -172,7 +172,7 @@
                         {{ form_row(form.value) }}
                         {{ form_row(form.type) }}
                         {{ form_row(form.useRules) }}
-                        {{ form_row(form.useRulesets) }}
+                        {{ form_row(form.useRulePackages) }}
                     </div>
                 </div>
             </div>

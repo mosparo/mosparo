@@ -7,7 +7,7 @@ use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\Rule;
-use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Entity\Submission;
 use Mosparo\Helper\ProjectHelper;
@@ -92,7 +92,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                 $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'No project available for the sent public key.'], 403));
                 return;
             }
-        } else if (strpos($activeRoute, 'verification_api_') === 0 || strpos($activeRoute, 'statistic_api_') === 0) {
+        } else if (str_starts_with($activeRoute, 'verification_api_') || str_starts_with($activeRoute, 'statistic_api_') || str_starts_with($activeRoute, 'rule_package_api_')) {
             // Check if the IP is allowed to access the backend APIs
             if (!IpUtil::isIpAllowed($request->getClientIp(), $this->apiAccessIpAllowList)) {
                 throw new AccessDeniedHttpException(sprintf('Access to the API for this IP address (%s) is not allowed.', $request->getClientIp()));
@@ -200,9 +200,10 @@ class ProjectSubscriber implements EventSubscriberInterface
             'rule_create_choose_type' => ProjectMember::ROLE_EDITOR,
             'rule_create_with_type' => ProjectMember::ROLE_EDITOR,
             'rule_delete' => ProjectMember::ROLE_EDITOR,
-            'ruleset_add' => ProjectMember::ROLE_EDITOR,
-            'ruleset_edit' => ProjectMember::ROLE_EDITOR,
-            'ruleset_delete' => ProjectMember::ROLE_EDITOR,
+            'rule_package_add_choose_type' => ProjectMember::ROLE_EDITOR,
+            'rule_package_add_with_type' => ProjectMember::ROLE_EDITOR,
+            'rule_package_edit' => ProjectMember::ROLE_EDITOR,
+            'rule_package_delete' => ProjectMember::ROLE_EDITOR,
             'settings_general' => ProjectMember::ROLE_OWNER,
             'settings_member_list' => ProjectMember::ROLE_OWNER,
             'settings_member_add' => ProjectMember::ROLE_OWNER,

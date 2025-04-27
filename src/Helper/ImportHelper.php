@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
-use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Exception\ImportException;
 use Mosparo\Specifications\Specifications;
@@ -137,8 +137,8 @@ class ImportHelper
                 $this->executeSecurityGuidelineChanges($sectionChanges);
             } else if ($sectionKey === 'rules') {
                 $this->executeRuleChanges($sectionChanges);
-            } else if ($sectionKey === 'rulesets') {
-                $this->executeRulesetChanges($sectionChanges);
+            } else if ($sectionKey === 'rulePackages') {
+                $this->executeRulePackageChanges($sectionChanges);
             }
 
             $this->entityManager->flush();
@@ -205,7 +205,7 @@ class ImportHelper
             !empty($changes['securitySettings'] ?? []) ||
             !empty($changes['securityGuidelines'] ?? []) ||
             !empty($changes['rules'] ?? []) ||
-            !empty($changes['rulesets'] ?? [])
+            !empty($changes['rulePackages'] ?? [])
         );
     }
 
@@ -233,8 +233,8 @@ class ImportHelper
             $changes['rules'] = $this->findRuleChanges($importData['project']['rules'], $jobData['handlingExistingRules']);
         }
 
-        if ($jobData['importRulesets'] && isset($importData['project']['rulesets'])) {
-            $changes['rulesets'] = $this->findRulesetChanges($importData['project']['rulesets']);
+        if ($jobData['importRulePackages'] && isset($importData['project']['rulePackages'])) {
+            $changes['rulePackages'] = $this->findRulePackageChanges($importData['project']['rulePackages']);
         }
 
         return $changes;
@@ -501,39 +501,39 @@ class ImportHelper
         return ($storedRating === $importedRating);
     }
 
-    protected function findRulesetChanges(array $rulesets): array
+    protected function findRulePackageChanges(array $rulePackages): array
     {
         $changes = [];
-        $rulesetRepository = $this->entityManager->getRepository(Ruleset::class);
+        $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
 
-        foreach ($rulesets as $ruleset) {
-            $storedRuleset = $rulesetRepository->findOneBy(['url' => $ruleset['url']]);
+        foreach ($rulePackages as $rulePackage) {
+            $storedRulePackage = $rulePackageRepository->findOneBy(['url' => $rulePackage['url']]);
 
             $mode = 'add';
-            $storedRulesetId = null;
-            $storedRulesetName = null;
-            if ($storedRuleset !== null) {
+            $storedRulePackageId = null;
+            $storedRulePackageName = null;
+            if ($storedRulePackage !== null) {
                 if (
-                    $storedRuleset->getName() === $ruleset['name'] &&
-                    $storedRuleset->getSpamRatingFactor() === (float) $ruleset['spamRatingFactor'] &&
-                    $storedRuleset->getStatus() === (bool) $ruleset['status']
+                    $storedRulePackage->getName() === $rulePackage['name'] &&
+                    $storedRulePackage->getSpamRatingFactor() === (float) $rulePackage['spamRatingFactor'] &&
+                    $storedRulePackage->getStatus() === (bool) $rulePackage['status']
                 ) {
                     // Everything up to date, no change required.
                     continue;
                 }
 
                 $mode = 'modify';
-                $storedRulesetId = $storedRuleset->getId();
-                $storedRulesetName = $storedRuleset->getName();
+                $storedRulePackageId = $storedRulePackage->getId();
+                $storedRulePackageName = $storedRulePackage->getName();
             }
 
             $changes[] = [
                 'mode' => $mode,
-                'storedRuleset' => [
-                    'id' => $storedRulesetId,
-                    'name' => $storedRulesetName
+                'storedRulePackage' => [
+                    'id' => $storedRulePackageId,
+                    'name' => $storedRulePackageName
                 ],
-                'importedRuleset' => $ruleset,
+                'importedRulePackage' => $rulePackage,
             ];
         }
 
@@ -683,28 +683,28 @@ class ImportHelper
         }
     }
 
-    protected function executeRulesetChanges(array $sectionChanges)
+    protected function executeRulePackageChanges(array $sectionChanges)
     {
-        $rulesetRepository = $this->entityManager->getRepository(Ruleset::class);
+        $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
 
         foreach ($sectionChanges as $change) {
-            $importedRuleset = $change['importedRuleset'];
+            $importedRulePackage = $change['importedRulePackage'];
 
             if ($change['mode'] === 'add') {
-                $ruleset = new Ruleset();
-                $ruleset->setUrl($importedRuleset['url']);
+                $rulePackage = new RulePackage();
+                $rulePackage->setSource($importedRulePackage['url']);
 
-                $this->entityManager->persist($ruleset);
+                $this->entityManager->persist($rulePackage);
             } else if ($change['mode'] === 'modify') {
-                $ruleset = $rulesetRepository->find($change['storedRuleset']['id']);
-                if (!$ruleset) {
-                    throw new ImportException('Stored ruleset not found.', ImportException::STORED_RULESET_NOT_FOUND);
+                $rulePackage = $rulePackageRepository->find($change['storedRulePackage']['id']);
+                if (!$rulePackage) {
+                    throw new ImportException('Stored rule package not found.', ImportException::STORED_RULE_PACKAGE_NOT_FOUND);
                 }
             }
 
-            $ruleset->setName($importedRuleset['name']);
-            $ruleset->setStatus((bool) $importedRuleset['status']);
-            $ruleset->setSpamRatingFactor($importedRuleset['spamRatingFactor']);
+            $rulePackage->setName($importedRulePackage['name']);
+            $rulePackage->setStatus((bool) $importedRulePackage['status']);
+            $rulePackage->setSpamRatingFactor($importedRulePackage['spamRatingFactor']);
         }
     }
 }

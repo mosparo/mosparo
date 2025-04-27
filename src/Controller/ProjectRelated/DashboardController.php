@@ -7,7 +7,7 @@ use DatePeriod;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Rule;
-use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\RulePackage;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\StatisticHelper;
@@ -48,10 +48,10 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
 
         $builder = $entityManager->createQueryBuilder();
         $builder
-            ->select('COUNT(rs.id) AS rulesets')
-            ->from(Ruleset::class, 'rs');
+            ->select('COUNT(rp.id) AS rule_packages')
+            ->from(RulePackage::class, 'rp');
         $result = $builder->getQuery()->getOneOrNullResult();
-        $numberOfRulesets = $result['rulesets'];
+        $numberOfRulePackages = $result['rule_packages'];
 
         // Get the date format for the chart
         [ , $dateFormat, , ] = $localeHelper->determineLocaleValues($request);
@@ -65,7 +65,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
             'numberOfNoSpamSubmissions' => $numberOfNoSpamSubmissions,
             'numberOfSpamSubmissions' => $numberOfSpamSubmissions,
             'numberOfRules' => $numberOfRules,
-            'numberOfRulesets' => $numberOfRulesets,
+            'numberOfRulePackages' => $numberOfRulePackages,
             'chartDateFormat' => $dateFormat,
             'dateRangeOptions' => DateRangeUtil::getChoiceOptions(false, $statisticStorageLimit),
             'activeRange' => $range,

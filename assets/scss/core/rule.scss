@@ -103,9 +103,12 @@
     }
 }
 
-.rule-type-label {
+.rule-type-label,
+.rule-package-type-label {
     display: flex;
     align-items: center;
+
+    white-space: nowrap;
 
     i {
         font-size: 1.25em;

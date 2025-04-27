@@ -52,7 +52,7 @@ class ImportCommand extends Command
             ->addOption('securitySettings', null, InputOption::VALUE_NEGATABLE, 'Import the security settings of a project.', false)
             ->addOption('rules', null, InputOption::VALUE_NEGATABLE, 'Import the rules of a project.', false)
             ->addOption('handlingExistingRules', null, InputOption::VALUE_REQUIRED, 'Define what should happen with existing rules (acceptable values: "override", "append", or "add").', 'override')
-            ->addOption('rulesets', null, InputOption::VALUE_NEGATABLE, 'Import the rulesets a project.', false)
+            ->addOption('rulePackages', null, InputOption::VALUE_NEGATABLE, 'Import the rule packages a project.', false)
 
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force the import without showing the summary or waiting for confirmation.')
         ;
@@ -85,10 +85,10 @@ class ImportCommand extends Command
         $securitySettings = $input->getOption('securitySettings');
         $rules = $input->getOption('rules');
         $handlingExistingRules = $input->getOption('handlingExistingRules');
-        $rulesets = $input->getOption('rulesets');
+        $rulePackages = $input->getOption('rulePackages');
 
 
-        if (!$generalSettings && !$designSettings && !$securitySettings && !$rules && !$rulesets) {
+        if (!$generalSettings && !$designSettings && !$securitySettings && !$rules && !$rulePackages) {
             $output->writeln($formatter->formatBlock(['Enable at least one section to import.'], 'error', true));
             return Command::FAILURE;
         }
@@ -108,7 +108,7 @@ class ImportCommand extends Command
             'importDesignSettings' => $designSettings,
             'importSecuritySettings' => $securitySettings,
             'importRules' => $rules,
-            'importRulesets' => $rulesets,
+            'importRulePackages' => $rulePackages,
             'handlingExistingRules' => $handlingExistingRules,
         ];
 
@@ -130,7 +130,7 @@ class ImportCommand extends Command
                 'designSettings' => ['number' => '2', 'name' => 'Design settings', 'active' => $designSettings, 'inFile' => isset($importData['project']['design'])],
                 'securitySettings' => ['number' => '3', 'name' => 'Security settings', 'active' => $securitySettings, 'inFile' => isset($importData['project']['security'])],
                 'rules' => ['number' => '4', 'name' => 'Rules', 'active' => $rules, 'inFile' => isset($importData['project']['rules'])],
-                'rulesets' => ['number' => '5', 'name' => 'Rulesets', 'active' => $rulesets, 'inFile' => isset($importData['project']['rulesets'])],
+                'rulePackages' => ['number' => '5', 'name' => 'Rule packages', 'active' => $rulePackages, 'inFile' => isset($importData['project']['rulePackages'])],
             ];
 
             $availableCommands = [
@@ -139,7 +139,7 @@ class ImportCommand extends Command
                 '2' => 'Show the design setting changes.',
                 '3' => 'Show the security setting changes.',
                 '4' => 'Show the rule changes.',
-                '5' => 'Show the ruleset changes.',
+                '5' => 'Show the rule package changes.',
                 'abort' => 'Abort the import.',
                 'exit' => 'Abort the import.',
                 'execute' => 'Execute the changes.',
@@ -346,7 +346,7 @@ class ImportCommand extends Command
                         count($change['itemChanges']['remove']),
                     ];
                 }
-            } else if ($sectionKey === 'rulesets') {
+            } else if ($sectionKey === 'rulePackages') {
                 $headers = ['Action', 'Name', 'URL', 'Status', 'Spam rating factor'];
 
                 $values = [];
@@ -358,16 +358,16 @@ class ImportCommand extends Command
                     }
 
                     $status = 'Inactive';
-                    if ($change['importedRuleset']['status']) {
+                    if ($change['importedRulePackage']['status']) {
                         $status = 'Active';
                     }
 
                     $values[] = [
                         $mode,
-                        $change['importedRuleset']['name'],
-                        $change['importedRuleset']['url'],
+                        $change['importedRulePackage']['name'],
+                        $change['importedRulePackage']['url'],
                         $status,
-                        $change['importedRuleset']['spamRatingFactor'],
+                        $change['importedRulePackage']['spamRatingFactor'],
                     ];
                 }
             }

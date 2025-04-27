@@ -223,7 +223,7 @@ rule:
     dropdown: Filtrovat seznam pravidel
     options:
       all: Zobrazit vše
-ruleset:
+rulePackage:
   list:
     refreshedAt: Aktualizováno v
     name: Název
@@ -257,7 +257,7 @@ ruleset:
       rating: Hodnocení
       title: Zahrnutá pravidla
       ruleDetails: Podrobnosti pravidla
-    title: Zobrazit sadu pravidel %rulesetName%
+    title: Zobrazit sadu pravidel %rulePackageName%
     list:
       rules:
         type: Typ
@@ -278,12 +278,12 @@ ruleset:
         name: Název
       items:
         title: Zahrnuté položky
-      backToRuleset: Zpět na sadu pravidel
+      backToRulePackage: Zpět na sadu pravidel
   delete:
-    title: Odstranit sadu pravidel %rulesetName%
-    confirm: Opravdu chcete odstranit sadu pravidel %rulesetName%?
+    title: Odstranit sadu pravidel %rulePackageName%
+    confirm: Opravdu chcete odstranit sadu pravidel %rulePackageName%?
     message:
-      successfullyDeleted: Sada pravidel %rulesetName% byla úspěšně odstraněna.
+      successfullyDeleted: Sada pravidel %rulePackageName% byla úspěšně odstraněna.
   title: Sady pravidel
   backToList: Zpět na sady pravidel
   message:
@@ -291,7 +291,7 @@ ruleset:
   add:
     title: Přidat sadu pravidel
   edit:
-    title: Úprava sady pravidel %rulesetName%
+    title: Úprava sady pravidel %rulePackageName%
 submission:
   title: Záznamy
   list:
@@ -1027,12 +1027,12 @@ tools:
     form:
       title: Nastavení testu
       value: Hodnota testu
-      useRulesets: Použít sady pravidel
+      useRulePackages: Použít sady pravidel
       type: Typ dat
       useRules: Použít pravidla
       valueHelp: Zadejte hodnotu, se kterou chcete pravidla otestovat.
       typeHelp: Vyberte typ dat. Některé typy pravidel se vztahují pouze na určité datové typy.
-      useRulesetsHelp: Aktivujte toto pole pro testování sad pravidel.
+      useRulePackagesHelp: Aktivujte toto pole pro testování sad pravidel.
       useRulesHelp: Aktivujte toto pole pro otestování pravidel.
     types:
       userAgent: Uživatelský agent
@@ -1095,7 +1095,7 @@ tools:
         storedRuleItemNotFound: Uložená položka pravidla nebyla nalezena.
         wrongSpecificationsVersion: Soubor importu byl vytvořen s jinou verzí, než používá tento mosparo projekt.
         storedRuleNotFound: Uložené pravidlo nebylo nalezeno.
-        storedRulesetNotFound: Uložená sada pravidel nebyla nalezena.
+        storedRulePackageNotFound: Uložená sada pravidel nebyla nalezena.
       intro: mosparo simulovalo import a zjistilo následující změny. Zkontrolujte je a proveďte změny, pokud je vše v pořádku.
       notRedoable: Tyto změny nelze po provedení vrátit zpět. Před provedením změn můžete projekt exportovat, abyste měli zálohu konfigurace.
     title: Import
@@ -1114,7 +1114,7 @@ tools:
     designSettingsHelp: Zahrnuje všechna nastavení související s designem projektu.
     securitySettings: Nastavení zabezpečení
     rulesHelp: Zahrnuje všechna pravidla projektu.
-    rulesets: Sady pravidel
+    rulePackages: Sady pravidel
     securitySettingsHelp: Zahrnuje všechna nastavení související se zabezpečením projektu.
-    rulesetsHelp: Zahrnuje všechny sady pravidel projektu.
+    rulePackagesHelp: Zahrnuje všechny sady pravidel projektu.
     rules: Pravidla

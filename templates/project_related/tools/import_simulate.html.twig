@@ -84,13 +84,13 @@
                                             </a>
                                         </li>
                                         <li class="nav-item only-icon">
-                                            <a href="#tabs-rulesets" class="nav-link" data-bs-toggle="tab">
+                                            <a href="#tabs-rule-packages" class="nav-link" data-bs-toggle="tab">
                                                 <i class="ti ti-stack"></i>
                                                 <span class="visible-when-active d-xl-inline">
-                                                    {{ 'tools.eiParts.rulesets'|trans }}
+                                                    {{ 'tools.eiParts.rulePackages'|trans }}
                                                 </span>
-                                                {% if changes.rulesets is defined %}
-                                                    {%  set numberOfChanges = changes.rulesets|length %}
+                                                {% if changes.rulePackages is defined %}
+                                                    {%  set numberOfChanges = changes.rulePackages|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
                                                 {% endif %}
                                             </a>
@@ -188,16 +188,16 @@
                                                 {% endif %}
                                             </div>
                                         </div>
-                                        <div class="card tab-pane" id="tabs-rulesets">
+                                        <div class="card tab-pane" id="tabs-rule-packages">
                                             <div class="card-body">
-                                                {% if changes.rulesets is defined and changes.rulesets %}
-                                                    {{ _self.changesTable('rulesets', changes.rulesets) }}
+                                                {% if changes.rulePackages is defined and changes.rulePackages %}
+                                                    {{ _self.changesTable('rulePackages', changes.rulePackages) }}
                                                 {% else %}
-                                                    {% if not jobData.importRulesets %}
+                                                    {% if not jobData.importRulePackages %}
                                                         <div class="alert alert-info">
                                                             {{ 'tools.import.simulate.changes.notActive'|trans }}
                                                         </div>
-                                                    {% elseif not importData.project.rulesets is defined %}
+                                                    {% elseif not importData.project.rulePackages is defined %}
                                                         <div class="alert alert-info">
                                                             {{ 'tools.import.simulate.changes.notInExport'|trans }}
                                                         </div>
@@ -288,7 +288,7 @@
                     <th width="1%" class="text-center">{{ 'tools.import.simulate.table.itemsModify'|trans }}</th>
                     <th width="1%" class="text-center">{{ 'tools.import.simulate.table.itemsRemove'|trans }}</th>
                 </tr>
-            {% elseif type == 'rulesets' %}
+            {% elseif type == 'rulePackages' %}
                 <tr>
                     <th width="1%"></th>
                     <th>{{ 'tools.import.simulate.table.name'|trans }}</th>
@@ -405,7 +405,7 @@
                         <td class="text-end text-azure strong">{{ change.itemChanges['modify']|length }}</td>
                         <td class="text-end text-danger strong">{{ change.itemChanges['remove']|length }}</td>
                     </tr>
-                {% elseif type == 'rulesets' %}
+                {% elseif type == 'rulePackages' %}
                     <tr>
                         <td>
                             {% if change.mode == 'add' %}
@@ -418,16 +418,16 @@
                                 </span>
                             {% endif %}
                         </td>
-                        <td>{{ change.importedRuleset.name }}</td>
-                        <td><code>{{ change.importedRuleset.url }}</code></td>
+                        <td>{{ change.importedRulePackage.name }}</td>
+                        <td><code>{{ change.importedRulePackage.url }}</code></td>
                         <td class="text-center">
-                            {% if change.importedRuleset.status %}
+                            {% if change.importedRulePackage.status %}
                                 <span class="text-success"><strong>{{ 'state.active'|trans }}</strong></span>
                             {% else %}
                                 <span class="text-danger"><strong>{{ 'state.inactive'|trans }}</strong></span>
                             {% endif %}
                         </td>
-                        <td class="text-end">{{ change.importedRuleset.spamRatingFactor }}</td>
+                        <td class="text-end">{{ change.importedRulePackage.spamRatingFactor }}</td>
                     </tr>
                 {% endif %}
             {% endfor %}

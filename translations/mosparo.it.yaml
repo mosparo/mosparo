@@ -231,7 +231,7 @@ dashboard:
   dateRange:
     dropdown: Seleziona un intervallo di dati visibile
   title: Cruscotto
-ruleset:
+rulePackage:
   view:
     rule:
       title: Visualizza regola %ruleName%
@@ -242,7 +242,7 @@ ruleset:
         title: Dettagli regola
       items:
         title: Oggetti inclusi
-      backToRuleset: Torna all'elenco delle regole
+      backToRulePackage: Torna all'elenco delle regole
     details:
       url: URL
       lastUpdatedAt: Ultimo aggiornamento il
@@ -261,7 +261,7 @@ ruleset:
       items: Oggetti
       value: Valore
       rating: Valutazione
-    title: Visualizza gruppo di regole %rulesetName%
+    title: Visualizza gruppo di regole %rulePackageName%
     list:
       rules:
         name: Nome
@@ -289,12 +289,12 @@ ruleset:
     spamRatingFactorHelp: Con il fattore di valutazione spam è possibile definire un fattore per rafforzare o indebolire le regole in questo elenco. Se il valore è maggiore di 1.0 la regola viene rafforzata, se il valore è inferiore a 1.0 la regola viene indebolita.
   delete:
     message:
-      successfullyDeleted: L'elenco delle regole %rulesetName% è stato cancellato correttamente.
-    title: Cancella l'elenco delle regole %rulesetName%
-    confirm: Vuoi veramente cancellare l'elenco delle regole %rulesetName%?
+      successfullyDeleted: L'elenco delle regole %rulePackageName% è stato cancellato correttamente.
+    title: Cancella l'elenco delle regole %rulePackageName%
+    confirm: Vuoi veramente cancellare l'elenco delle regole %rulePackageName%?
   title: Gruppo di regole
   edit:
-    title: Modifica gruppo di regole %rulesetName%
+    title: Modifica gruppo di regole %rulePackageName%
   backToList: Torna al gruppo di regole
   message:
     errorWhileUpdating: 'Si è verificato un errore aggiornando il gruppo di regole:'
@@ -756,9 +756,9 @@ tools:
       valueHelp: Immetti il valore che vuoi testare con le tue regole.
       typeHelp: Seleziona il tipo di dati. Alcune regole possono essere applicate solo su dati specifici.
       useRulesHelp: Attiva questo campo per testare le tue regole.
-      useRulesetsHelp: Attiva questo campo per testare il tuo set di regole.
+      useRulePackagesHelp: Attiva questo campo per testare il tuo set di regole.
       title: Impostazioni test
-      useRulesets: Usa set di regole
+      useRulePackages: Usa set di regole
       value: Valori test
       type: Tipo dati
       useRules: Utilizza regole
@@ -812,7 +812,7 @@ tools:
         projectNotAvailable: Non riesco a trovare la proprietà con il suo ID.
         storedRuleNotFound: La regola salvata non è stata trovata.
         storedRuleItemNotFound: L'oggetto della regola salvata non è stato trovato.
-        storedRulesetNotFound: Il set di regola salvato non è stato trovato.
+        storedRulePackageNotFound: Il set di regola salvato non è stato trovato.
         importFileInvalid: Il file di importazione non è valido.
         noChangesAvailable: Non ci sono modifiche disponibili.
         jobDataInvalid: I dati del lavoro per il token non sono validi.
@@ -836,11 +836,11 @@ tools:
   eiParts:
     generalSettings: Impostazioni generali
     rules: Regole
-    rulesetsHelp: Include tutti i gruppi di regole di un progetto.
+    rulePackagesHelp: Include tutti i gruppi di regole di un progetto.
     designSettings: Impostazioni grafiche
     rulesHelp: Include tutte le regole di un progetto.
     securitySettings: Impostazioni di sicurezza
-    rulesets: Gruppo di regole
+    rulePackages: Gruppo di regole
     designSettingsHelp: Include tutte le impostazioni relative alla grafica del progetto.
     securitySettingsHelp: Include tutte le impostazioni relative alla sicurezza del progetto.
     generalSettingsHelp: Include le impostazioni generiche di un progetto come il suo nome, la descrizione, l'host e il punteggio per lo spam.

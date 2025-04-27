@@ -274,12 +274,11 @@ rule:
       infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
       placeholder: Bewertung
 
-# Ruleset
   filter:
     options:
       all: Alle anzeigen
     dropdown: Liste der Regeln filtern
-ruleset:
+rulePackage:
   title: Regel-Pakete
   backToList: Zu den Regel-Paketen
 
@@ -297,11 +296,11 @@ ruleset:
     title: Regel-Paket hinzufügen
 
   edit:
-    title: Regel-Paket %rulesetName% bearbeiten
+    title: Regel-Paket %rulePackageName% bearbeiten
 
   form:
     name: Name
-    url: URL
+    source: Quelle
     status: Status
     spamRatingFactor: Spam-Bewertungsfaktor
     spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher alle Regel dieses Regel-Paketes verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Regeln verstärkt, ist der Wert kleiner als 1.0, werden die Regeln abgeschwächt.
@@ -310,11 +309,11 @@ ruleset:
       successfullySaved: Das Regel-Paket wurde erfolgreich gespeichert.
 
   view:
-    title: Regel-Paket %rulesetName% anschauen
+    title: Regel-Paket %rulePackageName% anschauen
 
     details:
       title: Details des Regel-Paketes
-      url: URL
+      source: Quelle
       status: Status
       spamRatingFactor: Spam-Bewertungsfaktor
       lastRefreshedAt: Zuletzt aktualisiert
@@ -350,15 +349,15 @@ ruleset:
         title: Details der Regel
         name: Name
       title: Regel %ruleName% ansehen
-      backToRuleset: Zurück zum Regel-Paket
+      backToRulePackage: Zurück zum Regel-Paket
       items:
         title: Enthaltene Einträge
   delete:
-    title: Regel-Paket %rulesetName% löschen
-    confirm: Wollen Sie das Regel-Paket %rulesetName% wirklich löschen?
+    title: Regel-Paket %rulePackageName% löschen
+    confirm: Wollen Sie das Regel-Paket %rulePackageName% wirklich löschen?
 
     message:
-      successfullyDeleted: Das Regel-Paket %rulesetName% wurde erfolgreich gelöscht.
+      successfullyDeleted: Das Regel-Paket %rulePackageName% wurde erfolgreich gelöscht.
 
 # Submission
 submission:
@@ -1505,7 +1504,7 @@ tools:
         wrongSpecificationsVersion: Die Importdatei wurde mit einer anderen Spezifikationsversion erstellt als die, die mosparo verwendet.
         storedRuleNotFound: Die gespeicherte Regel wurde nicht gefunden.
         storedRuleItemNotFound: Der gespeicherte Eintrag wurde nicht gefunden.
-        storedRulesetNotFound: Das gespeicherte Regel-Paket wurde nicht gefunden.
+        storedRulePackageNotFound: Das gespeicherte Regel-Paket wurde nicht gefunden.
       notRedoable: Sie können diese Änderungen nicht rückgängig machen, sobald Sie sie ausgeführt haben. Sie können das Projekt exportieren, bevor Sie die Änderungen ausführen, um eine Sicherungskopie der Konfiguration zu erstellen.
     title: Importieren
     form:
@@ -1548,7 +1547,7 @@ tools:
         title: Passende Regeln
       title: Test-Resultat
     form:
-      useRulesets: Regel-Pakete verwenden
+      useRulePackages: Regel-Pakete verwenden
       useRules: Regeln verwenden
       title: Test-Einstellungen
       value: Test-Wert
@@ -1556,7 +1555,7 @@ tools:
       valueHelp: Geben Sie den Wert ein, mit dem Sie Ihre Regeln testen wollen.
       typeHelp: Wählen Sie den Datentyp. Einige Regeltypen gelten nur für bestimmte Datentypen.
       useRulesHelp: Aktivieren Sie dieses Feld, um Ihre Regeln zu testen.
-      useRulesetsHelp: Aktivieren Sie dieses Feld, um Ihre Regel-Pakete zu testen.
+      useRulePackagesHelp: Aktivieren Sie dieses Feld, um Ihre Regel-Pakete zu testen.
     types:
       userAgent: User-Agent
       emailField: E-Mail-Feld
@@ -1582,9 +1581,9 @@ tools:
     securitySettingsHelp: Umfasst alle Einstellungen, die sich auf die Sicherheit eines Projekts beziehen.
     rulesHelp: Enthält alle Regeln eines Projekts.
     generalSettingsHelp: Enthält die allgemeinen Einstellungen eines Projekts wie den Namen, die Beschreibung, die Hosts sowie den Spam-Score.
-    rulesets: Regel-Pakete
+    rulePackages: Regel-Pakete
     designSettings: Darstellungseinstellungen
-    rulesetsHelp: Enthält alle Regel-Pakete eines Projekts.
+    rulePackagesHelp: Enthält alle Regel-Pakete eines Projekts.
 dataTable:
   name: Name
   empty: Leer

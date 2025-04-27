@@ -14,65 +14,65 @@ class RuleItemTest extends TestCase
 
     public function testGetId()
     {
-        $rulesetRuleItemCache = new RuleItem();
+        $rulePackageRuleItemCache = new RuleItem();
 
-        $refObject = new ReflectionObject($rulesetRuleItemCache);
+        $refObject = new ReflectionObject($rulePackageRuleItemCache);
         $refProperty = $refObject->getProperty('id');
         $refProperty->setAccessible(true);
-        $refProperty->setValue($rulesetRuleItemCache, '123');
+        $refProperty->setValue($rulePackageRuleItemCache, '123');
 
-        $this->assertEquals(123, $rulesetRuleItemCache->getId());
+        $this->assertEquals(123, $rulePackageRuleItemCache->getId());
     }
 
     public function testGetUuid()
     {
-        $rulesetRuleItemCache = new RuleItem();
-        $rulesetRuleItemCache->setUuid(self::EXAMPLE_UUID);
+        $rulePackageRuleItemCache = new RuleItem();
+        $rulePackageRuleItemCache->setUuid(self::EXAMPLE_UUID);
 
-        $this->assertEquals(self::EXAMPLE_UUID, $rulesetRuleItemCache->getUuid());
+        $this->assertEquals(self::EXAMPLE_UUID, $rulePackageRuleItemCache->getUuid());
     }
 
     public function testGetRule()
     {
-        $rulesetRuleCache = new Rule();
+        $rulePackageRuleCache = new Rule();
 
-        $rulesetRuleItemCache = new RuleItem();
-        $rulesetRuleItemCache->setRule($rulesetRuleCache);
+        $rulePackageRuleItemCache = new RuleItem();
+        $rulePackageRuleItemCache->setRule($rulePackageRuleCache);
 
-        $this->assertSame($rulesetRuleCache, $rulesetRuleItemCache->getRule());
+        $this->assertSame($rulePackageRuleCache, $rulePackageRuleItemCache->getRule());
     }
 
     public function testGetType()
     {
-        $rulesetRuleItemCache = new RuleItem();
-        $rulesetRuleItemCache->setType('test-type');
+        $rulePackageRuleItemCache = new RuleItem();
+        $rulePackageRuleItemCache->setType('test-type');
 
-        $this->assertEquals('test-type', $rulesetRuleItemCache->getType());
+        $this->assertEquals('test-type', $rulePackageRuleItemCache->getType());
     }
 
     public function testGetValue()
     {
-        $rulesetRuleItemCache = new RuleItem();
-        $rulesetRuleItemCache->setValue(300);
+        $rulePackageRuleItemCache = new RuleItem();
+        $rulePackageRuleItemCache->setValue(300);
 
-        $this->assertEquals(300, $rulesetRuleItemCache->getValue());
+        $this->assertEquals(300, $rulePackageRuleItemCache->getValue());
     }
 
     public function testGetSpamRatingFactor()
     {
-        $rulesetRuleItemCache = new RuleItem();
-        $rulesetRuleItemCache->setSpamRatingFactor(5);
+        $rulePackageRuleItemCache = new RuleItem();
+        $rulePackageRuleItemCache->setSpamRatingFactor(5);
 
-        $this->assertEquals(5, $rulesetRuleItemCache->getSpamRatingFactor());
+        $this->assertEquals(5, $rulePackageRuleItemCache->getSpamRatingFactor());
     }
 
     public function testGetProject()
     {
         $project = new Project();
 
-        $rulesetRuleItemCache = new RuleItem();
-        $rulesetRuleItemCache->setProject($project);
+        $rulePackageRuleItemCache = new RuleItem();
+        $rulePackageRuleItemCache->setProject($project);
 
-        $this->assertSame($project, $rulesetRuleItemCache->getProject());
+        $this->assertSame($project, $rulePackageRuleItemCache->getProject());
     }
 }

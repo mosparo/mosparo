@@ -4,7 +4,7 @@ namespace Mosparo\Helper;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Rule;
-use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\Submission;
 use Mosparo\Exception;
 use Mosparo\Rule\RuleTypeManager;
@@ -21,7 +21,7 @@ class RuleTesterHelper
 
     protected TokenGenerator $tokenGenerator;
 
-    protected RulesetHelper $rulesetHelper;
+    protected RulePackageHelper $rulePackageHelper;
 
     protected GeoIp2Helper $geoIp2Helper;
 
@@ -30,21 +30,21 @@ class RuleTesterHelper
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        RuleTypeManager $ruleTypeManager,
-        ProjectHelper $projectHelper,
-        TokenGenerator $tokenGenerator,
-        RulesetHelper $rulesetHelper,
-        GeoIp2Helper $geoIp2Helper
+        RuleTypeManager        $ruleTypeManager,
+        ProjectHelper          $projectHelper,
+        TokenGenerator         $tokenGenerator,
+        RulePackageHelper      $rulePackageHelper,
+        GeoIp2Helper           $geoIp2Helper
     ) {
         $this->entityManager = $entityManager;
         $this->ruleTypeManager = $ruleTypeManager;
         $this->projectHelper = $projectHelper;
         $this->tokenGenerator = $tokenGenerator;
-        $this->rulesetHelper = $rulesetHelper;
+        $this->rulePackageHelper = $rulePackageHelper;
         $this->geoIp2Helper = $geoIp2Helper;
     }
 
-    public function simulateRequest($value, $type = 'textField', $useRules = true, $useRulesets = true): Submission
+    public function simulateRequest($value, $type = 'textField', $useRules = true, $useRulePackages = true): Submission
     {
         $translatedFieldType = [
             'textField' => 'text',
@@ -118,12 +118,12 @@ class RuleTesterHelper
         $submission = new Submission();
         $submission->setData($data);
 
-        $this->checkRequest($submission, [], null, $useRules, $useRulesets);
+        $this->checkRequest($submission, [], null, $useRules, $useRulePackages);
 
         return $submission;
     }
 
-    public function checkRequest(Submission $submission, array $securitySettings = [], $type = null, $useRules = true, $useRulesets = true): void
+    public function checkRequest(Submission $submission, array $securitySettings = [], $type = null, $useRules = true, $useRulePackages = true): void
     {
         $ruleArgs = ['status' => 1];
         if ($type !== null) {
@@ -131,7 +131,7 @@ class RuleTesterHelper
         }
 
         // Load the rules
-        $this->loadRules($ruleArgs, $useRules, $useRulesets);
+        $this->loadRules($ruleArgs, $useRules, $useRulePackages);
 
         // Load the rule testers
         $this->loadRuleTesters();
@@ -143,7 +143,7 @@ class RuleTesterHelper
         $this->analyzeResults($submission, $results, $securitySettings);
     }
 
-    protected function loadRules(array $ruleArgs, $useRules = true, $useRulesets = true): void
+    protected function loadRules(array $ruleArgs, $useRules = true, $useRulePackages = true): void
     {
         $this->rules = [];
         if ($useRules) {
@@ -151,27 +151,27 @@ class RuleTesterHelper
             $this->rules = $ruleRepository->findBy($ruleArgs);
         }
 
-        if ($useRulesets) {
-            $rulesetRepository = $this->entityManager->getRepository(Ruleset::class);
-            $rulesets = $rulesetRepository->findBy(['status' => 1]);
+        if ($useRulePackages) {
+            $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
+            $rulePackages = $rulePackageRepository->findBy(['status' => 1]);
 
-            foreach ($rulesets as $ruleset) {
+            foreach ($rulePackages as $rulePackage) {
                 try {
-                    $result = $this->rulesetHelper->downloadRuleset($ruleset);
+                    $result = $this->rulePackageHelper->fetchRulePackage($rulePackage);
 
                     if ($result) {
-                        $this->entityManager->flush($ruleset);
+                        $this->entityManager->flush($rulePackage);
                     }
                 } catch (Exception $e) {
                     // Do nothing
                 }
 
-                $rulesetCache = $ruleset->getRulesetCache();
-                if ($rulesetCache === null) {
+                $rulePackageCache = $rulePackage->getRulePackageCache();
+                if ($rulePackageCache === null) {
                     continue;
                 }
 
-                foreach ($rulesetCache->getRules() as $rule) {
+                foreach ($rulePackageCache->getRules() as $rule) {
                     if (isset($ruleArgs['type']) && !in_array($rule->getType(), $ruleArgs['type'])) {
                         continue;
                     }

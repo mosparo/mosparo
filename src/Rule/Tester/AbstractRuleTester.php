@@ -2,7 +2,7 @@
 
 namespace Mosparo\Rule\Tester;
 
-use Mosparo\Entity\RulesetRuleCache;
+use Mosparo\Entity\RulePackageRuleCache;
 use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleItemEntityInterface;
 
@@ -22,8 +22,8 @@ abstract class AbstractRuleTester implements RuleTesterInterface
 
         $rating = ($rating * $additionalFactor) * $ruleSpamRatingFactor;
 
-        if ($rule instanceof RulesetRuleCache && !empty($rule->getRulesetCache()->getRuleset()->getSpamRatingFactor())) {
-            $rating = $rating * floatval($rule->getRulesetCache()->getRuleset()->getSpamRatingFactor());
+        if ($rule instanceof RulePackageRuleCache && !empty($rule->getRulePackageCache()->getRulePackage()->getSpamRatingFactor())) {
+            $rating = $rating * floatval($rule->getRulePackageCache()->getRulePackage()->getSpamRatingFactor());
         }
 
         return $rating;

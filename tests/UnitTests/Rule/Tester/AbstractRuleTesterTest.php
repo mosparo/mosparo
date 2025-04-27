@@ -4,10 +4,10 @@ namespace Mosparo\Tests\UnitTests\Rule\Tester;
 
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
-use Mosparo\Entity\Ruleset;
-use Mosparo\Entity\RulesetCache;
-use Mosparo\Entity\RulesetRuleCache;
-use Mosparo\Entity\RulesetRuleItemCache;
+use Mosparo\Entity\RulePackage;
+use Mosparo\Entity\RulePackageCache;
+use Mosparo\Entity\RulePackageRuleCache;
+use Mosparo\Entity\RulePackageRuleItemCache;
 use Mosparo\Rule\Tester\WordRuleTester;
 
 class AbstractRuleTesterTest extends TestCaseWithItems
@@ -32,27 +32,27 @@ class AbstractRuleTesterTest extends TestCaseWithItems
         $this->assertEquals([['type' => 'text', 'value' => 'word', 'rating' => 10.0, 'uuid' => null]], $result);
     }
 
-    public function testValidateDataRulesetSpamRating()
+    public function testValidateDataRulePackageSpamRating()
     {
-        $rulesetStub = $this->createStub(Ruleset::class);
-        $rulesetStub
+        $rulePackageStub = $this->createStub(RulePackage::class);
+        $rulePackageStub
             ->method('getSpamRatingFactor')
             ->willReturn(7.0);
 
-        $rulesetCacheStub = $this->createStub(RulesetCache::class);
-        $rulesetCacheStub
-            ->method('getRuleset')
-            ->willReturn($rulesetStub);
+        $rulePackageCacheStub = $this->createStub(RulePackageCache::class);
+        $rulePackageCacheStub
+            ->method('getRulePackage')
+            ->willReturn($rulePackageStub);
 
-        $ruleCacheStub = $this->createStub(RulesetRuleCache::class);
+        $ruleCacheStub = $this->createStub(RulePackageRuleCache::class);
         $ruleCacheStub
             ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RulesetRuleItemCache::class, [
+            ->willReturn($this->buildItemsCollection(RulePackageRuleItemCache::class, [
                 ['type' => 'text', 'value' => 'word', 'rating' => 5.0],
             ]));
         $ruleCacheStub
-            ->method('getRulesetCache')
-            ->willReturn($rulesetCacheStub);
+            ->method('getRulePackageCache')
+            ->willReturn($rulePackageCacheStub);
 
         $ruleTester = new WordRuleTester();
         $result = $ruleTester->validateData('test', 'word', $ruleCacheStub);

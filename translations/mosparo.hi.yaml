@@ -752,7 +752,7 @@ dataTable:
   empty: रिक्त
   name: नाम
   value: मान
-ruleset:
+rulePackage:
   list:
     refreshedAt: इस समय रीफ़्रेश
     updatedAt: इस समय अद्यतित
@@ -804,15 +804,15 @@ ruleset:
         name: नाम
         type: प्रकार
         spamRatingFactor: स्पैम रेटिंग कारक
-      backToRuleset: नियम समूह पर वापस जाएं
+      backToRulePackage: नियम समूह पर वापस जाएं
       items:
         title: शामिल मद
-    title: नियम समूह %rulesetName% देखें
+    title: नियम समूह %rulePackageName% देखें
   delete:
-    confirm: क्या आप वास्तव में नियम समूह %rulesetName% को मिटाना चाहते हैं?
-    title: नियम समूह %rulesetName% मिटाएं
+    confirm: क्या आप वास्तव में नियम समूह %rulePackageName% को मिटाना चाहते हैं?
+    title: नियम समूह %rulePackageName% मिटाएं
     message:
-      successfullyDeleted: नियम समूह %rulesetName% सफलतापूर्वक मिटा दिया गया।
+      successfullyDeleted: नियम समूह %rulePackageName% सफलतापूर्वक मिटा दिया गया।
   title: नियम समूह
   backToList: नियम समूह पर वापस जाएं
   message:
@@ -820,7 +820,7 @@ ruleset:
   add:
     title: नियम समूह जोड़ें
   edit:
-    title: नियम समूह %rulesetName% संपादित करें
+    title: नियम समूह %rulePackageName% संपादित करें
 submission:
   list:
     page: पृष्ठ
@@ -1240,8 +1240,8 @@ tools:
       typeHelp: डेटा प्रकार चुनें। कुछ नियम प्रकार केवल विशिष्ट डेटा प्रकारों पर ही लागू होते हैं।
       useRules: नियमों का उपयोग करें
       useRulesHelp: अपने नियमों का परीक्षण करने के लिए इस क्षेत्र को सक्रिय करें।
-      useRulesets: नियम समूह का उपयोग करें
-      useRulesetsHelp: अपने नियम-समूह का परीक्षण करने के लिए इस क्षेत्र को सक्रिय करें।
+      useRulePackages: नियम समूह का उपयोग करें
+      useRulePackagesHelp: अपने नियम-समूह का परीक्षण करने के लिए इस क्षेत्र को सक्रिय करें।
   export:
     includedData: सम्मिलित डेटा
     errorMessage:
@@ -1299,7 +1299,7 @@ tools:
         wrongSpecificationsVersion: आयात फाइल को इस मोस्पारो द्वारा उपयोग किए जा रहे संस्करण से भिन्न विनिर्देशन संस्करण के साथ बनाया गया था।
         storedRuleNotFound: संग्रहीत नियम नहीं मिला।
         storedRuleItemNotFound: संग्रहीत नियम मद नहीं मिला।
-        storedRulesetNotFound: संग्रहीत नियम समूह नहीं मिला।
+        storedRulePackageNotFound: संग्रहीत नियम समूह नहीं मिला।
       intro: मोस्पारो ने आयात का अनुकरण किया और निम्नलिखित परिवर्तनों का पता लगाया। कृपया उनकी समीक्षा करें और यदि सब कुछ ठीक है तो परिवर्तनों को निष्पादित करें।
       notRedoable: आप इन परिवर्तनों को निष्पादित करने के तुरंत बाद उन्हें दोबारा नहीं कर सकते। विन्यास बैकअप रखने के लिए आप परिवर्तनों को निष्पादित करने से पहले परियोजना को निर्यात कर सकते हैं।
       changes:
@@ -1320,8 +1320,8 @@ tools:
     securitySettingsHelp: इसमें किसी परियोजना की सुरक्षा से संबंधित सभी सेटिंग शामिल हैं।
     rules: नियम
     rulesHelp: इसमें परियोजना के सभी नियम शामिल हैं।
-    rulesets: नियम समूह
-    rulesetsHelp: इसमें किसी परियोजना के सभी नियम समूह शामिल हैं।
+    rulePackages: नियम समूह
+    rulePackagesHelp: इसमें किसी परियोजना के सभी नियम समूह शामिल हैं।
   title: औजार
 unit:
   day: दिन

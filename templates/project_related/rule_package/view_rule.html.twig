@@ -1,0 +1,187 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% import 'project_related/rule_package/macro/rule_package_types.html.twig' as rt %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'rulePackage.view.rule.title'|trans({ '%ruleName%': rule.name }) }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'rulePackage.title'|trans }} <i class="ti ti-chevron-right"></i> {{ rulePackage.name }} <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}{{ 'rulePackage.view.rule.title'|trans({ '%ruleName%': rule.name }) }} {% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-12 col-md-auto ms-auto mt-3 mt-md-0 rule-type-information">
+        <div class="page-pretitle">
+            {{ 'rule.form.ruleType'|trans }}
+        </div>
+        <div class="h1 page-title">
+            {{ rt.type(rulePackage.type) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block pageBody %}
+    {% set isManualFeed = rulePackage.type.value == 3 or rulePackage.type.value == 4 %}
+    <div class="container-xl">
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'rulePackage.view.details.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-4 mb-3">
+                                <h4 class="mb-0">{{ 'rulePackage.view.details.source'|trans }}</h4>
+                                <div>
+                                    {% if not isManualFeed %}
+                                        <code>{{ rulePackage.source }}</code>
+                                    {% else %}
+                                        <span class="text-blue"><strong>{{ 'rulePackage.view.details.sourceManualImport'|trans }}</strong></span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3">
+                                <h4 class="mb-0">{{ 'rulePackage.view.details.status'|trans }}</h4>
+                                <div>
+                                    {% if rulePackage.status %}
+                                        <span class="text-success"><strong>{{ 'state.active'|trans }}</strong></span>
+                                    {% else %}
+                                        <span class="text-danger"><strong>{{ 'state.inactive'|trans }}</strong></span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3">
+                                <h4 class="mb-0">{{ 'rulePackage.view.details.spamRatingFactor'|trans }}</h4>
+                                <div>
+                                    {% if rulePackage.spamRatingFactor %}
+                                        {{ rulePackage.spamRatingFactor }}
+                                    {% else %}
+                                        <em>1</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'rulePackage.view.details.lastRefreshedAt'|trans }}</h4>
+                                <div>
+                                    {% if rulePackage.rulePackageCache.refreshedAt %}
+                                        {{ rulePackage.rulePackageCache.refreshedAt|date }}
+                                    {% else %}
+                                        <em>-</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'rulePackage.view.details.lastUpdatedAt'|trans }}</h4>
+                                <div>
+                                    {% if rulePackage.rulePackageCache.updatedAt %}
+                                        {{ rulePackage.rulePackageCache.updatedAt|date }}
+                                    {% else %}
+                                        <em>-</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'rulePackage.view.details.numberOfIncludedRules'|trans }}</h4>
+                                <div>
+                                    {{ rulePackage.rulePackageCache.rules|length }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'rulePackage.view.rule.details.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'rulePackage.view.rule.details.name'|trans }}</h4>
+                                <div>
+                                    {{ rule.name }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'rulePackage.view.rule.details.type'|trans }}</h4>
+                                <div>
+                                    {% set ruleType = rule_type(rule.type) %}
+                                    {% if ruleType %}
+                                        <div class="rule-type-label">
+                                            <i class="{{ ruleType.icon }}"></i>
+                                            {{ ruleType.name|trans }}
+                                        </div>
+                                    {% else %}
+                                        <code>{{ rule.type }}</code>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 mb-md-0">
+                                <h4 class="mb-0">{{ 'rulePackage.view.rule.details.spamRatingFactor'|trans }}</h4>
+                                <div>
+                                    {% if rule.spamRatingFactor %}
+                                        {{ rule.spamRatingFactor }}
+                                    {% else %}
+                                        <em>1</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="mt-3 mt-md-1">{{ 'rulePackage.view.rule.items.title'|trans }}</h2>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div id="rule_package_rule_items">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto">
+                <a href="{{ path('rule_package_view', { '_projectId': activeProject.id, 'id': rulePackage.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'rulePackage.view.rule.backToRulePackage'|trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js')|add_path_prefix }}"></script>
+    {% cspscript %}
+        <script>
+            $(function() {
+                $('#rule_package_rule_items').initDataTables({{ datatable_settings(datatable) }}, {
+                    autoWidth: false,
+                    searching: false,
+                    info: false,
+                    columnDefs: [
+                        { width: "20%", targets: 0 },
+                        { width: "70%", targets: 1},
+                        { width: "10%", targets: 2},
+                    ]
+                });
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}
