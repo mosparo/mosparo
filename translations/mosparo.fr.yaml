@@ -375,7 +375,6 @@ rulePackage:
     title: Voir l'ensemble de règles %rulePackageName%
     details:
       title: Informations sur l'ensemble de règles
-      url: URL
       status: État
       spamRatingFactor: Facteur d'évaluation des spams
       lastRefreshedAt: Dernière actualisation le
@@ -428,7 +427,6 @@ rulePackage:
     title: Modifier l'ensemble de règles %rulePackageName%
   form:
     name: Nom
-    url: URL
     status: État
     spamRatingFactor: Facteur d'évaluation des spams
     message:
