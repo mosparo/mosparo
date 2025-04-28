@@ -1,5 +1,7 @@
 {% extends 'project_related/tools/tools_base.html.twig' %}
 
+{% import 'project_related/rule_package/macro/rule_package_types.html.twig' as rt %}
+
 {% trans_default_domain 'mosparo' %}
 
 {% block documentTitle %}{{ 'tools.import.simulate.title'|trans }} - {{ parent() }}{% endblock %}
@@ -292,7 +294,8 @@
                 <tr>
                     <th width="1%"></th>
                     <th>{{ 'tools.import.simulate.table.name'|trans }}</th>
-                    <th>{{ 'tools.import.simulate.table.url'|trans }}</th>
+                    <th>{{ 'tools.import.simulate.table.type'|trans }}</th>
+                    <th>{{ 'tools.import.simulate.table.source'|trans }}</th>
                     <th width="1%" class="text-center">{{ 'tools.import.simulate.table.status'|trans }}</th>
                     <th width="1%" class="text-end">{{ 'tools.import.simulate.table.spamRatingFactor'|trans }}</th>
                 </tr>
@@ -407,6 +410,7 @@
                     </tr>
                 {% elseif type == 'rulePackages' %}
                     <tr>
+                        {% set isManualFeed = change.importedRulePackage.type == 3 or change.importedRulePackage.type == 4 %}
                         <td>
                             {% if change.mode == 'add' %}
                                 <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.add'|trans }}">
@@ -419,7 +423,14 @@
                             {% endif %}
                         </td>
                         <td>{{ change.importedRulePackage.name }}</td>
-                        <td><code>{{ change.importedRulePackage.url }}</code></td>
+                        <td>{{ rt.type(rule_package_type(change.importedRulePackage.type)) }}</td>
+                        <td>
+                            {% if not isManualFeed %}
+                                <code>{{ change.importedRulePackage.source }}</code>
+                            {% else %}
+                                <span class="text-blue"><strong>{{ 'rulePackage.view.details.sourceManualImport'|trans }}</strong></span>
+                            {% endif %}
+                        </td>
                         <td class="text-center">
                             {% if change.importedRulePackage.status %}
                                 <span class="text-success"><strong>{{ 'state.active'|trans }}</strong></span>

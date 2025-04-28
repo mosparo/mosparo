@@ -239,8 +239,10 @@ class ExportHelper
 
         foreach ($rulePackageRepository->findAll() as $rulePackage) {
             $rulePackages[] = [
+                'uuid' => $rulePackage->getUuid(),
                 'name' => $rulePackage->getName(),
-                'url' => $rulePackage->getUrl(),
+                'type' => $rulePackage->getType()->value,
+                'source' => $rulePackage->getSource(),
                 'status' => (bool) $rulePackage->getStatus(),
                 'spamRatingFactor' => $rulePackage->getSpamRatingFactor() ?? 1,
             ];

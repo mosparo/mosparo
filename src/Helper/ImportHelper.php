@@ -8,6 +8,7 @@ use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
+use Mosparo\Enum\RulePackageType;
 use Mosparo\Exception\ImportException;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
@@ -20,13 +21,16 @@ class ImportHelper
 
     protected DesignHelper $designHelper;
 
+    protected RulePackageHelper $rulePackageHelper;
+
     protected string $importDirectory;
 
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, DesignHelper $designHelper, string $importDirectory)
+    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, DesignHelper $designHelper, RulePackageHelper $rulePackageHelper, string $importDirectory)
     {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->designHelper = $designHelper;
+        $this->rulePackageHelper = $rulePackageHelper;
         $this->importDirectory = $importDirectory;
     }
 
@@ -96,7 +100,9 @@ class ImportHelper
         $changes = $this->findChanges($project, $jobData, $importData);
 
         // Set the originally active project
-        $this->projectHelper->setActiveProject($activeProject);
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
+        }
 
         return [$jobData, $importData, $this->hasChanges($changes), $changes];
     }
@@ -138,10 +144,19 @@ class ImportHelper
             } else if ($sectionKey === 'rules') {
                 $this->executeRuleChanges($sectionChanges);
             } else if ($sectionKey === 'rulePackages') {
-                $this->executeRulePackageChanges($sectionChanges);
+                $modifiedRulePackages = $this->executeRulePackageChanges($sectionChanges);
             }
 
             $this->entityManager->flush();
+
+            // Update the modified rule packages.
+            if ($modifiedRulePackages) {
+                try {
+                    $this->rulePackageHelper->fetchRulePackages($modifiedRulePackages);
+                } catch (\Exception $e) {
+                    // Ignore all errors because the method call above is a helper but not required.
+                }
+            }
         }
 
         // Prepare the css cache
@@ -507,16 +522,22 @@ class ImportHelper
         $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
 
         foreach ($rulePackages as $rulePackage) {
-            $storedRulePackage = $rulePackageRepository->findOneBy(['url' => $rulePackage['url']]);
+            $storedRulePackage = $rulePackageRepository->findOneBy([
+                'uuid' => $rulePackage['uuid'],
+                'type' => $rulePackage['type'],
+            ]);
 
             $mode = 'add';
             $storedRulePackageId = null;
             $storedRulePackageName = null;
             if ($storedRulePackage !== null) {
+                $storedSpamRatingFactor = $storedRulePackage->getSpamRatingFactor() ?: 1.0;
+
                 if (
                     $storedRulePackage->getName() === $rulePackage['name'] &&
-                    $storedRulePackage->getSpamRatingFactor() === (float) $rulePackage['spamRatingFactor'] &&
-                    $storedRulePackage->getStatus() === (bool) $rulePackage['status']
+                    $storedSpamRatingFactor === (float) $rulePackage['spamRatingFactor'] &&
+                    $storedRulePackage->getStatus() === (bool) $rulePackage['status'] &&
+                    (string) $storedRulePackage->getSource() === (string) $rulePackage['source']
                 ) {
                     // Everything up to date, no change required.
                     continue;
@@ -683,8 +704,9 @@ class ImportHelper
         }
     }
 
-    protected function executeRulePackageChanges(array $sectionChanges)
+    protected function executeRulePackageChanges(array $sectionChanges): array
     {
+        $modifiedRulePackages = [];
         $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
 
         foreach ($sectionChanges as $change) {
@@ -692,7 +714,8 @@ class ImportHelper
 
             if ($change['mode'] === 'add') {
                 $rulePackage = new RulePackage();
-                $rulePackage->setSource($importedRulePackage['url']);
+                $rulePackage->setUuid($importedRulePackage['uuid']);
+                $rulePackage->setType(RulePackageType::from($importedRulePackage['type']));
 
                 $this->entityManager->persist($rulePackage);
             } else if ($change['mode'] === 'modify') {
@@ -703,8 +726,13 @@ class ImportHelper
             }
 
             $rulePackage->setName($importedRulePackage['name']);
+            $rulePackage->setSource($importedRulePackage['source']);
             $rulePackage->setStatus((bool) $importedRulePackage['status']);
             $rulePackage->setSpamRatingFactor($importedRulePackage['spamRatingFactor']);
+
+            $modifiedRulePackages[] = $rulePackage;
         }
+
+        return $modifiedRulePackages;
     }
 }

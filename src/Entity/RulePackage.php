@@ -14,6 +14,9 @@ class RulePackage implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
+    #[ORM\Column(type: 'guid')]
+    private ?string $uuid;
+
     #[ORM\Column(type: 'integer', enumType: RulePackageType::class, options: ['default' => 1])]
     private RulePackageType $type = RulePackageType::AUTOMATICALLY_FROM_URL;
 
@@ -36,9 +39,26 @@ class RulePackage implements ProjectRelatedEntityInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
 
+    public function __construct()
+    {
+        $this->uuid = uuid_create(UUID_TYPE_RANDOM);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 
     public function getType(): ?RulePackageType
@@ -70,7 +90,7 @@ class RulePackage implements ProjectRelatedEntityInterface
         return $this->source;
     }
 
-    public function setSource(string $source): self
+    public function setSource(?string $source): self
     {
         $this->source = $source;
 
@@ -99,6 +119,11 @@ class RulePackage implements ProjectRelatedEntityInterface
         $this->status = $status;
 
         return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return ($this->status);
     }
 
     public function getRulePackageCache(): ?RulePackageCache

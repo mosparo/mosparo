@@ -60,9 +60,20 @@ class RulePackageHelper
         }
     }
 
+    public function fetchRulePackages(array $rulePackages): void
+    {
+        foreach ($rulePackages as $rulePackage) {
+            if ($rulePackage->isActive() && in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
+                $this->fetchRulePackage($rulePackage);
+            }
+        }
+
+        $this->entityManager->flush();
+    }
+
     public function fetchRulePackage(RulePackage $rulePackage): bool
     {
-        if (!in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
+        if (!$rulePackage->isActive() || !in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
             return false;
         }
 

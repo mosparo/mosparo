@@ -3,7 +3,9 @@
 namespace Mosparo\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Attributes\RulePackageTypeInfo;
 use Mosparo\Entity\Project;
+use Mosparo\Enum\RulePackageType;
 use Mosparo\Exception\ImportException;
 use Mosparo\Helper\ImportHelper;
 use Mosparo\Rule\RuleTypeManager;
@@ -347,7 +349,7 @@ class ImportCommand extends Command
                     ];
                 }
             } else if ($sectionKey === 'rulePackages') {
-                $headers = ['Action', 'Name', 'URL', 'Status', 'Spam rating factor'];
+                $headers = ['Action', 'Name', 'Type', 'URL', 'Status', 'Spam rating factor'];
 
                 $values = [];
                 foreach ($changes as $change) {
@@ -365,7 +367,8 @@ class ImportCommand extends Command
                     $values[] = [
                         $mode,
                         $change['importedRulePackage']['name'],
-                        $change['importedRulePackage']['url'],
+                        $this->translator->trans(RulePackageTypeInfo::from(RulePackageType::from($change['importedRulePackage']['type']))->title, [], 'mosparo', 'en'),
+                        $change['importedRulePackage']['source'] ?? 'Manual import',
                         $status,
                         $change['importedRulePackage']['spamRatingFactor'],
                     ];

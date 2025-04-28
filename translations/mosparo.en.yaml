@@ -996,6 +996,7 @@ tools:
     intro: If you want to move your project to a different mosparo installation or if you want to synchronize the settings with another project, you can export the project with this functionality. Choose which data you want to export and click the button.
     includedData: Included data
     infoSensitiveData: Sensitive data will never be included in the export. Submissions, submit tokens, the unique project identifier, the API keys, and the project members will not be in the export.
+    infoManualRulePackages: The rule package content will not be included in the export. This means that all manually imported rule packages need to be reimported after importing the export file.
 
     errorMessage:
       selectAtLeastOneElement: Select at least one element that you want to export.
@@ -1005,7 +1006,7 @@ tools:
     intro: If you want to copy the data from another project into this one, please choose the file to import and which data you want to import. If you import the rules, please choose how mosparo should handle existing rules.
     intro2: After you've selected all the data, please click the button below. mosparo will analyze the file and gives you a summary of what will be changed before anything is imported.
     importData: Data to import
-    infoOverrideData: The settings, as well as the rule packages, will always be overridden in the project. The rule package will be matched against the type, name and origin. For the rules, you have to choose what mosparo should do with existing rules.
+    infoOverrideData: The settings, as well as the rule packages, will always be overridden in the project. For the rules, you have to choose what mosparo should do with existing rules. Rule packages created before version 1.4.0 of mosparo may have a different ID and not match the import file.
 
     backToImport: Back to import
 
@@ -1045,7 +1046,7 @@ tools:
         newValue: New value
         type: Type
         status: Status
-        url: URL
+        source: Source
         add: Add
         modify: Modify
         items: Items
