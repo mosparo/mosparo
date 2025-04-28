@@ -763,13 +763,11 @@ rulePackage:
     status: स्थिति
     spamRatingFactor: स्पैम रेटिंग कारक
     name: नाम
-    url: URL
     spamRatingFactorHelp: स्पैम रेटिंग कारक के साथ आप एक ऐसा कारक परिभाषित कर सकते हैं जो इस नियम समूह के सभी नियमों को मजबूत या कमजोर बनाता है। यदि मान 1.0 से अधिक है, तो नियम मजबूत होंगे, यदि मान 1.0 से कम है, तो नियम कमजोर होंगे।
     message:
       successfullySaved: नियम समूह सफलतापूर्वक सहेजा गया।
   view:
     details:
-      url: URL
       status: स्थिति
       spamRatingFactor: स्पैम रेटिंग कारक
       lastUpdatedAt: अंतिम अद्यतित
@@ -1270,7 +1268,6 @@ tools:
       title: उपलब्ध परिवर्तन
       noChangesFound: परियोजना पहले से ही आयात फाइल में मौजूद डेटा के समान है, और इसमें कोई परिवर्तन उपलब्ध नहीं है।
       table:
-        url: URL
         modify: संशोधित करें
         priority: वरीयता
         guidelineNew: नये दिशानिर्देश

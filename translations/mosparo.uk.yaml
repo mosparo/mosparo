@@ -240,7 +240,6 @@ rulePackage:
     title: Редагування набору правил %rulePackageName%
   form:
     name: Ім’я
-    url: URL
     status: Стан
     spamRatingFactor: Коефіцієнт рейтингу спаму
     message:
@@ -252,7 +251,6 @@ rulePackage:
       status: Стан
       spamRatingFactor: Коефіцієнт рейтингу спаму
       lastUpdatedAt: Останнє оновлення о
-      url: URL
       lastRefreshedAt: Останнє оновлення о
       numberOfIncludedRules: Кількість включених правил
     title: Переглянути набір правил %rulePackageName%

@@ -244,7 +244,6 @@ rulePackage:
         title: Oggetti inclusi
       backToRulePackage: Torna all'elenco delle regole
     details:
-      url: URL
       lastUpdatedAt: Ultimo aggiornamento il
       spamRatingFactor: Fattore di valutazione spam
       lastRefreshedAt: Ultimo aggiornamento il
@@ -283,7 +282,6 @@ rulePackage:
     message:
       successfullySaved: Il gruppo di regole è stato salvato correttamente.
     name: Nome
-    url: URL
     status: Stato
     spamRatingFactor: Fattore di valutazione spam
     spamRatingFactorHelp: Con il fattore di valutazione spam è possibile definire un fattore per rafforzare o indebolire le regole in questo elenco. Se il valore è maggiore di 1.0 la regola viene rafforzata, se il valore è inferiore a 1.0 la regola viene indebolita.
@@ -804,7 +802,6 @@ tools:
         itemsModify: Modifica
         name: Nome
         type: Tipo
-        url: URL
         spamRatingFactor: Fattore di valutazione spam
         priority: Priorità
         criteria: Criterio

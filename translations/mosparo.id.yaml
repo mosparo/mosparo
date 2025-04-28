@@ -226,7 +226,6 @@ rulePackage:
     actions: Tindakan
   form:
     name: Nama
-    url: URL
     status: Status
     message:
       successfullySaved: Kumpulan aturan berhasil disimpan.
@@ -236,7 +235,6 @@ rulePackage:
     title: Lihat kumpulan aturan %rulePackageName%
     details:
       title: Detail kumpulan aturan
-      url: URL
       spamRatingFactor: Faktor peringkat spam
       lastRefreshedAt: Terakhir disegarkan pada
       lastUpdatedAt: Terakhir diperbarui pada
