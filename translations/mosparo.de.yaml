@@ -300,7 +300,6 @@ rulePackage:
 
   form:
     name: Name
-    source: Quelle
     status: Status
     spamRatingFactor: Spam-Bewertungsfaktor
     spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher alle Regel dieses Regel-Paketes verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Regeln verstärkt, ist der Wert kleiner als 1.0, werden die Regeln abgeschwächt.
@@ -1471,7 +1470,6 @@ tools:
       table:
         add: Hinzufügen
         status: Status
-        url: URL
         modify: Ändern
         items: Einträge
         itemsAdd: Hinzufügen
