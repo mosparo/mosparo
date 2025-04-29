@@ -181,10 +181,10 @@ class RulePackageHelper
         $json = json_decode($content);
 
         $validator = new Validator();
-        $validator->resolver()->registerFile('http://schema.mosparo.io/ruleset.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_RULESET));
+        $validator->resolver()->registerFile('http://schema.mosparo.io/rule-package.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_RULE_PACKAGE));
         $validator->resolver()->registerFile('http://schema.mosparo.io/rule.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_RULE));
 
-        $result = $validator->validate($json, 'http://schema.mosparo.io/ruleset.json');
+        $result = $validator->validate($json, 'http://schema.mosparo.io/rule-package.json');
 
         return $result->isValid();
     }
