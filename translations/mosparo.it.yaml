@@ -250,6 +250,10 @@ rulePackage:
       numberOfIncludedRules: Numero di regole incluse
       title: Dettagli gruppo di regole
       status: Stato
+      source: Sorgente
+      sourceManualImport: Importazione manuale
+      importFirst: Questo pacchetto di regole non contiene alcun dato. Importa manualmente i dati del pacchetto di regole.
+      noRulePackageCache: Non è presente alcuna cache del pacchetto di regole per questo pacchetto. Ciò significa che il download non è riuscito oppure si è verificato un altro errore.
     includedRules:
       title: Regole incluse
       description: Descrizione
@@ -278,6 +282,7 @@ rulePackage:
     name: Nome
     status: Stato
     refreshedAt: Rinfrescato il
+    type: Tipologia
   form:
     message:
       successfullySaved: Il gruppo di regole è stato salvato correttamente.
@@ -285,6 +290,10 @@ rulePackage:
     status: Stato
     spamRatingFactor: Fattore di valutazione spam
     spamRatingFactorHelp: Con il fattore di valutazione spam è possibile definire un fattore per rafforzare o indebolire le regole in questo elenco. Se il valore è maggiore di 1.0 la regola viene rafforzata, se il valore è inferiore a 1.0 la regola viene indebolita.
+    sourceUrlHelp: Specifica l'URL dal quale mosparo può scaricare il pacchetto di regole.
+    sourceUrl: URL sorgente
+    sourceFile: File sorgente
+    sourceFileHelp: Specifica il percorso file assoluto in cui è memorizzato il file del pacchetto di regole.
   delete:
     message:
       successfullyDeleted: L'elenco delle regole %rulePackageName% è stato cancellato correttamente.
@@ -298,6 +307,9 @@ rulePackage:
     errorWhileUpdating: 'Si è verificato un errore aggiornando il gruppo di regole:'
   add:
     title: Aggiungi gruppo di regole
+  addChooseType:
+    title: Scegli tipologia
+    intro: Scegli il tipo di pacchetto di regole che vuoi aggiungere. Puoi scegliere tra tipi automatici e manuali. I tipi automatici aggiorneranno il pacchetto di regole automaticamente, mentre quelli manuali devono essere aggiornati tramite un'azione o uno strumento esterno.
 submission:
   list:
     page: Pagina
@@ -765,7 +777,7 @@ tools:
       value: Valori test
       type: Tipo dati
       useRules: Utilizza regole
-    intro: Inserisci il valore che vuoi testare. Scegli il tipo di dati che vuoi usare per la prova e se vuoi usare regole e insiemi di regole. Il tipo di dati è importante perchè alcune regole vengono applicate solo a certi tipi di dati.
+    intro: Inserisci il valore che vuoi testare. Scegli il tipo di dati che vuoi usare per la prova e se vuoi usare regole e pacchetti di regole. Il tipo di dati è importante perchè alcune regole vengono applicate solo a certi tipi di dati.
   title: Strumenti
   export:
     errorMessage:
@@ -774,6 +786,7 @@ tools:
     includedData: Dati inclusi
     intro: Se vuoi migrare il tuo progetto in una diversa installazione di mosparo oppure se vuoi sincronizzare le impostazioni con un progetto diverso, puoi esportare il progetto con questa funzionalità. Seleziona quali dati vuoi esportare e fai click sul pulsante.
     infoSensitiveData: I dati sensibili non verranno mai inclusi in un'esportazione. Richieste, token di richiesta, identificatore unico di progetto, chiavi API e i membri del progetto non saranno inclusi nell'esportazione.
+    infoManualRulePackages: Il contenuto del pacchetto di regole non sarà incluso nell'esportazione. Ciò significa che tutti i pacchetti di regole importati manualmente devono essere reimportati dopo l'importazione del file esportato.
   import:
     backToImport: Torna all'importazione
     form:
@@ -809,6 +822,7 @@ tools:
         guidelineNew: Nuova linea guida
         guidelineModify: Modifiche richieste
         guidelineEqual: Nessuna modifica richiesta
+        source: Sorgente
       errorMessage:
         importFileNotFound: Il file di importazione non esiste.
         projectNotAvailable: Non riesco a trovare la proprietà con il suo ID.
@@ -834,7 +848,7 @@ tools:
     title: Importa
     intro: Se vuoi copiare i dati da un altro progetto a questo, seleziona il file da importare e quali dati vuoi importare. Se vuoi importare le regole dovrai decidere come mosparo dovrà gestire quelle esistenti.
     intro2: Dopo aver selezionato i dati, fai click sul pulsante qui sotto. mosparo analizzerà il file e ti fornirà un sommario di ciò che sarà modificato prima di iniziare l'importazione.
-    infoOverrideData: Le impostazioni, così come i gruppi di regole, verranno sempre sovrascritti nel progetto. I gruppi di regole verranno associati all'URL. Per quanto riguarda le regole, dovrai decidere come mosparo dovrà comportarsi con quelle esistenti.
+    infoOverrideData: Le impostazioni, così come i pacchetti di regole, verranno sempre sovrascritti nel progetto. Per quanto riguarda le regole, dovrai decidere come mosparo dovrà comportarsi con quelle esistenti. I pacchetti di regole creati prima della versione 1.4.0 di mosparo potrebbero avere un ID differente e non corrispondere al file di importazione.
   eiParts:
     generalSettings: Impostazioni generali
     rules: Regole
@@ -1320,10 +1334,10 @@ interface:
 downloadCheck:
   cardTitle: Connessione Internet
   moreInformation: Altre informazioni
-  downloadIsPossible: Le impostazioni PHP consentono di scaricare i set di regole e gli aggiornamenti. Non è necessaria alcuna configurazione.
-  downloadIsNotPossible: Le impostazioni PHP non consentono di scaricare aggiornamenti o set di regole. Se si desidera utilizzare i set di regole o la funzionalità di aggiornamento, è necessario modificare la configurazione PHP di conseguenza.
+  downloadIsPossible: Le impostazioni PHP consentono di scaricare i pacchetti di regole e gli aggiornamenti. Non è necessaria alcuna configurazione.
+  downloadIsNotPossible: Le impostazioni PHP non consentono di scaricare aggiornamenti o pacchetti di regole. Se si desidera utilizzare i pacchetti di regole o la funzionalità di aggiornamento, è necessario modificare la configurazione PHP di conseguenza.
   curlIsEnabledButFunctionsAreDisabled: L'estensione %extensionName% è abilitata, ma le funzioni necessarie (%functionNames%) sono disabilitate. Si consiglia di disabilitare l'estensione in generale o di abilitare le funzioni necessarie.
-  intro: Una connessione Internet in uscita non è un requisito per mosparo. Se è disponibile una connessione a Internet, mosparo controlla automaticamente la presenza di aggiornamenti caricando il file della versione dal sito web di mosparo. È necessaria una connessione Internet attiva per scaricare gli aggiornamenti, i database GeoIP2 e i set di regole.
+  intro: Una connessione Internet in uscita non è un requisito per mosparo. Se è disponibile una connessione a Internet, mosparo controlla automaticamente la presenza di aggiornamenti caricando il file della versione dal sito web di mosparo. È necessaria una connessione Internet attiva per scaricare gli aggiornamenti, i database GeoIP2 e i pacchetti di regole.
 security:
   login:
     emailLabel: Indirizzo email
@@ -1460,3 +1474,25 @@ cleanupExecutor:
     label: Cron job web
 cleanup:
   lastDatabaseCleanup: 'Ultima pulizia del database:'
+rulePackageType:
+  category:
+    automatically:
+      label: Automaticamente
+      description: Se desideri che mosparo importi automaticamente i pacchetti di regole, utilizza una delle seguenti tipologie.
+    manually:
+      label: Manualmente
+      description: Utilizza una tra le tipologie manuali se desideri importare manualmente i pacchetti di regole o eseguire l'importazione con un cron job.
+  manuallyViaApi:
+    label: Manualmente tramite API
+    description: Importa il pacchetto di regole utilizzando i tuoi strumenti o mosparo RPG tramite l'API di mosparo.
+  automaticallyFromUrl:
+    label: Automaticamente dall'URL
+    description: mosparo carica automaticamente il pacchetto di regole dall'URL tramite connessione internet.
+  automaticallyFromFile:
+    label: Automaticamente dal file
+    description: mosparo carica automaticamente il pacchetto di regole dal percorso file specificato nel tuo server.
+  manuallyViaCli:
+    label: Manualmente tramite CLI
+    description: Esegui il comando CLI per importare manualmente il pacchetto di regole quando lo modifichi.
+unknown:
+  label: Sconosciuto
