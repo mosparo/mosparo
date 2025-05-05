@@ -29,6 +29,10 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">{{ 'rulePackage.view.details.title'|trans }}</h3>
+                        <button type="button" class="btn btn-info btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#import_modal">
+                            <i class="ti ti-stack-push"></i>
+                            {{ 'action.howToImport'|trans }}
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -150,8 +154,15 @@
             </div>
         {% else %}
             {% if isManualFeed %}
-                <div class="alert alert-info">
-                    {{ 'rulePackage.view.details.importFirst'|trans }}
+                <div class="alert alert-info p-5">
+                    <h4 class="alert-title">{{ 'rulePackage.view.details.importFirstTitle'|trans }}</h4>
+
+                    <p>{{ 'rulePackage.view.details.importFirst'|trans }}</p>
+
+                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#import_modal">
+                        <i class="ti ti-stack-push"></i>
+                        {{ 'action.learnMore'|trans }}
+                    </button>
                 </div>
             {% else %}
                 <div class="alert alert-info">
@@ -166,6 +177,31 @@
                     <i class="ti ti-chevron-left"></i>
                     {{ 'rulePackage.backToList'|trans }}
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-blur fade" tabindex="-1" id="import_modal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="ti ti-stack-push"></i>
+                        {{ 'rulePackage.view.howtoImport.title'|trans }}
+                    </h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'rulePackage.view.howtoImport.intro'|trans }}</p>
+                    {% include 'project_related/rule_package/snippets/howto_import.html.twig' %}
+                </div>
+                <div class="modal-footer">
+                    <a href="https://documentation.mosparo.io/docs/usage/rule_packages" class="btn btn-info" target="_blank">
+                        <i class="ti ti-question-mark"></i>
+                        {{ 'action.help'|trans }}
+                    </a>
+                    <button type="button" class="btn ms-auto" data-bs-dismiss="modal">{{ 'action.close'|trans }}</button>
+                </div>
             </div>
         </div>
     </div>

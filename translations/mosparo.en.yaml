@@ -383,6 +383,7 @@ rulePackage:
       lastRefreshedAt: Last refreshed at
       lastUpdatedAt: Last updated at
       numberOfIncludedRules: Number of included rules
+      importFirstTitle: Import rule package first
       importFirst: This rule package does not contain any data. Please import the rule package data manually.
       noRulePackageCache: There is no rule package cache stored for this rule package. This means that the download was not successful or something else went wrong.
 
@@ -409,6 +410,41 @@ rulePackage:
         type: Type
         value: Value
         spamRatingFactor: Spam rating factor
+
+    howtoImport:
+      title: How to import
+      intro: This rule package is a manually imported rule package type. This means you must import the rule package data for this rule package. Otherwise, the rule package is empty and will not prevent any spam.
+
+      arguments:
+        required: Required
+        value: Value
+        description: Description
+
+      cli:
+        intro: Please use the following command to import the rule package via CLI. One of the arguments %codeArgFile% or %codeArgInput% is required.
+        infoAdjustPaths: Please remember to adjust the paths to the PHP binary and the mosparo CLI command. Your hosting provider's documentation usually provides more information about this part.
+
+        arguments:
+          descriptionProjectId: Specifies the project ID of the rule package.
+          descriptionRulePackageId: Specifies the rule package ID.
+          descriptionFile: Specifies the file path to the rule package file.
+          descriptionInput: The command will read the rule package content from the standard input if set.
+          descriptionHash: If the command should verify the hash of the rule package, specify the SHA256 hash with this argument.
+
+      api:
+        intro: Please import the rule package content using the mosparo API. You can use the API directly or use one of our API clients, or you can also use mosparo RPG (Rule Package Generator) to build and import the rule package content.
+        introSecond: Below is the most important information about the API and an example if you want to use the rule package with mosparo RPG. Read more about the different options in our documentation.
+
+        endpoint:
+          title: Endpoint
+
+        arguments:
+          descriptionRulePackageId: Specifies the rule package ID.
+          descriptionRulePackageContent: Specifies the content of the rule package.
+          descriptionRulePackageHash: To verify the hash before importing the content, specify the SHA256 hash with this argument.
+
+        example:
+          intro: This example shows the configuration required for the mosparo RPG profile. Please see the documentation for other options.
 
     rule:
       title: View rule %ruleName%
@@ -1606,6 +1642,7 @@ action:
   delete: Delete
   actions: Actions
   help: Help
+  learnMore: Learn more
   close: Close
   manage: Manage
   use: Use
@@ -1620,6 +1657,7 @@ action:
   simulateImport: Simulate import
   executeChanges: Execute changes
   moreInformation: More information
+  howToImport: How to import
 
 # General values
 general:
@@ -1856,3 +1894,20 @@ rulePackageType:
 unknown:
   label: Unknown
 
+example:
+  titleSingular: Example
+  titlePlural: Examples
+
+argument:
+  titleSingular: Argument
+  titlePlural: Arguments
+
+tooltip:
+  projectId: Project ID
+  rulePackageId: Rule package ID
+  file: File path
+  input: Use standard input
+  hash: SHA256 hash
+  host: Host
+  publicKey: Public key
+  privateKey: Private key

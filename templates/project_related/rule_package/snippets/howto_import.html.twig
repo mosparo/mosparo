@@ -1,0 +1,109 @@
+{% trans_default_domain 'mosparo' %}
+
+{% if rulePackage.type.value == 3 %}
+    <p>{{ 'rulePackage.view.howtoImport.cli.intro'|trans({'%codeArgFile%': '<code class="text-nowrap">-f|--file</code>', '%codeArgInput%': '<code class="text-nowrap">-i|--input</code>'})|raw }}</p>
+    <pre>mosparo:rule-package:import [-f|--file FILE] [-i|--input] [-s|--hash HASH] [--] &lt;projectId&gt; &lt;rulePackageId&gt;</pre>
+
+    <h4>{{ 'argument.titlePlural'|trans }}</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ 'argument.titleSingular'|trans }}</th>
+                <th>{{ 'rulePackage.view.howtoImport.arguments.required'|trans }}</th>
+                <th>{{ 'rulePackage.view.howtoImport.arguments.value'|trans }}</th>
+                <th>{{ 'rulePackage.view.howtoImport.arguments.description'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>projectId</code></td>
+                <td><span class="status status-green">{{ 'state.yes'|trans }}</span></td>
+                <td><code>{{ rulePackage.project.id }}</code></td>
+                <td>{{ 'rulePackage.view.howtoImport.cli.arguments.descriptionProjectId'|trans }}</td>
+            </tr>
+            <tr>
+                <td><code>rulePackageId</code></td>
+                <td><span class="status status-green">{{ 'state.yes'|trans }}</span></td>
+                <td><code>{{ rulePackage.id }}</code></td>
+                <td>{{ 'rulePackage.view.howtoImport.cli.arguments.descriptionRulePackageId'|trans }}</td>
+            </tr>
+            <tr>
+                <td><code class="text-nowrap">-f|--file FILE</code></td>
+                <td></td>
+                <td></td>
+                <td>{{ 'rulePackage.view.howtoImport.cli.arguments.descriptionFile'|trans }}</td>
+            </tr>
+            <tr>
+                <td><code class="text-nowrap">-i|--input</code></td>
+                <td></td>
+                <td></td>
+                <td>{{ 'rulePackage.view.howtoImport.cli.arguments.descriptionInput'|trans }}</td>
+            </tr>
+            <tr>
+                <td><code class="text-nowrap">-s|--hash HASH</code></td>
+                <td></td>
+                <td></td>
+                <td>{{ 'rulePackage.view.howtoImport.cli.arguments.descriptionHash'|trans }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>{{ 'example.titlePlural'|trans }}</h4>
+    <pre>php bin/console mosparo:rule-package:import <span class="text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.file'|trans }}">-f rule-package.json</span> <span class="text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.hash'|trans }}">-s 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</span> <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.projectId'|trans }}">{{ rulePackage.project.id }}</span> <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.rulePackageId'|trans }}">{{ rulePackage.id }}</span></pre>
+    <pre>cat rule-package.json | php bin/console mosparo:rule-package:import <span class="text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.input'|trans }}">-i</span> <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.projectId'|trans }}">{{ rulePackage.project.id }}</span> <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.rulePackageId'|trans }}">{{ rulePackage.id }}</span></pre>
+
+    <div class="alert alert-info mb-0">
+        {{ 'rulePackage.view.howtoImport.cli.infoAdjustPaths'|trans }}
+    </div>
+{% elseif rulePackage.type.value == 4 %}
+    <p>{{ 'rulePackage.view.howtoImport.api.intro'|trans }}</p>
+    <p>{{ 'rulePackage.view.howtoImport.api.introSecond'|trans }}</p>
+
+    <h4>{{ 'rulePackage.view.howtoImport.api.endpoint.title'|trans }}</h4>
+    <pre>{{ url('rule_package_api_import') }}</pre>
+
+    <h4>{{ 'argument.titlePlural'|trans }}</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ 'argument.titleSingular'|trans }}</th>
+                <th>{{ 'rulePackage.view.howtoImport.arguments.required'|trans }}</th>
+                <th>{{ 'rulePackage.view.howtoImport.arguments.value'|trans }}</th>
+                <th>{{ 'rulePackage.view.howtoImport.arguments.description'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>rulePackageId</code></td>
+                <td><span class="status status-green">{{ 'state.yes'|trans }}</span></td>
+                <td><code>{{ rulePackage.id }}</code></td>
+                <td>{{ 'rulePackage.view.howtoImport.api.arguments.descriptionRulePackageId'|trans }}</td>
+            </tr>
+            <tr>
+                <td><code>rulePackageContent</code></td>
+                <td><span class="status status-green">{{ 'state.yes'|trans }}</span></td>
+                <td></td>
+                <td>{{ 'rulePackage.view.howtoImport.api.arguments.descriptionRulePackageContent'|trans }}</td>
+            </tr>
+            <tr>
+                <td><code>rulePackageHash</code></td>
+                <td></td>
+                <td></td>
+                <td>{{ 'rulePackage.view.howtoImport.api.arguments.descriptionRulePackageHash'|trans }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>{{ 'example.titleSingular'|trans }}</h4>
+    <p>{{ 'rulePackage.view.howtoImport.api.example.intro'|trans }}</p>
+
+    <pre>output:
+  - type: mosparo_api
+    identifier: store_via_api
+    options:
+      host: <span class="text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.host'|trans }}">{{ app.request.schemeAndHttpHost }}</span>
+      public_key: <span class="text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.publicKey'|trans }}">{{ activeProject.publicKey }}</span>
+      private_key: <span class="text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.privateKey'|trans }}">{{ activeProject.privateKey|obfuscate }}</span>
+      verify_ssl: true
+      rule_package_id: <span class="text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.rulePackageId'|trans }}">{{ rulePackage.id }}</span></pre>
+{% endif %}
