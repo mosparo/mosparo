@@ -254,6 +254,7 @@ rulePackage:
       sourceManualImport: Importazione manuale
       importFirst: Questo pacchetto di regole non contiene alcun dato. Importa manualmente i dati del pacchetto di regole.
       noRulePackageCache: Non è presente alcuna cache del pacchetto di regole per questo pacchetto. Ciò significa che il download non è riuscito oppure si è verificato un altro errore.
+      importFirstTitle: Importa prima il pacchetto di regole
     includedRules:
       title: Regole incluse
       description: Descrizione
@@ -276,6 +277,15 @@ rulePackage:
         type: Tipo
         value: Valore
         spamRatingFactor: Fattore di valutazione spam
+    howtoImport:
+      title: Come importare
+      intro: Questo pacchetto di regole è di tipo importato manualmente. Ciò significa che devi importarne i dati manualmente. In caso contrario, il pacchetto sarà vuoto e non impedirà alcuno spam.
+      arguments:
+        required: Necessario
+        value: Valore
+        description: Descrizione
+      cli:
+        intro: Usa il seguente comando per importare il pacchetto di regole tramite CLI. È necessario specificare uno degli argomenti %codeArgFile% o %codeArgInput%.
   list:
     actions: Azioni
     updatedAt: Aggiornato il
