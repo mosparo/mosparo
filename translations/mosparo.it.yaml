@@ -286,6 +286,24 @@ rulePackage:
         description: Descrizione
       cli:
         intro: Usa il seguente comando per importare il pacchetto di regole tramite CLI. È necessario specificare uno degli argomenti %codeArgFile% o %codeArgInput%.
+        arguments:
+          descriptionInput: Il comando leggerà il contenuto del pacchetto di regole dall'input standard, se impostato.
+          descriptionProjectId: Specifica l'ID del progetto del pacchetto di regole.
+          descriptionRulePackageId: Specifica l'ID del pacchetto di regole.
+          descriptionFile: Specifica il percorso del file del pacchetto di regole.
+          descriptionHash: Se il comando deve verificare l'hash del pacchetto di regole, specifica l'hash SHA256 con questo argomento.
+        infoAdjustPaths: Ricorda di impostare il percorso per i binari di PHP e il comando CLI di mosparo. La documentazione del tuo hosting può esserti di aiuto.
+      api:
+        example:
+          intro: Questo esempio mostra la configurazione necessaria per il profilo mosparo RPG. Consulta la documentazione per altre opzioni.
+        intro: Importa il contenuto del pacchetto di regole usando l'API di mosparo. Puoi utilizzare direttamente l'API, uno dei nostri client API oppure mosparo RPG (Rule Package Generator) per creare e importare il contenuto del pacchetto.
+        introSecond: Qui sotto trovi le informazioni più importanti sull'API e un esempio per usare il pacchetto di regole con mosparo RPG. Puoi approfondire le diverse opzioni nella nostra documentazione.
+        endpoint:
+          title: Endpoint
+        arguments:
+          descriptionRulePackageId: Specifica l'ID del pacchetto di regole.
+          descriptionRulePackageContent: Specifica il contenuto del pacchetto di regole.
+          descriptionRulePackageHash: Per verificare l'hash prima dell'importazione del contenuto, specifica l'hash SHA256 con questo argomento.
   list:
     actions: Azioni
     updatedAt: Aggiornato il
@@ -1331,6 +1349,8 @@ action:
   checkRequirements: Verifica dei requisiti
   skipWizard: Salta la procedura guidata
   moreInformation: Altre informazioni
+  learnMore: Approfondisci
+  howToImport: Come importare
 state:
   inactive: Inattivo
   ignored: Ignorato
@@ -1506,3 +1526,18 @@ rulePackageType:
     description: Esegui il comando CLI per importare manualmente il pacchetto di regole quando lo modifichi.
 unknown:
   label: Sconosciuto
+example:
+  titleSingular: Esempio
+  titlePlural: Esempi
+argument:
+  titleSingular: Argomento
+  titlePlural: Argomenti
+tooltip:
+  projectId: ID progetto
+  rulePackageId: ID pacchetto di regole
+  file: Percorso file
+  input: Usa input standard
+  hash: Hash SHA256
+  host: Host
+  publicKey: Chiave pubblica
+  privateKey: Chiave privata
