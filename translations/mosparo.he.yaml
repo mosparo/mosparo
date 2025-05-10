@@ -386,7 +386,6 @@ tools:
       table:
         oldValue: ערך ישן
         newValue: ערך חדש
-        url: כתובת URL
         modify: שינוי
         itemsModify: שינוי
         guidelineNew: הנחיה חדשה

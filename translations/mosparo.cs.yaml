@@ -232,7 +232,6 @@ rulePackage:
     updatedAt: Aktualizováno
   form:
     name: Název
-    url: URL
     status: Stav
     spamRatingFactor: Faktor hodnocení spamu
     spamRatingFactorHelp: Pomocí faktoru hodnocení spamu můžete definovat faktor, který posílí nebo oslabí všechna pravidla této sady pravidel. Pokud je hodnota větší než 1,0, budou pravidla posílena, pokud je hodnota menší než 1,0, budou pravidla oslabena.
@@ -240,7 +239,6 @@ rulePackage:
       successfullySaved: Sada pravidel byla úspěšně uložena.
   view:
     details:
-      url: URL
       lastRefreshedAt: Naposledy aktualizováno v
       status: Stav
       spamRatingFactor: Faktor hodnocení spamu
@@ -1073,7 +1071,6 @@ tools:
         notInExport: Tato sekce není v souboru importu dostupná.
       table:
         status: Stav
-        url: URL
         add: Přidat
         modify: Upravit
         spamRatingFactor: Faktor hodnocení spamu
