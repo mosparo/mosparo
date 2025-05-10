@@ -7,6 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\Rule;
 use Mosparo\Form\RuleAddMultipleItemsType;
 use Mosparo\Form\RuleFormType;
+use Mosparo\Helper\RuleCacheHelper;
 use Mosparo\Rule\RuleTypeManager;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
@@ -29,11 +30,14 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
     protected RuleTypeManager $ruleTypeManager;
 
-    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, RuleTypeManager $ruleTypeManager)
+    protected RuleCacheHelper $ruleCacheHelper;
+
+    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, RuleTypeManager $ruleTypeManager, RuleCacheHelper $ruleCacheHelper)
     {
         $this->entityManager = $entityManager;
         $this->translator = $translator;
         $this->ruleTypeManager = $ruleTypeManager;
+        $this->ruleCacheHelper = $ruleCacheHelper;
     }
 
     #[Route('/', name: 'rule_list')]
@@ -108,9 +112,9 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     }
 
     #[Route('/create/{type}', name: 'rule_create_with_type')]
-    public function createWithType(Request $request, $type, EntityManagerInterface $entityManager, RuleTypeManager $ruleTypeManager): Response
+    public function createWithType(Request $request, $type, EntityManagerInterface $entityManager): Response
     {
-        $ruleType = $ruleTypeManager->getRuleType($type);
+        $ruleType = $this->ruleTypeManager->getRuleType($type);
 
         $rule = new Rule();
         $rule->setType($type);
@@ -121,6 +125,8 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($rule);
             $entityManager->flush();
+
+            $this->ruleCacheHelper->clearRulesCache();
 
             $session = $request->getSession();
             $session->getFlashBag()->add(
@@ -146,20 +152,22 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     }
 
     #[Route('/{id}/edit', name: 'rule_edit')]
-    public function edit(Request $request, Rule $rule, EntityManagerInterface $entityManager, RuleTypeManager $ruleTypeManager): Response
+    public function edit(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         $readOnly = false;
         if (!$this->projectHelper->canManage()) {
             $readOnly = true;
         }
 
-        $ruleType = $ruleTypeManager->getRuleType($rule->getType());
+        $ruleType = $this->ruleTypeManager->getRuleType($rule->getType());
 
         $form = $this->createForm(RuleFormType::class, $rule, [ 'rule_type' => $ruleType, 'readonly' => $readOnly, 'locale' => $request->getLocale() ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !$readOnly) {
             $entityManager->flush();
+
+            $this->ruleCacheHelper->clearRulesCache();
 
             $session = $request->getSession();
             $session->getFlashBag()->add(
@@ -193,6 +201,8 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             if ($this->isCsrfTokenValid('delete-rule', $submittedToken)) {
                 $entityManager->remove($rule);
                 $entityManager->flush();
+
+                $this->ruleCacheHelper->clearRulesCache();
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(

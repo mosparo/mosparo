@@ -23,14 +23,23 @@ class ImportHelper
 
     protected RulePackageHelper $rulePackageHelper;
 
+    protected RuleCacheHelper $ruleCacheHelper;
+
     protected string $importDirectory;
 
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, DesignHelper $designHelper, RulePackageHelper $rulePackageHelper, string $importDirectory)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ProjectHelper $projectHelper,
+        DesignHelper $designHelper,
+        RulePackageHelper $rulePackageHelper,
+        RuleCacheHelper $ruleCacheHelper,
+        string $importDirectory
+    ) {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->designHelper = $designHelper;
         $this->rulePackageHelper = $rulePackageHelper;
+        $this->ruleCacheHelper = $ruleCacheHelper;
         $this->importDirectory = $importDirectory;
     }
 
@@ -132,6 +141,7 @@ class ImportHelper
 
         // Execute the changes
         $refreshCssCache = false;
+        $clearRulesCache = false;
         foreach ($changes as $sectionKey => $sectionChanges) {
             if (in_array($sectionKey, ['generalSettings', 'designSettings', 'securitySettings'])) {
                 $this->executeProjectChanges($project, $sectionChanges);
@@ -142,7 +152,9 @@ class ImportHelper
             } else if ($sectionKey === 'securityGuidelines') {
                 $this->executeSecurityGuidelineChanges($sectionChanges);
             } else if ($sectionKey === 'rules') {
-                $this->executeRuleChanges($sectionChanges);
+                if ($this->executeRuleChanges($sectionChanges)) {
+                    $clearRulesCache = true;
+                }
             } else if ($sectionKey === 'rulePackages') {
                 $modifiedRulePackages = $this->executeRulePackageChanges($sectionChanges);
             }
@@ -153,6 +165,7 @@ class ImportHelper
             if ($modifiedRulePackages) {
                 try {
                     $this->rulePackageHelper->fetchRulePackages($modifiedRulePackages);
+                    $clearRulesCache = true;
                 } catch (\Exception $e) {
                     // Ignore all errors because the method call above is a helper but not required.
                 }
@@ -162,6 +175,11 @@ class ImportHelper
         // Prepare the css cache
         if ($refreshCssCache) {
             $this->designHelper->generateCssCache($project);
+        }
+
+        // Clear the rules cache
+        if ($clearRulesCache) {
+            $this->ruleCacheHelper->clearRulesCache();
         }
 
         // Remove the two files since everything is done
@@ -630,8 +648,9 @@ class ImportHelper
         }
     }
 
-    protected function executeRuleChanges(array $sectionChanges)
+    protected function executeRuleChanges(array $sectionChanges): bool
     {
+        $clearRulesCache = false;
         $ruleRepository = $this->entityManager->getRepository(Rule::class);
 
         foreach ($sectionChanges as $change) {
@@ -665,6 +684,8 @@ class ImportHelper
                 $ruleItem->setSpamRatingFactor((float) $itemChange['rating']);
 
                 $this->entityManager->persist($ruleItem);
+
+                $clearRulesCache = true;
             }
 
             // Modify the stored items
@@ -683,6 +704,8 @@ class ImportHelper
                 $ruleItem->setType($itemChange['type']);
                 $ruleItem->setValue($itemChange['value']);
                 $ruleItem->setSpamRatingFactor($itemChange['rating']);
+
+                $clearRulesCache = true;
             }
 
             // Remove the stored items
@@ -700,8 +723,12 @@ class ImportHelper
 
                 $rule->removeItem($ruleItem);
                 $this->entityManager->remove($ruleItem);
+
+                $clearRulesCache = true;
             }
         }
+
+        return $clearRulesCache;
     }
 
     protected function executeRulePackageChanges(array $sectionChanges): array

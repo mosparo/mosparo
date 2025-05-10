@@ -25,16 +25,22 @@ class RuleTesterHelper
 
     protected GeoIp2Helper $geoIp2Helper;
 
+    protected RuleCacheHelper $ruleCacheHelper;
+
+    protected bool $prepareRulesInSharedCache;
+
     protected array $rules = [];
     protected array $ruleTesters = [];
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        RuleTypeManager        $ruleTypeManager,
-        ProjectHelper          $projectHelper,
-        TokenGenerator         $tokenGenerator,
-        RulePackageHelper      $rulePackageHelper,
-        GeoIp2Helper           $geoIp2Helper
+        RuleTypeManager $ruleTypeManager,
+        ProjectHelper $projectHelper,
+        TokenGenerator $tokenGenerator,
+        RulePackageHelper $rulePackageHelper,
+        GeoIp2Helper $geoIp2Helper,
+        RuleCacheHelper $ruleCacheHelper,
+        bool $prepareRulesInSharedCache,
     ) {
         $this->entityManager = $entityManager;
         $this->ruleTypeManager = $ruleTypeManager;
@@ -42,6 +48,8 @@ class RuleTesterHelper
         $this->tokenGenerator = $tokenGenerator;
         $this->rulePackageHelper = $rulePackageHelper;
         $this->geoIp2Helper = $geoIp2Helper;
+        $this->ruleCacheHelper = $ruleCacheHelper;
+        $this->prepareRulesInSharedCache = $prepareRulesInSharedCache;
     }
 
     public function simulateRequest($value, $type = 'textField', $useRules = true, $useRulePackages = true): Submission
@@ -146,38 +154,53 @@ class RuleTesterHelper
     protected function loadRules(array $ruleArgs, $useRules = true, $useRulePackages = true): void
     {
         $this->rules = [];
-        if ($useRules) {
-            $ruleRepository = $this->entityManager->getRepository(Rule::class);
-            $this->rules = $ruleRepository->findBy($ruleArgs);
+
+        // If enabled, try to load the rules from the cache, but only if rules and rule packages are used.
+        if ($this->prepareRulesInSharedCache && $useRules && $useRulePackages) {
+            $this->rules = $this->ruleCacheHelper->loadRulesFromCache();
         }
 
-        if ($useRulePackages) {
-            $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
-            $rulePackages = $rulePackageRepository->findBy(['status' => 1]);
+        // If there were no rules in the cache, load the rules from the database
+        if (!$this->rules) {
+            if ($useRules) {
+                $ruleRepository = $this->entityManager->getRepository(Rule::class);
+                $this->rules = $ruleRepository->findBy($ruleArgs);
+            }
 
-            foreach ($rulePackages as $rulePackage) {
-                try {
-                    $result = $this->rulePackageHelper->fetchRulePackage($rulePackage);
+            if ($useRulePackages) {
+                $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
+                $rulePackages = $rulePackageRepository->findBy(['status' => 1]);
 
-                    if ($result) {
-                        $this->entityManager->flush($rulePackage);
+                foreach ($rulePackages as $rulePackage) {
+                    try {
+                        $result = $this->rulePackageHelper->fetchRulePackage($rulePackage);
+
+                        if ($result) {
+                            $this->entityManager->flush();
+                        }
+                    } catch (Exception $e) {
+                        // Do nothing
                     }
-                } catch (Exception $e) {
-                    // Do nothing
-                }
 
-                $rulePackageCache = $rulePackage->getRulePackageCache();
-                if ($rulePackageCache === null) {
-                    continue;
-                }
-
-                foreach ($rulePackageCache->getRules() as $rule) {
-                    if (isset($ruleArgs['type']) && !in_array($rule->getType(), $ruleArgs['type'])) {
+                    $rulePackageCache = $rulePackage->getRulePackageCache();
+                    if ($rulePackageCache === null) {
                         continue;
                     }
 
-                    $this->rules[] = $rule;
+                    $rules = $rulePackageCache->getRules();
+                    foreach ($rules as $rule) {
+                        if (isset($ruleArgs['type']) && !in_array($rule->getType(), $ruleArgs['type'])) {
+                            continue;
+                        }
+
+                        $this->rules[] = $rule;
+                    }
                 }
+            }
+
+            // Store the rules in the cache, if enabled. We only store the rules if rules and rule packages are used.
+            if ($this->prepareRulesInSharedCache && $useRules && $useRulePackages) {
+                $this->ruleCacheHelper->storeRulesInCache($this->rules);
             }
         }
     }
@@ -236,7 +259,7 @@ class RuleTesterHelper
     protected function isRuleTypeApplicable(RuleTypeInterface $ruleType, $path): bool
     {
         foreach ($ruleType->getTargetFieldKeys() as $fieldKey) {
-            if (strpos($path, $fieldKey) === 0) {
+            if (str_starts_with($path, $fieldKey)) {
                 return true;
             }
         }
