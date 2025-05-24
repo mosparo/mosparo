@@ -20,6 +20,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
         // Callbacks
         onBeforeGetFormData: null,
+        onGetFormData: null,
         onGetFieldValue: null,
         onCheckForm: null,
         onResetState: null,
@@ -535,7 +536,13 @@ function mosparo(containerId, url, uuid, publicKey, options)
             }
         });
 
-        return { fields: fields, ignoredFields: ignoredFields };
+        let formData = { fields: fields, ignoredFields: ignoredFields };
+
+        if (this.options.onGetFormData !== null) {
+            formData = this.options.onGetFormData(this.formElement, formData);
+        }
+
+        return formData;
     }
 
     this.getFieldValue = function (el) {
