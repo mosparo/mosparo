@@ -1,13 +1,13 @@
 label: Jag accepterar att formulärposterna kontrolleras för spam och lagras krypterade i 14 dagar.
 accessibility:
-  checkingData: Spamskyddet verifierar dina uppgifter. Vänta.
-  dataValid: Dina uppgifter är giltiga. Du kan skicka in formuläret.
+  checkingData: Spamskyddet verifierar dina uppgifter. Vänligen vänta.
+  dataValid: Dina data är giltiga. Nu kan du skicka in formuläret.
   protectedBy: Denna form skyddas från spam av mosparo.
 error:
   gotNoToken: mosparo returnerade ingen skicka in token.
   internalError: Ett fel uppstod. Var god försök igen.
   noSubmitTokenAvailable: Ingen skicka in token tillgänglig. Validering av detta formulär är inte möjligt.
-  spamDetected: Dina uppgifter fångades av vårt spamskydd.
+  spamDetected: Dina data fastnade i vårt spamskydd.
   lockedOut: Du är utelåst. Försök igen efter %datetime%.
   delay: Din begäran försenades. Vänligen vänta %seconds% sekunder.
 hp:
