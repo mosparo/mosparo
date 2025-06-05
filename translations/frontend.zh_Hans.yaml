@@ -10,5 +10,5 @@ hp:
 accessibility:
   checkingData: 垃圾邮件保护系统正在验证您的数据，请稍等一下。
   dataValid: 您的数据有效，您现在可以提交表单了。
-  protectedBy: mosparo保护此表单免受垃圾邮件攻击
+  protectedBy: mosparo 保护此表单免受垃圾邮件攻击
 label: 我接受对表单条目进行垃圾邮件检查并加密存储 14 天。
