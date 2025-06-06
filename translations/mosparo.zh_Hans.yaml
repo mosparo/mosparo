@@ -97,4 +97,7 @@ projectGroup:
     openParentGroup: 打开上一类别
     openGroup: 打开此类别
     backToList: 返回项目类别列表
+    openParentGroupName: 返回到 %name%
   mainGroup: 主要类别
+projectGroupSelector:
+  noProjectsAvailable: 无可用项目
