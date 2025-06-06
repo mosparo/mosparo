@@ -15,7 +15,8 @@ tools:
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: Uw IP-adres staat niet in de toegestane lijst. Voeg uw IP-adres toe aan de lijst.
+      ownIpNotInAllowList: Uw IP-adres staat niet in de toegestane lijst. Voeg uw
+        IP-adres toe aan de lijst.
 ipAllowList:
   itemInvalid: Het item '%item%' is geen geldig IP-adres of subnet.
 honeypotField:
@@ -24,8 +25,12 @@ securityGuideline:
   atLeastOneCriteriaRequired: De beveiligingsrichtlijn vereist minimaal één criterium.
   asNumberNotNumeric: Het AS-nummer is geen getal.
 webCronJob:
-  webCronJobIntervalAtLeast5Minutes: Het webcronjobinterval moet minimaal 5 minuten zijn.
-  geoIpRefreshIntervalAtLeast1Day: Het vernieuwingsinterval van GeoIP2 moet minimaal één dag of langer zijn.
+  webCronJobIntervalAtLeast5Minutes: Het webcronjobinterval moet minimaal 5 minuten
+    zijn.
+  geoIpRefreshIntervalAtLeast1Day: Het vernieuwingsinterval van GeoIP2 moet minimaal
+    één dag of langer zijn.
 hosts:
-  hostContainsProtocol: Deze host bevat een protocol. Voer de host in zonder protocol (bijvoorbeeld example.com in plaats van https://example.com).
-  hostContainsInvalidCharacter: Deze host bevat ongeldige tekens. In dit veld zijn alleen tekens (a-z), cijfers (0-9), streepjes, punten en de ster (*) toegestaan.
+  hostContainsProtocol: Deze host bevat een protocol. Voer de host in zonder protocol
+    (bijvoorbeeld example.com in plaats van https://example.com).
+  hostContainsInvalidCharacter: Deze host bevat ongeldige tekens. In dit veld zijn
+    alleen tekens (a-z), cijfers (0-9), streepjes, punten en de ster (*) toegestaan.
