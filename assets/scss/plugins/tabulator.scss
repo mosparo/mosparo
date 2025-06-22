@@ -1,0 +1,183 @@
+.tabulator-toolbar {
+    display: flex;
+
+    padding: 0.5rem 1.25rem;
+
+    .btn-group > .btn:nth-child(n+3),
+    .btn-group > :not(.btn-check) + .btn, .btn-group > .btn-group:not(:first-child) > .btn {
+        border-left: 1px solid rgba(0, 0, 0, 0.2);
+    }
+}
+
+.tabulator {
+    font-size: 0.875rem;
+
+    .tabulator-header .tabulator-headers,
+    .tabulator-footer,
+    .tabulator-tableholder .tabulator-table {
+        min-width: 100%;
+    }
+
+    .tabulator-header {
+        border-bottom-width: 1px;
+
+        &,
+        .tabulator-col {
+            background: var(--tblr-bg-surface-tertiary);
+
+            .tabulator-col-content {
+                font-size: .75rem;
+                font-weight: var(--tblr-font-weight-medium);
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                line-height: 1rem;
+
+                color: var(--tblr-secondary);
+
+                padding-top: .5rem;
+                padding-bottom: .5rem;
+
+                &:hover {
+                    background: var(--tblr-bg-surface-secondary);
+                }
+            }
+        }
+    }
+
+    .tabulator-col {
+        &:first-child {
+            .tabulator-col-content {
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+            }
+        }
+
+        &:last-child {
+            .tabulator-col-content {
+                padding-right: 1.25rem;
+            }
+        }
+
+        input[type="checkbox"] {
+            vertical-align: middle;
+        }
+    }
+
+    .tabulator-row {
+        --tblr-table-color-type: initial;
+        --tblr-table-bg-type: initial;
+        --tblr-table-color-state: initial;
+        --tblr-table-bg-state: initial;
+        --tblr-table-color: inherit;
+        --tblr-table-bg: transparent;
+        --tblr-table-border-color: var(--tblr-border-color-translucent);
+        --tblr-table-accent-bg: transparent;
+        --tblr-table-striped-color: inherit;
+        --tblr-table-striped-bg: var(--tblr-bg-surface-tertiary);
+        --tblr-table-active-color: inherit;
+        --tblr-table-active-bg: var(--tblr-active-bg);
+        --tblr-table-hover-color: inherit;
+        --tblr-table-hover-bg: rgba(var(--tblr-emphasis-color-rgb), 0.075);
+
+        color: var(--tblr-table-color-state, var(--tblr-table-color-type, var(--tblr-table-color)));
+        background-color: var(--tblr-table-bg);
+        border-bottom-width: var(--tblr-border-width);
+        box-shadow: inset 0 0 0 9999px var(--tblr-table-bg-state, var(--tblr-table-bg-type, var(--tblr-table-accent-bg)));
+
+        &.tabulator-row-even {
+            --tblr-table-color-type: var(--tblr-table-striped-color);
+            --tblr-table-bg-type: var(--tblr-table-striped-bg);
+        }
+
+        &.tabulator-selectable:hover {
+            --tblr-table-color-state: var(--tblr-table-hover-color);
+            --tblr-table-bg-state: var(--tblr-table-hover-bg);
+
+            background-color: var(--tblr-table-bg);
+        }
+
+        .tabulator-cell {
+            &.tabulator-cell-edited {
+                background: rgba(var(--tblr-warning-rgb), 0.15);
+            }
+
+            &.tabulator-editing {
+                background: var(--tblr-blue-lt);
+                border-color: var(--tblr-blue);
+            }
+
+            &.tabulator-editing input,
+            &.tabulator-editing select {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+                margin-left: -1px;
+            }
+
+            &:first-child {
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+
+                &.tabulator-editing input,
+                &.tabulator-editing select {
+                    padding-left: 0 !important;
+                    margin-left: -1px;
+                }
+            }
+
+            &:last-child {
+                padding-right: 1.25rem;
+            }
+        }
+    }
+
+    .tabulator-footer {
+        background-color: var(--tblr-card-cap-bg);
+
+        border-top: none;
+        border-radius: 0 0 var(--tblr-card-border-radius) var(--tblr-card-border-radius);
+
+        padding: var(--tblr-card-cap-padding-y) 1.25rem;
+
+        .tabulator-footer-contents {
+            padding: 0;
+        }
+
+        .tabulator-paginator {
+            @extend .pagination;
+
+            flex: unset;
+
+            .tabulator-pages {
+                display: flex;
+            }
+
+            .tabulator-page {
+                margin-top: 0;
+
+                @extend .page-link;
+
+                &.active {
+                    color: var(--tblr-pagination-active-color);
+                    background-color: var(--tblr-pagination-active-bg);
+                    border-color: var(--tblr-pagination-active-border-color);
+
+                    z-index: 3;
+                }
+            }
+        }
+    }
+}
+
+.tabulator-edit-list {
+    font-size: 0.875rem;
+
+    .tabulator-edit-list-item {
+        padding-left: 1.25rem;
+
+        &.active,
+        &:hover {
+            background: var(--tblr-blue);
+            color: var(--tblr-blue-fg);
+        }
+    }
+}

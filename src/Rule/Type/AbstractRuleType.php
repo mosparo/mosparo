@@ -68,4 +68,9 @@ abstract class AbstractRuleType implements RuleTypeInterface
     {
         return $value;
     }
+
+    public function getValidatorPattern(): array
+    {
+        return [];
+    }
 }

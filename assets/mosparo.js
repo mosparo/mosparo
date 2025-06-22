@@ -21,6 +21,12 @@ global.ApexCharts = apexCharts;
 const dt = require('datatables.net');
 const dtR = require('datatables.net-responsive');
 
+const tabulator = require('tabulator-tables');
+global.Tabulator = tabulator;
+
+const papa = require('papaparse');
+global.papa = papa;
+
 import './js/ui.js';
 import './js/form.js';
 import './js/color.js';

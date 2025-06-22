@@ -34,4 +34,35 @@ final class UnicodeBlockRuleType extends AbstractRuleType
 
         return $unicodeBlock->getName($locale);
     }
+
+    public function getValueOptions(string $locale): array
+    {
+        $unicodeIndex = new UnicodeIndex();
+        $blockChoices = [];
+        foreach ($unicodeIndex->getIndex() as $key => $className) {
+            $block = new $className();
+            $blockChoices[$key] = $block->getName($locale);
+        }
+
+        uasort($blockChoices, function ($keyA, $keyB): int {
+            $keyA = mb_strtolower($keyA);
+            $keyB = mb_strtolower($keyB);
+
+            $pattern = ['ä', 'ö', 'ü'];
+            $replacement = ['a', 'o', 'u'];
+
+            $keyA = str_replace($pattern, $replacement, $keyA);
+            $keyB = str_replace($pattern, $replacement, $keyB);
+
+            if ($keyA < $keyB) {
+                return -1;
+            } else if ($keyA > $keyB) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        return $blockChoices;
+    }
 }

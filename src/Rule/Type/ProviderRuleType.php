@@ -25,4 +25,12 @@ final class ProviderRuleType extends AbstractRuleType
     protected string $testerClass = ProviderRuleTester::class;
     protected array $targetFieldKeys = ['client.asNumber', 'client.country'];
     protected string $helpTemplate = 'project_related/rule/type/help/provider.html.twig';
+
+    public function getValidatorPattern(): array
+    {
+        return [
+            'asNumber' => '^\d{1,10}$',
+            'country' => '^[A-Z]{2}$',
+        ];
+    }
 }

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Rule\RuleItemEntityInterface;
 
 #[ORM\Entity(repositoryClass: RuleItemRepository::class)]
+#[ORM\Index(name: 'uuid_idx', fields: ['uuid'])]
 class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 {
     #[ORM\Id]
@@ -28,7 +29,7 @@ class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
     private ?string $value;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    private ?float $spamRatingFactor = null;
+    private ?float $spamRatingFactor = 1.0;
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]

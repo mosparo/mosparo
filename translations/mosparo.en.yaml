@@ -164,14 +164,11 @@ rule:
   create:
     title: Create rule
 
-    message:
-      successfullyCreated: The new rule was created successfully.
+    label:
+      ruleType: Rule type
 
   edit:
     title: Edit rule %ruleName%
-
-    message:
-      successfullySaved: The rule was saved successfully.
 
   form:
     ruleType: Rule type
@@ -184,17 +181,74 @@ rule:
       spamRatingFactor: Spam rating factor
       spamRatingFactorHelp: With the spam rating factor you can define a factor which strengthens or weakens the entries of this rule. If the value is greater than 1.0, the entries are strengthened, if the value is less than 1.0, the entries are weakened.
 
+    status:
+      unsavedChanges: '%counter% unsaved changes'
+      savingChanges: 'Saving %counter% changes'
+
     items:
       title: Items
       type: Type
+      value: Value
       rating: Rating
 
+    filter:
+      title: Filter items
+      useWildcard: Use %wildcard% as wildcard.
+      itemSpamRatingFactor: Item spam rating factor
+
+    noItemsInTable:
+      title: No items yet
+      text: This rule does not contain any items yet.
+
+    nothingFound:
+      title: Nothing found
+      text: There are no items that match your filter.
+
     addMultipleItems:
-      label: Label
+      type: Type
       items: Items
       itemsHelp: Add one item per line.
       rating: Rating
       ratingHelp: If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.
+
+    modal:
+      importTxtFile:
+        title: Import text file
+        file: File
+        fileHelp: Please choose the text file (*.txt) you want to import from your computer.
+        action: Import file
+
+      importCsvFile:
+        title: Import CSV file
+        file: File
+        fileHelp: Please choose the CSV file (*.csv) you want to import from your computer.
+        action: Import file
+
+      addingItems:
+        title: Adding items
+        messageCompleted: The given data was processed. See the summary of the added, skipped, and invalid items above. You can close this window now.
+        progress:
+          dataProcessed: Data processed
+          processingPleaseWait: Processing data…
+          processingStats: Processed %processedBytes% of %totalBytes%
+          abortHint: If you close this window, the process will stop, and you must start again later.
+
+        summary:
+          addedLabel: Added
+          addedTooltip: These items are added to the rule.
+          skippedLabel: Skipped
+          skippedTooltip: These items already exist, so the import process skipped them.
+          invalidLabel: Invalid
+          invalidTooltip: Invalid items, for example when the item type is not existing or the value is in the wrong format.
+
+      deleteSelectedItems:
+        title: Delete selected items
+        confirm: Do you really want to delete the selected %counter% rule items?
+        confirmOne: Do you really want to delete the selected rule item?
+        confirmDelete: Yes, delete the items
+
+        progress:
+          deletingPleaseWait: Deleting items… Please wait…
 
   delete:
     title: Delete rule %ruleName%
@@ -471,6 +525,7 @@ rulePackage:
 submission:
   title: Submissions
   backToList: Back to submissions
+  submitTokenMissing: Submit token missing
 
   list:
     id: ID
@@ -1632,9 +1687,11 @@ password:
 
 # General actions
 action:
+  back: Back
   add: Add
   remove: Remove
   save: Save
+  saveChanges: Save changes
   saveAndContinue: Save and continue
   skipWizard: Skip wizard
   view: View
@@ -1644,6 +1701,7 @@ action:
   help: Help
   learnMore: Learn more
   close: Close
+  reset: Reset
   manage: Manage
   use: Use
   configure: Configure
@@ -1653,14 +1711,19 @@ action:
   goToTheDashboard: Go to the dashboard
   checkRequirements: Check requirements
   export: Export
+  exportItems: Export items
   importProject: Import project
   simulateImport: Simulate import
   executeChanges: Execute changes
   moreInformation: More information
   howToImport: How to import
+  toggleDropdown: Toggle dropdown
+  filter: Filter
 
 # General values
 general:
+  pleaseWait: Please wait…
+  areYouSure: Are you sure?
   infoUndo: You cannot undo this process.
   example: Example
   empty: Empty
@@ -1681,7 +1744,11 @@ roles:
   inactive: Inactive
 
 form:
+  pleaseChoose: Please choose…
+  addItem: Add item
   addMultipleItems: Add multiple items
+  importTextFile: Import (Text file)
+  importCsvFile: Import (CSV file)
   choices:
     systemDefault: Default setting
     browserLanguage: Browser language
@@ -1713,6 +1780,32 @@ datatable:
     aria:
       sortAscending: ": activate to sort column ascending"
       sortDescending: ": activate to sort column descending"
+
+tabulator:
+  data:
+    loading: Loading…
+    error: Error
+
+  groups:
+    item: item
+    items: items
+
+  pagination:
+    pageSize: Page size
+    pageTitle: Show page
+    first: '%s%First%e%'
+    firstTitle: First page
+    last: '%s%Last%e%'
+    lastTitle: Last page
+    prev: '%s%Prev%e%'
+    prevTitle: Previous page
+    next: '%s%Next%e%'
+    nextTitle: Next page
+    all: All
+    counter: '%vd%Page%e% %page% %vd%of%e%%vm%/%e% %totalPages%'
+
+  filter:
+    default: Filter column…
 
 # Setup
 setup:
@@ -1801,6 +1894,11 @@ dataTable:
   name: Name
   value: Value
   empty: Empty
+
+multiSelect:
+  selectedItems: Selected items
+  actions:
+    deleteSelectedItems: Delete selected items
 
 dateRange:
   14d: 14 Days

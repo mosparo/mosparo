@@ -96,6 +96,13 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
+.form-control,
+.form-select {
+    &.field-edited {
+        background: rgba(var(--tblr-warning-rgb), 0.15);
+    }
+}
+
 textarea.ip-address-field {
     font-family: monospace;
 }

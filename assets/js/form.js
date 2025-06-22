@@ -28,10 +28,26 @@ let updateCssVariable = function (variableName, value, type) {
     document.documentElement.style.setProperty(variableName, value);
 };
 
+let getRandomUuid = function ()
+{
+    if (crypto.randomUUID) {
+        return crypto.randomUUID();
+    }
+
+    // This should not be used but in case someone is running mosparo in a http context,
+    // we cannot use crypto.randomUUID() to get a random UUID. This faked id will later
+    // be replaced in the backend.
+    let number = new Uint32Array(1);
+    crypto.getRandomValues(number);
+
+    return 'dead-' + number[0];
+}
+
 window.collectionToggleRemoveButton = collectionToggleRemoveButton;
 window.collectionGetRandomHash = collectionGetRandomHash;
 window.updateCssVariable = updateCssVariable;
 window.updateMultipleCssVariable = updateMultipleCssVariable;
+window.getRandomUuid = getRandomUuid;
 
 $(document).ready(function () {
     $('.collection-widget.add-allowed .add-item-button').click(function () {
