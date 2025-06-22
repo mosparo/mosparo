@@ -88,6 +88,4 @@ rule:
     intro: Kies het type regel dat u wilt maken. De beschikbare typen worden gebruikt voor verschillende velden en kunnen later niet worden gewijzigd voor een andere regel.
   create:
     title: Maak een regel aan
-    message:
-      successfullyCreated: De nieuwe regels is aangemaakt.
   title: Regels

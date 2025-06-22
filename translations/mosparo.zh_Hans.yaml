@@ -79,14 +79,10 @@ form:
 rule:
   edit:
     title: 编辑角色%ruleName%
-    message:
-      successfullySaved: 角色保存成功。
   createChooseType:
     title: 选择类型
   create:
     title: 创建角色
-    message:
-      successfullyCreated: 新角色已成功创建。
   form:
     ruleType: 角色类型
 projectGroup:

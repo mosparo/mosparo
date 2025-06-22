@@ -76,12 +76,8 @@ dashboard:
 rule:
   create:
     title: יצירת חוק
-    message:
-      successfullyCreated: החוק החדש נוצר בהצלחה.
   edit:
     title: עריכת חוק %ruleName%
-    message:
-      successfullySaved: החוק נשמר בהצלחה.
   form:
     rule:
       title: חוק
@@ -95,7 +91,6 @@ rule:
       type: סוג
       rating: דירוג
     addMultipleItems:
-      label: תווית
       items: פריטים
       rating: דירוג
       itemsHelp: יש להוסיף פריט אחד בשורה.
