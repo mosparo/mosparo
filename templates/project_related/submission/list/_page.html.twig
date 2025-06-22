@@ -1,5 +1,15 @@
-<div class="page-name">{{ row.submitToken.pageTitle }}</div>
-<div class="origin-page-url-container">
-    <a href="{{ row.submitToken.pageUrl }}" target="_blank" class="origin-page-url">{{ row.submitToken.pageUrl|replace({'https://': ''}) }}</a>
-    <i class="ti ti-external-link"></i>
-</div>
+{% trans_default_domain 'mosparo' %}
+
+{% if row.submitToken %}
+    <div class="page-name">
+        {{ row.submitToken.pageTitle }}
+    </div>
+    <div class="origin-page-url-container">
+        <a href="{{ row.submitToken.pageUrl }}" target="_blank" class="origin-page-url">{{ row.submitToken.pageUrl|replace({'https://': ''}) }}</a>
+        <i class="ti ti-external-link"></i>
+    </div>
+{% else %}
+    <span class="status status-warning">
+        {{ 'submission.submitTokenMissing'|trans }}
+    </span>
+{% endif %}
