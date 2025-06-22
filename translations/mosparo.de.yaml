@@ -114,14 +114,8 @@ rule:
   create:
     title: Regel erstellen
 
-    message:
-      successfullyCreated: Die neue Regel wurde erfolgreich erstellt.
-
   edit:
     title: Regel %ruleName% bearbeiten
-
-    message:
-      successfullySaved: Die Regel wurde erfolgreich gespeichert.
 
   form:
     ruleType: Regeltyp
@@ -140,7 +134,6 @@ rule:
       rating: Bewertung
 
     addMultipleItems:
-      label: Bezeichnung
       items: Einträge
       itemsHelp: Geben Sie ein Element pro Zeile ein.
       rating: Bewertung

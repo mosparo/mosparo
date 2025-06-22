@@ -79,15 +79,12 @@ rule:
     intro: Silakan pilih jenis aturan yang ingin Anda buat. Jenis yang tersedia digunakan untuk bidang yang berbeda dan tidak dapat diubah untuk aturan sesudahnya.
   create:
     title: Buat peraturan
-    message:
-      successfullyCreated: Aturan baru berhasil dibuat.
   form:
     items:
       type: Tipe
       rating: Peringkat
       title: item
     addMultipleItems:
-      label: Label
       items: Item
       itemsHelp: Tambahkan satu item per baris.
       rating: Peringkat
@@ -207,8 +204,6 @@ rule:
       infoValueEqualZero: Jika rating disetel ke %zero%, item tidak akan terdeteksi sebagai spam karena nilai rating spam akan menjadi %zero%.
   edit:
     title: Edit aturan %ruleName%
-    message:
-      successfullySaved: Aturan berhasil disimpan.
   filter:
     options:
       all: Tampilkan semua

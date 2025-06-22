@@ -78,8 +78,6 @@ header:
 rule:
   edit:
     title: Modifica regola %ruleName%
-    message:
-      successfullySaved: La regola è stata salvata correttamente.
   list:
     name: Nome
     type: Tipo
@@ -87,8 +85,6 @@ rule:
     actions: Azioni
   create:
     title: Crea regola
-    message:
-      successfullyCreated: La nuova regola è stata creata correttamente.
   createChooseType:
     title: Scegli il tipo
     intro: Seleziona il tipo di ruolo che vuoi creare. I tipi disponibili sono utilizzati per diversi campi e non possono essere modificati per regole successive.
@@ -103,7 +99,6 @@ rule:
       spamRatingFactorHelp: Con il fattore di valutazione spam puoi definire un fattore per inasprire o addolcire la valutazione di questa regola. Se il valore è maggiore di 1.0 la valutazione è inasprita, se il valore è inferiore a 1.0 la valutazione è addolcita.
       spamRatingFactor: Fattore di valutazione spam
     addMultipleItems:
-      label: Etichetta
       items: Oggetti
       rating: Valutazione
       ratingHelp: Se non impostata, la valutazione predefinita è 1.0. Se la valutazione viene impostata a 0.0 l'oggetto non verrà identificato come spam.
