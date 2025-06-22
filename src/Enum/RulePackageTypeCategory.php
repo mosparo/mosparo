@@ -26,7 +26,6 @@ enum RulePackageTypeCategory: int implements TranslatableInterface
             ];
         }, self::cases());
 
-        dump($values);
         return $values;
     }
 
