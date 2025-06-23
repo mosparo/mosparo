@@ -1531,6 +1531,7 @@ administration:
       license: License
 
     website: Website
+    listOfContributors: Many more people have helped us improve and extend mosparo over the past years. We are thankful for all the help, inspiration, and feedback. See the %linkStart%full list of people here%linkEnd%.
 
   cleanupStatistic:
     title: Cleanup statistic
