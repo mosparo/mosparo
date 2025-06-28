@@ -1,7 +1,7 @@
 label: Strinjam se, da se vnosi v formular preverijo na morebiten spam in se kriptirani hranijo 14 dni.
 accessibility:
-  checkingData: Preverjamo vaše podatke. Prosimo počakajte.
-  dataValid: Vaši podatki ne vsebujejo spam sporočil. Lahko posredujete formular.
+  checkingData: Preverjamo resničnost vaših podatkov. Prosimo počakajte.
+  dataValid: Lahko pošljete podatke, ker ne vsebujejo spam sporočil. .
 error:
   gotNoToken: Mosparo ne vrača odgovorov.
   internalError: Prišlo je do napake. Prosimo ponovite predhodni korak.
