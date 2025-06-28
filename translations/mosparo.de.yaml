@@ -114,14 +114,8 @@ rule:
   create:
     title: Regel erstellen
 
-    message:
-      successfullyCreated: Die neue Regel wurde erfolgreich erstellt.
-
   edit:
     title: Regel %ruleName% bearbeiten
-
-    message:
-      successfullySaved: Die Regel wurde erfolgreich gespeichert.
 
   form:
     ruleType: Regeltyp
@@ -140,7 +134,6 @@ rule:
       rating: Bewertung
 
     addMultipleItems:
-      label: Bezeichnung
       items: Einträge
       itemsHelp: Geben Sie ein Element pro Zeile ein.
       rating: Bewertung
@@ -300,7 +293,6 @@ rulePackage:
 
   form:
     name: Name
-    source: Quelle
     status: Status
     spamRatingFactor: Spam-Bewertungsfaktor
     spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher alle Regel dieses Regel-Paketes verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Regeln verstärkt, ist der Wert kleiner als 1.0, werden die Regeln abgeschwächt.
@@ -1471,7 +1463,6 @@ tools:
       table:
         add: Hinzufügen
         status: Status
-        url: URL
         modify: Ändern
         items: Einträge
         itemsAdd: Hinzufügen
