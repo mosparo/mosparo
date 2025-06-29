@@ -574,6 +574,10 @@
                             } else if (change.type === 'item') {
                                 for (let row of table.getRows()) {
                                     if (row.getData().uuid === change.uuid) {
+                                        if (typeof row.getData().id === 'undefined') {
+                                            row.getData().id = change.id;
+                                        }
+
                                         let idx = processingUuids.indexOf(change.uuid);
 
                                         if (idx > -1) {

@@ -294,6 +294,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         }
 
         $processed = [];
+        $newItems = [];
         foreach ($changes as $change) {
             $type = $change['type'] ?? null;
             if (!$type) {
@@ -331,6 +332,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                             ->setRule($rule)
                             ->setUuid($change['data']['uuid']);
 
+                        $newItems[] = $item;
                         $entityManager->persist($item);
                     }
                 } else {
@@ -350,6 +352,16 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         }
 
         $entityManager->flush();
+
+        // Add the IDs of the newly saved items to add them to the row in the frontend.
+        foreach ($newItems as $newItem) {
+            foreach ($processed as $key => $processedData) {
+                if ($processedData['uuid'] === $newItem->getUuid()) {
+                    $entityManager->refresh($newItem);
+                    $processed[$key]['id'] = $item->getId();
+                }
+            }
+        }
 
         return new JsonResponse([
             'success' => true,
