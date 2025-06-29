@@ -2,7 +2,6 @@
 
 namespace Mosparo\Rule\Type;
 
-use Mosparo\Rule\Form\WebsiteFormType;
 use Mosparo\Rule\Tester\WebsiteRuleTester;
 
 final class WebsiteRuleType extends AbstractRuleType
@@ -17,7 +16,6 @@ final class WebsiteRuleType extends AbstractRuleType
             'name' => 'rule.type.website.url.title'
         ],
     ];
-    protected string $formClass = WebsiteFormType::class;
     protected string $testerClass = WebsiteRuleTester::class;
     protected array $targetFieldKeys = ['formData.input[url]', 'formData.textarea'];
     protected string $helpTemplate = 'project_related/rule/type/help/website.html.twig';

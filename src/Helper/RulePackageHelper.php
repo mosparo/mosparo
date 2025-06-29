@@ -32,16 +32,13 @@ class RulePackageHelper
 
     protected ProjectHelper $projectHelper;
 
-    protected RuleCacheHelper $ruleCacheHelper;
-
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $router,
         HttpClientInterface $client,
         ConnectionHelper $connectionHelper,
         CleanupHelper $cleanupHelper,
-        ProjectHelper $projectHelper,
-        RuleCacheHelper $ruleCacheHelper
+        ProjectHelper $projectHelper
     ) {
         $this->entityManager = $entityManager;
         $this->router = $router;
@@ -49,7 +46,6 @@ class RulePackageHelper
         $this->connectionHelper = $connectionHelper;
         $this->cleanupHelper = $cleanupHelper;
         $this->projectHelper = $projectHelper;
-        $this->ruleCacheHelper = $ruleCacheHelper;
     }
 
     public function fetchAll(): void
@@ -60,19 +56,10 @@ class RulePackageHelper
         foreach ($projectRepository->findAll() as $project) {
             $this->projectHelper->setActiveProject($project);
 
-            $changed = false;
             foreach ($rulePackageRepository->findBy(['status' => 1]) as $rulePackage) {
                 if (in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
-                    $result = $this->fetchRulePackage($rulePackage);
-
-                    if ($result) {
-                        $changed = true;
-                    }
+                    $this->fetchRulePackage($rulePackage);
                 }
-            }
-
-            if ($changed) {
-                $this->ruleCacheHelper->clearRulesCache();
             }
 
             $this->entityManager->flush();
@@ -81,19 +68,10 @@ class RulePackageHelper
 
     public function fetchRulePackages(array $rulePackages): void
     {
-        $changed = false;
         foreach ($rulePackages as $rulePackage) {
             if ($rulePackage->isActive() && in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
-                $result = $this->fetchRulePackage($rulePackage);
-
-                if ($result) {
-                    $changed = true;
-                }
+                $this->fetchRulePackage($rulePackage);
             }
-        }
-
-        if ($changed) {
-            $this->ruleCacheHelper->clearRulesCache();
         }
 
         $this->entityManager->flush();

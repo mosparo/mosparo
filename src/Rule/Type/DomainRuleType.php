@@ -2,7 +2,6 @@
 
 namespace Mosparo\Rule\Type;
 
-use Mosparo\Rule\Form\DomainFormType;
 use Mosparo\Rule\Tester\DomainRuleTester;
 
 final class DomainRuleType extends AbstractRuleType
@@ -17,7 +16,6 @@ final class DomainRuleType extends AbstractRuleType
             'name' => 'rule.type.domain.domain.title',
         ],
     ];
-    protected string $formClass = DomainFormType::class;
     protected string $testerClass = DomainRuleTester::class;
     protected array $targetFieldKeys = ['formData.input[url]', 'formData.input[email]', 'formData.textarea'];
     protected string $helpTemplate = 'project_related/rule/type/help/domain.html.twig';

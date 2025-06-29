@@ -39,11 +39,6 @@ abstract class AbstractRuleType implements RuleTypeInterface
         return $this->subtypes;
     }
 
-    public function getFormClass(): string
-    {
-        return $this->formClass;
-    }
-
     public function getTesterClass(): string
     {
         return $this->testerClass;

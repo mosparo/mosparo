@@ -4,12 +4,18 @@ namespace Mosparo\Entity;
 
 use Mosparo\Repository\RuleItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Rule\PreparedRuleItemTrait;
+use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleItemEntityInterface;
 
 #[ORM\Entity(repositoryClass: RuleItemRepository::class)]
-#[ORM\Index(name: 'uuid_idx', fields: ['uuid'])]
+#[ORM\Index(name: 'ri_uuid_idx', fields: ['uuid'])]
+#[ORM\Index(name: 'ri_hashed_idx', fields: ['project', 'type', 'hashedValue'])]
+#[ORM\HasLifecycleCallbacks]
 class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 {
+    use PreparedRuleItemTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -22,7 +28,7 @@ class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Rule $rule;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 50)]
     private ?string $type;
 
     #[ORM\Column(type: 'text')]
@@ -115,5 +121,10 @@ class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
         $this->project = $project;
 
         return $this;
+    }
+
+    public function getParent(): RuleEntityInterface
+    {
+        return $this->rule;
     }
 }

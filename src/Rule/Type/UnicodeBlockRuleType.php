@@ -2,7 +2,6 @@
 
 namespace Mosparo\Rule\Type;
 
-use Mosparo\Rule\Form\UnicodeBlockFormType;
 use Mosparo\Rule\Tester\UnicodeBlockRuleTester;
 use zepi\Unicode\UnicodeIndex;
 
@@ -18,7 +17,6 @@ final class UnicodeBlockRuleType extends AbstractRuleType
             'name' => 'rule.type.unicodeBlock.block.title',
         ],
     ];
-    protected string $formClass = UnicodeBlockFormType::class;
     protected string $testerClass = UnicodeBlockRuleTester::class;
     protected array $targetFieldKeys = ['formData.'];
     protected string $helpTemplate = 'project_related/rule/type/help/unicodeBlock.html.twig';

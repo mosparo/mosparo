@@ -3,13 +3,13 @@
 namespace Mosparo\Rule\Tester;
 
 use Mosparo\Entity\RulePackageRuleCache;
-use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleItemEntityInterface;
 
 abstract class AbstractRuleTester implements RuleTesterInterface
 {
-    protected function calculateSpamRating(RuleEntityInterface $rule, RuleItemEntityInterface $item, $additionalFactor = 1): float
+    protected function calculateSpamRating(RuleItemEntityInterface $item, $additionalFactor = 1): float
     {
+        $rule = $item->getParent();
         $rating = 1;
         if (!empty($item->getSpamRatingFactor())) {
             $rating = floatval($item->getSpamRatingFactor());

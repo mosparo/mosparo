@@ -7,7 +7,6 @@ use Mosparo\Entity\Project;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Enum\RulePackageType;
 use Mosparo\Helper\ProjectHelper;
-use Mosparo\Helper\RuleCacheHelper;
 use Mosparo\Helper\RulePackageHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -25,16 +24,13 @@ class ImportRulePackageCommand extends Command
 
     protected RulePackageHelper $rulePackageHelper;
 
-    protected RuleCacheHelper $ruleCacheHelper;
-
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, RulePackageHelper $rulePackageHelper, RuleCacheHelper $ruleCacheHelper)
+    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, RulePackageHelper $rulePackageHelper)
     {
         parent::__construct();
 
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->rulePackageHelper = $rulePackageHelper;
-        $this->ruleCacheHelper = $ruleCacheHelper;
     }
 
     protected function configure(): void
@@ -121,9 +117,6 @@ class ImportRulePackageCommand extends Command
 
         // Store the rule package cache
         $this->entityManager->flush();
-
-        // Clear the rule cache
-        $this->ruleCacheHelper->clearRulesCache();
 
         return Command::SUCCESS;
     }

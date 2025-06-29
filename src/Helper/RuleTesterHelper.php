@@ -3,10 +3,12 @@
 namespace Mosparo\Helper;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Mosparo\Entity\Rule;
-use Mosparo\Entity\RulePackage;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
+use Mosparo\Entity\RuleItem;
+use Mosparo\Entity\RulePackageRuleItemCache;
 use Mosparo\Entity\Submission;
-use Mosparo\Exception;
+use Mosparo\Rule\RuleItemIterator;
 use Mosparo\Rule\RuleTypeManager;
 use Mosparo\Rule\Type\RuleTypeInterface;
 use Mosparo\Util\TokenGenerator;
@@ -27,8 +29,6 @@ class RuleTesterHelper
 
     protected RuleCacheHelper $ruleCacheHelper;
 
-    protected bool $prepareRulesInSharedCache;
-
     protected array $rules = [];
     protected array $ruleTesters = [];
 
@@ -40,7 +40,6 @@ class RuleTesterHelper
         RulePackageHelper $rulePackageHelper,
         GeoIp2Helper $geoIp2Helper,
         RuleCacheHelper $ruleCacheHelper,
-        bool $prepareRulesInSharedCache,
     ) {
         $this->entityManager = $entityManager;
         $this->ruleTypeManager = $ruleTypeManager;
@@ -49,7 +48,6 @@ class RuleTesterHelper
         $this->rulePackageHelper = $rulePackageHelper;
         $this->geoIp2Helper = $geoIp2Helper;
         $this->ruleCacheHelper = $ruleCacheHelper;
-        $this->prepareRulesInSharedCache = $prepareRulesInSharedCache;
     }
 
     public function simulateRequest($value, $type = 'textField', $useRules = true, $useRulePackages = true): Submission
@@ -126,134 +124,124 @@ class RuleTesterHelper
         $submission = new Submission();
         $submission->setData($data);
 
-        $this->checkRequest($submission, [], null, $useRules, $useRulePackages);
+        $this->checkRequest($submission, [], $useRules, $useRulePackages);
 
         return $submission;
     }
 
-    public function checkRequest(Submission $submission, array $securitySettings = [], $type = null, $useRules = true, $useRulePackages = true): void
+    public function checkRequest(Submission $submission, array $securitySettings = [], bool $useRules = true,  bool$useRulePackages = true): void
     {
-        $ruleArgs = ['status' => 1];
-        if ($type !== null) {
-            $ruleArgs['type'] = $type;
-        }
-
-        // Load the rules
-        $this->loadRules($ruleArgs, $useRules, $useRulePackages);
-
-        // Load the rule testers
         $this->loadRuleTesters();
 
-        // Check the rules
-        $results = $this->checkRules($submission->getData());
-
-        // Analyze the results
-        $this->analyzeResults($submission, $results, $securitySettings);
-    }
-
-    protected function loadRules(array $ruleArgs, $useRules = true, $useRulePackages = true): void
-    {
-        $this->rules = [];
-
-        // If enabled, try to load the rules from the cache, but only if rules and rule packages are used.
-        if ($this->prepareRulesInSharedCache && $useRules && $useRulePackages) {
-            $this->rules = $this->ruleCacheHelper->loadRulesFromCache();
-        }
-
-        // If there were no rules in the cache, load the rules from the database
-        if (!$this->rules) {
-            if ($useRules) {
-                $ruleRepository = $this->entityManager->getRepository(Rule::class);
-                $this->rules = $ruleRepository->findBy($ruleArgs);
-            }
-
-            if ($useRulePackages) {
-                $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
-                $rulePackages = $rulePackageRepository->findBy(['status' => 1]);
-
-                foreach ($rulePackages as $rulePackage) {
-                    try {
-                        $result = $this->rulePackageHelper->fetchRulePackage($rulePackage);
-
-                        if ($result) {
-                            $this->entityManager->flush();
-                        }
-                    } catch (Exception $e) {
-                        // Do nothing
-                    }
-
-                    $rulePackageCache = $rulePackage->getRulePackageCache();
-                    if ($rulePackageCache === null) {
-                        continue;
-                    }
-
-                    $rules = $rulePackageCache->getRules();
-                    foreach ($rules as $rule) {
-                        if (isset($ruleArgs['type']) && !in_array($rule->getType(), $ruleArgs['type'])) {
+        foreach ($submission->getData() as $groupKey => $groupData) {
+            foreach ($groupData as $fieldData) {
+                if (is_array($fieldData['value'])) {
+                    foreach ($fieldData['value'] as $subValue) {
+                        if (!trim($subValue)) {
                             continue;
                         }
 
-                        $this->rules[] = $rule;
+                        $this->checkFieldData($groupKey, $fieldData, $subValue, $useRules, $useRulePackages);
                     }
-                }
-            }
+                } else {
+                    if (!trim($fieldData['value'])) {
+                        continue;
+                    }
 
-            // Store the rules in the cache, if enabled. We only store the rules if rules and rule packages are used.
-            if ($this->prepareRulesInSharedCache && $useRules && $useRulePackages) {
-                $this->ruleCacheHelper->storeRulesInCache($this->rules);
-            }
-        }
-    }
-
-    protected function checkRules(array $data): array
-    {
-        $results = [];
-        foreach ($data as $groupKey => $groupData) {
-            foreach ($groupData as $fieldData) {
-                $path = $groupKey . '.' . $fieldData['fieldPath'];
-
-                $issues = $this->checkRulesForField($path, $fieldData);
-
-                if ($issues) {
-                    $results[$path] = $issues;
+                    $this->checkFieldData($groupKey, $fieldData, $fieldData['value'], $useRules, $useRulePackages);
                 }
             }
         }
 
-        return $results;
+        // Analyze the results
+        $this->analyzeResults($submission, $this->results, $securitySettings);
     }
 
-    protected function checkRulesForField($path, $fieldData): array
+    protected function checkFieldData(string $groupKey, array $fieldData, mixed $value, bool $useRules = true,  bool$useRulePackages = true)
     {
-        $issues = [];
-        foreach ($this->rules as $rule) {
-            $ruleType = $this->ruleTypeManager->getRuleType($rule->getType());
+        $value = strtolower($value);
+        $path = $groupKey . '.' . $fieldData['fieldPath'];
+
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb
+            ->select('i');
+
+        $fromCache = false;
+        $storedRuleItemIds = $this->ruleCacheHelper->getRuleItemIdsForValue($value);
+
+        if ($storedRuleItemIds) {
+            $fromCache = true;
+
+            $ruleItemIterator = new RuleItemIterator($this->entityManager, $qb, $useRules, $useRulePackages, $storedRuleItemIds);
+        } else {
+            $orExpr = $this->buildExpressions($qb, $groupKey, $fieldData, $value);
+
+            // If we have no expressions, we do not have to do anything with this field.
+            if ($orExpr === null) {
+                return;
+            }
+
+            $qb->andWhere($orExpr);
+
+            $ruleItemIterator = new RuleItemIterator($this->entityManager, $qb, $useRules, $useRulePackages);
+        }
+
+        $processedItemIds = ['ri' => [], 'rpric' => []];
+        foreach ($ruleItemIterator as $item) {
+            if ($item instanceof RuleItem) {
+                $processedItemIds['ri'][] = $item->getId();
+            } else if ($item instanceof RulePackageRuleItemCache) {
+                $processedItemIds['rpric'][] = $item->getId();
+            }
+
+            $rule = $item->getParent();
+            $tester = $this->ruleTesters[$rule->getType()] ?? null;
+
+            if (!$tester) {
+                continue;
+            }
+
+            $result = $tester->validateData($fieldData['name'], $value, $item);
+
+            if ($result) {
+                if (!isset($this->results[$path])) {
+                    $this->results[$path] = [];
+                }
+
+                $this->results[$path] = array_merge($this->results[$path], [$result]);
+            }
+
+            $ruleItemIterator->detach($item);
+        }
+
+        if (!$fromCache) {
+            $this->ruleCacheHelper->storeRuleItemsForValue($value, $processedItemIds);
+        }
+    }
+
+    protected function buildExpressions(QueryBuilder $qb, string $groupKey, array $fieldData, mixed $value): ?Expr\Orx
+    {
+        $orExpr = $qb->expr()->orX();
+
+        foreach ($this->ruleTypeManager->getRuleTypes() as $ruleType) {
+            $path = $groupKey . '.' . $fieldData['fieldPath'];
             if (!$this->isRuleTypeApplicable($ruleType, $path)) {
                 continue;
             }
 
-            $ruleTester = $this->ruleTesters[$rule->getType()];
-
-            $value = $fieldData['value'] ?? '';
-            if (is_array($value)) {
-                $result = [];
-                foreach ($value as $key => $subValue) {
-                    $subResult = $ruleTester->validateData($fieldData['name'], $subValue, $rule);
-
-                    if (count($subResult) > 0) {
-                        $result = array_merge($result, $subResult);
-                    }
-                }
-            } else {
-                $result = $ruleTester->validateData($fieldData['name'], $value, $rule);
+            $tester = $this->ruleTesters[$ruleType->getKey()] ?? null;
+            if (!$tester) {
+                continue;
             }
 
-            if (count($result) > 0) {
-                $issues = array_merge($issues, $result);
-            }
+            $tester->buildExpressions($qb, $orExpr, $fieldData, $value);
         }
 
-        return $issues;
+        if ($orExpr->count() === 0) {
+            return null;
+        }
+
+        return $orExpr;
     }
 
     protected function isRuleTypeApplicable(RuleTypeInterface $ruleType, $path): bool
@@ -269,16 +257,10 @@ class RuleTesterHelper
 
     protected function loadRuleTesters(): void
     {
-        foreach ($this->rules as $rule) {
-            if (isset($this->ruleTesters[$rule->getType()])) {
-                continue;
-            }
-
-            $ruleType = $this->ruleTypeManager->getRuleType($rule->getType());
-
+        foreach ($this->ruleTypeManager->getRuleTypes() as $ruleType) {
             $ruleTesterClass = $ruleType->getTesterClass();
-            $ruleTester = new $ruleTesterClass();
-            $this->ruleTesters[$rule->getType()] = $ruleTester;
+            $ruleTester = new $ruleTesterClass($this->entityManager);
+            $this->ruleTesters[$ruleType->getKey()] = $ruleTester;
         }
     }
 

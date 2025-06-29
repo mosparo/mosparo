@@ -1487,6 +1487,15 @@ administration:
       continue: Continue
 
     finalize:
+      process:
+        v14:
+          title: Process tasks
+          intro: mosparo needs to optimize the stored data to catch spam reliably. Please wait while the tasks are executed.
+          processingPleaseWait: Processing tasks…
+          processingStats: Processed %processedTasks% of %totalTasks%
+          doNotLeave: Please do not leave this page or abort the process. If the process does not change for a longer time, please refresh this page.
+
+    finalized:
       title: Update executed
       description: The needed changes for this update were executed. Your installation is up to date.
 

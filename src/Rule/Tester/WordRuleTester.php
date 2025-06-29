@@ -2,30 +2,40 @@
 
 namespace Mosparo\Rule\Tester;
 
+use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\QueryBuilder;
 use Kir\StringUtils\Matching\Wildcards\Pattern;
-use Mosparo\Rule\RuleEntityInterface;
+use Mosparo\Rule\RuleItemEntityInterface;
 
 class WordRuleTester extends AbstractRuleTester
 {
-    public function validateData($key, $value, RuleEntityInterface $rule): array
+    public function buildExpressions(QueryBuilder $qb, Orx $orExpr, array $fieldData, ?string $value)
+    {
+        $orExpr->add($qb->expr()->andX()
+            ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('text')))
+            ->add($qb->expr()->like($qb->createNamedParameter($value), 'i.preparedValue'))
+        );
+
+        $orExpr->add($qb->expr()->eq('i.type', $qb->createNamedParameter('regex')));
+    }
+
+    public function validateData($key, $value, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
-        foreach ($rule->getItems() as $item) {
-            $result = false;
-            if ($item->getType() === 'text') {
-                $result = $this->validateTextItem($value, $item->getValue());
-            } else if ($item->getType() === 'regex') {
-                $result = $this->validateRegexItem($value, $item->getValue());
-            }
+        $result = false;
+        if ($item->getType() === 'text') {
+            $result = $this->validateTextItem($value, $item->getValue());
+        } else if ($item->getType() === 'regex') {
+            $result = $this->validateRegexItem($value, $item->getValue());
+        }
 
-            if ($result !== false) {
-                $matchingItems[] = [
-                    'type' => $item->getType(),
-                    'value' => $item->getValue(),
-                    'rating' => $this->calculateSpamRating($rule, $item),
-                    'uuid' => $rule->getUuid()
-                ];
-            }
+        if ($result !== false) {
+            $matchingItems = [
+                'type' => $item->getType(),
+                'value' => $item->getValue(),
+                'rating' => $this->calculateSpamRating($item),
+                'uuid' => $item->getParent()->getUuid(),
+            ];
         }
 
         return $matchingItems;

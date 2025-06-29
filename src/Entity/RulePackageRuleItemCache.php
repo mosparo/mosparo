@@ -4,11 +4,18 @@ namespace Mosparo\Entity;
 
 use Mosparo\Repository\RulePackageRuleCacheRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Rule\PreparedRuleItemTrait;
+use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleItemEntityInterface;
 
 #[ORM\Entity(repositoryClass: RulePackageRuleCacheRepository::class)]
+#[ORM\Index(name: 'rpric_uuid_idx', fields: ['uuid'])]
+#[ORM\Index(name: 'rpric_hashed_idx', fields: ['project', 'type', 'hashedValue'])]
+#[ORM\HasLifecycleCallbacks]
 class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 {
+    use PreparedRuleItemTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -21,7 +28,7 @@ class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleIte
     #[ORM\JoinColumn(nullable: false)]
     private ?RulePackageRuleCache $rulePackageRuleCache = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 50)]
     private ?string $type;
 
     #[ORM\Column(type: 'text')]
@@ -114,5 +121,10 @@ class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleIte
         $this->project = $project;
 
         return $this;
+    }
+
+    public function getParent(): RuleEntityInterface
+    {
+        return $this->rulePackageRuleCache;
     }
 }

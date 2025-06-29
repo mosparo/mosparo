@@ -2,25 +2,25 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'administration.update.finalize.title'|trans }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'administration.update.finalized.title'|trans }} - {{ parent() }}{% endblock %}
 
 {% block small_body %}
-    <h2 class="card-title text-center mb-4">{{ 'administration.update.finalize.title'|trans }}</h2>
+    <h2 class="card-title text-center mb-4">{{ 'administration.update.finalized.title'|trans }}</h2>
 
     <p>
-        {{ 'administration.update.finalize.description'|trans }}
+        {{ 'administration.update.finalized.description'|trans }}
     </p>
 
     {% if showHostsAlert %}
         <div class="alert alert-danger mt-4">
             <div class="alert-title">
-                {{ 'administration.update.finalize.hostsAlert.title'|trans }}
+                {{ 'administration.update.finalized.hostsAlert.title'|trans }}
             </div>
             <p class="text-muted">
-                {{ 'administration.update.finalize.hostsAlert.intro'|trans }}
+                {{ 'administration.update.finalized.hostsAlert.intro'|trans }}
             </p>
             <p class="text-muted">
-                <strong>{{ 'administration.update.finalize.hostsAlert.intro2'|trans }}</strong>
+                <strong>{{ 'administration.update.finalized.hostsAlert.intro2'|trans }}</strong>
             </p>
             <div class="d-flex justify-content-end">
                 <a href="https://documentation.mosparo.io/docs/usage/settings/#hosts" target="_blank" class="btn btn-info">
@@ -34,13 +34,13 @@
     {% if showGeoIp2Info %}
         <div class="alert alert-info mt-4">
             <div class="alert-title">
-                {{ 'administration.update.finalize.geoIp2Info.title'|trans }}
+                {{ 'administration.update.finalized.geoIp2Info.title'|trans }}
             </div>
             <p class="text-muted">
-                {{ 'administration.update.finalize.geoIp2Info.intro'|trans }}
+                {{ 'administration.update.finalized.geoIp2Info.intro'|trans }}
             </p>
             <p class="text-muted">
-                <strong>{{ 'administration.update.finalize.geoIp2Info.intro2'|trans }}</strong>
+                <strong>{{ 'administration.update.finalized.geoIp2Info.intro2'|trans }}</strong>
             </p>
             <div class="d-flex justify-content-end">
                 <a href="https://documentation.mosparo.io/docs/administration/geoip" target="_blank" class="btn btn-info">

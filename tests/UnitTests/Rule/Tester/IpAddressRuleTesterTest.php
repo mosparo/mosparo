@@ -11,49 +11,73 @@ class IpAddressRuleTesterTest extends TestCaseWithItems
     public function testValidateDataIpAddress()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'ipAddress', 'value' => '127.0.0.1', 'rating' => 5.0]
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('ipAddress');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('127.0.0.1');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new IpAddressRuleTester();
-        $result = $ruleTester->validateData('test', '127.0.0.1', $ruleStub);
+        $result = $ruleTester->validateData('test', '127.0.0.1', $ruleItemStub);
 
         $this->assertIsArray($result);
-        $this->assertCount(1, $result);
-        $this->assertEquals([['type' => 'ipAddress', 'value' => '127.0.0.1', 'rating' => 5.0, 'uuid' => null]], $result);
+        $this->assertEquals(['type' => 'ipAddress', 'value' => '127.0.0.1', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
     public function testValidateDataSubnet()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'subnet', 'value' => '192.168.0.0/24', 'rating' => 5.0]
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('subnet');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('192.168.0.0/24');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new IpAddressRuleTester();
-        $result = $ruleTester->validateData('test', '192.168.0.123', $ruleStub);
+        $result = $ruleTester->validateData('test', '192.168.0.123', $ruleItemStub);
 
         $this->assertIsArray($result);
-        $this->assertCount(1, $result);
-        $this->assertEquals([['type' => 'subnet', 'value' => '192.168.0.0/24', 'rating' => 5.0, 'uuid' => null]], $result);
+        $this->assertEquals(['type' => 'subnet', 'value' => '192.168.0.0/24', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
     public function testValidateDataNothingFound()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'ipAddress', 'value' => '127.0.0.1', 'rating' => 5.0],
-                ['type' => 'subnet', 'value' => '192.168.0.0/24', 'rating' => 5.0]
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('ipAddress');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('127.0.0.1');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new IpAddressRuleTester();
-        $result = $ruleTester->validateData('test', '192.168.1.123', $ruleStub);
+        $result = $ruleTester->validateData('test', '192.168.1.123', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);

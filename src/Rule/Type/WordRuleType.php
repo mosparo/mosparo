@@ -2,7 +2,6 @@
 
 namespace Mosparo\Rule\Type;
 
-use Mosparo\Rule\Form\WordFormType;
 use Mosparo\Rule\Tester\WordRuleTester;
 
 final class WordRuleType extends AbstractRuleType
@@ -21,7 +20,6 @@ final class WordRuleType extends AbstractRuleType
             'name' => 'rule.type.word.regex.title'
         ]
     ];
-    protected string $formClass = WordFormType::class;
     protected string $testerClass = WordRuleTester::class;
     protected array $targetFieldKeys = ['formData.'];
     protected string $helpTemplate = 'project_related/rule/type/help/word.html.twig';

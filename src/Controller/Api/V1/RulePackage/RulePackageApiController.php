@@ -5,7 +5,6 @@ namespace Mosparo\Controller\Api\V1\RulePackage;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Enum\RulePackageType;
 use Mosparo\Helper\ProjectHelper;
-use Mosparo\Helper\RuleCacheHelper;
 use Mosparo\Helper\RulePackageHelper;
 use Mosparo\Repository\RulePackageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +27,7 @@ class RulePackageApiController extends AbstractController
     }
 
     #[Route('/import', name: 'rule_package_api_import')]
-    public function import(Request $request, EntityManagerInterface $entityManager, RulePackageRepository $rulePackageRepository, RuleCacheHelper $ruleCacheHelper): Response
+    public function import(Request $request, EntityManagerInterface $entityManager, RulePackageRepository $rulePackageRepository): Response
     {
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {
@@ -116,9 +115,6 @@ class RulePackageApiController extends AbstractController
 
         // Store the rule package cache
         $entityManager->flush();
-
-        // Clear the rule cache
-        $ruleCacheHelper->clearRulesCache();
 
         return new JsonResponse([
             'successful' => true,

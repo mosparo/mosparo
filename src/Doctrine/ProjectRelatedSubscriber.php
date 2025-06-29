@@ -23,7 +23,7 @@ class ProjectRelatedSubscriber
     {
         $entity = $args->getObject();
 
-        if ($entity instanceof ProjectRelatedEntityInterface) {
+        if ($entity instanceof ProjectRelatedEntityInterface && $this->projectHelper->getActiveProject()) {
             $entity->setProject($this->projectHelper->getActiveProject());
         }
     }

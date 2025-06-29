@@ -9,7 +9,6 @@ use Kir\StringUtils\Matching\Wildcards\Pattern;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
 use Mosparo\Form\RuleFormType;
-use Mosparo\Helper\RuleCacheHelper;
 use Mosparo\Rule\RuleTypeManager;
 use Mosparo\Rule\Type\RuleTypeInterface;
 use Mosparo\Rule\Type\UnicodeBlockRuleType;
@@ -37,14 +36,11 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
     protected RuleTypeManager $ruleTypeManager;
 
-    protected RuleCacheHelper $ruleCacheHelper;
-
-    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, RuleTypeManager $ruleTypeManager, RuleCacheHelper $ruleCacheHelper)
+    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, RuleTypeManager $ruleTypeManager)
     {
         $this->entityManager = $entityManager;
         $this->translator = $translator;
         $this->ruleTypeManager = $ruleTypeManager;
-        $this->ruleCacheHelper = $ruleCacheHelper;
     }
 
     #[Route('/', name: 'rule_list')]
@@ -161,8 +157,6 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
         if ($form->isSubmitted() && $form->isValid() && !$readOnly) {
             $entityManager->flush();
-
-            $this->ruleCacheHelper->clearRulesCache();
 
             $session = $request->getSession();
             $session->getFlashBag()->add(
@@ -489,14 +483,19 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
         $qb = $entityManager->createQueryBuilder();
         $qb
-            ->delete('Mosparo\Entity\RuleItem', 'ri')
+            ->select('ri')
+            ->from('Mosparo\Entity\RuleItem', 'ri')
             ->where('ri.rule = :rule')
             ->andWhere('ri.id IN (:ids)')
             ->setParameter('rule', $rule)
             ->setParameter('ids', $itemIds, ArrayParameterType::INTEGER);
 
         try {
-            $qb->getQuery()->execute();
+            foreach ($qb->getQuery()->getResult() as $item) {
+                $entityManager->remove($item);
+            }
+
+            $entityManager->flush();
         } catch (\Exception $e) {
             return new JsonResponse([
                 'success' => false,
@@ -528,8 +527,6 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
                 $entityManager->remove($rule);
                 $entityManager->flush();
-
-                $this->ruleCacheHelper->clearRulesCache();
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(

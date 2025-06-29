@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Mosparo\Rule\RuleEntityInterface;
 
 #[ORM\Entity(repositoryClass: RulePackageRuleCacheRepository::class)]
+#[ORM\Index(name: 'rprc_uuid_idx', fields: ['uuid'])]
 class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityInterface
 {
     #[ORM\Id]

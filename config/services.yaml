@@ -206,6 +206,10 @@ services:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
 
+    Mosparo\Helper\Migration\V14OptimizeRulesHelper:
+        arguments:
+            $isDebug: '%kernel.debug%'
+
     Mosparo\Command\UpdateMosparoCommand:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
@@ -239,15 +243,11 @@ services:
             $cache: '@mosparo.cache.service'
             $prepareCssFilesInSharedCache: '%env(MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE)%'
 
-    Mosparo\Helper\RuleTesterHelper:
-        arguments:
-            $prepareRulesInSharedCache: '%env(bool:MOSPARO_PREPARE_RULES_IN_SHARED_CACHE)%'
-
     Mosparo\Helper\RuleCacheHelper:
         arguments:
             $cache: '@mosparo.cache.service'
-            $prepareRulesInSharedCache: '%env(bool:MOSPARO_PREPARE_RULES_IN_SHARED_CACHE)%'
-            $rulesCacheTtl: '%env(int:MOSPARO_RULES_CACHE_TTL)%'
+            $useSharedCacheForRuleItems: '%env(bool:MOSPARO_USE_SHARED_CACHE_FOR_RULE_ITEMS)%'
+            $ruleItemsCacheTtl: '%env(int:MOSPARO_RULE_ITEMS_CACHE_TTL)%'
 
     Mosparo\ExpressionLanguage\AllowListExpressionLanguageProvider:
         tags:

@@ -11,7 +11,6 @@ use Mosparo\Enum\RulePackageType;
 use Mosparo\Enum\RulePackageTypeCategory;
 use Mosparo\Exception;
 use Mosparo\Form\RulePackageFormType;
-use Mosparo\Helper\RuleCacheHelper;
 use Mosparo\Helper\RulePackageHelper;
 use Mosparo\Rule\RuleTypeManager;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
@@ -38,8 +37,6 @@ class RulePackageController extends AbstractController implements ProjectRelated
 
     protected RulePackageHelper $rulePackageHelper;
 
-    protected RuleCacheHelper $ruleCacheHelper;
-
     protected TranslatorInterface $translator;
 
     public function __construct(
@@ -47,14 +44,12 @@ class RulePackageController extends AbstractController implements ProjectRelated
         DataTableFactory $dataTableFactory,
         RuleTypeManager $ruleTypeManager,
         RulePackageHelper $rulePackageHelper,
-        RuleCacheHelper $ruleCacheHelper,
         TranslatorInterface $translator
     ) {
         $this->entityManager = $entityManager;
         $this->dataTableFactory = $dataTableFactory;
         $this->ruleTypeManager = $ruleTypeManager;
         $this->rulePackageHelper = $rulePackageHelper;
-        $this->ruleCacheHelper = $ruleCacheHelper;
         $this->translator = $translator;
     }
 
@@ -149,8 +144,6 @@ class RulePackageController extends AbstractController implements ProjectRelated
                 }
             }
 
-            $this->ruleCacheHelper->clearRulesCache();
-
             if (!$hasError) {
                 $this->entityManager->flush();
 
@@ -186,8 +179,6 @@ class RulePackageController extends AbstractController implements ProjectRelated
             if ($this->isCsrfTokenValid('delete-rule-package', $submittedToken)) {
                 $this->entityManager->remove($rulePackage);
                 $this->entityManager->flush();
-
-                $this->ruleCacheHelper->clearRulesCache();
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
