@@ -12,6 +12,8 @@
 .tabulator {
     font-size: 0.875rem;
 
+    background: unset;
+
     .tabulator-header .tabulator-headers,
     .tabulator-footer,
     .tabulator-tableholder .tabulator-table {
@@ -38,8 +40,29 @@
                 padding-bottom: .5rem;
 
                 &:hover {
-                    background: var(--tblr-bg-surface-secondary);
+                    color: var(--tblr-body-color);
                 }
+            }
+
+            &.tabulator-sortable[aria-sort=none] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+                border-bottom-color: var(--tblr-secondary);
+            }
+
+            &.tabulator-sortable[aria-sort=none] .tabulator-col-content:hover .tabulator-col-sorter .tabulator-arrow {
+                border-bottom-color: var(--tblr-body-color);
+            }
+
+            &.tabulator-sortable[aria-sort=ascending] .tabulator-col-content,
+            &.tabulator-sortable[aria-sort=descending] .tabulator-col-content {
+                color: var(--tblr-body-color);
+            }
+
+            &.tabulator-sortable[aria-sort=ascending] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+                border-bottom-color: var(--tblr-body-color) !important;
+            }
+
+            &.tabulator-sortable[aria-sort=descending] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+                border-top-color: var(--tblr-body-color) !important;
             }
         }
     }
@@ -97,6 +120,10 @@
         }
 
         .tabulator-cell {
+            &.tabulator-row-header {
+                background: unset;
+            }
+
             &.tabulator-cell-edited {
                 background: rgba(var(--tblr-warning-rgb), 0.15);
             }
@@ -179,5 +206,25 @@
             background: var(--tblr-blue);
             color: var(--tblr-blue-fg);
         }
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+        background-color: unset;
+    }
+}
+
+[data-bs-theme=dark],
+body[data-bs-theme=dark] [data-bs-theme=light] {
+    .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left,
+    .tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left,
+    .tabulator .tabulator-header,
+    .tabulator .tabulator-row {
+        border-color: var(--tblr-border-color-translucent) !important;
+    }
+
+    .tabulator .tabulator-tableholder .tabulator-table {
+        background-color: var(--tblr-bg-surface);
     }
 }
