@@ -184,6 +184,7 @@ rule:
     status:
       unsavedChanges: '%counter% unsaved changes'
       savingChanges: 'Saving %counter% changes'
+      nothingToSave: Nothing to save
 
     items:
       title: Items

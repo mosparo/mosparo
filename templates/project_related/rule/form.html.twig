@@ -135,6 +135,9 @@
                             <div class="status-dot status-dot-animated"></div>
                             {{ 'rule.form.status.savingChanges'|trans({'%counter%': '<span></span>'})|raw }}
                         </div>
+                        <div class="status status-gray me-3 text-nowrap d-none" id="status-no-changes">
+                            {{ 'rule.form.status.nothingToSave'|trans }}
+                        </div>
                         <button type="button" class="btn btn-primary mt-2 mt-md-0 w-mobile-100" id="btn-saving-changes">
                             <i class="ti ti-device-floppy"></i>
                             {{ 'action.saveChanges'|trans }}
@@ -502,6 +505,7 @@
 
                     if (number) {
                         statusEl.removeClass('d-none');
+                        $('#status-no-changes').addClass('d-none');
                     } else {
                         statusEl.addClass('d-none');
                     }
@@ -514,6 +518,7 @@
 
                     if (number) {
                         statusEl.removeClass('d-none');
+                        $('#status-no-changes').addClass('d-none');
                     } else {
                         statusEl.addClass('d-none');
                     }
@@ -526,6 +531,9 @@
                     if (processingChanges || changes.size === 0) {
                         return;
                     }
+
+                    let saveButtonEl = $('#btn-saving-changes');
+                    saveButtonEl.prop('disabled', true);
 
                     let preparedChanges = [];
                     changes.forEach(function (change, key) {
@@ -547,6 +555,7 @@
                     });
 
                     if (!preparedChanges.length) {
+                        saveButtonEl.prop('disabled', false);
                         return;
                     }
 
@@ -595,6 +604,7 @@
                         processingChanges = false;
 
                         updateSavingChanges(0);
+                        saveButtonEl.prop('disabled', false);
                     });
                 }
 
@@ -1207,7 +1217,14 @@
                         $(this).find('.modal-loader').removeClass('visible');
                     });
 
-                    $('#btn-saving-changes').click(saveChanges);
+                    $('#btn-saving-changes').click(function () {
+                        if (changes.size === 0) {
+                            $('#status-no-changes').removeClass('d-none');
+                            return;
+                        }
+
+                        saveChanges();
+                    });
                     saveInterval = setInterval(saveChanges, 3000);
                 {% endif %}
             });
