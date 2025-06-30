@@ -109,6 +109,11 @@ class RulePackageController extends AbstractController implements ProjectRelated
     }
 
     #[Route('/add/with-type/{type}', name: 'rule_package_add_with_type')]
+    public function addWithType(Request $request, string $type = null): Response
+    {
+        return $this->form($request, null, $type);
+    }
+
     #[Route('/{id}/edit', name: 'rule_package_edit')]
     public function form(Request $request, RulePackage $rulePackage = null, ?string $type = null): Response
     {
