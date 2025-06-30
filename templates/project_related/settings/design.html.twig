@@ -107,37 +107,99 @@
                             <h2 class="card-title">{{ 'settings.design.subtitles.dimensionSettings'|trans }}</h2>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
-                                    {{ form_row(form.boxSize) }}
-                                </div>
-                                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
-                                    <div class="form-group">
-                                        {{ form_label(form.boxRadius) }}
-                                        <div class="input-group">
-                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
-                                                <i class="ti ti-minus"></i>
-                                            </button>
-                                            {{ form_widget(form.boxRadius) }}
-                                            <span class="input-group-text">px</span>
-                                            <button class="btn btn-icon-only btn-increase-value" type="button">
-                                                <i class="ti ti-plus"></i>
-                                            </button>
+                            <div class="card-tabs">
+                                <ul class="nav nav-tabs" data-bs-toggle="tabs">
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-box-size" class="nav-link active" data-bs-toggle="tab">
+                                            <i class="ti ti-select-all"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.dimensions.mosparoBox'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-checkbox-size" class="nav-link" data-bs-toggle="tab">
+                                            <i class="ti ti-checkbox"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.dimensions.checkbox'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="card tab-pane active show" id="tabs-box-size">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                    {{ form_row(form.boxSize) }}
+                                                </div>
+                                                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                    <div class="form-group">
+                                                        {{ form_label(form.boxRadius) }}
+                                                        <div class="input-group">
+                                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                                                <i class="ti ti-minus"></i>
+                                                            </button>
+                                                            {{ form_widget(form.boxRadius) }}
+                                                            <span class="input-group-text">px</span>
+                                                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                                                <i class="ti ti-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-group">
+                                                        {{ form_label(form.boxBorderWidth) }}
+                                                        <div class="input-group">
+                                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                                                <i class="ti ti-minus"></i>
+                                                            </button>
+                                                            {{ form_widget(form.boxBorderWidth) }}
+                                                            <span class="input-group-text">px</span>
+                                                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                                                <i class="ti ti-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-lg-4">
-                                    <div class="form-group">
-                                        {{ form_label(form.boxBorderWidth) }}
-                                        <div class="input-group">
-                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
-                                                <i class="ti ti-minus"></i>
-                                            </button>
-                                            {{ form_widget(form.boxBorderWidth) }}
-                                            <span class="input-group-text">px</span>
-                                            <button class="btn btn-icon-only btn-increase-value" type="button">
-                                                <i class="ti ti-plus"></i>
-                                            </button>
+                                    <div class="card tab-pane" id="tabs-checkbox-size">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                    <div class="form-group">
+                                                        {{ form_label(form.checkboxRadius) }}
+                                                        <div class="input-group">
+                                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                                                <i class="ti ti-minus"></i>
+                                                            </button>
+                                                            {{ form_widget(form.checkboxRadius) }}
+                                                            <span class="input-group-text">px</span>
+                                                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                                                <i class="ti ti-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-group">
+                                                        {{ form_label(form.checkboxBorderWidth) }}
+                                                        <div class="input-group">
+                                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                                                <i class="ti ti-minus"></i>
+                                                            </button>
+                                                            {{ form_widget(form.checkboxBorderWidth) }}
+                                                            <span class="input-group-text">px</span>
+                                                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                                                <i class="ti ti-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
