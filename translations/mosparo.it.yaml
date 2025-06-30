@@ -998,17 +998,7 @@ administration:
     buttons:
       continue: Continua
     updateChannel: Canale di aggiornamento
-    finalize:
-      title: Aggiornamento effettuato
-      geoIp2Info:
-        title: "Versione 1.2.2: Richiesto l'ID dell'utente MaxMind"
-        intro2: Controllare la configurazione di GeoIP2 e inserire il proprio ID utente.
-        intro: L'ID dell'utente MaxMind e la chiave di licenza sono necessari per scaricare il database GeoIP2.
-      description: Le modifiche necessarie per questo aggiornamento sono state eseguite. L'installazione è aggiornata.
-      hostsAlert:
-        intro: Con la versione 1.2, mosparo inizia a verificare l'origine di una richiesta di frontend. A causa di questo cambiamento, gli host del progetto devono essere impostati correttamente.
-        title: "Versione 1.2: modifica della verifica dell'origine"
-        intro2: Si prega di verificare subito i progetti e i moduli.
+    finalize: {}
     execute:
       description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
       message:

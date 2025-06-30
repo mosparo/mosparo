@@ -735,9 +735,6 @@ administration:
         savedSuccessfully: Le canal de mise à jour a bien été enregistré.
     buttons:
       continue: Continuer
-    finalize:
-      title: Mise à jour effectuée
-      description: Les modifications requises pour cette mise à jour ont été effectuées. Votre installation est à jour.
   system:
     title: Informations du système
     description: Retrouvez toutes les informations à propos de mosparo.

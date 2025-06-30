@@ -649,9 +649,6 @@ administration:
     description: Periksa versi baru dan perbarui instalasi mosparo Anda.
     updateChannel: Perbarui saluran
     installedVersion: Versi terpasang
-    finalize:
-      title: Pembaruan dieksekusi
-      description: Perubahan yang diperlukan untuk pembaruan ini dijalankan. Instalasi Anda mutakhir.
     upgrade:
       installedVersion: Versi utama diinstal
       availableVersion: Tersedia versi utama
