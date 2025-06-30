@@ -2028,3 +2028,4 @@ tooltip:
   host: Host
   publicKey: Public key
   privateKey: Private key
+  deleted: Deleted

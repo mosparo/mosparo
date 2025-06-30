@@ -38,11 +38,17 @@
     {% cspscript %}
         <script>
             $(function() {
-                $('#cleanup_statistic').initDataTables({{ datatable_settings(datatable) }}, {
+                let tableEl = $('#cleanup_statistic');
+
+                tableEl.initDataTables({{ datatable_settings(datatable) }}, {
                     autoWidth: false,
                     searching: false,
                     info: false,
                     columnDefs: []
+                });
+
+                tableEl.on('draw.dt', function(e) {
+                   initializeTooltips();
                 });
             });
         </script>

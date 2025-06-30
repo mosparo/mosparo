@@ -1,5 +1,9 @@
+{% trans_default_domain 'mosparo' %}
+
 {{ value }}
 
-{% if row.numberOfDeletedSubmitTokens %}
-    <span class="status status-red">-{{ row.numberOfDeletedSubmissions }}</span>
+{% if row.numberOfDeletedSubmissions %}
+    <span class="status status-red" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'tooltip.deleted'|trans }}">
+        -{{ row.numberOfDeletedSubmissions }}
+    </span>
 {% endif %}

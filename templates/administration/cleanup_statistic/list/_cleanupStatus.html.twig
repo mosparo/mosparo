@@ -1,7 +1,7 @@
 {% trans_default_domain 'mosparo' %}
 
 {% if value.value == 1 %}
-    <span class="status status-red">{{ 'cleanupStatus.incomplete.label'|trans }}</span>
+    <span class="status status-orange">{{ 'cleanupStatus.incomplete.label'|trans }}</span>
 {% elseif value.value == 2 %}
     <span class="status status-green">{{ 'cleanupStatus.complete.label'|trans }}</span>
 {% else %}

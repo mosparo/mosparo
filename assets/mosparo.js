@@ -32,3 +32,4 @@ import './js/form.js';
 import './js/color.js';
 import './js/table.js';
 import './js/project.js';
+import './js/tooltip.js';
