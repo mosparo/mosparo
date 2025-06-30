@@ -24,7 +24,7 @@ final class WebsiteRuleType extends AbstractRuleType
     {
         return [
             // This pattern tries to match it as good as possible but is not to be 100% precise.
-            'url' => '^([a-zA-Z0-9]+):\/\/([\w\-\.]+\.)*[\w\-\.]+\.\w{2,}(.[^\s]*)',
+            'url' => '^([a-zA-Z0-9]+)?:\/\/([\w\-\.]+\.)*[\w\-\.]+\.\w{2,}(.[^\s]*)',
         ];
     }
 }
