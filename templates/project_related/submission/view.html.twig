@@ -57,13 +57,21 @@
 {% block pageTitleColumn %}
     {{ parent() }}
 
-    {% if activeProject.verificationSimulationMode %}
-        <div class="col-auto ms-auto">
+    {% if submission.issues or activeProject.verificationSimulationMode %}
+        <div class="col-12 col-md-auto ms-auto mt-2 mt-md-0">
             <div class="btn-list">
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#verification-simulation-modal">
-                    <i class="ti ti-route"></i>
-                    {{ 'submission.view.action.openVerificationSimulation'|trans }}
-                </button>
+                {% if submission.issues %}
+                    <button type="button" class="btn btn-outline-purple" data-bs-toggle="modal" data-bs-target="#verification-issues-modal">
+                        <i class="ti ti-input-x"></i>
+                        {{ 'submission.view.action.openVerificationIssues'|trans }}
+                    </button>
+                {% endif %}
+                {% if activeProject.verificationSimulationMode %}
+                    <button type="button" class="btn btn-outline-purple" data-bs-toggle="modal" data-bs-target="#verification-simulation-modal">
+                        <i class="ti ti-route"></i>
+                        {{ 'submission.view.action.openVerificationSimulation'|trans }}
+                    </button>
+                {% endif %}
             </div>
         </div>
     {% endif %}
@@ -445,6 +453,71 @@
             </div>
         </div>
     </div>
+
+    {% if submission.issues %}
+        <div class="modal modal-blur fade" tabindex="-1" id="verification-issues-modal">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="ti ti-input-x"></i>
+                            {{ 'submission.view.verificationIssues.title'|trans }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ 'submission.view.verificationIssues.intro'|trans }}</p>
+
+                        {% for issue in submission.issues %}
+                            {% if issue.name is defined %}
+                                <h4>{{ 'submission.view.verificationIssues.labels.fieldIssue'|trans({'%name%': issue.name}) }}</h4>
+                            {% else %}
+                                <h4>{{ 'submission.view.verificationIssues.labels.generalIssue'|trans }}</h4>
+                            {% endif %}
+
+                            <table class="table table-bordered table-striped {% if loop.last %}mb-0{% endif %}">
+                                <tbody>
+                                    {% if issue.message is defined %}
+                                        <tr>
+                                            <th class="text-nowrap">
+                                                {{ 'submission.view.verificationIssues.labels.message'|trans }}
+                                            </th>
+                                            <td>
+                                                {{ issue.message }}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if issue.errorMessage is defined %}
+                                        <tr>
+                                            <th class="text-nowrap">
+                                                {{ 'submission.view.verificationIssues.labels.errorMessage'|trans }}
+                                            </th>
+                                            <td>
+                                                {{ issue.errorMessage }}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if issue.debugInformation is defined %}
+                                        <tr>
+                                            <th class="text-nowrap">
+                                                {{ 'submission.view.verificationIssues.labels.debugInformation'|trans }}
+                                            </th>
+                                            <td>
+                                                {{ _self.dataTable(issue.debugInformation) }}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     {% if activeProject.verificationSimulationMode %}
         <div class="modal modal-blur fade verification-simulation" tabindex="-1" id="verification-simulation-modal">

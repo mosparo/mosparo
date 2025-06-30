@@ -46,6 +46,9 @@ class Submission implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'json')]
     private array $verifiedFields = [];
 
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $issues = null;
+
     #[ORM\Column(type: 'json')]
     private array $generalVerifications = [];
 
@@ -215,6 +218,48 @@ class Submission implements ProjectRelatedEntityInterface
         }
 
         return $this->verifiedFields[$key];
+    }
+
+    public function getIssues($withDebugInformation = true): array
+    {
+        if (!$this->issues) {
+            return [];
+        }
+
+        if ($withDebugInformation) {
+            return $this->issues;
+        }
+
+        $issues = $this->issues;
+
+        foreach ($issues as $key => $issue) {
+            unset($issues[$key]['debugInformation']);
+        }
+
+        return $issues;
+    }
+
+    public function setIssues(array $issues): self
+    {
+        $this->issues = $issues;
+
+        return $this;
+    }
+
+    public function addIssue(array $issue): self
+    {
+        $this->issues[] = $issue;
+
+        return $this;
+    }
+
+    public function countIssues(): int
+    {
+        if (!$this->issues) {
+            return 0;
+        }
+
+        return count($this->issues);
     }
 
     public function getGeneralVerifications(): array

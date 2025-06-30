@@ -20,10 +20,10 @@ class VerificationHelper
         $submittedFormData = $submissionData['formData'];
 
         if (empty($submittedFormData) || empty($formData)) {
-            $issues[] = [
+            $submission->addIssue([
                 'name' => 'formData',
                 'message' => 'Form data is empty.',
-            ];
+            ]);
         }
 
         foreach ($submittedFormData as $sFieldData) {
@@ -35,16 +35,15 @@ class VerificationHelper
             $sValue = $sFieldData['value'] ?? '';
 
             if (!isset($formData[$sKey])) {
-                // Prepare the API debug data
-                $debugInformation = [];
-                if ($submission->getProject()->isApiDebugMode()) {
-                    $debugInformation['debugInformation'] = [
+                $submission->addIssue([
+                    'name' => $sKey,
+                    'message' => 'Missing in form data, verification not possible.',
+                    'debugInformation' => [
                         'reason' => 'field_not_in_received_data',
                         'expectedValue' => $this->describeValue($sValue),
-                    ];
-                }
+                    ]
+                ]);
 
-                $issues[] = ['name' => $sKey, 'message' => 'Missing in form data, verification not possible.'] + $debugInformation;
                 $submission->setVerifiedField($sKey, Submission::SUBMISSION_FIELD_INVALID);
                 continue;
             }
@@ -52,24 +51,23 @@ class VerificationHelper
             $fValue = $formData[$sKey];
 
             if (!$this->verifyValues($sValue, $fValue)) {
-                // Prepare the API debug data
-                $debugInformation = [];
-                if ($submission->getProject()->isApiDebugMode()) {
-                    $debugInformation['debugInformation'] = [
+                $submission->addIssue([
+                    'name' => $sKey,
+                    'message' => 'Field not valid.',
+                    'debugInformation' => [
                         'reason' => 'field_signature_invalid',
                         'expectedValue' => $this->describeValue($sValue),
                         'receivedValue' => $this->describeValue($fValue, true),
-                    ];
-                }
+                    ]
+                ]);
 
-                $issues[] = ['name' => $sKey, 'message' => 'Field not valid.'] + $debugInformation;
                 $submission->setVerifiedField($sKey, Submission::SUBMISSION_FIELD_INVALID);
             } else {
                 $submission->setVerifiedField($sKey, Submission::SUBMISSION_FIELD_VALID);
             }
         }
 
-        return ['valid' => (count($issues) === 0), 'verifiedFields' => $submission->getVerifiedFields(), 'issues' => $issues];
+        return ['valid' => ($submission->countIssues() === 0), 'verifiedFields' => $submission->getVerifiedFields(), 'issues' => $submission->getIssues($submission->getProject()->isApiDebugMode())];
     }
 
     /**

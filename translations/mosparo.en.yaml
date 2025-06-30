@@ -551,6 +551,7 @@ submission:
     title: Submission %submissionId%
 
     action:
+      openVerificationIssues: Verification issues
       openVerificationSimulation: Verification simulation
 
     spam:
@@ -625,6 +626,17 @@ submission:
         text: This submission is equal to previous submissions. mosparo found %actualNumberOfEqualSubmissions% equal submissions within the configured time range, more than the allowed number of %allowedNumberOfEqualSubmissions% equal submissions.
         maximumAllowed: 'Maximum allowed:'
         counted: 'Counted:'
+
+    verificationIssues:
+      title: Verification issues
+      intro: The following issues were detected during the verification of the submission. This information can be helpful if you want to understand why a submission was declined.
+
+      labels:
+        fieldIssue: Field issue %name%
+        generalIssue: General issue
+        errorMessage: Error message
+        message: Message
+        debugInformation: Debug information
 
     verificationSimulation:
       title: Verification simulation
