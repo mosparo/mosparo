@@ -77,7 +77,7 @@
         "twig/extra-bundle": "^3.13",
         "twig/intl-extra": "^3.13",
         "twig/twig": "3.14.0",
-        "zepi/unicode": "^2.0"
+        "zepi/unicode": "^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
