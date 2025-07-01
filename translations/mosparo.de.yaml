@@ -149,7 +149,6 @@ rule:
     filter:
       title: Einträge filtern
       useWildcard: Verwenden Sie %wildcard% als Platzhalter.
-      itemSpamRatingFactor: Spam-Bewertung
     noItemsInTable:
       title: Noch keine Einträge vorhanden
   delete:
