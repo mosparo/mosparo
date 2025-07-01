@@ -88,12 +88,11 @@
                 position: absolute;
                 top: calc(var(--mosparo-circle-border-width, 3px) * -1);
                 left: calc(var(--mosparo-circle-border-width, 3px) * -1);
-
-                border-radius: var(--mosparo-loading-circle-radius, 20px);
             }
 
             &:before {
                 border: 1px solid var(--mosparo-circle-border-color, rgb(0, 0, 0));
+                border-radius: var(--mosparo-circle-radius, 20px);
 
                 transform: scale(1);
 
@@ -107,6 +106,7 @@
             &:after {
                 border: var(--mosparo-circle-border-width, 3px) solid transparent;
                 border-left-color: var(--mosparo-loading-circle-animated-border-color, rgb(0, 0, 255));
+                border-radius: var(--mosparo-loading-circle-radius, 20px);
 
                 opacity: 0;
 
