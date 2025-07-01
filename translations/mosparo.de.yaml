@@ -405,7 +405,31 @@ rulePackage:
         title: Enthaltene Einträge
     howtoImport:
       title: Wie Sie importieren können
-      intro: Dieses Regelpaket ist ein manuell importierter Regelpakettyp. Das bedeutet, dass Sie die Regelpaketdaten für dieses Regelpaket importieren müssen. Andernfalls ist das Regelpaket leer und wird keinen Spam verhindern.
+      intro: Dieses Regelpaket ist ein manuell importiertes Regelpaket. Das bedeutet, dass Sie die Daten für dieses Regelpaket importieren müssen. Andernfalls ist das Regelpaket leer und wird keinen Spam verhindern.
+      arguments:
+        required: Erforderlich
+        value: Wert
+        description: Beschreibung
+      cli:
+        intro: Bitte verwenden Sie den folgenden Befehl, um das Regelpaket über per CLI zu importieren. Eines der Argumente %codeArgFile% oder %codeArgInput% ist erforderlich.
+        infoAdjustPaths: Bitte denken Sie daran, die Pfade zu den PHP-Binärdateien und dem mosparo CLI-Befehl anzupassen. Die Dokumentation Ihres Hosting-Anbieters enthält in der Regel weitere Informationen zu diesem Teil.
+        arguments:
+          descriptionProjectId: Gibt die Projekt-ID des Regelpakets an.
+          descriptionRulePackageId: Gibt die ID des Regelpakets an.
+          descriptionFile: Gibt den Dateipfad für die Regelpaketdatei an.
+          descriptionInput: Der Befehl liest den Inhalt des Regelpakets von der Standardeingabe, falls diese gesetzt ist.
+          descriptionHash: Wenn der Befehl den Hash des Regelpakets verifizieren soll, geben Sie den SHA256-Hash mit diesem Argument an.
+      api:
+        intro: Bitte importieren Sie den Inhalt des Regelpakets über die mosparo API. Sie können die API direkt nutzen oder einen unserer API-Clients verwenden. Sie können auch mosparo RPG (Rule Package Generator) verwenden, um den Inhalt des Regelpakets zu erstellen und zu importieren.
+        introSecond: Nachfolgend finden Sie die wichtigsten Informationen über die API und ein Beispiel, wenn Sie das Regelpaket mit mosparo RPG verwenden möchten. Lesen Sie mehr über die verschiedenen Optionen in unserer Dokumentation.
+        endpoint:
+          title: Endpunkt
+        arguments:
+          descriptionRulePackageId: Gibt die ID des Regelpakets an.
+          descriptionRulePackageContent: Gibt den Inhalt des Regelpakets an.
+          descriptionRulePackageHash: Um den Hash vor dem Importieren des Inhalts zu überprüfen, geben Sie den SHA256-Hash mit diesem Argument an.
+        example:
+          intro: Dieses Beispiel zeigt die für das mosparo RPG-Profil erforderliche Konfiguration. Weitere Optionen entnehmen Sie bitte der Dokumentation.
   delete:
     title: Regel-Paket %rulePackageName% löschen
     confirm: Wollen Sie das Regel-Paket %rulePackageName% wirklich löschen?
@@ -508,6 +532,7 @@ submission:
         title: Arbeitsnachweis ungültig
     action:
       openVerificationSimulation: Verifizierungs-Simulation
+      openVerificationIssues: Verifizierungs-Probleme
     verificationSimulation:
       buttons:
         customIntegration: Eigene Integration
@@ -590,12 +615,22 @@ submission:
         authorizationHeader: Die Autorisierungskopfzeile muss Base64-kodiert sein.
       errors:
         noValidationToken: Die Verifikationssimulation ist nicht möglich, da kein Validierungscode für diese Übermittlung gespeichert ist. Das bedeutet, dass die Daten im Formular die mosparo-Validierung nicht bestanden haben, wodurch die Verifizierung unmöglich ist.
+    verificationIssues:
+      title: Verifizierungs-Probleme
+      intro: Die folgenden Probleme wurden bei der Überprüfung der Einsendung festgestellt. Diese Informationen können hilfreich sein, wenn Sie verstehen möchten, warum eine Einsendung abgelehnt wurde.
+      labels:
+        fieldIssue: Feld %name%
+        generalIssue: Generelles Problem
+        errorMessage: Fehlermeldung
+        message: Meldung
+        debugInformation: Debug-Informationen
   filter:
     options:
       spam: Spam-Einsendungen
       all: Alle Einsendungen
       valid: Gültige Einsendungen
     dropdown: Liste der Einsendungen filtern
+  submitTokenMissing: Einsende-Code fehlt
 settings:
   title: Projekt-Einstellungen
   backToSettings: Zu den Einstellungen
@@ -741,6 +776,7 @@ settings:
       proofOfWorkDynamicComplexityNumberOfSubmissions: Anzahl der Einsendungen zum Erreichen der maximalen Komplexität
       proofOfWorkActive: Arbeitsnachweis aktivieren
       proofOfWorkComplexity: Komplexität
+      overrideSpamDetection: Spam-Erkennung überschreiben
     message:
       successfullySaved: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
 
@@ -765,8 +801,8 @@ settings:
           subnetsHelp: 'Fügen Sie die Subnetze hinzu, für die diese Richtlinie berücksichtigt werden soll. Sie können IPv4- oder IPv6-Subnetze definieren. Die IP-Adresse sehen Sie in den Details der Anmeldung. Beispiel: 192.168.1.0/24'
         infoGeoIp2Disabled: GeoIP2 ist nicht verfügbar. Bitte konfigurieren Sie die GeoIP2-Datenbank, damit die Kriterien Ländercodes und AS-Nummern verwendet werden können.
         settings:
-          title: Sicherheitseinstellungen
-          intro: Bitte aktivieren Sie das Kontrollkästchen für die Einstellungen, die Sie in den Sicherheitseinstellungen überschreiben möchten. Wenn Sie eine Einstellung nicht überschreiben, wird mosparo die Einstellung aus den Projekteinstellungen verwenden.
+          title: Einstellungen überschreiben
+          intro: Bitte aktivieren Sie das Kontrollkästchen für die Einstellungen, die Sie in den Projekt- oder allgemeinen Sicherheitseinstellungen überschreiben möchten. Wenn Sie eine Einstellung nicht überschreiben, wird mosparo die Einstellung aus dem Projekt oder den allgemeinen Sicherheitseinstellungen verwenden. Wenn Sie denselben Wert wie in den Projekt- oder allgemeinen Sicherheitseinstellungen konfigurieren, wird der benutzerdefinierte Wert aus der Sicherheitsrichtlinie entfernt.
       list:
         name: Name
         actions: Aktionen
@@ -803,6 +839,10 @@ settings:
       speed: Geschwindigkeit
       rangeSizeHelp: Je grösser der Zahlenbereich ist, desto mehr Berechnungen muss der Browser durchführen. Es wird empfohlen, keinen zu grossen Zahlenbereich zu verwenden, da es Zeit kostet, bis der Benutzer das Formular abschicken kann.
       cryptoSpeedHelp: Diese Werte wurden auf Ihrem Gerät getestet und berechnet. Andere Geräte können schneller oder langsamer sein. Diese Zahlen sollten Ihnen einen Anhaltspunkt geben, aber sie zeigen nicht die genaue Dauer für jeden Nutzer.
+    spamDetection:
+      title: Spamerkennung
+      intro: Legen Sie fest, ob der Spamschutz für diese Sicherheitsrichtlinie aktiviert werden soll und welcher Spam-Score zur Erkennung von Spam verwendet werden soll.
+      intro2: Wenn Sie die Einstellungen für die Spamerkennung nicht überschreiben, werden die Einstellungen aus dem Projekt verwendet.
   design:
     title: Darstellung
 
