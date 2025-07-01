@@ -1101,7 +1101,7 @@ tools:
         noMatchingRules: No rule matched the test value.
 
   importExport:
-    infoRulesWithManyItems: Rules with hundreds of items can consume a lot of memory when exporting or importing these rules. This can lead to an error when you try to do it in the browser. Please increase the memory limit of the PHP process in such a case or use the CLI command to export the rules.
+    infoRulesWithManyItems: Rules with hundreds of items can consume a lot of memory when exporting or importing these rules. This can lead to an error when you try to do it in the browser. Please increase the memory limit of the PHP process in such a case or use the CLI command to import or export the rules.
 
   export:
     title: Export
