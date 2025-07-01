@@ -840,9 +840,9 @@ settings:
       rangeSizeHelp: Je grösser der Zahlenbereich ist, desto mehr Berechnungen muss der Browser durchführen. Es wird empfohlen, keinen zu grossen Zahlenbereich zu verwenden, da es Zeit kostet, bis der Benutzer das Formular abschicken kann.
       cryptoSpeedHelp: Diese Werte wurden auf Ihrem Gerät getestet und berechnet. Andere Geräte können schneller oder langsamer sein. Diese Zahlen sollten Ihnen einen Anhaltspunkt geben, aber sie zeigen nicht die genaue Dauer für jeden Nutzer.
     spamDetection:
-      title: Spamerkennung
+      title: Spam-Erkennung
       intro: Legen Sie fest, ob der Spamschutz für diese Sicherheitsrichtlinie aktiviert werden soll und welcher Spam-Score zur Erkennung von Spam verwendet werden soll.
-      intro2: Wenn Sie die Einstellungen für die Spamerkennung nicht überschreiben, werden die Einstellungen aus dem Projekt verwendet.
+      intro2: Wenn Sie die Einstellungen für die Spam-Erkennung nicht überschreiben, werden die Einstellungen aus dem Projekt verwendet.
   design:
     title: Darstellung
 
@@ -1116,7 +1116,14 @@ administration:
     buttons:
       continue: Weiter
 
-    finalize: {}
+    finalize:
+      process:
+        v14:
+          title: Aufgaben verarbeiten
+          intro: mosparo muss die gespeicherten Daten optimieren, um Spam zuverlässig abzufangen. Bitte warten Sie, während die Aufgaben ausgeführt werden.
+          processingPleaseWait: Aufgaben verarbeiten…
+          processingStats: '%processedTasks% von %totalTasks% verarbeitet'
+          doNotLeave: Bitte verlassen Sie diese Seite nicht und brechen Sie den Vorgang nicht ab. Wenn sich der Fortschritt längere Zeit nicht ändert, aktualisieren Sie bitte diese Seite.
     upgrade:
       updateFirst: Bevor Sie auf die nächste Hauptversion upgraden können, müssen Sie die neuste Version Ihrer bisherigen Hauptversion installieren.
       introAvailable: Eine neue Hauptversion ist verfügbar. Sie können das Update-Tool verwenden, um auf die neuste Hauptversion zu aktualisieren.
@@ -1131,6 +1138,9 @@ administration:
         upgrade: Upgrade zu %newMajorVersion%
         recheck: Erneut prüfen
       meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit dem Upgrade fortfahren.
+    finalized:
+      title: Update ausgeführt
+      description: Die erforderlichen Änderungen für dieses Update wurden durchgeführt. Ihre Installation ist auf dem neuesten Stand.
   system:
     title: System-Informationen
     description: Alle Informationen über mosparo.
@@ -1572,6 +1582,7 @@ tools:
         criteria: Kriterien
         guidelineModify: Anpassung erforderlich
         guidelineEqual: Keine Anpassung erforderlich
+        source: Quelle
       title: Verfügbare Änderungen
       intro: mosparo hat den Import simuliert und die folgenden Änderungen festgestellt. Bitte überprüfen Sie diese und führen Sie die Änderungen aus, wenn alles in Ordnung ist.
       changes:
@@ -1602,7 +1613,7 @@ tools:
         addHelp: mosparo fügt bestehende Regeln als neue Regeln hinzu. Die neuen Regeln erhalten eine neue Identifikation (UUID).
       importFile: Zu importierende Datei
     intro: Wenn Sie die Daten aus einem anderen Projekt in dieses Projekt kopieren möchten, wählen Sie bitte die zu importierende Datei und die zu importierenden Daten aus. Wenn Sie die Regeln importieren, wählen Sie bitte aus, wie mosparo bestehende Regeln behandeln soll.
-    infoOverrideData: Die Einstellungen sowie die Regel-Pakete werden im Projekt immer überschrieben. Für Regel-Pakete muss die URL übereinstimmen. Bei den Regeln müssen Sie auswählen, was mosparo mit den vorhandenen Regeln machen soll.
+    infoOverrideData: Die Einstellungen und auch die Regelpakete werden im Projekt immer überschrieben. Bei den Regeln müssen Sie auswählen, was mosparo mit bestehenden Regeln machen soll. Regelpakete, die vor Version 1.4.0 von mosparo erstellt wurden, haben möglicherweise eine andere ID und passen nicht zur Importdatei.
     errorMessage:
       selectAtLeastOneElement: Wählen Sie mindestens ein Element aus, das Sie importieren möchten.
       fileUploadError: Die Datei wurde nicht korrekt hochgeladen. Bitte prüfen Sie die Protokolldatei.
@@ -1649,7 +1660,7 @@ tools:
       ipAddress: IP-Adresse
     title: Regel-Tester
     description: Testen Sie wie Ihre Regeln Spam erkennen werden.
-    intro: Geben Sie den Wert ein, den Sie testen möchten. Wählen Sie, welchen Datentyp Sie für den Test verwenden wollen und ob Sie Regeln und Regelsätze verwenden wollen. Der Datentyp ist wichtig, da einige Regeltypen nur für bestimmte Datentypen gelten.
+    intro: Geben Sie den Wert ein, den Sie testen möchten. Wählen Sie, welchen Datentyp Sie für den Test verwenden wollen und ob Sie Regeln und Regel-Pakete verwenden wollen. Der Datentyp ist wichtig, da einige Regeltypen nur für bestimmte Datentypen gelten.
   export:
     title: Exportieren
     includedData: Enthaltene Daten
@@ -1657,6 +1668,7 @@ tools:
     errorMessage:
       selectAtLeastOneElement: Wählen Sie mindestens ein Element aus, das Sie exportieren möchten.
     infoSensitiveData: Sensible Daten werden niemals exportiert. Einsendungen, Einsendecodes, die eindeutige Projekt-ID (UUID), die API-Schlüssel und die Projektmitglieder werden daher nicht exportiert.
+    infoManualRulePackages: Der Inhalt des Regelpakets wird nicht in den Export aufgenommen. Dies bedeutet, dass alle manuell importierten Regelpakete nach dem Importieren der Datei erneut importiert werden müssen.
   eiParts:
     generalSettings: Haupteinstellungen
     securitySettings: Sicherheitseinstellungen
@@ -1668,6 +1680,8 @@ tools:
     rulePackages: Regel-Pakete
     designSettings: Darstellungseinstellungen
     rulePackagesHelp: Enthält alle Regel-Pakete eines Projekts.
+  importExport:
+    infoRulesWithManyItems: Regeln mit Hunderten von Einträge können beim Exportieren oder Importieren der Regeln sehr viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser zu tun. Bitte erhöhen Sie in einem solchen Fall den Arbeitsspeicher des PHP-Prozesses oder verwenden Sie den CLI-Befehl zum Importieren oder Exportieren der Regeln.
 dataTable:
   name: Name
   empty: Leer
