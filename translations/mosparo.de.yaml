@@ -114,6 +114,8 @@ rule:
   create:
     title: Regel erstellen
 
+    label:
+      ruleType: Regeltyp
   edit:
     title: Regel %ruleName% bearbeiten
 
@@ -133,12 +135,23 @@ rule:
       type: Typ
       rating: Bewertung
 
+      value: Wert
     addMultipleItems:
       items: Einträge
       itemsHelp: Geben Sie ein Element pro Zeile ein.
       rating: Bewertung
       ratingHelp: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt wird, werden die Einträge werden nicht als Spam erkannt.
 
+    status:
+      unsavedChanges: '%counter% nicht-gespeicherte Änderungen'
+      savingChanges: Speichern von %counter% Änderungen
+      nothingToSave: Nichts zu speichern
+    filter:
+      title: Einträge filtern
+      useWildcard: Verwenden Sie %wildcard% als Platzhalter.
+      itemSpamRatingFactor: Spam-Bewertung
+    noItemsInTable:
+      title: Noch keine Einträge vorhanden
   delete:
     title: Regel %ruleName% löschen
     confirm: Wollen Sie die Regel %ruleName% wirklich löschen?
