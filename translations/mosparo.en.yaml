@@ -195,7 +195,7 @@ rule:
     filter:
       title: Filter items
       useWildcard: Use %wildcard% as wildcard.
-      itemSpamRatingFactor: Item spam rating factor
+      itemSpamRating: Item spam rating
 
     noItemsInTable:
       title: No items yet
