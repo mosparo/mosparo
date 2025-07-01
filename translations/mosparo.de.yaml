@@ -181,10 +181,14 @@ rule:
           skippedLabel: Übersprungen
           skippedTooltip: Diese Einträge sind bereits vorhanden, so dass sie beim Import übersprungen wurden.
           invalidLabel: Ungültig
-          invalidTooltip: Ungültige Elemente, zum Beispiel wenn der Eintragstyp nicht vorhanden ist oder der Wert das falsche Format hat.
+          invalidTooltip: Ungültige Einträge, zum Beispiel wenn der Eintragstyp nicht vorhanden ist oder der Wert das falsche Format hat.
       deleteSelectedItems:
-        title: Ausgewählte Elemente löschen
+        title: Ausgewählte Einträge löschen
         confirm: Möchten Sie die %counter% ausgewählten Regel-Einträge wirklich löschen?
+        confirmOne: Möchten Sie den ausgewählten Regel-Eintrag wirklich löschen?
+        confirmDelete: Ja, Einträge löschen
+        progress:
+          deletingPleaseWait: Löschen der Einträge… Bitte warten…
   delete:
     title: Regel %ruleName% löschen
     confirm: Wollen Sie die Regel %ruleName% wirklich löschen?
@@ -331,6 +335,7 @@ rulePackage:
     updatedAt: Geändert am
     actions: Aktionen
 
+    type: Typ
   add:
     title: Regel-Paket hinzufügen
 
@@ -346,6 +351,10 @@ rulePackage:
     message:
       successfullySaved: Das Regel-Paket wurde erfolgreich gespeichert.
 
+    sourceUrl: Quell-URL
+    sourceUrlHelp: Geben Sie die URL an, von der mosparo das Regelpaket herunterladen kann.
+    sourceFile: Quell-Datei
+    sourceFileHelp: Geben Sie den absoluten Dateipfad an, unter dem die Regelpaketdatei gespeichert wird.
   view:
     title: Regel-Paket %rulePackageName% anschauen
 
@@ -358,6 +367,10 @@ rulePackage:
       lastUpdatedAt: Zuletzt geändert
       numberOfIncludedRules: Anzahl der beinhalteten Regeln
 
+      sourceManualImport: Manueller Import
+      importFirstTitle: Regelpaket zuerst importieren
+      importFirst: Dieses Regelpaket enthält keine Daten. Bitte importieren Sie die Daten des Regelpakets manuell.
+      noRulePackageCache: Es ist kein Regelpaket-Cache für dieses Regelpaket gespeichert. Das bedeutet, dass der Download nicht erfolgreich war oder etwas anderes schief gelaufen ist.
     includedRules:
       title: Beinhaltete Regeln
       ruleDetails: Details der Regel
@@ -390,6 +403,9 @@ rulePackage:
       backToRulePackage: Zurück zum Regel-Paket
       items:
         title: Enthaltene Einträge
+    howtoImport:
+      title: Wie Sie importieren können
+      intro: Dieses Regelpaket ist ein manuell importierter Regelpakettyp. Das bedeutet, dass Sie die Regelpaketdaten für dieses Regelpaket importieren müssen. Andernfalls ist das Regelpaket leer und wird keinen Spam verhindern.
   delete:
     title: Regel-Paket %rulePackageName% löschen
     confirm: Wollen Sie das Regel-Paket %rulePackageName% wirklich löschen?
@@ -398,6 +414,9 @@ rulePackage:
       successfullyDeleted: Das Regel-Paket %rulePackageName% wurde erfolgreich gelöscht.
 
 # Submission
+  addChooseType:
+    title: Typ wählen
+    intro: Bitte wählen Sie die Art des Regelpakets, das Sie hinzufügen möchten. Sie können zwischen automatischen und manuellen Typen wählen. Bei den automatischen Typen wird das Regelpaket automatisch aktualisiert, während die manuellen Typen durch eine externe Aktion oder ein Tool aktualisiert werden müssen.
 submission:
   title: Einsendungen
   backToList: Zu den Einsendungen
