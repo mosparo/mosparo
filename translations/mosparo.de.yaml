@@ -142,6 +142,7 @@ rule:
       rating: Bewertung
       ratingHelp: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt wird, werden die Einträge werden nicht als Spam erkannt.
 
+      type: Typ
     status:
       unsavedChanges: '%counter% nicht-gespeicherte Änderungen'
       savingChanges: Speichern von %counter% Änderungen
@@ -151,6 +152,39 @@ rule:
       useWildcard: Verwenden Sie %wildcard% als Platzhalter.
     noItemsInTable:
       title: Noch keine Einträge vorhanden
+      text: Diese Regel enthält noch keine Einträge.
+    nothingFound:
+      title: Nichts gefunden
+      text: Es gibt keine Einträge, die Ihrem Filter entsprechen.
+    modal:
+      importTxtFile:
+        title: Text-Datei importieren
+        file: Datei
+        fileHelp: Bitte wählen Sie die Textdatei (*.txt), die Sie von Ihrem Computer importieren möchten.
+        action: Datei importieren
+      importCsvFile:
+        title: CSV-Datei importieren
+        file: Datei
+        fileHelp: Bitte wählen Sie die CSV-Datei (*.csv), die Sie von Ihrem Computer importieren möchten.
+        action: Datei importieren
+      addingItems:
+        title: Einträge hinzufügen
+        messageCompleted: Die angegebenen Daten wurden verarbeitet. Sie finden die Zusammenfassung der hinzugefügten, übersprungenen und ungültigen Elemente oben. Sie können dieses Fenster jetzt schließen.
+        progress:
+          dataProcessed: Verarbeitete Daten
+          processingPleaseWait: Verarbeiten der Daten…
+          processingStats: '%processedBytes% von %totalBytes% verarbeitet'
+          abortHint: Wenn Sie dieses Fenster schliessen, wird der Prozess angehalten und Sie müssen ihn später erneut starten.
+        summary:
+          addedLabel: Hinzugefügt
+          addedTooltip: Diese Einträge wurden der Regel hinzugefügt.
+          skippedLabel: Übersprungen
+          skippedTooltip: Diese Einträge sind bereits vorhanden, so dass sie beim Import übersprungen wurden.
+          invalidLabel: Ungültig
+          invalidTooltip: Ungültige Elemente, zum Beispiel wenn der Eintragstyp nicht vorhanden ist oder der Wert das falsche Format hat.
+      deleteSelectedItems:
+        title: Ausgewählte Elemente löschen
+        confirm: Möchten Sie die %counter% ausgewählten Regel-Einträge wirklich löschen?
   delete:
     title: Regel %ruleName% löschen
     confirm: Wollen Sie die Regel %ruleName% wirklich löschen?
