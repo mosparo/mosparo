@@ -1140,7 +1140,15 @@ administration:
       meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit dem Upgrade fortfahren.
     finalized:
       title: Update ausgeführt
-      description: Die erforderlichen Änderungen für dieses Update wurden durchgeführt. Ihre Installation ist auf dem neuesten Stand.
+      description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
+      hostsAlert:
+        title: 'Version 1.2: Änderung der Herkunftsüberprüfung'
+        intro: Mit Version 1.2 beginnt mosparo, die Herkunft einer Frontend-Anfrage zu verifizieren. Aufgrund dieser Änderung müssen die Hosts in Ihrem Projekt korrekt konfiguriert sein.
+        intro2: Bitte überprüfen Sie Ihre Projekte und Formulare jetzt.
+      geoIp2Info:
+        title: 'Version 1.2.2: MaxMind Konto-ID erforderlich'
+        intro: Ihre MaxMind-Konto-ID und Ihr Lizenzschlüssel sind erforderlich, um die GeoIP2-Datenbank herunterzuladen.
+        intro2: Bitte überprüfen Sie die GeoIP2-Konfiguration und geben Sie Ihre Konto-ID ein.
   system:
     title: System-Informationen
     description: Alle Informationen über mosparo.
@@ -1173,6 +1181,7 @@ administration:
 
     website: Website
 
+    listOfContributors: Viele weitere Menschen haben uns in den letzten Jahren geholfen, mosparo zu verbessern und zu erweitern. Wir sind dankbar für all die Hilfe, Inspiration und das Feedback. Sehen Sie die %linkStart%vollständige Liste der Personen hier%linkEnd%.
   security:
     title: Sicherheits-Einstellungen
     reverseProxy:
@@ -1253,6 +1262,14 @@ administration:
       geoIp2RefreshIntervalHelp: Bestimmt die Anzahl der Tage, nach denen versucht wird, die GeoIP2-Datenbank zu aktualisieren. Um eine Überlastung des GeoIP2-Servers zu vermeiden, sollte die Datenbank nur selten, z. B. einmal pro Woche, aktualisiert werden.
     title: Cronjobs
     description: Konfigurieren Sie die Cronjobs von mosparo.
+  cleanupStatistic:
+    title: Bereinigungsstatistik
+    description: Prüfen Sie, wann die Übermittlungstoken und Übermittlungen aus der Datenbank gelöscht wurden.
+    list:
+      dateTime: Datum und Uhrzeit
+      cleanupExecutor: Ausführender
+      submitTokens: Einsende-Codes
+      submissions: Einsendungen
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. Ist eine Internetverbindung vorhanden, sucht mosparo automatisch nach Updates, indem die Versionsdatei von der mosparo-Website heruntergeladen wird. Auch für das Herunterladen von Updates, der GeoIP2-Datenbanken und Regel-Pakete benötigen Sie eine aktive Internetverbindung.
