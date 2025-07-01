@@ -114,7 +114,7 @@ class GeoIp2Helper
         }
 
         $ipLocalizationRepository = $this->entityManager->getRepository(IpLocalization::class);
-        $ipLocalization = $ipLocalizationRepository->findOneBy(['ipAddress' => $ipAddressHash]);
+        $ipLocalization = $ipLocalizationRepository->findOneBy(['ipAddress' => $ipAddress]);
         if ($ipLocalization !== null) {
             $this->localizedIpAddresses[$ipAddressHash] = $ipLocalization;
             return $ipLocalization;
