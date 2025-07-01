@@ -344,18 +344,9 @@
             </div>
         </div>
 
-        <div class="modal modal-blur fade" tabindex="-1" id="progress-modal">
+        <div class="modal modal-blur fade" tabindex="-1" id="progress-modal" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    {% if false %}
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="ti ti-hourglass-high"></i>
-                            {{ 'rule.form.modal.addingItems.title'|trans }}
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
-                    </div>
-                    {% endif %}
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
                     <div class="modal-status bg-info"></div>
 
