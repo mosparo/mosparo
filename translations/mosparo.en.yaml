@@ -632,7 +632,7 @@ submission:
       intro: The following issues were detected during the verification of the submission. This information can be helpful if you want to understand why a submission was declined.
 
       labels:
-        fieldIssue: Field issue %name%
+        fieldIssue: Field %name%
         generalIssue: General issue
         errorMessage: Error message
         message: Message
