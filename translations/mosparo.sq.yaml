@@ -1,1 +1,10 @@
-{}
+header:
+  pleaseChoose: Ju lutem zgjidhni…
+  noProjectsFound: Nuk u gjet asnjë projekt
+  account: Llogaria
+projectGroup:
+  mainGroup: Grupi kryesor
+  action:
+    edit: Redakto grupin
+    delete: Fshi grupin
+    openMainGroup: Kthehu te grupi kryesor

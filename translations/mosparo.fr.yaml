@@ -196,7 +196,6 @@ rule:
       type: Type
       rating: Évaluation
     addMultipleItems:
-      label: Étiquette
       items: Éléments
       itemsHelp: Ajoutez un élément par ligne.
       rating: Évaluation
@@ -208,12 +207,8 @@ rule:
     intro: Veuillez choisir le type de règle que vous souhaitez créer. Les types disponibles sont utilisés pour différents champs et ne peuvent pas être modifiés pour une règle par la suite.
   create:
     title: Créer une règle
-    message:
-      successfullyCreated: La nouvelle règle a bien été créée.
   edit:
     title: Modifier la règle %ruleName%
-    message:
-      successfullySaved: La règle a bien été enregistrée.
   delete:
     title: Supprimer la règle %ruleName%
     confirm: Voulez-vous vraiment supprimer la règle %ruleName% ?
@@ -375,7 +370,6 @@ rulePackage:
     title: Voir l'ensemble de règles %rulePackageName%
     details:
       title: Informations sur l'ensemble de règles
-      url: URL
       status: État
       spamRatingFactor: Facteur d'évaluation des spams
       lastRefreshedAt: Dernière actualisation le
@@ -428,7 +422,6 @@ rulePackage:
     title: Modifier l'ensemble de règles %rulePackageName%
   form:
     name: Nom
-    url: URL
     status: État
     spamRatingFactor: Facteur d'évaluation des spams
     message:
@@ -742,9 +735,6 @@ administration:
         savedSuccessfully: Le canal de mise à jour a bien été enregistré.
     buttons:
       continue: Continuer
-    finalize:
-      title: Mise à jour effectuée
-      description: Les modifications requises pour cette mise à jour ont été effectuées. Votre installation est à jour.
   system:
     title: Informations du système
     description: Retrouvez toutes les informations à propos de mosparo.

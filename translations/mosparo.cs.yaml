@@ -87,12 +87,8 @@ rule:
     intro: Vyberte typ pravidla, které chcete vytvořit. Dostupné typy se používají pro různá pole a nelze je pro pravidlo dodatečně změnit.
   create:
     title: Vytvořit pravidlo
-    message:
-      successfullyCreated: Nové pravidlo bylo úspěšně vytvořeno.
   edit:
     title: Upravit pravidlo %ruleName%
-    message:
-      successfullySaved: Pravidlo bylo úspěšně uloženo.
   form:
     ruleType: Typ pravidla
     rule:
@@ -103,7 +99,6 @@ rule:
       spamRatingFactor: Faktor hodnocení spamu
       spamRatingFactorHelp: Pomocí faktoru hodnocení spamu můžete definovat faktor, který posiluje nebo oslabuje záznamy tohoto pravidla. Pokud je hodnota větší než 1,0, jsou položky posíleny, pokud je hodnota menší než 1,0, jsou položky poníženy.
     addMultipleItems:
-      label: Štítek
       itemsHelp: Přidejte jednu položku na řádek.
       items: Položky
       rating: Hodnocení
@@ -232,7 +227,6 @@ rulePackage:
     updatedAt: Aktualizováno
   form:
     name: Název
-    url: URL
     status: Stav
     spamRatingFactor: Faktor hodnocení spamu
     spamRatingFactorHelp: Pomocí faktoru hodnocení spamu můžete definovat faktor, který posílí nebo oslabí všechna pravidla této sady pravidel. Pokud je hodnota větší než 1,0, budou pravidla posílena, pokud je hodnota menší než 1,0, budou pravidla oslabena.
@@ -240,7 +234,6 @@ rulePackage:
       successfullySaved: Sada pravidel byla úspěšně uložena.
   view:
     details:
-      url: URL
       lastRefreshedAt: Naposledy aktualizováno v
       status: Stav
       spamRatingFactor: Faktor hodnocení spamu
@@ -681,9 +674,6 @@ administration:
         infoDevelopChannel: Vývojový a beta kanál obsahuje netestované a nestabilní verze, které nejsou připraveny pro produkci. Nepoužívejte je prosím v produkčním prostředí.
         savedSuccessfully: Aktualizační kanál byl úspěšně uložen.
       title: Aktualizovat nastavení
-    finalize:
-      description: Potřebné změny pro tuto aktualizaci byly provedeny. Vaše instalace je aktuální.
-      title: Aktualizace provedena
     buttons:
       continue: Pokračovat
     description: Zkontrolujte nové verze a aktualizujte instalaci systému mosparo.
@@ -1073,7 +1063,6 @@ tools:
         notInExport: Tato sekce není v souboru importu dostupná.
       table:
         status: Stav
-        url: URL
         add: Přidat
         modify: Upravit
         spamRatingFactor: Faktor hodnocení spamu

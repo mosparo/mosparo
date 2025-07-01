@@ -114,14 +114,10 @@ rule:
   create:
     title: Regel erstellen
 
-    message:
-      successfullyCreated: Die neue Regel wurde erfolgreich erstellt.
-
+    label:
+      ruleType: Regeltyp
   edit:
     title: Regel %ruleName% bearbeiten
-
-    message:
-      successfullySaved: Die Regel wurde erfolgreich gespeichert.
 
   form:
     ruleType: Regeltyp
@@ -139,13 +135,61 @@ rule:
       type: Typ
       rating: Bewertung
 
+      value: Wert
     addMultipleItems:
-      label: Bezeichnung
       items: Einträge
       itemsHelp: Geben Sie ein Element pro Zeile ein.
       rating: Bewertung
       ratingHelp: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt wird, werden die Einträge werden nicht als Spam erkannt.
 
+      type: Typ
+    status:
+      unsavedChanges: '%counter% nicht-gespeicherte Änderungen'
+      savingChanges: Speichern von %counter% Änderungen
+      nothingToSave: Nichts zu speichern
+    filter:
+      title: Einträge filtern
+      useWildcard: Verwenden Sie %wildcard% als Platzhalter.
+      itemSpamRating: Spam-Bewertung des Eintrags
+    noItemsInTable:
+      title: Noch keine Einträge vorhanden
+      text: Diese Regel enthält noch keine Einträge.
+    nothingFound:
+      title: Nichts gefunden
+      text: Es gibt keine Einträge, die Ihrem Filter entsprechen.
+    modal:
+      importTxtFile:
+        title: Textdatei importieren
+        file: Datei
+        fileHelp: Bitte wählen Sie die Textdatei (*.txt), die Sie von Ihrem Computer importieren möchten.
+        action: Datei importieren
+      importCsvFile:
+        title: CSV-Datei importieren
+        file: Datei
+        fileHelp: Bitte wählen Sie die CSV-Datei (*.csv), die Sie von Ihrem Computer importieren möchten.
+        action: Datei importieren
+      addingItems:
+        title: Einträge hinzufügen
+        messageCompleted: Die angegebenen Daten wurden verarbeitet. Oben finden Sie die Zusammenfassung der hinzugefügten, übersprungenen und ungültigen Einträge. Sie können dieses Fenster jetzt schließen.
+        progress:
+          dataProcessed: Daten verarbeitet
+          processingPleaseWait: Daten verarbeiten…
+          processingStats: '%processedBytes% von %totalBytes% verarbeitet'
+          abortHint: Wenn Sie dieses Fenster schliessen, wird der Prozess angehalten und Sie müssen ihn später erneut starten.
+        summary:
+          addedLabel: Hinzugefügt
+          addedTooltip: Diese Einträge wurden der Regel hinzugefügt.
+          skippedLabel: Übersprungen
+          skippedTooltip: Diese Einträge sind bereits vorhanden, so dass sie beim Import übersprungen wurden.
+          invalidLabel: Ungültig
+          invalidTooltip: Ungültige Einträge, zum Beispiel wenn der Eintragstyp nicht vorhanden ist oder der Wert das falsche Format hat.
+      deleteSelectedItems:
+        title: Ausgewählte Einträge löschen
+        confirm: Möchten Sie die %counter% ausgewählten Einträge wirklich löschen?
+        confirmOne: Möchten Sie den ausgewählte Eintrag wirklich löschen?
+        confirmDelete: Ja, Einträge löschen
+        progress:
+          deletingPleaseWait: Einträge werden gelöscht… Bitte warten…
   delete:
     title: Regel %ruleName% löschen
     confirm: Wollen Sie die Regel %ruleName% wirklich löschen?
@@ -292,6 +336,7 @@ rulePackage:
     updatedAt: Geändert am
     actions: Aktionen
 
+    type: Typ
   add:
     title: Regel-Paket hinzufügen
 
@@ -300,7 +345,6 @@ rulePackage:
 
   form:
     name: Name
-    source: Quelle
     status: Status
     spamRatingFactor: Spam-Bewertungsfaktor
     spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher alle Regel dieses Regel-Paketes verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Regeln verstärkt, ist der Wert kleiner als 1.0, werden die Regeln abgeschwächt.
@@ -308,6 +352,10 @@ rulePackage:
     message:
       successfullySaved: Das Regel-Paket wurde erfolgreich gespeichert.
 
+    sourceUrl: Quell-URL
+    sourceUrlHelp: Geben Sie die URL an, von der mosparo das Regelpaket herunterladen kann.
+    sourceFile: Quell-Datei
+    sourceFileHelp: Geben Sie den absoluten Dateipfad an, unter dem die Datei des Regelpakets gespeichert wird.
   view:
     title: Regel-Paket %rulePackageName% anschauen
 
@@ -320,6 +368,10 @@ rulePackage:
       lastUpdatedAt: Zuletzt geändert
       numberOfIncludedRules: Anzahl der beinhalteten Regeln
 
+      sourceManualImport: Manueller Import
+      importFirstTitle: Regelpaket zuerst importieren
+      importFirst: Dieses Regelpaket enthält keine Daten. Bitte importieren Sie die Daten des Regelpakets manuell.
+      noRulePackageCache: Es ist kein Regelpaket-Cache für dieses Regelpaket gespeichert. Das bedeutet, dass der Download nicht erfolgreich war oder etwas anderes schief gelaufen ist.
     includedRules:
       title: Beinhaltete Regeln
       ruleDetails: Details der Regel
@@ -352,6 +404,33 @@ rulePackage:
       backToRulePackage: Zurück zum Regel-Paket
       items:
         title: Enthaltene Einträge
+    howtoImport:
+      title: Wie importieren
+      intro: Dieses Regelpaket ist ein manuell importiertes Regelpaket. Das bedeutet, dass Sie die Daten für dieses Regelpaket importieren müssen. Andernfalls ist das Regelpaket leer und wird keinen Spam verhindern.
+      arguments:
+        required: Erforderlich
+        value: Wert
+        description: Beschreibung
+      cli:
+        intro: Bitte verwenden Sie den folgenden Befehl, um das Regelpaket über CLI zu importieren. Eines der Argumente %codeArgFile% oder %codeArgInput% ist erforderlich.
+        infoAdjustPaths: Bitte denken Sie daran, die Pfade zu den PHP-Binärdateien und dem mosparo CLI-Befehl anzupassen. Die Dokumentation Ihres Hosting-Anbieters enthält in der Regel weitere Informationen zu diesem Teil.
+        arguments:
+          descriptionProjectId: Gibt die Projekt-ID des Regelpakets an.
+          descriptionRulePackageId: Gibt die ID des Regelpakets an.
+          descriptionFile: Gibt den Dateipfad für die Regelpaketdatei an.
+          descriptionInput: Der Befehl liest den Inhalt des Regelpakets von der Standardeingabe, falls diese gesetzt ist.
+          descriptionHash: Wenn der Befehl den Hash des Regelpakets verifizieren soll, geben Sie den SHA256-Hash mit diesem Argument an.
+      api:
+        intro: Bitte importieren Sie den Inhalt des Regelpakets über die mosparo API. Sie können die API direkt nutzen oder einen unserer API-Clients verwenden. Sie können auch mosparo RPG (Rule Package Generator) verwenden, um den Inhalt des Regelpakets zu erstellen und zu importieren.
+        introSecond: Nachfolgend finden Sie die wichtigsten Informationen über die API und ein Beispiel, wenn Sie das Regelpaket mit mosparo RPG verwenden möchten. Lesen Sie mehr über die verschiedenen Optionen in unserer Dokumentation.
+        endpoint:
+          title: Endpunkt
+        arguments:
+          descriptionRulePackageId: Gibt die ID des Regelpakets an.
+          descriptionRulePackageContent: Gibt den Inhalt des Regelpakets an.
+          descriptionRulePackageHash: Um den Hash vor dem Importieren des Inhalts zu überprüfen, geben Sie den SHA256-Hash mit diesem Argument an.
+        example:
+          intro: Dieses Beispiel zeigt die für das mosparo RPG-Profil erforderliche Konfiguration. Weitere Optionen entnehmen Sie bitte der Dokumentation.
   delete:
     title: Regel-Paket %rulePackageName% löschen
     confirm: Wollen Sie das Regel-Paket %rulePackageName% wirklich löschen?
@@ -360,6 +439,9 @@ rulePackage:
       successfullyDeleted: Das Regel-Paket %rulePackageName% wurde erfolgreich gelöscht.
 
 # Submission
+  addChooseType:
+    title: Typ wählen
+    intro: Bitte wählen Sie den Typ des Regelpakets, das Sie hinzufügen möchten. Sie können zwischen automatischen und manuellen Typen wählen. Bei den automatischen Typen wird das Regelpaket automatisch aktualisiert, während die manuellen Typen durch eine externe Aktion oder ein Tool aktualisiert werden müssen.
 submission:
   title: Einsendungen
   backToList: Zu den Einsendungen
@@ -451,6 +533,7 @@ submission:
         title: Arbeitsnachweis ungültig
     action:
       openVerificationSimulation: Verifizierungs-Simulation
+      openVerificationIssues: Verifizierungsprobleme
     verificationSimulation:
       buttons:
         customIntegration: Eigene Integration
@@ -533,12 +616,22 @@ submission:
         authorizationHeader: Die Autorisierungskopfzeile muss Base64-kodiert sein.
       errors:
         noValidationToken: Die Verifikationssimulation ist nicht möglich, da kein Validierungscode für diese Übermittlung gespeichert ist. Das bedeutet, dass die Daten im Formular die mosparo-Validierung nicht bestanden haben, wodurch die Verifizierung unmöglich ist.
+    verificationIssues:
+      title: Verifizierungsprobleme
+      intro: Die folgenden Probleme wurden bei der Überprüfung der Einsendung festgestellt. Diese Informationen können hilfreich sein, wenn Sie verstehen möchten, warum eine Einsendung abgelehnt wurde.
+      labels:
+        fieldIssue: Feld %name%
+        generalIssue: Generelles Problem
+        errorMessage: Fehlermeldung
+        message: Meldung
+        debugInformation: Debug-Informationen
   filter:
     options:
       spam: Spam-Einsendungen
       all: Alle Einsendungen
       valid: Gültige Einsendungen
     dropdown: Liste der Einsendungen filtern
+  submitTokenMissing: Einsende-Code fehlt
 settings:
   title: Projekt-Einstellungen
   backToSettings: Zu den Einstellungen
@@ -684,6 +777,7 @@ settings:
       proofOfWorkDynamicComplexityNumberOfSubmissions: Anzahl der Einsendungen zum Erreichen der maximalen Komplexität
       proofOfWorkActive: Arbeitsnachweis aktivieren
       proofOfWorkComplexity: Komplexität
+      overrideSpamDetection: Spam-Erkennung überschreiben
     message:
       successfullySaved: Die Sicherheits-Einstellungen wurden erfolgreich gespeichert.
 
@@ -708,8 +802,8 @@ settings:
           subnetsHelp: 'Fügen Sie die Subnetze hinzu, für die diese Richtlinie berücksichtigt werden soll. Sie können IPv4- oder IPv6-Subnetze definieren. Die IP-Adresse sehen Sie in den Details der Anmeldung. Beispiel: 192.168.1.0/24'
         infoGeoIp2Disabled: GeoIP2 ist nicht verfügbar. Bitte konfigurieren Sie die GeoIP2-Datenbank, damit die Kriterien Ländercodes und AS-Nummern verwendet werden können.
         settings:
-          title: Sicherheitseinstellungen
-          intro: Bitte aktivieren Sie das Kontrollkästchen für die Einstellungen, die Sie in den Sicherheitseinstellungen überschreiben möchten. Wenn Sie eine Einstellung nicht überschreiben, wird mosparo die Einstellung aus den Projekteinstellungen verwenden.
+          title: Einstellungen überschreiben
+          intro: Bitte aktivieren Sie das Kontrollkästchen für die Einstellungen, die Sie in den Projekt- oder allgemeinen Sicherheitseinstellungen überschreiben möchten. Wenn Sie eine Einstellung nicht überschreiben, wird mosparo die Einstellung aus dem Projekt oder den allgemeinen Sicherheitseinstellungen verwenden. Wenn Sie denselben Wert wie in den Projekt- oder allgemeinen Sicherheitseinstellungen konfigurieren, wird der benutzerdefinierte Wert aus der Sicherheitsrichtlinie entfernt.
       list:
         name: Name
         actions: Aktionen
@@ -746,6 +840,10 @@ settings:
       speed: Geschwindigkeit
       rangeSizeHelp: Je grösser der Zahlenbereich ist, desto mehr Berechnungen muss der Browser durchführen. Es wird empfohlen, keinen zu grossen Zahlenbereich zu verwenden, da es Zeit kostet, bis der Benutzer das Formular abschicken kann.
       cryptoSpeedHelp: Diese Werte wurden auf Ihrem Gerät getestet und berechnet. Andere Geräte können schneller oder langsamer sein. Diese Zahlen sollten Ihnen einen Anhaltspunkt geben, aber sie zeigen nicht die genaue Dauer für jeden Nutzer.
+    spamDetection:
+      title: Spam-Erkennung
+      intro: Legen Sie fest, ob der Spamschutz für diese Sicherheitsrichtlinie aktiviert werden soll und welcher Spam-Score zur Erkennung von Spam verwendet werden soll.
+      intro2: Wenn Sie die Einstellungen für die Spam-Erkennung nicht überschreiben, werden die Einstellungen aus dem Projekt verwendet.
   design:
     title: Darstellung
 
@@ -763,6 +861,9 @@ settings:
       preview: Vorschau
       colorAndDimensionSettings: Farben und Grösse
       invisibleSimpleDesign: Einfache unsichtbare Darstellung
+      dimensions:
+        mosparoBox: mosparo Box
+        checkbox: Kontrollkästchen
     preview:
       background: Hintergrund der Vorschau
 
@@ -810,6 +911,8 @@ settings:
       fullPageOverlay: Mit Overlay ganze Website überlagern
       invisibleLogo: Logo
       invisiblePageOverlay: Seiten-Overlay
+      checkboxRadius: Radius des Kontrollkästchens
+      checkboxBorderWidth: Rahmenbreite des Kontrollkästchen
     choices:
       boxSize:
         small: Klein
@@ -1020,18 +1123,13 @@ administration:
       continue: Weiter
 
     finalize:
-      title: Update ausgeführt
-      description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
-
-      hostsAlert:
-        title: 'Version 1.2: Änderung der Herkunftsüberprüfung'
-        intro: Mit Version 1.2 beginnt mosparo, die Herkunft einer Frontend-Anfrage zu verifizieren. Aufgrund dieser Änderung müssen die Hosts in Ihrem Projekt korrekt konfiguriert sein.
-        intro2: Bitte überprüfen Sie Ihre Projekte und Formulare jetzt.
-
-      geoIp2Info:
-        title: 'Version 1.2.2: MaxMind Konto-ID erforderlich'
-        intro: Ihre MaxMind-Konto-ID und Ihr Lizenzschlüssel sind erforderlich, um die GeoIP2-Datenbank herunterzuladen.
-        intro2: Bitte überprüfen Sie die GeoIP2-Konfiguration und geben Sie Ihre Konto-ID ein.
+      process:
+        v14:
+          title: Aufgaben verarbeiten
+          intro: mosparo muss die gespeicherten Daten optimieren, um Spam zuverlässig abzufangen. Bitte warten Sie, während die Aufgaben ausgeführt werden.
+          processingPleaseWait: Aufgaben verarbeiten…
+          processingStats: '%processedTasks% von %totalTasks% verarbeitet'
+          doNotLeave: Bitte verlassen Sie diese Seite nicht und brechen Sie den Vorgang nicht ab. Wenn sich der Fortschritt längere Zeit nicht ändert, aktualisieren Sie bitte diese Seite.
     upgrade:
       updateFirst: Bevor Sie auf die nächste Hauptversion upgraden können, müssen Sie die neuste Version Ihrer bisherigen Hauptversion installieren.
       introAvailable: Eine neue Hauptversion ist verfügbar. Sie können das Update-Tool verwenden, um auf die neuste Hauptversion zu aktualisieren.
@@ -1046,6 +1144,17 @@ administration:
         upgrade: Upgrade zu %newMajorVersion%
         recheck: Erneut prüfen
       meetPrerequisites: Alle Voraussetzungen sind erfüllt. Sie können mit dem Upgrade fortfahren.
+    finalized:
+      title: Update ausgeführt
+      description: Die notwendigen Änderungen für dieses Update wurden ausgeführt. Ihre Installation ist aktuell.
+      hostsAlert:
+        title: 'Version 1.2: Änderung der Herkunftsüberprüfung'
+        intro: Mit Version 1.2 beginnt mosparo, die Herkunft einer Frontend-Anfrage zu verifizieren. Aufgrund dieser Änderung müssen die Hosts in Ihrem Projekt korrekt konfiguriert sein.
+        intro2: Bitte überprüfen Sie Ihre Projekte und Formulare jetzt.
+      geoIp2Info:
+        title: 'Version 1.2.2: MaxMind Konto-ID erforderlich'
+        intro: Ihre MaxMind-Konto-ID und Ihr Lizenzschlüssel sind erforderlich, um die GeoIP2-Datenbank herunterzuladen.
+        intro2: Bitte überprüfen Sie die GeoIP2-Konfiguration und geben Sie Ihre Konto-ID ein.
   system:
     title: System-Informationen
     description: Alle Informationen über mosparo.
@@ -1078,6 +1187,7 @@ administration:
 
     website: Website
 
+    listOfContributors: Viele weitere Menschen haben uns in den letzten Jahren geholfen, mosparo zu verbessern und zu erweitern. Wir sind dankbar für all die Hilfe, Inspiration und das Feedback. Sehen Sie die %linkStart%vollständige Liste der Personen hier%linkEnd%.
   security:
     title: Sicherheits-Einstellungen
     reverseProxy:
@@ -1158,6 +1268,16 @@ administration:
       geoIp2RefreshIntervalHelp: Bestimmt die Anzahl der Tage, nach denen versucht wird, die GeoIP2-Datenbank zu aktualisieren. Um eine Überlastung des GeoIP2-Servers zu vermeiden, sollte die Datenbank nur selten, z. B. einmal pro Woche, aktualisiert werden.
     title: Cronjobs
     description: Konfigurieren Sie die Cronjobs von mosparo.
+  cleanupStatistic:
+    title: Bereinigungsstatistik
+    description: Prüfen Sie, wann die Übermittlungstoken und Übermittlungen aus der Datenbank gelöscht wurden.
+    list:
+      dateTime: Datum und Uhrzeit
+      cleanupExecutor: Ausführender
+      submitTokens: Einsende-Codes
+      submissions: Einsendung
+      executionTime: Ausführungsdauer
+      cleanupStatus: Status
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. Ist eine Internetverbindung vorhanden, sucht mosparo automatisch nach Updates, indem die Versionsdatei von der mosparo-Website heruntergeladen wird. Auch für das Herunterladen von Updates, der GeoIP2-Datenbanken und Regel-Pakete benötigen Sie eine aktive Internetverbindung.
@@ -1328,6 +1448,14 @@ action:
   simulateImport: Import simulieren
   executeChanges: Änderungen ausführen
   test: Testen
+  back: Zurück
+  saveChanges: Änderungen speichern
+  learnMore: Mehr erfahren
+  reset: Zurücksetzen
+  exportItems: Einträge exportieren
+  howToImport: Wie importieren
+  toggleDropdown: Dropdown umschalten
+  filter: Filtern
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
@@ -1335,6 +1463,8 @@ general:
   unlimited: Unlimitiert
 
 # State
+  pleaseWait: Bitte wählen…
+  areYouSure: Sind Sie sicher?
 state:
   active: Aktiv
   inactive: Inaktiv
@@ -1355,6 +1485,10 @@ form:
     browserLanguage: Sprache des Browsers
   clearField: Feld leeren
 
+  pleaseChoose: Bitte wählen…
+  addItem: Eintrag hinzufügen
+  importTextFile: Importieren (Text-Datei)
+  importCsvFile: Importieren (CSV-Datei)
 interface:
   colorModes:
     light: Hell
@@ -1471,7 +1605,6 @@ tools:
       table:
         add: Hinzufügen
         status: Status
-        url: URL
         modify: Ändern
         items: Einträge
         itemsAdd: Hinzufügen
@@ -1488,6 +1621,7 @@ tools:
         criteria: Kriterien
         guidelineModify: Anpassung erforderlich
         guidelineEqual: Keine Anpassung erforderlich
+        source: Quelle
       title: Verfügbare Änderungen
       intro: mosparo hat den Import simuliert und die folgenden Änderungen festgestellt. Bitte überprüfen Sie diese und führen Sie die Änderungen aus, wenn alles in Ordnung ist.
       changes:
@@ -1518,7 +1652,7 @@ tools:
         addHelp: mosparo fügt bestehende Regeln als neue Regeln hinzu. Die neuen Regeln erhalten eine neue Identifikation (UUID).
       importFile: Zu importierende Datei
     intro: Wenn Sie die Daten aus einem anderen Projekt in dieses Projekt kopieren möchten, wählen Sie bitte die zu importierende Datei und die zu importierenden Daten aus. Wenn Sie die Regeln importieren, wählen Sie bitte aus, wie mosparo bestehende Regeln behandeln soll.
-    infoOverrideData: Die Einstellungen sowie die Regel-Pakete werden im Projekt immer überschrieben. Für Regel-Pakete muss die URL übereinstimmen. Bei den Regeln müssen Sie auswählen, was mosparo mit den vorhandenen Regeln machen soll.
+    infoOverrideData: Die Einstellungen und auch die Regelpakete werden im Projekt immer überschrieben. Bei den Regeln müssen Sie auswählen, was mosparo mit bestehenden Regeln machen soll. Regelpakete, die vor Version 1.4.0 von mosparo erstellt wurden, haben möglicherweise eine andere ID und passen nicht zur Importdatei.
     errorMessage:
       selectAtLeastOneElement: Wählen Sie mindestens ein Element aus, das Sie importieren möchten.
       fileUploadError: Die Datei wurde nicht korrekt hochgeladen. Bitte prüfen Sie die Protokolldatei.
@@ -1565,7 +1699,7 @@ tools:
       ipAddress: IP-Adresse
     title: Regel-Tester
     description: Testen Sie wie Ihre Regeln Spam erkennen werden.
-    intro: Geben Sie den Wert ein, den Sie testen möchten. Wählen Sie, welchen Datentyp Sie für den Test verwenden wollen und ob Sie Regeln und Regelsätze verwenden wollen. Der Datentyp ist wichtig, da einige Regeltypen nur für bestimmte Datentypen gelten.
+    intro: Geben Sie den Wert ein, den Sie testen möchten. Wählen Sie, welchen Datentyp Sie für den Test verwenden wollen und ob Sie Regeln und Regel-Pakete verwenden wollen. Der Datentyp ist wichtig, da einige Regeltypen nur für bestimmte Datentypen gelten.
   export:
     title: Exportieren
     includedData: Enthaltene Daten
@@ -1573,6 +1707,7 @@ tools:
     errorMessage:
       selectAtLeastOneElement: Wählen Sie mindestens ein Element aus, das Sie exportieren möchten.
     infoSensitiveData: Sensible Daten werden niemals exportiert. Einsendungen, Einsendecodes, die eindeutige Projekt-ID (UUID), die API-Schlüssel und die Projektmitglieder werden daher nicht exportiert.
+    infoManualRulePackages: Der Inhalt des Regelpakets wird nicht in den Export aufgenommen. Dies bedeutet, dass alle manuell importierten Regelpakete nach dem Importieren der Datei erneut importiert werden müssen.
   eiParts:
     generalSettings: Haupteinstellungen
     securitySettings: Sicherheitseinstellungen
@@ -1584,6 +1719,8 @@ tools:
     rulePackages: Regel-Pakete
     designSettings: Darstellungseinstellungen
     rulePackagesHelp: Enthält alle Regel-Pakete eines Projekts.
+  importExport:
+    infoRulesWithManyItems: Regeln mit Hunderten von Einträge können beim Exportieren oder Importieren der Regeln sehr viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser zu tun. Bitte erhöhen Sie in einem solchen Fall den Arbeitsspeicher des PHP-Prozesses oder verwenden Sie den CLI-Befehl zum Importieren oder Exportieren der Regeln.
 dataTable:
   name: Name
   empty: Leer
@@ -1650,3 +1787,85 @@ projectGroup:
 projectGroupSelector:
   noProjectsAvailable: Keine Projekte vorhanden
   noGroupsAvailable: Keine Gruppen verfügbar.
+tabulator:
+  data:
+    loading: Wird geladen…
+    error: Fehler
+  groups:
+    item: Eintrag
+    items: Einträge
+  pagination:
+    pageSize: Seitenumfang
+    pageTitle: Seite anzeigen
+    first: '%s%Erste%e%'
+    firstTitle: Erste Seite
+    last: '%s%Letzte%e%'
+    lastTitle: Letzte Seite
+    prev: '%s%Vorherige%e%'
+    prevTitle: Vorherige Seite
+    next: '%s%Nächste%e%'
+    nextTitle: Nächste Seite
+    all: Alle
+    counter: '%vd%Seite%e% %page% %vd%von%e%%vm%/%e% %totalPages%'
+  filter:
+    default: Spalte filtern…
+multiSelect:
+  selectedItems: Selected Einträge
+  actions:
+    deleteSelectedItems: Ausgewählte Einträge löschen
+cleanup:
+  lastDatabaseCleanup: 'Letzte Datenbankbereinigung:'
+cleanupStatus:
+  unknown:
+    label: Unbekannt
+  incomplete:
+    label: Unvollständig
+  complete:
+    label: Komplett
+cleanupExecutor:
+  unknown:
+    label: Unbekannt
+  cleanupCommand:
+    label: Bereinigungsbefehl
+  frontendApi:
+    label: Frontend-API
+  webCronJob:
+    label: Web-Cronjob
+rulePackageType:
+  category:
+    automatically:
+      label: Automatisch
+      description: Wenn Sie möchten, dass mosparo das Regelpaket automatisch importiert, verwenden Sie einen der folgenden Typen.
+    manually:
+      label: Manuell
+      description: Verwenden Sie einen der manuellen Typen, wenn Sie das Regelpaket manuell importieren oder den Import mit einem Cronjob ausführen möchten.
+  automaticallyFromUrl:
+    label: Automatisch von URL
+    description: mosparo lädt das Regelpaket automatisch von der URL über die Internetverbindung.
+  automaticallyFromFile:
+    label: Automatisch aus Datei
+    description: mosparo lädt das Regelpaket automatisch aus dem angegebenen Dateipfad auf Ihrem Server.
+  manuallyViaCli:
+    label: Manuell über CLI
+    description: Führen Sie den CLI-Befehl aus, um das Regelpaket manuell zu importieren, wenn Sie es ändern.
+  manuallyViaApi:
+    label: Manuell über API
+    description: Importieren Sie das Regelpaket mit Ihren Tools oder mosparo RPG über die mosparo API.
+unknown:
+  label: Unbekannt
+example:
+  titleSingular: Beispiel
+  titlePlural: Beispiele
+argument:
+  titleSingular: Argument
+  titlePlural: Argumente
+tooltip:
+  projectId: Projekt-ID
+  rulePackageId: Regelpaket-ID
+  file: Dateipfad
+  input: Standardeingabe verwenden
+  hash: SHA256-Hash
+  host: Host
+  publicKey: Öffentlicher Schlüssel
+  privateKey: Geheimer Schlüssel
+  deleted: Gelöscht

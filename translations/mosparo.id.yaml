@@ -79,15 +79,12 @@ rule:
     intro: Silakan pilih jenis aturan yang ingin Anda buat. Jenis yang tersedia digunakan untuk bidang yang berbeda dan tidak dapat diubah untuk aturan sesudahnya.
   create:
     title: Buat peraturan
-    message:
-      successfullyCreated: Aturan baru berhasil dibuat.
   form:
     items:
       type: Tipe
       rating: Peringkat
       title: item
     addMultipleItems:
-      label: Label
       items: Item
       itemsHelp: Tambahkan satu item per baris.
       rating: Peringkat
@@ -207,8 +204,6 @@ rule:
       infoValueEqualZero: Jika rating disetel ke %zero%, item tidak akan terdeteksi sebagai spam karena nilai rating spam akan menjadi %zero%.
   edit:
     title: Edit aturan %ruleName%
-    message:
-      successfullySaved: Aturan berhasil disimpan.
   filter:
     options:
       all: Tampilkan semua
@@ -226,7 +221,6 @@ rulePackage:
     actions: Tindakan
   form:
     name: Nama
-    url: URL
     status: Status
     message:
       successfullySaved: Kumpulan aturan berhasil disimpan.
@@ -236,7 +230,6 @@ rulePackage:
     title: Lihat kumpulan aturan %rulePackageName%
     details:
       title: Detail kumpulan aturan
-      url: URL
       spamRatingFactor: Faktor peringkat spam
       lastRefreshedAt: Terakhir disegarkan pada
       lastUpdatedAt: Terakhir diperbarui pada
@@ -656,9 +649,6 @@ administration:
     description: Periksa versi baru dan perbarui instalasi mosparo Anda.
     updateChannel: Perbarui saluran
     installedVersion: Versi terpasang
-    finalize:
-      title: Pembaruan dieksekusi
-      description: Perubahan yang diperlukan untuk pembaruan ini dijalankan. Instalasi Anda mutakhir.
     upgrade:
       installedVersion: Versi utama diinstal
       availableVersion: Tersedia versi utama

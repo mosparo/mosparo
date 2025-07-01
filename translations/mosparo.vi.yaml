@@ -9,12 +9,8 @@ rule:
   createChooseType:
     title: Chọn loại
   create:
-    message:
-      successfullyCreated: Quy tắc mới đã được tạo thành công.
     title: Tạo quy tắc
   edit:
-    message:
-      successfullySaved: Quy tắc đã được lưu thành công.
     title: Chỉnh sửa quy tắc %ruleName%
   form:
     ruleType: Loại quy tắc
@@ -30,7 +26,6 @@ rule:
       title: Items
       rating: Đánh giá
     addMultipleItems:
-      label: Nhãn
       items: Items
       itemsHelp: Thêm một item trên mỗi dòng.
       rating: Đánh giá
