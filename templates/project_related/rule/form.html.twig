@@ -449,6 +449,8 @@
             var processingUuids = [];
             var activeFilters = {};
             var saveInterval = null;
+            const baseChunkSize = {{ baseChunkSize }}; // 4 KiB
+            var usedChunkSize = baseChunkSize;
             var placeholderEl = $('<div></div>').addClass('empty')[0];
 
             var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rule.form.noItemsInTable.title'|trans }}')[0];
@@ -665,7 +667,7 @@
                     progressModal.modal('show');
 
                     let modalWasVisible = false;
-                    const chunkSize = 32 * 1024; // 32 KiB
+                    usedChunkSize = baseChunkSize;
                     const totalBytes = inputData.length;
                     let processedBytes = 0;
                     let chunkData = null;
@@ -681,8 +683,8 @@
                             break;
                         }
 
-                        if (processedBytes + chunkSize < totalBytes) {
-                            posNextNl = inputData.indexOf('\n', processedBytes + chunkSize);
+                        if (processedBytes + usedChunkSize < totalBytes) {
+                            posNextNl = inputData.indexOf('\n', processedBytes + usedChunkSize);
                         } else {
                             posNextNl = totalBytes;
                         }
@@ -718,6 +720,14 @@
                             adjustSummaryValues($('#number-of-added-items'), responseData.counters.added);
                             adjustSummaryValues($('#number-of-skipped-items'), responseData.counters.skipped);
                             adjustSummaryValues($('#number-of-invalid-items'), responseData.counters.invalid);
+
+                            if (responseData.chunkSize) {
+                                if (responseData.chunkSize === 'increase') {
+                                    usedChunkSize *= 2;
+                                } else if (responseData.chunkSize === 'decrease') {
+                                    usedChunkSize /= 2;
+                                }
+                            }
                         });
                     }
 
@@ -1125,6 +1135,7 @@
                         })
 
                         $('#adding-items-total').text(convertBytesIntoHumanReadableFormat(totalBytes));
+                        usedChunkSize = baseChunkSize;
 
                         papa.parse(file, {
                             chunk: function (results, parser) {
@@ -1171,10 +1182,20 @@
                                     adjustSummaryValues($('#number-of-skipped-items'), responseData.counters.skipped);
                                     adjustSummaryValues($('#number-of-invalid-items'), responseData.counters.invalid);
 
+                                    if (responseData.chunkSize) {
+                                        if (responseData.chunkSize === 'increase') {
+                                            usedChunkSize *= 2;
+                                        } else if (responseData.chunkSize === 'decrease') {
+                                            usedChunkSize /= 2;
+                                        }
+
+                                        parser.streamer._config['chunkSize'] = usedChunkSize;
+                                    }
+
                                     parser.resume();
                                 });
                             },
-                            chunkSize: 32 * 1024, // 32 KiB
+                            chunkSize: usedChunkSize,
                             complete: function () {
                                 $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(totalBytes));
                                 $('#adding-items-progress-bar').css('width', '100%');
@@ -1199,6 +1220,8 @@
                         $('#progress-modal-title-please-wait, #progress-modal-status, #add-multiple-items-loader .alert-info').removeClass('d-none');
                         $('#progress-modal-title-items-added, #add-multiple-items-loader .alert-success, #progress-modal .modal-footer').addClass('d-none');
                         $('#adding-items-progress-bar').css('width', '0%');
+                        $('#adding-items-processed').text(0);
+                        $('#adding-items-total').text(0);
 
                         $('#number-of-added-items, #number-of-skipped-items, #number-of-invalid-items').text('0').data('val', 0);
                     });

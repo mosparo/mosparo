@@ -12,6 +12,7 @@ use Mosparo\Form\RuleFormType;
 use Mosparo\Rule\RuleTypeManager;
 use Mosparo\Rule\Type\RuleTypeInterface;
 use Mosparo\Rule\Type\UnicodeBlockRuleType;
+use Mosparo\Util\EnvironmentUtil;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
@@ -179,7 +180,8 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             'valueOptions' => $valueOptions,
             'validatorPattern' => $ruleType->getValidatorPattern(),
             'form' => $form->createView(),
-            'ruleType' => $ruleType
+            'ruleType' => $ruleType,
+            'baseChunkSize' => $this->determineBaseChunkSize(),
         ]);
     }
 
@@ -472,10 +474,16 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
         $entityManager->flush();
 
+        $chunkSizeData = [];
+        $adjustChunkSize = $this->determineChunkSizeAdjustment();
+        if ($adjustChunkSize && $counters['skipped'] === 0) {
+            $chunkSizeData['chunkSize'] = $adjustChunkSize;
+        }
+
         return new JsonResponse([
             'success' => true,
             'counters' => $counters,
-        ]);
+        ] + $chunkSizeData);
     }
 
     #[Route('/{id}/delete-selected', name: 'rule_edit_delete_selected')]
@@ -641,5 +649,40 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         }
 
         return $matchingOptions;
+    }
+
+    protected function determineBaseChunkSize(): int
+    {
+        $memoryLimit = EnvironmentUtil::getMemoryLimitInBytes();
+        $chunkSizesKilo = [
+            0 => 4,
+            64 => 16,
+            128 => 32,
+            256 => 64,
+        ];
+
+        $baseChunkSize = 4; // Use 4 KiB if the memory limit is 0
+        foreach ($chunkSizesKilo as $memInM => $chunkInKilo) {
+            $memInBytes = $memInM * 1024 * 1024;
+            if ($memInBytes < $memoryLimit) {
+                $baseChunkSize = $chunkInKilo;
+            }
+        }
+
+        return $baseChunkSize * 1024;
+    }
+
+    protected function determineChunkSizeAdjustment(): ?string
+    {
+        $peakMemory = memory_get_peak_usage();
+        $memoryLimit = EnvironmentUtil::getMemoryLimitInBytes();
+
+        if ($peakMemory > $memoryLimit * 0.8) {
+            return 'decrease';
+        } else if ($peakMemory < $memoryLimit * 0.25) {
+            return 'increase';
+        }
+
+        return null;
     }
 }
