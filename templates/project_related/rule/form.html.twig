@@ -1129,7 +1129,7 @@
                         papa.parse(file, {
                             chunk: function (results, parser) {
                                 if (!$('#progress-modal').is(':visible') && modalWasVisible) {
-                                    parser.stop();
+                                    parser.abort();
                                 }
 
                                 let items = [];
