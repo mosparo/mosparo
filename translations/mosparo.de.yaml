@@ -150,6 +150,7 @@ rule:
     filter:
       title: Einträge filtern
       useWildcard: Verwenden Sie %wildcard% als Platzhalter.
+      itemSpamRating: Spam-Bewertung des Eintrags
     noItemsInTable:
       title: Noch keine Einträge vorhanden
       text: Diese Regel enthält noch keine Einträge.
@@ -1269,7 +1270,9 @@ administration:
       dateTime: Datum und Uhrzeit
       cleanupExecutor: Ausführender
       submitTokens: Einsende-Codes
-      submissions: Einsendungen
+      submissions: Einsendung
+      executionTime: Ausführungsdauer
+      cleanupStatus: Status
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. Ist eine Internetverbindung vorhanden, sucht mosparo automatisch nach Updates, indem die Versionsdatei von der mosparo-Website heruntergeladen wird. Auch für das Herunterladen von Updates, der GeoIP2-Datenbanken und Regel-Pakete benötigen Sie eine aktive Internetverbindung.
@@ -1440,6 +1443,14 @@ action:
   simulateImport: Import simulieren
   executeChanges: Änderungen ausführen
   test: Testen
+  back: Zurück
+  saveChanges: Änderungen speichern
+  learnMore: Mehr erfahren
+  reset: Zurücksetzen
+  exportItems: Einträge exportieren
+  howToImport: Wie importieren
+  toggleDropdown: Dropdown umschalten
+  filter: Filtern
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
@@ -1447,6 +1458,8 @@ general:
   unlimited: Unlimitiert
 
 # State
+  pleaseWait: Bitte wählen…
+  areYouSure: Sind Sie sicher?
 state:
   active: Aktiv
   inactive: Inaktiv
@@ -1467,6 +1480,10 @@ form:
     browserLanguage: Sprache des Browsers
   clearField: Feld leeren
 
+  pleaseChoose: Bitte wählen…
+  addItem: Eintrag hinzufügen
+  importTextFile: Importieren (Text-Datei)
+  importCsvFile: Importieren (CSV-Datei)
 interface:
   colorModes:
     light: Hell
@@ -1765,3 +1782,85 @@ projectGroup:
 projectGroupSelector:
   noProjectsAvailable: Keine Projekte vorhanden
   noGroupsAvailable: Keine Gruppen verfügbar.
+tabulator:
+  data:
+    loading: Wird geladen…
+    error: Fehler
+  groups:
+    item: Eintrag
+    items: Einträge
+  pagination:
+    pageSize: Seitenumfang
+    pageTitle: Seite anzeigen
+    first: '%s%Erste%e%'
+    firstTitle: Erste Seite
+    last: '%s%Letzte%e%'
+    lastTitle: Letzte Seite
+    prev: '%s%Vorherige%e%'
+    prevTitle: Vorherige Seite
+    next: '%s%Nächste%e%'
+    nextTitle: Nächste Seite
+    all: Alle
+    counter: '%vd%Seite%e% %page% %vd%von%e%%vm%/%e% %totalPages%'
+  filter:
+    default: Spalte filtern…
+multiSelect:
+  selectedItems: Selected Einträge
+  actions:
+    deleteSelectedItems: Ausgewählte Einträge löschen
+cleanup:
+  lastDatabaseCleanup: 'Letzte Datenbankbereinigung:'
+cleanupStatus:
+  unknown:
+    label: Unbekannt
+  incomplete:
+    label: Unvollständig
+  complete:
+    label: Komplett
+cleanupExecutor:
+  unknown:
+    label: Unbekannt
+  cleanupCommand:
+    label: Bereinigungsbefehl
+  frontendApi:
+    label: Frontend-API
+  webCronJob:
+    label: Web-Cronjob
+rulePackageType:
+  category:
+    automatically:
+      label: Automatisch
+      description: Wenn Sie möchten, dass mosparo das Regelpaket automatisch importiert, verwenden Sie einen der folgenden Typen.
+    manually:
+      label: Manuell
+      description: Verwenden Sie einen der manuellen Typen, wenn Sie das Regelpaket manuell importieren oder den Import mit einem Cronjob ausführen möchten.
+  automaticallyFromUrl:
+    label: Automatisch von URL
+    description: mosparo lädt das Regelpaket automatisch von der URL über die Internetverbindung.
+  automaticallyFromFile:
+    label: Automatisch aus Datei
+    description: mosparo lädt das Regelpaket automatisch aus dem angegebenen Dateipfad auf Ihrem Server.
+  manuallyViaCli:
+    label: Manuell über CLI
+    description: Führen Sie den CLI-Befehl aus, um das Regelpaket manuell zu importieren, wenn Sie es ändern.
+  manuallyViaApi:
+    label: Manuell über API
+    description: Importieren Sie das Regelpaket mit Ihren Tools oder mosparo RPG über die mosparo API.
+unknown:
+  label: Unbekannt
+example:
+  titleSingular: Beispiel
+  titlePlural: Beispiele
+argument:
+  titleSingular: Argument
+  titlePlural: Argumente
+tooltip:
+  projectId: Projekt-ID
+  rulePackageId: Regelpaket-ID
+  file: Dateipfad
+  input: Standardeingabe verwenden
+  hash: SHA256-Hash
+  host: Host
+  publicKey: Öffentlicher Schlüssel
+  privateKey: Geheimer Schlüssel
+  deleted: Gelöscht
