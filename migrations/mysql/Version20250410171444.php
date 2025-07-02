@@ -21,7 +21,7 @@ final class Version20250410171444 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            CREATE TABLE cleanup_statistic (id INT AUTO_INCREMENT NOT NULL, date_time DATETIME NOT NULL, cleanup_executor INT NOT NULL, number_of_stored_submit_tokens INT NOT NULL, number_of_deleted_submit_tokens INT NOT NULL, number_of_stored_submissions INT NOT NULL, number_of_deleted_submissions INT NOT NULL, execution_time DOUBLE PRECISION NOT NULL, cleanup_status INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci`
+            CREATE TABLE cleanup_statistic (id INT AUTO_INCREMENT NOT NULL, date_time DATETIME NOT NULL, cleanup_executor INT NOT NULL, number_of_stored_submit_tokens INT NOT NULL, number_of_deleted_submit_tokens INT NOT NULL, number_of_stored_submissions INT NOT NULL, number_of_deleted_submissions INT NOT NULL, execution_time DOUBLE PRECISION NOT NULL, cleanup_status INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
     }
 
