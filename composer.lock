@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69e22f1639a69c97fd878bd3c8ea992b",
+    "content-hash": "3791e8c3976aa0314d713c25dcbe0f4d",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1199,16 +1199,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "3.4.3",
+            "version": "3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "ef607f26c2965fe460c55733cc7c031fb7e1f2fa"
+                "reference": "6deec3655ba3e8f15280aac11e264225854d2369"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/ef607f26c2965fe460c55733cc7c031fb7e1f2fa",
-                "reference": "ef607f26c2965fe460c55733cc7c031fb7e1f2fa",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/6deec3655ba3e8f15280aac11e264225854d2369",
+                "reference": "6deec3655ba3e8f15280aac11e264225854d2369",
                 "shasum": ""
             },
             "require": {
@@ -1283,9 +1283,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/3.4.3"
+                "source": "https://github.com/doctrine/orm/tree/3.5.0"
             },
-            "time": "2025-06-27T12:14:15+00:00"
+            "time": "2025-07-01T17:40:53+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -2506,16 +2506,16 @@
         },
         {
             "name": "mosparo/specifications",
-            "version": "v4.0",
+            "version": "v5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mosparo/specifications.git",
-                "reference": "bbb1b60ee54a33d5c483ba51abcb6e733a94b5f8"
+                "reference": "ffd6934a4d47f1cf98d4953cf6852e84cf6c2d31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mosparo/specifications/zipball/bbb1b60ee54a33d5c483ba51abcb6e733a94b5f8",
-                "reference": "bbb1b60ee54a33d5c483ba51abcb6e733a94b5f8",
+                "url": "https://api.github.com/repos/mosparo/specifications/zipball/ffd6934a4d47f1cf98d4953cf6852e84cf6c2d31",
+                "reference": "ffd6934a4d47f1cf98d4953cf6852e84cf6c2d31",
                 "shasum": ""
             },
             "require": {
@@ -2550,9 +2550,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mosparo/specifications/issues",
-                "source": "https://github.com/mosparo/specifications/tree/v4.0"
+                "source": "https://github.com/mosparo/specifications/tree/v5.0"
             },
-            "time": "2023-11-26T18:40:45+00:00"
+            "time": "2025-04-29T17:35:12+00:00"
         },
         {
             "name": "nelmio/security-bundle",
