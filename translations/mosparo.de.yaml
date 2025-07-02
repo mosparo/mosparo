@@ -1810,7 +1810,7 @@ tabulator:
   filter:
     default: Spalte filtern…
 multiSelect:
-  selectedItems: Selected Einträge
+  selectedItems: Ausgewählte Einträge
   actions:
     deleteSelectedItems: Ausgewählte Einträge löschen
 cleanup:
