@@ -6,6 +6,7 @@ use Mosparo\Repository\DelayRepository;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: DelayRepository::class)]
 class Delay
 {

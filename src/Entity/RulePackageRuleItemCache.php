@@ -8,6 +8,7 @@ use Mosparo\Rule\PreparedRuleItemTrait;
 use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleItemEntityInterface;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RulePackageRuleCacheRepository::class)]
 #[ORM\Index(name: 'rpric_uuid_idx', fields: ['uuid'])]
 #[ORM\Index(name: 'rpric_hashed_idx', fields: ['project', 'type', 'hashedValue'])]

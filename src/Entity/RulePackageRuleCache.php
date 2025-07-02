@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Mosparo\Rule\RuleEntityInterface;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RulePackageRuleCacheRepository::class)]
 #[ORM\Index(name: 'rprc_uuid_idx', fields: ['uuid'])]
 class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityInterface

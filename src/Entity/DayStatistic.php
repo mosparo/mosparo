@@ -5,6 +5,7 @@ namespace Mosparo\Entity;
 use Mosparo\Repository\DayStatisticRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: DayStatisticRepository::class)]
 #[ORM\UniqueConstraint(name: 'day_project_idx', columns: ['date', 'project_id'])]
 class DayStatistic implements ProjectRelatedEntityInterface

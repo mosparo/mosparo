@@ -5,6 +5,7 @@ namespace Mosparo\Entity;
 use Mosparo\Repository\ProjectMemberRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: ProjectMemberRepository::class)]
 class ProjectMember
 {

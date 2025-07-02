@@ -9,6 +9,7 @@ use Mosparo\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Util\DateRangeUtil;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
 {

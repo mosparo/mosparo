@@ -7,6 +7,7 @@ use Mosparo\Repository\SubmissionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Verification\GeneralVerification;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: SubmissionRepository::class)]
 class Submission implements ProjectRelatedEntityInterface
 {

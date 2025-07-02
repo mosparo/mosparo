@@ -5,6 +5,7 @@ namespace Mosparo\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Repository\ProjectConfigValueRepository;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: ProjectConfigValueRepository::class)]
 class ProjectConfigValue implements ProjectRelatedEntityInterface
 {

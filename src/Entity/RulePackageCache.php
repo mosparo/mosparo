@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\RulePackageCacheRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RulePackageCacheRepository::class)]
 class RulePackageCache implements ProjectRelatedEntityInterface
 {

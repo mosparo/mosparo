@@ -6,6 +6,7 @@ use Mosparo\Enum\RulePackageType;
 use Mosparo\Repository\RulePackageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RulePackageRepository::class)]
 class RulePackage implements ProjectRelatedEntityInterface
 {

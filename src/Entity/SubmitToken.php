@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Mosparo\Repository\SubmitTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: SubmitTokenRepository::class)]
 class SubmitToken implements ProjectRelatedEntityInterface
 {

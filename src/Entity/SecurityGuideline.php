@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\SecurityGuidelineRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: SecurityGuidelineRepository::class)]
 class SecurityGuideline implements ProjectRelatedEntityInterface
 {

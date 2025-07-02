@@ -7,6 +7,7 @@ use Mosparo\Enum\CleanupStatus;
 use Mosparo\Repository\CleanupStatisticRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: CleanupStatisticRepository::class)]
 class CleanupStatistic
 {

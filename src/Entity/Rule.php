@@ -8,6 +8,7 @@ use Mosparo\Repository\RuleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Rule\RuleEntityInterface;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RuleRepository::class)]
 class Rule implements ProjectRelatedEntityInterface, RuleEntityInterface
 {
