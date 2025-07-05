@@ -1,2 +1,9 @@
 accessibility:
-  checkingData: Apsauga nuo spamo tikrina jūsų informaciją. Prašau palaukite
+  checkingData: Apsauga nuo spamo tikrina jūsų informaciją. Prašome palaukti.
+  dataValid: Informacija patikrinta. Jus dabar galite pateikti formą.
+error:
+  internalError: Įvyko klaida. Prašau pakartokite dar kartą
+  lockedOut: Jus buvote užblokuoti. Prašome pabandyti dar kartą per %datetime%.
+  delay: Jūsų užklausa buvo atidėta. Prašome pabandyti dar kartą per %seconds% sekundžių.
+hp:
+  fieldTitle: Palikite šią vietą tuščia
