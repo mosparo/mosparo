@@ -7,7 +7,8 @@ error:
   lockedOut: Ju jeni ndaluar përkohësisht. Ju lutemi provoni përsëri pas %datetime%.
 label: Unë pranoj që hyrjet e formularit kontrollohen për postë të padëshiruar dhe ruhen të koduara për 14 ditë.
 accessibility:
-  checkingData: Ne po kontrollojmë të dhënat tuaja. Ju lutem prisni.
+  checkingData: Mbrojtja nga spam-i po verifikon të dhënat tuaja. Ju lutemi prisni.
   dataValid: Të dhënat tuaja nuk përmbajnë spam. Ju mund të dorëzoni formularin.
+  protectedBy: Ky formular është i mbrojtur nga spam-i nga mosparo.
 hp:
   fieldTitle: Lëreni këtë fushë hyrjes bosh
