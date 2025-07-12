@@ -30,7 +30,8 @@ class RuleTesterHelper
     protected RuleCacheHelper $ruleCacheHelper;
 
     protected array $rules = [];
-    protected array $ruleTesters = [];
+
+    protected array $results = [];
 
     public function __construct(
         EntityManagerInterface $entityManager,
