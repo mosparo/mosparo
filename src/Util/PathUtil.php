@@ -11,7 +11,7 @@ class PathUtil
             return $path;
         }
 
-        // If twe have a different directory separator, replace the slash in the path and return the path.
+        // If we have a different directory separator, replace the slash in the path and return the path.
         $preparedPath = str_replace('/', DIRECTORY_SEPARATOR, $path);
 
         // Convert to lowercase to be able to compare on case-insensitive file systems.
