@@ -16,10 +16,6 @@ class EnvironmentUtil
             $memory = $memory * pow(1024, strpos(' kmg', strtolower($unit)));
         }
 
-        if (!isset($memory)) {
-            return 0;
-        }
-
-        return $memory;
+        return $memory ?? 0;
     }
 }
