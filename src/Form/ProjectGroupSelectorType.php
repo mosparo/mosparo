@@ -37,7 +37,7 @@ class ProjectGroupSelectorType extends ChoiceType
         parent::buildForm($builder, $options);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['tree'] = $options['tree'];
         $view->vars['active_group'] = $options['active_group'];
