@@ -37,15 +37,21 @@ class RuleTypeManagerTest extends TestCase
 
     public function testGetRuleType()
     {
-        $ruleTypeManager = $this->createRuleTypeManager();
-
-        $this->assertInstanceOf(TestRuleType::class, $ruleTypeManager->getRuleType('test-type'));
+        $this->assertInstanceOf(TestRuleType::class, $this->createRuleTypeManager()->getRuleType('test-type'));
     }
 
     public function testGetNonExistingRuleType()
     {
-        $ruleTypeManager = $this->createRuleTypeManager();
+        $this->assertNull($this->createRuleTypeManager()->getRuleType('third-test-type'));
+    }
 
-        $this->assertNull($ruleTypeManager->getRuleType('third-test-type'));
+    public function testGetRuleTypeKeys()
+    {
+        $keys = $this->createRuleTypeManager()->getRuleTypeKeys();
+
+        $this->assertCount(2, $keys);
+        $this->assertContainsOnly('string', $keys, true);
+        $this->assertContains('test-type', $keys);
+        $this->assertContains('second-test-type', $keys);
     }
 }
