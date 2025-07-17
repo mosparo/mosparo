@@ -2,6 +2,10 @@ project:
   action:
     goto: Отиди към проект
     delete: Изтрий проект
+    create: Създай
+    manage: Управление на проекти
+    id: Идентификатор на проекта
+    settings: Настройки
   create:
     message:
       successfullyCreatedAndConfigured: Новият проект е успешно създаден и настроен.
@@ -12,25 +16,55 @@ project:
     actions: Действия
     name: Име
     status: Статус
+    projects: Проекти
   filter:
     options:
       all: Покажи всички
       active: Покажи активните проекти
       inactive: Покажи неактивните проекти
+    dropdown: Филтрирай списъка с проекти
   search:
     placeholder: Потърси за…
   createWizard:
     design:
       title: Изберете дизайн
+      introStartWizard: Вашият проект беше създаден успешно. За да започнете да го използвате, моля изберете дизайн и продължете.
+      infoAdvancedMode: След помощника можете да преминете към режим за напреднали или невидим режим чрез настройките за дизайн. Режимът за напреднали позволява прецизното настройване на уебсайта, а невидимият режим не показва кутийката mosparo.
+    security:
+      title: Активиране на функциите за сигурност
+      introSecurity: Моля изберете функциите за сигурност, които искате да активирате.
+      infoSettings: Можете да активирате, деактивирате или променяте функциите за сигурност в настройките за сигурност след помощника.
+    connection:
+      title: Информация за връзката
+      savedSuccessfully: Настройките за дизайн и сигурност бяха запазени успешно. Вече можете да използвате този проект в уебсайт.
+      introConnection: За да използвате mosparo в уебсайт трябва да добавите интеграцията към уебсайта и да свържете уебсайта и този проект. За тази стъпка, моля копирайте и поставете следната информация в правилното поле в интеграцията.
+      infoSettings: Можете да намерите информация за връзката в настройките на проекта след този помощник.
   form:
     status: Статус
     name: Име
     description: Описание
+    projectGroup: Група с проекти
+    projectGroupHelp: Можете да използвате групи с проекти, за да организирате проектите си. Изберете групата с проекти, в която искате да съхраните този проект.
+    hosts: Хостове
+    statusHelp: Активирайте или деактивирайте засичането на спам. Ако е деактивирано, системата ще записва всички заявки, но няма да предотвратява никоя от тях.
+    spamScore: Оценка за спам
+    spamScoreHelp: Оценка, определяща дали заявката ще бъде третирана като спам. Ако оценката е по-голяма от това число, то заявката се счита за спам.
+    statisticStorageLimit: Съхранение на статистики
+    statisticStorageLimitHelp: Определя колко дълго mosparo ще пази статистиките в базата данни. Тази опция няма общо с периода на съхранение на заявките, след който заявките биват изтривани от базата данни (14 дни).
   roles:
     owner: Собственик
+    reader: Четящ
+    editor: Редактор
   delete:
     title: Изтрий проект %projectName%
     confirm: Наистина ли искате да изтриете проекта %projectName%?
+    disconnectFirst: Моля, проверете дали сте прекъснали връзката между Вашия уебсайт или интеграция и този проект, преди да го изтриете.
+    message:
+      successfullyDeleted: Проект %projectName% беше изтрит успешно.
+  searchTitle: Проекти за %searchQuery%
+  infoNoProjectAvailable: Няма проекти
+  infoCreateProjectOrRequestAccess: Създай нов проект или поискай достъп до друг проект.
+  infoNoProjectsInThisGroup: Няма проекти в тази група.
 header:
   pleaseChoose: Моля изберете…
   noProjectsFound: Няма намерени проекти
@@ -38,6 +72,12 @@ header:
 dashboard:
   chart:
     spam: Спам
+    valid: Валидно
+    annotation:
+      statisticOnly: Само статистика
+  title: Табло за управление
+  dateRange:
+    dropdown: Изберете срок за видими дати
 rule:
   title: Правила
   list:
@@ -47,6 +87,57 @@ rule:
     actions: Действия
   createChooseType:
     title: Изберете тип
+    intro: Моля изберете вида правило, който искате да създадете. Наличните видове се използватт за различни полета и не могат да бъдат променяни за правило след това.
   form:
     rule:
       name: Име
+      title: Правило
+      description: Описание
+      status: Статус
+      spamRatingFactor: Оценка за спам
+    ruleType: Вид правило
+    items:
+      title: Артикули
+      type: Тип
+      rating: Оценка
+    addMultipleItems:
+      items: Артикули
+      itemsHelp: Добавяйте по един артикул на ред.
+      rating: Оценка
+      ratingHelp: Ако не е зададена стойност, стойността по подразбиране е 1.0. Ако е зададена оценка 0.0, артикулите няма да бъдат отчетени като спам.
+  backToList: Връщане към правила
+  create:
+    title: Създай правило
+  edit:
+    title: Редактирай правило %ruleName%
+projectGroup:
+  action:
+    edit: Редактирай група
+    delete: Изтрий група
+    openMainGroup: Връщане към основната група
+    openParentGroupName: Връщане към %name%
+    openParentGroup: Отвори група-родтел
+    openGroup: Отвори група
+    backToList: Връщане към списъка с проекти
+  mainGroup: Основна група
+  create:
+    title: Създай група с проекти
+  edit:
+    title: Редактирай група с проекти %projectGroupName%
+  form:
+    name: Име
+    description: Описание
+    parentGroup: Група-родител
+    tooltip:
+      activeGroup: Редактирате тази група.
+    message:
+      successfullySaved: Групата с проекти %projectGroupName% беше успешно запазена.
+  delete:
+    title: Изтрий група с проекти %projectGroupName%
+    confirm: Наистина ли искате да изтриете групата с проекти %projectGroupName%?
+    reassignChildren: Всички групи с проекти и проекти в тази група с проекти ще се прехвърлят автоматично към групата с проекти-родител.
+    message:
+      successfullyDeleted: Групата с проекти %projectGroupName% беше изтрита успешно.
+projectGroupSelector:
+  noGroupsAvailable: Няма групи.
+  noProjectsAvailable: Няма проекти
