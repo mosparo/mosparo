@@ -1,12 +1,12 @@
 label: Ik ga ermee akkoord dat de gegevens die ik in het formulier verstrek, gecontroleerd worden op spam en gedurende 14 dagen versleuteld opgeslagen worden.
 accessibility:
-  checkingData: Wij controleren uw gegevens op spam. Even geduld.
-  dataValid: Uw gegevens bevatten geen spam. U kunt het formulier versturen.
+  checkingData: De spambeveiliging controleert uw gegevens. Even geduld a.u.b.
+  dataValid: Uw gegevens bevatten geen spam. U kunt nu het formulier versturen.
   protectedBy: Dit formulier is beveiligd tegen spam door mosparo.
 error:
   internalError: Er is een fout opgetreden. Herhaal het proces.
   noSubmitTokenAvailable: Geen verzend-token beschikbaar. Uw gegevens kunnen niet gevalideerd worden.
-  spamDetected: Uw gegevens bevatten spam.
+  spamDetected: Uw gegevens zijn door onze spambeveiliging tegengehouden.
   lockedOut: U bent tijdelijk geblokkeerd. Probeer het na %datetime% nogmaals.
   delay: Uw aanvraag is vertraagd. Wacht %seconds%.
   gotNoToken: mosparo heeft geen token teruggegeven.
