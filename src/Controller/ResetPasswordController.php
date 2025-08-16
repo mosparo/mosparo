@@ -118,7 +118,7 @@ class ResetPasswordController extends AbstractController
                 'mosparo'
             ));
 
-            return $this->redirectToRoute('app_forgot_password_request');
+            return $this->redirectToRoute('security_reset');
         }
 
         // The token is valid; allow the user to change their password.
