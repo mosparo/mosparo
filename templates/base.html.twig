@@ -233,7 +233,7 @@
                                             </a>
                                         </li>
 
-                                        <li class="nav-item {% if route starts with 'rule_' and not route starts with 'rule_package_' %}active{% endif %}">
+                                        <li class="nav-item {% if route starts with 'rule_' and not (route starts with 'rule_package_') %}active{% endif %}">
                                             <a class="nav-link" href="{{ path('rule_list', {'_projectId': activeProject.id}) }}">
                                                 <i class="ti ti-tags"></i>
                                                 <span class="nav-link-title">
