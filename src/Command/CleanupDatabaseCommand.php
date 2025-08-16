@@ -28,7 +28,8 @@ class CleanupDatabaseCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Cleanups the database.');
+            ->setDescription('Cleanup the database.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -36,8 +37,19 @@ class CleanupDatabaseCommand extends Command
         // Disable the project related filter
         $this->projectHelper->unsetActiveProject();
 
+        // Sleep for 0.01 - 0.5 seconds before starting the cleanup process. This is done to reduce
+        // the technical possibility that the cleanup process is executed multiple times at the
+        // exact same moment (especially in a multi-node setup).
+        usleep(mt_rand(10000, 500000));
+
         // Execute the cleanup process
-        $this->cleanupHelper->cleanup(1000000, true, false, 0, CleanupExecutor::CLEANUP_COMMAND);
+        $this->cleanupHelper->cleanup(
+            1000000,
+            true,
+            false,
+            0,
+            CleanupExecutor::CLEANUP_COMMAND
+        );
 
         return Command::SUCCESS;
     }
