@@ -8,3 +8,6 @@ password:
     form:
       constraint:
         notBlank: Veuillez saisir votre adresse e-mail.
+settings:
+  mosparoName:
+    colonNotAllowed: Les deux points (:) ne sont pas autorisés dans le nom de l'installation de mosparo.
