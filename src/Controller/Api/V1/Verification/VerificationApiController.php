@@ -170,14 +170,11 @@ class VerificationApiController extends AbstractController
         $verificationSignature = '';
         $verificationResult = $this->verificationHelper->verifyFormData($submission, $formData);
         if ($verificationResult['valid']) {
-            $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
-            $formSignature = $requestHelper->createFormDataHmacHash($formData);
-
             // Check for equal form submission, if the security feature is enabled
             if ($securitySettings['equalSubmissionsActive']) {
                 $allowedNumberOfEqualSubmissions = $securitySettings['equalSubmissionsNumberOfEqualSubmissions'];
                 $actualNumberOfEqualSubmissions = $this->securityHelper->countEqualSubmissions(
-                    $formSignature,
+                    $submission->getSignature(),
                     $securitySettings['equalSubmissionsTimeFrame'],
                     $securitySettings['equalSubmissionsBasedOnIpAddress'],
                     $clientIpAddress
@@ -214,6 +211,9 @@ class VerificationApiController extends AbstractController
                     return new JsonResponse($issue);
                 }
             }
+
+            $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
+            $formSignature = $requestHelper->createFormDataHmacHash($formData);
 
             $validationSignature = $requestHelper->createHmacHash($submission->getValidationToken());
             $verificationSignature = $requestHelper->createHmacHash($validationSignature . $formSignature);

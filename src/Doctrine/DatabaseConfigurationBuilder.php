@@ -21,8 +21,8 @@ class DatabaseConfigurationBuilder
                 $options[\PDO::MYSQL_ATTR_SSL_CA] = $_ENV['DATABASE_MYSQL_SSL_CA'];
             }
 
-            if ($_ENV['DATABASE_MYSQL_SSL_VERIFY_SERVER_CERT'] ?? null) {
-                $options[\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = $_ENV['DATABASE_MYSQL_SSL_VERIFY_SERVER_CERT'];
+            if (isset($_ENV['DATABASE_MYSQL_SSL_VERIFY_SERVER_CERT'])) {
+                $options[\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = (bool) $_ENV['DATABASE_MYSQL_SSL_VERIFY_SERVER_CERT'];
             }
         }
 

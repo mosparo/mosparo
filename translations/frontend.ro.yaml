@@ -1,5 +1,5 @@
 error:
-  spamDetected: Datele dvs. au fost reținute de sistemul nostru de protecție împotriva spam-ului.
+  spamDetected: Datele dvs. au fost prins de sistemul nostru de protecție împotriva spam-ului.
   delay: Cererea dumneavoastră a fost amânată. Vă rugăm să așteptați %seconds% secunde.
   gotNoToken: mosparo nu a returnat niciun token.
   internalError: S-a produs o eroare. Vă rugăm să încercați din nou.
@@ -9,5 +9,6 @@ hp:
   fieldTitle: Lăsați acest câmp liber
 accessibility:
   dataValid: Datele dumneavoastră sunt corecte. Puteți trimite formularul.
-  checkingData: Vă verificăm datele. Vă rugăm să așteptați.
+  checkingData: Protecția împotriva spamului îți verifică datele. Vă rugăm să așteptați.
+  protectedBy: Acest formular este protejat împotriva spamului de către mosparo.
 label: Sunt de acord cu faptul că datele înscrise în formular sunt verificate pentru spam și stocate în mod criptat timp de 14 zile.
