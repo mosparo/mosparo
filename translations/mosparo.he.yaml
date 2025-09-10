@@ -76,12 +76,8 @@ dashboard:
 rule:
   create:
     title: יצירת חוק
-    message:
-      successfullyCreated: החוק החדש נוצר בהצלחה.
   edit:
     title: עריכת חוק %ruleName%
-    message:
-      successfullySaved: החוק נשמר בהצלחה.
   form:
     rule:
       title: חוק
@@ -95,7 +91,6 @@ rule:
       type: סוג
       rating: דירוג
     addMultipleItems:
-      label: תווית
       items: פריטים
       rating: דירוג
       itemsHelp: יש להוסיף פריט אחד בשורה.
@@ -162,7 +157,7 @@ rule:
   createChooseType:
     title: בחירת סוג
     intro: נא למלא את סוג החוק שברצונך ליצור. הסוגים הזמינים משמשים בשדות שונים ללא ניתן לשנותם עבור חוק מאוחר יותר.
-ruleset:
+rulePackage:
   title: אוסף חוקים
   backToList: חזרה לאוסף החוקים
   list:
@@ -174,7 +169,7 @@ ruleset:
   add:
     title: הוספת אוסף חוקים
   edit:
-    title: עריכת אוסף החוקים %rulesetName%
+    title: עריכת אוסף החוקים %rulePackageName%
   form:
     status: מצב
     message:
@@ -220,13 +215,13 @@ ruleset:
         spamRatingFactor: פקטור דירוג ספאם
       items:
         title: פריטים כלולים
-      backToRuleset: חזרה לאוסף החוקים
-    title: הצגת אוסף החוקים %rulesetName%
+      backToRulePackage: חזרה לאוסף החוקים
+    title: הצגת אוסף החוקים %rulePackageName%
   message:
     errorWhileUpdating: 'חלה תקלה בעדכון אוסף החוקים:'
   delete:
-    confirm: האם בוודאות ברצונך למחוק את אוסף החוקים %rulesetName%?
-    title: מחיקת אוסף חוקים %rulesetName%
+    confirm: האם בוודאות ברצונך למחוק את אוסף החוקים %rulePackageName%?
+    title: מחיקת אוסף חוקים %rulePackageName%
 settings:
   security:
     guideline:
@@ -324,10 +319,10 @@ tools:
       valueHelp: יש להזין את הערך שאתו יבדקו החוקים שלך.
       typeHelp: בחירת את סוג הנתונים. סוגים מסוימים של חוקים חלים רק על סוגי נתונים ספציפיים.
       useRulesHelp: יש להפעיל שדה זה כדי לבדוק את החוקים שלך.
-      useRulesets: שימוש בחוקים
+      useRulePackages: שימוש בחוקים
       type: סוג נתונים
       useRules: שימוש בחוקים
-      useRulesetsHelp: הפעלת שדה זה תבדוק את החוקים שלך.
+      useRulePackagesHelp: הפעלת שדה זה תבדוק את החוקים שלך.
     types:
       textField: שדה טקסט (שורה אחת)
       textarea: שדה טקסט (מרובה שורות)
@@ -386,7 +381,6 @@ tools:
       table:
         oldValue: ערך ישן
         newValue: ערך חדש
-        url: כתובת URL
         modify: שינוי
         itemsModify: שינוי
         guidelineNew: הנחיה חדשה
@@ -406,7 +400,7 @@ tools:
       errorMessage:
         projectNotAvailable: לא ניתן למצוא פרויקט על ידי id.
         storedRuleNotFound: החוק המאוחסן לא נמצא.
-        storedRulesetNotFound: לא נמצאו חוקים מאוחסנים.
+        storedRulePackageNotFound: לא נמצאו חוקים מאוחסנים.
         importFileInvalid: קובץ הייבוא אינו תקין.
         importFileNotFound: קובץ הייבוא אינו קיים.
         storedRuleItemNotFound: פריט החוק המאוחסן לא נמצא.
@@ -428,11 +422,11 @@ tools:
     designSettings: הגדרות תכנון
     securitySettings: הגדרות אבטחה
     rulesHelp: כולל את כל חוקי הפרויקט.
-    rulesets: אוסף חוקים
+    rulePackages: אוסף חוקים
     generalSettings: הגדרות כלליות
     securitySettingsHelp: כולל את כל ההגדרות הקשורות לאבטחת הפרויקט.
     rules: חוקים
-    rulesetsHelp: כולל את כל החוקים של פרויקט.
+    rulePackagesHelp: כולל את כל החוקים של פרויקט.
   title: כלים
 administration:
   settings:

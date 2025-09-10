@@ -117,39 +117,52 @@ class VerificationApiController extends AbstractController
             if (!$minimumTimeGv->isValid()) {
                 $submission->setValid($minimumTimeGv->isValid());
 
-                $entityManager->flush();
-
-                // Prepare the API debug data
-                $debugInformation = [];
-                if ($activeProject->isApiDebugMode()) {
-                    $debugInformation['debugInformation'] = [
+                $issue = [
+                    'error' => true,
+                    'errorMessage' => 'Verification failed.',
+                    'debugInformation' => [
                         'reason' => 'minimum_time_invalid',
                         'minimumTimeExpected' => $minimumTimeSeconds,
                         'minimumTimeElapsed' => $seconds,
-                    ];
+                    ],
+                ];
+
+                $submission->addIssue($issue);
+
+                $entityManager->flush();
+
+                if (!$activeProject->isApiDebugMode()) {
+                    unset($issue['debugInformation']);
                 }
 
-                return new JsonResponse(['error' => true, 'errorMessage' => 'Verification failed.'] + $debugInformation);
+                return new JsonResponse($issue);
             }
         }
 
         $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
         if ($request->request->get('validationSignature') !== $validationSignature) {
             $submission->setValid(false);
-            $entityManager->flush();
 
-            // Prepare the API debug data
-            $debugInformation = [];
-            if ($activeProject->isApiDebugMode()) {
-                $debugInformation['debugInformation'] = [
+            $issue = [
+                'error' => true,
+                'errorMessage' => 'Verification failed.',
+                'debugInformation' => [
                     'reason' => 'validation_signature_invalid',
                     'expectedSignature' => $validationSignature,
                     'receivedSignature' => $request->request->get('validationSignature'),
                     'signaturePayload' => $submission->getValidationToken(),
-                ];
+                ],
+            ];
+
+            $submission->addIssue($issue);
+
+            $entityManager->flush();
+
+            if (!$activeProject->isApiDebugMode()) {
+                unset($issue['debugInformation']);
             }
 
-            return new JsonResponse(['error' => true, 'errorMessage' => 'Verification failed.'] + $debugInformation);
+            return new JsonResponse($issue);
         }
 
         $requestData = $request->request->all();
@@ -177,19 +190,25 @@ class VerificationApiController extends AbstractController
                 if (!$equalSubmissionsGv->isValid()) {
                     $submission->setValid($equalSubmissionsGv->isValid());
 
-                    $entityManager->flush();
-
-                    // Prepare the API debug data
-                    $debugInformation = [];
-                    if ($activeProject->isApiDebugMode()) {
-                        $debugInformation['debugInformation'] = [
+                    $issue = [
+                        'error' => true,
+                        'errorMessage' => 'Verification failed.',
+                        'debugInformation' => [
                             'reason' => 'too_many_equal_submissions',
                             'allowedNumberOfEqualSubmissions' => $allowedNumberOfEqualSubmissions,
                             'actualNumberOfEqualSubmissions' => $actualNumberOfEqualSubmissions,
-                        ];
+                        ],
+                    ];
+
+                    $submission->addIssue($issue);
+
+                    $entityManager->flush();
+
+                    if (!$activeProject->isApiDebugMode()) {
+                        unset($issue['debugInformation']);
                     }
 
-                    return new JsonResponse(['error' => true, 'errorMessage' => 'Verification failed.'] + $debugInformation);
+                    return new JsonResponse($issue);
                 }
             }
 

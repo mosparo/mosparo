@@ -78,8 +78,6 @@ header:
 rule:
   edit:
     title: Modifica regola %ruleName%
-    message:
-      successfullySaved: La regola è stata salvata correttamente.
   list:
     name: Nome
     type: Tipo
@@ -87,8 +85,6 @@ rule:
     actions: Azioni
   create:
     title: Crea regola
-    message:
-      successfullyCreated: La nuova regola è stata creata correttamente.
   createChooseType:
     title: Scegli il tipo
     intro: Seleziona il tipo di ruolo che vuoi creare. I tipi disponibili sono utilizzati per diversi campi e non possono essere modificati per regole successive.
@@ -103,7 +99,6 @@ rule:
       spamRatingFactorHelp: Con il fattore di valutazione spam puoi definire un fattore per inasprire o addolcire la valutazione di questa regola. Se il valore è maggiore di 1.0 la valutazione è inasprita, se il valore è inferiore a 1.0 la valutazione è addolcita.
       spamRatingFactor: Fattore di valutazione spam
     addMultipleItems:
-      label: Etichetta
       items: Oggetti
       rating: Valutazione
       ratingHelp: Se non impostata, la valutazione predefinita è 1.0. Se la valutazione viene impostata a 0.0 l'oggetto non verrà identificato come spam.
@@ -231,7 +226,7 @@ dashboard:
   dateRange:
     dropdown: Seleziona un intervallo di dati visibile
   title: Cruscotto
-ruleset:
+rulePackage:
   view:
     rule:
       title: Visualizza regola %ruleName%
@@ -242,15 +237,19 @@ ruleset:
         title: Dettagli regola
       items:
         title: Oggetti inclusi
-      backToRuleset: Torna all'elenco delle regole
+      backToRulePackage: Torna all'elenco delle regole
     details:
-      url: URL
       lastUpdatedAt: Ultimo aggiornamento il
       spamRatingFactor: Fattore di valutazione spam
       lastRefreshedAt: Ultimo aggiornamento il
       numberOfIncludedRules: Numero di regole incluse
       title: Dettagli gruppo di regole
       status: Stato
+      source: Sorgente
+      sourceManualImport: Importazione manuale
+      importFirst: Questo pacchetto di regole non contiene alcun dato. Importa manualmente i dati del pacchetto di regole.
+      noRulePackageCache: Non è presente alcuna cache del pacchetto di regole per questo pacchetto. Ciò significa che il download non è riuscito oppure si è verificato un altro errore.
+      importFirstTitle: Importa prima il pacchetto di regole
     includedRules:
       title: Regole incluse
       description: Descrizione
@@ -261,7 +260,7 @@ ruleset:
       items: Oggetti
       value: Valore
       rating: Valutazione
-    title: Visualizza gruppo di regole %rulesetName%
+    title: Visualizza gruppo di regole %rulePackageName%
     list:
       rules:
         name: Nome
@@ -273,33 +272,67 @@ ruleset:
         type: Tipo
         value: Valore
         spamRatingFactor: Fattore di valutazione spam
+    howtoImport:
+      title: Come importare
+      intro: Questo pacchetto di regole è di tipo importato manualmente. Ciò significa che devi importarne i dati manualmente. In caso contrario, il pacchetto sarà vuoto e non impedirà alcuno spam.
+      arguments:
+        required: Necessario
+        value: Valore
+        description: Descrizione
+      cli:
+        intro: Usa il seguente comando per importare il pacchetto di regole tramite CLI. È necessario specificare uno degli argomenti %codeArgFile% o %codeArgInput%.
+        arguments:
+          descriptionInput: Il comando leggerà il contenuto del pacchetto di regole dall'input standard, se impostato.
+          descriptionProjectId: Specifica l'ID del progetto del pacchetto di regole.
+          descriptionRulePackageId: Specifica l'ID del pacchetto di regole.
+          descriptionFile: Specifica il percorso del file del pacchetto di regole.
+          descriptionHash: Se il comando deve verificare l'hash del pacchetto di regole, specifica l'hash SHA256 con questo argomento.
+        infoAdjustPaths: Ricorda di impostare il percorso per i binari di PHP e il comando CLI di mosparo. La documentazione del tuo hosting può esserti di aiuto.
+      api:
+        example:
+          intro: Questo esempio mostra la configurazione necessaria per il profilo mosparo RPG. Consulta la documentazione per altre opzioni.
+        intro: Importa il contenuto del pacchetto di regole usando l'API di mosparo. Puoi utilizzare direttamente l'API, uno dei nostri client API oppure mosparo RPG (Rule Package Generator) per creare e importare il contenuto del pacchetto.
+        introSecond: Qui sotto trovi le informazioni più importanti sull'API e un esempio per usare il pacchetto di regole con mosparo RPG. Puoi approfondire le diverse opzioni nella nostra documentazione.
+        endpoint:
+          title: Endpoint
+        arguments:
+          descriptionRulePackageId: Specifica l'ID del pacchetto di regole.
+          descriptionRulePackageContent: Specifica il contenuto del pacchetto di regole.
+          descriptionRulePackageHash: Per verificare l'hash prima dell'importazione del contenuto, specifica l'hash SHA256 con questo argomento.
   list:
     actions: Azioni
     updatedAt: Aggiornato il
     name: Nome
     status: Stato
     refreshedAt: Rinfrescato il
+    type: Tipologia
   form:
     message:
       successfullySaved: Il gruppo di regole è stato salvato correttamente.
     name: Nome
-    url: URL
     status: Stato
     spamRatingFactor: Fattore di valutazione spam
     spamRatingFactorHelp: Con il fattore di valutazione spam è possibile definire un fattore per rafforzare o indebolire le regole in questo elenco. Se il valore è maggiore di 1.0 la regola viene rafforzata, se il valore è inferiore a 1.0 la regola viene indebolita.
+    sourceUrlHelp: Specifica l'URL dal quale mosparo può scaricare il pacchetto di regole.
+    sourceUrl: URL sorgente
+    sourceFile: File sorgente
+    sourceFileHelp: Specifica il percorso file assoluto in cui è memorizzato il file del pacchetto di regole.
   delete:
     message:
-      successfullyDeleted: L'elenco delle regole %rulesetName% è stato cancellato correttamente.
-    title: Cancella l'elenco delle regole %rulesetName%
-    confirm: Vuoi veramente cancellare l'elenco delle regole %rulesetName%?
+      successfullyDeleted: L'elenco delle regole %rulePackageName% è stato cancellato correttamente.
+    title: Cancella l'elenco delle regole %rulePackageName%
+    confirm: Vuoi veramente cancellare l'elenco delle regole %rulePackageName%?
   title: Gruppo di regole
   edit:
-    title: Modifica gruppo di regole %rulesetName%
+    title: Modifica gruppo di regole %rulePackageName%
   backToList: Torna al gruppo di regole
   message:
     errorWhileUpdating: 'Si è verificato un errore aggiornando il gruppo di regole:'
   add:
     title: Aggiungi gruppo di regole
+  addChooseType:
+    title: Scegli tipologia
+    intro: Scegli il tipo di pacchetto di regole che vuoi aggiungere. Puoi scegliere tra tipi automatici e manuali. I tipi automatici aggiorneranno il pacchetto di regole automaticamente, mentre quelli manuali devono essere aggiornati tramite un'azione o uno strumento esterno.
 submission:
   list:
     page: Pagina
@@ -544,8 +577,8 @@ settings:
           priority: Priorità
           priorityHelp: Definisce in quale ordine verificare le linee guida. La linea guida con valore più alto viene verificata per prima.
         settings:
-          title: Impostazioni di sicurezza
-          intro: Abilita il flag di sovrascrittura per le impostazioni che dovranno essere sovrascritte dalle impostazioni di sicurezza generali. Se un'impostazione non viene sovrascritta mosparo utilizzerà quella relativa al progetto.
+          title: Impostazioni di sovrascrittura
+          intro: Seleziona la casella di sovrascrittura per le impostazioni che desideri sovrascrivere rispetto a quelle del progetto o delle impostazioni di sicurezza generali. Se non sovrascrivi un'impostazione, mosparo utilizzerà quella del progetto o delle impostazioni generali. Se configuri lo stesso valore presente nel progetto o nelle impostazioni generali, il valore personalizzato verrà rimosso dalla politica di sicurezza.
         infoGeoIp2Disabled: GeoIP2 non è disponibile. Configura il database GeoIP2 per poter usare il codice Stato e il numero AS come criteri.
       list:
         name: Nome
@@ -607,6 +640,7 @@ settings:
       proofOfWorkDynamicComplexityBasedOnIpAddress: Basato sull'indirizzo IP
       overrideProofOfWork: Sovrascrivi proof of work
       proofOfWorkDynamicComplexityBasedOnIpAddressHelp: Il rilevamento avverrà in base all'indirizzo IP dell'utente. Se disabilitato, tutti gli invii di tutti gli utenti all'interno dell'intervallo di tempo verranno conteggiati.
+      overrideSpamDetection: Sovrascrivi rilevamento spam
     ipLockout:
       title: Blocco IP
       intro: Per rendere la vita degli spam bot più difficile, mosparo può bloccare automaticamente un certo indirizzo IP temporaneamente. Se un indirizzo IP invia diversi moduli allora mosparo può conteggiarli e bloccare l'indirizzo IP al raggiungimento di una certa quantità.
@@ -638,6 +672,10 @@ settings:
       speed: Velocità
       rangeSizeHelp: Maggiore è l'intervallo numerico, più calcoli deve eseguire il browser. Si consiglia di non utilizzare un intervallo numerico troppo ampio, poiché potrebbe richiedere troppo tempo per l'utente prima di poter inviare il modulo.
       cryptoSpeedHelp: Questi valori sono testati e calcolati sul tuo dispositivo. Altri dispositivi possono essere più veloci o più lenti. Questi numeri servono solo come indicazione, ma non indicano la durata esatta per ogni utente.
+    spamDetection:
+      title: Rilevamento dello spam
+      intro: Definisci se la protezione antispam deve essere abilitata per questa regola di sicurezza e quale punteggio spam deve essere utilizzato per identificare lo spam.
+      intro2: Se non sovrascrivi le impostazioni di rilevamento dello spam, saranno utilizzate le impostazioni del progetto.
   title: Impostazioni progetto
   design:
     form:
@@ -756,13 +794,13 @@ tools:
       valueHelp: Immetti il valore che vuoi testare con le tue regole.
       typeHelp: Seleziona il tipo di dati. Alcune regole possono essere applicate solo su dati specifici.
       useRulesHelp: Attiva questo campo per testare le tue regole.
-      useRulesetsHelp: Attiva questo campo per testare il tuo set di regole.
+      useRulePackagesHelp: Attiva questo campo per testare il tuo set di regole.
       title: Impostazioni test
-      useRulesets: Usa set di regole
+      useRulePackages: Usa set di regole
       value: Valori test
       type: Tipo dati
       useRules: Utilizza regole
-    intro: Inserisci il valore che vuoi testare. Scegli il tipo di dati che vuoi usare per la prova e se vuoi usare regole e insiemi di regole. Il tipo di dati è importante perchè alcune regole vengono applicate solo a certi tipi di dati.
+    intro: Inserisci il valore che vuoi testare. Scegli il tipo di dati che vuoi usare per la prova e se vuoi usare regole e pacchetti di regole. Il tipo di dati è importante perchè alcune regole vengono applicate solo a certi tipi di dati.
   title: Strumenti
   export:
     errorMessage:
@@ -771,6 +809,7 @@ tools:
     includedData: Dati inclusi
     intro: Se vuoi migrare il tuo progetto in una diversa installazione di mosparo oppure se vuoi sincronizzare le impostazioni con un progetto diverso, puoi esportare il progetto con questa funzionalità. Seleziona quali dati vuoi esportare e fai click sul pulsante.
     infoSensitiveData: I dati sensibili non verranno mai inclusi in un'esportazione. Richieste, token di richiesta, identificatore unico di progetto, chiavi API e i membri del progetto non saranno inclusi nell'esportazione.
+    infoManualRulePackages: Il contenuto del pacchetto di regole non sarà incluso nell'esportazione. Ciò significa che tutti i pacchetti di regole importati manualmente devono essere reimportati dopo l'importazione del file esportato.
   import:
     backToImport: Torna all'importazione
     form:
@@ -799,7 +838,6 @@ tools:
         itemsModify: Modifica
         name: Nome
         type: Tipo
-        url: URL
         spamRatingFactor: Fattore di valutazione spam
         priority: Priorità
         criteria: Criterio
@@ -807,12 +845,13 @@ tools:
         guidelineNew: Nuova linea guida
         guidelineModify: Modifiche richieste
         guidelineEqual: Nessuna modifica richiesta
+        source: Sorgente
       errorMessage:
         importFileNotFound: Il file di importazione non esiste.
         projectNotAvailable: Non riesco a trovare la proprietà con il suo ID.
         storedRuleNotFound: La regola salvata non è stata trovata.
         storedRuleItemNotFound: L'oggetto della regola salvata non è stato trovato.
-        storedRulesetNotFound: Il set di regola salvato non è stato trovato.
+        storedRulePackageNotFound: Il set di regola salvato non è stato trovato.
         importFileInvalid: Il file di importazione non è valido.
         noChangesAvailable: Non ci sono modifiche disponibili.
         jobDataInvalid: I dati del lavoro per il token non sono validi.
@@ -832,15 +871,15 @@ tools:
     title: Importa
     intro: Se vuoi copiare i dati da un altro progetto a questo, seleziona il file da importare e quali dati vuoi importare. Se vuoi importare le regole dovrai decidere come mosparo dovrà gestire quelle esistenti.
     intro2: Dopo aver selezionato i dati, fai click sul pulsante qui sotto. mosparo analizzerà il file e ti fornirà un sommario di ciò che sarà modificato prima di iniziare l'importazione.
-    infoOverrideData: Le impostazioni, così come i gruppi di regole, verranno sempre sovrascritti nel progetto. I gruppi di regole verranno associati all'URL. Per quanto riguarda le regole, dovrai decidere come mosparo dovrà comportarsi con quelle esistenti.
+    infoOverrideData: Le impostazioni, così come i pacchetti di regole, verranno sempre sovrascritti nel progetto. Per quanto riguarda le regole, dovrai decidere come mosparo dovrà comportarsi con quelle esistenti. I pacchetti di regole creati prima della versione 1.4.0 di mosparo potrebbero avere un ID differente e non corrispondere al file di importazione.
   eiParts:
     generalSettings: Impostazioni generali
     rules: Regole
-    rulesetsHelp: Include tutti i gruppi di regole di un progetto.
+    rulePackagesHelp: Include tutti i gruppi di regole di un progetto.
     designSettings: Impostazioni grafiche
     rulesHelp: Include tutte le regole di un progetto.
     securitySettings: Impostazioni di sicurezza
-    rulesets: Gruppo di regole
+    rulePackages: Gruppo di regole
     designSettingsHelp: Include tutte le impostazioni relative alla grafica del progetto.
     securitySettingsHelp: Include tutte le impostazioni relative alla sicurezza del progetto.
     generalSettingsHelp: Include le impostazioni generiche di un progetto come il suo nome, la descrizione, l'host e il punteggio per lo spam.
@@ -959,17 +998,7 @@ administration:
     buttons:
       continue: Continua
     updateChannel: Canale di aggiornamento
-    finalize:
-      title: Aggiornamento effettuato
-      geoIp2Info:
-        title: "Versione 1.2.2: Richiesto l'ID dell'utente MaxMind"
-        intro2: Controllare la configurazione di GeoIP2 e inserire il proprio ID utente.
-        intro: L'ID dell'utente MaxMind e la chiave di licenza sono necessari per scaricare il database GeoIP2.
-      description: Le modifiche necessarie per questo aggiornamento sono state eseguite. L'installazione è aggiornata.
-      hostsAlert:
-        intro: Con la versione 1.2, mosparo inizia a verificare l'origine di una richiesta di frontend. A causa di questo cambiamento, gli host del progetto devono essere impostati correttamente.
-        title: "Versione 1.2: modifica della verifica dell'origine"
-        intro2: Si prega di verificare subito i progetti e i moduli.
+    finalize: {}
     execute:
       description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
       message:
@@ -1121,6 +1150,16 @@ administration:
         savedSuccessfully: Le impostazioni sono state salvate correttamente.
     title: Cron jobs
     description: Configura i cron jobs per mosparo.
+  cleanupStatistic:
+    list:
+      dateTime: Data e ora
+      cleanupExecutor: Esecutore
+      submitTokens: Token di invio
+      submissions: Invio
+      executionTime: Tempo di esecuzione
+      cleanupStatus: Stato
+    description: Controlla quando i token di invio e le richieste sono stati rimossi dal database.
+    title: Statistiche di pulizia
 account:
   twoFactor:
     action:
@@ -1295,6 +1334,8 @@ action:
   checkRequirements: Verifica dei requisiti
   skipWizard: Salta la procedura guidata
   moreInformation: Altre informazioni
+  learnMore: Approfondisci
+  howToImport: Come importare
 state:
   inactive: Inattivo
   ignored: Ignorato
@@ -1308,10 +1349,10 @@ interface:
 downloadCheck:
   cardTitle: Connessione Internet
   moreInformation: Altre informazioni
-  downloadIsPossible: Le impostazioni PHP consentono di scaricare i set di regole e gli aggiornamenti. Non è necessaria alcuna configurazione.
-  downloadIsNotPossible: Le impostazioni PHP non consentono di scaricare aggiornamenti o set di regole. Se si desidera utilizzare i set di regole o la funzionalità di aggiornamento, è necessario modificare la configurazione PHP di conseguenza.
+  downloadIsPossible: Le impostazioni PHP consentono di scaricare i pacchetti di regole e gli aggiornamenti. Non è necessaria alcuna configurazione.
+  downloadIsNotPossible: Le impostazioni PHP non consentono di scaricare aggiornamenti o pacchetti di regole. Se si desidera utilizzare i pacchetti di regole o la funzionalità di aggiornamento, è necessario modificare la configurazione PHP di conseguenza.
   curlIsEnabledButFunctionsAreDisabled: L'estensione %extensionName% è abilitata, ma le funzioni necessarie (%functionNames%) sono disabilitate. Si consiglia di disabilitare l'estensione in generale o di abilitare le funzioni necessarie.
-  intro: Una connessione Internet in uscita non è un requisito per mosparo. Se è disponibile una connessione a Internet, mosparo controlla automaticamente la presenza di aggiornamenti caricando il file della versione dal sito web di mosparo. È necessaria una connessione Internet attiva per scaricare gli aggiornamenti, i database GeoIP2 e i set di regole.
+  intro: Una connessione Internet in uscita non è un requisito per mosparo. Se è disponibile una connessione a Internet, mosparo controlla automaticamente la presenza di aggiornamenti caricando il file della versione dal sito web di mosparo. È necessaria una connessione Internet attiva per scaricare gli aggiornamenti, i database GeoIP2 e i pacchetti di regole.
 security:
   login:
     emailLabel: Indirizzo email
@@ -1430,3 +1471,58 @@ languageSource:
   htmlBrowserFallback:
     label: Usa la lingua del sito, fallback sulla lingua del browser
     help: Usa la lingua del sito web per la finestra frontend di mosparo. Se mosparo non ha traduzioni per questa lingua, utilizza la lingua del browser. Se anche questa non è disponibile, verrà utilizzato l'inglese come alternativa.
+cleanupStatus:
+  unknown:
+    label: Sconosciuto
+  complete:
+    label: Completo
+  incomplete:
+    label: Incompleto
+cleanupExecutor:
+  unknown:
+    label: Sconosciuto
+  cleanupCommand:
+    label: Comando di pulizia
+  frontendApi:
+    label: API per il frontend
+  webCronJob:
+    label: Cron job web
+cleanup:
+  lastDatabaseCleanup: 'Ultima pulizia del database:'
+rulePackageType:
+  category:
+    automatically:
+      label: Automaticamente
+      description: Se desideri che mosparo importi automaticamente i pacchetti di regole, utilizza una delle seguenti tipologie.
+    manually:
+      label: Manualmente
+      description: Utilizza una tra le tipologie manuali se desideri importare manualmente i pacchetti di regole o eseguire l'importazione con un cron job.
+  manuallyViaApi:
+    label: Manualmente tramite API
+    description: Importa il pacchetto di regole utilizzando i tuoi strumenti o mosparo RPG tramite l'API di mosparo.
+  automaticallyFromUrl:
+    label: Automaticamente dall'URL
+    description: mosparo carica automaticamente il pacchetto di regole dall'URL tramite connessione internet.
+  automaticallyFromFile:
+    label: Automaticamente dal file
+    description: mosparo carica automaticamente il pacchetto di regole dal percorso file specificato nel tuo server.
+  manuallyViaCli:
+    label: Manualmente tramite CLI
+    description: Esegui il comando CLI per importare manualmente il pacchetto di regole quando lo modifichi.
+unknown:
+  label: Sconosciuto
+example:
+  titleSingular: Esempio
+  titlePlural: Esempi
+argument:
+  titleSingular: Argomento
+  titlePlural: Argomenti
+tooltip:
+  projectId: ID progetto
+  rulePackageId: ID pacchetto di regole
+  file: Percorso file
+  input: Usa input standard
+  hash: Hash SHA256
+  host: Host
+  publicKey: Chiave pubblica
+  privateKey: Chiave privata

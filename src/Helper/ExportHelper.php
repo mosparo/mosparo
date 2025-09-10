@@ -5,7 +5,7 @@ namespace Mosparo\Helper;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Rule;
-use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Exception\ExportException;
 use Mosparo\Specifications\Specifications;
@@ -34,9 +34,9 @@ class ExportHelper
         return $fileName;
     }
 
-    public function exportProject(Project $project, bool $exportGeneralSettings, bool $exportDesignSettings, bool $exportSecuritySettings, bool $exportRules, bool $exportRulesets): array
+    public function exportProject(Project $project, bool $exportGeneralSettings, bool $exportDesignSettings, bool $exportSecuritySettings, bool $exportRules, bool $exportRulePackages): array
     {
-        if (!$exportGeneralSettings && !$exportDesignSettings && !$exportSecuritySettings && !$exportRules && !$exportRulesets) {
+        if (!$exportGeneralSettings && !$exportDesignSettings && !$exportSecuritySettings && !$exportRules && !$exportRulePackages) {
             throw new ExportException('Select at least one element that you want to export.', ExportException::EMPTY_REQUEST);
         }
 
@@ -70,8 +70,8 @@ class ExportHelper
             $data['rules'] = $this->exportRules();
         }
 
-        if ($exportRulesets) {
-            $data['rulesets'] = $this->exportRulesets();
+        if ($exportRulePackages) {
+            $data['rulePackages'] = $this->exportRulePackages();
         }
 
         // Change the active project back
@@ -232,20 +232,22 @@ class ExportHelper
         return $rules;
     }
 
-    protected function exportRulesets(): array
+    protected function exportRulePackages(): array
     {
-        $rulesets = [];
-        $rulesetRepository = $this->entityManager->getRepository(Ruleset::class);
+        $rulePackages = [];
+        $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
 
-        foreach ($rulesetRepository->findAll() as $ruleset) {
-            $rulesets[] = [
-                'name' => $ruleset->getName(),
-                'url' => $ruleset->getUrl(),
-                'status' => (bool) $ruleset->getStatus(),
-                'spamRatingFactor' => $ruleset->getSpamRatingFactor() ?? 1,
+        foreach ($rulePackageRepository->findAll() as $rulePackage) {
+            $rulePackages[] = [
+                'uuid' => $rulePackage->getUuid(),
+                'name' => $rulePackage->getName(),
+                'type' => $rulePackage->getType()->value,
+                'source' => $rulePackage->getSource(),
+                'status' => (bool) $rulePackage->getStatus(),
+                'spamRatingFactor' => $rulePackage->getSpamRatingFactor() ?? 1,
             ];
         }
 
-        return $rulesets;
+        return $rulePackages;
     }
 }

@@ -7,7 +7,8 @@ use DatePeriod;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Rule;
-use Mosparo\Entity\Ruleset;
+use Mosparo\Entity\RulePackage;
+use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\StatisticHelper;
 use Mosparo\Util\DateRangeUtil;
@@ -23,8 +24,14 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
 
     #[Route('/', name: 'project_dashboard')]
     #[Route('/range/{range}', name: 'project_dashboard_with_range')]
-    public function dashboard(Request $request, EntityManagerInterface $entityManager, LocaleHelper $localeHelper, StatisticHelper $statisticHelper, string $range = ''): Response
-    {
+    public function dashboard(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        LocaleHelper $localeHelper,
+        StatisticHelper $statisticHelper,
+        CleanupHelper $cleanupHelper,
+        string $range = ''
+    ): Response {
         $statisticStorageLimit = $this->projectHelper->getActiveProject()->getStatisticStorageLimit();
         if (!DateRangeUtil::isValidRange($range, false, $statisticStorageLimit)) {
             $range = DateRangeUtil::DATE_RANGE_14D;
@@ -41,10 +48,10 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
 
         $builder = $entityManager->createQueryBuilder();
         $builder
-            ->select('COUNT(rs.id) AS rulesets')
-            ->from(Ruleset::class, 'rs');
+            ->select('COUNT(rp.id) AS rule_packages')
+            ->from(RulePackage::class, 'rp');
         $result = $builder->getQuery()->getOneOrNullResult();
-        $numberOfRulesets = $result['rulesets'];
+        $numberOfRulePackages = $result['rule_packages'];
 
         // Get the date format for the chart
         [ , $dateFormat, , ] = $localeHelper->determineLocaleValues($request);
@@ -58,12 +65,13 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
             'numberOfNoSpamSubmissions' => $numberOfNoSpamSubmissions,
             'numberOfSpamSubmissions' => $numberOfSpamSubmissions,
             'numberOfRules' => $numberOfRules,
-            'numberOfRulesets' => $numberOfRulesets,
+            'numberOfRulePackages' => $numberOfRulePackages,
             'chartDateFormat' => $dateFormat,
             'dateRangeOptions' => DateRangeUtil::getChoiceOptions(false, $statisticStorageLimit),
             'activeRange' => $range,
             'statisticOnlyRangeStartDate' => $startDate->getTimestamp() * 1000,
             'statisticOnlyRangeEndDate' => $endDate->getTimestamp() * 1000,
+            'lastDatabaseCleanup' => $cleanupHelper->getLastDatabaseCleanup(),
         ]);
     }
 

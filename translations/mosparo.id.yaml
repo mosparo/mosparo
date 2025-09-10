@@ -79,15 +79,12 @@ rule:
     intro: Silakan pilih jenis aturan yang ingin Anda buat. Jenis yang tersedia digunakan untuk bidang yang berbeda dan tidak dapat diubah untuk aturan sesudahnya.
   create:
     title: Buat peraturan
-    message:
-      successfullyCreated: Aturan baru berhasil dibuat.
   form:
     items:
       type: Tipe
       rating: Peringkat
       title: item
     addMultipleItems:
-      label: Label
       items: Item
       itemsHelp: Tambahkan satu item per baris.
       rating: Peringkat
@@ -207,13 +204,11 @@ rule:
       infoValueEqualZero: Jika rating disetel ke %zero%, item tidak akan terdeteksi sebagai spam karena nilai rating spam akan menjadi %zero%.
   edit:
     title: Edit aturan %ruleName%
-    message:
-      successfullySaved: Aturan berhasil disimpan.
   filter:
     options:
       all: Tampilkan semua
     dropdown: Filter daftar aturan
-ruleset:
+rulePackage:
   title: Kumpulan aturan
   backToList: Kembali ke kumpulan aturan
   message:
@@ -226,17 +221,15 @@ ruleset:
     actions: Tindakan
   form:
     name: Nama
-    url: URL
     status: Status
     message:
       successfullySaved: Kumpulan aturan berhasil disimpan.
     spamRatingFactor: Faktor peringkat spam
     spamRatingFactorHelp: Dengan faktor peringkat spam Anda dapat menentukan faktor yang memperkuat atau melemahkan semua aturan dari kumpulan aturan ini. Jika nilainya lebih besar dari 1,0 maka aturan akan diperkuat, jika nilainya kurang dari 1,0 maka aturan akan diperlemah.
   view:
-    title: Lihat kumpulan aturan %rulesetName%
+    title: Lihat kumpulan aturan %rulePackageName%
     details:
       title: Detail kumpulan aturan
-      url: URL
       spamRatingFactor: Faktor peringkat spam
       lastRefreshedAt: Terakhir disegarkan pada
       lastUpdatedAt: Terakhir diperbarui pada
@@ -261,7 +254,7 @@ ruleset:
       title: Lihat aturan %ruleName%
       items:
         title: Item yang disertakan
-      backToRuleset: Kembali ke aturan dipilih
+      backToRulePackage: Kembali ke aturan dipilih
     list:
       rules:
         actions: Tindakan
@@ -276,12 +269,12 @@ ruleset:
   add:
     title: Tambahkan kumpulan aturan
   edit:
-    title: Edit kumpulan aturan %rulesetName%
+    title: Edit kumpulan aturan %rulePackageName%
   delete:
-    title: Hapus kumpulan aturan %rulesetName%
-    confirm: Apakah Anda benar-benar ingin menghapus kumpulan aturan %rulesetName%?
+    title: Hapus kumpulan aturan %rulePackageName%
+    confirm: Apakah Anda benar-benar ingin menghapus kumpulan aturan %rulePackageName%?
     message:
-      successfullyDeleted: Kumpulan aturan %rulesetName% berhasil dihapus.
+      successfullyDeleted: Kumpulan aturan %rulePackageName% berhasil dihapus.
 submission:
   list:
     id: ID
@@ -656,9 +649,6 @@ administration:
     description: Periksa versi baru dan perbarui instalasi mosparo Anda.
     updateChannel: Perbarui saluran
     installedVersion: Versi terpasang
-    finalize:
-      title: Pembaruan dieksekusi
-      description: Perubahan yang diperlukan untuk pembaruan ini dijalankan. Instalasi Anda mutakhir.
     upgrade:
       installedVersion: Versi utama diinstal
       availableVersion: Tersedia versi utama
@@ -986,7 +976,7 @@ tools:
       value: Nilai tes
       type: Jenis bidang
       useRules: Gunakan aturan
-      useRulesets: Gunakan kumpulan aturan
+      useRulePackages: Gunakan kumpulan aturan
     types:
       textField: Bidang teks (Baris tunggal)
       textarea: Bidang teks (Multi-baris)
@@ -994,5 +984,5 @@ tools:
       urlField: bidang URL
       userAgent: Agen pengguna
       ipAddress: alamat IP
-    intro: Masukkan nilai yang ingin Anda uji. Pilih tipe data yang ingin Anda gunakan untuk pengujian dan jika Anda ingin menggunakan aturan dan ruleset. Tipe data penting karena beberapa tipe aturan hanya berlaku untuk tipe data tertentu.
+    intro: Masukkan nilai yang ingin Anda uji. Pilih tipe data yang ingin Anda gunakan untuk pengujian dan jika Anda ingin menggunakan aturan dan rulePackage. Tipe data penting karena beberapa tipe aturan hanya berlaku untuk tipe data tertentu.
   title: Peralatan

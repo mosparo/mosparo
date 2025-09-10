@@ -1,0 +1,11 @@
+{% trans_default_domain 'mosparo' %}
+
+{% if value.value == 1 %}
+    <span class="status status-azure text-nowrap">{{ 'cleanupExecutor.cleanupCommand.label'|trans }}</span>
+{% elseif value.value == 2 %}
+    <span class="status status-blue text-nowrap">{{ 'cleanupExecutor.frontendApi.label'|trans }}</span>
+{% elseif value.value == 3 %}
+    <span class="status status-indigo text-nowrap">{{ 'cleanupExecutor.webCronJob.label'|trans }}</span>
+{% else %}
+    <span class="status">{{ 'cleanupExecutor.unknown.label'|trans }}</span>
+{% endif %}

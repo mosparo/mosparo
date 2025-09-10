@@ -2,31 +2,45 @@
 
 namespace Mosparo\Rule\Tester;
 
+use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\QueryBuilder;
 use IPLib\Factory;
 use IPLib\Range\Subnet;
-use Mosparo\Rule\RuleEntityInterface;
+use Mosparo\Rule\RuleItemEntityInterface;
+use Mosparo\Util\HashUtil;
 
 class IpAddressRuleTester extends AbstractRuleTester
 {
-    public function validateData($key, $value, RuleEntityInterface $rule): array
+    public function buildExpressions(QueryBuilder $qb, Orx $orExpr, array $fieldData, ?string $value)
+    {
+        $orExpr->add($qb->expr()->andX()
+            ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('ipAddress')))
+            ->add($qb->expr()->eq('i.hashedValue', $qb->createNamedParameter(HashUtil::hashFast($value))))
+        );
+
+        $orExpr->add($qb->expr()->andX()
+            ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('subnet')))
+            ->add($qb->expr()->like($qb->createNamedParameter($value), 'i.preparedValue'))
+        );
+    }
+
+    public function validateData($key, $value, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
-        foreach ($rule->getItems() as $item) {
-            $result = false;
-            if ($item->getType() === 'ipAddress') {
-                $result = $this->validateIpAddress($value, $item->getValue());
-            } else if ($item->getType() === 'subnet') {
-                $result = $this->validateSubnet($value, $item->getValue());
-            }
+        $result = false;
+        if ($item->getType() === 'ipAddress') {
+            $result = $this->validateIpAddress($value, $item->getValue());
+        } else if ($item->getType() === 'subnet') {
+            $result = $this->validateSubnet($value, $item->getValue());
+        }
 
-            if ($result !== false) {
-                $matchingItems[] = [
-                    'type' => $item->getType(),
-                    'value' => $item->getValue(),
-                    'rating' => $this->calculateSpamRating($rule, $item),
-                    'uuid' => $rule->getUuid()
-                ];
-            }
+        if ($result !== false) {
+            $matchingItems = [
+                'type' => $item->getType(),
+                'value' => $item->getValue(),
+                'rating' => $this->calculateSpamRating($item),
+                'uuid' => $item->getParent()->getUuid(),
+            ];
         }
 
         return $matchingItems;

@@ -96,18 +96,49 @@ rule:
       status: Статус
       spamRatingFactor: Оценка за спам
     ruleType: Вид правило
+    status:
+      unsavedChanges: '%counter% незапазени промени'
+      savingChanges: Запазване на %counter% промени
+      nothingToSave: Нищо за запазване
     items:
       title: Артикули
       type: Тип
+      value: Стойност
       rating: Оценка
+    filter:
+      title: Филтрирай артикули
+      itemSpamRating: Оценка за спам на артикул
+    noItemsInTable:
+      title: Все още няма артикули
+      text: Това правило все още няма артикули.
+    nothingFound:
+      title: Нищо не е намерено
+      text: Няма артикули, които отговарят на вашето търсене.
     addMultipleItems:
+      type: Тип
       items: Артикули
       itemsHelp: Добавяйте по един артикул на ред.
       rating: Оценка
       ratingHelp: Ако не е зададена стойност, стойността по подразбиране е 1.0. Ако е зададена оценка 0.0, артикулите няма да бъдат отчетени като спам.
+    modal:
+      importTxtFile:
+        title: Внесете текстов файл
+        file: Файл
+        fileHelp: Моля изберете текстовия файл (*.txt), който искате да внесете от компютъра си.
+        action: Внеси файл
+      importCsvFile:
+        title: Внеси CSV файл
+        file: Файл
+        fileHelp: Моля изберете CSV файла (*.csv), който искате да внесете от кокмпютъра си.
+        action: Внеси файл
+      addingItems:
+        title: Добавяне на артикули
+        messageCompleted: Предоставените данни бяха обработени. Можете да видите обобщението на добавените, пропуснатите и невалидните артикули по-горе. Можете да затворте този прозорец.
   backToList: Връщане към правила
   create:
     title: Създай правило
+    label:
+      ruleType: Вид правило
   edit:
     title: Редактирай правило %ruleName%
 projectGroup:

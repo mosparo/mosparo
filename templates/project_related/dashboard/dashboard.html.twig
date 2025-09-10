@@ -65,6 +65,9 @@
                     <div class="position-relative">
                         <div class="dashboard-submission-chart" id="submission_chart"></div>
                     </div>
+                    {% if lastDatabaseCleanup %}
+                        <div class="card-footer text-muted"><strong>{{ 'cleanup.lastDatabaseCleanup'|trans }}</strong> {{ lastDatabaseCleanup|date }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -97,7 +100,7 @@
             <div class="col-12 {% if isOwner %}col-md-4{% else %}col-md-6{% endif %}">
                 <div class="card mb-3 flex-fill">
                     <div class="card-title mb-0 p-0 flex-fill">
-                        <a href="{{ path('ruleset_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
+                        <a href="{{ path('rule_package_list', { '_projectId': activeProject.id }) }}" class="d-block p-3 text-body dashboard-link">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span class="bg-cyan text-white avatar">
@@ -106,12 +109,12 @@
                                 </div>
                                 <div class="col">
                                     <div class="font-weight-medium">
-                                        {{ 'ruleset.title'|trans }}
+                                        {{ 'rulePackage.title'|trans }}
                                     </div>
                                 </div>
                                 <div class="col-auto">
                                     <span class="badge bg-cyan">
-                                        {{ numberOfRulesets }}
+                                        {{ numberOfRulePackages }}
                                     </span>
                                 </div>
                             </div>

@@ -156,6 +156,14 @@ pre {
     color: rgb(var(--tblr-info-rgb));
 }
 
+.informative-tooltip {
+    cursor: help;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
 [data-bs-theme=dark],
 body[data-bs-theme=dark] [data-bs-theme=light] {
     pre {
@@ -234,5 +242,21 @@ body[data-bs-theme=dark] [data-bs-theme=light] {
         &.w-100 {
             white-space: normal;
         }
+    }
+
+    .visually-hidden-mobile-only {
+        position: absolute;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+    }
+
+    .w-mobile-100 {
+        width: 100%;
     }
 }

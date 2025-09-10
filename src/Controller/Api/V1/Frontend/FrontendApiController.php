@@ -11,6 +11,7 @@ use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\SubmitToken;
+use Mosparo\Enum\CleanupExecutor;
 use Mosparo\Enum\LanguageSource;
 use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\ProjectHelper;
@@ -91,7 +92,7 @@ class FrontendApiController extends AbstractController
         }
 
         // Cleanup the database
-        $this->cleanupHelper->cleanup();
+        $this->cleanupHelper->cleanup(cleanupExecutor: CleanupExecutor::FRONTEND_API);
 
         // Determine the security settings
         $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp());
@@ -149,7 +150,7 @@ class FrontendApiController extends AbstractController
         }
 
         // Cleanup the database
-        $this->cleanupHelper->cleanup();
+        $this->cleanupHelper->cleanup(cleanupExecutor: CleanupExecutor::FRONTEND_API);
 
         // Determine the security settings
         $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp());
@@ -283,7 +284,7 @@ class FrontendApiController extends AbstractController
 
         // Check the data
         if (!$submission->isSpam()) {
-            $this->ruleTesterHelper->checkRequest($submission);
+            $this->ruleTesterHelper->checkRequest($submission, $securitySettings);
         }
 
         $submission->setSubmitToken($submitToken);

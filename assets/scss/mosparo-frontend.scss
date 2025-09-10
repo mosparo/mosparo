@@ -86,14 +86,13 @@
                 height: var(--mosparo-circle-size, 40px);
 
                 position: absolute;
-                top: var(--mosparo-circle-offset, -3px);
-                left: var(--mosparo-circle-offset, -3px);
-
-                border-radius: var(--mosparo-circle-radius, 20px);
+                top: calc(var(--mosparo-circle-border-width, 3px) * -1);
+                left: calc(var(--mosparo-circle-border-width, 3px) * -1);
             }
 
             &:before {
                 border: 1px solid var(--mosparo-circle-border-color, rgb(0, 0, 0));
+                border-radius: var(--mosparo-circle-radius, 20px);
 
                 transform: scale(1);
 
@@ -107,6 +106,7 @@
             &:after {
                 border: var(--mosparo-circle-border-width, 3px) solid transparent;
                 border-left-color: var(--mosparo-loading-circle-animated-border-color, rgb(0, 0, 255));
+                border-radius: var(--mosparo-loading-circle-radius, 20px);
 
                 opacity: 0;
 
@@ -173,7 +173,7 @@
         .mosparo__checkbox_column {
             .mosparo__checkbox {
                 border-color: var(--mosparo-loading-circle-border-color, transparent);
-                border-radius: var(--mosparo-circle-radius, 20px);
+                border-radius: var(--mosparo-loading-circle-radius, 20px);
 
                 &:after {
                     opacity: 1;
@@ -200,7 +200,7 @@
 
                 .mosparo__icon-checkmark {
                     display: block;
-                    width: var(--mosparo-circle-radius, 20px);
+                    width: var(--mosparo-icon-size, 20px);
                     height: var(--mosparo-checkmark-icon-height, 10px);
 
                     margin-top: -4px;
@@ -241,8 +241,8 @@
                     display: block;
 
                     position: relative;
-                    width: var(--mosparo-circle-radius, 20px);
-                    height: var(--mosparo-circle-radius, 20px);
+                    width: var(--mosparo-icon-size, 20px);
+                    height: var(--mosparo-icon-size, 20px);
 
                     transform: rotate(45deg);
 
@@ -295,20 +295,20 @@
 
             input[type="checkbox"]:focus + .mosparo__checkbox {
                 border-color: var(--mosparo-focus-circle-border-color, rgb(170, 170, 170));
-                box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
+                box-shadow: 0 0 0 var(--mosparo-circle-border-width, 3px) var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
             }
         }
     }
 
     &.mosparo__checked {
         input[type="checkbox"]:focus + .mosparo__checkbox {
-            box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
+            box-shadow: 0 0 0 var(--mosparo-circle-border-width, 3px) var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
         }
     }
 
     &.mosparo__invalid {
         input[type="checkbox"]:focus + .mosparo__checkbox {
-            box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
+            box-shadow: 0 0 0 var(--mosparo-circle-border-width, 3px) var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
         }
     }
 

@@ -4,6 +4,7 @@ namespace Mosparo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: SecurityGuidelineConfigValueRepository::class)]
 class SecurityGuidelineConfigValue implements ProjectRelatedEntityInterface
 {

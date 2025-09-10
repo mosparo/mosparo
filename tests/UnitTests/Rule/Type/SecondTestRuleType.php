@@ -16,7 +16,6 @@ final class SecondTestRuleType extends AbstractRuleType
             'name' => 'second-test-type-subtype-1.title',
         ]
     ];
-    protected string $formClass = 'second-test-type-form-class';
     protected string $testerClass = 'second-test-type-tester-class';
     protected array $targetFieldKeys = ['formData.'];
     protected string $helpTemplate = 'second-test-type-help-template';

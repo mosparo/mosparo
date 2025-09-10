@@ -23,13 +23,13 @@
 {% block pageBody %}
     <div class="container-xl">
         {{ form_start(form) }}
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-12 col-lg-4">
                 <div class="card mb-3">
                     <div class="card-header">
                         <h3 class="card-title">{{ 'rule.form.rule.title'|trans }}</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" id="rule-form-fields">
                         {{ form_row(form.name) }}
                         {{ form_row(form.description) }}
                         {{ form_row(form.status) }}
@@ -46,29 +46,105 @@
                             {{ 'action.help'|trans }}
                         </button>
                     </div>
-                    <div class="card-body rule-items">
-                        {{ form_widget(form.items, {'attr': {'allowAddMultiple': ruleType.allowAddMultiple }}) }}
+                    <div class="card-body rule-items p-0">
+                        <div class="tabulator-toolbar">
+                            {% if canManage %}
+                                <div class="dropdown me-auto">
+                                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" disabled>
+                                        <span class="d-block d-md-none">
+                                            <i class="ti ti-checkbox"></i>
+                                        </span>
+                                        <span class="d-none d-md-block">
+                                            {{ 'multiSelect.selectedItems'|trans }}
+                                        </span>
+                                        <span class="badge bg-blue text-blue-fg mx-1 selected-rows-counter d-none"></span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item text-red" disabled id="delete-selected-items">
+                                            <i class="ti ti-trash"></i>
+                                            {{ 'multiSelect.actions.deleteSelectedItems'|trans }} <span class="badge bg-red text-red-fg ms-1 selected-rows-counter d-none"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="btn-group ms-auto">
+                                    <button type="button" class="btn btn-success add-item-btn">
+                                        <i class="ti ti-square-plus me-0 me-md-1"></i>
+                                        <span class="visually-hidden-mobile-only">{{ 'form.addItem'|trans }}</span>
+                                    </button>
+                                    <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+                                        <span class="visually-hidden">{{ 'action.toggleDropdown'|trans }}</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#add-multiple-items-modal">
+                                            <i class="ti ti-copy-plus"></i>
+                                            {{ 'form.addMultipleItems'|trans }}
+                                        </button>
+                                        <div class="dropdown-divider"></div>
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#import-txt-file-modal">
+                                            <i class="ti ti-file-type-txt"></i>
+                                            {{ 'form.importTextFile'|trans }}
+                                        </button>
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#import-csv-file-modal">
+                                            <i class="ti ti-file-type-csv"></i>
+                                            {{ 'form.importCsvFile'|trans }}
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <button type="button" class="btn btn-pink ms-2" data-bs-toggle="modal" data-bs-target="#filter-modal">
+                                <i class="ti ti-filter me-0 me-md-1"></i>
+                                <span class="visually-hidden-mobile-only">{{ 'action.filter'|trans }}</span>
+                                <span class="badge bg-white text-pink ms-2 d-none" id="active-filters-counter"></span>
+                            </button>
+                        </div>
+
+                        <div id="tabulator-items-table"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-3">
-            <div class="col-12 col-md-auto mt-2 mt-md-0">
-                <a href="{{ path('rule_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
-                    <i class="ti ti-chevron-left"></i>
-                    {{ 'rule.backToList'|trans }}
-                </a>
+        <div class="row mt-3 sticky-bottom pb-3 bg-body">
+            <div class="col-12">
+                <div class="border-top mb-3"></div>
             </div>
 
-            {% if canManage %}
-                <div class="col-12 col-md-auto ms-auto order-first order-md-last">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="ti ti-device-floppy"></i>
-                        {{ 'action.save'|trans }}
-                    </button>
+            <div class="col-12 d-flex flex-column flex-md-row justify-content-between">
+                <div class="mt-2 mt-md-0 flex-1 order-last order-md-first">
+                    <a href="{{ path('rule_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-mobile-100" tabindex="1000">
+                        <i class="ti ti-chevron-left"></i>
+                        {{ 'rule.backToList'|trans }}
+                    </a>
                 </div>
-            {% endif %}
+
+                <div class="mt-2 mt-md-0">
+                    <a href="{{ path('rule_export_items', { '_projectId': activeProject.id, 'id': rule.id }) }}" class="btn btn-secondary w-mobile-100" id="export-items" download="rule_items_{{ rule.id }}.csv">
+                        <i class="ti ti-file-type-csv"></i>
+                        {{ 'action.exportItems'|trans }}
+                    </a>
+                </div>
+
+                {% if canManage %}
+                    <div class="order-first order-md-last d-flex flex-column flex-md-row align-items-center justify-content-end flex-1">
+                        <div class="status status-warning me-3 text-nowrap d-none" id="status-unsaved-changes">
+                            {{ 'rule.form.status.unsavedChanges'|trans({'%counter%': '<span></span>'})|raw }}
+                        </div>
+                        <div class="status status-info me-3 text-nowrap d-none" id="status-saving-changes">
+                            <div class="status-dot status-dot-animated"></div>
+                            {{ 'rule.form.status.savingChanges'|trans({'%counter%': '<span></span>'})|raw }}
+                        </div>
+                        <div class="status status-gray me-3 text-nowrap d-none" id="status-no-changes">
+                            {{ 'rule.form.status.nothingToSave'|trans }}
+                        </div>
+                        <button type="button" class="btn btn-primary mt-2 mt-md-0 w-mobile-100" id="btn-saving-changes">
+                            <i class="ti ti-device-floppy"></i>
+                            {{ 'action.saveChanges'|trans }}
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
         </div>
 
         {{ form_end(form) }}
@@ -94,33 +170,269 @@
         </div>
     </div>
 
-    <div class="modal modal-blur fade" tabindex="-1" id="add-multiple-items-modal">
+    <div class="modal modal-blur fade" tabindex="-1" id="filter-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="ti ti-square-plus"></i>
-                        {{ 'form.addMultipleItems'|trans }}
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        {{ form_row(addMultipleForm.type) }}
-                        {{ form_row(addMultipleForm.items) }}
-                        {{ form_row(addMultipleForm.rating) }}
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
-                    <button type="button" class="btn btn-primary ms-auto" id="btn-add-multiple-items">
-                        <i class="ti ti-square-plus"></i>
-                        {{ 'form.addMultipleItems'|trans }}
-                    </button>
-                </div>
+                <form id="submit-filter-form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="ti ti-filter"></i>
+                            {{ 'rule.form.filter.title'|trans }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                    </div>
+                    <div class="modal-body position-relative">
+                        <div class="form-group">
+                            <label class="form-label" for="filter-type">{{ 'rule.form.items.type'|trans }}</label>
+                            <select name="filter_type" id="filter-type" class="form-select">
+                                <option value="">{{ 'form.pleaseChoose'|trans }}</option>
+                                {% for type, label in typeOptions %}
+                                    <option value="{{ type }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="filter-value">{{ 'rule.form.items.value'|trans }}</label>
+                            <input name="filter_value" id="filter-value" class="form-control" value="">
+                            <div class="form-text mb-0 help-text">
+                                {{ 'rule.form.filter.useWildcard'|trans({'%wildcard%': '<code>*</code>'})|raw }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="filter-srf-min">{{ 'rule.form.items.rating'|trans }}</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control text-center" name="filter_srf_min" id="filter-srf-min">
+                                <span class="input-group-text"><i class="ti ti-math-lower"></i></span>
+                                <span class="input-group-text">{{ 'rule.form.filter.itemSpamRating'|trans }}</span>
+                                <span class="input-group-text"><i class="ti ti-math-lower"></i></span>
+                                <input type="number" class="form-control text-center" name="filter_srf_max" id="filter-srf-max">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                        <button type="reset" class="btn btn-secondary ms-auto" id="btn-reset-filter">
+                            <i class="ti ti-cancel"></i>
+                            {{ 'action.reset'|trans }}
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="btn-filter-items">
+                            <i class="ti ti-filter"></i>
+                            {{ 'action.filter'|trans }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    {% if canManage %}
+        <div class="modal modal-blur fade" tabindex="-1" id="add-multiple-items-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="ti ti-square-plus"></i>
+                            {{ 'form.addMultipleItems'|trans }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                    </div>
+                    <div class="modal-body position-relative">
+                        <form>
+                            <div class="form-group">
+                                <label class="form-label form-label required" for="rule_add_multiple_items_type">{{ 'rule.form.addMultipleItems.type'|trans }}</label>
+                                <select id="rule_add_multiple_items_type" name="rule_add_multiple_items[type]" class="form-select rule-item-type form-select">
+                                    {% for value, label in typeOptions %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label form-label required" for="rule_add_multiple_items_items">{{ 'rule.form.addMultipleItems.items'|trans }}</label>
+                                <textarea id="rule_add_multiple_items_items" name="rule_add_multiple_items[items]" required="required" class="form-control"></textarea>
+                                <div class="form-text mb-0 help-text">{{ 'rule.form.addMultipleItems.itemsHelp'|trans }}</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label form-label required" for="rule_add_multiple_items_rating">{{ 'rule.form.addMultipleItems.rating'|trans }}</label>
+                                <input type="number" id="rule_add_multiple_items_rating" name="rule_add_multiple_items[rating]" required="required" min="-1000000" max="1000000" step="any" class="form-control" value="1.0">
+                                <div class="form-text mb-0 help-text">{{ 'rule.form.addMultipleItems.ratingHelp'|trans }}</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                        <button type="button" class="btn btn-primary ms-auto" id="btn-add-multiple-items">
+                            <i class="ti ti-square-plus"></i>
+                            {{ 'form.addMultipleItems'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-blur fade" tabindex="-1" id="import-txt-file-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="ti ti-file-type-txt"></i>
+                            {{ 'rule.form.modal.importTxtFile.title'|trans }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                    </div>
+                    <div class="modal-body position-relative">
+                        <form>
+                            <div class="form-group">
+                                <label class="form-label form-label required" for="rule_import_txt_file_type">{{ 'rule.form.addMultipleItems.type'|trans }}</label>
+                                <select id="rule_import_txt_file_type" name="rule_import_txt_file[type]" class="form-select rule-item-type form-select">
+                                    {% for value, label in typeOptions %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label form-label required" for="rule_import_txt_file_file">{{ 'rule.form.modal.importTxtFile.file'|trans }}</label>
+                                <input type="file" id="rule_import_txt_file_file" name="rule_import_txt_file[file]" required="required" class="form-control" accept="text/plain">
+                                <div class="form-text mb-0 help-text">{{ 'rule.form.modal.importTxtFile.fileHelp'|trans }}</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label form-label required" for="rule_import_txt_file_rating">{{ 'rule.form.addMultipleItems.rating'|trans }}</label>
+                                <input type="number" id="rule_import_txt_file_rating" name="rule_import_txt_file[rating]" required="required" min="-1000000" max="1000000" step="any" class="form-control" value="1.0">
+                                <div class="form-text mb-0 help-text">{{ 'rule.form.addMultipleItems.ratingHelp'|trans }}</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                        <button type="button" class="btn btn-primary ms-auto" id="btn-import-txt-file">
+                            <i class="ti ti-file-upload"></i>
+                            {{ 'rule.form.modal.importTxtFile.action'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-blur fade" tabindex="-1" id="import-csv-file-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="ti ti-file-type-csv"></i>
+                            {{ 'rule.form.modal.importCsvFile.title'|trans }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                    </div>
+                    <div class="modal-body position-relative">
+                        <form>
+                            <div class="form-group">
+                                <label class="form-label form-label required" for="rule_import_csv_file_file">{{ 'rule.form.modal.importCsvFile.file'|trans }}</label>
+                                <input type="file" id="rule_import_csv_file_file" name="rule_import_csv_file[file]" required="required" class="form-control" accept="text/csv">
+                                <div class="form-text mb-0 help-text">{{ 'rule.form.modal.importCsvFile.fileHelp'|trans }}</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                        <button type="button" class="btn btn-primary ms-auto" id="btn-import-csv-file">
+                            <i class="ti ti-file-upload"></i>
+                            {{ 'rule.form.modal.importCsvFile.action'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-blur fade" tabindex="-1" id="progress-modal" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                    <div class="modal-status bg-info"></div>
+
+                    <div class="modal-body text-center py-4 px-5">
+                        <div class="mb-2">
+                            <i class="ti ti-hourglass-empty icon icon-lg text-info" id="progress-modal-icon"></i>
+                        </div>
+                        <h3 class="modal-title">
+                            <span id="progress-modal-title-please-wait">{{ 'general.pleaseWait'|trans }}</span>
+                            <span id="progress-modal-title-items-added" class="d-none">{{ 'rule.form.modal.addingItems.progress.dataProcessed'|trans }}</span>
+                        </h3>
+                        <div id="add-multiple-items-loader">
+                            <div class="progress-bar-container">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div id="progress-modal-status">{{ 'rule.form.modal.addingItems.progress.processingPleaseWait'|trans }}</div>
+                                    <div class="ms-auto">{{ 'rule.form.modal.addingItems.progress.processingStats'|trans({'%processedBytes%': '<strong id="adding-items-processed">0</strong>', '%totalBytes%': '<strong id="adding-items-total">0</strong>'})|raw }}</div>
+                                </div>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" id="adding-items-progress-bar"></div>
+                                </div>
+                                <div class="d-flex flex-row justify-content-between mb-4">
+                                    <div class="text-success informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rule.form.modal.addingItems.summary.addedTooltip'|trans|escape('html_attr') }}">
+                                        {{ 'rule.form.modal.addingItems.summary.addedLabel'|trans|escape('html_attr') }}: <span id="number-of-added-items">0</span>
+                                    </div>
+                                    <div class="text-info informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rule.form.modal.addingItems.summary.skippedTooltip'|trans|escape('html_attr') }}">
+                                        {{ 'rule.form.modal.addingItems.summary.skippedLabel'|trans|escape('html_attr') }}: <span id="number-of-skipped-items">0</span>
+                                    </div>
+                                    <div class="text-danger informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rule.form.modal.addingItems.summary.invalidTooltip'|trans|escape('html_attr') }}">
+                                        {{ 'rule.form.modal.addingItems.summary.invalidLabel'|trans|escape('html_attr') }}: <span id="number-of-invalid-items">0</span>
+                                    </div>
+                                </div>
+                                <div class="alert alert-info mb-0 text-start">
+                                    {{ 'rule.form.modal.addingItems.progress.abortHint'|trans }}
+                                </div>
+                                <div class="alert alert-success mb-0 text-start d-none">
+                                    {{ 'rule.form.modal.addingItems.messageCompleted'|trans }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-none">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-blur fade" tabindex="-1" id="delete-selected-items-modal">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content position-relative">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                    <div class="modal-status bg-danger"></div>
+                    <div class="modal-body text-center py-4">
+                        <div class="mb-2">
+                            <i class="ti ti-alert-triangle icon icon-lg text-danger"></i>
+                        </div>
+                        <h3 class="modal-title">
+                            {{ 'general.areYouSure'|trans }}
+                        </h3>
+                        <p class="text-secondary d-none" id="delete-selected-items-multiple">
+                            {{ 'rule.form.modal.deleteSelectedItems.confirm'|trans({ '%counter%': '<strong class="selected-rows-counter"></strong>' })|raw }}
+                        </p>
+                        <p class="text-secondary d-none" id="delete-selected-items-one">
+                            {{ 'rule.form.modal.deleteSelectedItems.confirmOne'|trans }}
+                        </p>
+                        <p class="text-secondary mb-0">
+                            {{ 'general.infoUndo'|trans }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                        <button type="button" class="btn btn-danger ms-auto" id="execute-delete-selected-items">
+                            <i class="ti ti-trash"></i>
+                            {{ 'rule.form.modal.deleteSelectedItems.confirmDelete'|trans }}
+                        </button>
+                    </div>
+                    <div class="modal-loader">
+                        <div class="loader-content">
+                            <div class="loader"></div>
+                            <span class="mt-5">{{ 'rule.form.modal.deleteSelectedItems.progress.deletingPleaseWait'|trans }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
@@ -128,38 +440,807 @@
 
     {% cspscript %}
         <script>
-            $(document).ready(function () {
-                $('#btn-add-multiple-items').click(function () {
-                    let modal = $('#add-multiple-items-modal');
-                    let type = modal.find('select[name="rule_add_multiple_items[type]"]').val();
-                    let items = modal.find('textarea[name="rule_add_multiple_items[items]"]').val().split("\n");
-                    let rating = modal.find('input[name="rule_add_multiple_items[rating]"]').val();
+            const changes = new Map();
+            const typeOptions = {{ typeOptions|json_encode|raw }};
+            const valueOptions = {{ valueOptions|json_encode|raw }};
+            const validatorPattern = {{ validatorPattern|json_encode|raw }};
+            var table = null;
+            var processingChanges = false;
+            var processingUuids = [];
+            var activeFilters = {};
+            var saveInterval = null;
+            const baseChunkSize = {{ baseChunkSize }}; // 4 KiB
+            var usedChunkSize = baseChunkSize;
+            var placeholderEl = $('<div></div>').addClass('empty')[0];
 
-                    let collectionObj = $('.collection-widget');
-                    let list = collectionObj.find('.collection-list');
-                    let newWidget = list.attr('data-prototype');
+            var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rule.form.noItemsInTable.title'|trans }}')[0];
+            var emptyTableTextEl = $('<p></p>').addClass('empty-subtitle text-secondary').appendTo(placeholderEl).text('{{ 'rule.form.noItemsInTable.text'|trans }}')[0];
+            var emptyTableActionEl = $('<div></div>').addClass('empty-action').appendTo(placeholderEl)[0];
+            var emptyTableAddItemButtonEl = $('<button></button>')
+                .attr('type', 'button')
+                .addClass('btn btn-success add-item-btn')
+                .append($('<i></i>').addClass('ti ti-square-plus'))
+                .append($('<div></div>').text('{{ 'form.addItem'|trans }}'))
+                .appendTo(emptyTableActionEl)[0];
+            var emptyTableAdjustFilterButtonEl = $('<button></button>')
+                .attr('type', 'button')
+                .attr('data-bs-toggle', 'modal')
+                .attr('data-bs-target', '#filter-modal')
+                .addClass('btn btn-pink d-none')
+                .append($('<i></i>').addClass('ti ti-filter'))
+                .append($('<div></div>').text('{{ 'action.filter'|trans }}'))
+                .appendTo(emptyTableActionEl)[0];
 
-                    for (let itemIndex in items) {
-                        let item = items[itemIndex];
-                        if (item.trim() === '') {
-                            continue;
-                        }
+            function updateFiltersCounter()
+            {
+                let numberOfActiveFilters = Object.keys(activeFilters).length;
+                let counterEl = $('#active-filters-counter');
 
-                        let itemWidget = newWidget.replace(/__name__/g, collectionGetRandomHash());
+                if (numberOfActiveFilters) {
+                    counterEl.text(numberOfActiveFilters).removeClass('d-none');
 
-                        let newElem = $(list.attr('data-widget-tags'));
-                        newElem.append(itemWidget);
-                        newElem.append($('<button></button>').attr('type', 'button').addClass('btn btn-danger btn-icon-only remove-item-button').html('<i class="ti ti-circle-minus"></i>'));
-                        newElem.find('.rule-item-type').val(type);
-                        newElem.find('.rule-item-value').val(item);
-                        newElem.find('.rule-item-rating').val(rating);
-                        newElem.appendTo(list);
+                    emptyTableTitleEl.textContent = '{{ 'rule.form.nothingFound.title'|trans }}';
+                    emptyTableTextEl.textContent = '{{ 'rule.form.nothingFound.text'|trans }}';
+                    emptyTableAdjustFilterButtonEl.classList.remove('d-none');
+                    emptyTableAddItemButtonEl.classList.add('d-none');
+                } else {
+                    counterEl.text('').addClass('d-none');
+                    emptyTableTitleEl.textContent = '{{ 'rule.form.noItemsInTable.title'|trans }}';
+                    emptyTableTextEl.textContent = '{{ 'rule.form.noItemsInTable.text'|trans }}';
+                    emptyTableAdjustFilterButtonEl.classList.add('d-none');
+                    emptyTableAddItemButtonEl.classList.remove('d-none');
+                }
+            }
+
+            {% if canManage %}
+                function updateUnsavedStatus(number) {
+                    let statusEl = $('#status-unsaved-changes');
+
+                    if (number) {
+                        statusEl.removeClass('d-none');
+                        $('#status-no-changes').addClass('d-none');
+                    } else {
+                        statusEl.addClass('d-none');
                     }
 
-                    collectionToggleRemoveButton(list);
-                    $('#add-multiple-items-modal').modal('hide');
-                    $('#add-multiple-items-modal').find('.modal-body form')[0].reset();
+                    statusEl.find('span').text(number);
+                }
+
+                function updateSavingChanges(number) {
+                    let statusEl = $('#status-saving-changes');
+
+                    if (number) {
+                        statusEl.removeClass('d-none');
+                        $('#status-no-changes').addClass('d-none');
+                    } else {
+                        statusEl.addClass('d-none');
+                    }
+
+                    statusEl.find('span').text(number);
+                }
+
+                function saveChanges()
+                {
+                    if (processingChanges || changes.size === 0) {
+                        return;
+                    }
+
+                    let saveButtonEl = $('#btn-saving-changes');
+                    saveButtonEl.prop('disabled', true);
+
+                    let preparedChanges = [];
+                    changes.forEach(function (change, key) {
+                        if (change.type === 'item') {
+                            if (table.modules.edit.getCurrentCell() !== false && change.data.uuid === table.modules.edit.getCurrentCell().getRow().getData().uuid) {
+                                return;
+                            }
+
+                            // We do not store items with empty values
+                            if (!change.data.value) {
+                                return;
+                            }
+
+                            processingUuids.push(change.data.uuid);
+                        }
+
+                        preparedChanges.push(change);
+                        changes.delete(key);
+                    });
+
+                    if (!preparedChanges.length) {
+                        saveButtonEl.prop('disabled', false);
+                        return;
+                    }
+
+                    updateUnsavedStatus(changes.size);
+                    updateSavingChanges(preparedChanges.length);
+
+                    let data = {
+                        token: '{{ csrf_token('save-changes') }}',
+                        changes: preparedChanges,
+                    };
+                    processingChanges = true;
+
+                    $.post('{{ path('rule_edit_save_changes', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                        let fieldMappings = {
+                            name: '#rule_form_name',
+                            description: '#rule_form_description',
+                            status: '#rule_form_status',
+                            spamRatingFactor: '#rule_form_spamRatingFactor',
+                        };
+                        for (let change of responseData.processed) {
+                            if (change.type === 'field') {
+                                if (change.fieldName in fieldMappings) {
+                                    $(fieldMappings[change.fieldName]).removeClass('field-edited');
+                                }
+                            } else if (change.type === 'item') {
+                                for (let row of table.getRows()) {
+                                    if (row.getData().uuid === change.uuid) {
+                                        if (typeof row.getData().id === 'undefined') {
+                                            row.getData().id = change.id;
+                                        }
+
+                                        let idx = processingUuids.indexOf(change.uuid);
+
+                                        if (idx > -1) {
+                                            processingUuids.splice(idx, 1);
+
+                                            for (let cell of row.getCells()) {
+                                                cell.getElement().classList.remove('tabulator-cell-edited');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        processingChanges = false;
+
+                        updateSavingChanges(0);
+                        saveButtonEl.prop('disabled', false);
+                    });
+                }
+
+                function canEditCell(cell)
+                {
+                    return processingUuids.indexOf(cell.getRow().getData().uuid) === -1;
+                }
+
+                function valueValidator(cell, value) {
+                    let type = cell.getRow().getCell('type').getValue();
+                    return validateValue(type, value);
+                }
+
+                function validateValue(type, value)
+                {
+                    if (!value) {
+                        return false;
+                    }
+
+                    if (!(type in typeOptions)) {
+                        return false;
+                    }
+
+                    if (Object.keys(validatorPattern).length > 0 && type in validatorPattern) {
+                        let pattern = validatorPattern[type];
+                        let re = new RegExp(pattern);
+
+                        return re.test(value);
+                    }
+
+                    if (type === 'regex' || type === 'uaRegex') {
+                        try {
+                            new RegExp(value);
+                        } catch (e) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                let convertBytesIntoHumanReadableFormat = function (bytes)
+                {
+                    if (bytes === 0) {
+                        return '0 Bytes';
+                    }
+
+                    let div = 1024;
+                    let sizes = ['Bytes', 'KiB', 'MiB', 'GiB'];
+
+                    let size = Math.floor(Math.log(bytes) / Math.log(div));
+
+                    return parseFloat((bytes / Math.pow(div, size)).toFixed(2)) + ' ' + sizes[size];
+                };
+
+                let adjustSummaryValues = function (el, delta)
+                {
+                    let originVal = parseInt(el.data('val') || 0);
+                    let newVal = parseInt(originVal) + parseInt(delta);
+
+                    el.data('val', newVal).text(newVal);
+                }
+
+                async function addItemsFromList(type, inputData, rating)
+                {
+                    let progressModal = $('#progress-modal');
+                    progressModal.modal('show');
+
+                    let modalWasVisible = false;
+                    usedChunkSize = baseChunkSize;
+                    const totalBytes = inputData.length;
+                    let processedBytes = 0;
+                    let chunkData = null;
+                    let posNextNl = 0;
+
+                    progressModal.on('shown.bs.modal', function () {
+                        modalWasVisible = true;
+                    })
+
+                    $('#adding-items-total').text(convertBytesIntoHumanReadableFormat(totalBytes));
+                    while (processedBytes < totalBytes) {
+                        if (!progressModal.is(':visible') && modalWasVisible) {
+                            break;
+                        }
+
+                        if (processedBytes + usedChunkSize < totalBytes) {
+                            posNextNl = inputData.indexOf('\n', processedBytes + usedChunkSize);
+                        } else {
+                            posNextNl = totalBytes;
+                        }
+                        chunkData = inputData.substring(processedBytes, posNextNl);
+                        processedBytes += chunkData.length;
+
+                        let items = [];
+                        lines = chunkData.split('\n').map((val) => val.trim());
+                        for (const line of lines) {
+                            if (!line) {
+                                continue;
+                            }
+
+                            if (!validateValue(type, line)) {
+                                adjustSummaryValues($('#number-of-invalid-items'), 1);
+                                continue;
+                            }
+
+                            items.push([type, line, rating]);
+                        }
+
+                        let data = {
+                            token: '{{ csrf_token('add-multiple-items') }}',
+                            items: JSON.stringify(items),
+                        };
+
+                        await $.post('{{ path('rule_edit_add_multiple', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                            let percent = (processedBytes / totalBytes) * 100;
+
+                            $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(processedBytes));
+                            $('#adding-items-progress-bar').css('width', percent + '%');
+
+                            adjustSummaryValues($('#number-of-added-items'), responseData.counters.added);
+                            adjustSummaryValues($('#number-of-skipped-items'), responseData.counters.skipped);
+                            adjustSummaryValues($('#number-of-invalid-items'), responseData.counters.invalid);
+
+                            if (responseData.chunkSize) {
+                                if (responseData.chunkSize === 'increase') {
+                                    usedChunkSize *= 2;
+                                } else if (responseData.chunkSize === 'decrease') {
+                                    usedChunkSize /= 2;
+                                }
+                            }
+                        });
+                    }
+
+                    if (processedBytes >= totalBytes) {
+                        $('#progress-modal .modal-status').removeClass('bg-info').addClass('bg-success');
+                        $('#progress-modal-icon').removeClass('ti-hourglass-empty text-info').addClass('ti-check text-success');
+                        $('#progress-modal-title-please-wait, #progress-modal-status, #add-multiple-items-loader .alert-info').addClass('d-none');
+                        $('#progress-modal-title-items-added, #add-multiple-items-loader .alert-success, #progress-modal .modal-footer').removeClass('d-none');
+                    }
+
+                    table.refreshFilter();
+                }
+            {% endif %}
+
+            $(document).ready(function () {
+                table = new Tabulator('#tabulator-items-table', {
+                    index: 'uuid',
+                    layout: 'fitDataStretch',
+                    layoutColumnsOnNewData: true,
+                    responsiveLayout: false,
+                    rowHeight: 40,
+                    addRowPos: 'top',
+
+                    ajaxURL: '{{ path('rule_load_items', {'_projectId': activeProject.id, 'id': rule.id}) }}',
+                    ajaxParams: function() {
+                        return {
+                            token: '{{ csrf_token('manage-rule') }}',
+                            activeFilters: activeFilters,
+                        };
+                    },
+                    filterMode: 'remote',
+                    sortMode: 'remote',
+
+                    pagination: true,
+                    paginationMode: 'remote',
+                    paginationSize: 30,
+                    paginationCounter: function (perPage, row, page, totalRows, totalPages) {
+                        return '{{ 'tabulator.pagination.counter'|trans({
+                            '%vm%': '<span class="d-inline d-md-none">',
+                            '%vd%': '<span class="d-none d-md-inline">',
+                            '%e%': '</span>'
+                        })|raw }}'
+                            .replace('%page%', page)
+                            .replace('%totalPages%', totalPages);
+                    },
+                    columnHeaderSortMulti: false,
+
+                    placeholder: placeholderEl,
+
+                    initialSort: [
+                        { column: 'value', dir: 'asc' },
+                    ],
+                    columnDefaults: {
+                        tooltip: false,
+                    },
+                    rowHeader: {
+                        headerSort: false,
+                        resizable: false,
+                        frozen: true,
+                        headerHozAlign: 'center',
+                        hozAlign: 'center',
+                        formatter: 'rowSelection',
+                        titleFormatter: 'rowSelection',
+                        headerClick: function (e, column) {
+                            if (column.getDefinition().formatter === 'rowSelection') {
+                                if (table.modules.selectRow.selectedRows.length) {
+                                    table.deselectRow();
+                                } else {
+                                    table.selectRow();
+                                }
+                            }
+                        },
+                        cellClick: function(e, cell) {
+                            cell.getRow().toggleSelect();
+                        }
+                    },
+                    columns:[
+                        { title: '{{ 'rule.form.items.type'|trans }}', field: 'type', width: '25%', minWidth: 100, resizable: false, vertAlign: 'middle', formatter: 'lookup', formatterParams: typeOptions,  {% if canManage %}editor: 'list', editorParams: { values: typeOptions }, editable: canEditCell,{% endif %} },
+                        { title: '{{ 'rule.form.items.value'|trans }}', field: 'value', width: '50%', resizable: false, vertAlign: 'middle', {% if valueOptions %}formatter: 'lookup', formatterParams: valueOptions,{% endif %} {% if canManage %}{% if valueOptions %}editor: 'list', editorParams: { values: valueOptions },{% else %}editor: 'input', validator: [{type: valueValidator}],{% endif %} editable: canEditCell,{% endif %} widthGrow: 4 },
+                        { title: '{{ 'rule.form.items.rating'|trans }}', field: 'spamRatingFactor', width: '15%', minWidth: 100, resizable: false, vertAlign: 'middle', hozAlign: 'right', {% if canManage %}editor: 'number', editable: canEditCell, validator: ['numeric', 'min:-1000000', 'max:1000000'], editorParams: {
+                                min: -1000000,
+                                max: 1000000,
+                                step: 'any',
+                                selectContents: true,
+                                elementAttributes: {
+                                    class: "text-end",
+                                },
+                            },
+                            editorEmptyValue: 1.0,{% endif %}
+                            formatter: function (cell, formatterParams, onRendered) {
+                                let val = cell.getValue();
+
+                                if (val === null) {
+                                    val = 1.0;
+                                }
+
+                                if (val === Math.floor(val)) {
+                                    let valStr = val.toString();
+                                    let length = valStr.length;
+                                    if (valStr.substring(0, 1) === '-') {
+                                        length--;
+                                    }
+
+                                    val = val.toPrecision(length + 1);
+                                }
+
+                                return val;
+                            },
+                        },
+                    ],
+
+                    locale: '{{ app.request.locale }}',
+                    langs: {
+                        '{{ app.request.locale }}': {
+                            'data': {
+                                'loading': '{{ 'tabulator.data.loading'|trans }}',
+                                'error': '{{ 'tabulator.data.error'|trans }}',
+                            },
+                            'groups': {
+                                'item': '{{ 'tabulator.groups.item'|trans }}',
+                                'items': '{{ 'tabulator.groups.items'|trans }}',
+                            },
+                            'pagination': {
+                                'page_size': '{{ 'tabulator.pagination.pageSize'|trans }}',
+                                'page_title': '{{ 'tabulator.pagination.pageTitle'|trans }}',
+                                'first': '{{ 'tabulator.pagination.first'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-left-pipe"></i>'})|raw }}',
+                                'first_title': '{{ 'tabulator.pagination.firstTitle'|trans }}',
+                                'last': '{{ 'tabulator.pagination.last'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-right-pipe"></i>'})|raw }}',
+                                'last_title': '{{ 'tabulator.pagination.lastTitle'|trans }}',
+                                'prev': '{{ 'tabulator.pagination.prev'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-left"></i>'})|raw }}',
+                                'prev_title': '{{ 'tabulator.pagination.prevTitle'|trans }}',
+                                'next': '{{ 'tabulator.pagination.next'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-right"></i>'})|raw }}',
+                                'next_title': '{{ 'tabulator.pagination.nextTitle'|trans }}',
+                                'all': '{{ 'tabulator.pagination.all'|trans }}',
+                            },
+                            'headerFilters': {
+                                'default': '{{ 'tabulator.filter.default'|trans }}',
+                            }
+                        }
+                    },
                 });
+
+                let submitFilterForm = $('#submit-filter-form');
+                submitFilterForm[0].addEventListener('reset', function () {
+                    activeFilters = {};
+
+                    updateFiltersCounter();
+                    table.refreshFilter();
+
+                    $('#filter-modal').modal('hide');
+                });
+
+                submitFilterForm.submit(function (ev) {
+                    ev.preventDefault(false);
+
+                    activeFilters = {};
+
+                    let typeFieldEl = $('#filter-type');
+                    let valueFieldEl = $('#filter-value');
+                    let srfMinFieldEl = $('#filter-srf-min');
+                    let srfMaxFieldEl = $('#filter-srf-max');
+
+                    if (typeFieldEl.val()) {
+                        activeFilters.type = typeFieldEl.val();
+                    }
+
+                    if (valueFieldEl.val()) {
+                        activeFilters.value = valueFieldEl.val();
+                    }
+
+                    if (srfMinFieldEl.val()) {
+                        activeFilters.srfMin = srfMinFieldEl.val();
+                    }
+
+                    if (srfMaxFieldEl.val()) {
+                        activeFilters.srfMax = srfMaxFieldEl.val();
+                    }
+
+                    updateFiltersCounter();
+                    table.refreshFilter();
+
+                    $('#filter-modal').modal('hide');
+                });
+
+                $(window).resize(function () {
+                    table.getColumn('type').setWidth('25%');
+                    table.getColumn('value').setWidth('50%');
+                    table.getColumn('spamRatingFactor').setWidth('15%');
+                    table.redraw();
+                });
+
+                {% if canManage %}
+                    $('#rule-form-fields').find('input, textarea, select').change(function () {
+                        const data = {
+                            name: $(this).data('field-name'),
+                            value: $(this).val(),
+                        };
+                        const key = 'field-' + data.name;
+                        if (changes.has(key)) {
+                            let change = changes.get(key);
+                            change.data = data;
+                        } else {
+                            changes.set(key, {
+                                type: 'field',
+                                data: data
+                            });
+                        }
+                        $(this).addClass('field-edited');
+                        updateUnsavedStatus(changes.size);
+                    });
+
+                    table.on("rowSelectionChanged", function(data, rows, selected, deselected) {
+                        $('.selected-rows-counter').each(function () {
+                            $(this).text(rows.length);
+
+                            if (rows.length) {
+                                if ($(this).hasClass('badge')) {
+                                    $(this).removeClass('d-none');
+                                }
+
+                                if ($(this).parents('button').length > 0) {
+                                    $(this).parents('button').prop('disabled', false);
+                                }
+                            } else {
+                                if ($(this).hasClass('badge')) {
+                                    $(this).addClass('d-none');
+                                }
+
+                                if ($(this).parents('button').length > 0) {
+                                    $(this).parents('button').prop('disabled', true);
+                                }
+                            }
+                        });
+                    });
+
+                    // Handle the table modification events
+                    table.on('cellEdited', function(cell) {
+                        cell.getElement().classList.add('tabulator-cell-edited');
+
+                        const data = cell.getRow().getData();
+                        if (!data.value) {
+                            return;
+                        }
+
+                        const key = 'item-' + data.uuid;
+                        if (changes.has(key)) {
+                            let change = changes.get(key);
+                            change.data = data;
+                        } else {
+                            changes.set(key, {
+                                type: 'item',
+                                data: data
+                            });
+                        }
+
+                        updateUnsavedStatus(changes.size);
+                    });
+
+                    table.on('rowAdded', function (row) {
+                        // Delay the auto editing after adding it
+                        setTimeout(function () {
+                            row.getCell('value').edit()
+                        }, 100);
+                    });
+
+                    // Handle the add and delete item buttons
+                    $('body').on('click', '.add-item-btn', function () {
+                        table.addRow({
+                            uuid: getRandomUuid(),
+                            type: '{{ typeOptions|keys|first }}',
+                            value: '',
+                            spamRatingFactor: 1.0,
+                        });
+                    });
+
+                    $('#delete-selected-items').click(function () {
+                        let selected = table.getSelectedRows();
+
+                        let modal = $('#delete-selected-items-modal');
+                        modal.modal('show');
+
+                        if (selected.length === 1) {
+                            $('#delete-selected-items-one').removeClass('d-none');
+                        } else {
+                            $('#delete-selected-items-multiple').removeClass('d-none');
+                        }
+                    });
+
+                    $('#execute-delete-selected-items').click(function () {
+                        let itemIds = [];
+                        let selected = table.getSelectedRows();
+                        for (let row of selected) {
+                            if (!row.getData().id) {
+                                row.delete();
+                                continue;
+                            }
+                            itemIds.push(row.getData().id);
+                        }
+
+                        if (itemIds.length === 0) {
+                            table.refreshFilter();
+                            table.dispatchEvent('rowSelectionChanged', [], []);
+                            $('#delete-selected-items-modal').modal('hide');
+                            return;
+                        }
+
+                        let data = {
+                            token: '{{ csrf_token('delete-selected-items') }}',
+                            deleteItemIds: itemIds
+                        };
+
+                        $('#delete-selected-items-modal .modal-loader').addClass('visible');
+                        $.post('{{ path('rule_edit_delete_selected', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                            if (responseData.success) {
+                                table.refreshFilter();
+                                $('#delete-selected-items-modal').modal('hide');
+                            }
+                        });
+                    });
+
+                    $('#btn-add-multiple-items').click(async function () {
+                        let modal = $('#add-multiple-items-modal');
+                        modal.find('.form-control.is-invalid').removeClass('is-invalid');
+
+                        let type = modal.find('select[name="rule_add_multiple_items[type]"]').val();
+                        let items = modal.find('textarea[name="rule_add_multiple_items[items]"]').val().trim();
+                        let rating = parseFloat(modal.find('input[name="rule_add_multiple_items[rating]"]').val());
+
+                        if (!type || !items || typeof rating !== 'number') {
+                            if (!type) {
+                                modal.find('select[name="rule_add_multiple_items[type]"]').addClass('is-invalid');
+                            }
+
+                            if (!items) {
+                                modal.find('textarea[name="rule_add_multiple_items[items]"]').addClass('is-invalid');
+                            }
+
+                            if (typeof rating !== 'number') {
+                                modal.find('input[name="rule_add_multiple_items[rating]"]').addClass('is-invalid');
+                            }
+
+                            return;
+                        }
+
+                        modal.modal('hide');
+
+                        await addItemsFromList(type, items, parseFloat(rating));
+                    });
+                    
+                    $('#btn-import-txt-file').click(function () {
+                        let modal = $('#import-txt-file-modal');
+                        modal.find('.form-control.is-invalid').removeClass('is-invalid');
+
+                        let type = modal.find('select[name="rule_import_txt_file[type]"]').val();
+                        let file = modal.find('input[name="rule_import_txt_file[file]"]')[0].files[0];
+                        let rating = parseFloat(modal.find('input[name="rule_import_txt_file[rating]"]').val());
+
+                        if (!type || !file || typeof rating !== 'number') {
+                            if (!type) {
+                                modal.find('select[name="rule_import_txt_file[type]"]').addClass('is-invalid');
+                            }
+
+                            if (!file) {
+                                modal.find('input[name="rule_import_txt_file[file]"]').addClass('is-invalid');
+                            }
+
+                            if (typeof rating !== 'number') {
+                                modal.find('input[name="rule_import_txt_file[rating]"]').addClass('is-invalid');
+                            }
+
+                            return;
+                        }
+
+                        modal.modal('hide');
+
+                        const reader = new FileReader();
+                        reader.onload = async () => {
+                            await addItemsFromList(type, reader.result, rating);
+                        };
+                        reader.readAsText(file);
+                    });
+
+                    $('#btn-import-csv-file').click(function () {
+                        let modal = $('#import-csv-file-modal');
+                        modal.find('.form-control.is-invalid').removeClass('is-invalid');
+
+                        let file = modal.find('input[name="rule_import_csv_file[file]"]')[0].files[0];
+
+                        if (!file) {
+                            modal.find('input[name="rule_import_csv_file[file]"]').addClass('is-invalid');
+
+                            return;
+                        }
+
+                        modal.modal('hide');
+
+                        let progressModal = $('#progress-modal');
+                        progressModal.modal('show');
+
+                        let modalWasVisible = false;
+                        const totalBytes = file.size;
+
+                        progressModal.on('shown.bs.modal', function () {
+                            modalWasVisible = true;
+                        })
+
+                        $('#adding-items-total').text(convertBytesIntoHumanReadableFormat(totalBytes));
+                        usedChunkSize = baseChunkSize;
+
+                        papa.parse(file, {
+                            chunk: function (results, parser) {
+                                if (!$('#progress-modal').is(':visible') && modalWasVisible) {
+                                    parser.abort();
+                                }
+
+                                let items = [];
+                                for (const itemData of results.data) {
+                                    if (!itemData[1]) {
+                                        continue;
+                                    }
+
+                                    if (!validateValue(itemData[0], itemData[1])) {
+                                        adjustSummaryValues($('#number-of-invalid-items'), 1);
+                                        continue;
+                                    }
+
+                                    items.push([itemData[0], itemData[1], parseFloat(itemData[2])]);
+                                }
+
+                                if (items.length === 0) {
+                                    let percent = (results.meta.cursor / totalBytes) * 100;
+
+                                    $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(results.meta.cursor));
+                                    $('#adding-items-progress-bar').css('width', percent + '%');
+
+                                    return;
+                                }
+
+                                let data = {
+                                    token: '{{ csrf_token('add-multiple-items') }}',
+                                    items: JSON.stringify(items),
+                                };
+                                parser.pause();
+
+                                $.post('{{ path('rule_edit_add_multiple', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                                    let percent = (results.meta.cursor / totalBytes) * 100;
+
+                                    $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(results.meta.cursor));
+                                    $('#adding-items-progress-bar').css('width', percent + '%');
+
+                                    adjustSummaryValues($('#number-of-added-items'), responseData.counters.added);
+                                    adjustSummaryValues($('#number-of-skipped-items'), responseData.counters.skipped);
+                                    adjustSummaryValues($('#number-of-invalid-items'), responseData.counters.invalid);
+
+                                    if (responseData.chunkSize) {
+                                        if (responseData.chunkSize === 'increase') {
+                                            usedChunkSize *= 2;
+                                        } else if (responseData.chunkSize === 'decrease') {
+                                            usedChunkSize /= 2;
+                                        }
+
+                                        parser.streamer._config['chunkSize'] = usedChunkSize;
+                                    }
+
+                                    parser.resume();
+                                });
+                            },
+                            chunkSize: usedChunkSize,
+                            complete: function () {
+                                $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(totalBytes));
+                                $('#adding-items-progress-bar').css('width', '100%');
+                                $('#progress-modal .modal-status').removeClass('bg-info').addClass('bg-success');
+                                $('#progress-modal-icon').removeClass('ti-hourglass-empty text-info').addClass('ti-check text-success');
+                                $('#progress-modal-title-please-wait, #progress-modal-status, #add-multiple-items-loader .alert-info').addClass('d-none');
+                                $('#progress-modal-title-items-added, #add-multiple-items-loader .alert-success, #progress-modal .modal-footer').removeClass('d-none');
+
+                                table.refreshFilter();
+                            }
+                        });
+                    });
+
+                    $('#add-multiple-items-modal, #import-txt-file-modal, #import-csv-file-modal').on('hidden.bs.modal', function () {
+                        $(this).find('form')[0].reset();
+                        $(this).find('.form-control.is-invalid').removeClass('is-invalid');
+                    });
+
+                    $('#progress-modal').on('hidden.bs.modal', function () {
+                        $('#progress-modal .modal-status').addClass('bg-info').removeClass('bg-success');
+                        $('#progress-modal-icon').addClass('ti-hourglass-empty text-info').removeClass('ti-check text-success');
+                        $('#progress-modal-title-please-wait, #progress-modal-status, #add-multiple-items-loader .alert-info').removeClass('d-none');
+                        $('#progress-modal-title-items-added, #add-multiple-items-loader .alert-success, #progress-modal .modal-footer').addClass('d-none');
+                        $('#adding-items-progress-bar').css('width', '0%');
+                        $('#adding-items-processed').text(0);
+                        $('#adding-items-total').text(0);
+
+                        $('#number-of-added-items, #number-of-skipped-items, #number-of-invalid-items').text('0').data('val', 0);
+                    });
+
+                    $('#delete-selected-items-modal').on('hidden.bs.modal', function () {
+                        $('#delete-selected-items-one, #delete-selected-items-multiple').addClass('d-none');
+                        $(this).find('.modal-loader').removeClass('visible');
+                    });
+
+                    $('#btn-saving-changes').click(function () {
+                        if (changes.size === 0) {
+                            $('#status-no-changes').removeClass('d-none');
+                            return;
+                        }
+
+                        saveChanges();
+                    });
+                    saveInterval = setInterval(saveChanges, 3000);
+                {% endif %}
             });
         </script>
     {% endcspscript %}

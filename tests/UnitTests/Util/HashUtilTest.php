@@ -22,4 +22,12 @@ class HashUtilTest extends TestCase
 
         $this->assertEquals(hash('sha256', $randomString), $hash);
     }
+
+    public function testFast()
+    {
+        $randomString = uniqid();
+        $hash = HashUtil::hashFast($randomString);
+
+        $this->assertEquals(hash('xxh128', $randomString), $hash);
+    }
 }

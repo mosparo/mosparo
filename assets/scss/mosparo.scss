@@ -19,6 +19,8 @@ $badge-color: #ffffff;
 @import '~datatables.net-responsive-bs5';
 @import 'spectrum-colorpicker2/dist/spectrum.css';
 
+@import '~tabulator-tables/dist/css/tabulator_bootstrap5.min.css';
+
 /* Mosparo Core */
 @import 'core/base.scss';
 @import 'core/navigation.scss';
@@ -32,8 +34,10 @@ $badge-color: #ffffff;
 @import 'core/design.scss';
 @import 'core/update.scss';
 @import 'core/import.scss';
+@import 'core/ui.scss';
 
 /* Plugins */
 @import 'plugins/datatable.scss';
 @import 'plugins/spectrum.scss';
+@import 'plugins/tabulator.scss';
 

@@ -14,7 +14,8 @@
         "stimulus": "^3.0.1",
         "webpack": "^5.74.0",
         "webpack-cli": "^4.10.0",
-        "webpack-notifier": "^1.15.0"
+        "webpack-notifier": "^1.15.0",
+        "webpack-dev-server": "^5.2"
     },
     "license": "MIT",
     "private": true,
@@ -34,7 +35,9 @@
         "datatables.net": "^1.12.1",
         "datatables.net-responsive": "^2.3.0",
         "datatables.net-responsive-bs5": "^2.3.0",
+        "papaparse": "^5.5.3",
         "spectrum-colorpicker2": "https://github.com/zepi/spectrum/tarball/93e4fb101676c8fc9c7a302e65128b7387484ac4",
+        "tabulator-tables": "^6.3.1",
         "tinycolor2": "^1.4.2"
     }
 }

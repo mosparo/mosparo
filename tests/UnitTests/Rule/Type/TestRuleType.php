@@ -16,7 +16,6 @@ final class TestRuleType extends AbstractRuleType
             'name' => 'test-type-subtype-1.title',
         ]
     ];
-    protected string $formClass = 'test-type-form-class';
     protected string $testerClass = 'test-type-tester-class';
     protected array $targetFieldKeys = ['formData.'];
     protected string $helpTemplate = 'test-type-help-template';

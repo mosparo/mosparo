@@ -4,8 +4,9 @@ namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\ApiClient\RequestHelper;
-use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
+use Mosparo\Helper\CleanupHelper;
+use Mosparo\Util\StringUtil;
 use Mosparo\Verification\GeneralVerification;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
@@ -24,7 +25,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
 
     #[Route('/', name: 'submission_list')]
     #[Route('/filter/{filter}', name: 'submission_list_filtered')]
-    public function index(Request $request, DataTableFactory $dataTableFactory, $filter = ''): Response
+    public function index(Request $request, DataTableFactory $dataTableFactory, CleanupHelper $cleanupHelper, $filter = ''): Response
     {
         if (!in_array($filter, ['spam', 'valid'])) {
             $filter = '';
@@ -107,6 +108,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
         return $this->render('project_related/submission/list.html.twig', [
             'datatable' => $table,
             'filter' => $filter,
+            'lastDatabaseCleanup' => $cleanupHelper->getLastDatabaseCleanup(),
         ]);
     }
 
@@ -153,7 +155,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
                 'hashedFormData' => $hashedFormData,
                 'formDataJson' => $requestHelper->toJson($hashedFormData),
                 'publicKey' => $activeProject->getPublicKey(),
-                'privateKey' => $this->preparePrivateKey($activeProject),
+                'privateKey' => StringUtil::obfuscateString($activeProject->getPrivateKey()),
                 'formDataSignature' => $formDataSignature,
                 'validationSignature' => $validationSignature,
                 'verificationSignature' => $requestHelper->createHmacHash($validationSignature . $formDataSignature),
@@ -184,15 +186,6 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
         }
 
         return $formData;
-    }
-
-    protected function preparePrivateKey(Project $project): string
-    {
-        $privateKey = $project->getPrivateKey();
-
-        $preparedPrivateKey = substr($privateKey, 0, 4) . str_repeat('*', strlen($privateKey) - 8) . substr($privateKey, -4);
-
-        return $preparedPrivateKey;
     }
 
     protected function generateVerifiedFields(Submission $submission): array

@@ -42,6 +42,9 @@
                     <div id="submissions">
 
                     </div>
+                    {% if lastDatabaseCleanup %}
+                        <div class="card-footer text-muted"><strong>{{ 'cleanup.lastDatabaseCleanup'|trans }}</strong> {{ lastDatabaseCleanup|date }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>

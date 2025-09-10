@@ -1,0 +1,18 @@
+{% trans_default_domain 'mosparo' %}
+
+<div class="d-flex action-buttons-list">
+    <a href="{{ path('rule_package_view', { '_projectId': activeProject.id, 'id': row.id }) }}" class="btn btn-info me-2">
+        <i class="ti ti-info-circle"></i>
+        {{ 'action.view'|trans }}
+    </a>
+    {% if canManage %}
+        <a href="{{ path('rule_package_edit', { '_projectId': activeProject.id, 'id': row.id }) }}" class="btn btn-primary me-2">
+            <i class="ti ti-pencil"></i>
+            {{ 'action.edit'|trans }}
+        </a>
+        <a href="{{ path('rule_package_delete', { '_projectId': activeProject.id, 'id': row.id }) }}" class="btn btn-danger">
+            <i class="ti ti-circle-minus"></i>
+            {{ 'action.delete'|trans }}
+        </a>
+    {% endif %}
+</div>

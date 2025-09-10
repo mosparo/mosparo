@@ -74,7 +74,6 @@ rule:
       spamRatingFactorHelp: За допомогою коефіцієнта рейтингу спаму можна визначити фактор, який підсилює або послаблює записи цього правила. Якщо значення більше 1.0, записи посилюються, якщо значення менше 1.0, записи послаблюються.
     addMultipleItems:
       itemsHelp: Додавайте по одному елементу в рядок.
-      label: Мітка
       items: Елементи
       rating: Рейтинг
       ratingHelp: Якщо не встановлено, типовим значенням є 1.0. Якщо рейтинг встановлено на 0.0, елементи не будуть оцінені як спам-елементи.
@@ -85,8 +84,6 @@ rule:
       rating: Рейтинг
   edit:
     title: Редагувати правило «%ruleName%»
-    message:
-      successfullySaved: Правило успішно збережено.
   title: Правила
   backToList: Назад до правил
   list:
@@ -99,8 +96,6 @@ rule:
     intro: Виберіть тип правила, яке ви хочете створити. Доступні типи використовуються для різних полів і не можуть бути змінені для правила пізніше.
   create:
     title: Створити правило
-    message:
-      successfullyCreated: Нове правило успішно створено.
   delete:
     title: Видалити правило «%ruleName%»
     confirm: Ви дійсно хочете видалити правило «%ruleName%»?
@@ -223,7 +218,7 @@ dashboard:
       statisticOnly: Тільки статистика
   dateRange:
     dropdown: Виберіть видимий діапазон дат
-ruleset:
+rulePackage:
   title: Набір правил
   backToList: Повернутися до наборів правил
   message:
@@ -237,10 +232,9 @@ ruleset:
   add:
     title: Додати набір правил
   edit:
-    title: Редагування набору правил %rulesetName%
+    title: Редагування набору правил %rulePackageName%
   form:
     name: Ім’я
-    url: URL
     status: Стан
     spamRatingFactor: Коефіцієнт рейтингу спаму
     message:
@@ -252,10 +246,9 @@ ruleset:
       status: Стан
       spamRatingFactor: Коефіцієнт рейтингу спаму
       lastUpdatedAt: Останнє оновлення о
-      url: URL
       lastRefreshedAt: Останнє оновлення о
       numberOfIncludedRules: Кількість включених правил
-    title: Переглянути набір правил %rulesetName%
+    title: Переглянути набір правил %rulePackageName%
     includedRules:
       title: Включені правила
       spamRatingFactor: Коефіцієнт рейтингу спаму
@@ -284,14 +277,14 @@ ruleset:
         name: Назва
         type: Тип
         spamRatingFactor: Коефіцієнт рейтингу спаму
-      backToRuleset: Повернутися до набору правил
+      backToRulePackage: Повернутися до набору правил
       items:
         title: Включені елементи
   delete:
-    title: Видалити набір правил «%rulesetName%»
-    confirm: Ви дійсно хочете видалити набір правил «%rulesetName%»?
+    title: Видалити набір правил «%rulePackageName%»
+    confirm: Ви дійсно хочете видалити набір правил «%rulePackageName%»?
     message:
-      successfullyDeleted: Набір правил «%rulesetName%» успішно видалено.
+      successfullyDeleted: Набір правил «%rulePackageName%» успішно видалено.
 submission:
   list:
     spam: Спам

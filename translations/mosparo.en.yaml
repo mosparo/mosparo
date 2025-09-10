@@ -164,14 +164,11 @@ rule:
   create:
     title: Create rule
 
-    message:
-      successfullyCreated: The new rule was created successfully.
+    label:
+      ruleType: Rule type
 
   edit:
     title: Edit rule %ruleName%
-
-    message:
-      successfullySaved: The rule was saved successfully.
 
   form:
     ruleType: Rule type
@@ -184,17 +181,75 @@ rule:
       spamRatingFactor: Spam rating factor
       spamRatingFactorHelp: With the spam rating factor you can define a factor which strengthens or weakens the entries of this rule. If the value is greater than 1.0, the entries are strengthened, if the value is less than 1.0, the entries are weakened.
 
+    status:
+      unsavedChanges: '%counter% unsaved changes'
+      savingChanges: 'Saving %counter% changes'
+      nothingToSave: Nothing to save
+
     items:
       title: Items
       type: Type
+      value: Value
       rating: Rating
 
+    filter:
+      title: Filter items
+      useWildcard: Use %wildcard% as wildcard.
+      itemSpamRating: Item spam rating
+
+    noItemsInTable:
+      title: No items yet
+      text: This rule does not contain any items yet.
+
+    nothingFound:
+      title: Nothing found
+      text: There are no items that match your filter.
+
     addMultipleItems:
-      label: Label
+      type: Type
       items: Items
       itemsHelp: Add one item per line.
       rating: Rating
       ratingHelp: If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.
+
+    modal:
+      importTxtFile:
+        title: Import text file
+        file: File
+        fileHelp: Please choose the text file (*.txt) you want to import from your computer.
+        action: Import file
+
+      importCsvFile:
+        title: Import CSV file
+        file: File
+        fileHelp: Please choose the CSV file (*.csv) you want to import from your computer.
+        action: Import file
+
+      addingItems:
+        title: Adding items
+        messageCompleted: The given data was processed. See the summary of the added, skipped, and invalid items above. You can close this window now.
+        progress:
+          dataProcessed: Data processed
+          processingPleaseWait: Processing data…
+          processingStats: Processed %processedBytes% of %totalBytes%
+          abortHint: If you close this window, the process will stop, and you must start again later.
+
+        summary:
+          addedLabel: Added
+          addedTooltip: These items are added to the rule.
+          skippedLabel: Skipped
+          skippedTooltip: These items already exist, so the import process skipped them.
+          invalidLabel: Invalid
+          invalidTooltip: Invalid items, for example when the item type is not existing or the value is in the wrong format.
+
+      deleteSelectedItems:
+        title: Delete selected items
+        confirm: Do you really want to delete the selected %counter% rule items?
+        confirmOne: Do you really want to delete the selected rule item?
+        confirmDelete: Yes, delete the items
+
+        progress:
+          deletingPleaseWait: Deleting items… Please wait…
 
   delete:
     title: Delete rule %ruleName%
@@ -332,48 +387,60 @@ rule:
       infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
       placeholder: Rating
 
-# Ruleset
-ruleset:
-  title: Rulesets
-  backToList: Back to rulesets
+# Rule package
+rulePackage:
+  title: Rule packages
+  backToList: Back to rule packages
 
   message:
-    errorWhileUpdating: 'An error occurred while updating the ruleset:'
+    errorWhileUpdating: 'An error occurred while updating the rule package:'
 
   list:
     name: Name
+    type: Type
     status: Status
     refreshedAt: Refreshed at
     updatedAt: Updated at
     actions: Actions
 
+  addChooseType:
+    title: Choose type
+    intro: Please choose which type of rule package you want to add. You can choose between automatic and manual types. The automatic types will update the rule package automatically, while the manual ones must be updated by an external action or tool.
+
   add:
-    title: Add ruleset
+    title: Add rule package
 
   edit:
-    title: Edit ruleset %rulesetName%
+    title: Edit rule package %rulePackageName%
 
   form:
     name: Name
-    url: URL
+    sourceUrl: Source URL
+    sourceUrlHelp: Specify the URL from which mosparo can download the rule package.
+    sourceFile: Source file
+    sourceFileHelp: Specify the absolute file path at which the rule package file is stored.
     status: Status
     spamRatingFactor: Spam rating factor
-    spamRatingFactorHelp: With the spam rating factor you can define a factor that strengthens or weakens all rules of this ruleset. If the value is greater than 1.0, the rules will be strengthened, if the value is less than 1.0, the rules will be weakened.
+    spamRatingFactorHelp: With the spam rating factor you can define a factor that strengthens or weakens all rules of this rule package. If the value is greater than 1.0, the rules will be strengthened, if the value is less than 1.0, the rules will be weakened.
 
     message:
-      successfullySaved: The ruleset was saved successfully.
+      successfullySaved: The rule package was saved successfully.
 
   view:
-    title: View ruleset %rulesetName%
+    title: View rule package %rulePackageName%
 
     details:
-      title: Ruleset details
-      url: URL
+      title: Rule package details
+      source: Source
+      sourceManualImport: Manual import
       status: Status
       spamRatingFactor: Spam rating factor
       lastRefreshedAt: Last refreshed at
       lastUpdatedAt: Last updated at
       numberOfIncludedRules: Number of included rules
+      importFirstTitle: Import rule package first
+      importFirst: This rule package does not contain any data. Please import the rule package data manually.
+      noRulePackageCache: There is no rule package cache stored for this rule package. This means that the download was not successful or something else went wrong.
 
     includedRules:
       title: Included rules
@@ -399,6 +466,41 @@ ruleset:
         value: Value
         spamRatingFactor: Spam rating factor
 
+    howtoImport:
+      title: How to import
+      intro: This rule package is a manually imported rule package type. This means you must import the rule package data for this rule package. Otherwise, the rule package is empty and will not prevent any spam.
+
+      arguments:
+        required: Required
+        value: Value
+        description: Description
+
+      cli:
+        intro: Please use the following command to import the rule package via CLI. One of the arguments %codeArgFile% or %codeArgInput% is required.
+        infoAdjustPaths: Please remember to adjust the paths to the PHP binary and the mosparo CLI command. Your hosting provider's documentation usually provides more information about this part.
+
+        arguments:
+          descriptionProjectId: Specifies the project ID of the rule package.
+          descriptionRulePackageId: Specifies the rule package ID.
+          descriptionFile: Specifies the file path to the rule package file.
+          descriptionInput: The command will read the rule package content from the standard input if set.
+          descriptionHash: If the command should verify the hash of the rule package, specify the SHA256 hash with this argument.
+
+      api:
+        intro: Please import the rule package content using the mosparo API. You can use the API directly or use one of our API clients, or you can also use mosparo RPG (Rule Package Generator) to build and import the rule package content.
+        introSecond: Below is the most important information about the API and an example if you want to use the rule package with mosparo RPG. Read more about the different options in our documentation.
+
+        endpoint:
+          title: Endpoint
+
+        arguments:
+          descriptionRulePackageId: Specifies the rule package ID.
+          descriptionRulePackageContent: Specifies the content of the rule package.
+          descriptionRulePackageHash: To verify the hash before importing the content, specify the SHA256 hash with this argument.
+
+        example:
+          intro: This example shows the configuration required for the mosparo RPG profile. Please see the documentation for other options.
+
     rule:
       title: View rule %ruleName%
 
@@ -411,19 +513,20 @@ ruleset:
       items:
         title: Included items
 
-      backToRuleset: Back to ruleset
+      backToRulePackage: Back to rule package
 
   delete:
-    title: Delete ruleset %rulesetName%
-    confirm: Do you really want to delete the ruleset %rulesetName%?
+    title: Delete rule package %rulePackageName%
+    confirm: Do you really want to delete the rule package %rulePackageName%?
 
     message:
-      successfullyDeleted: The ruleset %rulesetName% was deleted successfully.
+      successfullyDeleted: The rule package %rulePackageName% was deleted successfully.
 
 # Submission
 submission:
   title: Submissions
   backToList: Back to submissions
+  submitTokenMissing: Submit token missing
 
   list:
     id: ID
@@ -448,6 +551,7 @@ submission:
     title: Submission %submissionId%
 
     action:
+      openVerificationIssues: Verification issues
       openVerificationSimulation: Verification simulation
 
     spam:
@@ -522,6 +626,17 @@ submission:
         text: This submission is equal to previous submissions. mosparo found %actualNumberOfEqualSubmissions% equal submissions within the configured time range, more than the allowed number of %allowedNumberOfEqualSubmissions% equal submissions.
         maximumAllowed: 'Maximum allowed:'
         counted: 'Counted:'
+
+    verificationIssues:
+      title: Verification issues
+      intro: The following issues were detected during the verification of the submission. This information can be helpful if you want to understand why a submission was declined.
+
+      labels:
+        fieldIssue: Field %name%
+        generalIssue: General issue
+        errorMessage: Error message
+        message: Message
+        debugInformation: Debug information
 
     verificationSimulation:
       title: Verification simulation
@@ -735,8 +850,8 @@ settings:
           asNumbersHelp: "Add the AS numbers for which this guideline should be considered. You can see the AS number in the submission details. Example: 123456"
 
         settings:
-          title: Security settings
-          intro: Please check the override checkbox for the settings you want to override from the general security settings. If you do not override a setting, mosparo will use the one from the project settings.
+          title: Override settings
+          intro: Please check the override checkbox for the settings you want to override from the project or general security settings. If you do not override a setting, mosparo will use the one from the project or general security settings. If you configure the same value as in the project or general security settings, the custom value is removed from the security policy.
 
         infoGeoIp2Disabled: GeoIP2 is not available. Please configure the GeoIP2 database to use the country codes and AS numbers criteria.
 
@@ -746,6 +861,11 @@ settings:
 
         message:
           successfullyRemoved: The security guideline %guidelineName% was removed successfully from the project.
+
+    spamDetection:
+      title: Spam detection
+      intro: Define if the spam protection should be enabled for this security guideline and which spam score should be used to identify spam.
+      intro2: If you do not override the spam detection settings, the settings from the project will be used.
 
     minimumTime:
       title: Minimum Time
@@ -818,6 +938,7 @@ settings:
       ipAllowList: Always allowed IP addresses and subnets
       ipAllowListHelp: "Specify one IP address or subnet per line. Example: 192.168.1.13 or 192.168.1.0/24"
 
+      overrideSpamDetection: Override spam detection
       overrideMinimumTime: Override minimum time
       overrideHoneypotField: Override honeypot field
       overrideDelay: Override request delay
@@ -846,6 +967,9 @@ settings:
       invisibleSimpleDesign: Invisible simple design
       colorAndDimensionSettings: Colors and Dimension
       preview: Preview
+      dimensions:
+        mosparoBox: mosparo Box
+        checkbox: Checkbox
       colors:
         normal: Normal
         focus: On focus and hover
@@ -874,6 +998,8 @@ settings:
       boxSize: Box size
       boxRadius: Box radius
       boxBorderWidth: Border width
+      checkboxRadius: Checkbox radius
+      checkboxBorderWidth: Checkbox border width
       showMosparoLogo: Show mosparo logo below the checkbox
       showPingAnimation: Show ping animation to highlight the checkbox
       invisibleLogo: Logo
@@ -929,7 +1055,7 @@ tools:
   ruleTester:
     title: Rule tester
     description: Test how your rules will detect spam.
-    intro: Enter the value you want to test. Choose which data type you want to use for the test and if you want to use rules and rulesets. The data type is important because some rule types only apply to specific data types.
+    intro: Enter the value you want to test. Choose which data type you want to use for the test and if you want to use rules and rule packages. The data type is important because some rule types only apply to specific data types.
 
     form:
       title: Test settings
@@ -939,8 +1065,8 @@ tools:
       typeHelp: Select the data type. Some rule types do only apply to specific data types.
       useRules: Use rules
       useRulesHelp: Activate this field to test your rules.
-      useRulesets: Use rulesets
-      useRulesetsHelp: Activate this field to test your rulesets.
+      useRulePackages: Use rule packages
+      useRulePackagesHelp: Activate this field to test your rule packages.
 
     types:
       textField: Text field (Single-line)
@@ -974,11 +1100,15 @@ tools:
         rating: Rating
         noMatchingRules: No rule matched the test value.
 
+  importExport:
+    infoRulesWithManyItems: Rules with hundreds of items can consume a lot of memory when exporting or importing these rules. This can lead to an error when you try to do it in the browser. Please increase the memory limit of the PHP process in such a case or use the CLI command to import or export the rules.
+
   export:
     title: Export
     intro: If you want to move your project to a different mosparo installation or if you want to synchronize the settings with another project, you can export the project with this functionality. Choose which data you want to export and click the button.
     includedData: Included data
     infoSensitiveData: Sensitive data will never be included in the export. Submissions, submit tokens, the unique project identifier, the API keys, and the project members will not be in the export.
+    infoManualRulePackages: The rule package content will not be included in the export. This means that all manually imported rule packages need to be reimported after importing the export file.
 
     errorMessage:
       selectAtLeastOneElement: Select at least one element that you want to export.
@@ -988,7 +1118,7 @@ tools:
     intro: If you want to copy the data from another project into this one, please choose the file to import and which data you want to import. If you import the rules, please choose how mosparo should handle existing rules.
     intro2: After you've selected all the data, please click the button below. mosparo will analyze the file and gives you a summary of what will be changed before anything is imported.
     importData: Data to import
-    infoOverrideData: The settings, as well as the rulesets, will always be overridden in the project. The ruleset will be matched against the URL. For the rules, you have to choose what mosparo should do with existing rules.
+    infoOverrideData: The settings, as well as the rule packages, will always be overridden in the project. For the rules, you have to choose what mosparo should do with existing rules. Rule packages created before version 1.4.0 of mosparo may have a different ID and not match the import file.
 
     backToImport: Back to import
 
@@ -1028,7 +1158,7 @@ tools:
         newValue: New value
         type: Type
         status: Status
-        url: URL
+        source: Source
         add: Add
         modify: Modify
         items: Items
@@ -1053,7 +1183,7 @@ tools:
         noChangesAvailable: There are no changes are available.
         storedRuleNotFound: The stored rule was not found.
         storedRuleItemNotFound: The stored rule item was not found.
-        storedRulesetNotFound: The stored ruleset was not found.
+        storedRulePackageNotFound: The stored rule package was not found.
 
   eiParts:
     generalSettings: General settings
@@ -1064,8 +1194,8 @@ tools:
     securitySettingsHelp: Includes all settings related to the security of a project.
     rules: Rules
     rulesHelp: Includes all rules of a project.
-    rulesets: Rulesets
-    rulesetsHelp: Includes all rulesets of a project.
+    rulePackages: Rule packages
+    rulePackagesHelp: Includes all rule packages of a project.
 
 # Administration
 administration:
@@ -1375,6 +1505,15 @@ administration:
       continue: Continue
 
     finalize:
+      process:
+        v14:
+          title: Process tasks
+          intro: mosparo needs to optimize the stored data to catch spam reliably. Please wait while the tasks are executed.
+          processingPleaseWait: Processing tasks…
+          processingStats: Processed %processedTasks% of %totalTasks%
+          doNotLeave: Please do not leave this page or abort the process. If the process does not change for a longer time, please refresh this page.
+
+    finalized:
       title: Update executed
       description: The needed changes for this update were executed. Your installation is up to date.
 
@@ -1419,13 +1558,26 @@ administration:
       license: License
 
     website: Website
+    listOfContributors: Many more people have helped us improve and extend mosparo over the past years. We are thankful for all the help, inspiration, and feedback. See the %linkStart%full list of people here%linkEnd%.
+
+  cleanupStatistic:
+    title: Cleanup statistic
+    description: Check when the submit tokens and submissions were cleared from the database.
+
+    list:
+      dateTime: Date and time
+      cleanupExecutor: Executor
+      submitTokens: Submit tokens
+      submissions: Submission
+      executionTime: Execution time
+      cleanupStatus: Status
 
 # Download check
 downloadCheck:
   cardTitle: Internet connection
-  intro: An outgoing internet connection is not a requirement for mosparo. If an internet connection is available, mosparo automatically checks for updates by loading the version file from the mosparo website. You also need an active internet connection to download updates, the GeoIP2 databases, and rulesets.
-  downloadIsPossible: The PHP settings allow downloads of rulesets and updates. No adjustment is required.
-  downloadIsNotPossible: The PHP settings do not allow the download of updates or rulesets. If you want to use the rulesets or update functionality, please adjust your PHP configuration accordingly.
+  intro: An outgoing internet connection is not a requirement for mosparo. If an internet connection is available, mosparo automatically checks for updates by loading the version file from the mosparo website. You also need an active internet connection to download updates, the GeoIP2 databases, and rule packages.
+  downloadIsPossible: The PHP settings allow downloads of rule packages and updates. No adjustment is required.
+  downloadIsNotPossible: The PHP settings do not allow the download of updates or rule packages. If you want to use the rule packages or update functionality, please adjust your PHP configuration accordingly.
   curlIsEnabledButFunctionsAreDisabled: The extension %extensionName% is enabled, but the required functions (%functionNames%) are disabled. We recommend disabling the extension in general or enabling the needed functions.
   moreInformation: More information
 
@@ -1566,9 +1718,11 @@ password:
 
 # General actions
 action:
+  back: Back
   add: Add
   remove: Remove
   save: Save
+  saveChanges: Save changes
   saveAndContinue: Save and continue
   skipWizard: Skip wizard
   view: View
@@ -1576,7 +1730,9 @@ action:
   delete: Delete
   actions: Actions
   help: Help
+  learnMore: Learn more
   close: Close
+  reset: Reset
   manage: Manage
   use: Use
   configure: Configure
@@ -1586,13 +1742,19 @@ action:
   goToTheDashboard: Go to the dashboard
   checkRequirements: Check requirements
   export: Export
+  exportItems: Export items
   importProject: Import project
   simulateImport: Simulate import
   executeChanges: Execute changes
   moreInformation: More information
+  howToImport: How to import
+  toggleDropdown: Toggle dropdown
+  filter: Filter
 
 # General values
 general:
+  pleaseWait: Please wait…
+  areYouSure: Are you sure?
   infoUndo: You cannot undo this process.
   example: Example
   empty: Empty
@@ -1613,7 +1775,11 @@ roles:
   inactive: Inactive
 
 form:
+  pleaseChoose: Please choose…
+  addItem: Add item
   addMultipleItems: Add multiple items
+  importTextFile: Import (Text file)
+  importCsvFile: Import (CSV file)
   choices:
     systemDefault: Default setting
     browserLanguage: Browser language
@@ -1645,6 +1811,32 @@ datatable:
     aria:
       sortAscending: ": activate to sort column ascending"
       sortDescending: ": activate to sort column descending"
+
+tabulator:
+  data:
+    loading: Loading…
+    error: Error
+
+  groups:
+    item: item
+    items: items
+
+  pagination:
+    pageSize: Page size
+    pageTitle: Show page
+    first: '%s%First%e%'
+    firstTitle: First page
+    last: '%s%Last%e%'
+    lastTitle: Last page
+    prev: '%s%Prev%e%'
+    prevTitle: Previous page
+    next: '%s%Next%e%'
+    nextTitle: Next page
+    all: All
+    counter: '%vd%Page%e% %page% %vd%of%e%%vm%/%e% %totalPages%'
+
+  filter:
+    default: Filter column…
 
 # Setup
 setup:
@@ -1734,6 +1926,11 @@ dataTable:
   value: Value
   empty: Empty
 
+multiSelect:
+  selectedItems: Selected items
+  actions:
+    deleteSelectedItems: Delete selected items
+
 dateRange:
   14d: 14 Days
   1m: 1 Month
@@ -1770,3 +1967,77 @@ languageSource:
   htmlBrowserFallback:
     label: Use website language, fallback to browser language
     help: Use the website's language for the mosparo frontend box. If mosparo has no translations for this language, use the browser's language. If this language is unavailable too, fall back to English.
+
+cleanup:
+  lastDatabaseCleanup: 'Last database cleanup:'
+
+cleanupStatus:
+  unknown:
+    label: Unknown
+
+  incomplete:
+    label: Incomplete
+
+  complete:
+    label: Complete
+
+cleanupExecutor:
+  unknown:
+    label: Unknown
+
+  cleanupCommand:
+    label: Cleanup command
+
+  frontendApi:
+    label: Frontend API
+
+  webCronJob:
+    label: Web cron job
+
+rulePackageType:
+  category:
+    automatically:
+      label: Automatically
+      description: If you want mosparo to automatically import the rule package, use one of the following types.
+
+    manually:
+      label: Manually
+      description: Use one of the manual types if you want to import the rule package manually or execute the import with a cron job.
+
+  automaticallyFromUrl:
+    label: Automatically from URL
+    description: mosparo automatically loads the rule package from the URL over the internet connection.
+
+  automaticallyFromFile:
+    label: Automatically from file
+    description: mosparo automatically loads the rule package from the specified file path on your server.
+
+  manuallyViaCli:
+    label: Manually via CLI
+    description: Execute the CLI command to import the rule package manually when you change it.
+
+  manuallyViaApi:
+    label: Manually via API
+    description: Import the rule package with your tools or mosparo RPG over mosparo's API.
+
+unknown:
+  label: Unknown
+
+example:
+  titleSingular: Example
+  titlePlural: Examples
+
+argument:
+  titleSingular: Argument
+  titlePlural: Arguments
+
+tooltip:
+  projectId: Project ID
+  rulePackageId: Rule package ID
+  file: File path
+  input: Use standard input
+  hash: SHA256 hash
+  host: Host
+  publicKey: Public key
+  privateKey: Private key
+  deleted: Deleted

@@ -54,7 +54,7 @@
                                 {{ form_row(form.rules) }}
                             </div>
                             <div class="col-12 col-md-4 mb-3">
-                                {{ form_row(form.rulesets) }}
+                                {{ form_row(form.rulePackages) }}
                             </div>
                         </div>
 
@@ -62,22 +62,26 @@
                             {{ 'tools.import.infoOverrideData'|trans }}
                         </div>
 
-                        <div id="handlingExistingRulesContainer" class="d-none">
+                        <div class="alert alert-info mb-0">
+                            {{ 'tools.importExport.infoRulesWithManyItems'|trans }}
+                        </div>
+
+                        <div id="handlingExistingRulesContainer" class="d-none mt-3">
                             {{ form_label(form.handlingExistingRules) }}
                             <div class="row">
-                                <div class="col-12 col-md-4 mb-3">
+                                <div class="col-12 col-md-4 mb-3 mb-md-0">
                                     {{ form_widget(form.handlingExistingRules[0]) }}
                                     <p class="form-text mb-0 help-text">
                                         {{ 'tools.import.form.choice.overrideHelp'|trans }}
                                     </p>
                                 </div>
-                                <div class="col-12 col-md-4 mb-3">
+                                <div class="col-12 col-md-4 mb-3 mb-md-0">
                                     {{ form_widget(form.handlingExistingRules[1]) }}
                                     <p class="form-text mb-0 help-text">
                                         {{ 'tools.import.form.choice.appendHelp'|trans }}
                                     </p>
                                 </div>
-                                <div class="col-12 col-md-4 mb-3">
+                                <div class="col-12 col-md-4 mb-0">
                                     {{ form_widget(form.handlingExistingRules[2]) }}
                                     <p class="form-text mb-0 help-text">
                                         {{ 'tools.import.form.choice.addHelp'|trans }}

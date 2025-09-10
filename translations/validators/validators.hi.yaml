@@ -5,17 +5,22 @@ tools:
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: अनुमति सूची में आपके IP पते की अनुमति नहीं है। कृपया सूची में अपना IP पता जोड़ें।
+      ownIpNotInAllowList: अनुमति सूची में आपके IP पते की अनुमति नहीं है। कृपया सूची
+        में अपना IP पता जोड़ें।
 ipAllowList:
   itemInvalid: वस्तु '%item%' मान्य IP पता या सबनेट नहीं है।
 honeypotField:
-  nameHasInvalidCharacter: कृपया केवल अक्षरों, संख्याओं और डैश चिह्न (-) का उपयोग करें।
+  nameHasInvalidCharacter: कृपया केवल अक्षरों, संख्याओं और डैश चिह्न (-) का उपयोग
+    करें।
 securityGuideline:
-  atLeastOneCriteriaRequired: सुरक्षा दिशानिर्देश के लिए कम से कम एक मानदंड की आवश्यकता होती है।
+  atLeastOneCriteriaRequired: सुरक्षा दिशानिर्देश के लिए कम से कम एक मानदंड की आवश्यकता
+    होती है।
   asNumberNotNumeric: AS संख्या कोई संख्या नहीं है।
 webCronJob:
-  webCronJobIntervalAtLeast5Minutes: वेब क्रॉन जॉब का अंतराल कम से कम 5 मिनट या अधिक होना चाहिए।
-  geoIpRefreshIntervalAtLeast1Day: GeoIP2 ताजा करने का अंतराल कम से कम एक दिन या अधिक होना चाहिए।
+  webCronJobIntervalAtLeast5Minutes: वेब क्रॉन जॉब का अंतराल कम से कम 5 मिनट या अधिक
+    होना चाहिए।
+  geoIpRefreshIntervalAtLeast1Day: GeoIP2 ताजा करने का अंतराल कम से कम एक दिन या अधिक
+    होना चाहिए।
 password:
   form:
     constraint:
@@ -27,8 +32,10 @@ password:
       constraint:
         notBlank: अपना ईमेल दर्ज करें।
 hosts:
-  hostContainsInvalidCharacter: इस होस्ट में अमान्य वर्ण हैं। इस फ़ील्ड में, केवल वर्ण (a-z), संख्याएँ (0-9), डैश, डॉट्स, कोलन और स्टार (*) की अनुमति है।
-  hostContainsProtocol: इस होस्ट में एक प्रोटोकॉल है। कृपया प्रोटोकॉल रहित होस्ट दर्ज करें (उदाहरण के लिए, https://example.com के बजाय example.com)।
+  hostContainsInvalidCharacter: इस होस्ट में अमान्य वर्ण हैं। इस फ़ील्ड में, केवल
+    वर्ण (a-z), संख्याएँ (0-9), डैश, डॉट्स, कोलन और स्टार (*) की अनुमति है।
+  hostContainsProtocol: इस होस्ट में एक प्रोटोकॉल है। कृपया प्रोटोकॉल रहित होस्ट दर्ज
+    करें (उदाहरण के लिए, https://example.com के बजाय example.com)।
 settings:
   mosparoName:
     colonNotAllowed: mosparo इंस्टॉलेशन के नाम में कोलन (:) की अनुमति नहीं है।

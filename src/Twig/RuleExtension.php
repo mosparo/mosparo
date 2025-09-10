@@ -3,7 +3,7 @@
 namespace Mosparo\Twig;
 
 use Mosparo\Repository\RuleRepository;
-use Mosparo\Repository\RulesetRuleCacheRepository;
+use Mosparo\Repository\RulePackageRuleCacheRepository;
 use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleTypeManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -17,15 +17,15 @@ class RuleExtension extends AbstractExtension
 
     protected RuleRepository $ruleRepository;
 
-    protected RulesetRuleCacheRepository $rulesetRuleCacheRepository;
+    protected RulePackageRuleCacheRepository $rulePackageRuleCacheRepository;
 
     protected RuleTypeManager $ruleTypeManager;
 
-    public function __construct(UrlGeneratorInterface $router, RuleRepository $ruleRepository, RulesetRuleCacheRepository $rulesetRuleCacheRepository, RuleTypeManager $ruleTypeManager)
+    public function __construct(UrlGeneratorInterface $router, RuleRepository $ruleRepository, RulePackageRuleCacheRepository $rulePackageRuleCacheRepository, RuleTypeManager $ruleTypeManager)
     {
         $this->router = $router;
         $this->ruleRepository = $ruleRepository;
-        $this->rulesetRuleCacheRepository = $rulesetRuleCacheRepository;
+        $this->rulePackageRuleCacheRepository = $rulePackageRuleCacheRepository;
         $this->ruleTypeManager = $ruleTypeManager;
     }
 
@@ -51,9 +51,9 @@ class RuleExtension extends AbstractExtension
             return $rule;
         }
 
-        $rulesetRuleCache = $this->rulesetRuleCacheRepository->findOneBy(['uuid' => $uuid]);
-        if ($rulesetRuleCache) {
-            return $rulesetRuleCache;
+        $rulePackageRuleCache = $this->rulePackageRuleCacheRepository->findOneBy(['uuid' => $uuid]);
+        if ($rulePackageRuleCache) {
+            return $rulePackageRuleCache;
         }
 
         return null;
@@ -66,12 +66,12 @@ class RuleExtension extends AbstractExtension
             return $this->router->generate('rule_edit', ['_projectId' => $rule->getProject()->getId(), 'id' => $rule->getId()]);
         }
 
-        $rulesetRuleCache = $this->rulesetRuleCacheRepository->findOneBy(['uuid' => $uuid]);
-        if ($rulesetRuleCache) {
-            return $this->router->generate('ruleset_view_rule', [
-                '_projectId' => $rulesetRuleCache->getProject()->getId(),
-                'id' => $rulesetRuleCache->getRulesetCache()->getRuleset()->getId(),
-                'ruleUuid' => $rulesetRuleCache->getUuid()
+        $rulePackageRuleCache = $this->rulePackageRuleCacheRepository->findOneBy(['uuid' => $uuid]);
+        if ($rulePackageRuleCache) {
+            return $this->router->generate('rule_package_view_rule', [
+                '_projectId' => $rulePackageRuleCache->getProject()->getId(),
+                'id' => $rulePackageRuleCache->getRulePackageCache()->getRulePackage()->getId(),
+                'ruleUuid' => $rulePackageRuleCache->getUuid()
             ]);
         }
 
@@ -88,9 +88,9 @@ class RuleExtension extends AbstractExtension
             }
         }
 
-        $rulesetRuleCache = $this->rulesetRuleCacheRepository->findOneBy(['uuid' => $uuid]);
-        if ($rulesetRuleCache) {
-            $ruleType = $this->ruleTypeManager->getRuleType($rulesetRuleCache->getType());
+        $rulePackageRuleCache = $this->rulePackageRuleCacheRepository->findOneBy(['uuid' => $uuid]);
+        if ($rulePackageRuleCache) {
+            $ruleType = $this->ruleTypeManager->getRuleType($rulePackageRuleCache->getType());
             if ($ruleType) {
                 return $ruleType->formatValue($value, $locale);
             }

@@ -38,7 +38,7 @@ class ExportCommand extends Command
             ->addOption('designSettings', null, InputOption::VALUE_NEGATABLE, 'Export the design settings of a project.', true)
             ->addOption('securitySettings', null, InputOption::VALUE_NEGATABLE, 'Export the security settings of a project.', true)
             ->addOption('rules', null, InputOption::VALUE_NEGATABLE, 'Export the rules of a project.', true)
-            ->addOption('rulesets', null, InputOption::VALUE_NEGATABLE, 'Export the rulesets a project.', true)
+            ->addOption('rulePackages', null, InputOption::VALUE_NEGATABLE, 'Export the rule packages a project.', true)
         ;
     }
 
@@ -60,7 +60,7 @@ class ExportCommand extends Command
             $input->getOption('designSettings'),
             $input->getOption('securitySettings'),
             $input->getOption('rules'),
-            $input->getOption('rulesets')
+            $input->getOption('rulePackages')
         );
 
         if ($input->getArgument('filePath')) {

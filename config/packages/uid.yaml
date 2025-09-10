@@ -1,0 +1,4 @@
+framework:
+    uid:
+        default_uuid_version: 4
+        time_based_uuid_version: 7

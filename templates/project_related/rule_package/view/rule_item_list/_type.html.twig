@@ -1,0 +1,13 @@
+{% trans_default_domain 'mosparo' %}
+
+{% set ruleType = rule_type(row.rulePackageRuleCache.type) %}
+{% if ruleType %}
+    {% set ruleSubtype = rule_subtype(ruleType, row.type) %}
+    {% if ruleSubtype %}
+        {{ ruleSubtype|trans }}
+    {% else %}
+        <code>{{ row.type }}</code>
+    {% endif %}
+{% else %}
+    <code>{{ row.type }}</code>
+{% endif %}

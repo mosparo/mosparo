@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Mosparo\Repository\IpLocalizationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: IpLocalizationRepository::class)]
 class IpLocalization
 {

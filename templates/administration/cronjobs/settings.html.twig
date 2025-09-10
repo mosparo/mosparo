@@ -71,7 +71,7 @@
 
                                     <pre>{% apply spaceless %}
 php bin/console mosparo:cleanup-database
-php bin/console mosparo:rulesets:refresh
+php bin/console mosparo:rule-packages:refresh
 {% if isGeoIp2Active -%}
 php bin/console mosparo:geoip2:download-database
 {%- endif -%}
@@ -84,7 +84,7 @@ php bin/console mosparo:geoip2:download-database
                                     <h4>{{ 'administration.cronJobs.setup.titles.example'|trans }}</h4>
                                     <pre>{% apply spaceless %}
 */15 * * * * php bin/console mosparo:cleanup-database
-0 */2 * * * php bin/console mosparo:rulesets:refresh
+0 */2 * * * php bin/console mosparo:rule-packages:refresh
 {% if isGeoIp2Active -%}
 {{ random(0, 59) }} {{ random(0, 23) }} * * {{ random(0, 6) }} php bin/console mosparo:geoip2:download-database
 {%- endif -%}

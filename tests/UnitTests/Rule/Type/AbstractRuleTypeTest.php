@@ -20,7 +20,6 @@ class AbstractRuleTypeTest extends TestCase
                 'name' => 'test-type-subtype-1.title',
             ]
         ], $ruleType->getSubtypes());
-        $this->assertEquals('test-type-form-class', $ruleType->getFormClass());
         $this->assertEquals('test-type-tester-class', $ruleType->getTesterClass());
         $this->assertEquals(['formData.'], $ruleType->getTargetFieldKeys());
         $this->assertEquals('test-type-help-template', $ruleType->getHelpTemplate());

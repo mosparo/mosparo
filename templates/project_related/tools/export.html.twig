@@ -50,12 +50,20 @@
                                 {{ form_row(form.rules) }}
                             </div>
                             <div class="col-12 col-md-4 mb-3">
-                                {{ form_row(form.rulesets) }}
+                                {{ form_row(form.rulePackages) }}
                             </div>
                         </div>
 
                         <div class="alert alert-info">
                             {{ 'tools.export.infoSensitiveData'|trans }}
+                        </div>
+
+                        <div class="alert alert-info">
+                            {{ 'tools.importExport.infoRulesWithManyItems'|trans }}
+                        </div>
+
+                        <div class="alert alert-info">
+                            {{ 'tools.export.infoManualRulePackages'|trans }}
                         </div>
                     </div>
                 </div>

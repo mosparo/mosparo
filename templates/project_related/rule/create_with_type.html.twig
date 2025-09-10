@@ -1,8 +1,71 @@
-{% extends 'project_related/rule/form.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'rule.create.title'|trans }} - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} {{ 'rule.title'|trans }}  <i class="ti ti-chevron-right"></i>{% endblock %}
-{% block pageTitle %}{{ 'rule.create.title'|trans }}{% endblock %}
+{% form_theme form 'project_related/rule/_form_theme.html.twig' %}
 
+{% set title = 'rule.create.title'|trans %}
+
+{% block documentTitle %}{{ title }} - {{ parent() }}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset('build/images/icons/rule.svg')|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">
+                            {{ title }}
+                        </h2>
+
+                        {{ form_row(form.name) }}
+
+                        <div class="form-label">
+                            {{ 'rule.create.label.ruleType'|trans }}
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="border rounded w-100 h-100 flex-column align-items-start justify-content-start rule-type-button">
+                                    <div class="h2">
+                                        <i class="{{ ruleType.icon }}"></i>
+                                        {{ ruleType.name|trans }}
+                                    </div>
+                                    <p>
+                                        {{ ruleType.description|trans }}
+                                    </p>
+                                    <ul class="align-items-start mb-0">
+                                        {% for subType in ruleType.subtypes %}
+                                            <li>{{ subType.name|trans }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto mt-2 mt-md-0">
+                <a href="{{ path('rule_create_choose_type', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'action.back'|trans }}
+                </a>
+            </div>
+            <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-device-floppy"></i>
+                    {{ 'action.save'|trans }}
+                </button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

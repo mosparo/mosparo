@@ -46,7 +46,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         $data = [
             'type' => 'textField',
             'useRules' => true,
-            'useRulesets' => true,
+            'useRulePackages' => true,
         ];
         $form = $this->createFormBuilder($data, ['translation_domain' => 'mosparo'])
             ->add('value', TextareaType::class, [
@@ -67,9 +67,9 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'help' => 'tools.ruleTester.form.useRulesHelp',
                 'required' => false,
             ])
-            ->add('useRulesets', CheckboxType::class, [
-                'label' => 'tools.ruleTester.form.useRulesets',
-                'help' => 'tools.ruleTester.form.useRulesetsHelp',
+            ->add('useRulePackages', CheckboxType::class, [
+                'label' => 'tools.ruleTester.form.useRulePackages',
+                'help' => 'tools.ruleTester.form.useRulePackagesHelp',
                 'required' => false,
             ])
             ->getForm();
@@ -80,22 +80,22 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
             'value' => '',
             'type' => '',
             'useRules' => '',
-            'useRulesets' => ''
+            'useRulePackages' => ''
         ];
         $submission = null;
         if ($form->isSubmitted() && $form->isValid()) {
             $value = trim($form->get('value')->getData());
             $type = $form->get('type')->getData();
             $useRules = $form->get('useRules')->getData();
-            $useRulesets = $form->get('useRulesets')->getData();
+            $useRulePackages = $form->get('useRulePackages')->getData();
 
-            $submission = $ruleTesterHelper->simulateRequest($value, $type, $useRules, $useRulesets);
+            $submission = $ruleTesterHelper->simulateRequest($value, $type, $useRules, $useRulePackages);
 
             $testData = [
                 'value' => $value,
                 'type' => $type,
                 'useRules' => $useRules,
-                'useRulesets' => $useRulesets,
+                'useRulePackages' => $useRulePackages,
             ];
         }
 
@@ -134,10 +134,10 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'help' => 'tools.eiParts.rulesHelp',
                 'data' => true,
             ])
-            ->add('rulesets', CheckboxType::class, [
-                'label' => 'tools.eiParts.rulesets',
+            ->add('rulePackages', CheckboxType::class, [
+                'label' => 'tools.eiParts.rulePackages',
                 'required' => false,
-                'help' => 'tools.eiParts.rulesetsHelp',
+                'help' => 'tools.eiParts.rulePackagesHelp',
                 'data' => true,
             ])
             ->getForm();
@@ -154,7 +154,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     $form->get('designSettings')->getData(),
                     $form->get('securitySettings')->getData(),
                     $form->get('rules')->getData(),
-                    $form->get('rulesets')->getData(),
+                    $form->get('rulePackages')->getData(),
                 );
 
                 $exportFileName = $exportHelper->generateFileName($this->getActiveProject());
@@ -219,10 +219,10 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'required' => false,
                 'help' => 'tools.eiParts.rulesHelp',
             ])
-            ->add('rulesets', CheckboxType::class, [
-                'label' => 'tools.eiParts.rulesets',
+            ->add('rulePackages', CheckboxType::class, [
+                'label' => 'tools.eiParts.rulePackages',
                 'required' => false,
-                'help' => 'tools.eiParts.rulesetsHelp',
+                'help' => 'tools.eiParts.rulePackagesHelp',
             ])
             ->add('handlingExistingRules', ChoiceType::class, [
                 'label' => 'tools.import.form.handlingExistingRules',
@@ -258,11 +258,11 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'importDesignSettings' => $form->get('designSettings')->getData(),
                 'importSecuritySettings' => $form->get('securitySettings')->getData(),
                 'importRules' => $form->get('rules')->getData(),
-                'importRulesets' => $form->get('rulesets')->getData(),
+                'importRulePackages' => $form->get('rulePackages')->getData(),
                 'handlingExistingRules' => $form->get('handlingExistingRules')->getData(),
             ];
 
-            if (!$importData['importGeneralSettings'] && !$importData['importDesignSettings'] && !$importData['importSecuritySettings'] && !$importData['importRules'] && !$importData['importRulesets']) {
+            if (!$importData['importGeneralSettings'] && !$importData['importDesignSettings'] && !$importData['importSecuritySettings'] && !$importData['importRules'] && !$importData['importRulePackages']) {
                 $error = true;
                 $errorMessage = 'tools.import.errorMessage.selectAtLeastOneElement';
             } else {
@@ -326,8 +326,8 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     case ImportException::STORED_RULE_ITEM_NOT_FOUND:
                         $errorMessage = 'tools.import.simulate.errorMessage.storedRuleItemNotFound';
                         break;
-                    case ImportException::STORED_RULESET_NOT_FOUND:
-                        $errorMessage = 'tools.import.simulate.errorMessage.storedRulesetNotFound';
+                    case ImportException::STORED_RULE_PACKAGE_NOT_FOUND:
+                        $errorMessage = 'tools.import.simulate.errorMessage.storedRulePackageNotFound';
                         break;
                 }
             }

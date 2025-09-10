@@ -4,11 +4,19 @@ namespace Mosparo\Entity;
 
 use Mosparo\Repository\RuleItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Rule\PreparedRuleItemTrait;
+use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleItemEntityInterface;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RuleItemRepository::class)]
+#[ORM\Index(name: 'ri_uuid_idx', fields: ['uuid'])]
+#[ORM\Index(name: 'ri_hashed_idx', fields: ['project', 'type', 'hashedValue'])]
+#[ORM\HasLifecycleCallbacks]
 class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 {
+    use PreparedRuleItemTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -21,14 +29,14 @@ class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Rule $rule;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 50)]
     private ?string $type;
 
     #[ORM\Column(type: 'text')]
     private ?string $value;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    private ?float $spamRatingFactor = null;
+    private ?float $spamRatingFactor = 1.0;
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -114,5 +122,10 @@ class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
         $this->project = $project;
 
         return $this;
+    }
+
+    public function getParent(): RuleEntityInterface
+    {
+        return $this->rule;
     }
 }

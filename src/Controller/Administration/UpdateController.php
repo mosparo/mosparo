@@ -6,6 +6,8 @@ use Mosparo\Exception;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\ConnectionHelper;
 use Mosparo\Helper\DesignHelper;
+use Mosparo\Helper\Migration\V14OptimizeRulesHelper;
+use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Helper\UpdateHelper;
 use Mosparo\Kernel;
@@ -309,6 +311,7 @@ class UpdateController extends AbstractController
         $this->configHelper->writeEnvironmentConfig([
             'mosparo_installed_version' => Kernel::VERSION,
             'mosparo_assets_version' => $tokenGenerator->generateShortToken(),
+            'mosparo_finalize_update' => true,
         ]);
 
         // Clear the cache after the upgrade
@@ -334,6 +337,72 @@ class UpdateController extends AbstractController
             $session->remove('upgradeMosparo');
         }
 
+        return $this->redirectToRoute('administration_update_finalize_process', ['oldVersion' => $oldInstalledVersion]);
+    }
+
+    #[Route('/finalize/process', name: 'administration_update_finalize_process')]
+    public function finalizeProcess(Request $request, ProjectHelper $projectHelper, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
+    {
+        if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
+            return $this->redirectToRoute('dashboard');
+        }
+
+        $projectHelper->unsetActiveProject();
+
+        // Process the rules for version 1.4
+        if ($v14OptimizeRulesHelper->hasOpenTasks()) {
+            return $this->redirectToRoute('administration_update_finalize_process_v1_4', ['oldVersion' => $request->query->get('oldVersion')]);
+        }
+
+        return $this->redirectToRoute('administration_update_finalized', ['oldVersion' => $request->query->get('oldVersion')]);
+    }
+
+    #[Route('/finalize/process/v1.4', name: 'administration_update_finalize_process_v1_4')]
+    public function finalizeProcessV14(Request $request, ProjectHelper $projectHelper, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
+    {
+        if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
+            return $this->redirectToRoute('dashboard');
+        }
+
+        $projectHelper->unsetActiveProject();
+
+        if ($request->request->has('process') && $request->request->get('process')) {
+            $submittedToken = $request->request->get('token');
+            if (!$this->isCsrfTokenValid('process-tasks', $submittedToken)) {
+                return new Response(null, 401);
+            }
+
+            $numberOfProcessedTasks = $v14OptimizeRulesHelper->processOpenTasks();
+
+            if ($numberOfProcessedTasks === 0) {
+                return new JsonResponse([
+                    'finished' => true,
+                ]);
+            }
+
+            return new JsonResponse([
+                'processedTasks' => $numberOfProcessedTasks,
+            ]);
+        }
+
+        return $this->render('administration/update/process_v1_4.html.twig', [
+            'numberOfTasks' => $v14OptimizeRulesHelper->countOpenTasks(),
+            'urlAfterProcess' => $this->generateUrl('administration_update_finalize_process', ['oldVersion' => $request->query->get('oldVersion')]),
+        ]);
+    }
+
+    #[Route('/finalized', name: 'administration_update_finalized')]
+    public function finalized(Request $request): Response
+    {
+        if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
+            return $this->redirectToRoute('dashboard');
+        }
+
+        $this->configHelper->writeEnvironmentConfig([
+            'mosparo_finalize_update' => false,
+        ]);
+
+        $oldInstalledVersion = $request->query->get('oldVersion');
         $showGeoIp2Info = false;
         if ($this->configHelper->getEnvironmentConfigValue('geoipActive', false)) {
             $showGeoIp2Info = (
@@ -342,7 +411,7 @@ class UpdateController extends AbstractController
             );
         }
 
-        return $this->render('administration/update/finalize.html.twig', [
+        return $this->render('administration/update/finalized.html.twig', [
             'showHostsAlert' => version_compare($oldInstalledVersion, '1.2.0', '<'),
             'showGeoIp2Info' => $showGeoIp2Info,
         ]);

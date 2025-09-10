@@ -12,4 +12,10 @@ interface RuleItemEntityInterface
     public function setValue(string $value): self;
     public function getSpamRatingFactor(): ?float;
     public function setSpamRatingFactor(?float $spamRatingFactor): self;
+    public function getPreparedValue(): ?string;
+    public function setPreparedValue(string $preparedValue): self;
+    public function getHashedValue(): ?string;
+    public function setHashedValue(string $hashedValue): self;
+    public function getParent(): RuleEntityInterface;
+
 }

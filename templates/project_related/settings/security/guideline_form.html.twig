@@ -67,6 +67,33 @@
                         {{ 'settings.security.guideline.form.settings.intro'|trans }}
                     </div>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="card mb-3">
+                                <div class="card-header card-header-with-override-option">
+                                    <h3 class="card-title">{{ 'settings.security.spamDetection.title'|trans }}</h3>
+                                    {% if form.configValues.overrideSpamDetection is defined %}
+                                        {{ form_widget(form.configValues.overrideSpamDetection) }}
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <p>
+                                        {{ 'settings.security.spamDetection.intro'|trans }}
+                                    </p>
+
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            {{ form_row(form.configValues.spamStatus) }}
+                                        </div>
+                                        <div class="col">
+                                            {{ form_row(form.configValues.spamScore) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {% include 'project_related/settings/security/form/security_settings.html.twig' with { 'form': form.configValues } %}
                 </div>
             </div>

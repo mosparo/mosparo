@@ -39,11 +39,6 @@ abstract class AbstractRuleType implements RuleTypeInterface
         return $this->subtypes;
     }
 
-    public function getFormClass(): string
-    {
-        return $this->formClass;
-    }
-
     public function getTesterClass(): string
     {
         return $this->testerClass;
@@ -67,5 +62,10 @@ abstract class AbstractRuleType implements RuleTypeInterface
     public function formatValue(string $value, string $locale = ''): string
     {
         return $value;
+    }
+
+    public function getValidatorPattern(): array
+    {
+        return [];
     }
 }

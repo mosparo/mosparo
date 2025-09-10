@@ -80,8 +80,9 @@ We're using Weblate to organize the translations. You can find the mosparo proje
 |------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
 | Croatian   | hr            | [milotype](https://hosted.weblate.org/user/milotype/)                                                                                  |
 | Czech      | cs            | [pBrambi](https://hosted.weblate.org/user/pBrambi/)                                                                                    |
+| Dutch      | nl            | [Ratingthomas](https://hosted.weblate.org/user/Ratingthomas/)                                                                          |
 | English    | en            | mosparo Core Developers                                                                                                                |
-| Estonian   | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                                                |
+| Estonian   | et            | [jrthwlate](https://hosted.weblate.org/user/jrthwlate/)                                                                                |                                                                             |
 | French     | fr            | [NathanBnm](https://hosted.weblate.org/user/NathanBnm/), [Maetnicio](https://hosted.weblate.org/user/Maetnicio/)                       |
 | German     | de            | mosparo Core Developers, [winterrific](https://hosted.weblate.org/user/winterrific/)                                                   |
 | Hindi      | hi            | [Scrambled777](https://hosted.weblate.org/user/Scrambled777/), [govindgopalgaming](https://hosted.weblate.org/user/govindgopalgaming/) |

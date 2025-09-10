@@ -1,0 +1,8 @@
+{% trans_default_domain 'mosparo' %}
+
+<div class="d-flex action-buttons-list">
+    <a href="{{ path('rule_package_view_rule', { '_projectId': activeProject.id, 'id': row.rulePackageCache.rulePackage.id, 'ruleUuid': row.uuid }) }}" class="btn btn-info me-2">
+        <i class="ti ti-info-circle"></i>
+        {{ 'action.view'|trans }}
+    </a>
+</div>

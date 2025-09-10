@@ -11,48 +11,73 @@ class EmailRuleTesterTest extends TestCaseWithItems
     public function testValidateDataEmail()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0]
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('email');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('no-reply@example.com');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new EmailRuleTester();
-        $result = $ruleTester->validateData('test', 'no-reply@example.com', $ruleStub);
+        $result = $ruleTester->validateData('test', 'no-reply@example.com', $ruleItemStub);
 
         $this->assertIsArray($result);
-        $this->assertCount(1, $result);
-        $this->assertEquals([['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0, 'uuid' => null]], $result);
+        $this->assertEquals(['type' => 'email', 'value' => 'no-reply@example.com', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
     public function testValidateDataEmailInText()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0]
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('email');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('no-reply@example.com');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new EmailRuleTester();
-        $result = $ruleTester->validateData('test', 'Test this is a no-reply@example.com text with email address in it.', $ruleStub);
+        $result = $ruleTester->validateData('test', 'Test this is a no-reply@example.com text with email address in it.', $ruleItemStub);
 
         $this->assertIsArray($result);
-        $this->assertCount(1, $result);
-        $this->assertEquals([['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0, 'uuid' => null]], $result);
+        $this->assertEquals(['type' => 'email', 'value' => 'no-reply@example.com', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
     public function testValidateDataNothingFound()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0],
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('email');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('no-reply@example.com');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new EmailRuleTester();
-        $result = $ruleTester->validateData('test', 'no-reply@test.com', $ruleStub);
+        $result = $ruleTester->validateData('test', 'no-reply@test.com', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);
@@ -64,14 +89,23 @@ class EmailRuleTesterTest extends TestCaseWithItems
     public function testValidateDataDoNotFindPartialEmailAddressFullValue()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0],
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('email');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('no-reply@example.com');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new EmailRuleTester();
-        $result = $ruleTester->validateData('test', 'test+no-reply@test.com', $ruleStub);
+        $result = $ruleTester->validateData('test', 'test+no-reply@test.com', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);
@@ -83,14 +117,23 @@ class EmailRuleTesterTest extends TestCaseWithItems
     public function testValidateDataDoNotFindPartialEmailAddressInText()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'website', 'value' => 'no-reply@example.com', 'rating' => 5.0],
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('email');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('no-reply@example.com');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new EmailRuleTester();
-        $result = $ruleTester->validateData('test', 'Test this is a test+no-reply@example.com text with email address in it.', $ruleStub);
+        $result = $ruleTester->validateData('test', 'Test this is a test+no-reply@example.com text with email address in it.', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);

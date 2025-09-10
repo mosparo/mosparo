@@ -10,7 +10,7 @@
         &:not(.mosparo__checked):not(.mosparo__invalid).mosparo__focus:hover {
             input[type="checkbox"] + .mosparo__checkbox {
                 border-color: var(--mosparo-focus-circle-border-color, #AAA);
-                box-shadow: 0 0 0 4px var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
+                box-shadow: 0 0 0 var(--mosparo-circle-border-width, 3px) var(--mosparo-focus-circle-shadow-color, rgba(170, 170, 170, 0.3));
             }
         }
 

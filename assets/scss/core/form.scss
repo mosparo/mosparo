@@ -71,6 +71,11 @@ form .colorpicker-container {
     margin-bottom: 0;
 }
 
+.form-selectgroup-label {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
 .form-text {
     display: block;
 }
@@ -94,6 +99,13 @@ input::-webkit-inner-spin-button {
 
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+.form-control,
+.form-select {
+    &.field-edited {
+        background: rgba(var(--tblr-warning-rgb), 0.15);
+    }
 }
 
 textarea.ip-address-field {

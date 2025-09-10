@@ -1,0 +1,65 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.update.finalize.process.v14.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    <h2 class="card-title text-center mb-4">{{ 'administration.update.finalize.process.v14.title'|trans }}</h2>
+
+    <p>
+        {{ 'administration.update.finalize.process.v14.intro'|trans }}
+    </p>
+
+    <div class="progress-bar-container my-4">
+        <div class="d-flex justify-content-between mb-2">
+            <div id="progress-modal-status">{{ 'administration.update.finalize.process.v14.processingPleaseWait'|trans }}</div>
+            <div class="ms-auto">{{ 'administration.update.finalize.process.v14.processingStats'|trans({'%processedTasks%': '<strong id="tasks-processed">0</strong>', '%totalTasks%': '<strong>' ~ numberOfTasks ~ '</strong>'})|raw }}</div>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" id="tasks-progress-bar"></div>
+        </div>
+        <div class="alert alert-success mb-0 text-start d-none">
+            {{ 'rule.form.modal.addingTasks.messageCompleted'|trans }}
+        </div>
+    </div>
+
+    <div class="alert alert-warning">
+        {{ 'administration.update.finalize.process.v14.doNotLeave'|trans }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            var totalTasks = {{ numberOfTasks }};
+            var processedTasks = 0;
+
+            function processTasks()
+            {
+                $.post('{{ path('administration_update_finalize_process_v1_4') }}', { process: true, token: '{{ csrf_token('process-tasks') }}'}, function (responseData) {
+                    if (responseData.finished) {
+                        window.location.href = '{{ urlAfterProcess }}';
+                        return;
+                    }
+
+                    processedTasks += responseData.processedTasks;
+
+                    let percent = (processedTasks / totalTasks) * 100;
+
+                    $('#tasks-processed').text(processedTasks);
+                    $('#tasks-progress-bar').css('width', percent + '%');
+
+                    setTimeout(processTasks, 1);
+                });
+            }
+
+            $(document).ready(function () {
+                processTasks();
+            });
+        </script>
+    {% endcspscript %}
+
+{% endblock %}

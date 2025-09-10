@@ -1,0 +1,13 @@
+{% trans_default_domain 'mosparo' %}
+
+{% macro type(value) %}
+    {% set rulePackageType = get_rule_package_type_info(value) %}
+    {% if rulePackageType %}
+        <div class="rule-package-type-label">
+            <i class="{{ rulePackageType.icon }}"></i>
+            {{ rulePackageType.title|trans }}
+        </div>
+    {% else %}
+        <em>{{ 'unknown.label'|trans }}</em>
+    {% endif %}
+{% endmacro %}

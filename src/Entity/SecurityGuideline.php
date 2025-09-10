@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Mosparo\Repository\SecurityGuidelineRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: SecurityGuidelineRepository::class)]
 class SecurityGuideline implements ProjectRelatedEntityInterface
 {
@@ -44,10 +45,13 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
     private ?Project $project;
 
     private array $defaultSecurityConfigValues = [
+        'overrideSpamDetection' => false,
         'overrideMinimumTime' => false,
         'overrideHoneypotField' => false,
         'overrideDelay' => false,
         'overrideLockout' => false,
+        'overrideProofOfWork' => false,
+        'overrideEqualSubmissions' => false,
     ];
 
     public function __construct()
@@ -254,6 +258,10 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
                 $defaultValues[$key] = $projectConfigValue;
             }
         }
+
+        // Add the spam status and spam score default values from the project
+        $defaultValues['spamStatus'] = $this->getProject()->getStatus();
+        $defaultValues['spamScore'] = $this->getProject()->getSpamScore();
 
         return $defaultValues;
     }

@@ -11,49 +11,73 @@ class ProviderRuleTesterTest extends TestCaseWithItems
     public function testValidateDataIpAddress()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'asNumber', 'value' => '1234', 'rating' => 5.0]
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('asNumber');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('1234');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new ProviderRuleTester();
-        $result = $ruleTester->validateData('asNumber', '1234', $ruleStub);
+        $result = $ruleTester->validateData('asNumber', '1234', $ruleItemStub);
 
         $this->assertIsArray($result);
-        $this->assertCount(1, $result);
-        $this->assertEquals([['type' => 'asNumber', 'value' => '1234', 'rating' => 5.0, 'uuid' => null]], $result);
+        $this->assertEquals(['type' => 'asNumber', 'value' => '1234', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
     public function testValidateDataSubnet()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'country', 'value' => 'CH', 'rating' => 5.0]
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('country');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('CH');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new ProviderRuleTester();
-        $result = $ruleTester->validateData('country', 'CH', $ruleStub);
+        $result = $ruleTester->validateData('country', 'CH', $ruleItemStub);
 
         $this->assertIsArray($result);
-        $this->assertCount(1, $result);
-        $this->assertEquals([['type' => 'country', 'value' => 'CH', 'rating' => 5.0, 'uuid' => null]], $result);
+        $this->assertEquals(['type' => 'country', 'value' => 'CH', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
     public function testValidateDataNothingFound()
     {
         $ruleStub = $this->createStub(Rule::class);
-        $ruleStub
-            ->method('getItems')
-            ->willReturn($this->buildItemsCollection(RuleItem::class, [
-                ['type' => 'asNumber', 'value' => '1234', 'rating' => 5.0],
-                ['type' => 'country', 'value' => 'CH', 'rating' => 5.0]
-            ]));
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('asNumber');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('1234');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
 
         $ruleTester = new ProviderRuleTester();
-        $result = $ruleTester->validateData('asNumber', '4321', $ruleStub);
+        $result = $ruleTester->validateData('asNumber', '4321', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);
