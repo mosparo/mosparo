@@ -55,7 +55,12 @@ class CleanupHelper
             if ($nextCleanup->get() !== null) {
                 $cleanupStart = clone $nextCleanup->get();
             } else {
-                $cleanupStart = $this->getLastDatabaseCleanup()->add(new DateInterval(self::DURATION_REGULAR));
+                $cleanupStart = $this->getLastDatabaseCleanup();
+                if (!$cleanupStart) {
+                    $cleanupStart = new DateTime();
+                }
+
+                $cleanupStart->add(new DateInterval(self::DURATION_REGULAR));
             }
 
             // Add the cleanup grace period - if enabled - to the regular cleanup time but not the
