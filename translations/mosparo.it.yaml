@@ -85,6 +85,8 @@ rule:
     actions: Azioni
   create:
     title: Crea regola
+    label:
+      ruleType: Tipo regola
   createChooseType:
     title: Scegli il tipo
     intro: Seleziona il tipo di ruolo che vuoi creare. I tipi disponibili sono utilizzati per diversi campi e non possono essere modificati per regole successive.
@@ -103,11 +105,59 @@ rule:
       rating: Valutazione
       ratingHelp: Se non impostata, la valutazione predefinita è 1.0. Se la valutazione viene impostata a 0.0 l'oggetto non verrà identificato come spam.
       itemsHelp: Aggiungi un oggetto per ogni riga.
+      type: Tipo
     ruleType: Tipo ruolo
     items:
       type: Tipo
       title: Oggetti
       rating: Valutazione
+      value: Valore
+    status:
+      unsavedChanges: '%counter% modifiche non salvate'
+      savingChanges: Sto salvando %counter% modifiche
+      nothingToSave: Niente da salvare
+    filter:
+      useWildcard: Utilizza %wildcard% come carattere jolly.
+      itemSpamRating: Valutazione spam
+    noItemsInTable:
+      title: Ancora nessun oggetto
+      text: Questa regola ancora non contiene oggetti.
+    nothingFound:
+      title: Non trovo niente
+      text: Non ci sono oggetti che corrispondono al tuo filtro.
+    modal:
+      importTxtFile:
+        title: Importa file di testo
+        file: File
+        fileHelp: Seleziona il file di testo (*.txt) che vuoi importare dal tuo PC.
+        action: Importa file
+      importCsvFile:
+        title: Importa file CSV
+        file: File
+        fileHelp: Seleziona il file CSV (*.csv) che vuoi importare dal tuo PC.
+        action: Importa file
+      addingItems:
+        title: Aggiungi oggetti
+        messageCompleted: I dati sono stati processati. Qui sopra puoi vedere il sommario degli oggetti aggiunti, ignorati e non validi. Ora puoi chiudere questa finestra.
+        progress:
+          dataProcessed: Dati processati
+          processingPleaseWait: Sto processando i dati…
+          processingStats: Processati %processedBytes% di %totalBytes%
+          abortHint: Se chiudi questa finestra il processo verrà terminato e dovrai riavviarlo di nuovo.
+        summary:
+          addedLabel: Aggiunti
+          addedTooltip: Questi oggetti sono stati aggiunti alla regola.
+          skippedLabel: Ignorati
+          skippedTooltip: Questi oggetti esistono già, quindi il processo di importazione li ha ignorati.
+          invalidLabel: Non validi
+          invalidTooltip: Oggetti non validi, ad esempio il tipo di oggetto non esiste o il suo valore è espresso in un formato errato.
+      deleteSelectedItems:
+        title: Cancella gli oggetti selezionati
+        confirm: Vuoi veramente cancellare i %counter$ oggetti selezionati?
+        confirmOne: Vuoi veramente cancellare l'oggetto selezionato?
+        confirmDelete: Sì, cancella gli oggetti
+        progress:
+          deletingPleaseWait: Sto cancellando gli oggetti... Attendere…
   delete:
     confirm: Vuoi davvero eliminare la regola %ruleName%?
     title: Elimina regola %ruleName%
@@ -491,6 +541,11 @@ submission:
     ignoredFields:
       title: Campi ignorati
       intro: I campi seguenti non sono stati trasmessi a causa della loro tipologia (nell'esempio password o caricamento file).
+    verificationIssues:
+      labels:
+        message: Messaggio
+        errorMessage: Messaggio di errore
+        debugInformation: Informazioni di debug
   filter:
     options:
       valid: Invii validi
@@ -714,6 +769,8 @@ settings:
       showMosparoLogo: Visualizza il logo di Mosparo sotto al segno di spunta
       boxBorderWidth: Spessore bordo
       boxRadius: Raggio cornice
+      checkboxRadius: Raggio casella di spunta
+      checkboxBorderWidth: Spessore bordo casella di spunta
     subtitles:
       colors:
         normal: Normale
@@ -727,6 +784,9 @@ settings:
       simpleDesign: Design semplificato
       colorAndDimensionSettings: Colori e dimensioni
       preview: Anteprima
+      dimensions:
+        mosparoBox: Cornice Mosparo
+        checkbox: Casella di spunta
     cr:
       value: Valore
       text: Testo
@@ -1027,6 +1087,12 @@ administration:
       missingPrerequisites: Alcuni requisiti non sono soddisfatti. Verifica il sommario qui sotto.
       title: Verifica requisiti
       meetPrerequisites: Tutti i requisiti sono soddisfatti. Puoi procedere con l'aggiornamento.
+    finalized:
+      title: Eseguito aggiornamento
+      description: Le modifiche di aggiornamento sono state eseguite. La tua installazione è aggiornata.
+      hostsAlert:
+        title: 'Versione 1.2: Cambiata verifica origine'
+        intro2: Prego verificare i tuoi progetti e moduli ora.
   settings:
     message:
       savedSuccessfully: Le impostazioni sono state salvate correttamente.
@@ -1336,6 +1402,9 @@ action:
   moreInformation: Altre informazioni
   learnMore: Approfondisci
   howToImport: Come importare
+  back: Indietro
+  saveChanges: Salva modifiche
+  exportItems: Esporta oggetti
 state:
   inactive: Inattivo
   ignored: Ignorato
@@ -1399,12 +1468,18 @@ general:
   empty: Vuoto
   unlimited: Illimitato
   infoUndo: Non è possibile annullare questo processo.
+  pleaseWait: Prego attendere…
+  areYouSure: Sei sicuro?
 form:
   choices:
     systemDefault: Impostazioni predefinite
     browserLanguage: Lingua browser
   addMultipleItems: Aggiungi più elementi
   clearField: Pulisci campi
+  pleaseChoose: Prego seleziona…
+  addItem: Aggiungi oggetto
+  importTextFile: Importa (file di testo)
+  importCsvFile: Importa (file CSV)
 dateRange:
   1m: 1 mese
   2m: 2 mesi
@@ -1526,3 +1601,18 @@ tooltip:
   host: Host
   publicKey: Chiave pubblica
   privateKey: Chiave privata
+tabulator:
+  data:
+    loading: Caricamento…
+    error: Errore
+  groups:
+    item: oggetto
+    items: oggetti
+  pagination:
+    pageSize: Dimensioni pagina
+    pageTitle: Mostra pagina
+    firstTitle: Prima pagina
+    lastTitle: Ultima pagina
+    prevTitle: Pagina precedente
+    nextTitle: Pagina successiva
+    all: Tutte
