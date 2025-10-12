@@ -29,3 +29,6 @@ webCronJob:
 settings:
   mosparoName:
     colonNotAllowed: Dvotočka (:) se ne smije koristiti u imenu mosparo instalacije.
+hosts:
+  hostContainsInvalidCharacter: Ovaj host sadrži nevažeće znakove. U ovom polju su dozvoljeni samo znakovi (a-z), brojevi (0-9), crtice, točke, dvotočke i zvjezdica (*).
+  hostContainsProtocol: Ovaj host sadrži protokol. Unesite host bez protokola (na primjer, example.com umjesto https://example.com).
