@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: SubmitTokenRepository::class)]
+#[ORM\Index(name: 'st_token_idx', fields: ['token'])]
+#[ORM\Index(name: 'st_createdat_idx', fields: ['createdAt'])]
 class SubmitToken implements ProjectRelatedEntityInterface
 {
     #[ORM\Id]

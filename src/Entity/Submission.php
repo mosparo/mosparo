@@ -9,6 +9,9 @@ use Mosparo\Verification\GeneralVerification;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: SubmissionRepository::class)]
+#[ORM\Index(name: 's_submittedat_idx', fields: ['submittedAt'])]
+#[ORM\Index(name: 's_spam_idx', fields: ['spam'])]
+#[ORM\Index(name: 's_valid_idx', fields: ['valid'])]
 class Submission implements ProjectRelatedEntityInterface
 {
     const SUBMISSION_FIELD_NOT_VERIFIED = 'not-verified';

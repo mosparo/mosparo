@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: IpLocalizationRepository::class)]
+#[ORM\Index(name: 'ip_ipaddress_idx', fields: ['ipAddress'])]
 class IpLocalization
 {
     #[ORM\Id]

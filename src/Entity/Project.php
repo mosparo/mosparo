@@ -11,6 +11,7 @@ use Mosparo\Util\DateRangeUtil;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\Index(name: 'p_publickey_idx', fields: ['publicKey'])]
 class Project
 {
     #[ORM\Id]

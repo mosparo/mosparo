@@ -8,6 +8,7 @@ use DateTimeInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: LockoutRepository::class)]
+#[ORM\Index(name: 'l_validuntil_idx', fields: ['validUntil'])]
 class Lockout
 {
     #[ORM\Id]

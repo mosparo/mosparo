@@ -8,6 +8,7 @@ use DateTimeInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: DelayRepository::class)]
+#[ORM\Index(name: 'd_validuntil_idx', fields: ['validUntil'])]
 class Delay
 {
     #[ORM\Id]

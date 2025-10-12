@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: CleanupStatisticRepository::class)]
+#[ORM\Index(name: 'cs_datetime_idx', fields: ['dateTime'])]
 class CleanupStatistic
 {
     #[ORM\Id]
