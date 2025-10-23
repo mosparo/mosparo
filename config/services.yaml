@@ -182,7 +182,11 @@ services:
     Mosparo\Helper\CleanupHelper:
         arguments:
             $cache: '@mosparo.cache.service'
-            $cleanupGracePeriodEnabled: '%env(MOSPARO_CLEANUP_GRACE_PERIOD_ENABLED)%'
+            $cleanupGracePeriodEnabled: '%env(bool:MOSPARO_CLEANUP_GRACE_PERIOD_ENABLED)%'
+            $submitTokenRetentionPeriod: '%env(int:MOSPARO_SUBMIT_TOKEN_RETENTION_PERIOD)%'
+            $submissionRetentionPeriod: '%env(int:MOSPARO_SUBMISSION_RETENTION_PERIOD)%'
+            $cleanupProcessInterval: '%env(int:MOSPARO_CLEANUP_PROCESS_INTERVAL)%'
+            $cleanupUnfinishedInterval: '%env(int:MOSPARO_CLEANUP_UNFINISHED_INTERVAL)%'
 
     Mosparo\Helper\LocaleHelper:
         arguments:

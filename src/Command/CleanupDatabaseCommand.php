@@ -9,6 +9,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'mosparo:cleanup-database')]
 class CleanupDatabaseCommand extends Command
@@ -43,13 +44,19 @@ class CleanupDatabaseCommand extends Command
         usleep(mt_rand(10000, 500000));
 
         // Execute the cleanup process
-        $this->cleanupHelper->cleanup(
+
+        $result = $this->cleanupHelper->cleanup(
             1000000,
             true,
             false,
             0,
             CleanupExecutor::CLEANUP_COMMAND
         );
+
+        if ($output->isVerbose()) {
+            $io = new SymfonyStyle($input, $output);
+            $io->info(sprintf('Cleanup result: %s', $result->name));
+        }
 
         return Command::SUCCESS;
     }

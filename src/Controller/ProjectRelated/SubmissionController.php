@@ -79,21 +79,28 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
                 'query' => function (QueryBuilder $builder) use ($filter) {
                     $builder
                         ->select('e')
-                        ->from(Submission::class, 'e');
+                        ->from(Submission::class, 'e')
+                        ->where('e.submitToken IS NOT NULL')
+                    ;
 
                     if ($filter === 'spam') {
-                        $builder
-                            ->where('e.spam = TRUE')
-                            ->orWhere('e.valid = FALSE');
+                        $expr = $builder->expr()->orX()
+                            ->add('e.spam = TRUE')
+                            ->add('e.valid = FALSE')
+                        ;
                     } else if ($filter === 'valid') {
-                        $builder
-                            ->where('e.spam = FALSE')
-                            ->andWhere('e.valid = TRUE');
+                        $expr = $builder->expr()->andX()
+                            ->add('e.spam = FALSE')
+                            ->add('e.valid = TRUE')
+                        ;
                     } else {
-                        $builder
-                            ->where('e.spam = TRUE')
-                            ->orWhere('e.valid IS NOT NULL');
+                        $expr = $builder->expr()->orX()
+                            ->add('e.spam = TRUE')
+                            ->add('e.valid IS NOT NULL')
+                        ;
                     }
+
+                    $builder->andWhere($expr);
                 },
             ])
             ->handleRequest($request);
