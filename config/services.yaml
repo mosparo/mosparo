@@ -247,6 +247,10 @@ services:
             $cache: '@mosparo.cache.service'
             $prepareCssFilesInSharedCache: '%env(MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE)%'
 
+    Mosparo\Controller\ProjectRelated\DashboardController:
+        arguments:
+            $submissionRetentionPeriod: '%env(int:MOSPARO_SUBMISSION_RETENTION_PERIOD)%'
+
     Mosparo\Helper\RuleCacheHelper:
         arguments:
             $cache: '@mosparo.cache.service'

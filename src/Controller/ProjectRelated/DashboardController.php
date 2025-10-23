@@ -22,6 +22,13 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
 {
     use ProjectRelatedTrait;
 
+    protected DateInterval $submissionRetentionPeriod;
+
+    public function __construct(int $submissionRetentionPeriod = 14)
+    {
+        $this->submissionRetentionPeriod = new DateInterval(sprintf('P%dD', ($submissionRetentionPeriod >= 1 && $submissionRetentionPeriod <= 14) ? $submissionRetentionPeriod : 14)); // Days
+    }
+
     #[Route('/', name: 'project_dashboard')]
     #[Route('/range/{range}', name: 'project_dashboard_with_range')]
     public function dashboard(
@@ -57,7 +64,7 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
         [ , $dateFormat, , ] = $localeHelper->determineLocaleValues($request);
         $dateFormat = str_replace(['d', 'm', 'Y'], ['dd', 'MM', 'yyyy'], $dateFormat);
 
-        $endDate = (new DateTime())->setTime(0, 0)->sub(new DateInterval('P14D'));
+        $endDate = (new DateTime())->setTime(0, 0)->sub($this->submissionRetentionPeriod);
 
         return $this->render('project_related/dashboard/dashboard.html.twig', [
             'noSpamSubmissionsData' => $noSpamSubmissionsData,
