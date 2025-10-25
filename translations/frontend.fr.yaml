@@ -9,7 +9,7 @@ error:
   gotNoToken: mosparo n'a pas renvoyé de jeton de soumission.
   internalError: Une erreur s’est produite. Veuillez réessayer.
   noSubmitTokenAvailable: Aucun jeton de soumission disponible. Impossible de valider ce formulaire.
-  spamDetected: Vos données ont été interceptées par notre protection anti-spam.
+  spamDetected: Vos données ont été bloquées par notre protection anti-spam.
   lockedOut: Vous avez été temporairement bloqué. Veuillez réessayer après %datetime%.
   delay: Votre requête a été différée. Veuillez patienter pendant %seconds% secondes.
 
