@@ -967,3 +967,15 @@ tools:
     form:
       title: Paramètres de test
   title: Outils
+projectGroup:
+  mainGroup: Groupe principal
+  action:
+    edit: Modifier le groupe
+    delete: Supprimer le groupe
+    openMainGroup: Retourner au groupe principal
+    openParentGroupName: Retourner à %name%
+    openParentGroup: Ouvrir le groupe parent
+    openGroup: Ouvrir le groupe
+    backToList: Revenir à la liste des projets
+  create:
+    title: Créer un groupe de projet
