@@ -3,7 +3,7 @@ header:
   account: Compte
   noProjectsFound: Aucun projet trouvé
 project:
-  backToList: Revenir aux projets
+  backToList: Revenir à la liste des projets
   delete:
     message:
       successfullyDeleted: Le projet %projectName% a bien été supprimé.
@@ -12,10 +12,12 @@ project:
     disconnectFirst: Veuillez vous assurer que vous avez déconnecté votre site web ou l'intégration avec ce projet avant de le supprimer.
   title: Projets
   action:
-    manage: Gérer le projet
+    manage: Gérer les projets
     delete: Supprimer le projet
     goto: Aller au projet
     id: ID du projet
+    settings: Paramètres
+    create: Créer
   create:
     title: Créer un projet
     message:
@@ -35,6 +37,8 @@ project:
     verificationSimulationMode: Mode de simulation de vérification
     statisticStorageLimit: Stockage des statistiques
     statisticStorageLimitHelp: Définit la durée pendant laquelle mosparo doit conserver les statistiques dans la base de données. Cette option n'a aucun lien avec la durée de stockage des soumissions, après laquelle les soumissions sont supprimées de la base de données (14 jours).
+    projectGroup: Groupe de projets
+    projectGroupHelp: Vous pouvez utiliser les groupes de projets pour organiser vos projets. Sélectionnez le groupe de projets dans lequel vous désirez ranger ce projet.
   infoNoProjectAvailable: Aucun projet disponible
   infoCreateProjectOrRequestAccess: Créez un nouveau projet ou demandez l'accès à un autre projet.
   roles:
@@ -51,6 +55,7 @@ project:
     name: Nom
     status: Statut
     actions: Actions
+    projects: Projets
   search:
     placeholder: Rechercher…
   createWizard:
@@ -67,6 +72,8 @@ project:
       infoSettings: Vous pouvez activer, désactiver ou régler ces fonctions de sécurité dans les paramètres de sécurité après l'assistant.
       title: Activer les fonctions de sécurité
       introSecurity: Veuillez choisir les dispositifs de sécurité que vous souhaitez activer.
+  searchTitle: Projets pour %searchQuery%
+  infoNoProjectsInThisGroup: Il n'y a aucun projet dans ce groupe.
 dashboard:
   title: Tableau de bord
   chart:
@@ -195,11 +202,18 @@ rule:
       title: Éléments
       type: Type
       rating: Évaluation
+      value: Valeur
     addMultipleItems:
       items: Éléments
       itemsHelp: Ajoutez un élément par ligne.
       rating: Évaluation
       ratingHelp: Si elle n'est pas définie, l'évaluation par défaut est de 1,0. Si l'évaluation est fixée à 0,0, les éléments ne seront pas considérés comme des spams.
+    status:
+      unsavedChanges: '%counter% changements non sauvegardés'
+      savingChanges: Sauvegarde de %counter% changement(s)
+      nothingToSave: Rien à sauvegarder
+    filter:
+      title: Filtrer les objets
   title: Règles
   backToList: Revenir aux règles
   createChooseType:
@@ -207,6 +221,8 @@ rule:
     intro: Veuillez choisir le type de règle que vous souhaitez créer. Les types disponibles sont utilisés pour différents champs et ne peuvent pas être modifiés pour une règle par la suite.
   create:
     title: Créer une règle
+    label:
+      ruleType: Type de règle
   edit:
     title: Modifier la règle %ruleName%
   delete:
@@ -979,3 +995,22 @@ projectGroup:
     backToList: Revenir à la liste des projets
   create:
     title: Créer un groupe de projet
+  edit:
+    title: Éditer le groupe de projets %projectGroupName%
+  form:
+    name: Nom
+    description: Description
+    parentGroup: Groupe parent
+    tooltip:
+      activeGroup: Vous êtes en train d'éditer ce groupe.
+    message:
+      successfullySaved: Le groupe de projets %projectGroupName% a été sauvegardé avec succès.
+  delete:
+    title: Supprimer le groupe de projets %projectGroupName%
+    confirm: Voulez-vous vraiment supprimer le groupe de projets %projectGroupName% ?
+    reassignChildren: Tous les groupes de projets et les projets dans ce groupe de projets seront automatiquement assign2 au groupe de projets parent.
+    message:
+      successfullyDeleted: Le groupe de projets %projectGroupName% a été supprimé avec succès.
+projectGroupSelector:
+  noGroupsAvailable: Aucun groupe disponible.
+  noProjectsAvailable: Aucun projet disponible
