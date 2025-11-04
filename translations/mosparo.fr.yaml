@@ -208,12 +208,53 @@ rule:
       itemsHelp: Ajoutez un élément par ligne.
       rating: Évaluation
       ratingHelp: Si elle n'est pas définie, l'évaluation par défaut est de 1,0. Si l'évaluation est fixée à 0,0, les éléments ne seront pas considérés comme des spams.
+      type: Type
     status:
       unsavedChanges: '%counter% changements non sauvegardés'
       savingChanges: Sauvegarde de %counter% changement(s)
       nothingToSave: Rien à sauvegarder
     filter:
       title: Filtrer les objets
+      itemSpamRating: Note de spam de l'élément
+    noItemsInTable:
+      title: Pas encore d'élément
+      text: Cette règle ne contient pas encore d'élément.
+    nothingFound:
+      title: Aucun trouvé
+      text: Il n'y a aucun élément correspondant à votre filtre.
+    modal:
+      importTxtFile:
+        title: Importer un fichier texte
+        file: Fichier
+        fileHelp: Choisissez le fichier texte (*.txt) que vous souhaitez importer depuis votre ordinateur.
+        action: Importer un fichier
+      importCsvFile:
+        title: Importer un fichier CSV
+        file: Fichier
+        fileHelp: Choisissez le fichier CSV (*.csv) aue vous souhaitez importer depuis votre ordinateur.
+        action: Importer un fichier
+      addingItems:
+        title: Ajouter des éléments
+        messageCompleted: Les données fournies ont étés traitées. Vous trouverez le résumé des éléments ajoutés, passés, et invalide ci-dessus. Vous pouvez maintenant fermer cette fenêtre.
+        progress:
+          dataProcessed: Données traitées
+          processingPleaseWait: Traitement des données…
+          processingStats: Traité %processedBytes% sur %totalBytes%
+          abortHint: Si vous fermez cette fenêtre, le traitement sera interrompu, et vous devrez recommencer plus tard.
+        summary:
+          addedLabel: Ajouté
+          addedTooltip: Ces éléments sont ajoutés à la règle.
+          skippedLabel: Passé
+          skippedTooltip: Ces éléments existent déjà, l'import les a donc ignoré.
+          invalidLabel: Invalide
+          invalidTooltip: Éléments invalides, par example quand le type d'élément n'existe pas ou que la valeur est du mauvais format.
+      deleteSelectedItems:
+        title: Supprimer les éléments sélectionnés
+        confirm: Voulez-vous vraiment supprimer les %counter% éléments règles sélectionnés ?
+        confirmOne: Voulez-vous vraiment supprimer l'élément règle sélectionné ?
+        confirmDelete: Oui, supprimer les éléments
+        progress:
+          deletingPleaseWait: Suppression des éléments... Veuillez patienter…
   title: Règles
   backToList: Revenir aux règles
   createChooseType:
@@ -391,6 +432,11 @@ rulePackage:
       lastRefreshedAt: Dernière actualisation le
       lastUpdatedAt: Dernière mise à jour le
       numberOfIncludedRules: Nombre de règles incluses
+      source: Source
+      sourceManualImport: Import manuel
+      importFirstTitle: Importer le groupe de règle d'abord
+      importFirst: Ce groupe de règles ne contient aucune donnée. Veuillez importer le groupe de règles manuellement.
+      noRulePackageCache: Il n'y a pas de cache de groupe de règle pour ce groupe de règle. Cela veut dire que le téléchargement n'a pas fonctionné ou que quelque chose d'autre s'est mal passé.
     includedRules:
       title: Règles incluses
       ruleDetails: Informations sur la règle
@@ -422,6 +468,8 @@ rulePackage:
       items:
         title: Éléments inclus
       backToRulePackage: Retour à l'ensemble des règles
+    howtoImport:
+      title: Comment importer
   title: Ensembles de règles
   backToList: Revenir aux ensembles de règles
   message:
@@ -432,6 +480,7 @@ rulePackage:
     refreshedAt: Actualisé le
     updatedAt: Mis à jour le
     actions: Actions
+    type: Type
   add:
     title: Ajouter un ensemble de règles
   edit:
@@ -443,11 +492,18 @@ rulePackage:
     message:
       successfullySaved: L'ensemble de règles a bien été enregistré.
     spamRatingFactorHelp: Le facteur d'évaluation du spam vous permet de définir un facteur qui renforce ou affaiblit toutes les règles de ce jeu de règles. Si la valeur est supérieure à 1,0, les règles seront renforcées, si la valeur est inférieure à 1,0, les règles seront affaiblies.
+    sourceUrl: URL source
+    sourceUrlHelp: Spécifiez l'URL depuis lequel mosparo peut télécharger le groupe de règles.
+    sourceFile: Fichier source
+    sourceFileHelp: Spécifiez le chemin absolu du fichier où le fichier de groupe de règles est enregistré.
   delete:
     title: Supprimer l'ensemble de règles %rulePackageName%
     confirm: Voulez-vous vraiment supprimer l'ensemble de règles %rulePackageName% ?
     message:
       successfullyDeleted: L'ensemble de règles %rulePackageName% a bien été supprimé.
+  addChooseType:
+    title: Choisissez un type
+    intro: Veuillez choisir le type de groupe de règles que vous souhaitez ajouter. Vous pouvez choisir un type automatique ou manuel. Les types automatique mettront le groupe à jour automatiquement, alors que les manuels doivent être mis à jour par une action ou outil externe.
 settings:
   design:
     form:
