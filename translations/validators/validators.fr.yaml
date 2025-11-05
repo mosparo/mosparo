@@ -10,5 +10,23 @@ password:
         notBlank: Veuillez saisir votre adresse e-mail.
 settings:
   mosparoName:
-    colonNotAllowed: Les deux points (:) ne sont pas autorisés dans le nom de 
-      l'installation de mosparo.
+    colonNotAllowed: Les deux points (:) ne sont pas autorisés dans le nom de l'installation de mosparo.
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Votre adresse IP ne fait pas partie de la liste des adresses autorisées. Veuillez l’ajouter à cette liste.
+tools:
+  import:
+    importFile:
+      correctFile: S'il vous plaît téléversez un fichier JSON valide.
+ipAllowList:
+  itemInvalid: L'élément '%item%' n'est pas une adresse IP ou subnet valide.
+honeypotField:
+  nameHasInvalidCharacter: N'utilisez que des lettres, nombres ou tirets (-) s'il vous plaît.
+securityGuideline:
+  atLeastOneCriteriaRequired: Les directives de sécurité nécessitent au moins un critère.
+webCronJob:
+  geoIpRefreshIntervalAtLeast1Day: L'intervall de rafraichissement de GeoIP2 doit être d'un jour ou plus.
+hosts:
+  hostContainsProtocol: Cet hôte contient un protocole. Veuillez entrer un hôte sans protocole (par exemple, exemple.com au lieu de https://exemple.com).
+  hostContainsInvalidCharacter: Cet hôte contient des caractères invalides. Dans ce champ, seuls les caractères (a-z), nombres (0-9), tirets, points, virgules, et l'asterisque (*) sont permis.

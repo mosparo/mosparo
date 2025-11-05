@@ -3,7 +3,7 @@ header:
   account: Compte
   noProjectsFound: Aucun projet trouvé
 project:
-  backToList: Revenir aux projets
+  backToList: Revenir à la liste des projets
   delete:
     message:
       successfullyDeleted: Le projet %projectName% a bien été supprimé.
@@ -12,10 +12,12 @@ project:
     disconnectFirst: Veuillez vous assurer que vous avez déconnecté votre site web ou l'intégration avec ce projet avant de le supprimer.
   title: Projets
   action:
-    manage: Gérer le projet
+    manage: Gérer les projets
     delete: Supprimer le projet
     goto: Aller au projet
     id: ID du projet
+    settings: Paramètres
+    create: Créer
   create:
     title: Créer un projet
     message:
@@ -35,6 +37,8 @@ project:
     verificationSimulationMode: Mode de simulation de vérification
     statisticStorageLimit: Stockage des statistiques
     statisticStorageLimitHelp: Définit la durée pendant laquelle mosparo doit conserver les statistiques dans la base de données. Cette option n'a aucun lien avec la durée de stockage des soumissions, après laquelle les soumissions sont supprimées de la base de données (14 jours).
+    projectGroup: Groupe de projets
+    projectGroupHelp: Vous pouvez utiliser les groupes de projets pour organiser vos projets. Sélectionnez le groupe de projets dans lequel vous désirez ranger ce projet.
   infoNoProjectAvailable: Aucun projet disponible
   infoCreateProjectOrRequestAccess: Créez un nouveau projet ou demandez l'accès à un autre projet.
   roles:
@@ -51,6 +55,7 @@ project:
     name: Nom
     status: Statut
     actions: Actions
+    projects: Projets
   search:
     placeholder: Rechercher…
   createWizard:
@@ -67,6 +72,8 @@ project:
       infoSettings: Vous pouvez activer, désactiver ou régler ces fonctions de sécurité dans les paramètres de sécurité après l'assistant.
       title: Activer les fonctions de sécurité
       introSecurity: Veuillez choisir les dispositifs de sécurité que vous souhaitez activer.
+  searchTitle: Projets pour %searchQuery%
+  infoNoProjectsInThisGroup: Il n'y a aucun projet dans ce groupe.
 dashboard:
   title: Tableau de bord
   chart:
@@ -195,11 +202,59 @@ rule:
       title: Éléments
       type: Type
       rating: Évaluation
+      value: Valeur
     addMultipleItems:
       items: Éléments
       itemsHelp: Ajoutez un élément par ligne.
       rating: Évaluation
       ratingHelp: Si elle n'est pas définie, l'évaluation par défaut est de 1,0. Si l'évaluation est fixée à 0,0, les éléments ne seront pas considérés comme des spams.
+      type: Type
+    status:
+      unsavedChanges: '%counter% changements non sauvegardés'
+      savingChanges: Sauvegarde de %counter% changement(s)
+      nothingToSave: Rien à sauvegarder
+    filter:
+      title: Filtrer les objets
+      itemSpamRating: Note de spam de l'élément
+    noItemsInTable:
+      title: Pas encore d'élément
+      text: Cette règle ne contient pas encore d'élément.
+    nothingFound:
+      title: Aucun trouvé
+      text: Il n'y a aucun élément correspondant à votre filtre.
+    modal:
+      importTxtFile:
+        title: Importer un fichier texte
+        file: Fichier
+        fileHelp: Choisissez le fichier texte (*.txt) que vous souhaitez importer depuis votre ordinateur.
+        action: Importer un fichier
+      importCsvFile:
+        title: Importer un fichier CSV
+        file: Fichier
+        fileHelp: Choisissez le fichier CSV (*.csv) aue vous souhaitez importer depuis votre ordinateur.
+        action: Importer un fichier
+      addingItems:
+        title: Ajouter des éléments
+        messageCompleted: Les données fournies ont étés traitées. Vous trouverez le résumé des éléments ajoutés, passés, et invalide ci-dessus. Vous pouvez maintenant fermer cette fenêtre.
+        progress:
+          dataProcessed: Données traitées
+          processingPleaseWait: Traitement des données…
+          processingStats: Traité %processedBytes% sur %totalBytes%
+          abortHint: Si vous fermez cette fenêtre, le traitement sera interrompu, et vous devrez recommencer plus tard.
+        summary:
+          addedLabel: Ajouté
+          addedTooltip: Ces éléments sont ajoutés à la règle.
+          skippedLabel: Passé
+          skippedTooltip: Ces éléments existent déjà, l'import les a donc ignoré.
+          invalidLabel: Invalide
+          invalidTooltip: Éléments invalides, par example quand le type d'élément n'existe pas ou que la valeur est du mauvais format.
+      deleteSelectedItems:
+        title: Supprimer les éléments sélectionnés
+        confirm: Voulez-vous vraiment supprimer les %counter% éléments règles sélectionnés ?
+        confirmOne: Voulez-vous vraiment supprimer l'élément règle sélectionné ?
+        confirmDelete: Oui, supprimer les éléments
+        progress:
+          deletingPleaseWait: Suppression des éléments... Veuillez patienter…
   title: Règles
   backToList: Revenir aux règles
   createChooseType:
@@ -207,6 +262,8 @@ rule:
     intro: Veuillez choisir le type de règle que vous souhaitez créer. Les types disponibles sont utilisés pour différents champs et ne peuvent pas être modifiés pour une règle par la suite.
   create:
     title: Créer une règle
+    label:
+      ruleType: Type de règle
   edit:
     title: Modifier la règle %ruleName%
   delete:
@@ -375,6 +432,11 @@ rulePackage:
       lastRefreshedAt: Dernière actualisation le
       lastUpdatedAt: Dernière mise à jour le
       numberOfIncludedRules: Nombre de règles incluses
+      source: Source
+      sourceManualImport: Import manuel
+      importFirstTitle: Importer le groupe de règle d'abord
+      importFirst: Ce groupe de règles ne contient aucune donnée. Veuillez importer le groupe de règles manuellement.
+      noRulePackageCache: Il n'y a pas de cache de groupe de règle pour ce groupe de règle. Cela veut dire que le téléchargement n'a pas fonctionné ou que quelque chose d'autre s'est mal passé.
     includedRules:
       title: Règles incluses
       ruleDetails: Informations sur la règle
@@ -406,6 +468,8 @@ rulePackage:
       items:
         title: Éléments inclus
       backToRulePackage: Retour à l'ensemble des règles
+    howtoImport:
+      title: Comment importer
   title: Ensembles de règles
   backToList: Revenir aux ensembles de règles
   message:
@@ -416,6 +480,7 @@ rulePackage:
     refreshedAt: Actualisé le
     updatedAt: Mis à jour le
     actions: Actions
+    type: Type
   add:
     title: Ajouter un ensemble de règles
   edit:
@@ -427,11 +492,18 @@ rulePackage:
     message:
       successfullySaved: L'ensemble de règles a bien été enregistré.
     spamRatingFactorHelp: Le facteur d'évaluation du spam vous permet de définir un facteur qui renforce ou affaiblit toutes les règles de ce jeu de règles. Si la valeur est supérieure à 1,0, les règles seront renforcées, si la valeur est inférieure à 1,0, les règles seront affaiblies.
+    sourceUrl: URL source
+    sourceUrlHelp: Spécifiez l'URL depuis lequel mosparo peut télécharger le groupe de règles.
+    sourceFile: Fichier source
+    sourceFileHelp: Spécifiez le chemin absolu du fichier où le fichier de groupe de règles est enregistré.
   delete:
     title: Supprimer l'ensemble de règles %rulePackageName%
     confirm: Voulez-vous vraiment supprimer l'ensemble de règles %rulePackageName% ?
     message:
       successfullyDeleted: L'ensemble de règles %rulePackageName% a bien été supprimé.
+  addChooseType:
+    title: Choisissez un type
+    intro: Veuillez choisir le type de groupe de règles que vous souhaitez ajouter. Vous pouvez choisir un type automatique ou manuel. Les types automatique mettront le groupe à jour automatiquement, alors que les manuels doivent être mis à jour par une action ou outil externe.
 settings:
   design:
     form:
@@ -967,3 +1039,34 @@ tools:
     form:
       title: Paramètres de test
   title: Outils
+projectGroup:
+  mainGroup: Groupe principal
+  action:
+    edit: Modifier le groupe
+    delete: Supprimer le groupe
+    openMainGroup: Retourner au groupe principal
+    openParentGroupName: Retourner à %name%
+    openParentGroup: Ouvrir le groupe parent
+    openGroup: Ouvrir le groupe
+    backToList: Revenir à la liste des projets
+  create:
+    title: Créer un groupe de projet
+  edit:
+    title: Éditer le groupe de projets %projectGroupName%
+  form:
+    name: Nom
+    description: Description
+    parentGroup: Groupe parent
+    tooltip:
+      activeGroup: Vous êtes en train d'éditer ce groupe.
+    message:
+      successfullySaved: Le groupe de projets %projectGroupName% a été sauvegardé avec succès.
+  delete:
+    title: Supprimer le groupe de projets %projectGroupName%
+    confirm: Voulez-vous vraiment supprimer le groupe de projets %projectGroupName% ?
+    reassignChildren: Tous les groupes de projets et les projets dans ce groupe de projets seront automatiquement assign2 au groupe de projets parent.
+    message:
+      successfullyDeleted: Le groupe de projets %projectGroupName% a été supprimé avec succès.
+projectGroupSelector:
+  noGroupsAvailable: Aucun groupe disponible.
+  noProjectsAvailable: Aucun projet disponible
