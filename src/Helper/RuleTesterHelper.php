@@ -5,7 +5,9 @@ namespace Mosparo\Helper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
+use Mosparo\Entity\RulePackageRuleCache;
 use Mosparo\Entity\RulePackageRuleItemCache;
 use Mosparo\Entity\Submission;
 use Mosparo\Rule\RuleItemIterator;
@@ -196,6 +198,14 @@ class RuleTesterHelper
             }
 
             $rule = $item->getParent();
+            if ($rule instanceof Rule && !$rule->getStatus()) {
+                // Ignore the rule item because the rule is disabled
+                continue;
+            } else if ($rule instanceof RulePackageRuleCache && !$rule->getRulePackageCache()->getRulePackage()->getStatus()) {
+                // Ignore the rule item because the rule package is disabled
+                continue;
+            }
+
             $tester = $this->ruleTesters[$rule->getType()] ?? null;
 
             if (!$tester) {
