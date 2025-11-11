@@ -692,7 +692,7 @@
                         processedBytes += chunkData.length;
 
                         let items = [];
-                        lines = chunkData.split('\n').map((val) => val.trim());
+                        let lines = chunkData.split('\n').map((val) => val.trim());
                         for (const line of lines) {
                             if (!line) {
                                 continue;
@@ -706,32 +706,36 @@
                             items.push([type, line, rating]);
                         }
 
-                        let data = {
-                            token: '{{ csrf_token('add-multiple-items') }}',
-                            items: JSON.stringify(items),
-                        };
+                        if (items.length > 0) {
+                            let data = {
+                                token: '{{ csrf_token('add-multiple-items') }}',
+                                items: JSON.stringify(items),
+                            };
 
-                        await $.post('{{ path('rule_edit_add_multiple', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
-                            let percent = (processedBytes / totalBytes) * 100;
+                            await $.post('{{ path('rule_edit_add_multiple', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                                let percent = (processedBytes / totalBytes) * 100;
 
-                            $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(processedBytes));
-                            $('#adding-items-progress-bar').css('width', percent + '%');
+                                $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(processedBytes));
+                                $('#adding-items-progress-bar').css('width', percent + '%');
 
-                            adjustSummaryValues($('#number-of-added-items'), responseData.counters.added);
-                            adjustSummaryValues($('#number-of-skipped-items'), responseData.counters.skipped);
-                            adjustSummaryValues($('#number-of-invalid-items'), responseData.counters.invalid);
+                                adjustSummaryValues($('#number-of-added-items'), responseData.counters.added);
+                                adjustSummaryValues($('#number-of-skipped-items'), responseData.counters.skipped);
+                                adjustSummaryValues($('#number-of-invalid-items'), responseData.counters.invalid);
 
-                            if (responseData.chunkSize) {
-                                if (responseData.chunkSize === 'increase') {
-                                    usedChunkSize *= 2;
-                                } else if (responseData.chunkSize === 'decrease') {
-                                    usedChunkSize /= 2;
+                                if (responseData.chunkSize) {
+                                    if (responseData.chunkSize === 'increase') {
+                                        usedChunkSize *= 2;
+                                    } else if (responseData.chunkSize === 'decrease') {
+                                        usedChunkSize /= 2;
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
 
                     if (processedBytes >= totalBytes) {
+                        $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(totalBytes));
+                        $('#adding-items-progress-bar').css('width', '100%');
                         $('#progress-modal .modal-status').removeClass('bg-info').addClass('bg-success');
                         $('#progress-modal-icon').removeClass('ti-hourglass-empty text-info').addClass('ti-check text-success');
                         $('#progress-modal-title-please-wait, #progress-modal-status, #add-multiple-items-loader .alert-info').addClass('d-none');
