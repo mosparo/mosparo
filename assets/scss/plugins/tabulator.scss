@@ -154,6 +154,11 @@
             &:last-child {
                 padding-right: 1.25rem;
             }
+
+            &.tabulator-frozen {
+                box-shadow: inset 0 0 0 9999px var(--tblr-table-bg-state, var(--tblr-table-bg-type, var(--tblr-table-accent-bg)));
+                background: var(--tblr-bg-surface);
+            }
         }
     }
 
