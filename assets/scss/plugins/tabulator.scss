@@ -178,6 +178,21 @@
             @extend .pagination;
 
             flex: unset;
+            display: flex;
+            align-items: center;
+
+            label {
+                font-weight: normal;
+
+                @media screen and (max-width: 500px) {
+                    display: none;
+                }
+            }
+
+            .tabulator-page-size {
+                margin-left: 0.5rem;
+                margin-right: 1rem;
+            }
 
             .tabulator-pages {
                 display: flex;

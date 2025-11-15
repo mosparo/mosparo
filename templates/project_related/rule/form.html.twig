@@ -768,6 +768,7 @@
                     pagination: true,
                     paginationMode: 'remote',
                     paginationSize: 30,
+                    paginationSizeSelector: [10, 25, 50, 100, 250, 500],
                     paginationCounter: function (perPage, row, page, totalRows, totalPages) {
                         return '{{ 'tabulator.pagination.counter'|trans({
                             '%vm%': '<span class="d-inline d-md-none">',
