@@ -83,6 +83,7 @@
             var lastResponseText = '';
             var lastMessageTimestamp = 0;
             var isRunning = true;
+            var notFoundCounter = 0;
 
             function calculateCheckInterval()
             {
@@ -168,7 +169,7 @@
             {
                 jQuery.ajax({
                     type: 'GET',
-                    url: '{{ temporaryLogFileUrl }}',
+                    url: '{{ temporaryLogFileUrl }}?_t=' + (new Date()).getTime(),
                     success: function (responseText) {
                         let newMessages = extractNewMessage(responseText);
 
@@ -201,7 +202,7 @@
 
             setTimeout(checkLogFile, 250);
 
-            $.get('{{ path('administration_update_execute_update') }}', function (response) {
+            $.get('{{ path('administration_update_execute_update') }}?_t=' + (new Date()).getTime(), function (response) {
                 if (typeof response.error !== 'undefined' && response.error) {
                     isRunning = false;
 
