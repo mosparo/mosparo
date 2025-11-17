@@ -155,7 +155,7 @@ class ImportHelper
             $this->entityManager->flush();
 
             // Update the modified rule packages.
-            if ($modifiedRulePackages) {
+            if (!empty($modifiedRulePackages)) {
                 try {
                     $this->rulePackageHelper->fetchRulePackages($modifiedRulePackages);
                 } catch (\Exception $e) {
