@@ -87,7 +87,7 @@ class FrontendApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);
         }
 
-        if (!$request->request->has('pageTitle') || !$request->request->has('pageUrl')) {
+        if (!$request->request->has('pageTitle') || !$request->request->has('pageUrl') || !$request->request->has('formActionUrl')) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Required parameters missing.']);
         }
 
@@ -95,7 +95,11 @@ class FrontendApiController extends AbstractController
         $this->cleanupHelper->cleanup(cleanupExecutor: CleanupExecutor::FRONTEND_API);
 
         // Determine the security settings
-        $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp());
+        $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp(), [
+            'pageUrl' => $request->request->get('pageUrl'),
+            'formActionUrl' => $request->request->get('formActionUrl'),
+            'formId' => $request->request->get('formId'),
+        ]);
 
         // Check if the request is allowed
         $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_DELAY, $securitySettings);
@@ -112,6 +116,8 @@ class FrontendApiController extends AbstractController
 
         $submitToken->setPageTitle($request->request->get('pageTitle'));
         $submitToken->setPageUrl($request->request->get('pageUrl'));
+        $submitToken->setFormActionUrl($request->request->get('formActionUrl'));
+        $submitToken->setFormId($request->request->get('formId'));
 
         $entityManager->persist($submitToken);
 
@@ -152,19 +158,6 @@ class FrontendApiController extends AbstractController
         // Cleanup the database
         $this->cleanupHelper->cleanup(cleanupExecutor: CleanupExecutor::FRONTEND_API);
 
-        // Determine the security settings
-        $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp());
-
-        // Check if the request is allowed
-        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_LOCKOUT, $securitySettings);
-        if ($securityResult instanceof Lockout) {
-            return $this->prepareSecurityResponse($request, $securityResult);
-        }
-
-        $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
-
-        $activeProject = $this->projectHelper->getActiveProject();
-
         if (!$request->request->has('submitToken')) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not set.']);
         }
@@ -177,6 +170,19 @@ class FrontendApiController extends AbstractController
         if ($submitToken === null || !$submitToken->isValid()) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not valid.']);
         }
+
+        // Determine the security settings
+        $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp(), $submitToken->getFormOriginData());
+
+        // Check if the request is allowed
+        $securityResult = $this->securityHelper->checkIpAddress($request->getClientIp(), SecurityHelper::FEATURE_LOCKOUT, $securitySettings);
+        if ($securityResult instanceof Lockout) {
+            return $this->prepareSecurityResponse($request, $securityResult);
+        }
+
+        $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
+
+        $activeProject = $this->projectHelper->getActiveProject();
 
         if (!$request->request->has('formData')) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not set.']);

@@ -87,6 +87,8 @@ $(document).ready(function () {
         }
 
         collectionToggleRemoveButton(list);
+
+        list.trigger('collection-item-removed');
     });
 
     $('.card-field-switch').on('change', function () {

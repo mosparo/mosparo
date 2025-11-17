@@ -100,7 +100,7 @@ class VerificationApiController extends AbstractController
         }
 
         // Determine the security settings
-        $securitySettings = $this->securityHelper->determineSecuritySettings($clientIpAddress);
+        $securitySettings = $this->securityHelper->determineSecuritySettings($clientIpAddress, $submitToken->getFormOriginData());
 
         // Check if the minimum time functionality is active and if the time difference is bigger than the minimum time.
         if ($securitySettings['minimumTimeActive']) {

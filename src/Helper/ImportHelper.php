@@ -625,9 +625,12 @@ class ImportHelper
             $securityGuideline->setName($importedSecurityGuideline['name']);
             $securityGuideline->setDescription($importedSecurityGuideline['description']);
             $securityGuideline->setPriority($importedSecurityGuideline['priority']);
-            $securityGuideline->setSubnets($importedSecurityGuideline['subnets']);
-            $securityGuideline->setCountryCodes($importedSecurityGuideline['countryCodes']);
-            $securityGuideline->setAsNumbers($importedSecurityGuideline['asNumbers']);
+            $securityGuideline->setSubnets($importedSecurityGuideline['subnets'] ?? []);
+            $securityGuideline->setCountryCodes($importedSecurityGuideline['countryCodes'] ?? []);
+            $securityGuideline->setAsNumbers($importedSecurityGuideline['asNumbers'] ?? []);
+            $securityGuideline->setFormPageUrls($importedSecurityGuideline['formPageUrls'] ?? []);
+            $securityGuideline->setFormActionUrls($importedSecurityGuideline['formActionUrls'] ?? []);
+            $securityGuideline->setFormIds($importedSecurityGuideline['formIds'] ?? []);
 
             foreach ($importedSecurityGuideline['securitySettings'] as $setting) {
                 $securityGuideline->setConfigValue($setting['name'], $setting['value']);

@@ -243,6 +243,24 @@
                             </div>
                         </div>
 
+                        {% if submission.submitToken.formActionUrl %}
+                            <div class="mb-3">
+                                <h4 class="mb-0">{{ 'submission.view.source.formActionUrl'|trans }}</h4>
+                                <div>
+                                    <code>{{ submission.submitToken.formActionUrl }}</code>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if submission.submitToken.formId %}
+                            <div class="mb-3">
+                                <h4 class="mb-0">{{ 'submission.view.source.formId'|trans }}</h4>
+                                <div>
+                                    <code>{{ submission.submitToken.formId }}</code>
+                                </div>
+                            </div>
+                        {% endif %}
+
                         <div class="">
                             <h4 class="mb-0">{{ 'submission.view.source.requestedAt'|trans }}</h4>
                             <div>

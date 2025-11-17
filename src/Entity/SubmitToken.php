@@ -27,6 +27,12 @@ class SubmitToken implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'text')]
     private ?string $pageUrl;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $formActionUrl;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $formId;
+
     #[ORM\Column(type: 'string', length: 64)]
     private ?string $token;
 
@@ -91,6 +97,43 @@ class SubmitToken implements ProjectRelatedEntityInterface
         $this->pageUrl = $pageUrl;
 
         return $this;
+    }
+
+    public function getFormActionUrl(): ?string
+    {
+        return $this->formActionUrl;
+    }
+
+    public function setFormActionUrl(string $formActionUrl): self
+    {
+        $this->formActionUrl = $formActionUrl;
+
+        return $this;
+    }
+
+    public function getFormId(): ?string
+    {
+        return $this->formId;
+    }
+
+    public function setFormId(string $formId): self
+    {
+        if (strlen($formId) > 254) {
+            $formId = substr($formId, 0, 254);
+        }
+
+        $this->formId = $formId;
+
+        return $this;
+    }
+
+    public function getFormOriginData(): array
+    {
+        return [
+            'pageUrl' => $this->pageUrl,
+            'formActionUrl' => $this->formActionUrl,
+            'formId' => $this->formId,
+        ];
     }
 
     public function getToken(): ?string

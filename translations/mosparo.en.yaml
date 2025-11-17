@@ -573,6 +573,8 @@ submission:
       title: Source
       pageTitle: Page title
       pageUrl: Page URL
+      formActionUrl: Form action URL
+      formId: Form ID
       requestedAt: Requested at
 
     ignoredFields:
@@ -838,16 +840,30 @@ settings:
           priority: Priority
           priorityHelp: Defines in which order the guidelines will be tested. The highest guideline will be tested first.
 
+        categories:
+          ipBased:
+            label: IP-based
+            intro: The IP-based criteria utilize the user's IP address to determine the required security policy. These criteria help match the user who accesses a form (for example, matching your own IP address for less restrictive security settings).
+          formBased:
+            label: Form-based
+            intro: The form-based criteria use the information of the form in which mosparo is integrated to determine the required security policy. These criteria help differentiate between different forms within the same project (for example, other security settings for a login form than for a contact form).
+
         criteria:
           title: Criteria
           intro: Please define the criteria for this guideline. With the criteria, you can define for which origin these security settings should be used.
-          intro2: The guideline will be used for the user as soon as one of these criteria matches. You must add at least one criterion to save the guideline.
+          intro2: You can specify criteria in both categories, or you can specify only IP- or form-based criteria. The guideline will be applied to the user as soon as one of these criteria per category (IP-based or form-based) is met. You must add at least one criterion to save the guideline.
           subnets: Subnets
           subnetsHelp: "Add the subnets for which this guideline should be considered. You can define IPv4 or IPv6 subnets. You can see the IP address in the submission details. Example: 192.168.1.0/24"
           countryCodes: Country codes
           countryCodesHelp: "Add the country codes (ISO alpha-2) for which this guideline should be considered. You can see the country code in the submission details. Example: CH"
           asNumbers: AS numbers
           asNumbersHelp: "Add the AS numbers for which this guideline should be considered. You can see the AS number in the submission details. Example: 123456"
+          formPageUrls: Form page URLs
+          formPageUrlsHelp: 'Add the URLs of the forms for which this guideline should be considered. You can define an absolute URL or use the asterisk (*) as a wildcard. Example: https://example.com/contact/'
+          formActionUrls: Form action URLs
+          formActionUrlsHelp: 'Add the form action URLs for which this guideline should be considered. You can define an absolute URL or use the asterisk (*) as a wildcard. Example: https://example.com/contact/'
+          formIds: Form IDs
+          formIdsHelp: 'Add the form IDs for which this guideline should be considered. Please specify the ID without the hash sign (#). Example: contact-form'
 
         settings:
           title: Override settings

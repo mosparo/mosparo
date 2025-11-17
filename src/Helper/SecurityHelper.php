@@ -5,6 +5,7 @@ namespace Mosparo\Helper;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Kir\StringUtils\Matching\Wildcards\Pattern;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\IpLocalization;
 use Mosparo\Entity\Lockout;
@@ -218,24 +219,25 @@ class SecurityHelper
         return $result['submissions'] ?? 0;
     }
 
-    public function determineSecuritySettings(?string $ipAddress): array
+    public function determineSecuritySettings(?string $ipAddress, array $formOriginData): array
     {
+        $ipLocalization = null;
         if ($ipAddress) {
             $ipLocalization = $this->geoIp2Helper->locateIpAddress($ipAddress);
             if ($ipLocalization === false) {
                 $ipLocalization = null;
             }
+        }
 
-            $builder = $this->entityManager->createQueryBuilder();
-            $builder
-                ->select('sg')
-                ->from(SecurityGuideline::class, 'sg')
-                ->orderBy('sg.priority', 'DESC');
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder
+            ->select('sg')
+            ->from(SecurityGuideline::class, 'sg')
+            ->orderBy('sg.priority', 'DESC');
 
-            foreach ($builder->getQuery()->getResult() as $securityGuideline) {
-                if ($this->matchSecurityGuideline($securityGuideline, $ipAddress, $ipLocalization)) {
-                    return $securityGuideline->getConfigValues();
-                }
+        foreach ($builder->getQuery()->getResult() as $securityGuideline) {
+            if ($this->matchSecurityGuideline($securityGuideline, $ipAddress, $formOriginData, $ipLocalization)) {
+                return $securityGuideline->getConfigValues();
             }
         }
 
@@ -244,7 +246,31 @@ class SecurityHelper
         return $project->getSecurityConfigValues();
     }
 
-    protected function matchSecurityGuideline(SecurityGuideline $securityGuideline, string $ipAddress, ?IpLocalization $ipLocalization = null): bool
+    protected function matchSecurityGuideline(SecurityGuideline $securityGuideline, ?string $ipAddress, array $formOriginData, ?IpLocalization $ipLocalization = null): bool
+    {
+        $ipMatch = null;
+        $formOriginMatch = null;
+
+        if ($securityGuideline->getSubnets() || $securityGuideline->getAsNumbers() || $securityGuideline->getCountryCodes()) {
+            $ipMatch = $this->matchSecurityGuidelineForIpAddress($securityGuideline, $ipAddress, $ipLocalization);
+        }
+
+        if ($securityGuideline->getFormPageUrls() || $securityGuideline->getFormActionUrls() || $securityGuideline->getFormIds()) {
+            $formOriginMatch = $this->matchSecurityGuidelineForFormOrigin($securityGuideline, $formOriginData);
+        }
+
+        if ($ipMatch && $formOriginMatch) {
+            return true;
+        } else if ($ipMatch && $formOriginMatch === null) {
+            return true;
+        } if ($ipMatch === null && $formOriginMatch) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected function matchSecurityGuidelineForIpAddress(SecurityGuideline $securityGuideline, ?string $ipAddress, ?IpLocalization $ipLocalization = null): bool
     {
         foreach ($securityGuideline->getSubnets() as $subnet) {
             if (IpUtil::isIpInSubnet($subnet, $ipAddress)) {
@@ -260,6 +286,49 @@ class SecurityHelper
             if (in_array($ipLocalization->getAsNumber(), $securityGuideline->getAsNumbers())) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    protected function matchSecurityGuidelineForFormOrigin(SecurityGuideline $securityGuideline, array $formOriginData): bool
+    {
+        $formPageUrl = $formOriginData['pageUrl'] ?? '';
+        foreach ($securityGuideline->getFormPageUrls() as $fPageUrl) {
+            if ($this->matchUrl($fPageUrl, $formPageUrl)) {
+                return true;
+            }
+        }
+
+        $formActionUrl = $formOriginData['formActionUrl'] ?? '';
+        foreach ($securityGuideline->getFormActionUrls() as $fActionUrl) {
+            if ($this->matchUrl($fActionUrl, $formActionUrl)) {
+                return true;
+            }
+        }
+
+        $formId = $formOriginData['formId'] ?? '';
+        if (in_array($formId, $securityGuideline->getFormIds())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function matchUrl(string $pattern, string $url): bool
+    {
+        if ($url === '') {
+            return false;
+        }
+
+        // If the pattern not contains an asterisk and the URL starts with the pattern, we have a match.
+        if (!str_contains($pattern, '*') && str_starts_with($url, $pattern)) {
+            return true;
+        }
+
+        // Otherwise, use the pattern class to match the URL
+        if (Pattern::create($pattern)->match($url)) {
+            return true;
         }
 
         return false;

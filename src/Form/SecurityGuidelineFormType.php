@@ -53,6 +53,48 @@ class SecurityGuidelineFormType extends AbstractType implements EventSubscriberI
                     ]
                 ]
             ])
+            ->add('formPageUrls', CollectionType::class, [
+                'label' => 'settings.security.guideline.form.criteria.formPageUrls',
+                'help' => 'settings.security.guideline.form.criteria.formPageUrlsHelp',
+                'entry_type' => TextType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'delete_empty' => true,
+                'required' => false,
+                'entry_options' => [
+                    'constraints' => [
+                        new NotBlank(),
+                    ]
+                ]
+            ])
+            ->add('formActionUrls', CollectionType::class, [
+                'label' => 'settings.security.guideline.form.criteria.formActionUrls',
+                'help' => 'settings.security.guideline.form.criteria.formActionUrlsHelp',
+                'entry_type' => TextType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'delete_empty' => true,
+                'required' => false,
+                'entry_options' => [
+                    'constraints' => [
+                        new NotBlank(),
+                    ]
+                ]
+            ])
+            ->add('formIds', CollectionType::class, [
+                'label' => 'settings.security.guideline.form.criteria.formIds',
+                'help' => 'settings.security.guideline.form.criteria.formIdsHelp',
+                'entry_type' => TextType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'delete_empty' => true,
+                'required' => false,
+                'entry_options' => [
+                    'constraints' => [
+                        new NotBlank(),
+                    ]
+                ]
+            ])
             ->add('configValues', SecuritySettingsFormType::class, [
                 'label' => 'settings.security.guideline.form.settings.title',
                 'addOverrideOptions' => true,
