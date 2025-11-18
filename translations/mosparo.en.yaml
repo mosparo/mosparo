@@ -1238,6 +1238,7 @@ administration:
       title: Interface settings
       form:
         defaultColorMode: Default color mode
+        defaultNumberOfItemsPerPage: Default number of items per page
 
     mailSettings:
       title: Mail settings
@@ -1612,6 +1613,7 @@ account:
       timeFormat: Time format
       timezone: Timezone
       colorMode: Color mode
+      numberOfItemsPerPage: Number of items per page
 
     message:
       successfullySaved: Your settings were saved successfully.

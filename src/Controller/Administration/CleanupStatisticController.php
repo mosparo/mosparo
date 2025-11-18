@@ -3,11 +3,11 @@
 namespace Mosparo\Controller\Administration;
 
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\DataTable\MosparoDataTableFactory;
 use Mosparo\Entity\CleanupStatistic;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TwigColumn;
 use Omines\DataTablesBundle\DataTable;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class CleanupStatisticController extends AbstractController
 {
     #[Route('/', name: 'administration_cleanup_statistic')]
-    public function index(Request $request, DataTableFactory $dataTableFactory): Response
+    public function index(Request $request, MosparoDataTableFactory $dataTableFactory): Response
     {
         $table = $dataTableFactory->create(['autoWidth' => true])
             ->add('dateTime', TwigColumn::class, [

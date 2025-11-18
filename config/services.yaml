@@ -18,6 +18,7 @@ parameters:
     env(default_timezone): 'UTC'
 
     env(default_color_mode): 'light'
+    env(default_number_of_items_per_page): '50'
 
     env(database_system): 'mysql'
     env(database_driver): 'pdo_mysql'
@@ -198,6 +199,7 @@ services:
     Mosparo\Helper\InterfaceHelper:
         arguments:
             $defaultColorMode: '%env(default_color_mode)%'
+            $defaultNumberOfItemsPerPage: '%env(default_number_of_items_per_page)%'
 
     Mosparo\Helper\DesignHelper:
         arguments:
@@ -261,3 +263,9 @@ services:
         tags:
             - { name: security.expression_language_provider }
             - { name: routing.expression_language_provider }
+
+
+    Mosparo\DataTable\MosparoDataTableFactory:
+        arguments:
+            $config: '%datatables.config%'
+            $renderer: '@datatables.renderer'

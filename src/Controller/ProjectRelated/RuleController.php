@@ -6,9 +6,11 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Kir\StringUtils\Matching\Wildcards\Pattern;
+use Mosparo\DataTable\MosparoDataTableFactory;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
 use Mosparo\Form\RuleFormType;
+use Mosparo\Helper\InterfaceHelper;
 use Mosparo\Rule\RuleTypeManager;
 use Mosparo\Rule\Type\RuleTypeInterface;
 use Mosparo\Rule\Type\UnicodeBlockRuleType;
@@ -16,7 +18,6 @@ use Mosparo\Util\EnvironmentUtil;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,7 +47,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
 
     #[Route('/', name: 'rule_list')]
     #[Route('/filter/{filter}', name: 'rule_list_filtered')]
-    public function index(Request $request, DataTableFactory $dataTableFactory, $filter = ''): Response
+    public function index(Request $request, MosparoDataTableFactory $dataTableFactory, $filter = ''): Response
     {
         $filteredType = null;
         if (in_array($filter, $this->ruleTypeManager->getRuleTypeKeys())) {
@@ -144,7 +145,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
     }
 
     #[Route('/{id}/edit', name: 'rule_edit')]
-    public function edit(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Rule $rule, EntityManagerInterface $entityManager, InterfaceHelper $interfaceHelper): Response
     {
         $readOnly = false;
         if (!$this->projectHelper->canManage()) {
@@ -182,6 +183,8 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             'form' => $form->createView(),
             'ruleType' => $ruleType,
             'baseChunkSize' => $this->determineBaseChunkSize(),
+            'tabulatorPageSizeOptions' => array_values($interfaceHelper->getNumberOfItemsPerPageOptions()),
+            'tabulatorPageSize' => $interfaceHelper->determineNumberOfItemsPerPage($request),
         ]);
     }
 

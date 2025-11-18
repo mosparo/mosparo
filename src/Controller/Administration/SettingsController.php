@@ -50,6 +50,7 @@ class SettingsController extends AbstractController
             'defaultTimezone' => $environmentConfig['default_timezone'] ?? 'UTC',
 
             'defaultColorMode' => $environmentConfig['default_color_mode'] ?? 'light',
+            'defaultNumberOfItemsPerPage' => $environmentConfig['default_number_of_items_per_page'] ?? 50,
 
             'mailerUseSmtp' => (bool) ($environmentConfig['mailer_transport'] ?? '') == 'smtp',
             'mailerHost' => $environmentConfig['mailer_host'] ?? '',
@@ -75,6 +76,7 @@ class SettingsController extends AbstractController
             ->add('defaultTimeFormat', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultTimeFormat', 'choices' => $this->localeHelper->getTimeFormats(), 'attr' => ['class' => 'form-select']])
             ->add('defaultTimezone', TimezoneType::class, ['label' => 'administration.settings.localeSettings.form.defaultTimezone', 'attr' => ['class' => 'form-select']])
             ->add('defaultColorMode', ChoiceType::class, ['label' => 'administration.settings.interfaceSettings.form.defaultColorMode', 'choices' => $this->interfaceHelper->getColorModes(), 'attr' => ['class' => 'form-select']])
+            ->add('defaultNumberOfItemsPerPage', ChoiceType::class, ['label' => 'administration.settings.interfaceSettings.form.defaultNumberOfItemsPerPage', 'choices' => $this->interfaceHelper->getNumberOfItemsPerPageOptions(), 'attr' => ['class' => 'form-select']])
             ->add('mailerUseSmtp', CheckboxType::class, ['label' => 'administration.settings.mailSettings.form.useSmtp', 'required' => false])
             ->add('mailerHost', TextType::class, ['label' => 'administration.settings.mailSettings.form.host', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
             ->add('mailerPort', TextType::class, ['label' => 'administration.settings.mailSettings.form.port', 'attr' => ['disabled' => true, 'class' => 'mail-option']])
@@ -96,6 +98,7 @@ class SettingsController extends AbstractController
                 'default_timezone' => $form->get('defaultTimezone')->getData(),
 
                 'default_color_mode' => $form->get('defaultColorMode')->getData(),
+                'default_number_of_items_per_page' => $form->get('defaultNumberOfItemsPerPage')->getData(),
 
                 'mailer_transport' => !$form->get('mailerUseSmtp')->isEmpty() ? 'smtp' : '',
                 'mailer_from_address' => $form->get('mailerFromAddress')->getData(),

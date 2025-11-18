@@ -4,6 +4,7 @@ namespace Mosparo\Controller\Administration;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\DataTable\MosparoDataTableFactory;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
 use Mosparo\Form\PasswordFormType;
@@ -12,7 +13,6 @@ use Mosparo\Util\TokenGenerator;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -40,7 +40,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/', name: 'administration_user_list')]
-    public function index(Request $request, DataTableFactory $dataTableFactory): Response
+    public function index(Request $request, MosparoDataTableFactory $dataTableFactory): Response
     {
         $table = $dataTableFactory->create(['autoWidth' => true])
             ->add('email', TextColumn::class, ['label' => 'administration.user.list.user'])

@@ -55,6 +55,7 @@ class AccountController extends AbstractController
             'timeFormat' => $user->getConfigValue('timeFormat'),
             'timezone' => $user->getConfigValue('timezone'),
             'colorMode' => $user->getConfigValue('colorMode'),
+            'numberOfItemsPerPage' => $user->getConfigValue('numberOfItemsPerPage'),
         ];
         $form = $this->createFormBuilder($config, ['translation_domain' => 'mosparo'])
             ->add('locale', ChoiceType::class, ['label' => 'account.settings.form.locale', 'choices' => $this->localeHelper->findAvailableLanguages(true), 'preferred_choices' => ['default', 'browser'], 'attr' => ['class' => 'form-select']])
@@ -62,6 +63,7 @@ class AccountController extends AbstractController
             ->add('timeFormat', ChoiceType::class, ['label' => 'account.settings.form.timeFormat', 'choices' => $this->localeHelper->getTimeFormats(true), 'preferred_choices' => ['default'], 'attr' => ['class' => 'form-select']])
             ->add('timezone', ChoiceType::class, ['label' => 'account.settings.form.timezone', 'choices' => $this->localeHelper->getTimezones(true), 'preferred_choices' => ['default'], 'attr' => ['class' => 'form-select']])
             ->add('colorMode', ChoiceType::class, ['label' => 'account.settings.form.colorMode', 'choices' => $this->interfaceHelper->getColorModes(true), 'preferred_choices' => ['default'], 'attr' => ['class' => 'form-select']])
+            ->add('numberOfItemsPerPage', ChoiceType::class, ['label' => 'account.settings.form.numberOfItemsPerPage', 'choices' => $this->interfaceHelper->getNumberOfItemsPerPageOptions(true), 'preferred_choices' => ['default'], 'attr' => ['class' => 'form-select']])
             ->getForm();
 
         $form->handleRequest($request);
@@ -72,6 +74,7 @@ class AccountController extends AbstractController
             $user->setConfigValue('timeFormat', $form->get('timeFormat')->getData());
             $user->setConfigValue('timezone', $form->get('timezone')->getData());
             $user->setConfigValue('colorMode', $form->get('colorMode')->getData());
+            $user->setConfigValue('numberOfItemsPerPage', $form->get('numberOfItemsPerPage')->getData());
 
             // Store the user settings
             $this->entityManager->flush();

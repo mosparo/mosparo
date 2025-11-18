@@ -767,8 +767,8 @@
 
                     pagination: true,
                     paginationMode: 'remote',
-                    paginationSize: 25,
-                    paginationSizeSelector: [10, 25, 50, 100, 250, 500],
+                    paginationSize: {{ tabulatorPageSize }},
+                    paginationSizeSelector: {{ tabulatorPageSizeOptions|json_encode }},
                     paginationCounter: function (perPage, row, page, totalRows, totalPages) {
                         return '{{ 'tabulator.pagination.counter'|trans({
                             '%vm%': '<span class="d-inline d-md-none">',

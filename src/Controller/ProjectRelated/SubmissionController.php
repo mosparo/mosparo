@@ -4,6 +4,7 @@ namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\ApiClient\RequestHelper;
+use Mosparo\DataTable\MosparoDataTableFactory;
 use Mosparo\Entity\Submission;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Util\StringUtil;
@@ -12,7 +13,6 @@ use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
 use Omines\DataTablesBundle\DataTable;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
 
     #[Route('/', name: 'submission_list')]
     #[Route('/filter/{filter}', name: 'submission_list_filtered')]
-    public function index(Request $request, DataTableFactory $dataTableFactory, CleanupHelper $cleanupHelper, $filter = ''): Response
+    public function index(Request $request, MosparoDataTableFactory $dataTableFactory, CleanupHelper $cleanupHelper, $filter = ''): Response
     {
         if (!in_array($filter, ['spam', 'valid'])) {
             $filter = '';

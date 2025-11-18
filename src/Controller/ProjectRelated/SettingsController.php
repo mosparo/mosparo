@@ -4,6 +4,7 @@ namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\DataTable\MosparoDataTableFactory;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Entity\User;
@@ -21,7 +22,6 @@ use Omines\DataTablesBundle\Column\NumberColumn;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
 use Omines\DataTablesBundle\DataTable;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -108,7 +108,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     }
 
     #[Route('/members', name: 'settings_member_list')]
-    public function memberList(Request $request, DataTableFactory $dataTableFactory): Response
+    public function memberList(Request $request, MosparoDataTableFactory $dataTableFactory): Response
     {
         $project = $this->getActiveProject();
 
@@ -294,7 +294,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     }
 
     #[Route('/security', name: 'settings_security')]
-    public function security(Request $request, DataTableFactory $dataTableFactory): Response
+    public function security(Request $request, MosparoDataTableFactory $dataTableFactory): Response
     {
         $project = $this->getActiveProject();
 

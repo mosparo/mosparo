@@ -4,6 +4,7 @@ namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\DataTable\MosparoDataTableFactory;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\RulePackageRuleCache;
 use Mosparo\Entity\RulePackageRuleItemCache;
@@ -17,7 +18,6 @@ use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\NumberColumn;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +31,7 @@ class RulePackageController extends AbstractController implements ProjectRelated
 
     protected EntityManagerInterface $entityManager;
 
-    protected DataTableFactory $dataTableFactory;
+    protected MosparoDataTableFactory $dataTableFactory;
 
     protected RuleTypeManager $ruleTypeManager;
 
@@ -41,7 +41,7 @@ class RulePackageController extends AbstractController implements ProjectRelated
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        DataTableFactory $dataTableFactory,
+        MosparoDataTableFactory $dataTableFactory,
         RuleTypeManager $ruleTypeManager,
         RulePackageHelper $rulePackageHelper,
         TranslatorInterface $translator
