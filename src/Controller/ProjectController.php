@@ -14,7 +14,6 @@ use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\ProjectGroupHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Util\TokenGenerator;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +47,7 @@ class ProjectController extends AbstractController
     #[Route('/group/{projectGroup}', name: 'project_list_group')]
     #[Route('/filter/{filter}', name: 'project_list_filtered_root')]
     #[Route('/group/{projectGroup}/filter/{filter}', name: 'project_list_filtered_group')]
-    public function list(DataTableFactory $dataTableFactory, Request $request, $filter = '', ProjectGroup $projectGroup = null): Response
+    public function list(Request $request, $filter = '', ProjectGroup $projectGroup = null): Response
     {
         // Load the view from the user configuration
         $user = $this->getUser();
