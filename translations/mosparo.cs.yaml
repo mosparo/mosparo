@@ -1107,3 +1107,23 @@ tools:
     securitySettingsHelp: Zahrnuje všechna nastavení související se zabezpečením projektu.
     rulePackagesHelp: Zahrnuje všechny sady pravidel projektu.
     rules: Pravidla
+projectGroup:
+  mainGroup: Hlavní skupina
+  action:
+    edit: Upravit skupinu
+    delete: Smazat skupinu
+    openMainGroup: Zpět na hlavní skupinu
+    openParentGroupName: Zpět na %name%
+    openParentGroup: Otevřít nadřazenou skupinu
+    openGroup: Otevřít skupinu
+    backToList: Zpět na seznam projektů
+  create:
+    title: Vytvořit projektovou skupinu
+  edit:
+    title: Upravit skupinu projektů %projectGroupName%
+  form:
+    name: Jméno
+    description: Popis
+    parentGroup: Nadřazená skupina
+    tooltip:
+      activeGroup: Upravujete tuto skupinu.
