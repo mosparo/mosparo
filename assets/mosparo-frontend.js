@@ -821,15 +821,26 @@ function mosparo(containerId, url, uuid, publicKey, options)
         return hArr.map((bytes) => bytes.toString(16).padStart(2, '0')).join('');
     }
 
-    this.solvePoWPuzzle = async function(submitToken, targetHash, maxNumber) {
+    this.solvePoWPuzzle = async function(submitToken, targetHash, maxNumber, startNumber) {
         let selectedNumber = null;
 
-        for (let i = 0; i < maxNumber; i++) {
+        if (typeof startNumber === 'undefined') {
+            startNumber = 0
+        }
+
+        for (let i = startNumber; i < maxNumber; i++) {
             let hash = await this.generateHash(submitToken + i);
 
             if (hash === targetHash) {
                 selectedNumber = i;
                 break;
+            }
+
+            if ((i % 1000) === 0) {
+                setTimeout(() => {
+                    _this.solvePoWPuzzle(submitToken, targetHash, maxNumber, i + 1);
+                }, 1);
+                return;
             }
         }
 
