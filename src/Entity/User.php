@@ -307,6 +307,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 
     public function __unserialize(array $data): void
     {
+        // This is a fallback for after the update to v1.4.6.
+        if (isset($data["\x00Mosparo\Entity\User\x00id"])) {
+            $this->id = $data["\x00Mosparo\Entity\User\x00id"];
+            $this->email = $data["\x00Mosparo\Entity\User\x00email"];
+            $this->password = $data["\x00Mosparo\Entity\User\x00password"];
+            $this->roles = $data["\x00Mosparo\Entity\User\x00roles"];
+
+            return;
+        }
+
         [
             $this->id,
             $this->email,
