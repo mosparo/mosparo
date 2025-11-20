@@ -12,3 +12,10 @@ tools:
   import:
     importFile:
       correctFile: Prosím nahrajte správný soubor JSON.
+settings:
+  mosparoName:
+    colonNotAllowed: V názvu instalace mosparo není povoleno používat dvojtečku (:).
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: Vaše IP adresa není povolena v seznamu povolených adres. Přidejte prosím svou IP adresu do seznamu.
