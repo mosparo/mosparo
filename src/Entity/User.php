@@ -290,4 +290,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 
         return $this;
     }
+
+    /**
+     * This is required to prevent Symfony from storing the whole user object, including all project memberships
+     * into the session, which is stored in the database and is limited to 64KB.
+     */
+    public function __serialize(): array
+    {
+        return [
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->roles,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        // This is a fallback for after the update to v1.4.6.
+        if (isset($data["\x00Mosparo\Entity\User\x00id"])) {
+            $this->id = $data["\x00Mosparo\Entity\User\x00id"];
+            $this->email = $data["\x00Mosparo\Entity\User\x00email"];
+            $this->password = $data["\x00Mosparo\Entity\User\x00password"];
+            $this->roles = $data["\x00Mosparo\Entity\User\x00roles"];
+
+            return;
+        }
+
+        [
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->roles,
+        ] = $data;
+    }
 }
