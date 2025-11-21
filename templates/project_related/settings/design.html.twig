@@ -125,6 +125,14 @@
                                             </span>
                                         </a>
                                     </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-font-size" class="nav-link" data-bs-toggle="tab">
+                                            <i class="ti ti-text-size"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.dimensions.text'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="card tab-pane active show" id="tabs-box-size">
@@ -198,6 +206,18 @@
                                                             </button>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-font-size">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                    {{ form_row(form.fontSize) }}
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    {{ form_row(form.lineHeight) }}
                                                 </div>
                                             </div>
                                         </div>

@@ -87,6 +87,8 @@ class Project
         'boxBorderWidth' => 3,
         'checkboxRadius' => 20,
         'checkboxBorderWidth' => 3,
+        'fontSize' => ['value' => 16, 'unit' => 'px'],
+        'lineHeight' => ['value' => 22, 'unit' => 'px'],
         'colorBackground' => 'rgb(255, 255, 255)',
         'colorBorder' => 'rgb(0, 0, 0)',
         'colorCheckbox' => 'rgb(0, 0, 0)',

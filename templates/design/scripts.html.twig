@@ -70,14 +70,26 @@
 
                     let variables = sizeVariables[size];
                     for (let variableName in variables) {
-                        let fieldForVariable = $('input[data-variable="' + variableName + '"]');
+                        let type = 'number';
+                        let fieldForVariable = $('input[data-variable="' + variableName + '"], .value-with-unit-widget[data-variable="' + variableName +'"]');
                         if (fieldForVariable.length > 0 && initialTrigger) {
                             continue;
                         } else if (fieldForVariable.length > 0) {
-                            fieldForVariable.val(variables[variableName]);
+                            if (fieldForVariable.hasClass('value-with-unit-widget')) {
+                                fieldForVariable.find('input').val(variables[variableName]['value']);
+                                fieldForVariable.find('select').val(variables[variableName]['unit']);
+
+                                type = 'value-with-unit';
+                            } else {
+                                fieldForVariable.val(variables[variableName]);
+                            }
+                        } else {
+                            if (typeof variables[variableName] === 'object') {
+                                type = 'value-with-unit';
+                            }
                         }
 
-                        updateCssVariable(variableName, variables[variableName], 'number');
+                        updateCssVariable(variableName, variables[variableName], type);
                     }
 
                     checkLogoAvailability();

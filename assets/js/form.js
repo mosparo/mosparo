@@ -23,6 +23,8 @@ let updateCssVariable = function (variableName, value, type) {
         value = 'transparent';
     } else if (type === 'number') {
         value = value + 'px';
+    } else if (type === 'value-with-unit' && typeof value === 'object') {
+        value = value.value + value.unit;
     }
 
     document.documentElement.style.setProperty(variableName, value);
@@ -202,6 +204,40 @@ $(document).ready(function () {
         }
 
         updateVariable($(this), val, type);
+    });
+
+    $('.value-with-unit-widget[data-variable!=""][data-variable]').each(function () {
+        let el = $(this);
+
+        let getValue = function () {
+            let value = el.find('input').val();
+            let unit = el.find('select').val();
+
+            return value + unit;
+        }
+
+        el.find('input, select').change(function (ev) {
+            if ($(ev.target).is('select')) {
+                let input = el.find('input');
+                let oldUnit = input.data('unit');
+
+                if (oldUnit === 'px' && $(this).val() !== 'px') {
+                    // Simple px to rem calculation
+                    input.val(input.val() / 16);
+                } else if ($(this).val() === 'px') {
+                    // Simple rem to px calculation
+                    input.val(input.val() * 16);
+                }
+
+                input.data('unit', $(this).val());
+            }
+
+            updateVariable(el, getValue(), 'value-with-unit');
+        });
+
+        $(this).find('input').data('unit', $(this).find('select').val());
+
+        updateVariable(el, getValue(), 'value-with-unit');
     });
 
     $('.btn-copy-input-value').click(function () {

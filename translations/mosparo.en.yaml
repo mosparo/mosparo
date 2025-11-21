@@ -977,7 +977,7 @@ settings:
     title: Design
 
     subtitles:
-      dimensionSettings: Dimensions
+      dimensionSettings: Dimensions and font size
       colorSettings: Colors
       simpleDesign: Simple design
       invisibleSimpleDesign: Invisible simple design
@@ -986,6 +986,7 @@ settings:
       dimensions:
         mosparoBox: mosparo Box
         checkbox: Checkbox
+        text: Text
       colors:
         normal: Normal
         focus: On focus and hover
@@ -1016,6 +1017,8 @@ settings:
       boxBorderWidth: Border width
       checkboxRadius: Checkbox radius
       checkboxBorderWidth: Checkbox border width
+      fontSize: Font size
+      lineHeight: Line height
       showMosparoLogo: Show mosparo logo below the checkbox
       showPingAnimation: Show ping animation to highlight the checkbox
       invisibleLogo: Logo

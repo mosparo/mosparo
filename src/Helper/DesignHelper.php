@@ -23,6 +23,8 @@ class DesignHelper
         'boxBorderWidth',
         'checkboxRadius',
         'checkboxBorderWidth',
+        'fontSize',
+        'lineHeight',
         'colorBackground',
         'colorBorder',
         'colorCheckbox',
@@ -61,6 +63,8 @@ class DesignHelper
         '--mosparo-border-color' => ['key' => 'colorBorder', 'type' => 'color'],
         '--mosparo-border-radius' => ['key' => 'boxRadius', 'type' => 'number'],
         '--mosparo-border-width' => ['key' => 'boxBorderWidth', 'type' => 'number'],
+        '--mosparo-font-size' => ['key' => 'fontSize', 'type' => 'valueWithUnit'],
+        '--mosparo-line-height' => ['key' => 'lineHeight', 'type' => 'valueWithUnit'],
         '--mosparo-background-color' => ['key' => 'colorBackground', 'type' => 'color'],
         '--mosparo-text-color' => ['key' => 'colorText', 'type' => 'color'],
         '--mosparo-shadow-color' => ['key' => 'colorShadow', 'type' => 'color'],
@@ -96,8 +100,8 @@ class DesignHelper
 
     protected static array $boxSizeVariables = [
         'small' => [
-            '--mosparo-font-size' => 12,
-            '--mosparo-line-height' => 16,
+            '--mosparo-font-size' => ['value' => 12, 'unit' => 'px'],
+            '--mosparo-line-height' => ['value' => 16, 'unit' => 'px'],
             '--mosparo-padding-top' => 16,
             '--mosparo-padding-left' => 20,
             '--mosparo-padding-right' => 16,
@@ -123,8 +127,8 @@ class DesignHelper
             '--mosparo-logo-height' => 10,
         ],
         'medium' => [
-            '--mosparo-font-size' => 16,
-            '--mosparo-line-height' => 22,
+            '--mosparo-font-size' => ['value' => 16, 'unit' => 'px'],
+            '--mosparo-line-height' => ['value' => 22, 'unit' => 'px'],
             '--mosparo-padding-top' => 20,
             '--mosparo-padding-left' => 24,
             '--mosparo-padding-right' => 20,
@@ -150,8 +154,8 @@ class DesignHelper
             '--mosparo-logo-height' => 15,
         ],
         'large' => [
-            '--mosparo-font-size' => 24,
-            '--mosparo-line-height' => 32,
+            '--mosparo-font-size' => ['value' => 24, 'unit' => 'px'],
+            '--mosparo-line-height' => ['value' => 32, 'unit' => 'px'],
             '--mosparo-padding-top' => 26,
             '--mosparo-padding-left' => 30,
             '--mosparo-padding-right' => 26,
@@ -177,8 +181,8 @@ class DesignHelper
             '--mosparo-logo-height' => 15,
         ],
         'invisible' => [
-            '--mosparo-font-size' => 16,
-            '--mosparo-line-height' => 22,
+            '--mosparo-font-size' => ['value' => 16, 'unit' => 'px'],
+            '--mosparo-line-height' => ['value' => 22, 'unit' => 'px'],
             '--mosparo-padding-top' => 0,
             '--mosparo-padding-left' => 0,
             '--mosparo-padding-right' => 0,
@@ -460,6 +464,17 @@ class DesignHelper
             } else if ($project->getDesignMode() === 'invisible-simple') {
                 $configValues = $this->getInvisibleSimpleModeValues($project, $configValues);
             }
+
+            $boxSizeDependentValues = [
+                'boxRadius' => '--mosparo-border-radius',
+                'boxBorderWidth' => '--mosparo-border-width',
+                'fontSize' => '--mosparo-font-size',
+                'lineHeight' => '--mosparo-line-height'
+            ];
+            $sizeValues = self::$boxSizeVariables[$configValues['boxSize']];
+            foreach ($boxSizeDependentValues as $key => $variableName) {
+                $configValues[$key] = $sizeValues[$variableName];
+            }
         } else {
             foreach (self::$designConfigValueKeys as $designConfigValueKey) {
                 $configValues[$designConfigValueKey] = $project->getConfigValue($designConfigValueKey);
@@ -644,9 +659,16 @@ class DesignHelper
             $realValue = $value;
             if (is_numeric($value)) {
                 $realValue = $value . 'px';
+            } else if (is_array($value)) {
+                $realValue = $value['value'] . $value['unit'];
             }
 
-            $content = $this->replaceCssVariable($content, $cssVariableName, $defaultBoxCssVariables[$cssVariableName] . 'px', $realValue);
+            $originalValue = $defaultBoxCssVariables[$cssVariableName];
+            if (is_array($originalValue)) {
+                $originalValue = $originalValue['value'] ?: current($originalValue);
+            }
+
+            $content = $this->replaceCssVariable($content, $cssVariableName, $originalValue . 'px', $realValue);
         }
 
         return $content;
@@ -691,6 +713,8 @@ class DesignHelper
                     $value = 'absolute';
                 }
             }
+        } else if ($type == 'valueWithUnit') {
+            $value = $value['value'] . $value['unit'];
         }
 
         return $value;

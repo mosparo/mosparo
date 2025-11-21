@@ -153,3 +153,16 @@
         </li>
     </ul>
 {% endblock %}
+
+{% block value_with_unit_widget %}
+    <div class="input-group value-with-unit-widget" {% with {attr: attr} %}{{ block('attributes') }}{% endwith %}>
+        <button class="btn btn-icon-only btn-decrease-value" type="button">
+            <i class="ti ti-minus"></i>
+        </button>
+        {{ form_widget(form.value) }}
+        {{ form_widget(form.unit, {'attr': {'class': 'w-auto flex-grow-0'}}) }}
+        <button class="btn btn-icon-only btn-increase-value" type="button">
+            <i class="ti ti-plus"></i>
+        </button>
+    </div>
+{% endblock %}
