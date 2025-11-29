@@ -24,14 +24,14 @@ class IpAddressRuleTester extends AbstractRuleTester
         );
     }
 
-    public function validateData($key, $value, RuleItemEntityInterface $item): array
+    public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
         $result = false;
         if ($item->getType() === 'ipAddress') {
-            $result = $this->validateIpAddress($value, $item->getValue());
+            $result = $this->validateIpAddress($lowercaseValue, $item->getValue());
         } else if ($item->getType() === 'subnet') {
-            $result = $this->validateSubnet($value, $item->getValue());
+            $result = $this->validateSubnet($lowercaseValue, $item->getValue());
         }
 
         if ($result !== false) {
@@ -48,7 +48,6 @@ class IpAddressRuleTester extends AbstractRuleTester
 
     protected function validateIpAddress($value, $itemValue): bool
     {
-        $value = strtolower($value);
         $itemValue = strtolower($itemValue);
 
         if ($value === $itemValue) {

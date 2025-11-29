@@ -19,14 +19,14 @@ class UserAgentRuleTester extends AbstractRuleTester
         $orExpr->add($qb->expr()->eq('i.type', $qb->createNamedParameter('uaRegex')));
     }
 
-    public function validateData($key, $value, RuleItemEntityInterface $item): array
+    public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
         $result = false;
         if ($item->getType() === 'uaText') {
-            $result = $this->validateTextItem($value, $item->getValue());
+            $result = $this->validateTextItem($lowercaseValue, $item->getValue());
         } else if ($item->getType() === 'uaRegex') {
-            $result = $this->validateRegexItem($value, $item->getValue());
+            $result = $this->validateRegexItem($originalValue, $item->getValue());
         }
 
         if ($result !== false) {
@@ -43,7 +43,6 @@ class UserAgentRuleTester extends AbstractRuleTester
 
     protected function validateTextItem($value, $itemValue): bool
     {
-        $value = strtolower($value);
         $itemValue = strtolower($itemValue);
 
         if (strpos($itemValue, '*') !== false || strpos($itemValue, '?') !== false) {

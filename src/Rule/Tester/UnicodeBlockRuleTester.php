@@ -33,7 +33,7 @@ class UnicodeBlockRuleTester extends AbstractRuleTester
         );
     }
 
-    public function validateData($key, $value, RuleItemEntityInterface $item): array
+    public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array
     {
         $unicodeIndex = new UnicodeIndex();
 
@@ -45,7 +45,8 @@ class UnicodeBlockRuleTester extends AbstractRuleTester
             return [];
         }
 
-        if (preg_match($block->getRegex(), $value)) {
+        // Use the original value to correctly match the Unicode Block
+        if (preg_match($block->getRegex(), $originalValue)) {
             $matchingItems = [
                 'type' => $item->getType(),
                 'value' => $item->getValue(),

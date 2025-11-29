@@ -27,10 +27,35 @@ class DomainRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new DomainRuleTester();
-        $result = $ruleTester->validateData('test', 'https://test.example.com/test/test.html', $ruleItemStub);
+        $result = $ruleTester->validateData('test', 'https://test.example.com/test/test.html', 'https://test.example.com/test/test.html', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEquals(['type' => 'website', 'value' => 'example.com', 'rating' => 5.0, 'uuid' => null], $result);
+    }
+
+    public function testValidateDataDomainWithUppercase()
+    {
+        $ruleStub = $this->createStub(Rule::class);
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('website');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('EXAMPLE.com');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(5.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
+
+        $ruleTester = new DomainRuleTester();
+        $result = $ruleTester->validateData('test', 'https://test.example.com/test/test.html', 'https://test.EXAMPLE.com/test/test.html', $ruleItemStub);
+
+        $this->assertIsArray($result);
+        $this->assertEquals(['type' => 'website', 'value' => 'EXAMPLE.com', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
     public function testValidateDataDomainInEmail()
@@ -52,7 +77,7 @@ class DomainRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new DomainRuleTester();
-        $result = $ruleTester->validateData('test', 'no-reply@example.com', $ruleItemStub);
+        $result = $ruleTester->validateData('test', 'no-reply@example.com', 'no-reply@example.com', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEquals(['type' => 'website', 'value' => 'example.com', 'rating' => 5.0, 'uuid' => null], $result);
@@ -77,7 +102,7 @@ class DomainRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new DomainRuleTester();
-        $result = $ruleTester->validateData('test', 'https://exam.pletest.com/test/test.html', $ruleItemStub);
+        $result = $ruleTester->validateData('test', 'https://exam.pletest.com/test/test.html', 'https://exam.pletest.com/test/test.html', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);
@@ -102,7 +127,7 @@ class DomainRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new DomainRuleTester();
-        $result = $ruleTester->validateData('test', 'https://example.network/test/test.html', $ruleItemStub);
+        $result = $ruleTester->validateData('test', 'https://example.network/test/test.html', 'https://example.network/test/test.html', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);
@@ -127,7 +152,7 @@ class DomainRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new DomainRuleTester();
-        $result = $ruleTester->validateData('test', 'texample.net', $ruleItemStub);
+        $result = $ruleTester->validateData('test', 'texample.net', 'texample.net', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);

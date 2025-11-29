@@ -34,7 +34,7 @@ class AbstractRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new WordRuleTester();
-        $result = $ruleTester->validateData('test', 'word1', $ruleItemStub);
+        $result = $ruleTester->validateData('test', 'word1', 'word1', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEquals(['type' => 'text', 'value' => 'word', 'rating' => 10.0, 'uuid' => null], $result);
@@ -77,7 +77,7 @@ class AbstractRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleCacheStub);
 
         $ruleTester = new WordRuleTester();
-        $result = $ruleTester->validateData('test', 'word', $ruleItemStub);
+        $result = $ruleTester->validateData('test', 'word', 'word', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEquals(['type' => 'text', 'value' => 'word', 'rating' => 35.0, 'uuid' => null], $result);

@@ -39,7 +39,7 @@ class WebsiteRuleTester extends AbstractRuleTester
         }
     }
 
-    public function validateData($key, $value, RuleItemEntityInterface $item): array
+    public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
         $preparedValue = $item->getValue();
@@ -47,10 +47,9 @@ class WebsiteRuleTester extends AbstractRuleTester
             $preparedValue = '//' . $preparedValue;
         }
 
-        $value = strtolower($value);
         $preparedValue = strtolower($preparedValue);
 
-        if (strpos($value, $preparedValue) !== false) {
+        if (strpos($lowercaseValue, $preparedValue) !== false) {
             $matchingItems = [
                 'type' => $item->getType(),
                 'value' => $item->getValue(),

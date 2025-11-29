@@ -10,5 +10,5 @@ interface RuleTesterInterface
 {
     public function buildExpressions(QueryBuilder $qb, Orx $orExpr, array $fieldData, ?string $value);
 
-    public function validateData($key, $value, RuleItemEntityInterface $item): array;
+    public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array;
 }

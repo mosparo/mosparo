@@ -8,7 +8,7 @@ use Mosparo\Rule\Tester\ProviderRuleTester;
 
 class ProviderRuleTesterTest extends TestCaseWithItems
 {
-    public function testValidateDataIpAddress()
+    public function testValidateDataAsNumber()
     {
         $ruleStub = $this->createStub(Rule::class);
 
@@ -27,13 +27,13 @@ class ProviderRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new ProviderRuleTester();
-        $result = $ruleTester->validateData('asNumber', '1234', $ruleItemStub);
+        $result = $ruleTester->validateData('asNumber', '1234', '1234', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEquals(['type' => 'asNumber', 'value' => '1234', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
-    public function testValidateDataSubnet()
+    public function testValidateDataCountry()
     {
         $ruleStub = $this->createStub(Rule::class);
 
@@ -52,7 +52,7 @@ class ProviderRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new ProviderRuleTester();
-        $result = $ruleTester->validateData('country', 'CH', $ruleItemStub);
+        $result = $ruleTester->validateData('country', 'ch', 'CH', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEquals(['type' => 'country', 'value' => 'CH', 'rating' => 5.0, 'uuid' => null], $result);
@@ -77,7 +77,7 @@ class ProviderRuleTesterTest extends TestCaseWithItems
             ->willReturn($ruleStub);
 
         $ruleTester = new ProviderRuleTester();
-        $result = $ruleTester->validateData('asNumber', '4321', $ruleItemStub);
+        $result = $ruleTester->validateData('asNumber', '4321', '4321', $ruleItemStub);
 
         $this->assertIsArray($result);
         $this->assertEmpty($result);
