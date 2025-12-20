@@ -119,6 +119,7 @@ rule:
     filter:
       useWildcard: Utilizza %wildcard% come carattere jolly.
       itemSpamRating: Valutazione spam
+      title: Filtra elementi
     noItemsInTable:
       title: Ancora nessun oggetto
       text: Questa regola ancora non contiene oggetti.
@@ -538,6 +539,7 @@ submission:
         requestDataPlain: I dati richiesta del passo 7.
     action:
       openVerificationSimulation: Simulazione di validiazione
+      openVerificationIssues: Problemi di verifica
     ignoredFields:
       title: Campi ignorati
       intro: I campi seguenti non sono stati trasmessi a causa della loro tipologia (nell'esempio password o caricamento file).
@@ -546,6 +548,10 @@ submission:
         message: Messaggio
         errorMessage: Messaggio di errore
         debugInformation: Informazioni di debug
+        fieldIssue: Campo %name%
+        generalIssue: Problema generale
+      title: Problemi di verifica
+      intro: Sono stati rilevati i seguenti problemi durante la verifica dell’invio. Queste informazioni possono essere utili per capire perché l’invio è stato rifiutato.
   filter:
     options:
       valid: Invii validi
@@ -554,6 +560,7 @@ submission:
     dropdown: Filtra l'elenco degli invii
   title: Invii
   backToList: Torna agli invii
+  submitTokenMissing: Token di invio mancante
 settings:
   general:
     apiKeys:
@@ -709,7 +716,7 @@ settings:
     honeypot:
       title: Honeypot
       intro: Un campo honeypot è un campo invisibile del modulo. Gli utenti non possono vederlo ma gli spam bots probabilmente lo compileranno. Se questo accade significa che il modulo non è stato compilato da un utente vero e proprio.
-      infoField: Inserisci un nome per il campo honeypot. Il nome dovrebbe essere un normalissimo nome di un campo che non hai ancora utilizzato nel tuo form. mosparo aggiungerà automaticamente questo campo; non devi modificare manualmente il tuo form.
+      infoField: Inserisci un nome per il campo honeypot. Il nome dovrebbe essere un normalissimo nome di un campo che non hai ancora utilizzato nel tuo modulo. mosparo aggiungerà automaticamente questo campo; non devi modificare manualmente il tuo modulo.
     message:
       successfullySaved: Le impostazioni di sicurezza sono state salvate.
       guidelineSuccessfullySaved: Le linee guida di sicurezza sono state salvate.
@@ -943,6 +950,8 @@ tools:
     designSettingsHelp: Include tutte le impostazioni relative alla grafica del progetto.
     securitySettingsHelp: Include tutte le impostazioni relative alla sicurezza del progetto.
     generalSettingsHelp: Include le impostazioni generiche di un progetto come il suo nome, la descrizione, l'host e il punteggio per lo spam.
+  importExport:
+    infoRulesWithManyItems: Le regole con centinaia di elementi possono consumare molta memoria durante l’importazione o l’esportazione. Questo può causare un errore quando l’operazione viene eseguita dal browser. In questi casi, aumenta il limite di memoria del processo PHP oppure utilizza il comando CLI per importare o esportare le regole.
 administration:
   security:
     loginThrottling:
@@ -1058,7 +1067,14 @@ administration:
     buttons:
       continue: Continua
     updateChannel: Canale di aggiornamento
-    finalize: {}
+    finalize:
+      process:
+        v14:
+          title: Elabora attività
+          intro: mosparo deve ottimizzare i dati memorizzati per intercettare lo spam in modo affidabile. Attendere mentre le attività vengono eseguite.
+          processingPleaseWait: Elaborazione delle attività…
+          processingStats: Elaborate %processedTasks% di %totalTasks%
+          doNotLeave: Non abbandonare questa pagina né interrompere il processo. Se il processo non dovesse cambiare per un periodo prolungato, aggiorna la pagina.
     execute:
       description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
       message:
@@ -1093,6 +1109,11 @@ administration:
       hostsAlert:
         title: 'Versione 1.2: Cambiata verifica origine'
         intro2: Prego verificare i tuoi progetti e moduli ora.
+        intro: Con la versione 1.2, mosparo inizia a verificare l'origine di una richiesta frontend. A causa di questa modifica, gli host nel tuo progetto devono essere impostati correttamente.
+      geoIp2Info:
+        title: 'Versione 1.2.2: ID Account MaxMind richiesto'
+        intro: Per scaricare il database GeoIP2 sono necessari l'ID account e la chiave di licenza MaxMind.
+        intro2: Verifica la configurazione GeoIP2 e inserisci il tuo ID account.
   settings:
     message:
       savedSuccessfully: Le impostazioni sono state salvate correttamente.
@@ -1184,6 +1205,7 @@ administration:
       intro: Il logo è stato disegnato da Jan Kosa.
       license: Il logo è concesso in licenza %linkStart%Creative Commons Attribution-NoDerivatives 4.0 International License%linkEnd%.
     description: Recupera tutte le informazioni su mosparo.
+    listOfContributors: Molte altre persone ci hanno aiutato a migliorare ed estendere mosparo nel corso degli ultimi anni. Siamo grati per tutto l'aiuto, l'ispirazione e il feedback. Guarda l'%linkStart%elenco completo delle persone qui%linkEnd%.
   title: Amministrazione
   cronJobs:
     setup:
@@ -1405,6 +1427,9 @@ action:
   back: Indietro
   saveChanges: Salva modifiche
   exportItems: Esporta oggetti
+  reset: Ripristina
+  toggleDropdown: Attiva/Disattiva menu a tendina
+  filter: Filtra
 state:
   inactive: Inattivo
   ignored: Ignorato
@@ -1601,6 +1626,7 @@ tooltip:
   host: Host
   publicKey: Chiave pubblica
   privateKey: Chiave privata
+  deleted: Eliminato
 tabulator:
   data:
     loading: Caricamento…
@@ -1616,3 +1642,14 @@ tabulator:
     prevTitle: Pagina precedente
     nextTitle: Pagina successiva
     all: Tutte
+    first: '%s%Primo%e%'
+    last: '%s%Ultimo%e%'
+    prev: '%s%Prec%e%'
+    next: '%s%Succ%e%'
+    counter: '%vd%Pagina%e% %page% %vd%di%e%%vm%/%e% %totalPages%'
+  filter:
+    default: Filtra colonna…
+multiSelect:
+  selectedItems: Elementi selezionati
+  actions:
+    deleteSelectedItems: Elimina elementi selezionati
