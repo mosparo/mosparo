@@ -1,0 +1,1 @@
+This directory needs to be writable for mosparo, otherwise mosparo cannot prepare the CSS cache.
