@@ -287,9 +287,13 @@ class FrontendApiController extends AbstractController
             $this->ruleTesterHelper->checkRequest($submission, $securitySettings);
         }
 
-        $submission->setSubmitToken($submitToken);
+        $submission->setSubmitToken($submitToken, true);
 
         $entityManager->persist($submission);
+        $entityManager->flush();
+
+        // Make a second transaction and set the last submission to prevent deadlocks on the insert transaction above.
+        $submitToken->setLastSubmission($submission);
         $entityManager->flush();
 
         // Increase the day statistic if it is spam

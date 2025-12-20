@@ -82,16 +82,20 @@ class Submission implements ProjectRelatedEntityInterface
         return $this->submitToken;
     }
 
-    public function setSubmitToken(?SubmitToken $submitToken): self
+    public function setSubmitToken(?SubmitToken $submitToken, bool $doNotSetOwningSide = false): self
     {
-        // unset the owning side of the relation if necessary
-        if ($submitToken === null && $this->submitToken !== null && $this->submitToken->getLastSubmission() === $this) {
-            $this->submitToken->setLastSubmission(null);
-        }
+        // Setting the owning side may lock the submit token row, for example, when the submission is inserted.
+        // This can lead to a deadlock. To prevent a deadlock, set the owning side with a separate transaction.
+        if (!$doNotSetOwningSide) {
+            // unset the owning side of the relation if necessary
+            if ($submitToken === null && $this->submitToken !== null && $this->submitToken->getLastSubmission() === $this) {
+                $this->submitToken->setLastSubmission(null);
+            }
 
-        // set the owning side of the relation if necessary
-        if ($submitToken !== null && $submitToken->getLastSubmission() !== $this) {
-            $submitToken->setLastSubmission($this);
+            // set the owning side of the relation if necessary
+            if ($submitToken !== null && $submitToken->getLastSubmission() !== $this) {
+                $submitToken->setLastSubmission($this);
+            }
         }
 
         $this->submitToken = $submitToken;
