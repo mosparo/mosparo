@@ -8,3 +8,27 @@ password:
     form:
       constraint:
         notBlank: 사용자의 이메일을 입력해 주세요.
+settings:
+  mosparoName:
+    colonNotAllowed: mosparo 설치 이름에는 콜론(:)을 사용할 수 없습니다.
+tools:
+  import:
+    importFile:
+      correctFile: 올바른 JSON 파일을 업로드해 주세요.
+administration:
+  security:
+    backendAccess:
+      ownIpNotInAllowList: 사용자의 IP 주소는 허용 목록에 없습니다. 사용자의 IP 주소를 목록에 추가해 주세요.
+ipAllowList:
+  itemInvalid: "'%item%' 항목은 유효한 IP 주소 또는 서브넷이 아닙니다."
+honeypotField:
+  nameHasInvalidCharacter: 문자, 숫자, 대시 기호(-)만 사용해 주세요.
+securityGuideline:
+  atLeastOneCriteriaRequired: 보안 가이드라인에는 최소한 하나의 기준이 필요합니다.
+  asNumberNotNumeric: AS 번호는 숫자가 아닙니다.
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: 웹 크론 작업 간격은 최소 5분 이상이어야 합니다.
+  geoIpRefreshIntervalAtLeast1Day: GeoIP2 새로 고침 간격은 최소한 1일 이상이어야 합니다.
+hosts:
+  hostContainsProtocol: '이 호스트에는 프로토콜이 포함되어 있습니다. 프로토콜 없이 호스트를 입력하세요(예시: https://example.com 대신 example.com).'
+  hostContainsInvalidCharacter: 이 호스트에 잘못된 문자가 포함되어 있습니다. 이 필드에는 문자(a-z), 숫자(0-9), 대시, 마침표, 콜론, 별표(*)만 사용할 수 있습니다.
