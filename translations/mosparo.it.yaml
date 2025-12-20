@@ -119,6 +119,7 @@ rule:
     filter:
       useWildcard: Utilizza %wildcard% come carattere jolly.
       itemSpamRating: Valutazione spam
+      title: Filtra elementi
     noItemsInTable:
       title: Ancora nessun oggetto
       text: Questa regola ancora non contiene oggetti.
@@ -427,6 +428,8 @@ submission:
       pageTitle: Titolo pagina
       requestedAt: Richiesto il
       title: Sorgente
+      formActionUrl: URL azione modulo
+      formId: ID del modulo
     generalVerifications:
       minimumTime:
         text: Il modulo è stato inviato troppo velocemente. Sono stati impiegati solo %seconds% secondi, che è un tempo inferiore al tempo minimo di %minimumTimeSeconds% secondi.
@@ -538,6 +541,7 @@ submission:
         requestDataPlain: I dati richiesta del passo 7.
     action:
       openVerificationSimulation: Simulazione di validiazione
+      openVerificationIssues: Problemi di verifica
     ignoredFields:
       title: Campi ignorati
       intro: I campi seguenti non sono stati trasmessi a causa della loro tipologia (nell'esempio password o caricamento file).
@@ -546,6 +550,10 @@ submission:
         message: Messaggio
         errorMessage: Messaggio di errore
         debugInformation: Informazioni di debug
+        fieldIssue: Campo %name%
+        generalIssue: Problema generale
+      title: Problemi di verifica
+      intro: Sono stati rilevati i seguenti problemi durante la verifica dell’invio. Queste informazioni possono essere utili per capire perché l’invio è stato rifiutato.
   filter:
     options:
       valid: Invii validi
@@ -554,6 +562,7 @@ submission:
     dropdown: Filtra l'elenco degli invii
   title: Invii
   backToList: Torna agli invii
+  submitTokenMissing: Token di invio mancante
 settings:
   general:
     apiKeys:
@@ -623,8 +632,14 @@ settings:
           asNumbers: Numero AS
           asNumbersHelp: "Aggiungi il numero AS per il quale la linea guida dovrà essere considerata. Puoi visualizzare il numero AS dei dettagli dell'invio. Ad es.: 123456"
           intro: Definire il criterio per questa linea guida. Insieme al criterio è possibile definire per quale origine andrà utilizzata questa linea guida.
-          intro2: La linea guida verrà utilizzata per l'utente quando uno di questi criteri corrisponderà. Per poter salvare la linea guida è necessario aggiungere almeno un criterio.
+          intro2: Puoi specificare criteri in entrambe le categorie, oppure solo criteri basati su IP o solo basati su modulo. La linea guida verrà applicata all'utente non appena uno di questi criteri per categoria (basato su IP o basato su modulo) sarà soddisfatto. È necessario aggiungere almeno un criterio per salvare la linea guida.
           subnetsHelp: "Aggiungere la sottorete per la quale questa linea guida verrà considerata. E' possibile definire una sottorete IPv4 oppure IPv6. Puoi vedere l'indirizzo IP nei dettagli dell'invio. Ad es.: 192.168.1.0/24"
+          formPageUrls: URL delle pagine del modulo
+          formPageUrlsHelp: "Aggiungi gli URL dei moduli per i quali questa linea guida dovrebbe essere considerata. Puoi definire un URL assoluto o utilizzare l'asterisco (*) come carattere jolly. Esempio: https://example.com/contact/\""
+          formActionUrls: URL delle azioni del modulo
+          formActionUrlsHelp: "Aggiungi gli URL delle azioni dei moduli per i quali questa linea guida dovrebbe essere considerata. Puoi definire un URL assoluto o utilizzare l'asterisco (*) come carattere jolly. Esempio: https://example.com/contact/"
+          formIds: ID dei moduli
+          formIdsHelp: "Aggiungi gli ID dei moduli per i quali questa linea guida dovrebbe essere considerata. Definisci l'ID senza il simbolo cancelletto (#). Esempio: contact-form"
         guideline:
           title: Linea guida
           name: Nome
@@ -635,6 +650,13 @@ settings:
           title: Impostazioni di sovrascrittura
           intro: Seleziona la casella di sovrascrittura per le impostazioni che desideri sovrascrivere rispetto a quelle del progetto o delle impostazioni di sicurezza generali. Se non sovrascrivi un'impostazione, mosparo utilizzerà quella del progetto o delle impostazioni generali. Se configuri lo stesso valore presente nel progetto o nelle impostazioni generali, il valore personalizzato verrà rimosso dalla politica di sicurezza.
         infoGeoIp2Disabled: GeoIP2 non è disponibile. Configura il database GeoIP2 per poter usare il codice Stato e il numero AS come criteri.
+        categories:
+          ipBased:
+            label: Basato su IP
+            intro: I criteri basati su IP utilizzano l'indirizzo IP dell'utente per determinare la policy di sicurezza richiesta. Questi criteri aiutano a identificare l'utente che accede a un modulo (ad esempio, abbinando il tuo indirizzo IP per impostare policy di sicurezza meno restrittive).
+          formBased:
+            label: Basato sul modulo
+            intro: I criteri basati su modulo utilizzano le informazioni del modulo in cui mosparo è integrato per determinare la policy di sicurezza richiesta. Questi criteri aiutano a differenziare tra diversi moduli all'interno dello stesso progetto (ad esempio, impostazioni di sicurezza diverse per un modulo di login rispetto a un modulo di contatto).
       list:
         name: Nome
         priority: Priorità
@@ -709,7 +731,7 @@ settings:
     honeypot:
       title: Honeypot
       intro: Un campo honeypot è un campo invisibile del modulo. Gli utenti non possono vederlo ma gli spam bots probabilmente lo compileranno. Se questo accade significa che il modulo non è stato compilato da un utente vero e proprio.
-      infoField: Inserisci un nome per il campo honeypot. Il nome dovrebbe essere un normalissimo nome di un campo che non hai ancora utilizzato nel tuo form. mosparo aggiungerà automaticamente questo campo; non devi modificare manualmente il tuo form.
+      infoField: Inserisci un nome per il campo honeypot. Il nome dovrebbe essere un normalissimo nome di un campo che non hai ancora utilizzato nel tuo modulo. mosparo aggiungerà automaticamente questo campo; non devi modificare manualmente il tuo modulo.
     message:
       successfullySaved: Le impostazioni di sicurezza sono state salvate.
       guidelineSuccessfullySaved: Le linee guida di sicurezza sono state salvate.
@@ -771,6 +793,8 @@ settings:
       boxRadius: Raggio cornice
       checkboxRadius: Raggio casella di spunta
       checkboxBorderWidth: Spessore bordo casella di spunta
+      fontSize: Dimensione carattere
+      lineHeight: Interlinea
     subtitles:
       colors:
         normal: Normale
@@ -780,13 +804,14 @@ settings:
         loading: Durante il caricamento
       invisibleSimpleDesign: Design semplificato invisibile
       colorSettings: Colori
-      dimensionSettings: Dimensioni
+      dimensionSettings: Dimensioni e dimensione carattere
       simpleDesign: Design semplificato
       colorAndDimensionSettings: Colori e dimensioni
       preview: Anteprima
       dimensions:
         mosparoBox: Cornice Mosparo
         checkbox: Casella di spunta
+        text: Testo
     cr:
       value: Valore
       text: Testo
@@ -943,6 +968,8 @@ tools:
     designSettingsHelp: Include tutte le impostazioni relative alla grafica del progetto.
     securitySettingsHelp: Include tutte le impostazioni relative alla sicurezza del progetto.
     generalSettingsHelp: Include le impostazioni generiche di un progetto come il suo nome, la descrizione, l'host e il punteggio per lo spam.
+  importExport:
+    infoRulesWithManyItems: Le regole con centinaia di elementi possono consumare molta memoria durante l’importazione o l’esportazione. Questo può causare un errore quando l’operazione viene eseguita dal browser. In questi casi, aumenta il limite di memoria del processo PHP oppure utilizza il comando CLI per importare o esportare le regole.
 administration:
   security:
     loginThrottling:
@@ -1058,7 +1085,14 @@ administration:
     buttons:
       continue: Continua
     updateChannel: Canale di aggiornamento
-    finalize: {}
+    finalize:
+      process:
+        v14:
+          title: Elabora attività
+          intro: mosparo deve ottimizzare i dati memorizzati per intercettare lo spam in modo affidabile. Attendere mentre le attività vengono eseguite.
+          processingPleaseWait: Elaborazione delle attività…
+          processingStats: Elaborate %processedTasks% di %totalTasks%
+          doNotLeave: Non abbandonare questa pagina né interrompere il processo. Se il processo non dovesse cambiare per un periodo prolungato, aggiorna la pagina.
     execute:
       description: Attendi e non uscire da questa pagina. L'aggiornamento è iniziato…
       message:
@@ -1093,6 +1127,11 @@ administration:
       hostsAlert:
         title: 'Versione 1.2: Cambiata verifica origine'
         intro2: Prego verificare i tuoi progetti e moduli ora.
+        intro: Con la versione 1.2, mosparo inizia a verificare l'origine di una richiesta frontend. A causa di questa modifica, gli host nel tuo progetto devono essere impostati correttamente.
+      geoIp2Info:
+        title: 'Versione 1.2.2: ID Account MaxMind richiesto'
+        intro: Per scaricare il database GeoIP2 sono necessari l'ID account e la chiave di licenza MaxMind.
+        intro2: Verifica la configurazione GeoIP2 e inserisci il tuo ID account.
   settings:
     message:
       savedSuccessfully: Le impostazioni sono state salvate correttamente.
@@ -1124,6 +1163,7 @@ administration:
       title: Impostazioni interfaccia
       form:
         defaultColorMode: Modalità colore predefinita
+        defaultNumberOfItemsPerPage: Numero predefinito di elementi per pagina
     description: Configura le impostazioni da applicare alla tua installazione di mosparo.
   user:
     help:
@@ -1184,6 +1224,7 @@ administration:
       intro: Il logo è stato disegnato da Jan Kosa.
       license: Il logo è concesso in licenza %linkStart%Creative Commons Attribution-NoDerivatives 4.0 International License%linkEnd%.
     description: Recupera tutte le informazioni su mosparo.
+    listOfContributors: Molte altre persone ci hanno aiutato a migliorare ed estendere mosparo nel corso degli ultimi anni. Siamo grati per tutto l'aiuto, l'ispirazione e il feedback. Guarda l'%linkStart%elenco completo delle persone qui%linkEnd%.
   title: Amministrazione
   cronJobs:
     setup:
@@ -1262,6 +1303,7 @@ account:
       dateFormat: Formato data
       timezone: Fuso orario
       colorMode: Modalità colore
+      numberOfItemsPerPage: Numero di elementi per pagina
     title: Impostazioni utente
     message:
       successfullySaved: Le impostazioni sono state salvate.
@@ -1405,6 +1447,9 @@ action:
   back: Indietro
   saveChanges: Salva modifiche
   exportItems: Esporta oggetti
+  reset: Ripristina
+  toggleDropdown: Attiva/Disattiva menu a tendina
+  filter: Filtra
 state:
   inactive: Inattivo
   ignored: Ignorato
@@ -1601,6 +1646,7 @@ tooltip:
   host: Host
   publicKey: Chiave pubblica
   privateKey: Chiave privata
+  deleted: Eliminato
 tabulator:
   data:
     loading: Caricamento…
@@ -1616,3 +1662,14 @@ tabulator:
     prevTitle: Pagina precedente
     nextTitle: Pagina successiva
     all: Tutte
+    first: '%s%Primo%e%'
+    last: '%s%Ultimo%e%'
+    prev: '%s%Prec%e%'
+    next: '%s%Succ%e%'
+    counter: '%vd%Pagina%e% %page% %vd%di%e%%vm%/%e% %totalPages%'
+  filter:
+    default: Filtra colonna…
+multiSelect:
+  selectedItems: Elementi selezionati
+  actions:
+    deleteSelectedItems: Elimina elementi selezionati
