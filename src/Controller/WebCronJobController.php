@@ -102,7 +102,7 @@ class WebCronJobController extends AbstractController
 
         // Download the rule packages, only execute this if we have more than 10% of the max execution time available.
         if ((time() - $start) < ($maxExecutionTime * 0.9)) {
-            $this->rulePackageHelper->fetchAll();
+            $this->rulePackageHelper->fetchAll($start, $maxExecutionTime * 0.6);
         }
 
         // Update the GeoIP2 database, only execute this if we have more than 10% of the max execution time available.

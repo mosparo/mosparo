@@ -117,6 +117,12 @@
 
                 <div class="col-auto ms-auto">
                     <div class="btn-list">
+                        {% if canManage %}
+                            <a href="{{ path('rule_package_update_cache', {'_projectId': rulePackage.project.id, 'id': rulePackage.id}) }}" class="btn btn-teal">
+                                <i class="ti ti-refresh"></i>
+                                {{ 'action.updateCache'|trans }}
+                            </a>
+                        {% endif %}
                         <div class="dropdown">
                             <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'rule.filter.dropdown'|trans }}">
                                 <i class="ti ti-filter"></i>

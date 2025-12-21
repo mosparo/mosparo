@@ -127,6 +127,10 @@ project:
     message:
       successfullyDeleted: The project %projectName% was deleted successfully.
 
+    deleteRulePackages:
+        intro1: There are rule packages present in this project. You cannot delete the project.
+        intro2: Please delete the rule packages first and then delete the project.
+
   roles:
     reader: Reader
     editor: Editor
@@ -515,9 +519,43 @@ rulePackage:
 
       backToRulePackage: Back to rule package
 
+  updateCache:
+    title: Update cache
+    intro:
+      all: To use the rule packages, they need to be imported. For this, mosparo will create a local cache with the content of each rule package. Depending on the size of the rule packages, this can take a moment.
+      one: To use the rule package, it need to be imported. For this, mosparo will create a local cache with the content of the rule package. Depending on the size of the rule package, this can take a moment.
+
+    hintCronjob: You can automate this step by using cron jobs. You can find more about that in %linkStart%mosparo's documentation%linkEnd%.
+
+    alert:
+      doNotLeave: Please do not leave this page while the process is completed. If you leave this page, the process will stop, and the cache will not be up to date.
+      processCompleted: The process is completed. You can leave this page now.
+
+    progress:
+      rulePackage: Rule package
+      status: Status
+      progress: Progress
+
+    status:
+      pleaseWait: Please wait...
+      importing: Importing...
+      cleanup: Cleanup...
+      completed: Completed
+      upToDate: Up-to-date
+      tooSoon: Too soon
+      failed: Failed
+
   delete:
     title: Delete rule package %rulePackageName%
     confirm: Do you really want to delete the rule package %rulePackageName%?
+
+    process:
+      title: Deleting rule package %rulePackageName%
+      intro: Please wait while mosparo deletes the rule package. This can take a while, depending on the size of the rule package.
+
+      alert:
+        doNotLeave: Please do not leave this page while the process is completed. If you leave this page, the process will stop, and the rule package may not be deleted.
+        processCompleted: The rule package is deleted. You can leave this page now.
 
     message:
       successfullyDeleted: The rule package %rulePackageName% was deleted successfully.
@@ -1771,6 +1809,9 @@ action:
   howToImport: How to import
   toggleDropdown: Toggle dropdown
   filter: Filter
+  updateCache: Update cache
+  goToRulePackage: Go to rule package
+  goToRulePackages: Go to rule packages
 
 # General values
 general:

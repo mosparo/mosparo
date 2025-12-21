@@ -161,14 +161,16 @@ services:
         arguments: [ !tagged mosparo.ruleType ]
 
     Mosparo\Helper\GeoIp2Helper:
-        class: Mosparo\Helper\GeoIp2Helper
         arguments:
             $downloadDirectory: '%kernel.project_dir%/var/data/geoip2'
 
     Mosparo\Helper\ImportHelper:
-        class: Mosparo\Helper\ImportHelper
         arguments:
             $importDirectory: '%kernel.project_dir%/var/data/import'
+
+    Mosparo\Helper\RulePackageHelper:
+        arguments:
+            $rulePackageDirectory: '%kernel.project_dir%/var/data/rule-packages'
 
     Mosparo\Helper\SetupHelper:
         arguments:
@@ -263,7 +265,6 @@ services:
         tags:
             - { name: security.expression_language_provider }
             - { name: routing.expression_language_provider }
-
 
     Mosparo\DataTable\MosparoDataTableFactory:
         arguments:

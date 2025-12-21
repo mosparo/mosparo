@@ -308,7 +308,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         $errorMessage = null;
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $importHelper->executeImport($token);
+                $refreshRulePackages = $importHelper->executeImport($token);
             } catch (ImportException $e) {
                 $error = true;
                 $errorMessage = $e->getMessage();
@@ -343,7 +343,11 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     )
                 );
 
-                return $this->redirectToRoute('tools_import', ['_projectId' => $this->getActiveProject()->getId()]);
+                if ($refreshRulePackages) {
+                    return $this->redirectToRoute('rule_package_update_cache_all', ['_projectId' => $this->getActiveProject()->getId()]);
+                } else {
+                    return $this->redirectToRoute('tools_import', ['_projectId' => $this->getActiveProject()->getId()]);
+                }
             }
         }
 

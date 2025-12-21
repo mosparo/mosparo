@@ -112,7 +112,7 @@ class ImportHelper
         return [$jobData, $importData, $this->hasChanges($changes), $changes];
     }
 
-    public function executeImport(?string $token, array $jobData = [])
+    public function executeImport(?string $token, array $jobData = []): bool
     {
         if ($token !== null) {
             $jobData = $this->loadJobData($token);
@@ -137,6 +137,7 @@ class ImportHelper
 
         // Execute the changes
         $refreshCssCache = false;
+        $refreshRulePackages = false;
         foreach ($changes as $sectionKey => $sectionChanges) {
             if (in_array($sectionKey, ['generalSettings', 'designSettings', 'securitySettings'])) {
                 $this->executeProjectChanges($project, $sectionChanges);
@@ -156,11 +157,7 @@ class ImportHelper
 
             // Update the modified rule packages.
             if (!empty($modifiedRulePackages)) {
-                try {
-                    $this->rulePackageHelper->fetchRulePackages($modifiedRulePackages);
-                } catch (\Exception $e) {
-                    // Ignore all errors because the method call above is a helper but not required.
-                }
+                $refreshRulePackages = true;
             }
         }
 
@@ -176,6 +173,8 @@ class ImportHelper
 
         // Set the originally active project
         $this->projectHelper->setActiveProject($activeProject);
+
+        return $refreshRulePackages;
     }
 
     protected function loadImportData(array $jobData): array

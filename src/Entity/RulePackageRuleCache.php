@@ -7,6 +7,7 @@ use Mosparo\Repository\RulePackageRuleCacheRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Mosparo\Rule\RuleEntityInterface;
+use DateTimeInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RulePackageRuleCacheRepository::class)]
@@ -37,12 +38,18 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
     #[ORM\OneToMany(targetEntity: RulePackageRuleItemCache::class, mappedBy: 'rulePackageRuleCache', orphanRemoval: true)]
     private Collection $items;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $numberOfItems;
+
     #[ORM\Column(type: 'float', nullable: true)]
     private ?float $spamRatingFactor = null;
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -156,6 +163,18 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
         return null;
     }
 
+    public function getNumberOfItems(): ?int
+    {
+        return $this->numberOfItems;
+    }
+
+    public function setNumberOfItems(?int $numberOfItems): self
+    {
+        $this->numberOfItems = $numberOfItems;
+
+        return $this;
+    }
+
     public function getSpamRatingFactor(): ?float
     {
         return $this->spamRatingFactor;
@@ -178,5 +197,22 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
         $this->project = $project;
 
         return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getId() . '-' . spl_object_id($this);
     }
 }

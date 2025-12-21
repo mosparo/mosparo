@@ -7,11 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Rule\PreparedRuleItemTrait;
 use Mosparo\Rule\RuleEntityInterface;
 use Mosparo\Rule\RuleItemEntityInterface;
+use DateTimeInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RulePackageRuleCacheRepository::class)]
 #[ORM\Index(name: 'rpric_uuid_idx', fields: ['uuid'])]
 #[ORM\Index(name: 'rpric_hashed_idx', fields: ['project', 'type', 'hashedValue'])]
+#[ORM\Index(name: 'rpric_rprc_project_idx', fields: ['project', 'rulePackageRuleCache'])]
 #[ORM\HasLifecycleCallbacks]
 class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 {
@@ -41,6 +43,9 @@ class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleIte
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -127,5 +132,17 @@ class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleIte
     public function getParent(): RuleEntityInterface
     {
         return $this->rulePackageRuleCache;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 }

@@ -1,0 +1,185 @@
+{% extends 'project_related/project_related_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'rulePackage.updateCache.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{% endblock %}
+{% block pageTitle %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-narrow pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset('build/images/icons/rule-package.svg')|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">{{ 'rulePackage.updateCache.title'|trans }}</h2>
+
+                        <p>
+                            {% if rulePackages|length == 1 %}
+                                {{ 'rulePackage.updateCache.intro.one'|trans }}
+                            {% else %}
+                                {{ 'rulePackage.updateCache.intro.all'|trans }}
+                            {% endif %}
+                        </p>
+
+                        <p>
+                            {{ 'rulePackage.updateCache.hintCronjob'|trans({'%linkStart%': '<a href="https://documentation.mosparo.io/docs/installation/configure/cron_jobs" target="_blank">', '%linkEnd%': '</a>'})|raw }}
+                        </p>
+
+                        <div class="alert alert-info" id="alert-do-not-leave">
+                            {{ 'rulePackage.updateCache.alert.doNotLeave'|trans }}
+                        </div>
+
+                        <table class="table table-striped table-vcenter w-100">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'rulePackage.updateCache.progress.rulePackage'|trans }}</th>
+                                    <th>{{ 'rulePackage.updateCache.progress.status'|trans }}</th>
+                                    <th>{{ 'rulePackage.updateCache.progress.progress'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rulePackage in rulePackages %}
+                                    <tr class="rule-package-row" data-rule-package-id="{{ rulePackage.id }}">
+                                        <td class="w-25">{{ rulePackage.name }}</td>
+                                        <td class="w-1"><div class="status">{{ 'rulePackage.updateCache.status.pleaseWait'|trans }}</div></td>
+                                        <td class="w-50 text-center text-muted">
+                                            <div class="progress mb-1">
+                                                <div class="progress-bar import-progress-bar"></div>
+                                            </div>
+                                            <span class="import-progress-value">0</span>%
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="alert alert-success d-none" id="alert-progress-success">
+                            {{ 'rulePackage.updateCache.alert.processCompleted'|trans }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto mt-2 mt-md-0">
+                <a href="{{ path('rule_package_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'rulePackage.backToList'|trans }}
+                </a>
+            </div>
+            <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                {% if rulePackages|length == 1 %}
+                    <a href="{{ path('rule_package_view', {'_projectId': activeProject.id, 'id': rulePackages[0].id}) }}" class="btn btn-primary w-100 d-none" id="btn-go-to-rule-package">
+                        <i class="ti ti-info-circle"></i>
+                        {{ 'action.goToRulePackage'|trans }}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            var rulePackages = {{ rulePackageUrls|json_encode|raw }};
+            var activeRulePackageId = null;
+            var activeRulePackageUpdateUrl = null;
+
+            function updateRulePackages()
+            {
+                let isNew = false;
+                if (activeRulePackageId === null) {
+                    if (Object.keys(rulePackages).length === 0) {
+                        $('#alert-do-not-leave').addClass('d-none');
+                        $('#alert-progress-success').removeClass('d-none');
+                        $('#btn-go-to-rule-package').removeClass('d-none');
+
+                        return;
+                    }
+
+                    activeRulePackageId = Object.keys(rulePackages)[0];
+                    activeRulePackageUpdateUrl = rulePackages[activeRulePackageId];
+                    isNew = true;
+                }
+
+                let rulePackageRow = $('.rule-package-row[data-rule-package-id="' + activeRulePackageId + '"]');
+
+                if (isNew) {
+                    rulePackageRow.find('.status').text('{{ 'rulePackage.updateCache.status.importing'|trans }}').addClass('status-blue');
+                }
+
+                $.post(activeRulePackageUpdateUrl, {  }, function (responseData) {
+                    let progressBarEl = rulePackageRow.find('.import-progress-bar');
+                    let progressValueEl = rulePackageRow.find('.import-progress-value');
+                    let statusEl = rulePackageRow.find('.status');
+
+                    let progress = responseData.importProgress;
+                    if (responseData.importCompleted) {
+                        if (!progressBarEl.hasClass('bg-cyan')) {
+                            progressBarEl.addClass('bg-cyan').css('width', '0%');
+                            progressValueEl.text('0');
+                            statusEl.text('{{ 'rulePackage.updateCache.status.cleanup'|trans }}').removeClass('status-blue').addClass('status-cyan');
+                        }
+
+                        progress = responseData.cleanupProgress;
+                    }
+                    if (responseData.completed) {
+                        progress = 100;
+                    }
+
+                    if (progress) {
+                        progressBarEl.css('width', progress + '%');
+                        progressValueEl.text(progress);
+
+                        if (progress === 100) {
+                            if (responseData.result === 0) {
+                                progressBarEl.removeClass('bg-cyan').addClass('bg-green');
+                                statusEl.text('{{ 'rulePackage.updateCache.status.completed'|trans }}').removeClass('status-blue status-cyan').addClass('status-green');
+
+                                $('#btn-go-to-rule-package').prop('disabled', false);
+                            } else if (responseData.result === 3) {
+                                progressBarEl.removeClass('bg-cyan').addClass('bg-lime');
+                                statusEl.text('{{ 'rulePackage.updateCache.status.upToDate'|trans }}').removeClass('status-blue status-cyan').addClass('status-lime');
+                            } else if (responseData.result === 5) {
+                                progressBarEl.removeClass('bg-cyan').addClass('bg-purple');
+                                statusEl.text('{{ 'rulePackage.updateCache.status.tooSoon'|trans }}').removeClass('status-blue status-cyan').addClass('status-purple');
+                            }
+                        }
+                    }
+
+                    if (responseData.error) {
+                        progressBarEl.addClass('bg-red');
+                        statusEl.text('{{ 'rulePackage.updateCache.status.failed'|trans }}').removeClass('status-blue status-cyan').addClass('status-red');
+                    }
+
+                    let timeout = 1;
+                    if (responseData.completed || responseData.error) {
+                        delete rulePackages[activeRulePackageId];
+
+                        activeRulePackageId = null;
+                        activeRulePackageUpdateUrl = null;
+
+                        timeout = 500;
+                    }
+
+                    setTimeout(updateRulePackages, timeout);
+                }, 'json');
+            }
+
+            $(document).ready(function () {
+                updateRulePackages();
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

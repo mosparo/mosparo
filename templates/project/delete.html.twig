@@ -22,18 +22,29 @@
                         <div class="card-body">
                             <h2 class="card-title text-center mb-4">{{ 'project.delete.title'|trans({ '%projectName%': project.name }) }}</h2>
 
-                            <div class="alert alert-important alert-danger">
-                                <p>
-                                    {{ 'project.delete.confirm'|trans({ '%projectName%': '<strong>' ~ project.name|escape ~ '</strong>' })|raw }}
-                                </p>
-                                <p>
-                                    {{ 'general.infoUndo'|trans }}
-                                </p>
-                            </div>
+                            {% if hasRulePackages %}
+                                <div class="alert alert-danger">
+                                    <p>
+                                        {{ 'project.delete.deleteRulePackages.intro1'|trans }}
+                                    </p>
+                                    <p>
+                                        {{ 'project.delete.deleteRulePackages.intro2'|trans }}
+                                    </p>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-important alert-danger">
+                                    <p>
+                                        {{ 'project.delete.confirm'|trans({ '%projectName%': '<strong>' ~ project.name|escape ~ '</strong>' })|raw }}
+                                    </p>
+                                    <p>
+                                        {{ 'general.infoUndo'|trans }}
+                                    </p>
+                                </div>
 
-                            <div class="alert alert-danger">
-                                <p>{{ 'project.delete.disconnectFirst'|trans }}</p>
-                            </div>
+                                <div class="alert alert-danger">
+                                    <p>{{ 'project.delete.disconnectFirst'|trans }}</p>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -49,10 +60,17 @@
                     </a>
                 </div>
                 <div class="col-12 col-md-auto ms-auto order-first order-md-last">
-                    <button type="submit" class="btn btn-danger w-100">
-                        <i class="ti ti-circle-minus"></i>
-                        {{ 'action.delete'|trans }}
-                    </button>
+                    {% if hasRulePackages > 0 %}
+                        <a href="{{ path('rule_package_list', {'_projectId': project.id}) }}" class="btn btn-primary w-100">
+                            <i class="ti ti-stack"></i>
+                            {{ 'action.goToRulePackages'|trans }}
+                        </a>
+                    {% else %}
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="ti ti-circle-minus"></i>
+                            {{ 'action.delete'|trans }}
+                        </button>
+                    {% endif %}
                 </div>
             </div>
         </form>

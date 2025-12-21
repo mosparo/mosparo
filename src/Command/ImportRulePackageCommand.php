@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Enum\RulePackageType;
+use Mosparo\Exception;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\RulePackageHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -98,6 +99,9 @@ class ImportRulePackageCommand extends Command
             $content = file_get_contents($filePath);
         } else if ($useStdIn) {
             $content = file_get_contents('php://stdin');
+
+            $filePath = tempnam(sys_get_temp_dir(), 'rp-' . $rulePackage->getId());
+            file_put_contents($filePath, $content);
         }
 
         if ($input->hasOption('hash') && trim($input->getOption('hash'))) {
@@ -113,7 +117,11 @@ class ImportRulePackageCommand extends Command
         }
 
         // Process the content
-        $this->rulePackageHelper->validateAndProcessContent($rulePackage, $content);
+        try {
+            $this->rulePackageHelper->validateAndProcessContent($rulePackage, $filePath, false);
+        } catch (Exception $e) {
+            $output->writeln($formatter->formatBlock([sprintf('An error occurred: %s', $e->getMessage())], 'error', true));
+        }
 
         // Store the rule package cache
         $this->entityManager->flush();

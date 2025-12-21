@@ -13,6 +13,7 @@ use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\ProjectGroupHelper;
 use Mosparo\Helper\ProjectHelper;
+use Mosparo\Helper\RulePackageHelper;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -267,7 +268,7 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/{_projectId}/delete', name: 'project_delete')]
-    public function delete(Request $request): Response
+    public function delete(Request $request, RulePackageHelper $rulePackageHelper): Response
     {
         $project = $this->projectHelper->getActiveProject();
 
@@ -306,6 +307,7 @@ class ProjectController extends AbstractController
 
         return $this->render('project/delete.html.twig', [
             'project' => $project,
+            'hasRulePackages' => $rulePackageHelper->hasRulePackages(),
         ]);
     }
 }

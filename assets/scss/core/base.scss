@@ -229,7 +229,8 @@ body[data-bs-theme=dark] [data-bs-theme=light] {
     }
 
     .btn {
-        &.add-button {
+        &.add-button,
+        &.hide-text {
             .ti:not(.ti-icon-right) {
                 margin-right: 0;
             }

@@ -99,7 +99,7 @@ class RulePackageApiController extends AbstractController
 
         // Validate and process the content
         try {
-            $this->rulePackageHelper->validateAndProcessContent($rulePackage, $rulePackageContent);
+            $this->rulePackageHelper->validateAndProcessContent($rulePackage, $rulePackageContent, false);
         } catch (\Exception $e) {
             // Prepare the API debug data
             $debugInformation = [];

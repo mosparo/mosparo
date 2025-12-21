@@ -11,6 +11,7 @@
 /var/
 !/var/data/geoip2/.gitkeep
 !/var/data/import/.gitkeep
+!/var/data/rule-packages/.gitkeep
 /vendor/
 ###< symfony/framework-bundle ###
 

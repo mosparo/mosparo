@@ -21,16 +21,16 @@ class RulePackageCache implements ProjectRelatedEntityInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?RulePackage $rulePackage = null;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $refreshedAt = null;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'integer')]
-    private ?int $refreshInterval = 86400;
+    private int $refreshInterval = 86400;
 
-    #[ORM\OneToMany(targetEntity: RulePackageRuleCache::class, mappedBy: 'rulePackageCache', orphanRemoval :true)]
+    #[ORM\OneToMany(targetEntity: RulePackageRuleCache::class, mappedBy: 'rulePackageCache', orphanRemoval: true)]
     private Collection $rules;
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
@@ -83,7 +83,7 @@ class RulePackageCache implements ProjectRelatedEntityInterface
         return $this;
     }
 
-    public function getRefreshInterval(): ?int
+    public function getRefreshInterval(): int
     {
         return $this->refreshInterval;
     }
