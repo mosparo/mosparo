@@ -2,21 +2,20 @@
 
 namespace Mosparo\Twig;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Attributes\RulePackageTypeInfo;
 use Mosparo\Entity\RulePackageRuleCache;
-use Mosparo\Entity\RulePackageRuleItemCache;
 use Mosparo\Enum\RulePackageType;
+use Mosparo\Helper\RulePackageHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class RulePackageExtension extends AbstractExtension
 {
-    protected EntityManagerInterface $entityManager;
+    protected RulePackageHelper $rulePackageHelper;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(RulePackageHelper $rulePackageHelper)
     {
-        $this->entityManager = $entityManager;
+        $this->rulePackageHelper = $rulePackageHelper;
     }
 
     public function getFunctions(): array
@@ -40,23 +39,10 @@ class RulePackageExtension extends AbstractExtension
 
     public function countRuleItems(RulePackageRuleCache $rprc): int
     {
-        $result = $this->entityManager->createQueryBuilder()
-            ->select('COUNT(rpric.id)')
-            ->from(RulePackageRuleItemCache::class, 'rpric')
-            ->where('rpric.rulePackageRuleCache = :rprc')
-            ->setParameter('rprc', $rprc)
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
-
-        if ($result) {
-            $rprc->setNumberOfItems($result);
-
-            $this->entityManager->flush();
-
-            return $result;
+        if ($rprc->getNumberOfItems()) {
+            return $rprc->getNumberOfItems();
         }
 
-        return 0;
+        return $this->rulePackageHelper->countRuleItemsForRule($rprc);
     }
 }

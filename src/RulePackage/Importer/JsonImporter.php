@@ -10,6 +10,7 @@ use Mosparo\Entity\RulePackageRuleItemCache;
 use Mosparo\Entity\RulePackageProcessingJob;
 use Mosparo\Enum\RulePackageResult;
 use Mosparo\Exception;
+use Mosparo\Helper\RulePackageHelper;
 use Mosparo\RulePackage\ImporterInterface;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
@@ -17,10 +18,13 @@ use DateTime;
 
 class JsonImporter implements ImporterInterface
 {
+    protected RulePackageHelper $rulePackageHelper;
+
     protected EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(RulePackageHelper $rulePackageHelper, EntityManagerInterface $entityManager)
     {
+        $this->rulePackageHelper = $rulePackageHelper;
         $this->entityManager = $entityManager;
     }
 
@@ -137,6 +141,8 @@ class JsonImporter implements ImporterInterface
                     $this->entityManager->remove($item);
                 }
             }
+
+            $this->rulePackageHelper->countNumberOfRuleItems($rulePackageRuleCache);
         }
 
         // Remove all rules which are not in the data anymore
@@ -147,6 +153,8 @@ class JsonImporter implements ImporterInterface
         }
 
         $this->entityManager->flush();
+
+        $this->rulePackageHelper->countRulesForRulePackage($rulePackageCache);
 
         return RulePackageResult::COMPLETED;
     }

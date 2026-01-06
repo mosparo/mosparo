@@ -193,6 +193,22 @@ class ZipImporter implements ImporterInterface
             }
         }
 
+        // Count the rule items
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('rprc')
+            ->from(RulePackageRuleCache::class, 'rprc')
+            ->where('rprc.rulePackageCache = :rpc')
+            ->andWhere('rprc.project = :project')
+            ->setParameter('rpc', $rulePackageCache)
+            ->setParameter('project', $rulePackageCache->getProject())
+        ;
+        $rulesCounter = 0;
+        foreach ($qb->getQuery()->toIterable() as $rprc) {
+            $this->rulePackageHelper->countRuleItemsForRule($rprc);
+            $rulesCounter++;
+        }
+        $rulePackageCache->setNumberOfRules($rulesCounter);
+
         // Add the middlewares again, just in case
         if ($middlewares) {
             $this->entityManager->getConnection()->getConfiguration()->setMiddlewares($middlewares);
@@ -274,7 +290,6 @@ class ZipImporter implements ImporterInterface
             $rulePackageRuleCache->setName($rule->name);
             $rulePackageRuleCache->setDescription($rule->description ?? '');
             $rulePackageRuleCache->setType($rule->type);
-            $rulePackageRuleCache->setNumberOfItems($rule->numberOfItems ?? null);
             $rulePackageRuleCache->setUpdatedAt($rulePackageCache->getUpdatedAt());
 
             $rating = null;
@@ -318,8 +333,8 @@ class ZipImporter implements ImporterInterface
             $ruleItemUuids[] = $item->uuid;
         }
 
-        $ruleObjects = $this->findRuleObjects($rulePackageCache, $ruleUuids);
-        $itemObjects = $this->findRuleItemObjects($ruleObjects, $ruleItemUuids);
+        $ruleObjects = $this->rulePackageHelper->findRuleObjects($rulePackageCache, $ruleUuids);
+        $itemObjects = $this->rulePackageHelper->findRuleItemObjects($ruleObjects, $ruleItemUuids);
 
         $counter = 0;
 
@@ -391,45 +406,6 @@ class ZipImporter implements ImporterInterface
         $this->rulePackageRuleCache[$uuid] = $rulePackageRuleCache;
 
         return $rulePackageRuleCache;
-    }
-
-    protected function findRuleObjects(RulePackageCache $rulePackageCache, array $uuids): array
-    {
-        $qb = $this->entityManager->createQueryBuilder()
-            ->select('rprc')
-            ->from(RulePackageRuleCache::class, 'rprc')
-            ->where('rprc.rulePackageCache = :rpc')
-            ->andWhere('rprc.uuid IN (:uuids)')
-            ->setParameter('rpc', $rulePackageCache)
-            ->setParameter('uuids', $uuids, ArrayParameterType::STRING)
-        ;
-
-        $ruleObjects = [];
-        foreach ($qb->getQuery()->getResult() as $rprc) {
-            $ruleObjects[$rprc->getUuid()] = $rprc;
-        }
-
-        return $ruleObjects;
-    }
-
-    protected function findRuleItemObjects(array $ruleObjects, array $uuids): array
-    {
-        $ids = array_values(array_map(function ($obj) { return $obj->getId(); }, $ruleObjects));
-        $qb = $this->entityManager->createQueryBuilder()
-            ->select('rpric')
-            ->from(RulePackageRuleItemCache::class, 'rpric')
-            ->where('rpric.rulePackageRuleCache IN (:rprc)')
-            ->andWhere('rpric.uuid IN (:uuids)')
-            ->setParameter('rprc', $ids, ArrayParameterType::INTEGER)
-            ->setParameter('uuids', $uuids, ArrayParameterType::STRING)
-        ;
-
-        $ruleItemObjects = [];
-        foreach ($qb->getQuery()->getResult() as $rprc) {
-            $ruleItemObjects[$rprc->getUuid()] = $rprc;
-        }
-
-        return $ruleItemObjects;
     }
 
     protected function initializeValidator(): Validator

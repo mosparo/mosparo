@@ -291,7 +291,7 @@ class RulePackageHelper
         // Prepare the importer
         try {
             $this->importer = match($processingJob->getMimetype()) {
-                'application/json' => new JsonImporter($this->entityManager),
+                'application/json' => new JsonImporter($this, $this->entityManager),
                 'application/zip' => new ZipImporter($this, $this->entityManager, $this->logger, $this->rulePackageDirectory, $startTime, $maxSeconds)
             };
         } catch (\UnhandledMatchError $e) {
@@ -432,6 +432,85 @@ class RulePackageHelper
         ;
 
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countRulesForRulePackage(RulePackageCache $rpc): int
+    {
+        $result = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(rprc.id)')
+            ->from(RulePackageRuleCache::class, 'rprc')
+            ->where('rprc.rulePackageCache = :rpc')
+            ->setParameter('rpc', $rpc)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        if ($result !== $rpc->getNumberOfRules()) {
+            $rpc->setNumberOfRules($result);
+
+            $this->entityManager->flush();
+        }
+
+        return $result;
+    }
+
+    public function countRuleItemsForRule(RulePackageRuleCache $rprc): int
+    {
+        $result = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(rpric.id)')
+            ->from(RulePackageRuleItemCache::class, 'rpric')
+            ->where('rpric.rulePackageRuleCache = :rprc')
+            ->setParameter('rprc', $rprc)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        if ($result !== $rprc->getNumberOfItems()) {
+            $rprc->setNumberOfItems($result);
+
+            $this->entityManager->flush();
+        }
+
+        return $result;
+    }
+
+    public function findRuleObjects(RulePackageCache $rulePackageCache, array $uuids): array
+    {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('rprc')
+            ->from(RulePackageRuleCache::class, 'rprc')
+            ->where('rprc.rulePackageCache = :rpc')
+            ->andWhere('rprc.uuid IN (:uuids)')
+            ->setParameter('rpc', $rulePackageCache)
+            ->setParameter('uuids', $uuids, ArrayParameterType::STRING)
+        ;
+
+        $ruleObjects = [];
+        foreach ($qb->getQuery()->getResult() as $rprc) {
+            $ruleObjects[$rprc->getUuid()] = $rprc;
+        }
+
+        return $ruleObjects;
+    }
+
+    public function findRuleItemObjects(array $ruleObjects, array $uuids): array
+    {
+        $ids = array_values(array_map(function ($obj) { return $obj->getId(); }, $ruleObjects));
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('rpric')
+            ->from(RulePackageRuleItemCache::class, 'rpric')
+            ->where('rpric.rulePackageRuleCache IN (:rprc)')
+            ->andWhere('rpric.uuid IN (:uuids)')
+            ->setParameter('rprc', $ids, ArrayParameterType::INTEGER)
+            ->setParameter('uuids', $uuids, ArrayParameterType::STRING)
+        ;
+
+        $ruleItemObjects = [];
+        foreach ($qb->getQuery()->getResult() as $rpric) {
+            $ruleItemObjects[$rpric->getUuid()] = $rpric;
+        }
+
+        return $ruleItemObjects;
     }
 
     /**
