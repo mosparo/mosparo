@@ -254,7 +254,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     protected function getApiEndpoint(Request $request, string $activeRoute): string
     {
-        $apiEndpoint = $this->router->generate($activeRoute);
+        $apiEndpoint = $this->router->generate($activeRoute, $request->attributes->get('_route_params'));
 
         // If mosparo is set up with a prefix, remove the prefix from the API URL
         $prefix = $request->headers->get('x-forwarded-prefix', null);
