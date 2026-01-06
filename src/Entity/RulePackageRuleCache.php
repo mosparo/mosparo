@@ -215,4 +215,9 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
     {
         return $this->getId() . '-' . spl_object_id($this);
     }
+
+    public function getHash(): string
+    {
+        return md5($this->uuid . $this->type . $this->name . $this->description . $this->spamRatingFactor);
+    }
 }

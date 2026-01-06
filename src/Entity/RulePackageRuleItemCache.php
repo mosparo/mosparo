@@ -145,4 +145,9 @@ class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleIte
 
         return $this;
     }
+
+    public function getHash(): string
+    {
+        return md5($this->uuid . $this->type . $this->value . $this->spamRatingFactor);
+    }
 }
