@@ -112,18 +112,6 @@ class RulePackageProcessingJob implements ProjectRelatedEntityInterface
         return $this;
     }
 
-    public function getRefreshInterval(): int
-    {
-        return $this->refreshInterval;
-    }
-
-    public function setRefreshInterval(int $refreshInterval): self
-    {
-        $this->refreshInterval = $refreshInterval;
-
-        return $this;
-    }
-
     public function getMimetype(): string
     {
         return $this->mimetype;
