@@ -33,6 +33,9 @@ class RulePackageCache implements ProjectRelatedEntityInterface
     #[ORM\OneToMany(targetEntity: RulePackageRuleCache::class, mappedBy: 'rulePackageCache', orphanRemoval: true)]
     private Collection $rules;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $numberOfRules;
+
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
@@ -134,6 +137,18 @@ class RulePackageCache implements ProjectRelatedEntityInterface
         }
 
         return null;
+    }
+
+    public function getNumberOfRules(): ?int
+    {
+        return $this->numberOfRules;
+    }
+
+    public function setNumberOfRules(int $numberOfRules): self
+    {
+        $this->numberOfRules = $numberOfRules;
+
+        return $this;
     }
 
     public function getProject(): ?Project
