@@ -11,3 +11,15 @@ if (method_exists(Dotenv::class, 'bootEnv')) {
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 }
+
+passthru(sprintf(
+    'APP_ENV=%s php8.1 "%s/../bin/console" doctrine:migrations:migrate -n -q',
+    $_ENV['APP_ENV'],
+    __DIR__
+));
+
+passthru(sprintf(
+    'APP_ENV=%s php8.1 "%s/../bin/console" doctrine:fixtures:load -n -q',
+    $_ENV['APP_ENV'],
+    __DIR__
+));
