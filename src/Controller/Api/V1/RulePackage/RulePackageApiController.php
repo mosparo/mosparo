@@ -72,7 +72,6 @@ class RulePackageApiController extends AbstractController
                 ->setParameter('rpc', $rulePackageCache)
             ;
             $rulePackageRuleIds = [];
-            $counter = 0;
             foreach ($qb->getQuery()->toIterable() as $rule) {
                 echo sprintf('%s::r/%s/%d', $rule->getUuid(), $rule->getHash(), $rule->getId()) . PHP_EOL;
 
@@ -80,15 +79,8 @@ class RulePackageApiController extends AbstractController
 
                 $this->entityManager->detach($rule);
                 unset($rule);
-
-                $counter++;
-                if ($counter % 1000 === 0) {
-                    ob_flush();
-                    flush();
-                }
             }
 
-            ob_flush();
             flush();
 
             $hasMore = true;
@@ -114,7 +106,6 @@ class RulePackageApiController extends AbstractController
 
                     $counter++;
                     if ($counter % 1000 === 0) {
-                        ob_flush();
                         flush();
                     }
                 }
@@ -129,7 +120,6 @@ class RulePackageApiController extends AbstractController
                     $hasMore = false;
                 }
 
-                ob_flush();
                 flush();
             }
 
@@ -150,7 +140,11 @@ class RulePackageApiController extends AbstractController
             ]);
         }
 
-        $totalRules = $rulePackageCache->getNumberOfRules() ?? $this->rulePackageHelper->countRulesForRulePackage($rulePackageCache);
+        $totalRules = $rulePackageCache->getNumberOfRules();
+        if (!$totalRules) {
+            $totalRules = $this->rulePackageHelper->countRulesForRulePackage($rulePackageCache);
+        }
+
         $page = $request->get('page', 1);
         $perPage = $request->get('perPage', 1000);
         $totalPages = ceil($totalRules / $perPage);
@@ -196,17 +190,18 @@ class RulePackageApiController extends AbstractController
     public function ruleItems(Request $request, RulePackage $rulePackage, RulePackageRuleCache $rulePackageRuleCache): Response
     {
         $rulePackageCache = $rulePackage->getRulePackageCache();
-        if (!$rulePackageCache) {
-            return new JsonResponse([
-                'result' => false,
-                'noCache' => true,
-            ]);
+
+        $totalRuleItems = $rulePackageRuleCache->getNumberOfItems();
+        if (!$totalRuleItems) {
+            $totalRuleItems = $this->rulePackageHelper->countRuleItemsForRule($rulePackageRuleCache);
         }
 
-        $totalRuleItems = $rulePackageRuleCache->getNumberOfItems() ?? $this->rulePackageHelper->countRuleItemsForRule($rulePackageRuleCache);
         $page = $request->get('page', 1);
         $perPage = $request->get('perPage', 1000);
         $totalPages = ceil($totalRuleItems / $perPage);
+        if (!$totalPages) {
+            $totalPages = 1;
+        }
 
         $qb = $this->entityManager->createQueryBuilder()
             ->select('rpric')
@@ -232,7 +227,7 @@ class RulePackageApiController extends AbstractController
 
         return new JsonResponse([
             'result' => true,
-            'rules' => $ruleItems,
+            'ruleItems' => $ruleItems,
             'page' => $page,
             'totalPages' => $totalPages,
         ]);
@@ -340,11 +335,7 @@ class RulePackageApiController extends AbstractController
                     ->setParameter('id', $ruleData['id'])
                 ;
 
-                try {
-                    $qb->getQuery()->execute();
-                } catch (\Exception $e) {
-                    $errors[] = sprintf('Cannot delete %s; Error: %s', $ruleItemData['uuid'], $e->getMessage());
-                }
+                $qb->getQuery()->execute();
             } else if ($type === 'remove_rule_item') {
                 $ruleItemData = $task['data'];
 
@@ -362,11 +353,7 @@ class RulePackageApiController extends AbstractController
                     ->setParameter('id', $ruleItemData['id'])
                 ;
 
-                try {
-                    $qb->getQuery()->execute();
-                } catch (\Exception $e) {
-                    $errors[] = sprintf('Cannot delete %s; Error: %s', $ruleItemData['uuid'], $e->getMessage());
-                }
+                $qb->getQuery()->execute();
             }
         }
 
@@ -425,11 +412,6 @@ class RulePackageApiController extends AbstractController
     #[Route('/import', name: 'rule_package_api_import', methods: ['POST'])]
     public function import(Request $request, EntityManagerInterface $entityManager, RulePackageRepository $rulePackageRepository): Response
     {
-        // If there is no active project, we cannot do anything.
-        if (!$this->projectHelper->hasActiveProject()) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);
-        }
-
         $activeProject = $this->projectHelper->getActiveProject();
 
         if (!$request->request->has('rulePackageId') || !$request->request->has('rulePackageContent')) {
@@ -446,7 +428,10 @@ class RulePackageApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Required parameter missing.'] + $debugInformation);
         }
 
-        $rulePackage = $rulePackageRepository->find($request->request->get('rulePackageId'));
+        $rulePackage = $rulePackageRepository->findOneBy([
+            'id' => $request->request->get('rulePackageId'),
+            'project' => $activeProject->getId(),
+        ]);
         if ($rulePackage === null) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Rule package not found.']);
         }
@@ -495,7 +480,10 @@ class RulePackageApiController extends AbstractController
 
         // Validate and process the content
         try {
-            $this->rulePackageHelper->validateAndProcessContent($rulePackage, $rulePackageContent, false);
+            $filePath = tempnam(sys_get_temp_dir(), 'rp-' . $rulePackage->getId());
+            file_put_contents($filePath, $rulePackageContent);
+
+            $this->rulePackageHelper->validateAndProcessContent($rulePackage, $filePath, false);
         } catch (\Exception $e) {
             // Prepare the API debug data
             $debugInformation = [];

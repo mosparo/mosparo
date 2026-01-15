@@ -78,6 +78,10 @@ class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleIte
     {
         $this->rulePackageRuleCache = $rulePackageRuleCache;
 
+        if ($rulePackageRuleCache) {
+            $rulePackageRuleCache->addItem($this);
+        }
+
         return $this;
     }
 

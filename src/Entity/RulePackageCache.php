@@ -34,7 +34,7 @@ class RulePackageCache implements ProjectRelatedEntityInterface
     private Collection $rules;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $numberOfRules;
+    private ?int $numberOfRules = null;
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]

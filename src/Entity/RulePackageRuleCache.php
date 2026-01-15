@@ -39,7 +39,7 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
     private Collection $items;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $numberOfItems;
+    private ?int $numberOfItems = null;
 
     #[ORM\Column(type: 'float', nullable: true)]
     private ?float $spamRatingFactor = null;
@@ -70,6 +70,10 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
     public function setRulePackageCache(?RulePackageCache $rulePackageCache): self
     {
         $this->rulePackageCache = $rulePackageCache;
+
+        if ($rulePackageCache) {
+            $rulePackageCache->addRule($this);
+        }
 
         return $this;
     }
