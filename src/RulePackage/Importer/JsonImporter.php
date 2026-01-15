@@ -66,6 +66,7 @@ class JsonImporter implements ImporterInterface
             $rulePackage->setRulePackageCache($rulePackageCache);
 
             $this->entityManager->persist($rulePackageCache);
+            $this->entityManager->flush();
         }
 
         if ($rulePackageCache->getRefreshInterval() != $data['refreshInterval']) {
@@ -104,6 +105,7 @@ class JsonImporter implements ImporterInterface
             $rulePackageRuleCache->setName($rule['name']);
             $rulePackageRuleCache->setDescription($rule['description'] ?? '');
             $rulePackageRuleCache->setType($rule['type']);
+            $rulePackageRuleCache->setUpdatedAt($rulePackageCache->getUpdatedAt());
 
             $rating = null;
             if ($rule['spamRatingFactor']) {
@@ -127,6 +129,7 @@ class JsonImporter implements ImporterInterface
 
                 $rulePackageRuleItemCache->setType($item['type']);
                 $rulePackageRuleItemCache->setValue($item['value']);
+                $rulePackageRuleItemCache->setUpdatedAt($rulePackageRuleCache->getUpdatedAt());
 
                 $rating = null;
                 if ($item['rating']) {
@@ -135,12 +138,16 @@ class JsonImporter implements ImporterInterface
                 $rulePackageRuleItemCache->setSpamRatingFactor($rating);
             }
 
+            $this->entityManager->flush();
+
             // Remove all rule items which are not in the data anymore
             foreach ($rulePackageRuleCache->getItems() as $item) {
                 if (!in_array($item->getUuid(), $processedItemUuids)) {
                     $this->entityManager->remove($item);
                 }
             }
+
+            $this->entityManager->flush();
 
             $this->rulePackageHelper->countNumberOfRuleItems($rulePackageRuleCache);
         }
