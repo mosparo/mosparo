@@ -12,6 +12,7 @@ jobs:
         with:
           php_version: "8.1"
           php_extensions: gd intl pdo_mysql pdo_sqlite zip sodium
+          memory_limit: 256M
 
       - uses: php-actions/phpunit@v4
         with:
