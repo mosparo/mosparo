@@ -1,0 +1,11 @@
+name: Automated testing
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: php-actions/composer@v6
+      - uses: php-actions/phpunit@v4
