@@ -13,13 +13,15 @@ if ($_SERVER['APP_DEBUG']) {
 }
 
 passthru(sprintf(
-    'APP_ENV=%s php8.1 "%s/../bin/console" doctrine:migrations:migrate -n -q',
+    'APP_ENV=%s %s "%s/../bin/console" doctrine:migrations:migrate -n -q',
     $_ENV['APP_ENV'],
+    PHP_BINARY,
     __DIR__
 ));
 
 passthru(sprintf(
-    'APP_ENV=%s php8.1 "%s/../bin/console" doctrine:fixtures:load -n -q',
+    'APP_ENV=%s %s "%s/../bin/console" doctrine:fixtures:load -n -q',
     $_ENV['APP_ENV'],
+    PHP_BINARY,
     __DIR__
 ));
