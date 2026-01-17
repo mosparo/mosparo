@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6a0c9db66d4b59d36ea11bf77766f7c",
+    "content-hash": "b0dfa2c095f04fe769bddef07ad0bd64",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2499,16 +2499,16 @@
         },
         {
             "name": "mosparo/specifications",
-            "version": "v5.0",
+            "version": "v6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mosparo/specifications.git",
-                "reference": "ffd6934a4d47f1cf98d4953cf6852e84cf6c2d31"
+                "reference": "5884f78c56d1635b058569f9e957ab8b735e7de6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mosparo/specifications/zipball/ffd6934a4d47f1cf98d4953cf6852e84cf6c2d31",
-                "reference": "ffd6934a4d47f1cf98d4953cf6852e84cf6c2d31",
+                "url": "https://api.github.com/repos/mosparo/specifications/zipball/5884f78c56d1635b058569f9e957ab8b735e7de6",
+                "reference": "5884f78c56d1635b058569f9e957ab8b735e7de6",
                 "shasum": ""
             },
             "require": {
@@ -2543,9 +2543,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mosparo/specifications/issues",
-                "source": "https://github.com/mosparo/specifications/tree/v5.0"
+                "source": "https://github.com/mosparo/specifications/tree/v6.0"
             },
-            "time": "2025-04-29T17:35:12+00:00"
+            "time": "2026-01-17T09:00:43+00:00"
         },
         {
             "name": "nelmio/security-bundle",
