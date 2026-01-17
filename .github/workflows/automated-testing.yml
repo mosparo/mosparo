@@ -11,9 +11,9 @@ jobs:
       - uses: php-actions/composer@v6
         with:
           php_version: "8.1"
-          php_extensions: gd intl pdo_mysql pdo_sqlite3 zip sodium
+          php_extensions: gd intl pdo_mysql pdo_sqlite zip sodium
 
       - uses: php-actions/phpunit@v4
         with:
           php_version: "8.1"
-          php_extensions: gd intl pdo_mysql pdo_sqlite3 zip sodium
+          php_extensions: gd intl pdo_mysql pdo_sqlite zip sodium
