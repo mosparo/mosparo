@@ -442,7 +442,7 @@ submission:
       title: Verifiche generali
       features:
         minimumTime: Tempo minimo
-        proofOfWork: Proof of work
+        proofOfWork: Prova del lavoro
         equalSubmissions: Invii uguali
       proofOfWork:
         title: Proof of work non valido
