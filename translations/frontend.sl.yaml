@@ -4,7 +4,7 @@ accessibility:
   dataValid: Lahko pošljete podatke, ker ne vsebujejo spam sporočil. .
   protectedBy: Ta obrazec je pred nezaželeno pošto zaščiten z mosparo.
 error:
-  gotNoToken: Mosparo ne vrača odgovorov.
+  gotNoToken: mosparo ne vrača odgovorov.
   internalError: Prišlo je do napake. Prosimo ponovite predhodni korak.
   noSubmitTokenAvailable: Odgovor ni možen. Formularja ni mogoče preveriti.
   spamDetected: Med vašimi podatki se nahaja spam(vsiljena pošta) zato je sporočilo zadržano.

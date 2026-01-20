@@ -509,7 +509,7 @@ submission:
           intro: Tutti i dati sono stati raccolti e preparati. Ora puoi inviarli all'API.
         ten:
           title: 'Passo 10: verifica la risposta'
-          intro: Mosparo risponderà alla richiesta dall'API con una stringa JSON. Decodifica la stringa JSON e verifica se esiste una chiave %codeStart%valid%codeEnd% e se corrisponde a %codeStart%true%codeEnd%. In caso affermativo accertati che la chiave %codeStart%verificationSignature%codeEnd% sia impostata e corrisponda alla firma di verifica generata al passo 6. In caso affermativo la risposta è valida.
+          intro: mosparo risponderà alla richiesta dall'API con una stringa JSON. Decodifica la stringa JSON e verifica se esiste una chiave %codeStart%valid%codeEnd% e se corrisponde a %codeStart%true%codeEnd%. In caso affermativo accertati che la chiave %codeStart%verificationSignature%codeEnd% sia impostata e corrisponda alla firma di verifica generata al passo 6. In caso affermativo la risposta è valida.
       title: Simulazione di validiazione
       intro: La simulazione di verifica mostra i dati che mosparo accetta per il processo di verifica. Puoi confrontare i dati visualizzati con quelli che il tuo procedimento di verifica creerà per individuare eventuali problemi.
       buttons:
@@ -657,7 +657,7 @@ settings:
           successfullyRemoved: La linea guida %guidelineName% è stata cancellata dal progetto.
     minimumTime:
       title: Tempo minimo
-      intro: La funzione del tempo minimo misura il tempo tra l'inizializzazione di Mosparo (caricamento pagina) e la validazione dell'invio (dopo che il modulo è stato inviato). Se questo tempo è inferiore a quello impostato allora la validazione non è valida. Se il vostro modulo è molto semplice/breve questa funzione andrebbe disabilitata oppure dovreste utilizzare un numero molto basso.
+      intro: La funzione del tempo minimo misura il tempo tra l'inizializzazione di mosparo (caricamento pagina) e la validazione dell'invio (dopo che il modulo è stato inviato). Se questo tempo è inferiore a quello impostato allora la validazione non è valida. Se il vostro modulo è molto semplice/breve questa funzione andrebbe disabilitata oppure dovreste utilizzare un numero molto basso.
       introShort: La funzione del tempo minimo misura il tempo tra l'inizializzazione di mosparo (caricamento pagina) e la validazione dell'invio (dopo che il modulo è stato inviato). Questa funzione è consigliat aper moduli molto lunghi/complessi.
     form:
       minimumTimeSeconds: Tempo minimo
@@ -766,14 +766,14 @@ settings:
         textError: Questo è il colore del testo che apparirà in caso di errore.
         showMosparoLogo: Visualizza il loro sotto il messaggio di caricamento.
         websiteBackground: Seleziona il colore di sfondo del tuo sito. Questo colore verrà utilizzato per calcolare la quantità di contrasto.
-        websiteForeground: Seleziona il colore di primo piano del tuo sito. Questo colore verrà utilizzato per gli elementi principali del riquadro di Mosparo.
-        websiteAccent: Seleziona il colore delle evidenziazioni del tuo sito. Questo colore verrà usato per alcuni elementi del riquadro di Mosparo.
+        websiteForeground: Seleziona il colore di primo piano del tuo sito. Questo colore verrà utilizzato per gli elementi principali del riquadro di mosparo.
+        websiteAccent: Seleziona il colore delle evidenziazioni del tuo sito. Questo colore verrà usato per alcuni elementi del riquadro di mosparo.
         fullPageOverlay: Definisce se oscurare l'intera pagina o solo il modulo per il quale mosparo sta validando i dati.
       showPingAnimation: Visualizza un'animazione per evidenziare il segno di spunta
       invisibleLogo: Logo
       invisiblePageOverlay: Sovrapposizione pagina
       fullPageOverlay: Utilizza sovrapposizione pagina completa
-      showMosparoLogo: Visualizza il logo di Mosparo sotto al segno di spunta
+      showMosparoLogo: Visualizza il logo di mosparo sotto al segno di spunta
       boxBorderWidth: Spessore bordo
       boxRadius: Raggio cornice
       checkboxRadius: Raggio casella di spunta
@@ -792,7 +792,7 @@ settings:
       colorAndDimensionSettings: Colori e dimensioni
       preview: Anteprima
       dimensions:
-        mosparoBox: Cornice Mosparo
+        mosparoBox: Cornice mosparo
         checkbox: Casella di spunta
     cr:
       value: Valore
@@ -1016,7 +1016,7 @@ administration:
         message:
           specifyLicenseKey: Immetti una chiave licenza prima di tentare di scaricare il database.
           successfullyDownloaded: Il database è stato scaricato.
-          errorDownload: C'è stato un errore mentre Mosparo tentava di scaricare il database. %error%
+          errorDownload: C'è stato un errore mentre mosparo tentava di scaricare il database. %error%
         action: Scarica il database
         intro: 'Utilizza questo pulsante per far sì che mosparo scarichi il database:'
       cli:
