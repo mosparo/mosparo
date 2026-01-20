@@ -1,1 +1,39 @@
-{}
+header:
+  pleaseChoose: Wybierz…
+  noProjectsFound: Nie znaleziono projektów
+  account: Konto
+projectGroup:
+  mainGroup: Grupa Główna
+  action:
+    edit: Edytuj grupę
+    delete: Usuń grupę
+    openMainGroup: Wróć do głównej grupy
+    openParentGroupName: Wróć do %name%
+    openParentGroup: Otwórz grupę nadrzędną
+    openGroup: Otwórz grupę
+    backToList: Wróć do listy projektów
+  create:
+    title: Utwórz grupę projektów
+  edit:
+    title: Edytuj grupę %projectGroupName%
+  form:
+    name: Nazwa
+    description: Opis
+    parentGroup: Grupa nadrzędna
+    tooltip:
+      activeGroup: Edytujesz tę grupę.
+    message:
+      successfullySaved: Grupa projektów %projectGroupName% została zapisana.
+  delete:
+    title: Usuń grupę projektów %projectGroupName%
+    confirm: Czy na pewno chcesz usunąć grupę projektów %projectGroupName%?
+    reassignChildren: Każdy projekt z grupy zostanie przypisany do grupy nadrzędnej.
+    message:
+      successfullyDeleted: Grupa projektów %projectGroupName% została usunięta.
+projectGroupSelector:
+  noGroupsAvailable: Brak dostępnych grup.
+  noProjectsAvailable: Brak dostępnych projektów
+project:
+  title: Projekty
+  searchTitle: Projekty dla %searchQuery%
+  backToList: Wróć do listy projektów
