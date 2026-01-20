@@ -38,6 +38,9 @@ project:
     message:
       successfullyDeleted: Il progetto %projectName% è stato eliminato correttamente.
     disconnectFirst: Assicurati di aver disconnesso il tuo sito o il codice di integrazione con questo progetto prima di eliminarlo.
+    deleteRulePackages:
+      intro1: Sono presenti pacchetti di regole in questo progetto. Non puoi cancellarlo.
+      intro2: Cancella i pacchetti di regole prima di cancellare il progetto.
   createWizard:
     connection:
       savedSuccessfully: Le impostazioni della grafica e della sicurezza sono state salvate. Ora il progetto è pronto per essere utilizzato.
@@ -373,6 +376,12 @@ rulePackage:
       successfullyDeleted: L'elenco delle regole %rulePackageName% è stato cancellato correttamente.
     title: Cancella l'elenco delle regole %rulePackageName%
     confirm: Vuoi veramente cancellare l'elenco delle regole %rulePackageName%?
+    process:
+      title: Sto cancellando il pacchetto di regole %rulePackageName%
+      intro: Prego attendere mentre Mosparo cancella il pacchetto di regole. Può servire del tempo a seconda delle dimensioni del pacchetto.
+      alert:
+        doNotLeave: Non abbandonare questa pagine fin quando il processo non sarà completato. Se lasci questa pagina il processo verrà arrestato e il pacchetto di regole potrebbe non venir cancellato.
+        processCompleted: Il pacchetto di regole è stato cancellato. Ora puoi lasciare questa pagina.
   title: Gruppo di regole
   edit:
     title: Modifica gruppo di regole %rulePackageName%
@@ -384,6 +393,27 @@ rulePackage:
   addChooseType:
     title: Scegli tipologia
     intro: Scegli il tipo di pacchetto di regole che vuoi aggiungere. Puoi scegliere tra tipi automatici e manuali. I tipi automatici aggiorneranno il pacchetto di regole automaticamente, mentre quelli manuali devono essere aggiornati tramite un'azione o uno strumento esterno.
+  updateCache:
+    title: Aggiorna la cache
+    intro:
+      all: Per utilizzare i pacchetti di regole, è necessario importarli. Mosparo genererà una cache locale con il contenuto di ogni singolo pacchetto. La dimensione dei pacchetti di regole influirà sul tempo necessario.
+      one: Per utilizzare i pacchetti di regole, è necessario importarli. Mosparo genererà una cache locale con il contenuto di ogni singolo pacchetto. La dimensione dei pacchetti di regole influirà sul tempo necessario.
+    hintCronjob: Puoi automatizzare questa operazione con un cron job. Maggiori informazioni possono essere trovate in %linkStart%mosparo's documentation%linkEnd%.
+    alert:
+      doNotLeave: Non abbandonare questa pagine finché il processo non sarà completato. Se lasci questa pagina il processo verrà interrotto e la cache non sarà aggiornata.
+      processCompleted: Il processo è completo. Ora puoi lasciare questa pagina.
+    progress:
+      rulePackage: Pacchetto di regole
+      status: Stato
+      progress: Avanzamento
+    status:
+      pleaseWait: Prego attendere...
+      importing: Sto importando...
+      cleanup: Sto ripulendo...
+      completed: Completato
+      upToDate: Aggiornato
+      tooSoon: Troppo presto
+      failed: Fallito
 submission:
   list:
     page: Pagina
@@ -444,7 +474,7 @@ submission:
       title: Verifiche generali
       features:
         minimumTime: Tempo minimo
-        proofOfWork: Proof of work
+        proofOfWork: Prova del lavoro
         equalSubmissions: Invii uguali
       proofOfWork:
         title: Proof of work non valido
@@ -804,7 +834,7 @@ settings:
         loading: Durante il caricamento
       invisibleSimpleDesign: Design semplificato invisibile
       colorSettings: Colori
-      dimensionSettings: Dimensioni e dimensione carattere
+      dimensionSettings: Dimensioni e tipo di carattere
       simpleDesign: Design semplificato
       colorAndDimensionSettings: Colori e dimensioni
       preview: Anteprima
@@ -1450,6 +1480,9 @@ action:
   reset: Ripristina
   toggleDropdown: Attiva/Disattiva menu a tendina
   filter: Filtra
+  updateCache: Aggiorna cache
+  goToRulePackage: Vai al pacchetto di regole
+  goToRulePackages: Vai ai pacchetti di regole
 state:
   inactive: Inattivo
   ignored: Ignorato
