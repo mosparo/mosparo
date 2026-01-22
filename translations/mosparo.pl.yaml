@@ -62,3 +62,5 @@ project:
     create: Utwórz
   create:
     title: Utwórz projekt
+    message:
+      successfullyCreatedAndConfigured: Nowy projekt został utworzony i skonfigurowany.
