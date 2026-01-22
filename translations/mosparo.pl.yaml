@@ -37,3 +37,28 @@ project:
   title: Projekty
   searchTitle: Projekty dla %searchQuery%
   backToList: Wróć do listy projektów
+  infoCreateProjectOrRequestAccess: Utwórz nowy projekt lub poproś o dostęp do istniejącego.
+  infoNoProjectsInThisGroup: Brak projektów w grupie.
+  list:
+    name: Nazwa grupy
+    projects: Projekty
+    actions: Akcje
+    status: Status
+  infoNoProjectAvailable: Brak dostępnych projektów
+  filter:
+    dropdown: Filtruj listę projektów
+    options:
+      all: Pokaż wszystkie
+      active: Pokaż aktywne
+      inactive: Pokaż nieaktywne
+  search:
+    placeholder: Szukaj…
+  action:
+    manage: Zarządzaj projektami
+    id: ID projektu
+    settings: Ustawienia
+    delete: Usuń projekt
+    goto: Zobacz projekt
+    create: Utwórz
+  create:
+    title: Utwórz projekt
