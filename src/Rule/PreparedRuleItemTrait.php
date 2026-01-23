@@ -66,6 +66,11 @@ trait PreparedRuleItemTrait
         if ($type === 'subnet') {
             $range = Factory::parseRangeString($value);
 
+            // The range is invalid, so we cannot continue.
+            if (!$range) {
+                return $value;
+            }
+
             if (!$range->asPattern()) {
                 $prefix = $range->getNetworkPrefix();
 

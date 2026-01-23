@@ -625,7 +625,23 @@
                         let pattern = validatorPattern[type];
                         let re = new RegExp(pattern);
 
-                        return re.test(value);
+                        let result = re.test(value);
+
+                        // Ensure, that the IP subnet suffix is below or equal the max suffix.
+                        if (type === 'subnet' && result) {
+                            let maxSuffix = 32;
+                            if (value.indexOf(':') > 0) {
+                                maxSuffix = 128;
+                            }
+
+                            let suffix = value.substring(value.indexOf('/') + 1);
+
+                            if (parseInt(suffix) > maxSuffix) {
+                                return false;
+                            }
+                        }
+
+                        return result;
                     }
 
                     if (type === 'regex' || type === 'uaRegex') {
