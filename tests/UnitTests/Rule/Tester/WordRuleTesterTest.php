@@ -61,6 +61,34 @@ class WordRuleTesterTest extends TestCaseWithItems
         $this->assertEquals(['type' => 'text', 'value' => 'Word', 'rating' => 5.0, 'uuid' => null], $result);
     }
 
+    /**
+     * @see https://github.com/mosparo/mosparo/issues/380
+     */
+    public function testValidateDataWordWithZeroRating()
+    {
+        $ruleStub = $this->createStub(Rule::class);
+
+        $ruleItemStub = $this->createStub(RuleItem::class);
+        $ruleItemStub
+            ->method('getType')
+            ->willReturn('text');
+        $ruleItemStub
+            ->method('getValue')
+            ->willReturn('Word');
+        $ruleItemStub
+            ->method('getSpamRatingFactor')
+            ->willReturn(0.0);
+        $ruleItemStub
+            ->method('getParent')
+            ->willReturn($ruleStub);
+
+        $ruleTester = new WordRuleTester();
+        $result = $ruleTester->validateData('test', 'word1', 'Word1', $ruleItemStub);
+
+        $this->assertIsArray($result);
+        $this->assertEquals(['type' => 'text', 'value' => 'Word', 'rating' => 0.0, 'uuid' => null], $result);
+    }
+
     public function testValidateDataWildcard()
     {
         $ruleStub = $this->createStub(Rule::class);

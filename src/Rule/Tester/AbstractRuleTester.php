@@ -11,12 +11,12 @@ abstract class AbstractRuleTester implements RuleTesterInterface
     {
         $rule = $item->getParent();
         $rating = 1;
-        if (!empty($item->getSpamRatingFactor())) {
+        if ($item->getSpamRatingFactor() !== null) {
             $rating = floatval($item->getSpamRatingFactor());
         }
 
         $ruleSpamRatingFactor = 1;
-        if (!empty($rule->getSpamRatingFactor())) {
+        if ($rule->getSpamRatingFactor() !== null) {
             $ruleSpamRatingFactor = floatval($rule->getSpamRatingFactor());
         }
 
