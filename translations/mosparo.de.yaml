@@ -312,6 +312,10 @@ rule:
 
       wExact:
         title: Ganzes Wort
+        intro: Geben Sie ein Wort ein, das als ganzes übereinstimmen muss. Damit es übereinstimmt, muss das Wort im Wert durch ein Nicht-Wortzeichen (wie einen Punkt oder ein Komma) begrenzt sein oder am Anfang und/oder am Ende eines Werts stehen. Ein Wort in einem anderen Wort wird nicht gefunden (z. B. wird „Daten” in „Datenbank” nicht gefunden).
+      wFull:
+        title: Ganzes Feld
+        intro: Geben Sie den vollständigen Wert eines Feldes ein, das als Spam bewertet werden soll. Mit diesem Typ können Sie den gesamten Inhalt eines Feldes bewerten, beispielsweise den gesamten Inhalt eines Namensfeldes. Leerzeichen um den Inhalt herum werden ignoriert.
     rating:
       title: Bewertung
       intro: Mit dem Feld Bewertung können Sie das Gewicht eines Eintrages festlegen. Wenn Sie eine positive Zahl angeben, können Sie einem Eintrag einen höheren Wert zuweisen. Wenn Sie eine negative Zahl für den Eintrag angeben, wird die Gesamtzahl der Punkte verringert.
