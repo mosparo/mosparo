@@ -372,6 +372,14 @@ rule:
         title: Text
         intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
 
+      wExact:
+        title: Exact word
+        intro: Enter a word that should be matched exactly. The word must be delimited by a non-word character (like a dot, a comma) or needs to be written at the start and/or at the end of a value. A word in another word is not matched (for example, "data" in "database" will not match).
+
+      wFull:
+        title: Entire field
+        intro: Enter the full value of a field that should be rated as spam. You can use this type to match the entire content of a field, for example, to match the whole content of a name field. Spaces around the content will be ignored.
+
       regex:
         title: Regular Expression
         intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.

@@ -53,7 +53,7 @@ trait PreparedRuleItemTrait
             $value = str_replace('*', '%', $value);
         }
 
-        $inTextTypes = ['text', 'uaText', 'email', 'url', 'domain'];
+        $inTextTypes = ['text', 'wExact', 'wFull', 'uaText', 'email', 'url', 'domain'];
         if (in_array($type, $inTextTypes)) {
             $value = '%' . trim($value, '%') . '%';
         }
