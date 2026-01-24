@@ -374,7 +374,7 @@ rule:
 
       wExact:
         title: Exact word
-        intro: Enter a word that should be matched exactly. The word must be delimited by a non-word character (like a dot, a comma) or needs to be written at the start and/or at the end of a value. A word in another word is not matched (for example, "data" in "database" will not match).
+        intro: Enter a word that should be matched exactly. To match it, the word must be delimited by a non-word character (like a dot, a comma) in the value or needs to be written at the start and/or at the end of a value. A word in another word is not matched (for example, "data" in "database" will not match).
 
       wFull:
         title: Entire field
