@@ -310,6 +310,8 @@ rule:
         validation:
           invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
 
+      wExact:
+        title: Ganzes Wort
     rating:
       title: Bewertung
       intro: Mit dem Feld Bewertung können Sie das Gewicht eines Eintrages festlegen. Wenn Sie eine positive Zahl angeben, können Sie einem Eintrag einen höheren Wert zuweisen. Wenn Sie eine negative Zahl für den Eintrag angeben, wird die Gesamtzahl der Punkte verringert.
