@@ -137,6 +137,7 @@ class ImportHelper
 
         // Execute the changes
         $refreshCssCache = false;
+        $modifiedRulePackages = false;
         foreach ($changes as $sectionKey => $sectionChanges) {
             if (in_array($sectionKey, ['generalSettings', 'designSettings', 'securitySettings'])) {
                 $this->executeProjectChanges($project, $sectionChanges);
