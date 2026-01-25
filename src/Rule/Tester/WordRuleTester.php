@@ -66,7 +66,7 @@ class WordRuleTester extends AbstractRuleTester
 
     protected function validateWordExact($value, $itemValue): ?bool
     {
-        return (@preg_match('/(^|\W+)' . $itemValue . '($|\W+)/i', $value));
+        return (@preg_match('/(^|\W+)' . preg_quote($itemValue) . '($|\W+)/i', $value));
     }
 
     protected function validateWordFull($value, $itemValue): ?bool
