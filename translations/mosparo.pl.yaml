@@ -37,3 +37,53 @@ project:
   title: Projekty
   searchTitle: Projekty dla %searchQuery%
   backToList: Wróć do listy projektów
+  infoCreateProjectOrRequestAccess: Utwórz nowy projekt lub poproś o dostęp do istniejącego.
+  infoNoProjectsInThisGroup: Brak projektów w grupie.
+  list:
+    name: Nazwa grupy
+    projects: Projekty
+    actions: Akcje
+    status: Status
+  infoNoProjectAvailable: Brak dostępnych projektów
+  filter:
+    dropdown: Filtruj listę projektów
+    options:
+      all: Pokaż wszystkie
+      active: Pokaż aktywne
+      inactive: Pokaż nieaktywne
+  search:
+    placeholder: Szukaj…
+  action:
+    manage: Zarządzaj projektami
+    id: ID projektu
+    settings: Ustawienia
+    delete: Usuń projekt
+    goto: Zobacz projekt
+    create: Utwórz
+  create:
+    title: Utwórz projekt
+    message:
+      successfullyCreatedAndConfigured: Nowy projekt został utworzony i skonfigurowany.
+  form:
+    name: Nazwa projektu
+    description: Opis
+    hosts: Hosty
+    hostsHelp: Te hosty służą do przesyłania prawidłowych nagłówków zabezpieczeń (CORS). Host to domena (lub subdomena), która hostuje Twoją witrynę bez protokołu i ścieżki (na przykład example.com). Musisz dodać wszystkie domeny i subdomeny korzystające z tego projektu oraz wszystkie jego warianty (na przykład www.example.com i example.com). Możesz użyć gwiazdki (*) na początku nazwy hosta jako symbolu wieloznacznego (na przykład *.example.com). Zaleca się używanie gwiazdki jako prefiksu, a nie globalnego symbolu wieloznacznego dla wszystkich hostów.
+    projectGroup: Przypisz do grupy
+    projectGroupHelp: Możesz używać grup projektów do organizowania swoich projektów. Wybierz grupę projektów, w której chcesz zapisać ten projekt.
+  createWizard:
+    design:
+      title: Personalizacja wyglądu
+      introStartWizard: Twój projekt został pomyślnie utworzony. Aby rozpocząć korzystanie z niego, wybierz projekt i kontynuuj.
+      infoAdvancedMode: Proszę wybrać kolory, które będą obowiązywać na Państwa stronie internetowej. Kolor tła jest niezbędny do obliczenia prawidłowego współczynnika kontrastu, kolor pierwszego planu reprezentuje kolor tekstu, a kolor akcentowy jest używany dla elementów specjalnych w kontenerze Mosparo.
+    security:
+      title: Włącz funkcje bezpieczeństwa
+      introSecurity: Wybierz funkcje bezpieczeństwa, które chcesz włączyć.
+      infoSettings: Możesz włączać, wyłączać lub dostrajać te funkcje zabezpieczeń w ustawieniach zabezpieczeń po uruchomieniu kreatora.
+    connection:
+      title: Szczegóły połączenia
+      savedSuccessfully: Projekt i ustawienia zabezpieczeń zostały pomyślnie zapisane. Projekt jest teraz gotowy do użycia na stronie internetowej.
+      introConnection: Aby korzystać z Mosparo na stronie internetowej, należy dodać integrację do witryny, a następnie połączyć ją z projektem Mosparo. W tym celu skopiuj i wklej poniższe informacje w odpowiednie pole integracji.
+      infoSettings: Po zamknięciu kreatora szczegóły połączenia można znaleźć w ustawieniach projektu.
+action:
+  saveAndContinue: Zapisz i kontynuuj
