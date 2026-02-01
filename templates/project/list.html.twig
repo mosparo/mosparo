@@ -435,7 +435,7 @@
             <div class="container-xl d-flex flex-column justify-content-center">
                 <div class="empty">
                     <div class="empty-img">
-                        <img src="{{ asset('build/images/icons/project_empty.svg')|add_path_prefix }}" alt="" class="illustration-list" />
+                        <img src="{{ asset(get_illustration_path('project.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
                     </div>
                     <p class="empty-title">{{ 'project.infoNoProjectAvailable'|trans }}</p>
                     <p class="empty-subtitle text-muted">{{ 'project.infoCreateProjectOrRequestAccess'|trans }}</p>
