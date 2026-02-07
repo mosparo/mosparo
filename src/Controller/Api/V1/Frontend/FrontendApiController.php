@@ -4,15 +4,19 @@ namespace Mosparo\Controller\Api\V1\Frontend;
 
 use DateTime;
 use DateTimeInterface;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\ApiClient\RequestHelper;
+use Mosparo\Attributes\TranslationKeyInfo;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\Lockout;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\SubmitToken;
+use Mosparo\Entity\Translation;
 use Mosparo\Enum\CleanupExecutor;
 use Mosparo\Enum\LanguageSource;
+use Mosparo\Enum\TranslationKey;
 use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\CleanupHelper;
@@ -55,6 +59,8 @@ class FrontendApiController extends AbstractController
 
     protected StatisticHelper $statisticHelper;
 
+    protected EntityManagerInterface $entityManager;
+
     public function __construct(
         ProjectHelper $projectHelper,
         TokenGenerator $tokenGenerator,
@@ -65,7 +71,8 @@ class FrontendApiController extends AbstractController
         GeoIp2Helper $geoIp2Helper,
         TranslatorInterface $translator,
         LocaleHelper $localeHelper,
-        StatisticHelper $statisticHelper
+        StatisticHelper $statisticHelper,
+        EntityManagerInterface $entityManager
     ) {
         $this->projectHelper = $projectHelper;
         $this->tokenGenerator = $tokenGenerator;
@@ -77,10 +84,11 @@ class FrontendApiController extends AbstractController
         $this->translator = $translator;
         $this->localeHelper = $localeHelper;
         $this->statisticHelper = $statisticHelper;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/request-submit-token', name: 'frontend_api_request_submit_token')]
-    public function request(Request $request, EntityManagerInterface $entityManager): Response
+    public function request(Request $request): Response
     {
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {
@@ -119,7 +127,7 @@ class FrontendApiController extends AbstractController
         $submitToken->setFormActionUrl($request->request->get('formActionUrl'));
         $submitToken->setFormId($request->request->get('formId'));
 
-        $entityManager->persist($submitToken);
+        $this->entityManager->persist($submitToken);
 
         $args = [];
         if ($securitySettings['honeypotFieldActive'] && !$isIpOnAllowList) {
@@ -137,7 +145,7 @@ class FrontendApiController extends AbstractController
             $args['proofOfWorkMaxNumber'] = $maxNumber;
         }
 
-        $entityManager->flush();
+        $this->entityManager->flush();
 
         return new JsonResponse([
             'submitToken' => $submitToken->getToken(),
@@ -148,7 +156,7 @@ class FrontendApiController extends AbstractController
     }
 
     #[Route('/check-form-data', name: 'frontend_api_check_form_data')]
-    public function checkFormData(Request $request, EntityManagerInterface $entityManager): Response
+    public function checkFormData(Request $request): Response
     {
         // If there is no active project, we cannot do anything.
         if (!$this->projectHelper->hasActiveProject()) {
@@ -162,7 +170,7 @@ class FrontendApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not set.']);
         }
 
-        $submitTokenRepository = $entityManager->getRepository(SubmitToken::class);
+        $submitTokenRepository = $this->entityManager->getRepository(SubmitToken::class);
         $submitToken = $submitTokenRepository->findOneBy([
             'token' => $request->request->get('submitToken'),
         ]);
@@ -295,8 +303,8 @@ class FrontendApiController extends AbstractController
 
         $submission->setSubmitToken($submitToken);
 
-        $entityManager->persist($submission);
-        $entityManager->flush();
+        $this->entityManager->persist($submission);
+        $this->entityManager->flush();
 
         // Increase the day statistic if it is spam
         if ($submission->isSpam()) {
@@ -380,23 +388,81 @@ class FrontendApiController extends AbstractController
             }
         }
 
+        $projectTranslations = $this->getProjectTranslations($locales);
+
+        $label = null;
+        if (isset($projectTranslations[TranslationKey::LABEL->name])) {
+            $labelTranslation = current($projectTranslations[TranslationKey::LABEL->name]);
+
+            $label = $labelTranslation->getText();
+            $usedLocale = $labelTranslation->getLocale();
+        }
+
         return [
             'locale' => $usedLocale,
-            'label' => $this->translator->trans('label', [], 'frontend'),
+            'label' => $label ?? $this->translator->trans('label', [], 'frontend'),
 
-            'accessibilityCheckingData' => $this->translator->trans('accessibility.checkingData', [], 'frontend'),
-            'accessibilityDataValid' => $this->translator->trans('accessibility.dataValid', [], 'frontend'),
-            'accessibilityProtectedBy' => $this->translator->trans('accessibility.protectedBy', [], 'frontend'),
+            'accessibilityCheckingData' => $this->getTranslation($projectTranslations, TranslationKey::ACCESSIBILITY_CHECKING_DATA),
+            'accessibilityDataValid' => $this->getTranslation($projectTranslations, TranslationKey::ACCESSIBILITY_DATA_VALID),
+            'accessibilityProtectedBy' => $this->getTranslation($projectTranslations, TranslationKey::ACCESSIBILITY_PROTECTED_BY),
 
-            'errorGotNoToken' => $this->translator->trans('error.gotNoToken', [], 'frontend'),
-            'errorInternalError' => $this->translator->trans('error.internalError', [], 'frontend'),
-            'errorNoSubmitTokenAvailable' => $this->translator->trans('error.noSubmitTokenAvailable', [], 'frontend'),
-            'errorSpamDetected' => $this->translator->trans('error.spamDetected', [], 'frontend'),
-            'errorLockedOut' => $this->translator->trans('error.lockedOut', [], 'frontend'),
-            'errorDelay' => $this->translator->trans('error.delay', [], 'frontend'),
+            'errorGotNoToken' => $this->getTranslation($projectTranslations, TranslationKey::ERROR_GOT_NO_TOKEN),
+            'errorInternalError' => $this->getTranslation($projectTranslations, TranslationKey::ERROR_INTERNAL_ERROR),
+            'errorNoSubmitTokenAvailable' => $this->getTranslation($projectTranslations, TranslationKey::ERROR_NO_SUBMIT_TOKEN_AVAILABLE),
+            'errorSpamDetected' => $this->getTranslation($projectTranslations, TranslationKey::ERROR_SPAM_DETECTED),
+            'errorLockedOut' => $this->getTranslation($projectTranslations, TranslationKey::ERROR_LOCKED_OUT),
+            'errorDelay' => $this->getTranslation($projectTranslations, TranslationKey::ERROR_DELAY),
 
-            'hpLeaveEmpty' => $this->translator->trans('hp.fieldTitle', [], 'frontend'),
+            'hpLeaveEmpty' => $this->getTranslation($projectTranslations, TranslationKey::HONEY_POT_FIELD_TITLE),
         ];
+    }
+
+    protected function getProjectTranslations(array $locales)
+    {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('t')
+            ->from(Translation::class, 't')
+            ->where('t.locale IN (:locales)')
+            ->andWhere('t.project = :project')
+            ->setParameter('locales', $locales, ArrayParameterType::STRING)
+            ->setParameter('project', $this->projectHelper->getActiveProject())
+        ;
+
+        $translations = [];
+        foreach ($qb->getQuery()->toIterable() as $translation) {
+            $key = $translation->getTranslationKey()->name;
+            if (!isset($translations[$key])) {
+                $translations[$key] = [];
+            }
+
+            $translations[$key][$translation->getLocale()] = $translation;
+        }
+
+        // Sort the translations by the order of the locales. This should always
+        // be the correct priority to pick the correct translation.
+        $sortedTranslations = [];
+        foreach ($translations as $key => $translationsForKey) {
+            $sortedTranslations[$key] = [];
+
+            foreach ($locales as $locale) {
+                if (isset($translationsForKey[$locale])) {
+                    $sortedTranslations[$key][] = $translationsForKey[$locale];
+                }
+            }
+        }
+
+        return $sortedTranslations;
+    }
+
+    protected function getTranslation(array $translations, TranslationKey $translationKey): string
+    {
+        $key = $translationKey->name;
+        if (isset($translations[$key]) && $translations[$key]) {
+            return current($translations[$key])->getText();
+        }
+
+        $info = TranslationKeyInfo::from($translationKey);
+        return $this->translator->trans($info->frontendKey, [], 'frontend');
     }
 
     protected function findCorrectLocales(Request $request): array
@@ -416,7 +482,7 @@ class FrontendApiController extends AbstractController
         }
 
         if ($request->request->has('htmlLanguage') && $request->request->get('htmlLanguage')) {
-            $htmlLocale = $request->request->get('htmlLanguage');
+            $htmlLocale = str_replace('-', '_', $request->request->get('htmlLanguage'));
         }
 
         if ($staticLocale) {
@@ -433,7 +499,7 @@ class FrontendApiController extends AbstractController
 
         $locales[] = 'en'; // The default locale, always fallback to this
 
-        return array_filter($locales);
+        return array_unique(array_filter($locales));
     }
 
     protected function addLocales(&$locales, $locale)

@@ -7,7 +7,9 @@ use Doctrine\ORM\QueryBuilder;
 use Mosparo\DataTable\MosparoDataTableFactory;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\SecurityGuideline;
+use Mosparo\Entity\Translation;
 use Mosparo\Entity\User;
+use Mosparo\Enum\TranslationKey;
 use Mosparo\Form\AdvancedProjectFormType;
 use Mosparo\Form\DesignSettingsFormType;
 use Mosparo\Form\ProjectFormType;
@@ -25,6 +27,8 @@ use Omines\DataTablesBundle\DataTable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -504,6 +508,140 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         }
 
         return $this->redirectToRoute('settings_design', ['_projectId' => $this->getActiveProject()->getId()]);
+    }
+
+    #[Route('/translations', name: 'settings_translation_list')]
+    public function translationList(Request $request, MosparoDataTableFactory $dataTableFactory): Response
+    {
+        $project = $this->getActiveProject();
+
+        $table = $dataTableFactory->create(['autoWidth' => true])
+            ->add('locale', TextColumn::class, ['label' => 'settings.translation.list.locale'])
+            ->add('translationKey', TwigColumn::class, [
+                'label' => 'settings.translation.list.translationKey',
+                'template' => 'project_related/settings/translation/list/_translationKey.html.twig',
+            ])
+            ->add('text', TextColumn::class, ['label' => 'settings.translation.list.text'])
+            ->add('actions', TwigColumn::class, [
+                'label' => 'settings.translation.list.actions',
+                'className' => 'buttons',
+                'template' => 'project_related/settings/translation/list/_actions.html.twig'
+            ])
+            ->createAdapter(ORMAdapter::class, [
+                'entity' => Translation::class,
+                'query' => function (QueryBuilder $builder) use ($project) {
+                    $builder
+                        ->select('e')
+                        ->from(Translation::class, 'e')
+                        ->where('e.project = :project')
+                        ->setParameter('project', $project);
+                },
+            ])
+            ->addOrderBy('locale')
+            ->addOrderBy('translationKey')
+            ->handleRequest($request);
+
+        if ($table->isCallback()) {
+            return $table->getResponse();
+        }
+
+        return $this->render('project_related/settings/translation/list.html.twig', [
+            'project' => $project,
+            'datatable' => $table
+        ]);
+    }
+
+    #[Route('/translations/add', name: 'settings_translation_add')]
+    #[Route('/translations/{id}/edit', name: 'settings_translation_edit')]
+    public function translationModify(Request $request, EntityManagerInterface $entityManager, Translation $translation = null): Response
+    {
+        $isNew = false;
+        if ($translation === null) {
+            $translation = new Translation();
+            $translation->setProject($this->getActiveProject());
+            $isNew = true;
+
+            $entityManager->persist($translation);
+        }
+
+        $form = $this->createFormBuilder($translation, ['translation_domain' => 'mosparo'])
+            ->add('locale', TextType::class, [
+                'label' => 'settings.translation.form.locale',
+                'help' => 'settings.translation.form.localeHelp',
+                'attr' => [
+                    'placeholder' => $this->translator->trans('settings.translation.form.localePlaceholder', [], 'mosparo'),
+                    'maxlength' => 8,
+                ]
+            ])
+            ->add('translationKey', EnumType::class, [
+                'label' => 'settings.translation.form.translationKey',
+                'class' => TranslationKey::class,
+                'group_by' => function (TranslationKey $choice, int $key, string $value): ?string {
+                    if (str_starts_with($choice->name, 'ACCESSIBILITY_')) {
+                        return 'settings.translation.form.translationKeyGroup.accessibility';
+                    } else if (str_starts_with($choice->name, 'ERROR_')) {
+                        return 'settings.translation.form.translationKeyGroup.error';
+                    } else if (str_starts_with($choice->name, 'HONEY_POT_')) {
+                        return 'settings.translation.form.translationKeyGroup.honeyPot';
+                    }
+
+                    return 'settings.translation.form.translationKeyGroup.mainLabel';
+                }
+            ])
+            ->add('text', TextType::class, ['label' => 'settings.translation.form.text'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    'settings.translation.form.message.successfullySaved',
+                    [],
+                    'mosparo'
+                )
+            );
+
+            return $this->redirectToRoute('settings_translation_list', ['_projectId' => $this->getActiveProject()->getId()]);
+        }
+
+        return $this->render('project_related/settings/translation/form.html.twig', [
+            'translation' => $translation,
+            'form' => $form->createView(),
+            'isNew' => $isNew,
+        ]);
+    }
+
+    #[Route('/translations/{id}/remove', name: 'settings_translation_remove')]
+    public function translationRemove(Request $request, EntityManagerInterface $entityManager, Translation $translation): Response
+    {
+        if ($request->request->has('delete-token')) {
+            $submittedToken = $request->request->get('delete-token');
+
+            if ($this->isCsrfTokenValid('delete-translation', $submittedToken)) {
+                $entityManager->remove($translation);
+                $entityManager->flush();
+
+                $session = $request->getSession();
+                $session->getFlashBag()->add(
+                    'success',
+                    $this->translator->trans(
+                        'settings.translation.delete.message.successfullyRemoved',
+                        [],
+                        'mosparo'
+                    )
+                );
+
+                return $this->redirectToRoute('settings_translation_list', ['_projectId' => $this->getActiveProject()->getId()]);
+            }
+        }
+
+        return $this->render('project_related/settings/translation/remove.html.twig', [
+            'translation' => $translation,
+        ]);
     }
 
     #[Route('/reissue-keys', name: 'settings_reissue_keys')]

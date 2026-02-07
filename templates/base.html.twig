@@ -280,6 +280,10 @@
                                                         <i class="ti ti-color-swatch"></i>
                                                         {{ 'settings.design.title'|trans }}
                                                     </a>
+                                                    <a class="dropdown-item" href="{{ path('settings_translation_list', {'_projectId': activeProject.id}) }}">
+                                                        <i class="ti ti-language"></i>
+                                                        {{ 'settings.translation.title'|trans }}
+                                                    </a>
                                                 </div>
                                             </li>
                                         {% endif %}

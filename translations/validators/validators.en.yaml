@@ -41,3 +41,7 @@ webCronJob:
 hosts:
   hostContainsProtocol: This host contains a protocol. Please enter the host without protocol (for example, example.com instead of https://example.com).
   hostContainsInvalidCharacter: This host contains invalid characters. In this field, only characters (a-z), numbers (0-9), dashes, dots, colons, and the star (*) are allowed.
+
+translation:
+    locale:
+        invalidFormat: Please specify the locale in the correct format. Enter a two-character language code or a combination of the two-character language code together with the country code.

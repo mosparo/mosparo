@@ -1106,6 +1106,45 @@ settings:
       introColors: Please choose the colors which your website has. The background color is required to calculate the correct contrast ratio, the foreground color represents your text color, and the accent color is used for the special elements of the mosparo box.
       introPreview: On the right side, you'll see a preview of the mosparo box on your website.
 
+  translation:
+    title: Translations
+    backToList: Back to translations
+
+    list:
+      locale: Locale
+      translationKey: Base text
+      text: Translated text
+      actions: Actions
+
+    add:
+      title: Add translation
+
+    edit:
+      title: Edit translation
+
+    form:
+      locale: Locale
+      localeHelp: Please enter the locale either as a two-character language code (ISO 639-1; for example, de) or combined with a country code (for example, de_DE).
+      translationKey: Base text
+      text: Translated text
+      usePlaceholders: This base text contains placeholders (%datetime% or %seconds%). Please place these placeholders at the correct position in your translated text. mosparo will replace the placeholders with the dynamic values.
+
+      translationKeyGroup:
+        mainLabel: Main label
+        accessibility: Accessibility
+        error: Error
+        honeyPot: Honeypot
+
+      message:
+        successfullySaved: The translation was saved successfully.
+
+    delete:
+      title: Delete translation
+      confirm: Do you really want to delete the translation?
+
+      message:
+        successfullyRemoved: The translation was deleted successfully.
+
 tools:
   title: Tools
 
