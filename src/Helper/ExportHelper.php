@@ -7,6 +7,7 @@ use Mosparo\Entity\Project;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
+use Mosparo\Entity\Translation;
 use Mosparo\Exception\ExportException;
 use Mosparo\Specifications\Specifications;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -34,9 +35,9 @@ class ExportHelper
         return $fileName;
     }
 
-    public function exportProject(Project $project, bool $exportGeneralSettings, bool $exportDesignSettings, bool $exportSecuritySettings, bool $exportRules, bool $exportRulePackages): array
+    public function exportProject(Project $project, bool $exportGeneralSettings, bool $exportDesignSettings, bool $exportSecuritySettings, bool $exportTranslations, bool $exportRules, bool $exportRulePackages): array
     {
-        if (!$exportGeneralSettings && !$exportDesignSettings && !$exportSecuritySettings && !$exportRules && !$exportRulePackages) {
+        if (!$exportGeneralSettings && !$exportDesignSettings && !$exportSecuritySettings && !$exportTranslations && !$exportRules && !$exportRulePackages) {
             throw new ExportException('Select at least one element that you want to export.', ExportException::EMPTY_REQUEST);
         }
 
@@ -64,6 +65,10 @@ class ExportHelper
         if ($exportSecuritySettings) {
             $data['security'] = $this->exportSecuritySettings($project);
             $data['securityGuidelines'] = $this->exportSecurityGuidelines();
+        }
+
+        if ($exportTranslations) {
+            $data['translations'] = $this->exportTranslations();
         }
 
         if ($exportRules) {
@@ -200,6 +205,18 @@ class ExportHelper
         }
 
         return $securityGuidelines;
+    }
+
+    protected function exportTranslations(): array
+    {
+        $translations = [];
+        $translationsRepository = $this->entityManager->getRepository(Translation::class);
+
+        foreach ($translationsRepository->findAll() as $translation) {
+            $translations[] = $translation->toArray();
+        }
+
+        return $translations;
     }
 
     protected function exportRules(): array

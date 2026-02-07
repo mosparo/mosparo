@@ -128,6 +128,12 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'help' => 'tools.eiParts.securitySettingsHelp',
                 'data' => true,
             ])
+            ->add('translations', CheckboxType::class, [
+                'label' => 'tools.eiParts.translations',
+                'required' => false,
+                'help' => 'tools.eiParts.translationsHelp',
+                'data' => true,
+            ])
             ->add('rules', CheckboxType::class, [
                 'label' => 'tools.eiParts.rules',
                 'required' => false,
@@ -153,6 +159,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     $form->get('generalSettings')->getData(),
                     $form->get('designSettings')->getData(),
                     $form->get('securitySettings')->getData(),
+                    $form->get('translations')->getData(),
                     $form->get('rules')->getData(),
                     $form->get('rulePackages')->getData(),
                 );
@@ -214,6 +221,11 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'required' => false,
                 'help' => 'tools.eiParts.securitySettingsHelp',
             ])
+            ->add('translations', CheckboxType::class, [
+                'label' => 'tools.eiParts.translations',
+                'required' => false,
+                'help' => 'tools.eiParts.translationsHelp',
+            ])
             ->add('rules', CheckboxType::class, [
                 'label' => 'tools.eiParts.rules',
                 'required' => false,
@@ -257,12 +269,13 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'importGeneralSettings' => $form->get('generalSettings')->getData(),
                 'importDesignSettings' => $form->get('designSettings')->getData(),
                 'importSecuritySettings' => $form->get('securitySettings')->getData(),
+                'importTranslations' => $form->get('translations')->getData(),
                 'importRules' => $form->get('rules')->getData(),
                 'importRulePackages' => $form->get('rulePackages')->getData(),
                 'handlingExistingRules' => $form->get('handlingExistingRules')->getData(),
             ];
 
-            if (!$importData['importGeneralSettings'] && !$importData['importDesignSettings'] && !$importData['importSecuritySettings'] && !$importData['importRules'] && !$importData['importRulePackages']) {
+            if (!$importData['importGeneralSettings'] && !$importData['importDesignSettings'] && !$importData['importSecuritySettings'] && !$importData['importTranslations'] && !$importData['importRules'] && !$importData['importRulePackages']) {
                 $error = true;
                 $errorMessage = 'tools.import.errorMessage.selectAtLeastOneElement';
             } else {
@@ -352,7 +365,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         }
 
         try {
-            [$jobData, $importData, $hasChanges, $changes] = $importHelper->simulateImport($token);
+            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $importHelper->simulateImport($token);
 
             $jobData['changes'] = $changes;
 
@@ -389,6 +402,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
             'changes' => $changes,
             'jobData' => $jobData,
             'importData' => $importData,
+            'notInImport' => $notInImport,
             'error' => $error,
             'errorMessage' => $errorMessage,
         ]);

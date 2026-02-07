@@ -3,3 +3,20 @@
         font-size: 1.25rem;
     }
 }
+
+.accordion-button-icon {
+    display: flex;
+    align-items: center;
+
+    .ti {
+        font-size: 1.25rem;
+
+        margin-right: 0.5rem;
+    }
+}
+
+.accordion-collapse {
+    :last-child {
+        margin-bottom: 0;
+    }
+}

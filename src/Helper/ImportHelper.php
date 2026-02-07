@@ -8,7 +8,9 @@ use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
+use Mosparo\Entity\Translation;
 use Mosparo\Enum\RulePackageType;
+use Mosparo\Enum\TranslationKey;
 use Mosparo\Exception\ImportException;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
@@ -102,14 +104,14 @@ class ImportHelper
         $this->projectHelper->setActiveProject($project);
 
         // Detect the changes
-        $changes = $this->findChanges($project, $jobData, $importData);
+        [$changes, $notInImport] = $this->findChanges($project, $jobData, $importData);
 
         // Set the originally active project
         if ($activeProject) {
             $this->projectHelper->setActiveProject($activeProject);
         }
 
-        return [$jobData, $importData, $this->hasChanges($changes), $changes];
+        return [$jobData, $importData, $this->hasChanges($changes), $changes, $notInImport];
     }
 
     public function executeImport(?string $token, array $jobData = []): bool
@@ -147,6 +149,8 @@ class ImportHelper
                 }
             } else if ($sectionKey === 'securityGuidelines') {
                 $this->executeSecurityGuidelineChanges($sectionChanges);
+            } else if ($sectionKey === 'translations') {
+                $this->executeTranslationChanges($sectionChanges);
             } else if ($sectionKey === 'rules') {
                 $this->executeRuleChanges($sectionChanges);
             } else if ($sectionKey === 'rulePackages') {
@@ -223,6 +227,7 @@ class ImportHelper
             !empty($changes['designSettings'] ?? []) ||
             !empty($changes['securitySettings'] ?? []) ||
             !empty($changes['securityGuidelines'] ?? []) ||
+            !empty($changes['translations'] ?? []) ||
             !empty($changes['rules'] ?? []) ||
             !empty($changes['rulePackages'] ?? [])
         );
@@ -231,32 +236,57 @@ class ImportHelper
     protected function findChanges(Project $project, array $jobData, array $importData): array
     {
         $changes = [];
+        $notInImport = [];
 
         if ($jobData['importGeneralSettings']) {
             $changes['generalSettings'] = $this->findGeneralSettingsChanges($project, $importData['project']);
         }
 
-        if ($jobData['importDesignSettings'] && isset($importData['project']['design'])) {
-            $changes['designSettings'] = $this->findSettingChanges($project, $importData['project']['design']);
-        }
-
-        if ($jobData['importSecuritySettings'] && isset($importData['project']['security'])) {
-            $changes['securitySettings'] = $this->findSettingChanges($project, $importData['project']['security']);
-
-            if (isset($importData['project']['securityGuidelines'])) {
-                $changes['securityGuidelines'] = $this->findSecurityGuidelineChanges($importData['project']['securityGuidelines']);
+        if ($jobData['importDesignSettings']) {
+            if (isset($importData['project']['design'])) {
+                $changes['designSettings'] = $this->findSettingChanges($project, $importData['project']['design']);
+            } else {
+                $notInImport[] = 'designSettings';
             }
         }
 
-        if ($jobData['importRules'] && isset($importData['project']['rules'])) {
-            $changes['rules'] = $this->findRuleChanges($importData['project']['rules'], $jobData['handlingExistingRules']);
+        if ($jobData['importSecuritySettings']) {
+            if (isset($importData['project']['security'])) {
+                $changes['securitySettings'] = $this->findSettingChanges($project, $importData['project']['security']);
+
+                if (isset($importData['project']['securityGuidelines'])) {
+                    $changes['securityGuidelines'] = $this->findSecurityGuidelineChanges($importData['project']['securityGuidelines']);
+                }
+            } else {
+                $notInImport[] = 'securitySettings';
+            }
         }
 
-        if ($jobData['importRulePackages'] && isset($importData['project']['rulePackages'])) {
-            $changes['rulePackages'] = $this->findRulePackageChanges($importData['project']['rulePackages']);
+        if ($jobData['importTranslations']) {
+            if (isset($importData['project']['translations'])) {
+                $changes['translations'] = $this->findTranslationChanges($importData['project']['translations']);
+            } else {
+                $notInImport[] = 'translations';
+            }
         }
 
-        return $changes;
+        if ($jobData['importRules']) {
+            if (isset($importData['project']['rules'])) {
+                $changes['rules'] = $this->findRuleChanges($importData['project']['rules'], $jobData['handlingExistingRules']);
+            } else {
+                $notInImport[] = 'rules';
+            }
+        }
+
+        if ($jobData['importRulePackages']) {
+            if (isset($importData['project']['rulePackages'])) {
+                $changes['rulePackages'] = $this->findRulePackageChanges($importData['project']['rulePackages']);
+            } else {
+                $notInImport[] = 'rulePackages';
+            }
+        }
+
+        return [$changes, $notInImport];
     }
 
     protected function findGeneralSettingsChanges(Project $project, array $importData): array
@@ -402,6 +432,72 @@ class ImportHelper
 
         return $changes;
     }
+
+    protected function findTranslationChanges(array $translations): array
+    {
+        $changes = [];
+        $translationRepository = $this->entityManager->getRepository(Translation::class);
+
+        foreach ($translations as $translation) {
+            $storedTranslation = $translationRepository->findOneBy([
+                'locale' => $translation['locale'],
+                'translationKey' => $translation['translationKey'],
+            ]);
+
+            $mode = 'add';
+            $storedTranslationId = null;
+            $storedTranslationKey = null;
+            $storedTranslationLocale = null;
+            if ($storedTranslation !== null) {
+                if ($storedTranslation->isEqual($translation)) {
+                    // Everything up to date, no change required.
+                    continue;
+                }
+
+                $mode = 'modify';
+                $storedTranslationId = $storedTranslation->getId();
+                $storedTranslationKey = $storedTranslation->getTranslationKey();
+                $storedTranslationLocale = $storedTranslation->getLocale();
+            }
+
+            $translation['translationKey'] = TranslationKey::tryFrom($translation['translationKey']);
+
+            $changes[] = [
+                'mode' => $mode,
+                'storedTranslation' => [
+                    'id' => $storedTranslationId,
+                    'translationKey' => $storedTranslationKey,
+                    'locale' => $storedTranslationLocale,
+                ],
+                'importedTranslation' => $translation,
+            ];
+        }
+
+        usort($changes, function ($changeA, $changeB) {
+            $localeA = $changeA['importedTranslation']['locale'];
+            $localeB = $changeB['importedTranslation']['locale'];
+
+            if ($localeA > $localeB) {
+                return 1;
+            } else if ($localeA < $localeB) {
+                return -1;
+            } else {
+                $keyA = $changeA['importedTranslation']['translationKey']->value;
+                $keyB = $changeB['importedTranslation']['translationKey']->value;
+
+                if ($keyA < $keyB) {
+                    return -1;
+                } else if ($keyA > $keyB) {
+                    return 1;
+                }
+
+                return 0;
+            }
+        });
+
+        return $changes;
+    }
+
 
     protected function findRuleChanges(array $rules, string $handlingExistingRules): array
     {
@@ -634,6 +730,30 @@ class ImportHelper
             foreach ($importedSecurityGuideline['securitySettings'] as $setting) {
                 $securityGuideline->setConfigValue($setting['name'], $setting['value']);
             }
+        }
+    }
+
+    protected function executeTranslationChanges(array $sectionChanges)
+    {
+        $translationRepository = $this->entityManager->getRepository(Translation::class);
+
+        foreach ($sectionChanges as $change) {
+            $importedTranslation = $change['importedTranslation'];
+
+            if ($change['mode'] === 'add') {
+                $translation = new Translation();
+
+                $this->entityManager->persist($translation);
+            } else if ($change['mode'] === 'modify') {
+                $translation = $translationRepository->find($change['storedTranslation']['id']);
+                if (!$translation) {
+                    throw new ImportException('Stored translation not found.', ImportException::STORED_TRANSLATION_NOT_FOUND);
+                }
+            }
+
+            $translation->setLocale($importedTranslation['locale']);
+            $translation->setTranslationKey(TranslationKey::tryFrom($importedTranslation['translationKey']));
+            $translation->setText($importedTranslation['text']);
         }
     }
 

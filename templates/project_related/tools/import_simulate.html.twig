@@ -35,115 +35,72 @@
                             {% if hasChanges and changes %}
                                 <p>{{ 'tools.import.simulate.intro'|trans }}</p>
 
-                                <div class="card-tabs">
-                                    <ul class="nav nav-tabs" data-bs-toggle="tabs">
-                                        <li class="nav-item only-icon">
-                                            <a href="#tabs-general-settings" class="nav-link active" data-bs-toggle="tab">
-                                                <i class="ti ti-settings"></i>
-                                                <span class="visible-when-active d-xl-inline">
-                                                    {{ 'tools.eiParts.generalSettings'|trans }}
-                                                </span>
-                                                {% if changes.generalSettings is defined %}
+                                {% if notInImport|length %}
+                                    <div class="alert alert-info">
+                                        {{ 'tools.import.simulate.changes.notInExportMessage'|trans }}
+                                    </div>
+                                {% endif %}
+
+
+                                <div class="accordion" id="accordion-icons">
+                                    {% if changes.generalSettings is defined and changes.generalSettings %}
+                                        <div class="accordion-item">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-general-settings" aria-expanded="false">
+                                                    <div class="accordion-button-icon">
+                                                        <i class="ti ti-settings"></i>
+                                                    </div>
+                                                    <span class="visible-when-active d-xl-inline">
+                                                        {{ 'tools.eiParts.generalSettings'|trans }}
+                                                    </span>
                                                     {%  set numberOfChanges = changes.generalSettings|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
-                                                {% endif %}
-                                            </a>
-                                        </li>
-                                        <li class="nav-item only-icon">
-                                            <a href="#tabs-design-settings" class="nav-link" data-bs-toggle="tab">
-                                                <i class="ti ti-color-swatch"></i>
-                                                <span class="visible-when-active d-xl-inline">
-                                                    {{ 'tools.eiParts.designSettings'|trans }}
-                                                </span>
-                                                {% if changes.designSettings is defined %}
+                                                </button>
+                                            </div>
+                                            <div id="acc-general-settings" class="accordion-collapse collapse" data-bs-parent="#accordion-icons" style="">
+                                                <div class="accordion-body">
+                                                    {{ _self.changesTable('generalSettings', changes.generalSettings) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if changes.designSettings is defined and changes.designSettings %}
+                                        <div class="accordion-item">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-design-settings" aria-expanded="false">
+                                                    <div class="accordion-button-icon">
+                                                        <i class="ti ti-color-swatch"></i>
+                                                    </div>
+                                                    <span class="visible-when-active d-xl-inline">
+                                                        {{ 'tools.eiParts.designSettings'|trans }}
+                                                    </span>
                                                     {%  set numberOfChanges = changes.designSettings|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
-                                                {% endif %}
-                                            </a>
-                                        </li>
-                                        <li class="nav-item only-icon">
-                                            <a href="#tabs-security-settings" class="nav-link" data-bs-toggle="tab">
-                                                <i class="ti ti-shield"></i>
-                                                <span class="visible-when-active d-xl-inline">
-                                                    {{ 'tools.eiParts.securitySettings'|trans }}
-                                                </span>
-                                                {% if changes.securitySettings is defined and changes.securityGuidelines is defined %}
+                                                </button>
+                                            </div>
+                                            <div id="acc-design-settings" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
+                                                <div class="accordion-body">
+                                                    {{ _self.changesTable('designSettings', changes.designSettings) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if (changes.securitySettings is defined and changes.securitySettings) and (changes.securityGuidelines is defined and changes.securityGuidelines) %}
+                                        <div class="accordion-item">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-security-settings" aria-expanded="false">
+                                                    <div class="accordion-button-icon">
+                                                        <i class="ti ti-shield"></i>
+                                                    </div>
+                                                    <span class="visible-when-active d-xl-inline">
+                                                        {{ 'tools.eiParts.securitySettings'|trans }}
+                                                    </span>
                                                     {%  set numberOfChanges = changes.securitySettings|length + changes.securityGuidelines|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
-                                                {% endif %}
-                                            </a>
-                                        </li>
-                                        <li class="nav-item only-icon">
-                                            <a href="#tabs-rules" class="nav-link" data-bs-toggle="tab">
-                                                <i class="ti ti-tags"></i>
-                                                <span class="visible-when-active d-xl-inline">
-                                                    {{ 'tools.eiParts.rules'|trans }}
-                                                </span>
-                                                {% if changes.rules is defined %}
-                                                    {%  set numberOfChanges = changes.rules|length %}
-                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
-                                                {% endif %}
-                                            </a>
-                                        </li>
-                                        <li class="nav-item only-icon">
-                                            <a href="#tabs-rule-packages" class="nav-link" data-bs-toggle="tab">
-                                                <i class="ti ti-stack"></i>
-                                                <span class="visible-when-active d-xl-inline">
-                                                    {{ 'tools.eiParts.rulePackages'|trans }}
-                                                </span>
-                                                {% if changes.rulePackages is defined %}
-                                                    {%  set numberOfChanges = changes.rulePackages|length %}
-                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
-                                                {% endif %}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="card tab-pane active show" id="tabs-general-settings">
-                                            <div class="card-body">
-                                                {% if changes.generalSettings is defined and changes.generalSettings %}
-                                                    {{ _self.changesTable('generalSettings', changes.generalSettings) }}
-                                                {% else %}
-                                                    {% if not jobData.importGeneralSettings %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
-                                                        </div>
-                                                    {% elseif not importData.project.name is defined %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
-                                                        </div>
-                                                    {% endif %}
-                                                {% endif %}
+                                                </button>
                                             </div>
-                                        </div>
-                                        <div class="card tab-pane" id="tabs-design-settings">
-                                            <div class="card-body">
-                                                {% if changes.designSettings is defined and changes.designSettings %}
-                                                    {{ _self.changesTable('designSettings', changes.designSettings) }}
-                                                {% else %}
-                                                    {% if not jobData.importDesignSettings %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
-                                                        </div>
-                                                    {% elseif not importData.project.design is defined %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
-                                                        </div>
-                                                    {% endif %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="card tab-pane" id="tabs-security-settings">
-                                            <div class="card-body">
-                                                {% if (changes.securitySettings is defined and changes.securitySettings) or (changes.securityGuidelines is defined and changes.securityGuidelines) %}
+                                            <div id="acc-security-settings" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
+                                                <div class="accordion-body">
                                                     {% if changes.securitySettings is defined and changes.securitySettings %}
                                                         {{ _self.changesTable('securitySettings', changes.securitySettings) }}
                                                     {% endif %}
@@ -152,66 +109,73 @@
                                                         <h3 class="h2 mb-1">{{ 'settings.security.originBasedSecuritySettings.title'|trans }}</h3>
                                                         {{ _self.changesTable('securityGuidelines', changes.securityGuidelines) }}
                                                     {% endif %}
-                                                {% else %}
-                                                    {% if not jobData.importSecuritySettings %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
-                                                        </div>
-                                                    {% elseif not importData.project.security is defined %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
-                                                        </div>
-                                                    {% endif %}
-                                                {% endif %}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="card tab-pane" id="tabs-rules">
-                                            <div class="card-body">
-                                                {% if changes.rules is defined and changes.rules %}
+                                    {% endif %}
+                                    {% if changes.translations is defined and changes.translations %}
+                                        <div class="accordion-item">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-translations" aria-expanded="false">
+                                                    <div class="accordion-button-icon">
+                                                        <i class="ti ti-language"></i>
+                                                    </div>
+                                                    <span class="visible-when-active d-xl-inline">
+                                                        {{ 'tools.eiParts.translations'|trans }}
+                                                    </span>
+                                                    {%  set numberOfChanges = changes.translations|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                </button>
+                                            </div>
+                                            <div id="acc-translations" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
+                                                <div class="accordion-body">
+                                                    {{ _self.changesTable('translations', changes.translations) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if changes.rules is defined and changes.rules %}
+                                        <div class="accordion-item">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-rules" aria-expanded="false">
+                                                    <div class="accordion-button-icon">
+                                                        <i class="ti ti-tags"></i>
+                                                    </div>
+                                                    <span class="visible-when-active d-xl-inline">
+                                                        {{ 'tools.eiParts.rules'|trans }}
+                                                    </span>
+                                                    {%  set numberOfChanges = changes.rules|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                </button>
+                                            </div>
+                                            <div id="acc-rules" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
+                                                <div class="accordion-body">
                                                     {{ _self.changesTable('rules', changes.rules) }}
-                                                {% else %}
-                                                    {% if not jobData.importRules %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
-                                                        </div>
-                                                    {% elseif not importData.project.rules is defined %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
-                                                        </div>
-                                                    {% endif %}
-                                                {% endif %}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="card tab-pane" id="tabs-rule-packages">
-                                            <div class="card-body">
-                                                {% if changes.rulePackages is defined and changes.rulePackages %}
+                                    {% endif %}
+                                    {% if changes.rulePackages is defined and changes.rulePackages %}
+                                        <div class="accordion-item">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-rule-packages" aria-expanded="false">
+                                                    <div class="accordion-button-icon">
+                                                        <i class="ti ti-stack"></i>
+                                                    </div>
+                                                    <span class="visible-when-active d-xl-inline">
+                                                        {{ 'tools.eiParts.rulePackages'|trans }}
+                                                    </span>
+                                                    {%  set numberOfChanges = changes.rulePackages|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                </button>
+                                            </div>
+                                            <div id="acc-rule-packages" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
+                                                <div class="accordion-body">
                                                     {{ _self.changesTable('rulePackages', changes.rulePackages) }}
-                                                {% else %}
-                                                    {% if not jobData.importRulePackages %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notActive'|trans }}
-                                                        </div>
-                                                    {% elseif not importData.project.rulePackages is defined %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.notInExport'|trans }}
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="alert alert-info">
-                                                            {{ 'tools.import.simulate.changes.noChangesRequired'|trans }}
-                                                        </div>
-                                                    {% endif %}
-                                                {% endif %}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 </div>
 
                                 <div class="alert alert-warning mt-3">
@@ -276,6 +240,13 @@
                     <th width="1%">{{ 'tools.import.simulate.table.priority'|trans }}</th>
                     <th width="1%">{{ 'tools.import.simulate.table.criteria'|trans }}</th>
                     <th width="1%">{{ 'tools.import.simulate.table.securitySettings'|trans }}</th>
+                </tr>
+            {% elseif type == 'translations' %}
+                <tr>
+                    <th width="1%"></th>
+                    <th width="10%">{{ 'tools.import.simulate.table.locale'|trans }}</th>
+                    <th>{{ 'tools.import.simulate.table.translationKey'|trans }}</th>
+                    <th>{{ 'tools.import.simulate.table.text'|trans }}</th>
                 </tr>
             {% elseif type == 'rules' %}
                 <tr>
@@ -378,6 +349,23 @@
                                 </span>
                             </td>
                         {% endif %}
+                    </tr>
+                {% elseif type == 'translations' %}
+                    <tr>
+                        <td>
+                            {% if change.mode == 'add' %}
+                                <span class="text-success mode-icon" title="{{ 'tools.import.simulate.table.add'|trans }}">
+                                    <i class="ti ti-plus"></i>
+                                </span>
+                            {% elseif change.mode == 'modify' %}
+                                <span class="text-azure mode-icon" title="{{ 'tools.import.simulate.table.modify'|trans }}">
+                                    <i class="ti ti-pencil"></i>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ change.importedTranslation.locale }}</td>
+                        <td>{{ change.importedTranslation.translationKey|trans }}</td>
+                        <td>{{ change.importedTranslation.text }}</td>
                     </tr>
                 {% elseif type == 'rules' %}
                     <tr>

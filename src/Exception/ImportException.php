@@ -17,4 +17,5 @@ class ImportException extends Exception
     const STORED_RULE_ITEM_NOT_FOUND = 9;
     const STORED_RULE_PACKAGE_NOT_FOUND = 10;
     const STORED_SECURITY_GUIDELINE_NOT_FOUND = 11;
+    const STORED_TRANSLATION_NOT_FOUND = 12;
 }

@@ -1244,9 +1244,7 @@ tools:
       noChangesFound: The project is already the same as the data in the import file, and no changes are available.
 
       changes:
-        notActive: This section is not active for this import.
-        notInExport: This section is not available in the import file.
-        noChangesRequired: For this section are no changes required since everything is up to date already.
+        notInExportMessage: Some of the selected data are not available in the import file. Please export the project again and select all the required data.
 
       table:
         name: Name
@@ -1268,6 +1266,9 @@ tools:
         guidelineNew: New guideline
         guidelineModify: Modification required
         guidelineEqual: No modification required
+        locale: Locale
+        translationKey: Base text
+        text: Translated text
 
       errorMessage:
         jobDataFileNotFound: Job data file for token does not exist.
@@ -1288,6 +1289,8 @@ tools:
     designSettingsHelp: Includes all settings related to the design of a project.
     securitySettings: Security settings
     securitySettingsHelp: Includes all settings related to the security of a project.
+    translations: Translations
+    translationsHelp: Includes all translations that were added to a project.
     rules: Rules
     rulesHelp: Includes all rules of a project.
     rulePackages: Rule packages
