@@ -110,7 +110,7 @@ project:
     status: Status
     statusHelp: Activate or inactivate the spam detection. If inactive, the system will log all submissions but will not prevent any submission.
     spamScore: Spam score
-    spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.
+    spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this number, the submission is rated as spam.
     statisticStorageLimit: Statistic storage
     statisticStorageLimitHelp: Defines how long mosparo should keep the statistics in the database. This option has no connection to the storage range of the submissions, after which the submissions get deleted from the database (14 days).
     languageSource: Language source

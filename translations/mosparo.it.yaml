@@ -234,6 +234,8 @@ rule:
         intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
       shortIntro: Permette di filtrare termini specifici o schemi
       intro: La regola termini permette di filtrare usando termini ed Espressioni Regolari.
+      wExact:
+        title: Parola esatta
     userAgent:
       regex:
         validation:
