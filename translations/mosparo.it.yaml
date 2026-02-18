@@ -236,6 +236,10 @@ rule:
       intro: La regola termini permette di filtrare usando termini ed Espressioni Regolari.
       wExact:
         title: Parola esatta
+        intro: Inserisci una parola che deve corrispondere esattamente. Per essere rilevata, la parola deve essere delimitata da caratteri non alfanumerici (come un punto o una virgola) all'interno del valore, oppure deve trovarsi all'inizio o alla fine dello stesso. Una parola contenuta in un'altra non verrà considerata (ad esempio, 'data' in 'database' non produrrà alcuna corrispondenza).
+      wFull:
+        title: Campo intero
+        intro: Inserisci il valore completo di un campo che deve essere classificato come spam. Puoi usare questa tipologia per far corrispondere l'intero contenuto di un campo (ad esempio, per intercettare il contenuto integrale di un campo nome). Gli spazi all'inizio o alla fine del testo verranno ignorati.
     userAgent:
       regex:
         validation:
