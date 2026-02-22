@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\ProjectRelated;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Entity\Submission;
@@ -120,7 +121,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
     }
 
     #[Route('/{id}/view', name: 'submission_view')]
-    public function view(Submission $submission): Response
+    public function view(Submission $submission, EntityManagerInterface $entityManager): Response
     {
         $activeProject = $this->projectHelper->getActiveProject();
         $minimumTimeActive = $submission->getProject()->getConfigValue('minimumTimeActive');
@@ -179,9 +180,31 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
             ];
         }
 
+        $qb = $entityManager->createQueryBuilder()
+            ->select('s')
+            ->from(Submission::class, 's')
+            ->where('s.id > :id')
+            ->setParameter('id', $submission->getId())
+            ->orderBy('s.id', 'ASC')
+            ->setMaxResults(1)
+        ;
+        $previousSubmission = $qb->getQuery()->getOneOrNullResult();
+
+        $qb = $entityManager->createQueryBuilder()
+            ->select('s')
+            ->from(Submission::class, 's')
+            ->where('s.id < :id')
+            ->setParameter('id', $submission->getId())
+            ->orderBy('s.id', 'DESC')
+            ->setMaxResults(1)
+        ;
+        $nextSubmission = $qb->getQuery()->getOneOrNullResult();
+
         return $this->render('project_related/submission/view.html.twig', [
             'submission' => $submission,
             'generalVerifications' => $submission->getGeneralVerifications(),
+            'previousSubmission' => $previousSubmission,
+            'nextSubmission' => $nextSubmission,
         ] + $args + $verificationSimulationData);
     }
 

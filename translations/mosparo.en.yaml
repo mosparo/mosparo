@@ -559,8 +559,14 @@ submission:
     title: Submission %submissionId%
 
     action:
+      goToNewerSubmission: Newer
+      goToOlderSubmission: Older
       openVerificationIssues: Verification issues
       openVerificationSimulation: Verification simulation
+
+    actionDescription:
+      goToNewerSubmission: Go to the newer submission
+      goToOlderSubmission: Go to the older submission
 
     spam:
       title: Spam
