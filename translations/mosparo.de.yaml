@@ -540,6 +540,8 @@ submission:
     action:
       openVerificationSimulation: Verifizierungs-Simulation
       openVerificationIssues: Verifizierungsprobleme
+      goToNewerSubmission: Neuer
+      goToOlderSubmission: Älter
     verificationSimulation:
       buttons:
         customIntegration: Eigene Integration
@@ -631,6 +633,9 @@ submission:
         errorMessage: Fehlermeldung
         message: Meldung
         debugInformation: Debug-Informationen
+    actionDescription:
+      goToNewerSubmission: Zur neueren Einsendung gehen
+      goToOlderSubmission: Zur älteren Einsendung gehen
   filter:
     options:
       spam: Spam-Einsendungen
