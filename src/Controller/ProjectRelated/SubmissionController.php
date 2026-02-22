@@ -180,10 +180,17 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
             ];
         }
 
-        $qb = $entityManager->createQueryBuilder()
+        $qb = $entityManager->createQueryBuilder();
+        $verifiedOr = $qb->expr()->orX()
+            ->add('s.spam = TRUE')
+            ->add('s.valid IS NOT NULL')
+        ;
+
+        $qb
             ->select('s')
             ->from(Submission::class, 's')
             ->where('s.id > :id')
+            ->andWhere($verifiedOr)
             ->setParameter('id', $submission->getId())
             ->orderBy('s.id', 'ASC')
             ->setMaxResults(1)
@@ -194,6 +201,7 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
             ->select('s')
             ->from(Submission::class, 's')
             ->where('s.id < :id')
+            ->andWhere($verifiedOr)
             ->setParameter('id', $submission->getId())
             ->orderBy('s.id', 'DESC')
             ->setMaxResults(1)
