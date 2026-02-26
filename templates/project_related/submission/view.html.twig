@@ -57,7 +57,7 @@
 {% block pageTitleColumn %}
     {{ parent() }}
 
-    {% if submission.issues or activeProject.verificationSimulationMode %}
+    {% if previousSubmission or nextSubmission or submission.issues or activeProject.verificationSimulationMode %}
         <div class="col-12 col-md-auto ms-auto mt-2 mt-md-0">
             <div class="btn-list">
                 {% if previousSubmission %}
