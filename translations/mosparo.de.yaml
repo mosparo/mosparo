@@ -1731,7 +1731,7 @@ tools:
     designSettings: Darstellungseinstellungen
     rulePackagesHelp: Enthält alle Regel-Pakete eines Projekts.
   importExport:
-    infoRulesWithManyItems: Regeln mit Hunderten von Einträge können beim Exportieren oder Importieren der Regeln sehr viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser zu tun. Bitte erhöhen Sie in einem solchen Fall den Arbeitsspeicher des PHP-Prozesses oder verwenden Sie den CLI-Befehl zum Importieren oder Exportieren der Regeln.
+    infoRulesWithManyItems: Regeln mit Hunderten von Elementen können beim Exportieren oder Importieren dieser Regeln viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser durchzuführen. Bitte erhöhen Sie in einem solchen Fall die Speicherbegrenzung des PHP-Prozesses oder verwenden Sie den CLI-Befehl, um die Regeln zu importieren oder zu exportieren.
 dataTable:
   name: Name
   empty: Leer
