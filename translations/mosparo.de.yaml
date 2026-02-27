@@ -50,6 +50,9 @@ project:
     message:
       successfullyDeleted: Das Projekt %projectName% wurde erfolgreich gelöscht.
 
+    deleteRulePackages:
+      intro1: Dieses Projekt enthält Regelpakete. Sie können das Projekt nicht löschen.
+      intro2: Bitte löschen Sie zuerst die Regelpakete und anschließend das Projekt.
   roles:
     reader: Leser
     editor: Bearbeiter
@@ -439,9 +442,36 @@ rulePackage:
       successfullyDeleted: Das Regel-Paket %rulePackageName% wurde erfolgreich gelöscht.
 
 # Submission
+    process:
+      title: Löschen des Regelpakets %rulePackageName%
+      intro: Bitte warten Sie, während mosparo das Regelpaket löscht. Dies kann je nach Größe des Regelpakets eine Weile dauern.
+      alert:
+        doNotLeave: Bitte verlassen Sie diese Seite nicht, während der Vorgang abgeschlossen wird. Wenn Sie diese Seite verlassen, wird der Vorgang abgebrochen und das Regelpaket möglicherweise nicht gelöscht.
+        processCompleted: Das Regelpaket wurde gelöscht. Sie können diese Seite nun verlassen.
   addChooseType:
     title: Typ wählen
     intro: Bitte wählen Sie den Typ des Regelpakets, das Sie hinzufügen möchten. Sie können zwischen automatischen und manuellen Typen wählen. Bei den automatischen Typen wird das Regelpaket automatisch aktualisiert, während die manuellen Typen durch eine externe Aktion oder ein Tool aktualisiert werden müssen.
+  updateCache:
+    title: Cache aktualisieren
+    intro:
+      all: Um die Regelpakete verwenden zu können, müssen sie importiert werden. Dazu erstellt mosparo einen lokalen Cache mit dem Inhalt jedes Regelpakets. Je nach Größe der Regelpakete kann dies einen Moment dauern.
+      one: Um das Regelpaket zu verwenden, muss es importiert werden. Dazu erstellt mosparo einen lokalen Cache mit dem Inhalt des Regelpakets. Je nach Größe des Regelpakets kann dies einen Moment dauern.
+    hintCronjob: Sie können diesen Schritt mithilfe von Cron-Jobs automatisieren. Weitere Informationen hierzu finden Sie in der Dokumentation von %linkStart%mosparo%linkEnd%.
+    alert:
+      doNotLeave: Bitte verlassen Sie diese Seite nicht, während der Vorgang abgeschlossen wird. Wenn Sie diese Seite verlassen, wird der Vorgang abgebrochen und der Cache wird nicht aktualisiert.
+      processCompleted: Der Vorgang ist abgeschlossen. Sie können diese Seite nun verlassen.
+    progress:
+      rulePackage: Regelpaket
+      status: Status
+      progress: Fortschritt
+    status:
+      pleaseWait: Bitte warten...
+      importing: Importieren...
+      cleanup: Aufräumen...
+      completed: Abgeschlossen
+      upToDate: Aktuell
+      tooSoon: Zu früh
+      failed: Fehlgeschlagen
 submission:
   title: Einsendungen
   backToList: Zu den Einsendungen
@@ -482,6 +512,8 @@ submission:
       pageUrl: Seiten-URL
       requestedAt: Angefordert am
 
+      formActionUrl: Formular-Aktions-URL
+      formId: Formular-ID
     ignoredFields:
       title: Ignorierte Felder
       intro: Die folgenden Felder wurden aufgrund des Feld-Types nicht übermittelt (zum Beispiel Passwort- oder Datei-Upload-Felder).
@@ -797,13 +829,26 @@ settings:
           title: Kriterien
           asNumbers: AS-Nummern
           countryCodes: Ländercodes
-          intro2: Die Richtlinie wird für den Benutzer verwendet, sobald eines dieser Kriterien zutrifft. Sie müssen mindestens ein Kriterium hinzufügen, um die Richtlinie zu speichern.
+          intro2: Sie können Kriterien in beiden Kategorien festlegen oder nur IP- oder formularbasierte Kriterien angeben. Die Richtlinie wird auf den Benutzer angewendet, sobald eines dieser Kriterien pro Kategorie (IP-basiert oder formularbasiert) erfüllt ist. Sie müssen mindestens ein Kriterium hinzufügen, um die Richtlinie zu speichern.
           subnets: Subnetze
           subnetsHelp: 'Fügen Sie die Subnetze hinzu, für die diese Richtlinie berücksichtigt werden soll. Sie können IPv4- oder IPv6-Subnetze definieren. Die IP-Adresse sehen Sie in den Details der Anmeldung. Beispiel: 192.168.1.0/24'
+          formPageUrls: Formular-Seiten-URLs
+          formPageUrlsHelp: 'Fügen Sie die URLs der Formulare hinzu, für die diese Richtlinie berücksichtigt werden soll. Sie können eine absolute URL definieren oder das Sternchen (*) als Platzhalter verwenden. Beispiel: https://example.com/contact/'
+          formActionUrls: Formular-Aktions-URLs
+          formActionUrlsHelp: 'Fügen Sie die Formular-Aktions-URLs hinzu, für die diese Richtlinie gelten soll. Sie können eine absolute URL definieren oder das Sternchen (*) als Platzhalter verwenden. Beispiel: https://example.com/contact/'
+          formIds: Formular-IDs
+          formIdsHelp: 'Fügen Sie die Formular-IDs hinzu, für die diese Richtlinie berücksichtigt werden soll. Bitte geben Sie die ID ohne das Hash-Zeichen (#) an. Beispiel: contact-form'
         infoGeoIp2Disabled: GeoIP2 ist nicht verfügbar. Bitte konfigurieren Sie die GeoIP2-Datenbank, damit die Kriterien Ländercodes und AS-Nummern verwendet werden können.
         settings:
           title: Einstellungen überschreiben
           intro: Bitte aktivieren Sie das Kontrollkästchen für die Einstellungen, die Sie in den Projekt- oder allgemeinen Sicherheitseinstellungen überschreiben möchten. Wenn Sie eine Einstellung nicht überschreiben, wird mosparo die Einstellung aus dem Projekt oder den allgemeinen Sicherheitseinstellungen verwenden. Wenn Sie denselben Wert wie in den Projekt- oder allgemeinen Sicherheitseinstellungen konfigurieren, wird der benutzerdefinierte Wert aus der Sicherheitsrichtlinie entfernt.
+        categories:
+          ipBased:
+            label: IP-basiert
+            intro: Die IP-basierten Kriterien verwenden die IP-Adresse des Benutzers, um die erforderliche Sicherheitsrichtlinie zu bestimmen. Diese Kriterien helfen dabei, den Benutzer, der auf ein Formular zugreift, zuzuordnen (z. B. durch Abgleich mit Ihrer eigenen IP-Adresse für weniger restriktive Sicherheitseinstellungen).
+          formBased:
+            label: Formularbasiert
+            intro: Die formularbasierten Kriterien verwenden die Informationen des Formulars, in das mosparo integriert ist, um die erforderliche Sicherheitsrichtlinie zu bestimmen. Diese Kriterien helfen dabei, zwischen verschiedenen Formularen innerhalb desselben Projekts zu unterscheiden (z. B. andere Sicherheitseinstellungen für ein Anmeldeformular als für ein Kontaktformular).
       list:
         name: Name
         actions: Aktionen
@@ -848,7 +893,7 @@ settings:
     title: Darstellung
 
     subtitles:
-      dimensionSettings: Grösse
+      dimensionSettings: Abmessungen und Schriftgröße
       colorSettings: Farben
       colors:
         normal: Normal
@@ -864,6 +909,7 @@ settings:
       dimensions:
         mosparoBox: mosparo Box
         checkbox: Kontrollkästchen
+        text: Text
     preview:
       background: Hintergrund der Vorschau
 
@@ -913,6 +959,8 @@ settings:
       invisiblePageOverlay: Seiten-Overlay
       checkboxRadius: Radius des Kontrollkästchens
       checkboxBorderWidth: Rahmenbreite des Kontrollkästchen
+      fontSize: Schriftgröße
+      lineHeight: Zeilenhöhe
     choices:
       boxSize:
         small: Klein
@@ -959,6 +1007,7 @@ administration:
       form:
         defaultColorMode: Standard-Farbmodus
 
+        defaultNumberOfItemsPerPage: Standardanzahl der Elemente pro Seite
     mailSettings:
       title: Maileinstellungen
       form:
@@ -1302,6 +1351,7 @@ account:
       timezone: Zeitzone
       colorMode: Farbmodus
 
+      numberOfItemsPerPage: Anzahl der Elemente pro Seite
     message:
       successfullySaved: Ihre Einstellungen wurden erfolgreich gespeichert.
 
@@ -1456,6 +1506,9 @@ action:
   howToImport: Wie importieren
   toggleDropdown: Dropdown umschalten
   filter: Filtern
+  updateCache: Cache aktualisieren
+  goToRulePackage: Zum Regelpaket gehen
+  goToRulePackages: Zu den Regelpaketen gehen
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
@@ -1720,7 +1773,7 @@ tools:
     designSettings: Darstellungseinstellungen
     rulePackagesHelp: Enthält alle Regel-Pakete eines Projekts.
   importExport:
-    infoRulesWithManyItems: Regeln mit Hunderten von Einträge können beim Exportieren oder Importieren der Regeln sehr viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser zu tun. Bitte erhöhen Sie in einem solchen Fall den Arbeitsspeicher des PHP-Prozesses oder verwenden Sie den CLI-Befehl zum Importieren oder Exportieren der Regeln.
+    infoRulesWithManyItems: Regeln mit Hunderten von Elementen können beim Exportieren oder Importieren dieser Regeln viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser durchzuführen. Bitte erhöhen Sie in einem solchen Fall die Speicherbegrenzung des PHP-Prozesses oder verwenden Sie den CLI-Befehl, um die Regeln zu importieren oder zu exportieren.
 dataTable:
   name: Name
   empty: Leer
