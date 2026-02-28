@@ -546,6 +546,7 @@ submission:
     action:
       openVerificationSimulation: Simulazione di validiazione
       openVerificationIssues: Problemi di verifica
+      goToNewerSubmission: Recenti
     ignoredFields:
       title: Campi ignorati
       intro: I campi seguenti non sono stati trasmessi a causa della loro tipologia (nell'esempio password o caricamento file).
