@@ -10,6 +10,7 @@ use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Attributes\TranslationKeyInfo;
 use Mosparo\Entity\Delay;
 use Mosparo\Entity\Lockout;
+use Mosparo\Entity\PartialSubmission;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\SubmitToken;
@@ -117,17 +118,31 @@ class FrontendApiController extends AbstractController
 
         $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
 
-        $submitToken = new SubmitToken();
-        $submitToken->setIpAddress($request->getClientIp());
-        $submitToken->setCreatedAt(new DateTime());
-        $submitToken->setToken($this->tokenGenerator->generateToken());
+        $submitToken = null;
+        if ($request->request->has('submitToken') && $request->request->get('submitToken')) {
+            $token = $request->request->get('submitToken');
+            $submitTokenRepository = $this->entityManager->getRepository(SubmitToken::class);
+            $submitToken = $submitTokenRepository->findOneBy(['token' => $token]);
 
-        $submitToken->setPageTitle($request->request->get('pageTitle'));
-        $submitToken->setPageUrl($request->request->get('pageUrl'));
-        $submitToken->setFormActionUrl($request->request->get('formActionUrl'));
-        $submitToken->setFormId($request->request->get('formId'));
+            if ($submitToken === null || !$submitToken->isValid()) {
+                return new JsonResponse(['error' => true, 'errorMessage' => 'The given submit token does not exist or has already been used.']);
+            }
+        }
 
-        $this->entityManager->persist($submitToken);
+        // Create a new submit token
+        if (!$submitToken) {
+            $submitToken = new SubmitToken();
+            $submitToken->setIpAddress($request->getClientIp());
+            $submitToken->setCreatedAt(new DateTime());
+            $submitToken->setToken($this->tokenGenerator->generateToken());
+
+            $submitToken->setPageTitle($request->request->get('pageTitle'));
+            $submitToken->setPageUrl($request->request->get('pageUrl'));
+            $submitToken->setFormActionUrl($request->request->get('formActionUrl'));
+            $submitToken->setFormId($request->request->get('formId'));
+
+            $this->entityManager->persist($submitToken);
+        }
 
         $args = [];
         if ($securitySettings['honeypotFieldActive'] && !$isIpOnAllowList) {
@@ -155,28 +170,64 @@ class FrontendApiController extends AbstractController
         ] + $args);
     }
 
+    #[Route('/store-form-data', name: 'frontend_api_store_form_data')]
+    public function storeFormData(Request $request): Response
+    {
+        [$submitToken, $response] = $this->validateRequest($request);
+        if ($response !== null) {
+            return $response;
+        }
+
+        if (!$request->request->has('formData') && !$request->request->has('metaData')) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Form data and metadata not set.']);
+        }
+
+        $partialSubmission = $submitToken->getPartialSubmission();
+        if (!$partialSubmission) {
+            // Create the partial submission
+            $partialSubmission = new PartialSubmission();
+            $partialSubmission->setSubmitToken($submitToken);
+
+            $this->entityManager->persist($partialSubmission);
+        }
+
+        $formData = [];
+        if ($request->request->has('formData')) {
+            $formData = json_decode($request->request->get('formData'), true);
+            if ($formData === null || !isset($formData['fields'])) {
+                return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
+            }
+
+            if (isset($formData['ignoredFields']) && $formData['ignoredFields']) {
+                $partialSubmission->appendIgnoredFields($formData['ignoredFields']);
+            }
+        }
+
+        $metaData = [];
+        if ($request->request->has('metaData')) {
+            $metaData = json_decode($request->request->get('metaData'), true);
+        }
+
+        $partialSubmission->appendData([
+            'formData' => $formData['fields'],
+            'metaData' => $metaData,
+        ]);
+
+        $partialSubmission->setUpdatedAt(new DateTime());
+
+        $this->entityManager->flush();
+
+        return new JsonResponse([
+            'result' => true,
+        ]);
+    }
+
     #[Route('/check-form-data', name: 'frontend_api_check_form_data')]
     public function checkFormData(Request $request): Response
     {
-        // If there is no active project, we cannot do anything.
-        if (!$this->projectHelper->hasActiveProject()) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);
-        }
-
-        // Cleanup the database
-        $this->cleanupHelper->cleanup(cleanupExecutor: CleanupExecutor::FRONTEND_API);
-
-        if (!$request->request->has('submitToken')) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not set.']);
-        }
-
-        $submitTokenRepository = $this->entityManager->getRepository(SubmitToken::class);
-        $submitToken = $submitTokenRepository->findOneBy([
-            'token' => $request->request->get('submitToken'),
-        ]);
-
-        if ($submitToken === null || !$submitToken->isValid()) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not valid.']);
+        [$submitToken, $response] = $this->validateRequest($request);
+        if ($response !== null) {
+            return $response;
         }
 
         // Determine the security settings
@@ -199,6 +250,11 @@ class FrontendApiController extends AbstractController
         $formData = json_decode($request->request->get('formData'), true);
         if ($formData === null || !isset($formData['fields'])) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
+        }
+
+        $metaData = [];
+        if ($request->request->has('metaData')) {
+            $metaData = json_decode($request->request->get('metaData'), true);
         }
 
         // Add the client data
@@ -236,7 +292,15 @@ class FrontendApiController extends AbstractController
         // Create the submission
         $submission = new Submission();
         $submission->setSubmittedAt(new DateTime());
-        $submission->setIgnoredFields($formData['ignoredFields']);
+
+        // Add the content from the partial submission, if available.
+        if ($submitToken->getPartialSubmission()) {
+            $partialSubmission = $submitToken->getPartialSubmission();
+            $submission->appendData($partialSubmission->getData());
+            $submission->setIgnoredFields(array_merge($partialSubmission->getIgnoredFields(), $formData['ignoredFields']));
+        } else {
+            $submission->setIgnoredFields($formData['ignoredFields']);
+        }
 
         // Check for the honeypot field
         if ($securitySettings['honeypotFieldActive'] && !$isIpOnAllowList) {
@@ -288,8 +352,9 @@ class FrontendApiController extends AbstractController
         }
 
         // Set the submission data
-        $submission->setData([
+        $submission->appendData([
             'formData' => $formData['fields'],
+            'metaData' => $metaData,
             'client' => $clientData
         ]);
 
@@ -315,6 +380,32 @@ class FrontendApiController extends AbstractController
             'valid' => (!$submission->isSpam()),
             'validationToken' => $submission->getValidationToken(),
         ]);
+    }
+
+    protected function validateRequest(Request $request): array
+    {
+        // If there is no active project, we cannot do anything.
+        if (!$this->projectHelper->hasActiveProject()) {
+            return [null, new JsonResponse(['error' => true, 'errorMessage' => 'No project available.'])];
+        }
+
+        // Cleanup the database
+        $this->cleanupHelper->cleanup(cleanupExecutor: CleanupExecutor::FRONTEND_API);
+
+        if (!$request->request->has('submitToken')) {
+            return [null, new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not set.'])];
+        }
+
+        $submitTokenRepository = $this->entityManager->getRepository(SubmitToken::class);
+        $submitToken = $submitTokenRepository->findOneBy([
+            'token' => $request->request->get('submitToken'),
+        ]);
+
+        if ($submitToken === null || !$submitToken->isValid()) {
+            return [null, new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not valid.'])];
+        }
+
+        return [$submitToken, null];
     }
 
     protected function createSignature(SubmitToken $submitToken, $formData, Project $activeProject): string

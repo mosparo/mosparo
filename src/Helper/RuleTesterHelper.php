@@ -137,6 +137,11 @@ class RuleTesterHelper
         $this->loadRuleTesters();
 
         foreach ($submission->getData() as $groupKey => $groupData) {
+            // We do not check the metadata
+            if ($groupKey === 'metaData') {
+                continue;
+            }
+
             foreach ($groupData as $fieldData) {
                 if (is_array($fieldData['value'])) {
                     foreach ($fieldData['value'] as $subValue) {

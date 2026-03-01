@@ -5,6 +5,7 @@ namespace Mosparo\Entity;
 use DateTimeInterface;
 use Mosparo\Repository\SubmissionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Trait\SubmissionDataTrait;
 use Mosparo\Verification\GeneralVerification;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
@@ -14,6 +15,8 @@ use Mosparo\Verification\GeneralVerification;
 #[ORM\Index(name: 's_valid_idx', fields: ['valid'])]
 class Submission implements ProjectRelatedEntityInterface
 {
+    use SubmissionDataTrait;
+
     const SUBMISSION_FIELD_NOT_VERIFIED = 'not-verified';
     const SUBMISSION_FIELD_VALID = 'valid';
     const SUBMISSION_FIELD_INVALID = 'invalid';
@@ -111,33 +114,6 @@ class Submission implements ProjectRelatedEntityInterface
         return $this;
     }
 
-    public function getData(): ?array
-    {
-        return $this->data;
-    }
-
-    public function setData(array $data): self
-    {
-        $this->data = $data;
-
-        return $this;
-    }
-
-    public function getDataValue(string $group, string $name)
-    {
-        if (!isset($this->data[$group])) {
-            return false;
-        }
-
-        foreach ($this->data[$group] as $item) {
-            if ($item['name'] === $name) {
-                return $item['value'];
-            }
-        }
-
-        return false;
-    }
-
     public function getSignature(): ?string
     {
         return $this->signature;
@@ -182,18 +158,6 @@ class Submission implements ProjectRelatedEntityInterface
     public function setMatchedRuleItems(array $matchedRuleItems): self
     {
         $this->matchedRuleItems = $matchedRuleItems;
-
-        return $this;
-    }
-
-    public function getIgnoredFields(): ?array
-    {
-        return $this->ignoredFields;
-    }
-
-    public function setIgnoredFields(array $ignoredFields): self
-    {
-        $this->ignoredFields = $ignoredFields;
 
         return $this;
     }

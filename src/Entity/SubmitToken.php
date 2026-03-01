@@ -51,6 +51,9 @@ class SubmitToken implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $validUntil = null;
 
+    #[ORM\OneToOne(targetEntity: PartialSubmission::class, mappedBy: 'submitToken')]
+    private ?PartialSubmission $partialSubmission = null;
+
     #[ORM\OneToOne(targetEntity: Submission::class)]
     private ?Submission $lastSubmission;
 
@@ -206,6 +209,11 @@ class SubmitToken implements ProjectRelatedEntityInterface
         $this->validUntil = $validUntil;
 
         return $this;
+    }
+
+    public function getPartialSubmission(): ?PartialSubmission
+    {
+        return $this->partialSubmission;
     }
 
     public function getLastSubmission(): ?Submission

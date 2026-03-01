@@ -18,6 +18,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
         customMessages: {},
         language: null,
 
+        // Multistep forms
+        isMultiStepForm: false,
+        submitToken: null,
+        isLastStep: false,
+        forceInvisible: false,
+
         // Callbacks
         onBeforeGetFormData: null,
         onGetFormData: null,
@@ -29,6 +35,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
         onValidateFormInvisible: null,
         onSubmitFormInvisible: null,
         doSubmitFormInvisible: null,
+        onFormDataStored: null, // Mainly for multistep forms, controls the process after successfully storing the form data
+        onFormDataValid: null, // Mainly for multistep forms, controls the process after successfully validating the form data
     };
     this.options = {...this.defaultOptions, ...options};
     this.invisible = false;
@@ -86,7 +94,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
             this.loadCssResource();
         }
 
-        this.containerElement.classList.add('mosparo__container', 'mosparo__' + this.uuid);
+        let forceInvisibleClass = null;
+        if (this.options.forceInvisible) {
+            forceInvisibleClass = 'mosparo__force-invisible-mode';
+        }
+
+        this.containerElement.classList.add('mosparo__container', 'mosparo__' + this.uuid, forceInvisibleClass);
         this.containerElement.setAttribute('lang', this.messages.locale);
 
         // Find the form
@@ -239,7 +252,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         return Math.random().toString().substring(2, 16);
     }
 
-    this.requestSubmitToken = function () {
+    this.requestSubmitToken = function (submitToken) {
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         this.containerElement.classList.add('mosparo__loading');
 
@@ -262,6 +275,13 @@ function mosparo(containerId, url, uuid, publicKey, options)
             htmlLanguage: document.documentElement.lang,
         };
 
+        if (typeof submitToken !== 'undefined' && submitToken) {
+            // If the function is called manually
+            data.submitToken = submitToken;
+        } else if (this.options.submitToken) {
+            data.submitToken = this.options.submitToken;
+        }
+
         if (this.options.language !== null) {
             data.language = this.options.language;
         }
@@ -271,7 +291,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 _this.updateMessages(response.messages);
             }
 
-            if (response.invisible) {
+            if (response.invisible || _this.options.forceInvisible) {
                 _this.switchToInvisible();
             } else if (response.showLogo) {
                 _this.addAccessibilityLogo();
@@ -284,7 +304,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
                     _this.addHoneypotField(response.honeypotFieldName);
                 }
 
-                if ('proofOfWorkResult' in response && response.proofOfWorkResult) {
+                if ('proofOfWorkResult' in response && response.proofOfWorkResult && (!_this.options.isMultiStepForm || _this.options.isLastStep)) {
                     let targetHash = response.proofOfWorkResult;
                     let maxNumber = response.proofOfWorkMaxNumber;
 
@@ -365,6 +385,16 @@ function mosparo(containerId, url, uuid, publicKey, options)
         this.containerElement.classList.add('mosparo__loading');
         this.updateAccessibleStatus(this.getMessage('accessibilityCheckingData'));
 
+        let requestData = this.getRequestData();
+
+        if (this.options.isMultiStepForm && !this.options.isLastStep) {
+            this.storeFormData(requestData);
+        } else {
+            this.checkFormData(requestData);
+        }
+    }
+
+    this.getRequestData = function () {
         let formData = JSON.stringify(this.getFormData());
         let data = {
             formData: formData,
@@ -377,6 +407,61 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
         this.checkedFormData = formData;
 
+        return data;
+    }
+
+    this.storeFormData = function (data) {
+        this.send('/api/v1/frontend/store-form-data', data, function (response) {
+            _this.containerElement.classList.remove('mosparo__loading');
+
+            if (response.result) {
+                _this.checkboxFieldElement.checked = true;
+                _this.setHpFieldElementDisabled(true);
+                _this.containerElement.classList.add('mosparo__checked');
+
+                if (!_this.invisible) {
+                    // We skip the message if the box is invisible since the form will be submitted automatically.
+                    _this.updateAccessibleStatus(_this.getMessage('accessibilityDataValid'));
+                }
+            }
+
+            // If the onFormDataStored callback is set, we do not use the default logic to continue.
+            if (_this.options.onFormDataStored !== null) {
+                _this.options.onFormDataStored();
+            } else if (_this.invisible) {
+                _this.checkboxFieldElement.checked = true;
+
+                // Execute the event and the callback
+                _this.formElement.dispatchEvent(new CustomEvent('submit-form-invisible', { bubbles: true }));
+
+                if (_this.options.onSubmitFormInvisible !== null) {
+                    _this.options.onSubmitFormInvisible();
+                }
+
+                if (_this.options.doSubmitFormInvisible !== null) {
+                    _this.options.doSubmitFormInvisible();
+                } else {
+                    let buttons = _this.formElement.querySelectorAll('[type="submit"]');
+                    if (buttons.length) {
+                        buttons.item(0).click();
+                    } else {
+                        _this.formElement.submit();
+                    }
+                }
+
+                _this.loaderContainerElement.classList.remove('mosparo__loader-visible');
+            }
+        }, function () {
+            _this.checkboxFieldElement.checked = false;
+            _this.setHpFieldElementDisabled(false);
+            _this.containerElement.classList.remove('mosparo__loading');
+            _this.containerElement.classList.add('mosparo__invalid');
+
+            _this.showError(_this.getMessage('errorInternalError'));
+        });
+    }
+
+    this.checkFormData = function (data) {
         this.send('/api/v1/frontend/check-form-data', data, function (response) {
             _this.containerElement.classList.remove('mosparo__loading');
 
@@ -413,7 +498,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
                 _this.options.onCheckForm(response.valid);
             }
 
-            if (_this.invisible) {
+            // If the onFormDataValid callback is set, we do not use the default logic to continue.
+            if (_this.options.onFormDataValid !== null) {
+                if (response.valid) {
+                    _this.options.onFormDataValid();
+                }
+            } else if (_this.invisible) {
                 if (response.valid) {
                     _this.checkboxFieldElement.checked = true;
 
