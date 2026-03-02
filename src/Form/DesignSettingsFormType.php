@@ -57,8 +57,48 @@ class DesignSettingsFormType extends AbstractType
                 ->add('showPingAnimation', CheckboxType::class, ['label' => 'settings.design.form.showPingAnimation', 'required' => false, 'attr' => ['data-variable' => '--mosparo-ping-animation-name', 'data-variable-value' => 'mosparo__ping-animation', 'data-disabled-variable-value' => 'none']])
                 ->add('showMosparoLogo', CheckboxType::class, ['label' => 'settings.design.form.showMosparoLogo', 'required' => false, 'attr' => ['data-variable' => '--mosparo-show-logo', 'data-variable-value' => 'block', 'data-disabled-variable-value' => 'none']])
                 ->add('colorPageBodyBackground', TextType::class, ['label' => 'settings.design.preview.background', 'required' => false, 'attr' => ['class' => 'colorpicker', 'data-variable' => '--page-body-background', 'autocomplete' => 'off']])
+
+                // Fields for the invisible mode (needed for multistep forms)
+                ->add('colorLoaderBackground', TextType::class, [
+                    'label' => 'settings.design.form.color.loaderBackground',
+                    'help' => 'settings.design.form.help.loaderBackground',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'colorpicker',
+                        'data-variable' => '--mosparo-loader-background-color',
+                        'data-colorpicker-allow-empty' => 'false',
+                    ]
+                ])
+                ->add('colorLoaderText', TextType::class, [
+                    'label' => 'settings.design.form.color.loaderText',
+                    'help' => 'settings.design.form.help.loaderText',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'colorpicker',
+                        'data-variable' => '--mosparo-loader-text-color',
+                        'data-colorpicker-allow-empty' => 'false',
+                    ]
+                ])
+                ->add('colorLoaderCircle', TextType::class, [
+                    'label' => 'settings.design.form.color.loaderCircle',
+                    'help' => 'settings.design.form.help.loaderCircle',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'colorpicker',
+                        'data-variable' => '--mosparo-loader-circle-color',
+                        'data-colorpicker-allow-empty' => 'false',
+                    ]
+                ])
+                ->add('fullPageOverlay', CheckboxType::class, [
+                    'label' => 'settings.design.form.fullPageOverlay',
+                    'help' => 'settings.design.form.help.fullPageOverlay',
+                    'required' => false,
+                    'attr' => [
+                        'data-disabled-variable-value' => 'none'
+                    ]
+                ])
             ;
-        } elseif ($options['mode'] === 'invisible-simple') {
+        } else if ($options['mode'] === 'invisible-simple') {
             $builder
                 ->add('colorPageBodyBackground', TextType::class, [
                     'label' => 'settings.design.preview.background',

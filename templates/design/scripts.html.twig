@@ -37,10 +37,11 @@
         $(document).ready(function () {
             {% if mode == 'simple' or mode == 'advanced' %}
                 $('.mosparo-box').each(function () {
-                    new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true });
+                    let type = $(this).data('type');
+                    let forceInvisible = (type === 'invisible');
+                    let m = new mosparo($(this).prop('id'), '{{ app.request.getSchemeAndHttpHost() }}', '{{ project.uuid }}', '{{ project.publicKey }}', { designMode: true, forceInvisible: forceInvisible, });
 
                     $(this).find('.mosparo__label').text('{{ 'label'|trans({}, 'frontend')|escape('js') }}');
-                    let type = $(this).data('type');
                     switch (type) {
                         case 'focus':
                             $(this).addClass('mosparo__focus');
@@ -54,6 +55,12 @@
                         case 'failure':
                             $(this).addClass('mosparo__invalid');
                             $(this).find('.mosparo__error-message').addClass('mosparo__error-message-visible').text('{{ 'error.spamDetected'|trans({}, 'frontend')|escape('js') }}');
+                            break;
+                        case 'invisible':
+                            m.switchToInvisible();
+
+                            $(this).find('.mosparo__loader-container').addClass('mosparo__loader-visible');
+                            $(this).find('.mosparo__loader-text').text('{{ 'accessibility.checkingData'|trans({}, 'frontend')|escape('js') }}');
                             break;
                     }
                 });

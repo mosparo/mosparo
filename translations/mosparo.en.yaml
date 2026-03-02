@@ -1031,6 +1031,11 @@ settings:
         loading: When loading
         success: Success
         failure: Failure
+        invisible: Invisible
+
+    intro:
+      colors:
+        invisible: If you use mosparo in a multistep form, the invisible mode is used to store data in mosparo when you switch between steps.
 
     dropdown:
       title: Design mode

@@ -280,6 +280,14 @@
                                             </span>
                                         </a>
                                     </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-preview-invisible" class="nav-link" data-bs-toggle="tab">
+                                            <i class="ti ti-mask"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.design.subtitles.colors.invisible'|trans }}
+                                            </span>
+                                        </a>
+                                    </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="card tab-pane active show" id="tabs-preview-normal">
@@ -447,6 +455,39 @@
                                                     </div>
 
                                                     {{ _self.contrastRatioBox('failure') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-preview-invisible">
+                                        <div class="card-body">
+                                            <p>
+                                                {{ 'settings.design.intro.colors.invisible'|trans }}
+                                            </p>
+                                            <div class="row">
+                                                <div class="col-12 col-md-4 mb-3">
+                                                    {{ form_row(form.colorLoaderBackground) }}
+                                                </div>
+                                                <div class="col-12 col-md-4 mb-3 mb-lg-0">
+                                                    {{ form_row(form.colorLoaderText) }}
+                                                </div>
+                                                <div class="col-12 col-md-4 mb-3 mb-lg-0">
+                                                    {{ form_row(form.colorLoaderCircle) }}
+                                                </div>
+                                                <div class="col-12 col-md-4 mb-3 mb-lg-0">
+                                                    <h4>{{ 'settings.design.form.invisiblePageOverlay'|trans }}</h4>
+                                                    {{ form_row(form.fullPageOverlay) }}
+                                                </div>
+                                            </div>
+
+                                            <h3 class="mt-3">{{ 'settings.design.subtitles.preview'|trans }}</h3>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="design-mode-page-container large-preview">
+                                                        <div class="design-mode-inner-page-container">
+                                                            <div class="mosparo-box" id="mosparo-box-{{ random() }}" data-type="invisible"></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

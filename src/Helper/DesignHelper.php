@@ -521,6 +521,17 @@ class DesignHelper
         $configValues['colorSuccessShadow'] = $transparent;
         $configValues['colorFailureShadow'] = $transparent;
 
+        // Invisible mode
+        $overlayBackgroundColor = $colorWebsiteBackground;
+        if (str_starts_with($colorWebsiteBackground, 'rgb(')) {
+            $overlayBackgroundColor = str_replace(['rgb(', ')'], ['rgba(', ', 0.8)'], $colorWebsiteBackground);
+        }
+
+        $configValues['colorLoaderBackground'] = $overlayBackgroundColor;
+        $configValues['colorLoaderText'] = $colorWebsiteForeground;
+        $configValues['colorLoaderCircle'] = $colorWebsiteAccent;
+        $configValues['fullPageOverlay'] = true;
+
         return $configValues;
     }
 
