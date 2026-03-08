@@ -1677,10 +1677,6 @@ tools:
         source: Quelle
       title: Verfügbare Änderungen
       intro: mosparo hat den Import simuliert und die folgenden Änderungen festgestellt. Bitte überprüfen Sie diese und führen Sie die Änderungen aus, wenn alles in Ordnung ist.
-      changes:
-        notActive: Dieser Abschnitt ist für diesen Import nicht aktiv.
-        notInExport: Dieser Abschnitt ist in der Importdatei nicht verfügbar.
-        noChangesRequired: Für diesen Abschnitt sind keine Änderungen erforderlich, da bereits alles auf dem neuesten Stand ist.
       errorMessage:
         jobDataFileNotFound: Die Jobdatei für den Token existiert nicht.
         noChangesAvailable: Es sind keine Änderungen verfügbar.
