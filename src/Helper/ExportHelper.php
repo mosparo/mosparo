@@ -54,6 +54,7 @@ class ExportHelper
             $data['status'] = $project->getStatus();
             $data['spamScore'] = $project->getSpamScore();
             $data['statisticStorageLimit'] = $project->getStatisticStorageLimit();
+            $data['metadataAllowed'] = $project->isMetadataAllowed();
             $data['apiDebugMode'] = $project->isApiDebugMode();
             $data['verificationSimulationMode'] = $project->isVerificationSimulationMode();
         }

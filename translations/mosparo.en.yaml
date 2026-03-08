@@ -114,6 +114,8 @@ project:
     statisticStorageLimit: Statistic storage
     statisticStorageLimitHelp: Defines how long mosparo should keep the statistics in the database. This option has no connection to the storage range of the submissions, after which the submissions get deleted from the database (14 days).
     languageSource: Language source
+    metadataAllowed: Metadata allowed
+    metadataAllowedHelp: If enabled, the validation and verification APIs will accept metadata. This metadata is saved in the submission. With metadata, you can store additional information that does not represent a form field or client information.
     apiDebugMode: API debug mode
     apiDebugModeHelp: If the API debug mode is enabled, the verification API will return more information about the verification process. This information can be relevant to understand why a verification failed. Use this option to help integrate mosparo into your form.
     verificationSimulationMode: Verification simulation mode
@@ -633,6 +635,10 @@ submission:
         notVerified: Not verified
         hasPoints: Points
 
+      metadata:
+        title: Metadata
+        noMetadataAvailable: No metadata available
+
       client:
         title: Client
         ipAddress: IP address
@@ -810,6 +816,7 @@ settings:
       spamDetectionOptions: Spam detection options
       statisticsOptions: Statistic options
       languageOptions: Language options
+      metadataOptions: Metadata options
       developerOptions: Developer options
 
   projectMember:

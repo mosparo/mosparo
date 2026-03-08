@@ -45,6 +45,11 @@ class AdvancedProjectFormType extends AbstractType
                 'class' => LanguageSource::class,
                 'expanded' => true,
             ])
+            ->add('metadataAllowed', CheckboxType::class, [
+                'label' => 'project.form.metadataAllowed',
+                'help' => 'project.form.metadataAllowedHelp',
+                'required' => false,
+            ])
             ->add('apiDebugMode', CheckboxType::class, [
                 'label' => 'project.form.apiDebugMode',
                 'help' => 'project.form.apiDebugModeHelp',

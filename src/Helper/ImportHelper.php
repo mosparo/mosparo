@@ -347,6 +347,14 @@ class ImportHelper
             ];
         }
 
+        if (isset($importData['metadataAllowed']) && $project->isMetadataAllowed() !== $importData['metadataAllowed']) {
+            $changes[] = [
+                'key' => 'metadataAllowed',
+                'oldValue' => $project->isMetadataAllowed(),
+                'newValue' => $importData['metadataAllowed']
+            ];
+        }
+
         if (isset($importData['apiDebugMode']) && $project->isApiDebugMode() !== $importData['apiDebugMode']) {
             $changes[] = [
                 'key' => 'apiDebugMode',
@@ -665,7 +673,7 @@ class ImportHelper
     {
         foreach ($sectionChanges as $change) {
             $key = $change['key'];
-            if (in_array($key, ['name', 'description', 'hosts', 'status', 'spamScore', 'statisticStorageLimit', 'apiDebugMode', 'verificationSimulationMode'])) {
+            if (in_array($key, ['name', 'description', 'hosts', 'status', 'spamScore', 'statisticStorageLimit', 'metadataAllowed', 'apiDebugMode', 'verificationSimulationMode'])) {
                 switch ($key) {
                     case 'name':
                         $project->setName($change['newValue']);
@@ -684,6 +692,9 @@ class ImportHelper
                     break;
                     case 'statisticStorageLimit':
                         $project->setStatisticStorageLimit($change['newValue']);
+                    break;
+                    case 'metadataAllowed':
+                        $project->setMetadataAllowed($change['newValue']);
                     break;
                     case 'apiDebugMode':
                         $project->setApiDebugMode($change['newValue']);

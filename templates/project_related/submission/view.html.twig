@@ -330,134 +330,161 @@
                     {% endif %}
                 {% endfor %}
 
-                {% for groupKey, groupData in submission.data %}
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                {% if groupKey == 'formData' %}
-                                    <i class="ti ti-forms"></i>
-                                    {{ 'submission.view.data.formData.title'|trans }}
-                                {% elseif groupKey == 'client' %}
-                                    <i class="ti ti-user"></i>
-                                    {{ 'submission.view.data.client.title'|trans }}
-                                {% endif %}
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            {% for field in groupData %}
-                                {% set path = groupKey ~ '.' ~ field.fieldPath %}
-                                {% set totalPoints = 0 %}
-                                {% if path in submission.matchedRuleItems|keys %}
-                                    {% for match in submission.matchedRuleItems[path] %}
-                                        {% set totalPoints = totalPoints + match.rating %}
+                {% for groupKey in ['formData', 'client', 'metadata'] %}
+                    {% if submission.data[groupKey] is defined %}
+                        {% set groupData = submission.data[groupKey] %}
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    {% if groupKey == 'formData' %}
+                                        <i class="ti ti-forms"></i>
+                                        {{ 'submission.view.data.formData.title'|trans }}
+                                    {% elseif groupKey == 'metadata' %}
+                                        <i class="ti ti-code-dots"></i>
+                                        {{ 'submission.view.data.metadata.title'|trans }}
+                                    {% elseif groupKey == 'client' %}
+                                        <i class="ti ti-user"></i>
+                                        {{ 'submission.view.data.client.title'|trans }}
+                                    {% endif %}
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                {% if groupKey == 'metadata' %}
+                                    {% for fieldKey, fieldValue in groupData %}
+                                        <div class="row submission-row">
+                                            <div class="col-sm-12">
+                                                <h4>
+                                                    {{ fieldKey }}
+                                                </h4>
+                                                {% if fieldValue is iterable and not (fieldValue is empty) %}
+                                                    <pre class="mb-0">{{ fieldValue|var_export }}</pre>
+                                                {% elseif not (fieldValue is iterable) and fieldValue|trim != '' %}
+                                                    <code class="submission-data">{{ fieldValue|mark_invisible_characters }}</code>
+                                                {% else %}
+                                                    <em>{{ 'general.empty'|trans }}</em>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted">{{ 'submission.view.data.metadata.noMetadataAvailable'|trans }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for field in groupData %}
+                                        {% set path = groupKey ~ '.' ~ field.fieldPath %}
+                                        {% set totalPoints = 0 %}
+                                        {% if path in submission.matchedRuleItems|keys %}
+                                            {% for match in submission.matchedRuleItems[path] %}
+                                                {% set totalPoints = totalPoints + match.rating %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <div class="row submission-row">
+                                            <div class="col-sm-12 col-md-8">
+                                                <h4>
+                                                    {% if groupKey == 'client' %}
+                                                        {% if field.name == 'ipAddress' %}
+                                                            {{ 'submission.view.data.client.ipAddress'|trans }}
+                                                        {% elseif field.name == 'userAgent' %}
+                                                            {{ 'submission.view.data.client.userAgent'|trans }}
+                                                        {% elseif field.name == 'asNumber' %}
+                                                            {{ 'submission.view.data.client.asNumber'|trans }}
+                                                        {% elseif field.name == 'asOrganization' %}
+                                                            {{ 'submission.view.data.client.asOrganization'|trans }}
+                                                        {% elseif field.name == 'country' %}
+                                                            {{ 'submission.view.data.client.country'|trans }}
+                                                        {% else %}
+                                                            {{ field.name }}
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {{ field.name }}
+
+                                                        {% if field.type is defined and field.type == 'honeypot' %}
+                                                            <span class="badge bg-azure-lt">{{ 'submission.view.data.formData.honeypot'|trans }}</span>
+                                                        {% elseif not submission.valid is null %}
+                                                            {% set verifiedStatus = submission.getVerifiedField(field.name) %}
+                                                            {% if verifiedStatus == 'valid' %}
+                                                                <span class="badge bg-green-lt" title="{{ 'submission.view.data.formData.valid'|trans }}">
+                                                                    <i class="ti ti-circle-check"></i>
+                                                                </span>
+                                                            {% elseif verifiedStatus == 'invalid' %}
+                                                                <span class="badge bg-red-lt">{{ 'submission.view.data.formData.invalid'|trans }}</span>
+                                                            {% else %}
+                                                                <span class="badge bg-purple-lt">{{ 'submission.view.data.formData.notVerified'|trans }}</span>
+                                                            {% endif %}
+                                                        {% elseif totalPoints > 0 %}
+                                                            <span class="badge bg-red-lt">{{ 'submission.view.data.formData.hasPoints'|trans }}</span>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </h4>
+                                                {% if field.value is defined and field.value is iterable and not (field.value is empty) %}
+                                                    <ul>
+                                                        {% for subValue in field.value %}
+                                                            <li>
+                                                                <code class="submission-data">{{ subValue|mark_invisible_characters }}</code>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% elseif field.value is defined and not (field.value is iterable) and field.value|trim != '' %}
+                                                    <code class="submission-data">{{ field.value|mark_invisible_characters }}</code>
+                                                {% else %}
+                                                    <em>{{ 'general.empty'|trans }}</em>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-sm-12 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        <span class="{% if totalPoints > 0 %}text-danger submission-spam-value{% else %}text-muted{% endif %}">
+                                                            {{ 'submission.view.data.points'|trans({ '%totalPoints%': totalPoints }) }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        {% if path in submission.matchedRuleItems|keys %}
+                                                            {% if submission.matchedRuleItems[path][0].type == 'honeypot' %}
+                                                                <span class="badge bg-red">
+                                                                    {{ 'submission.view.data.fieldMustBeEmpty'|trans }}
+                                                                </span>
+                                                            {% else %}
+                                                                <table class="table table-bordered table-sm table-vcenter matched-rules-table mt-2 mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>{{ 'submission.view.data.value'|trans }}</th>
+                                                                            <th class="rating-column" class="text-center">{{ 'submission.view.data.rating'|trans }}</th>
+                                                                            <th class="reference-column"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    {% for match in submission.matchedRuleItems[path] %}
+                                                                        <tr>
+                                                                            <td><code>{{ match.value|format_rule_value(match.uuid, app.request.locale) }}</code></td>
+                                                                            <td class="text-center">
+                                                                                <span class="{% if match.rating > 0 %}text-danger{% else %}text-success{% endif %}">
+                                                                                    {{ match.rating }}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td>
+                                                                                {% set url = get_rule_detail_url(match.uuid) %}
+                                                                                {% if url != '' %}
+                                                                                    <a href="{{ url }}#{{ match.uuid }}" class="btn btn-ghost-info btn-sm btn-icon-only" target="_blank">
+                                                                                        <i class="ti ti-info-circle"></i>
+                                                                                    </a>
+                                                                                {% endif %}
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     {% endfor %}
                                 {% endif %}
-                                <div class="row submission-row">
-                                    <div class="col-sm-12 col-md-8">
-                                        <h4>
-                                            {% if groupKey == 'client' %}
-                                                {% if field.name == 'ipAddress' %}
-                                                    {{ 'submission.view.data.client.ipAddress'|trans }}
-                                                {% elseif field.name == 'userAgent' %}
-                                                    {{ 'submission.view.data.client.userAgent'|trans }}
-                                                {% elseif field.name == 'asNumber' %}
-                                                    {{ 'submission.view.data.client.asNumber'|trans }}
-                                                {% elseif field.name == 'asOrganization' %}
-                                                    {{ 'submission.view.data.client.asOrganization'|trans }}
-                                                {% elseif field.name == 'country' %}
-                                                    {{ 'submission.view.data.client.country'|trans }}
-                                                {% else %}
-                                                    {{ field.name }}
-                                                {% endif %}
-                                            {% else %}
-                                                {{ field.name }}
-
-                                                {% if field.type is defined and field.type == 'honeypot' %}
-                                                    <span class="badge bg-azure-lt">{{ 'submission.view.data.formData.honeypot'|trans }}</span>
-                                                {% elseif not submission.valid is null %}
-                                                    {% set verifiedStatus = submission.getVerifiedField(field.name) %}
-                                                    {% if verifiedStatus == 'valid' %}
-                                                        <span class="badge bg-green-lt" title="{{ 'submission.view.data.formData.valid'|trans }}">
-                                                            <i class="ti ti-circle-check"></i>
-                                                        </span>
-                                                    {% elseif verifiedStatus == 'invalid' %}
-                                                        <span class="badge bg-red-lt">{{ 'submission.view.data.formData.invalid'|trans }}</span>
-                                                    {% else %}
-                                                        <span class="badge bg-purple-lt">{{ 'submission.view.data.formData.notVerified'|trans }}</span>
-                                                    {% endif %}
-                                                {% elseif totalPoints > 0 %}
-                                                    <span class="badge bg-red-lt">{{ 'submission.view.data.formData.hasPoints'|trans }}</span>
-                                                {% endif %}
-                                            {% endif %}
-                                        </h4>
-                                        {% if field.value is defined and field.value is iterable and not (field.value is empty) %}
-                                            <ul>
-                                                {% for subValue in field.value %}
-                                                    <li>
-                                                        <code class="submission-data">{{ subValue|mark_invisible_characters }}</code>
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% elseif field.value is defined and not (field.value is iterable) and field.value|trim != '' %}
-                                            <code class="submission-data">{{ field.value|mark_invisible_characters }}</code>
-                                        {% else %}
-                                            <em>{{ 'general.empty'|trans }}</em>
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <div class="row">
-                                            <div class="col-12 text-end">
-                                                <span class="{% if totalPoints > 0 %}text-danger submission-spam-value{% else %}text-muted{% endif %}">
-                                                    {{ 'submission.view.data.points'|trans({ '%totalPoints%': totalPoints }) }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 text-end">
-                                                {% if path in submission.matchedRuleItems|keys %}
-                                                    {% if submission.matchedRuleItems[path][0].type == 'honeypot' %}
-                                                        <span class="badge bg-red">
-                                                            {{ 'submission.view.data.fieldMustBeEmpty'|trans }}
-                                                        </span>
-                                                    {% else %}
-                                                        <table class="table table-bordered table-sm table-vcenter matched-rules-table mt-2 mb-0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>{{ 'submission.view.data.value'|trans }}</th>
-                                                                    <th class="rating-column" class="text-center">{{ 'submission.view.data.rating'|trans }}</th>
-                                                                    <th class="reference-column"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            {% for match in submission.matchedRuleItems[path] %}
-                                                                <tr>
-                                                                    <td><code>{{ match.value|format_rule_value(match.uuid, app.request.locale) }}</code></td>
-                                                                    <td class="text-center">
-                                                                        <span class="{% if match.rating > 0 %}text-danger{% else %}text-success{% endif %}">
-                                                                            {{ match.rating }}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        {% set url = get_rule_detail_url(match.uuid) %}
-                                                                        {% if url != '' %}
-                                                                            <a href="{{ url }}#{{ match.uuid }}" class="btn btn-ghost-info btn-sm btn-icon-only" target="_blank">
-                                                                                <i class="ti ti-info-circle"></i>
-                                                                            </a>
-                                                                        {% endif %}
-                                                                    </td>
-                                                                </tr>
-                                                            {% endfor %}
-                                                            </tbody>
-                                                        </table>
-                                                    {% endif %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

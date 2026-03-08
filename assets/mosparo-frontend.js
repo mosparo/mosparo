@@ -60,6 +60,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
     this.checkedFormData = null;
     this.stateResetted = true;
     this.proofOfWorkNumber = null;
+    this.metadata = {};
 
     this.messages = {
         locale: 'en',
@@ -403,6 +404,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
         if (this.proofOfWorkNumber) {
             data.proofOfWorkNumber = this.proofOfWorkNumber;
+        }
+
+        this.formElement.dispatchEvent(new CustomEvent('collect-request-data', { bubbles: true, detail: data }));
+
+        if (Object.keys(this.metadata).length) {
+            data.metadata = JSON.stringify(this.metadata);
         }
 
         this.checkedFormData = formData;

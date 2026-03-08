@@ -138,7 +138,7 @@ class RuleTesterHelper
 
         foreach ($submission->getData() as $groupKey => $groupData) {
             // We do not check the metadata
-            if ($groupKey === 'metaData') {
+            if ($groupKey === 'metadata') {
                 continue;
             }
 

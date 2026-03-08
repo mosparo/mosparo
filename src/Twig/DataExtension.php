@@ -12,6 +12,7 @@ class DataExtension extends AbstractExtension
     {
         return [
             new TwigFilter('mark_invisible_characters', [$this, 'markInvisibleCharacters'], ['is_safe' => ['html']]),
+            new TwigFilter('var_export', [$this, 'exportVariable']),
         ];
     }
 
@@ -56,5 +57,10 @@ class DataExtension extends AbstractExtension
         }
 
         return $value;
+    }
+
+    public function exportVariable($value): string
+    {
+        return var_export($value, true);
     }
 }

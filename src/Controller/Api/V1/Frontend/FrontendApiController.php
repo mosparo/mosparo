@@ -178,9 +178,11 @@ class FrontendApiController extends AbstractController
             return $response;
         }
 
-        if (!$request->request->has('formData') && !$request->request->has('metaData')) {
+        if (!$request->request->has('formData') && !$request->request->has('metadata')) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data and metadata not set.']);
         }
+
+        $activeProject = $this->projectHelper->getActiveProject();
 
         $partialSubmission = $submitToken->getPartialSubmission();
         if (!$partialSubmission) {
@@ -203,15 +205,14 @@ class FrontendApiController extends AbstractController
             }
         }
 
-        $metaData = [];
-        if ($request->request->has('metaData')) {
-            $metaData = json_decode($request->request->get('metaData'), true);
+        $metadata = [];
+        if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
+            $metadata['metadata'] = json_decode($request->request->get('metadata'), true);
         }
 
-        $partialSubmission->appendData([
+        $partialSubmission->appendData(array_merge([
             'formData' => $formData['fields'],
-            'metaData' => $metaData,
-        ]);
+        ], $metadata));
 
         $partialSubmission->setUpdatedAt(new DateTime());
 
@@ -252,9 +253,9 @@ class FrontendApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
         }
 
-        $metaData = [];
-        if ($request->request->has('metaData')) {
-            $metaData = json_decode($request->request->get('metaData'), true);
+        $metadata = [];
+        if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
+            $metadata['metadata'] = json_decode($request->request->get('metadata'), true);
         }
 
         // Add the client data
@@ -352,11 +353,10 @@ class FrontendApiController extends AbstractController
         }
 
         // Set the submission data
-        $submission->appendData([
+        $submission->appendData(array_merge([
             'formData' => $formData['fields'],
-            'metaData' => $metaData,
-            'client' => $clientData
-        ]);
+            'client' => $clientData,
+        ], $metadata));
 
         // Create signature
         $submission->setSignature($this->createSignature($submitToken, $formData['fields'], $activeProject));

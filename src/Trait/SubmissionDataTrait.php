@@ -19,7 +19,7 @@ trait SubmissionDataTrait
     public function appendData(array $data): self
     {
         foreach ($data as $typeKey => $typeData) {
-            if ($typeKey === 'metaData') {
+            if ($typeKey === 'metadata') {
                 if (isset($this->data[$typeKey])) {
                     $this->data[$typeKey] = array_replace_recursive($this->data[$typeKey], $typeData);
                 } else {

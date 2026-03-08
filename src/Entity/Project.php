@@ -50,6 +50,9 @@ class Project
     #[ORM\Column(type: 'string', length: 7)]
     private ?string $statisticStorageLimit;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    private bool $metadataAllowed = false;
+
     #[ORM\Column(type: 'boolean')]
     private bool $apiDebugMode = false;
 
@@ -287,6 +290,18 @@ class Project
     public function setStatisticStorageLimit(string $statisticStorageLimit): self
     {
         $this->statisticStorageLimit = $statisticStorageLimit;
+
+        return $this;
+    }
+
+    public function isMetadataAllowed(): ?bool
+    {
+        return $this->metadataAllowed;
+    }
+
+    public function setMetadataAllowed(bool $metadataAllowed): self
+    {
+        $this->metadataAllowed = $metadataAllowed;
 
         return $this;
     }

@@ -93,6 +93,15 @@ class VerificationApiController extends AbstractController
         $submitToken->setVerifiedAt(new DateTime());
         $submission->setVerifiedAt(new DateTime());
 
+        if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
+            $metadata = json_decode($request->request->get('metadata'), true);
+            if ($metadata) {
+                $submission->appendData([
+                    'metadata' => $metadata,
+                ]);
+            }
+        }
+
         // Get the client IP address
         $clientIpAddress = $submission->getDataValue('client', 'ipAddress');
         if (!$clientIpAddress) {
@@ -232,6 +241,91 @@ class VerificationApiController extends AbstractController
             'verificationSignature' => $verificationSignature,
             'verifiedFields' => $verificationResult['verifiedFields'],
             'issues' => $verificationResult['issues'],
+        ]);
+    }
+
+    #[Route('/store-metadata', name: 'verification_api_store_metadata')]
+    public function storeMetadata(Request $request, EntityManagerInterface $entityManager, SubmitTokenRepository $submitTokenRepository): Response
+    {
+        // If there is no active project, we cannot do anything.
+        if (!$this->projectHelper->hasActiveProject()) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);
+        }
+
+        $activeProject = $this->projectHelper->getActiveProject();
+
+        if (!$activeProject->isMetadataAllowed()) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Metadata is not allowed in this project.']);
+        }
+
+        if (!$request->request->has('submitToken') || !$request->request->has('validationSignature')) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => 'required_parameter_missing',
+                    'hasSubmitToken' => $request->request->has('submitToken'),
+                    'hasValidationSignature' => $request->request->has('validationSignature'),
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Required parameter missing.'] + $debugInformation);
+        }
+
+        $submitToken = $submitTokenRepository->findOneBy(['token' => $request->request->get('submitToken')]);
+        if ($submitToken === null) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                if ($submitToken === null) {
+                    $debugInformation['debugInformation'] = [
+                        'reason' => 'submit_token_not_found',
+                    ];
+                } else if (!$submitToken->isValid()) {
+                    $debugInformation['debugInformation'] = [
+                        'reason' => 'submit_token_not_valid',
+                    ];
+                }
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not found or not valid.'] + $debugInformation);
+        }
+
+        $submission = $submitToken->getLastSubmission();
+        if (!$submission) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.']);
+        }
+
+        $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
+        if ($request->request->get('validationSignature') !== $validationSignature) {
+            $responseData = [
+                'error' => true,
+                'errorMessage' => 'Validation signature invalid.',
+            ];
+
+            if ($activeProject->isApiDebugMode()) {
+                $responseData['debugInformation'] = [
+                    'reason' => 'validation_signature_invalid',
+                    'expectedSignature' => $validationSignature,
+                    'receivedSignature' => $request->request->get('validationSignature'),
+                    'signaturePayload' => $submission->getValidationToken(),
+                ];
+            }
+
+            return new JsonResponse($responseData);
+        }
+
+        $metadata = json_decode($request->request->get('metadata'), true);
+        if ($metadata) {
+            $submission->appendData([
+                'metadata' => $metadata,
+            ]);
+        }
+
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'result' => true,
         ]);
     }
 }
