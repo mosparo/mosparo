@@ -974,10 +974,6 @@ tools:
         wrongSpecificationsVersion: Il file di importazione è stato generato con specifiche diverse dalla versione in uso di questa installazione di mosparo.
         jobDataFileNotFound: Il file dei dati del lavoro per il token non esiste.
       title: Modifiche disponibili
-      changes:
-        notActive: Questa sezione non è attiva per questa importazione.
-        notInExport: Questa sezione non è disponibile sul file da importare.
-        noChangesRequired: Per questa sezione non ci sono modifiche da fare perchè tutto è già aggiornato.
       noChangesFound: 'I dati del progetto sono gli stessi del file di importazione: non ci sono modifiche da fare.'
       intro: mosparo ha simulato l'importazione e ha rilevato le seguenti modifiche. Per favore verificale e procedi con le modifiche solo se va tutto bene.
       notRedoable: Non puoi annullare le modifiche dopo averle eseguite. Puoi esportare il progetto prima di eseguire le modifiche per avere un backup della configurazione.
