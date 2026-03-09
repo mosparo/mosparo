@@ -40,3 +40,8 @@ hosts:
     zvjezdica (*).
   hostContainsProtocol: Ovaj host sadrži protokol. Unesite host bez protokola 
     (na primjer, example.com umjesto https://example.com).
+translation:
+  locale:
+    invalidFormat: Navedite jezik u ispravnom formatu. Unesite dvoznamenkasti 
+      jezični kod ili kombinaciju dvoznamenkastog jezičnog koda zajedno s kodom 
+      države.
