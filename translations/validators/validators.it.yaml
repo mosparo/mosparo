@@ -1,6 +1,7 @@
 settings:
   mosparoName:
-    colonNotAllowed: I due punti (:) non sono consentiti nel nome dell'installazione di mosparo.
+    colonNotAllowed: I due punti (:) non sono consentiti nel nome 
+      dell'installazione di mosparo.
 password:
   form:
     constraint:
@@ -20,15 +21,27 @@ tools:
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: Il tuo indirizzo IP non è consentito dalla lista di autorizzazioni. Inserisci il tuo indirizzo IP alla lista.
+      ownIpNotInAllowList: Il tuo indirizzo IP non è consentito dalla lista di 
+        autorizzazioni. Inserisci il tuo indirizzo IP alla lista.
 securityGuideline:
   asNumberNotNumeric: Il numero AS non è un numero.
-  atLeastOneCriteriaRequired: Le linee guida di sicurezza richiedono almeno un criterio.
+  atLeastOneCriteriaRequired: Le linee guida di sicurezza richiedono almeno un 
+    criterio.
 webCronJob:
-  webCronJobIntervalAtLeast5Minutes: L'intervallo del web cron job deve essere di almeno 5 minuti o più.
-  geoIpRefreshIntervalAtLeast1Day: L'intervallo di aggiornamento di GeoIP2 deve essere di almeno un giorno o più.
+  webCronJobIntervalAtLeast5Minutes: L'intervallo del web cron job deve essere 
+    di almeno 5 minuti o più.
+  geoIpRefreshIntervalAtLeast1Day: L'intervallo di aggiornamento di GeoIP2 deve 
+    essere di almeno un giorno o più.
 hosts:
-  hostContainsProtocol: Questo host contiene un protocollo. Inserisci l'host senza protocollo (ad esempio, esempio.com invece di https://esempio.com).
-  hostContainsInvalidCharacter: Questo host contiene carattere non validi. In questo campo sono consentiti solo caratteri (a-z), numeri (0-9), trattini, punti, due punti e l'asterisco (*).
+  hostContainsProtocol: Questo host contiene un protocollo. Inserisci l'host 
+    senza protocollo (ad esempio, esempio.com invece di https://esempio.com).
+  hostContainsInvalidCharacter: Questo host contiene carattere non validi. In 
+    questo campo sono consentiti solo caratteri (a-z), numeri (0-9), trattini, 
+    punti, due punti e l'asterisco (*).
 honeypotField:
   nameHasInvalidCharacter: Usa solo lettere, numeri e il trattino (-).
+translation:
+  locale:
+    invalidFormat: Specifica la lingua nel formato corretto. Inserisci un codice
+      lingua di due caratteri o una combinazione del codice lingua di due 
+      caratteri insieme al codice del paese.
