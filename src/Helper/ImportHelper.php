@@ -347,11 +347,27 @@ class ImportHelper
             ];
         }
 
+        if (isset($importData['spamDataReturned']) && $project->isSpamDataReturned() !== $importData['spamDataReturned']) {
+            $changes[] = [
+                'key' => 'spamDataReturned',
+                'oldValue' => $project->isSpamDataReturned(),
+                'newValue' => $importData['spamDataReturned']
+            ];
+        }
+
         if (isset($importData['metadataAllowed']) && $project->isMetadataAllowed() !== $importData['metadataAllowed']) {
             $changes[] = [
                 'key' => 'metadataAllowed',
                 'oldValue' => $project->isMetadataAllowed(),
                 'newValue' => $importData['metadataAllowed']
+            ];
+        }
+
+        if (isset($importData['metadataReturned']) && $project->isMetadataReturned() !== $importData['metadataReturned']) {
+            $changes[] = [
+                'key' => 'metadataReturned',
+                'oldValue' => $project->isMetadataReturned(),
+                'newValue' => $importData['metadataReturned']
             ];
         }
 
@@ -673,7 +689,7 @@ class ImportHelper
     {
         foreach ($sectionChanges as $change) {
             $key = $change['key'];
-            if (in_array($key, ['name', 'description', 'hosts', 'status', 'spamScore', 'statisticStorageLimit', 'metadataAllowed', 'apiDebugMode', 'verificationSimulationMode'])) {
+            if (in_array($key, ['name', 'description', 'hosts', 'status', 'spamScore', 'statisticStorageLimit', 'spamDataReturned', 'metadataAllowed', 'metadataReturned', 'apiDebugMode', 'verificationSimulationMode'])) {
                 switch ($key) {
                     case 'name':
                         $project->setName($change['newValue']);
@@ -693,8 +709,14 @@ class ImportHelper
                     case 'statisticStorageLimit':
                         $project->setStatisticStorageLimit($change['newValue']);
                     break;
+                    case 'spamDataReturned':
+                        $project->setSpamDataReturned($change['newValue']);
+                    break;
                     case 'metadataAllowed':
                         $project->setMetadataAllowed($change['newValue']);
+                    break;
+                    case 'metadataReturned':
+                        $project->setMetadataReturned($change['newValue']);
                     break;
                     case 'apiDebugMode':
                         $project->setApiDebugMode($change['newValue']);

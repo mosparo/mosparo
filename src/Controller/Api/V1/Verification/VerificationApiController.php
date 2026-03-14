@@ -3,6 +3,7 @@
 namespace Mosparo\Controller\Api\V1\Verification;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\ApiClient\RequestHelper;
 use Mosparo\Helper\ProjectHelper;
@@ -102,6 +103,8 @@ class VerificationApiController extends AbstractController
             }
         }
 
+        $responseMetadata = ($activeProject->isMetadataReturned()) ? ['metadata' => $submission->getData()['metadata'] ?? []] : [];
+
         // Get the client IP address
         $clientIpAddress = $submission->getDataValue('client', 'ipAddress');
         if (!$clientIpAddress) {
@@ -126,7 +129,7 @@ class VerificationApiController extends AbstractController
             if (!$minimumTimeGv->isValid()) {
                 $submission->setValid($minimumTimeGv->isValid());
 
-                $issue = [
+                $issue = array_merge([
                     'error' => true,
                     'errorMessage' => 'Verification failed.',
                     'debugInformation' => [
@@ -134,7 +137,7 @@ class VerificationApiController extends AbstractController
                         'minimumTimeExpected' => $minimumTimeSeconds,
                         'minimumTimeElapsed' => $seconds,
                     ],
-                ];
+                ], $responseMetadata);
 
                 $submission->addIssue($issue);
 
@@ -152,7 +155,7 @@ class VerificationApiController extends AbstractController
         if ($request->request->get('validationSignature') !== $validationSignature) {
             $submission->setValid(false);
 
-            $issue = [
+            $issue = array_merge([
                 'error' => true,
                 'errorMessage' => 'Verification failed.',
                 'debugInformation' => [
@@ -161,7 +164,7 @@ class VerificationApiController extends AbstractController
                     'receivedSignature' => $request->request->get('validationSignature'),
                     'signaturePayload' => $submission->getValidationToken(),
                 ],
-            ];
+            ], $responseMetadata);
 
             $submission->addIssue($issue);
 
@@ -199,7 +202,7 @@ class VerificationApiController extends AbstractController
                 if (!$equalSubmissionsGv->isValid()) {
                     $submission->setValid($equalSubmissionsGv->isValid());
 
-                    $issue = [
+                    $issue = array_merge([
                         'error' => true,
                         'errorMessage' => 'Verification failed.',
                         'debugInformation' => [
@@ -207,7 +210,7 @@ class VerificationApiController extends AbstractController
                             'allowedNumberOfEqualSubmissions' => $allowedNumberOfEqualSubmissions,
                             'actualNumberOfEqualSubmissions' => $actualNumberOfEqualSubmissions,
                         ],
-                    ];
+                    ], $responseMetadata);
 
                     $submission->addIssue($issue);
 
@@ -236,12 +239,36 @@ class VerificationApiController extends AbstractController
 
         $this->statisticHelper->increaseDayStatistic($submission);
 
-        return new JsonResponse([
+        $responseSpamData = [];
+        if ($activeProject->isSpamDataReturned()) {
+            $minimumTimeData = [];
+            $minimumTimeGv = $submission->getGeneralVerification(GeneralVerification::MINIMUM_TIME);
+            if ($minimumTimeGv) {
+                $minimumTimeData['minimumTimeData'] = $minimumTimeGv->getData();
+            }
+
+            $equalSubmissionsData = [];
+            $equalSubmissionsGv = $submission->getGeneralVerification(GeneralVerification::EQUAL_SUBMISSIONS);
+            if ($equalSubmissionsGv) {
+                $equalSubmissionsData['equalSubmissionsData'] = $equalSubmissionsGv->getData();
+            }
+
+            $responseSpamData['spamData'] = array_merge([
+                'spamRating' => $submission->getSpamRating(),
+                'spamDetectionRating' => $submission->getSpamDetectionRating(),
+                'isSpam' => $submission->isSpam(),
+                'isValid' => $submission->isValid(),
+                'submittedAt' => $submission->getSubmittedAt()->format(DateTimeInterface::ATOM),
+                'verifiedAt' => $submission->getVerifiedAt()->format(DateTimeInterface::ATOM),
+            ], $minimumTimeData, $equalSubmissionsData);
+        }
+
+        return new JsonResponse(array_merge([
             'valid' => $verificationResult['valid'],
             'verificationSignature' => $verificationSignature,
             'verifiedFields' => $verificationResult['verifiedFields'],
             'issues' => $verificationResult['issues'],
-        ]);
+        ], $responseMetadata, $responseSpamData));
     }
 
     #[Route('/store-metadata', name: 'verification_api_store_metadata')]

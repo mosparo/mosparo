@@ -29,6 +29,7 @@
                     <div class="card-body">
                         {{ form_row(form.status) }}
                         {{ form_row(form.spamScore) }}
+                        {{ form_row(form.spamDataReturned) }}
                     </div>
                 </div>
                 <div class="card mb-3">
@@ -69,6 +70,7 @@
                     </div>
                     <div class="card-body">
                         {{ form_row(form.metadataAllowed) }}
+                        {{ form_row(form.metadataReturned) }}
                     </div>
                 </div>
                 <div class="card">
@@ -91,4 +93,18 @@
             </div>
         </div>
     {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#advanced_project_form_metadataAllowed').change(function () {
+                    $('#advanced_project_form_metadataReturned').prop('disabled', !$(this).prop('checked'));
+                }).trigger('change');
+            });
+        </script>
+    {% endcspscript %}
 {% endblock %}

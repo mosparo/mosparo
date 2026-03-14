@@ -126,9 +126,13 @@ project:
     spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.
     statisticStorageLimit: Statistic storage
     statisticStorageLimitHelp: Defines how long mosparo should keep the statistics in the database. This option has no connection to the storage range of the submissions, after which the submissions get deleted from the database (14 days).
+    spamDataReturned: Add spam detection data to verification response
+    spamDataReturnedHelp: If enabled, the verification API adds the spam detection data to the API response. With the data, you get more details on why a submission was spam or not.
     languageSource: Language source
     metadataAllowed: Metadata allowed
     metadataAllowedHelp: If enabled, the validation and verification APIs will accept metadata. This metadata is saved in the submission. With metadata, you can store additional information that does not represent a form field or client information.
+    metadataReturned: Add metadata to verification response
+    metadataReturnedHelp: If enabled, the verification API adds the metadata to the API response.
     apiDebugMode: API debug mode
     apiDebugModeHelp: If the API debug mode is enabled, the verification API will return more information about the verification process. This information can be relevant to understand why a verification failed. Use this option to help integrate mosparo into your form.
     verificationSimulationMode: Verification simulation mode

@@ -45,9 +45,19 @@ class AdvancedProjectFormType extends AbstractType
                 'class' => LanguageSource::class,
                 'expanded' => true,
             ])
+            ->add('spamDataReturned', CheckboxType::class, [
+                'label' => 'project.form.spamDataReturned',
+                'help' => 'project.form.spamDataReturnedHelp',
+                'required' => false,
+            ])
             ->add('metadataAllowed', CheckboxType::class, [
                 'label' => 'project.form.metadataAllowed',
                 'help' => 'project.form.metadataAllowedHelp',
+                'required' => false,
+            ])
+            ->add('metadataReturned', CheckboxType::class, [
+                'label' => 'project.form.metadataReturned',
+                'help' => 'project.form.metadataReturnedHelp',
                 'required' => false,
             ])
             ->add('apiDebugMode', CheckboxType::class, [

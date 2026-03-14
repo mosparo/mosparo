@@ -51,7 +51,13 @@ class Project
     private ?string $statisticStorageLimit;
 
     #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    private bool $spamDataReturned = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
     private bool $metadataAllowed = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    private bool $metadataReturned = false;
 
     #[ORM\Column(type: 'boolean')]
     private bool $apiDebugMode = false;
@@ -294,6 +300,18 @@ class Project
         return $this;
     }
 
+    public function isSpamDataReturned(): ?bool
+    {
+        return $this->spamDataReturned;
+    }
+
+    public function setSpamDataReturned(bool $spamDataReturned): self
+    {
+        $this->spamDataReturned = $spamDataReturned;
+
+        return $this;
+    }
+
     public function isMetadataAllowed(): ?bool
     {
         return $this->metadataAllowed;
@@ -302,6 +320,18 @@ class Project
     public function setMetadataAllowed(bool $metadataAllowed): self
     {
         $this->metadataAllowed = $metadataAllowed;
+
+        return $this;
+    }
+
+    public function isMetadataReturned(): ?bool
+    {
+        return $this->metadataReturned;
+    }
+
+    public function setMetadataReturned(bool $metadataReturned): self
+    {
+        $this->metadataReturned = $metadataReturned;
 
         return $this;
     }
