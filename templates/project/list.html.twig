@@ -55,6 +55,31 @@
                 </div>
             </form>
 
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'project.statistics.dropdown'|trans }}">
+                    <i class="ti ti-clock"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="{{ path('project_list_' ~ routeSuffix, baseQuery|merge({ 'projectGroup': projectGroup ? projectGroup.id : null, 'statistic': -1 })) }}" class="dropdown-item {% if statistic == -1 %}active{% endif %}">
+                        <i class="ti ti-check {% if statistic != -1 %}invisible{% endif %}"></i>
+                        {{ 'project.statistics.options.disabled'|trans }}
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    {% for option in statisticOptions %}
+                        {% if option > 0 %}
+                            <a href="{{ path('project_list_filtered_' ~ routeSuffix, baseQuery|merge({ 'projectGroup': projectGroup ? projectGroup.id : null, 'statistic': option })) }}" class="dropdown-item {% if statistic == option %}active{% endif %}">
+                                <i class="ti ti-check {% if statistic != option %}invisible{% endif %}"></i>
+                                {% if option == 1 %}
+                                    {{ 'project.statistics.options.showLastDay'|trans }}
+                                {% else %}
+                                    {{ 'project.statistics.options.showMultipleDays'|trans({'%days%': option}) }}
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
             {% if view == 'table' %}
                 <div class="dropdown">
                     <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'project.filter.dropdown'|trans }}">
@@ -224,6 +249,48 @@
                                         {{ project.description }}
                                     </p>
                                 </a>
+                                {% if statistic != -1 %}
+                                    <div class="card-footer d-flex justify-content-between">
+                                        {% set statistics = get_project_statistics(project, statistic) %}
+                                        {% if statistics.last %}
+                                            <div class="d-flex aling-items-center">
+                                                <i class="ti ti-mail project-table-sm-icon"></i>
+                                                <span>
+                                                    {% if statistics.last %}
+                                                        {% if statistics.last < date('yesterday') %}
+                                                            {{ statistics.last|date(dateFormat) }}
+                                                        {% else %}
+                                                            {{ statistics.last|format_datetime('relative_full', 'short') }}
+                                                        {% endif %}
+                                                    {% else %}
+                                                        -
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                            <div class="d-flex">
+                                                <div class="text-green me-2 d-flex aling-items-center">
+                                                    <i class="ti ti-check project-table-sm-icon"></i>
+                                                    <span>{{ statistics.valid ?? 0 }}</span>
+                                                </div>
+                                                <span class="text-danger d-flex aling-items-center">
+                                                    <i class="ti ti-circle-x project-table-sm-icon"></i>
+                                                    <span>{{ statistics.spam ?? 0 }}</span>
+                                                </span>
+                                            </div>
+                                        {% else %}
+                                            <div class="d-flex aling-items-center text-muted">
+                                                <i class="ti ti-clock project-table-sm-icon"></i>
+                                                <span>
+                                                    {% if statistic == 1 %}
+                                                        {{ 'project.statistics.noDataInTimeRangeOneDay'|trans }}
+                                                    {% else %}
+                                                        {{ 'project.statistics.noDataInTimeRangeDays'|trans({'%days%': statistic}) }}
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                                 <div class="card-footer">
                                     <div class="row">
                                         <div class="col">
@@ -305,8 +372,7 @@
                                 {% if projectGroup or treeNode.children|length %}
                                     <thead>
                                         <tr>
-                                            <th width="70%">{{ 'project.list.name'|trans }}</th>
-                                            <th></th>
+                                            <th width="{% if statistic != -1 %}50%{% else %}70%{% endif %}" colspan="{% if statistic != -1 %}5{% else %}2{% endif %}">{{ 'project.list.name'|trans }}</th>
                                             <th width="1%">{{ 'project.list.actions'|trans }}</th>
                                         </tr>
                                     </thead>
@@ -318,7 +384,7 @@
                                                 {% set previousPath = path('project_list_root', baseQuery) %}
                                             {% endif %}
                                             <tr class="clickable-table-row" data-href="{{ previousPath }}">
-                                                <td>
+                                                <td colspan="{% if statistic != -1 %}5{% else %}2{% endif %}">
                                                     <i class="ti ti-folder-up project-table-icon"></i>
                                                     {% if projectGroup.parent %}
                                                         {{ 'projectGroup.action.openParentGroupName'|trans({'%name%': projectGroup.parent.name}) }}
@@ -327,16 +393,14 @@
                                                     {% endif %}
                                                 </td>
                                                 <td></td>
-                                                <td></td>
                                             </tr>
                                         {% endif %}
                                         {% for node in treeNode.children %}
                                             <tr class="clickable-table-row" data-href="{{ path('project_list_group', baseQuery|merge({'projectGroup': node.projectGroup.id})) }}">
-                                                <td>
+                                                <td colspan="{% if statistic != -1 %}5{% else %}2{% endif %}">
                                                     <i class="ti ti-folder-open project-table-icon"></i>
                                                     {{ node.projectGroup.name }}
                                                 </td>
-                                                <td></td>
                                                 <td>
                                                     <div class="d-flex justify-content-end">
                                                         {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
@@ -362,7 +426,12 @@
                                 {% endif %}
                                 <thead>
                                     <tr>
-                                        <th width="70%">{{ 'project.list.projects'|trans }}</th>
+                                        <th width="50%">{{ 'project.list.projects'|trans }}</th>
+                                        {% if statistic != -1 %}
+                                            <th>{{ 'project.list.last'|trans }}</th>
+                                            <th>{{ 'project.list.valid'|trans }}</th>
+                                            <th>{{ 'project.list.spam'|trans }}</th>
+                                        {% endif %}
                                         <th>{{ 'project.list.status'|trans }}</th>
                                         <th width="1%">{{ 'project.list.actions'|trans }}</th>
                                     </tr>
@@ -379,6 +448,52 @@
 
                                                 {{ project.name }}
                                             </td>
+                                            {% if statistic != -1 %}
+                                                {% set statistics = get_project_statistics(project, statistic) %}
+                                                {% if statistics.last %}
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <i class="ti ti-mail project-table-sm-icon"></i>
+                                                            <span>
+                                                                {% if statistics.last %}
+                                                                    {% if statistics.last < date('yesterday') %}
+                                                                        {{ statistics.last|date(dateFormat) }}
+                                                                    {% else %}
+                                                                        {{ statistics.last|format_datetime('relative_full', 'short') }}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    -
+                                                                {% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center text-green me-2">
+                                                            <i class="ti ti-check project-table-sm-icon"></i>
+                                                            <span>{{ statistics.valid ?? 0 }}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center text-danger">
+                                                            <i class="ti ti-circle-x project-table-sm-icon"></i>
+                                                            <span>{{ statistics.spam ?? 0 }}</span>
+                                                        </div>
+                                                    </td>
+                                                {% else %}
+                                                    <td colspan="3">
+                                                        <div class="d-flex aling-items-center text-muted">
+                                                            <i class="ti ti-clock project-table-sm-icon"></i>
+                                                            <span>
+                                                                {% if statistic == 1 %}
+                                                                    {{ 'project.statistics.noDataInTimeRangeOneDay'|trans }}
+                                                                {% else %}
+                                                                    {{ 'project.statistics.noDataInTimeRangeDays'|trans({'%days%': statistic}) }}
+                                                                {% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                {% endif %}
+                                            {% endif %}
                                             <td>
                                                 {% if project.status == true %}
                                                     <span class="text-success"><strong>{{ 'state.active'|trans }}</strong></span>

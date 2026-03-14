@@ -79,8 +79,10 @@ class StatisticHelper
         }
 
         $builder
+            ->set('ds.updatedAt', ':updatedAt')
             ->where('ds.date = :date')
             ->andWhere('ds.project = :project')
+            ->setParameter('updatedAt', (new DateTime())->format('Y-m-d H:i:s'))
             ->setParameter('date', (new DateTime())->format('Y-m-d'))
             ->setParameter('project', $submission->getProject());
 
@@ -122,6 +124,8 @@ class StatisticHelper
         } else {
             $dayStatistic->setNumberOfSpamSubmissions(1);
         }
+
+        $dayStatistic->setUpdatedAt(new DateTime());
 
         try {
             $this->entityManager->persist($dayStatistic);

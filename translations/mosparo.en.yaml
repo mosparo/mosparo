@@ -56,6 +56,9 @@ project:
   list:
     name: Name
     projects: Projects
+    last: Last
+    valid: Valid
+    spam: Spam
     status: Status
     actions: Actions
 
@@ -68,6 +71,16 @@ project:
 
   search:
     placeholder: Search for…
+
+  statistics:
+    dropdown: Show statistics from
+    options:
+      disabled: Do not show the statistics
+      showLastDay: Past day
+      showMultipleDays: '%days% days'
+
+    noDataInTimeRangeOneDay: No data in the past day
+    noDataInTimeRangeDays: No data in the past %days% days
 
   action:
     manage: Manage projects
