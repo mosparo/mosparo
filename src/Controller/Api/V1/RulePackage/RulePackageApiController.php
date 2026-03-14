@@ -58,7 +58,6 @@ class RulePackageApiController extends AbstractController
             }
 
             // Remove the middlewares to prevent memory issues, especially in DEV environment.
-            $this->entityManager->getConnection()->getConfiguration()->getMiddlewares();
             $this->entityManager->getConnection()->getConfiguration()->setMiddlewares([]);
 
             $sentContent = false;
