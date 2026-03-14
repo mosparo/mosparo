@@ -361,8 +361,8 @@ class FrontendApiController extends AbstractController
         // Create signature
         $submission->setSignature($this->createSignature($submitToken, $formData['fields'], $activeProject));
 
-        // Check the data
-        if (!$submission->isSpam()) {
+        // Check the data. If the silent mode is enabled, check every request.
+        if (!$submission->isSpam() || $activeProject->isSilentModeEnabled()) {
             $this->ruleTesterHelper->checkRequest($submission, $securitySettings);
         }
 
@@ -371,13 +371,13 @@ class FrontendApiController extends AbstractController
         $this->entityManager->persist($submission);
         $this->entityManager->flush();
 
-        // Increase the day statistic if it is spam
+        // Increase the day statistic if it is spam. We count anyway, even if the silent mode is enabled
         if ($submission->isSpam()) {
             $this->statisticHelper->increaseDayStatistic($submission);
         }
 
         return new JsonResponse([
-            'valid' => (!$submission->isSpam()),
+            'valid' => (!$submission->isSpam() || $activeProject->isSilentModeEnabled()),
             'validationToken' => $submission->getValidationToken(),
         ]);
     }

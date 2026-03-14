@@ -45,6 +45,11 @@ class AdvancedProjectFormType extends AbstractType
                 'class' => LanguageSource::class,
                 'expanded' => true,
             ])
+            ->add('silentModeEnabled', CheckboxType::class, [
+                'label' => 'project.form.silentModeEnabled',
+                'help' => 'project.form.silentModeEnabledHelp',
+                'required' => false,
+            ])
             ->add('spamDataReturned', CheckboxType::class, [
                 'label' => 'project.form.spamDataReturned',
                 'help' => 'project.form.spamDataReturnedHelp',

@@ -51,6 +51,9 @@ class Project
     private ?string $statisticStorageLimit;
 
     #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    private bool $silentModeEnabled = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
     private bool $spamDataReturned = false;
 
     #[ORM\Column(type: 'boolean', options: ['default' => 0])]
@@ -296,6 +299,18 @@ class Project
     public function setStatisticStorageLimit(string $statisticStorageLimit): self
     {
         $this->statisticStorageLimit = $statisticStorageLimit;
+
+        return $this;
+    }
+
+    public function isSilentModeEnabled(): ?bool
+    {
+        return $this->silentModeEnabled;
+    }
+
+    public function setSilentModeEnabled(bool $silentModeEnabled): self
+    {
+        $this->silentModeEnabled = $silentModeEnabled;
 
         return $this;
     }

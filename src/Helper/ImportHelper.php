@@ -347,6 +347,14 @@ class ImportHelper
             ];
         }
 
+        if (isset($importData['silentModeEnabled']) && $project->isSpamDataReturned() !== $importData['silentModeEnabled']) {
+            $changes[] = [
+                'key' => 'silentModeEnabled',
+                'oldValue' => $project->isSpamDataReturned(),
+                'newValue' => $importData['silentModeEnabled']
+            ];
+        }
+
         if (isset($importData['spamDataReturned']) && $project->isSpamDataReturned() !== $importData['spamDataReturned']) {
             $changes[] = [
                 'key' => 'spamDataReturned',
@@ -689,7 +697,7 @@ class ImportHelper
     {
         foreach ($sectionChanges as $change) {
             $key = $change['key'];
-            if (in_array($key, ['name', 'description', 'hosts', 'status', 'spamScore', 'statisticStorageLimit', 'spamDataReturned', 'metadataAllowed', 'metadataReturned', 'apiDebugMode', 'verificationSimulationMode'])) {
+            if (in_array($key, ['name', 'description', 'hosts', 'status', 'spamScore', 'statisticStorageLimit', 'silentModeEnabled', 'spamDataReturned', 'metadataAllowed', 'metadataReturned', 'apiDebugMode', 'verificationSimulationMode'])) {
                 switch ($key) {
                     case 'name':
                         $project->setName($change['newValue']);
@@ -708,6 +716,9 @@ class ImportHelper
                     break;
                     case 'statisticStorageLimit':
                         $project->setStatisticStorageLimit($change['newValue']);
+                    break;
+                    case 'silentModeEnabled':
+                        $project->setSilentModeEnabled($change['newValue']);
                     break;
                     case 'spamDataReturned':
                         $project->setSpamDataReturned($change['newValue']);

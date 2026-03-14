@@ -126,6 +126,8 @@ project:
     spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this nubmer, the submission is rated as spam.
     statisticStorageLimit: Statistic storage
     statisticStorageLimitHelp: Defines how long mosparo should keep the statistics in the database. This option has no connection to the storage range of the submissions, after which the submissions get deleted from the database (14 days).
+    silentModeEnabled: Enable the silent mode
+    silentModeEnabledHelp: If enabled, mosparo will accept every submission in the frontend. When the backend verifies the submission, mosparo will block the submission so that the backend can handle the situation with the user. Please remember that when using silent mode, every submission will pass through your backend, which can generate additional load.
     spamDataReturned: Add spam detection data to verification response
     spamDataReturnedHelp: If enabled, the verification API adds the spam detection data to the API response. With the data, you get more details on why a submission was spam or not.
     languageSource: Language source

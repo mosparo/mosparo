@@ -230,7 +230,8 @@ class VerificationApiController extends AbstractController
             $validationSignature = $requestHelper->createHmacHash($submission->getValidationToken());
             $verificationSignature = $requestHelper->createHmacHash($validationSignature . $formSignature);
 
-            $submission->setValid(true);
+            // This logic ensures that even if silent mode is enabled, the submission cannot be valid if it is spam.
+            $submission->setValid(!$submission->isSpam());
         } else {
             $submission->setValid(false);
         }
@@ -264,7 +265,7 @@ class VerificationApiController extends AbstractController
         }
 
         return new JsonResponse(array_merge([
-            'valid' => $verificationResult['valid'],
+            'valid' => $submission->isValid(),
             'verificationSignature' => $verificationSignature,
             'verifiedFields' => $verificationResult['verifiedFields'],
             'issues' => $verificationResult['issues'],

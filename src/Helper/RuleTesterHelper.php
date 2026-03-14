@@ -307,6 +307,9 @@ class RuleTesterHelper
             $submission->setSpam(true);
         } else {
             $submission->setSpam(false);
+        }
+
+        if (!$submission->isSpam() || $activeProject->isSilentModeEnabled()) {
             $submission->setValidationToken($this->tokenGenerator->generateToken());
         }
     }
