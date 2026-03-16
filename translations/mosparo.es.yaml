@@ -1,1 +1,5 @@
-{}
+project:
+  form:
+    silentModeEnabled: Activar modo silencioso
+    silentModeEnabledHelp: Si se activa, mosparo aceptará cualquier envío en el frontend. Cuando el backend compruebe el envío, mosparo bloqueará los envíos hasta que el backend pueda gestionar la situación con el usuario. Por favor recuerda que cuando se utiliza el modo silencio, cualquier envío pasará a través de tu backend, lo cual puede generar carga adicional.
+    spamDataReturned: Añadir detección de spam a la verificación de respuesta
