@@ -42,6 +42,14 @@ project:
     languageSource: Sprachquelle
     projectGroup: Projektgruppe
     projectGroupHelp: Sie können Projektgruppen verwenden, um Ihre Projekte zu organisieren. Wählen Sie die Projektgruppe, in der Sie dieses Projekt speichern möchten.
+    silentModeEnabled: Stummschaltungsmodus aktivieren
+    silentModeEnabledHelp: Wenn diese Option aktiviert ist, akzeptiert mosparo jede Übermittlung im Frontend. Sobald das Backend die Übermittlung überprüft hat, blockiert mosparo diese, damit das Backend die Situation mit dem Benutzer klären kann. Bitte beachten Sie, dass im Stummschaltungsmodus jede Übermittlung Ihr Backend durchläuft, was zu einer zusätzlichen Belastung führen kann.
+    spamDataReturned: Spam-Erkennungsdaten zur Verifizierungsantwort hinzufügen
+    spamDataReturnedHelp: Wenn diese Option aktiviert ist, fügt die Verifizierungs-API die Daten zur Spam-Erkennung zur API-Antwort hinzu. Anhand dieser Daten erhalten Sie genauere Informationen darüber, warum eine Übermittlung als Spam eingestuft wurde oder nicht.
+    metadataAllowed: Metadaten sind zulässig
+    metadataAllowedHelp: Wenn diese Option aktiviert ist, akzeptieren die Validierungs- und Verifizierungs-APIs Metadaten. Diese Metadaten werden in der Übermittlung gespeichert. Mit Metadaten können Sie zusätzliche Informationen speichern, die weder ein Formularfeld noch Client-Informationen darstellen.
+    metadataReturned: Metadaten zur Verifizierungsantwort hinzufügen
+    metadataReturnedHelp: Wenn diese Option aktiviert ist, fügt die Verifizierungs-API die Metadaten zur API-Antwort hinzu.
   delete:
     title: Projekt %projectName% löschen
     confirm: Wollen Sie das Projekt %projectName% wirklich löschen?
@@ -79,6 +87,9 @@ project:
     status: Status
     actions: Aktionen
     projects: Projekte
+    last: Zuletzt
+    valid: Gültig
+    spam: Spam
   filter:
     options:
       all: Alle anzeigen
@@ -89,6 +100,14 @@ project:
     placeholder: Suchen nach…
   searchTitle: Projekte für %searchQuery%
   infoNoProjectsInThisGroup: Es gibt keine Projekte in dieser Gruppe.
+  statistics:
+    dropdown: Statistiken anzeigen von
+    options:
+      disabled: Statistiken nicht anzeigen
+      showLastDay: Gestern
+      showMultipleDays: '%days% Tage'
+    noDataInTimeRangeOneDay: Keine Daten vom letzten Tag
+    noDataInTimeRangeDays: Keine Daten aus den letzten %days% Tagen
 dashboard:
   title: Übersicht
   chart:
@@ -287,7 +306,7 @@ rule:
 
     website:
       title: Website
-      shortIntro: Filtert nach URLs
+      shortIntro: Ermöglicht das Filtern nach bestimmten Websites
       intro: Der Website-Regeltyp erlaubt das Filtern nach URLs.
       label: URL/Domain
       placeholder: 'https://example.com'
@@ -540,6 +559,9 @@ submission:
         asOrganization: AS Organisation
         country: Land
 
+      metadata:
+        title: Metadata
+        noMetadataAvailable: Es sind keine Metadaten verfügbar
     generalVerifications:
       minimumTime:
         title: Einsendung zu schnell
@@ -708,6 +730,7 @@ settings:
 
       languageOptions: Sprach-Optionen
       spamDetectionOptions: Spamerkennungs-Optionen
+      metadataOptions: Optionen für Metadaten
   projectMember:
     title: Projekt-Mitglieder
     backToList: Zu den Projekt-Mitgliedern
@@ -900,8 +923,9 @@ settings:
         focus: Bei Fokus und Hover
         loading: Beim Laden
         success: Erfolg
-        failure: Fehler
+        failure: Fehlgeschlagen
 
+        invisible: Unsichtbar
       simpleDesign: Einfache Darstellung
       preview: Vorschau
       colorAndDimensionSettings: Farben und Grösse
@@ -982,6 +1006,39 @@ settings:
       simple: Einfach
       title: Darstellungsart
       groupTitleInvisible: Unsichtbarer Spam-Schutz
+    intro:
+      colors:
+        invisible: Wenn Sie mosparo in einem mehrstufigen Formular verwenden, werden die Daten beim Wechsel zwischen den Schritten im unsichtbaren Modus in mosparo gespeichert.
+  translation:
+    title: Übersetzungen
+    backToList: Zurück zu den Übersetzungen
+    list:
+      locale: Ländereinstellung
+      translationKey: Ausgangstext
+      text: Übersetzter Text
+      actions: Aktionen
+    add:
+      title: Übersetzung hinzufügen
+    edit:
+      title: Übersetzung bearbeiten
+    form:
+      locale: Ländereinstellung
+      localeHelp: Bitte geben Sie die Sprachumgebung entweder als zweistelligen Sprachcode (ISO 639-1; z. B. de) oder in Kombination mit einem Ländercode (z. B. de_DE) ein.
+      translationKey: Ausgangstext
+      text: Übersetzter Text
+      usePlaceholders: Dieser Ausgangstext enthält Platzhalter (%datetime% oder %seconds%). Bitte fügen Sie diese Platzhalter an der richtigen Stelle in Ihrem übersetzten Text ein. mosparo ersetzt die Platzhalter durch die dynamischen Werte.
+      translationKeyGroup:
+        mainLabel: Hauptlabel
+        accessibility: Barrierefreiheit
+        error: Fehler
+        honeyPot: Honeypot
+      message:
+        successfullySaved: Die Übersetzung wurde erfolgreich gespeichert.
+    delete:
+      title: Übersetzung löschen
+      confirm: Möchten Sie die Übersetzung wirklich löschen?
+      message:
+        successfullyRemoved: Die Übersetzung wurde erfolgreich gelöscht.
 administration:
   title: Administration
 
@@ -1675,6 +1732,9 @@ tools:
         guidelineModify: Anpassung erforderlich
         guidelineEqual: Keine Anpassung erforderlich
         source: Quelle
+        locale: Sprache
+        translationKey: Ausgangstext
+        text: Übersetzter Text
       title: Verfügbare Änderungen
       intro: mosparo hat den Import simuliert und die folgenden Änderungen festgestellt. Bitte überprüfen Sie diese und führen Sie die Änderungen aus, wenn alles in Ordnung ist.
       errorMessage:
@@ -1689,6 +1749,8 @@ tools:
         storedRuleItemNotFound: Der gespeicherte Eintrag wurde nicht gefunden.
         storedRulePackageNotFound: Das gespeicherte Regel-Paket wurde nicht gefunden.
       notRedoable: Sie können diese Änderungen nicht rückgängig machen, sobald Sie sie ausgeführt haben. Sie können das Projekt exportieren, bevor Sie die Änderungen ausführen, um eine Sicherungskopie der Konfiguration zu erstellen.
+      changes:
+        notInExportMessage: Einige der ausgewählten Daten sind in der Importdatei nicht enthalten. Bitte exportieren Sie das Projekt erneut und wählen Sie alle erforderlichen Daten aus.
     title: Importieren
     form:
       handlingExistingRules: Behandlung bestehender Regeln
@@ -1768,6 +1830,8 @@ tools:
     rulePackages: Regel-Pakete
     designSettings: Darstellungseinstellungen
     rulePackagesHelp: Enthält alle Regel-Pakete eines Projekts.
+    translations: Übersetzungen
+    translationsHelp: Enthält alle Übersetzungen, die einem Projekt hinzugefügt wurden.
   importExport:
     infoRulesWithManyItems: Regeln mit Hunderten von Elementen können beim Exportieren oder Importieren dieser Regeln viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser durchzuführen. Bitte erhöhen Sie in einem solchen Fall die Speicherbegrenzung des PHP-Prozesses oder verwenden Sie den CLI-Befehl, um die Regeln zu importieren oder zu exportieren.
 dataTable:
