@@ -284,7 +284,7 @@ rule:
 
     website:
       title: Website
-      shortIntro: Filtert nach URLs
+      shortIntro: Ermöglicht das Filtern nach bestimmten Websites
       intro: Der Website-Regeltyp erlaubt das Filtern nach URLs.
       label: URL/Domain
       placeholder: 'https://example.com'
@@ -808,7 +808,7 @@ settings:
           title: Kriterien
           asNumbers: AS-Nummern
           countryCodes: Ländercodes
-          intro2: Die Richtlinie wird für den Benutzer verwendet, sobald eines dieser Kriterien zutrifft. Sie müssen mindestens ein Kriterium hinzufügen, um die Richtlinie zu speichern.
+          intro2: Die Richtlinie wird für den Benutzer angewendet, sobald eines dieser Kriterien erfüllt ist. Sie müssen mindestens ein Kriterium hinzufügen, um die Richtlinie zu speichern.
           subnets: Subnetze
           subnetsHelp: 'Fügen Sie die Subnetze hinzu, für die diese Richtlinie berücksichtigt werden soll. Sie können IPv4- oder IPv6-Subnetze definieren. Die IP-Adresse sehen Sie in den Details der Anmeldung. Beispiel: 192.168.1.0/24'
         infoGeoIp2Disabled: GeoIP2 ist nicht verfügbar. Bitte konfigurieren Sie die GeoIP2-Datenbank, damit die Kriterien Ländercodes und AS-Nummern verwendet werden können.
@@ -859,14 +859,14 @@ settings:
     title: Darstellung
 
     subtitles:
-      dimensionSettings: Grösse
+      dimensionSettings: Abmessungen
       colorSettings: Farben
       colors:
         normal: Normal
         focus: Bei Fokus und Hover
         loading: Beim Laden
         success: Erfolg
-        failure: Fehler
+        failure: Fehlgeschlagen
 
       simpleDesign: Einfache Darstellung
       preview: Vorschau
