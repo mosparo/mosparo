@@ -51,11 +51,19 @@
                                     <div class="col-auto">
                                         <span class="text-green me-2">
                                             <i class="ti ti-check"></i>
-                                            {{ numberOfNoSpamSubmissions }}
+                                            {% if numberOfDelayedRequests == 1 %}
+                                                {{ 'dashboard.submissions.summary.validSubmission'|trans }}
+                                            {% else %}
+                                                {{ 'dashboard.submissions.summary.validSubmissions'|trans({'%numberOfSubmissions%': numberOfNoSpamSubmissions}) }}
+                                            {% endif %}
                                         </span>
                                         <span class="text-danger">
                                             <i class="ti ti-circle-x"></i>
-                                            {{ numberOfSpamSubmissions }}
+                                            {% if numberOfSpamSubmissions == 1 %}
+                                                {{ 'dashboard.submissions.summary.spamSubmission'|trans }}
+                                            {% else %}
+                                                {{ 'dashboard.submissions.summary.spamSubmissions'|trans({'%numberOfSubmissions%': numberOfSpamSubmissions}) }}
+                                            {% endif %}
                                         </span>
                                     </div>
                                 </div>
@@ -145,6 +153,51 @@
                 </div>
             {% endif %}
         </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-3">
+                    <div class="card-header border-0 p-0">
+                        <div class="card-title p-0 flex-fill">
+                            <div class="d-block p-3 text-body">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="bg-yellow text-white avatar">
+                                            <i class="ti ti-shield"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">
+                                            {{ 'dashboard.requests.title'|trans }}
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="text-yellow me-2">
+                                            <i class="ti ti-clock-pause"></i>
+                                            {% if numberOfDelayedRequests == 1 %}
+                                                {{ 'dashboard.requests.summary.delayedRequest'|trans }}
+                                            {% else %}
+                                                {{ 'dashboard.requests.summary.delayedRequests'|trans({'%numberOfRequests%': numberOfDelayedRequests}) }}
+                                            {% endif %}
+                                        </span>
+                                        <span class="text-pink">
+                                            <i class="ti ti-clock-stop"></i>
+                                            {% if numberOfBlockedRequests == 1 %}
+                                                {{ 'dashboard.requests.summary.blockedRequest'|trans }}
+                                            {% else %}
+                                                {{ 'dashboard.requests.summary.blockedRequests'|trans({'%numberOfRequests%': numberOfBlockedRequests}) }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="position-relative">
+                        <div class="dashboard-request-chart" id="requests_chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -160,32 +213,34 @@
     {% cspscript %}
         <script type="text/javascript">
             $(document).ready(function () {
-                let colors = {
-                    background: '#FFFFFF',
-                    fill: ['#EAF7EC', '#FBEBEB'],
-                    colors: ['#56B344', '#D63939'],
-                    shade: 'light',
-                    tooltipTheme: 'light',
-                    axisColor: '#000000',
-                    annotationsLineColor: '#888888',
-                    annotationsLabelColor: '#888888',
+                let annotations = {
+                    {% if statisticOnlyRangeStartDate != statisticOnlyRangeEndDate %}
+                        xaxis: [
+                            {
+                                x: {{ statisticOnlyRangeEndDate }},
+                                borderColor: colors.annotationsLineColor,
+                                label: {
+                                    borderColor: 'transparent',
+                                    text: '{{ 'dashboard.chart.annotation.statisticOnly'|trans }}',
+                                    orientation: 'horizontal',
+                                    textAnchor: 'end',
+                                    offsetY: 15,
+                                    offsetX: -10,
+                                    style: {
+                                        fontSize: '14px',
+                                        background: 'transparent',
+                                        color: colors.annotationsLabelColor
+                                    }
+                                }
+                            },
+                        ]
+                    {% endif %}
                 };
 
-                if ($('body').data('bs-theme') === 'dark') {
-                    colors = {
-                        background: '#182433',
-                        fill: ['#1d3b21', '#3b1d1d'],
-                        colors: ['#56B344', '#D63939'],
-                        shade: 'dark',
-                        tooltipTheme: 'dark',
-                        axisColor: '#ffffff',
-                        annotationsLineColor: '#BBBBBB',
-                        annotationsLabelColor: '#BBBBBB',
-                    };
-                }
-
-                let chartOptions = {
-                    series: [
+                renderChart(
+                    $('#submission_chart')[0],
+                    '{{ csp_nonce('style') }}',
+                    [
                         {
                             name: "{{ 'dashboard.chart.valid'|trans }}",
                             data: {{ noSpamSubmissionsData|json_encode|raw }}
@@ -195,124 +250,27 @@
                             data: {{ spamSubmissionsData|json_encode|raw }}
                         }
                     ],
-                    chart: {
-                        type: "area",
-                        background: colors.background,
-                        fontFamily: 'inherit',
-                        height: 250,
-                        stacked: true,
-                        parentHeightOffset: 5,
-                        animations: {
-                            enabled: false
-                        },
-                        zoom: {
-                            enabled: false
-                        },
-                        toolbar: {
-                            show: false
-                        },
-                        sparkline: {
-                            enabled: false
-                        }
-                    },
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    fill: {
-                        colors: colors.fill,
-                        type: 'gradient',
-                        gradient: {
-                            inverseColors: false,
-                            shade: colors.shade,
-                            type: "vertical",
-                            opacityFrom: 0.9,
-                            opacityTo: 0.6,
-                            stops: [0, 100, 100, 100]
-                        }
-                    },
-                    tooltip: {
-                        theme: colors.tooltipTheme,
-                        x: {
-                            show: true,
-                            format: '{{ chartDateFormat }}',
-                            formatter: undefined,
-                        }
-                    },
-                    stroke: {
-                        width: 2,
-                        lineCap: "round",
-                        curve: "smooth",
-                    },
-                    colors: colors.colors,
-                    grid: {
-                        show: true,
-                        strokeDashArray: 4,
-                    },
-                    legend: {
-                        show: false
-                    },
-                    point: {
-                        show: false
-                    },
-                    xaxis: {
-                        labels: {
-                            padding: 0,
-                            datetimeFormatter: {
-                                day: '{{ chartDateFormat }}'
-                            },
-                            style: {
-                                colors: colors.axisColor
-                            }
-                        },
-                        tooltip: {
-                            enabled: false
-                        },
-                        axisBorder: {
-                            show: false,
-                        },
-                        type: 'datetime',
-                    },
-                    yaxis: {
-                        show: true,
-                        labels: {
-                            show: true,
-                            offsetX: 0,
-                            offsetY: 3,
-                            style: {
-                                colors: colors.axisColor
-                            }
-                        },
-                        tooltip: {
-                            enabled: false
-                        }
-                    },
-                    {% if statisticOnlyRangeStartDate != statisticOnlyRangeEndDate %}
-                        annotations: {
-                            xaxis: [
-                                {
-                                    x: {{ statisticOnlyRangeEndDate }},
-                                    borderColor: colors.annotationsLineColor,
-                                    label: {
-                                        borderColor: 'transparent',
-                                        text: '{{ 'dashboard.chart.annotation.statisticOnly'|trans }}',
-                                        orientation: 'horizontal',
-                                        textAnchor: 'end',
-                                        offsetY: 15,
-                                        offsetX: -10,
-                                        style: {
-                                            fontSize: '14px',
-                                            background: 'transparent',
-                                            color: colors.annotationsLabelColor
-                                        }
-                                    }
-                                },
-                            ]
-                        }
-                    {% endif %}
-                };
+                    'submissions',
+                    '{{ chartDateFormat }}',
+                    annotations
+                );
 
-                var submissionChart = new ApexCharts($('#submission_chart')[0], chartOptions);
-                submissionChart.render();
+                renderChart(
+                    $('#requests_chart')[0],
+                    '{{ csp_nonce('style') }}',
+                    [
+                        {
+                            name: "{{ 'dashboard.chart.delayed'|trans }}",
+                            data: {{ delayedRequestsData|json_encode|raw }}
+                        },
+                        {
+                            name: "{{ 'dashboard.chart.blocked'|trans }}",
+                            data: {{ blockedRequestsData|json_encode|raw }}
+                        }
+                    ],
+                    'requests',
+                    '{{ chartDateFormat }}'
+                );
             });
         </script>
     {% endcspscript %}

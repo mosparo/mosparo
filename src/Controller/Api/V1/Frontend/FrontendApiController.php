@@ -373,7 +373,7 @@ class FrontendApiController extends AbstractController
 
         // Increase the day statistic if it is spam. We count anyway, even if the silent mode is enabled
         if ($submission->isSpam()) {
-            $this->statisticHelper->increaseDayStatistic($submission);
+            $this->statisticHelper->increaseDayStatisticForSubmission($submission);
         }
 
         return new JsonResponse([

@@ -25,6 +25,12 @@ class DayStatistic implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'integer')]
     private int $numberOfSpamSubmissions = 0;
 
+    #[ORM\Column(type: 'integer')]
+    private int $numberOfDelayedRequests = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private int $numberOfBlockedRequests = 0;
+
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $updatedAt = null;
 
@@ -67,6 +73,30 @@ class DayStatistic implements ProjectRelatedEntityInterface
     public function setNumberOfSpamSubmissions(int $numberOfSpamSubmissions): self
     {
         $this->numberOfSpamSubmissions = $numberOfSpamSubmissions;
+
+        return $this;
+    }
+
+    public function getNumberOfDelayedRequests(): ?int
+    {
+        return $this->numberOfDelayedRequests;
+    }
+
+    public function setNumberOfDelayedRequests(int $numberOfDelayedRequests): self
+    {
+        $this->numberOfDelayedRequests = $numberOfDelayedRequests;
+
+        return $this;
+    }
+
+    public function getNumberOfBlockedRequests(): ?int
+    {
+        return $this->numberOfBlockedRequests;
+    }
+
+    public function setNumberOfBlockedRequests(int $numberOfBlockedRequests): self
+    {
+        $this->numberOfBlockedRequests = $numberOfBlockedRequests;
 
         return $this;
     }

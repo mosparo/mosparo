@@ -1,0 +1,272 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.throughputStatistics.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.throughputStatistics.title'|trans }}{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    {% if dateRangeOptions|length > 1 %}
+        <div class="col-auto ms-auto">
+            <div class="btn-list">
+                <div class="dropdown">
+                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'dateRange.dropdown'|trans }}">
+                        <i class="ti ti-calendar-stats"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for dateRangeLabel, value in dateRangeOptions %}
+                            <a href="{{ path('administration_throughput_statistics_with_range', {'range': value}) }}" class="dropdown-item">
+                                <i class="ti {% if activeRange == value %}ti-check{% else %}ti-calendar-stats{% endif %}"></i>
+                                {{ dateRangeLabel|trans }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block administrationPageBody %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header border-0 p-0">
+                    <div class="card-title p-0 flex-fill">
+                        <div class="d-block p-3 text-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-blue text-white avatar">
+                                        <i class="ti ti-mail"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{ 'administration.throughputStatistics.chartTitles.submissions'|trans }}
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="text-green me-2">
+                                        <i class="ti ti-check"></i>
+                                        {% if numberOfDelayedRequests == 1 %}
+                                            {{ 'dashboard.submissions.summary.validSubmission'|trans }}
+                                        {% else %}
+                                            {{ 'dashboard.submissions.summary.validSubmissions'|trans({'%numberOfSubmissions%': numberOfNoSpamSubmissions}) }}
+                                        {% endif %}
+                                    </span>
+                                    <span class="text-danger">
+                                        <i class="ti ti-circle-x"></i>
+                                        {% if numberOfSpamSubmissions == 1 %}
+                                            {{ 'dashboard.submissions.summary.spamSubmission'|trans }}
+                                        {% else %}
+                                            {{ 'dashboard.submissions.summary.spamSubmissions'|trans({'%numberOfSubmissions%': numberOfSpamSubmissions}) }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-relative">
+                    <div class="dashboard-submission-chart" id="submission_chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header border-0 p-0">
+                    <div class="card-title p-0 flex-fill">
+                        <div class="d-block p-3 text-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-yellow text-white avatar">
+                                        <i class="ti ti-shield"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{ 'administration.throughputStatistics.chartTitles.requests'|trans }}
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="text-yellow me-2">
+                                        <i class="ti ti-clock-pause"></i>
+                                        {% if numberOfDelayedRequests == 1 %}
+                                            {{ 'dashboard.requests.summary.delayedRequest'|trans }}
+                                        {% else %}
+                                            {{ 'dashboard.requests.summary.delayedRequests'|trans({'%numberOfRequests%': numberOfDelayedRequests}) }}
+                                        {% endif %}
+                                    </span>
+                                    <span class="text-pink">
+                                        <i class="ti ti-clock-stop"></i>
+                                        {% if numberOfBlockedRequests == 1 %}
+                                            {{ 'dashboard.requests.summary.blockedRequest'|trans }}
+                                        {% else %}
+                                            {{ 'dashboard.requests.summary.blockedRequests'|trans({'%numberOfRequests%': numberOfBlockedRequests}) }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-relative">
+                    <div class="dashboard-request-chart" id="requests_chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.throughputStatistics.requests.delays.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    {% if numberOfDelays > 0 %}
+                        <div class="row mb-3">
+                            <div class="col-5">
+                                <h4 class="mb-0">
+                                    {{ 'administration.throughputStatistics.requests.delays.numberOfActiveDelays'|trans }}
+                                </h4>
+                            </div>
+                            <div class="col-7">
+                                {{ numberOfDelays }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5">
+                                <h4 class="mb-0">
+                                    {{ 'administration.throughputStatistics.requests.delays.longestActiveDelay'|trans }}
+                                </h4>
+                            </div>
+                            <div class="col-7">
+                                {{ maxValidUntilDelay|date }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            {{ 'administration.throughputStatistics.requests.delays.noActiveDelays'|trans }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer d-flex justify-content-end">
+                    {% if numberOfDelays > 0 %}
+                        <a href="{{ path('administration_throughput_statistics_reset', {'type': 'delay'}) }}" class="btn btn-danger">
+                            <i class="ti ti-trash-x"></i>
+                            {{ 'action.reset'|trans }}
+                        </a>
+                    {% else %}
+                        <button type="button" class="btn btn-danger" disabled>
+                            <i class="ti ti-trash-x"></i>
+                            {{ 'action.reset'|trans }}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3 class="card-title">{{ 'administration.throughputStatistics.requests.lockouts.title'|trans }}</h3>
+                </div>
+                <div class="card-body">
+                    {% if numberOfLockouts > 0 %}
+                        <div class="row mb-3">
+                            <div class="col-5">
+                                <h4 class="mb-0">
+                                    {{ 'administration.throughputStatistics.requests.lockouts.numberOfActiveLockouts'|trans }}
+                                </h4>
+                            </div>
+                            <div class="col-7">
+                                {{ numberOfLockouts }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5">
+                                <h4 class="mb-0">
+                                    {{ 'administration.throughputStatistics.requests.lockouts.longestActiveLockout'|trans }}
+                                </h4>
+                            </div>
+                            <div class="col-7">
+                                {{ maxValidUntilLockout|date }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            {{ 'administration.throughputStatistics.requests.lockouts.noActiveLockouts'|trans }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer d-flex justify-content-end">
+                    {% if numberOfLockouts > 0 %}
+                        <a href="{{ path('administration_throughput_statistics_reset', {'type': 'lockout'}) }}" class="btn btn-danger">
+                            <i class="ti ti-trash-x"></i>
+                            {{ 'action.reset'|trans }}
+                        </a>
+                    {% else %}
+                        <button type="button" class="btn btn-danger" disabled>
+                            <i class="ti ti-trash-x"></i>
+                            {{ 'action.reset'|trans }}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {{ encore_entry_link_tags('apexcharts', null, '', { 'id': 'apexcharts-css' })|add_path_prefix }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                renderChart(
+                    $('#submission_chart')[0],
+                    '{{ csp_nonce('style') }}',
+                    [
+                        {
+                            name: "{{ 'dashboard.chart.valid'|trans }}",
+                            data: {{ noSpamSubmissionsData|json_encode|raw }}
+                        },
+                        {
+                            name: "{{ 'dashboard.chart.spam'|trans }}",
+                            data: {{ spamSubmissionsData|json_encode|raw }}
+                        }
+                    ],
+                    'submissions',
+                    '{{ chartDateFormat }}'
+                );
+
+                renderChart(
+                    $('#requests_chart')[0],
+                    '{{ csp_nonce('style') }}',
+                    [
+                        {
+                            name: "{{ 'dashboard.chart.delayed'|trans }}",
+                            data: {{ delayedRequestsData|json_encode|raw }}
+                        },
+                        {
+                            name: "{{ 'dashboard.chart.blocked'|trans }}",
+                            data: {{ blockedRequestsData|json_encode|raw }}
+                        }
+                    ],
+                    'requests',
+                    '{{ chartDateFormat }}'
+                );
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

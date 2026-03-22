@@ -118,6 +118,27 @@
                 <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
+                            <a href="{{ path('administration_throughput_statistics') }}">
+                                <img src="{{ asset(get_illustration_path('throughput_statistics.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
+                            </a>
+                        </div>
+                        <p class="empty-title">{{ 'administration.throughputStatistics.title'|trans }}</p>
+                        <p class="empty-subtitle text-muted">
+                            {{ 'administration.throughputStatistics.description'|trans }}
+                        </p>
+                        <div class="empty-action">
+                            <a href="{{ path('administration_throughput_statistics') }}" class="btn btn-primary">
+                                <i class="ti ti-device-analytics"></i>
+                                {{ 'action.view'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="empty">
+                        <div class="empty-img">
                             <a href="{{ path('administration_cleanup_statistic') }}">
                                 <img src="{{ asset(get_illustration_path('cleanup_statistic.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>

@@ -10,6 +10,7 @@ use Mosparo\Entity\Delay;
 use Mosparo\Entity\IpLocalization;
 use Mosparo\Entity\Lockout;
 use Mosparo\Entity\SecurityGuideline;
+use Mosparo\Enum\IncreaseReason;
 use Mosparo\Util\HashUtil;
 use Mosparo\Util\IpUtil;
 
@@ -24,11 +25,14 @@ class SecurityHelper
 
     protected GeoIp2Helper $geoIp2Helper;
 
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, GeoIp2Helper $geoIp2Helper)
+    protected StatisticHelper $statisticHelper;
+
+    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, GeoIp2Helper $geoIp2Helper, StatisticHelper $statisticHelper)
     {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->geoIp2Helper = $geoIp2Helper;
+        $this->statisticHelper = $statisticHelper;
     }
 
     public function checkIpAddress(string $ipAddress, int $feature, array $securitySettings)
@@ -44,6 +48,7 @@ class SecurityHelper
                 $delay = $this->checkForDelay($ipAddress, $securitySettings);
 
                 if ($delay !== null) {
+                    $this->statisticHelper->increaseDayStatistic(IncreaseReason::DELAYED, $this->projectHelper->getActiveProject());
                     return $delay;
                 }
             }
@@ -54,6 +59,7 @@ class SecurityHelper
                 $lockout = $this->checkForLockout($ipAddress, $securitySettings);
 
                 if ($lockout !== null) {
+                    $this->statisticHelper->increaseDayStatistic(IncreaseReason::BLOCKED, $this->projectHelper->getActiveProject());
                     return $lockout;
                 }
             }

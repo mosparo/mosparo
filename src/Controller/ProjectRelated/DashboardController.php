@@ -44,7 +44,17 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
             $range = DateRangeUtil::DATE_RANGE_14D;
         }
 
-        [$noSpamSubmissionsData, $spamSubmissionsData, $numberOfNoSpamSubmissions, $numberOfSpamSubmissions, $startDate] = $this->getSubmissionDataForChart($statisticHelper, $range);
+        [
+            $noSpamSubmissionsData,
+            $spamSubmissionsData,
+            $numberOfNoSpamSubmissions,
+            $numberOfSpamSubmissions,
+            $delayedRequestsData,
+            $blockedRequestsData,
+            $numberOfDelayedRequests,
+            $numberOfBlockedRequests,
+            $startDate
+        ] = $statisticHelper->getStatisticDataForCharts($range);
 
         $builder = $entityManager->createQueryBuilder();
         $builder
@@ -73,6 +83,10 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
             'numberOfSpamSubmissions' => $numberOfSpamSubmissions,
             'numberOfRules' => $numberOfRules,
             'numberOfRulePackages' => $numberOfRulePackages,
+            'delayedRequestsData' => $delayedRequestsData,
+            'blockedRequestsData' => $blockedRequestsData,
+            'numberOfDelayedRequests' => $numberOfDelayedRequests,
+            'numberOfBlockedRequests' => $numberOfBlockedRequests,
             'chartDateFormat' => $dateFormat,
             'dateRangeOptions' => DateRangeUtil::getChoiceOptions(false, $statisticStorageLimit),
             'activeRange' => $range,
@@ -80,60 +94,5 @@ class DashboardController extends AbstractController implements ProjectRelatedIn
             'statisticOnlyRangeEndDate' => $endDate->getTimestamp() * 1000,
             'lastDatabaseCleanup' => $cleanupHelper->getLastDatabaseCleanup(),
         ]);
-    }
-
-    protected function getSubmissionDataForChart(StatisticHelper $statisticHelper, string $range): array
-    {
-        $startDate = DateRangeUtil::getStartDateForRange($range);
-        $noSpamSubmissionsData = $spamSubmissionsData = $this->createEmptyDateArray($startDate);
-
-        $statisticData = $statisticHelper->getStatisticData($startDate);
-        foreach ($statisticData['numbersByDate'] as $date => $numbers) {
-            if (!isset($spamSubmissionsData[$date]) || !isset($noSpamSubmissionsData[$date])) {
-                continue;
-            }
-
-            $spamSubmissionsData[$date] = $numbers['numberOfSpamSubmissions'];
-            $noSpamSubmissionsData[$date] = $numbers['numberOfValidSubmissions'];
-        }
-
-        return [
-            $this->convertIntoChartArray($noSpamSubmissionsData),
-            $this->convertIntoChartArray($spamSubmissionsData),
-            array_sum($noSpamSubmissionsData),
-            array_sum($spamSubmissionsData),
-            $startDate,
-        ];
-    }
-
-    protected function createEmptyDateArray(DateTime $startDate): array
-    {
-        $dateArray = [];
-        $endDate = new DateTime();
-
-        $interval = DateInterval::createFromDateString('1 day');
-        $period = new DatePeriod($startDate, $interval, $endDate);
-
-        foreach ($period as $dt) {
-            $dateArray[$dt->format('Y-m-d')] = 0;
-        }
-
-        // Add the end date
-        $dateArray[$endDate->format('Y-m-d')] = 0;
-
-        return $dateArray;
-    }
-
-    protected function convertIntoChartArray($data): array
-    {
-        $convertedData = [];
-        foreach ($data as $date => $count) {
-            $convertedData[] = [
-                'x' => $date,
-                'y' => $count
-            ];
-        }
-
-        return $convertedData;
     }
 }

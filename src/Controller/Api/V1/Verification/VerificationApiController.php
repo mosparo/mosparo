@@ -238,7 +238,7 @@ class VerificationApiController extends AbstractController
 
         $entityManager->flush();
 
-        $this->statisticHelper->increaseDayStatistic($submission);
+        $this->statisticHelper->increaseDayStatisticForSubmission($submission);
 
         $responseSpamData = [];
         if ($activeProject->isSpamDataReturned()) {

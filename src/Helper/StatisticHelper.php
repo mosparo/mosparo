@@ -2,11 +2,16 @@
 
 namespace Mosparo\Helper;
 
+use DateInterval;
+use DatePeriod;
 use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\DayStatistic;
+use Mosparo\Entity\Project;
 use Mosparo\Entity\Submission;
+use Mosparo\Enum\IncreaseReason;
+use Mosparo\Util\DateRangeUtil;
 
 class StatisticHelper
 {
@@ -38,15 +43,20 @@ class StatisticHelper
                 ->setParameter(':startDate', $startDate->format('Y-m-d'));
         }
 
-        $data = ['numberOfValidSubmissions' => 0, 'numberOfSpamSubmissions' => 0, 'numbersByDate' => []];
+        $data = ['numberOfValidSubmissions' => 0, 'numberOfSpamSubmissions' => 0, 'numberOfDelayedRequests' => 0, 'numberOfBlockedRequests' => 0, 'numbersByDate' => []];
         foreach ($builder->getQuery()->getResult() as $dayStatistic) {
             $data['numberOfValidSubmissions'] += $dayStatistic->getNumberOfValidSubmissions();
             $data['numberOfSpamSubmissions'] += $dayStatistic->getNumberOfSpamSubmissions();
+            $data['numberOfDelayedRequests'] += $dayStatistic->getNumberOfDelayedRequests();
+            $data['numberOfBlockedRequests'] += $dayStatistic->getNumberOfBlockedRequests();
 
             $day = $dayStatistic->getDate()->format('Y-m-d');
             $data['numbersByDate'][$day] = [
                 'numberOfValidSubmissions' => $dayStatistic->getNumberOfValidSubmissions(),
                 'numberOfSpamSubmissions' => $dayStatistic->getNumberOfSpamSubmissions(),
+                'numberOfDelayedRequests' => $dayStatistic->getNumberOfDelayedRequests(),
+                'numberOfBlockedRequests' => $dayStatistic->getNumberOfBlockedRequests(),
+
             ];
         };
 
@@ -60,7 +70,25 @@ class StatisticHelper
      * @param bool $create
      * @return bool
      */
-    public function increaseDayStatistic(Submission $submission, $create = true): bool
+    public function increaseDayStatisticForSubmission(Submission $submission, $create = true): bool
+    {
+        $reason = IncreaseReason::SPAM;
+        if ($submission->isValid() && !$submission->isSpam()) {
+            $reason = IncreaseReason::VALID;
+        }
+
+        return $this->increaseDayStatistic($reason, $submission->getProject(), $create);
+    }
+
+    /**
+     * Increases the number in the DayStatistics of today for the given reason and project.
+     *
+     * @param IncreaseReason $reason
+     * @param Project $project
+     * @param bool $create
+     * @return bool
+     */
+    public function increaseDayStatistic(IncreaseReason $reason, Project $project, bool $create = true): bool
     {
         // We try to increase the number per SQL query to be as efficient as possible.
         // This query will fail for the first time on a day because no row exists for
@@ -70,12 +98,23 @@ class StatisticHelper
         $builder
             ->update(DayStatistic::class, 'ds');
 
-        if ($submission->isValid() && !$submission->isSpam()) {
-            $builder
-                ->set('ds.numberOfValidSubmissions', 'ds.numberOfValidSubmissions + 1');
-        } else {
-            $builder
-                ->set('ds.numberOfSpamSubmissions', 'ds.numberOfSpamSubmissions + 1');
+        switch ($reason) {
+            case IncreaseReason::SPAM:
+                $builder
+                    ->set('ds.numberOfSpamSubmissions', 'ds.numberOfSpamSubmissions + 1');
+                break;
+            case IncreaseReason::VALID:
+                $builder
+                    ->set('ds.numberOfValidSubmissions', 'ds.numberOfValidSubmissions + 1');
+                break;
+            case IncreaseReason::DELAYED:
+                $builder
+                    ->set('ds.numberOfDelayedRequests', 'ds.numberOfDelayedRequests + 1');
+                break;
+            case IncreaseReason::BLOCKED:
+                $builder
+                    ->set('ds.numberOfBlockedRequests', 'ds.numberOfBlockedRequests + 1');
+                break;
         }
 
         $builder
@@ -84,7 +123,7 @@ class StatisticHelper
             ->andWhere('ds.project = :project')
             ->setParameter('updatedAt', (new DateTime())->format('Y-m-d H:i:s'))
             ->setParameter('date', (new DateTime())->format('Y-m-d'))
-            ->setParameter('project', $submission->getProject());
+            ->setParameter('project', $project);
 
         $query = $builder->getQuery();
         $res = $query->execute();
@@ -92,12 +131,12 @@ class StatisticHelper
 
         // If no DayStatistic object for the active project and date exists, create one
         if (!$result && $create) {
-            $result = $this->createDayStatistic($submission);
+            $result = $this->createDayStatistic($reason, $project);
 
             // If we get false back, it means that the DayStatistic element for this day already exists,
             // probably because another request added it, and now we try again to increase the statistic.
             if ($result === false) {
-                $result = $this->increaseDayStatistic($submission, false);
+                $result = $this->increaseDayStatistic($reason, $project, false);
             }
         }
 
@@ -105,24 +144,34 @@ class StatisticHelper
     }
 
     /**
-     * Create a DayStatistic object for the given Submission object.
+     * Create a DayStatistic object for the given reason and project.
      * Returns true if everything worked correctly or false, if the
      * DayStatistic object already exists for the given day and project.
      *
-     * @param Submission $submission
+     * @param IncreaseReason $reason
+     * @param Project $project
      * @return bool
      *
      * @throws \Exception
      */
-    protected function createDayStatistic(Submission $submission): bool
+    protected function createDayStatistic(IncreaseReason $reason, Project $project): bool
     {
         $dayStatistic = new DayStatistic();
-        $dayStatistic->setProject($submission->getProject());
+        $dayStatistic->setProject($project);
 
-        if ($submission->isValid() && !$submission->isSpam()) {
-            $dayStatistic->setNumberOfValidSubmissions(1);
-        } else {
-            $dayStatistic->setNumberOfSpamSubmissions(1);
+        switch ($reason) {
+            case IncreaseReason::SPAM:
+                $dayStatistic->setNumberOfSpamSubmissions(1);
+                break;
+            case IncreaseReason::VALID:
+                $dayStatistic->setNumberOfValidSubmissions(1);
+                break;
+            case IncreaseReason::DELAYED:
+                $dayStatistic->setNumberOfDelayedRequests(1);
+                break;
+            case IncreaseReason::BLOCKED:
+                $dayStatistic->setNumberOfBlockedRequests(1);
+                break;
         }
 
         $dayStatistic->setUpdatedAt(new DateTime());
@@ -137,5 +186,66 @@ class StatisticHelper
         }
 
         return true;
+    }
+
+    public function getStatisticDataForCharts(string $range): array
+    {
+        $startDate = DateRangeUtil::getStartDateForRange($range);
+        $noSpamSubmissionsData = $spamSubmissionsData = $delayedRequestsData = $blockedRequestsData = $this->createEmptyDateArray($startDate);
+
+        $statisticData = $this->getStatisticData($startDate);
+        foreach ($statisticData['numbersByDate'] as $date => $numbers) {
+            if (!isset($spamSubmissionsData[$date])) {
+                continue;
+            }
+
+            $spamSubmissionsData[$date] = $numbers['numberOfSpamSubmissions'];
+            $noSpamSubmissionsData[$date] = $numbers['numberOfValidSubmissions'];
+            $delayedRequestsData[$date] = $numbers['numberOfDelayedRequests'];
+            $blockedRequestsData[$date] = $numbers['numberOfBlockedRequests'];
+        }
+
+        return [
+            $this->convertIntoChartArray($noSpamSubmissionsData),
+            $this->convertIntoChartArray($spamSubmissionsData),
+            array_sum($noSpamSubmissionsData),
+            array_sum($spamSubmissionsData),
+            $this->convertIntoChartArray($delayedRequestsData),
+            $this->convertIntoChartArray($blockedRequestsData),
+            array_sum($delayedRequestsData),
+            array_sum($blockedRequestsData),
+            $startDate,
+        ];
+    }
+
+    protected function createEmptyDateArray(DateTime $startDate): array
+    {
+        $dateArray = [];
+        $endDate = new DateTime();
+
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($startDate, $interval, $endDate);
+
+        foreach ($period as $dt) {
+            $dateArray[$dt->format('Y-m-d')] = 0;
+        }
+
+        // Add the end date
+        $dateArray[$endDate->format('Y-m-d')] = 0;
+
+        return $dateArray;
+    }
+
+    protected function convertIntoChartArray($data): array
+    {
+        $convertedData = [];
+        foreach ($data as $date => $count) {
+            $convertedData[] = [
+                'x' => $date,
+                'y' => $count
+            ];
+        }
+
+        return $convertedData;
     }
 }

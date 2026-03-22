@@ -167,9 +167,27 @@ dashboard:
   chart:
     valid: Valid
     spam: Spam
+    delayed: Delayed
+    blocked: Blocked
 
     annotation:
       statisticOnly: Statistic only
+
+  submissions:
+    summary:
+      validSubmission: 1 valid submission
+      validSubmissions: '%numberOfSubmissions% valid submissions'
+      spamSubmission: 1 spam submission
+      spamSubmissions: '%numberOfSubmissions% spam submissions'
+
+  requests:
+    title: Delayed or blocked Requests
+
+    summary:
+      delayedRequest: 1 delayed request
+      delayedRequests: '%numberOfRequests% delayed requests'
+      blockedRequest: 1 blocked request
+      blockedRequests: '%numberOfRequests% blocked requests'
 
 # Rules
 rule:
@@ -1563,6 +1581,39 @@ administration:
         intro: "To automatically refresh the database, it is recommend to set up a cronjob which will automatically download the database. To use the automatic update, please set up a cronjob like the following:"
         infoAbsolutePath: You maybe have to adjust the path of the %pathToBinConsole% file. It could be possible that you have to fill in the absolute path.
         infoRateLimit: Please remember that the number of downloads a license key can make is limited. Please do not use the download functionality to often.
+
+  throughputStatistics:
+    title: Throughput statistics
+    description: Shows the submission and request statistics processed by mosparo across all projects.
+    backToOverview: Back to througput statistics
+
+    chartTitles:
+      submissions: Submissions from all projects
+      requests: Requests from all projects
+
+    requests:
+      delays:
+        title: Active delays
+        numberOfActiveDelays: Number of active delays
+        longestActiveDelay: Longest active delay
+        noActiveDelays: There are no active delays at the moment.
+
+      lockouts:
+        title: Active lockouts
+        numberOfActiveLockouts: Number of active lockouts
+        longestActiveLockout: Longest active lockout
+        noActiveLockouts: There are no active lockouts at the moment.
+
+    reset:
+      delay:
+        title: Reset delays
+        confirm: Are you sure that you wanna reset all delays? If you do that, everyone who was delayed before can request the forms again without any hurdles.
+        successfullyResetted: The delays were reset successfully.
+
+      lockout:
+        title: Reset lockouts
+        confirm: Are you sure that you wanna reset all lockouts? If you do that, everyone who was blocked before can request the forms again without any hurdles.
+        successfullyResetted: The lockouts were reset successfully.
 
   update:
     title: Update
