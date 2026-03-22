@@ -1,13 +1,13 @@
 {% trans_default_domain 'mosparo' %}
 
-<p>{{ 'rule.type.userAgent.intro'|trans }}</p>
+<p>{{ 'rules.fieldRule.type.userAgent.intro'|trans }}</p>
 
 <ul>
     <li>
-        <strong>{{ 'rule.type.userAgent.text.title'|trans }}</strong>
+        <strong>{{ 'rules.fieldRule.type.userAgent.text.title'|trans }}</strong>
         <p>
             {{
-                'rule.type.userAgent.text.intro'|trans({
+                'rules.fieldRule.type.userAgent.text.intro'|trans({
                     '%star%': '<code>*</code>',
                     '%value%': '<code>*value*</code>'
                 })|raw
@@ -18,9 +18,9 @@
         </p>
     </li>
     <li>
-        <strong>{{ 'rule.type.userAgent.regex.title'|trans }}</strong>
+        <strong>{{ 'rules.fieldRule.type.userAgent.regex.title'|trans }}</strong>
         <p>
-            {{ 'rule.type.userAgent.regex.intro'|trans }}
+            {{ 'rules.fieldRule.type.userAgent.regex.intro'|trans }}
         </p>
         <p>
             <u>{{ 'general.example'|trans }}:</u> <code>/(curl|wget)/is</code>
@@ -28,4 +28,4 @@
     </li>
 </ul>
 
-{% include 'project_related/rule/type/help/_rating.html.twig' %}
+{% include 'project_related/rules/field_rule/type/help/_rating.html.twig' %}

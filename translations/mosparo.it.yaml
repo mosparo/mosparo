@@ -78,199 +78,200 @@ header:
   pleaseChoose: Prego, selezionare…
   account: Account
   noProjectsFound: Nessun progetto trovato
-rule:
-  edit:
-    title: Modifica regola %ruleName%
-  list:
-    name: Nome
-    type: Tipo
-    status: Stato
-    actions: Azioni
-  create:
-    title: Crea regola
-    label:
-      ruleType: Tipo regola
-  createChooseType:
-    title: Scegli il tipo
-    intro: Seleziona il tipo di ruolo che vuoi creare. I tipi disponibili sono utilizzati per diversi campi e non possono essere modificati per regole successive.
-  title: Regole
-  backToList: Ritorna alle regole
-  form:
-    rule:
-      description: Descrizione
+rules:
+  fieldRule:
+    edit:
+      title: Modifica regola %ruleName%
+    list:
       name: Nome
+      type: Tipo
       status: Stato
-      title: Regola
-      spamRatingFactorHelp: Con il fattore di valutazione spam puoi definire un fattore per inasprire o addolcire la valutazione di questa regola. Se il valore è maggiore di 1.0 la valutazione è inasprita, se il valore è inferiore a 1.0 la valutazione è addolcita.
-      spamRatingFactor: Fattore di valutazione spam
-    addMultipleItems:
-      items: Oggetti
-      rating: Valutazione
-      ratingHelp: Se non impostata, la valutazione predefinita è 1.0. Se la valutazione viene impostata a 0.0 l'oggetto non verrà identificato come spam.
-      itemsHelp: Aggiungi un oggetto per ogni riga.
-      type: Tipo
-    ruleType: Tipo ruolo
-    items:
-      type: Tipo
-      title: Oggetti
-      rating: Valutazione
-      value: Valore
-    status:
-      unsavedChanges: '%counter% modifiche non salvate'
-      savingChanges: Sto salvando %counter% modifiche
-      nothingToSave: Niente da salvare
-    filter:
-      useWildcard: Utilizza %wildcard% come carattere jolly.
-      itemSpamRating: Valutazione spam
-      title: Filtra elementi
-    noItemsInTable:
-      title: Ancora nessun oggetto
-      text: Questa regola ancora non contiene oggetti.
-    nothingFound:
-      title: Non trovo niente
-      text: Non ci sono oggetti che corrispondono al tuo filtro.
-    modal:
-      importTxtFile:
-        title: Importa file di testo
-        file: File
-        fileHelp: Seleziona il file di testo (*.txt) che vuoi importare dal tuo PC.
-        action: Importa file
-      importCsvFile:
-        title: Importa file CSV
-        file: File
-        fileHelp: Seleziona il file CSV (*.csv) che vuoi importare dal tuo PC.
-        action: Importa file
-      addingItems:
-        title: Aggiungi oggetti
-        messageCompleted: I dati sono stati processati. Qui sopra puoi vedere il sommario degli oggetti aggiunti, ignorati e non validi. Ora puoi chiudere questa finestra.
-        progress:
-          dataProcessed: Dati processati
-          processingPleaseWait: Sto processando i dati…
-          processingStats: Processati %processedBytes% di %totalBytes%
-          abortHint: Se chiudi questa finestra il processo verrà terminato e dovrai riavviarlo di nuovo.
-        summary:
-          addedLabel: Aggiunti
-          addedTooltip: Questi oggetti sono stati aggiunti alla regola.
-          skippedLabel: Ignorati
-          skippedTooltip: Questi oggetti esistono già, quindi il processo di importazione li ha ignorati.
-          invalidLabel: Non validi
-          invalidTooltip: Oggetti non validi, ad esempio il tipo di oggetto non esiste o il suo valore è espresso in un formato errato.
-      deleteSelectedItems:
-        title: Cancella gli oggetti selezionati
-        confirm: Vuoi veramente cancellare i %counter$ oggetti selezionati?
-        confirmOne: Vuoi veramente cancellare l'oggetto selezionato?
-        confirmDelete: Sì, cancella gli oggetti
-        progress:
-          deletingPleaseWait: Sto cancellando gli oggetti... Attendere…
-  delete:
-    confirm: Vuoi davvero eliminare la regola %ruleName%?
-    title: Elimina regola %ruleName%
-    message:
-      successfullyDeleted: La regola %ruleName% è stata eliminata correttamente.
-  type:
-    domain:
-      title: Dominio
-      shortIntro: Consente di filtrare per domini specifici
-      placeholder: esempio.com
+      actions: Azioni
+    create:
+      title: Crea regola
+      label:
+        ruleType: Tipo regola
+    createChooseType:
+      title: Scegli il tipo
+      intro: Seleziona il tipo di ruolo che vuoi creare. I tipi disponibili sono utilizzati per diversi campi e non possono essere modificati per regole successive.
+    title: Regole
+    backToList: Ritorna alle regole
+    form:
+      rule:
+        description: Descrizione
+        name: Nome
+        status: Stato
+        title: Regola
+        spamRatingFactorHelp: Con il fattore di valutazione spam puoi definire un fattore per inasprire o addolcire la valutazione di questa regola. Se il valore è maggiore di 1.0 la valutazione è inasprita, se il valore è inferiore a 1.0 la valutazione è addolcita.
+        spamRatingFactor: Fattore di valutazione spam
+      addMultipleItems:
+        items: Oggetti
+        rating: Valutazione
+        ratingHelp: Se non impostata, la valutazione predefinita è 1.0. Se la valutazione viene impostata a 0.0 l'oggetto non verrà identificato come spam.
+        itemsHelp: Aggiungi un oggetto per ogni riga.
+        type: Tipo
+      ruleType: Tipo ruolo
+      items:
+        type: Tipo
+        title: Oggetti
+        rating: Valutazione
+        value: Valore
+      status:
+        unsavedChanges: '%counter% modifiche non salvate'
+        savingChanges: Sto salvando %counter% modifiche
+        nothingToSave: Niente da salvare
+      filter:
+        useWildcard: Utilizza %wildcard% come carattere jolly.
+        itemSpamRating: Valutazione spam
+        title: Filtra elementi
+      noItemsInTable:
+        title: Ancora nessun oggetto
+        text: Questa regola ancora non contiene oggetti.
+      nothingFound:
+        title: Non trovo niente
+        text: Non ci sono oggetti che corrispondono al tuo filtro.
+      modal:
+        importTxtFile:
+          title: Importa file di testo
+          file: File
+          fileHelp: Seleziona il file di testo (*.txt) che vuoi importare dal tuo PC.
+          action: Importa file
+        importCsvFile:
+          title: Importa file CSV
+          file: File
+          fileHelp: Seleziona il file CSV (*.csv) che vuoi importare dal tuo PC.
+          action: Importa file
+        addingItems:
+          title: Aggiungi oggetti
+          messageCompleted: I dati sono stati processati. Qui sopra puoi vedere il sommario degli oggetti aggiunti, ignorati e non validi. Ora puoi chiudere questa finestra.
+          progress:
+            dataProcessed: Dati processati
+            processingPleaseWait: Sto processando i dati…
+            processingStats: Processati %processedBytes% di %totalBytes%
+            abortHint: Se chiudi questa finestra il processo verrà terminato e dovrai riavviarlo di nuovo.
+          summary:
+            addedLabel: Aggiunti
+            addedTooltip: Questi oggetti sono stati aggiunti alla regola.
+            skippedLabel: Ignorati
+            skippedTooltip: Questi oggetti esistono già, quindi il processo di importazione li ha ignorati.
+            invalidLabel: Non validi
+            invalidTooltip: Oggetti non validi, ad esempio il tipo di oggetto non esiste o il suo valore è espresso in un formato errato.
+        deleteSelectedItems:
+          title: Cancella gli oggetti selezionati
+          confirm: Vuoi veramente cancellare i %counter$ oggetti selezionati?
+          confirmOne: Vuoi veramente cancellare l'oggetto selezionato?
+          confirmDelete: Sì, cancella gli oggetti
+          progress:
+            deletingPleaseWait: Sto cancellando gli oggetti... Attendere…
+    delete:
+      confirm: Vuoi davvero eliminare la regola %ruleName%?
+      title: Elimina regola %ruleName%
+      message:
+        successfullyDeleted: La regola %ruleName% è stata eliminata correttamente.
+    type:
       domain:
         title: Dominio
-        intro: Inserisci un dominio che non sarà autorizzato ad effettuare invii. Utilizzando un dominio verranno anche intercettate tutte le email contenenti il dominio stesso.
-      intro: Il tipo di regola di dominio consente di filtrare i domini.
-      label: Dominio
-    email:
-      title: Email
-      intro: Il tipo di regola email consente di filtrare gli indirizzi email.
-      shortIntro: Consente di filtrare per indirizzi email specifici
-      placeholder: info@esempio.com
+        shortIntro: Consente di filtrare per domini specifici
+        placeholder: esempio.com
+        domain:
+          title: Dominio
+          intro: Inserisci un dominio che non sarà autorizzato ad effettuare invii. Utilizzando un dominio verranno anche intercettate tutte le email contenenti il dominio stesso.
+        intro: Il tipo di regola di dominio consente di filtrare i domini.
+        label: Dominio
       email:
-        title: Indirizzo email
-        intro: Inserisci un indirizzo email che non è autorizzato ad effettuare invii.
-      label: Indirizzo email
-    ipAddress:
-      title: Indirizzo IP
-      shortIntro: Consente di filtrare per indirizzi IP e sottoreti
-      intro: Il tipo di regola dell'indirizzo IP consente di filtrare gli indirizzi IP o le sottoreti.
+        title: Email
+        intro: Il tipo di regola email consente di filtrare gli indirizzi email.
+        shortIntro: Consente di filtrare per indirizzi email specifici
+        placeholder: info@esempio.com
+        email:
+          title: Indirizzo email
+          intro: Inserisci un indirizzo email che non è autorizzato ad effettuare invii.
+        label: Indirizzo email
       ipAddress:
         title: Indirizzo IP
-        intro: Inserisci un indirizzo IP che non è autorizzato ad effettuare invii.
-      placeholder: 0.0.0.0
-      subnet:
-        title: Sottorete
-        intro: Inserisci una sottomaschera di rete che non è autorizzata ad effettuare invii.
-      label: Indirizzo IP/Sottorete
-    provider:
-      title: Provider
-      country:
-        intro: Immettere il codice ISO di un paese che non è autorizzato a inviare alcun messaggio. Tutti gli indirizzi IP registrati in questo paese saranno contrassegnati come spam.
-        infoCountryBlock: Se si aggiunge un Paese alla regola, significa che nessuno potrà effettuare invii da questo Paese. Se da un lato questo suona bene, dall'altro potrebbe bloccare un utente reale dall'invio di un modulo. Fate attenzione a questa opzione. La corretta geolocalizzazione degli indirizzi IP non è mai garantita.
-        title: Paese
-      action:
-        configureGeoip2: Configurazione GeoIP2
-      asNumber:
-        title: Numero di AS
-        intro: Immettere un numero di AS che non è autorizzato a effettuare invii. Tutti gli indirizzi IP appartenenti a questo AS saranno bloccati.
-      shortIntro: Permetti di filtrare con informazioni specifiche relative al provider
-      infoGeoip2: Per poter utilizzare il tipo 'provider' è necessario configurare il database MindMax GeoLite2, diversamente questa opzione non avrà alcun effetto.
-      label: Numero AS/Paese
-      intro: La regola provider permette di filtrare per numero di AS e per codice Paese.
-    unicodeBlock:
-      shortIntro: Filtra l'input in base ai caratteri usati.
-      block:
-        title: Blocco
-        intro: Selezionare uno dei blocchi che devono essere valutati durante l'inserimento. Inserire quindi la valutazione corrispondente.
-        hintExtended: Sono disponibili estensioni e aggiunte per alcuni blocchi che dovrebbero essere aggiunti alle regole.
-        exampleCounting: Supponiamo che tu abbia creato una regola con il blocco "Emoticon" e una valutazione di 3 punti. In un invio un utente inserisce 5 emoticons. L'invio viene valutato 3 punti perchè è stata usata una emoticon.
-        explanationCounting: Per la validazione ogni blocco viene contato una volta sola, anche se sono stati utilizzati diversi caratteri per blocco.
-      intro: Il tipo di regola di blocco Unicode consente di valutare l'uso di determinati caratteri.
-      label: Blocco Unicode
-      title: Blocco Unicode
-    word:
-      title: Termine
-      label: Termine/Schema
-      regex:
-        title: Espressione regolare
-        validation:
-          invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
-        intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
-      text:
-        title: Testo
-        intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
-      shortIntro: Permette di filtrare termini specifici o schemi
-      intro: La regola termini permette di filtrare usando termini ed Espressioni Regolari.
-    userAgent:
-      regex:
-        validation:
-          invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
-        title: Espressione regolare
-        intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
-      text:
-        title: Testo
-        intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
-      intro: La regola user agent permette di filtrare per parole ed Espressioni Regolari nello user agent dell'utente.
-      shortIntro: Permette di filtrare per parole specifiche o schemi nello user agent
-      title: User agent
-      label: User Agent (Termine/Schema)
-    website:
-      url:
-        title: URL
-        intro: Inserisci un URL che non è autorizzato ad effettuare invii.
-        infoProtocol: E' consigliabile iniziare l'URL con il protocollo o con le due barre per URLs con protocollo indipendente. Se il valore non inizia con il protocollo la regola potrebbe identificare URLs non corretti.
-      shortIntro: Permetti di filtrare siti web specifici
-      label: URL/Dominio
-      title: Sito web
-      placeholder: https://esempio.com
-      intro: La regola siti web permette di filtrare per URLs.
-    rating:
-      infoCalculationMethod: La valutazione spam sarà calcolata moltiplicando la valutazione dell'oggetto per il fattore di valutazione che è stato definito nella regola.
-      infoDefaultAndDataType: La valutazione è un numero compreso tra %minValue% e %maxValue%. Se non viene definita alcuna valutazione, quella predefinita è %one%.
-      infoValueEqualZero: Se la valutazione è impostata a %zero% l'oggetto non verrà identificato come spam dato che il valore della valutazione sarà %zero% in ogni caso.
-      placeholder: Valutazione
-      title: Valutazione
-      intro: Il campo valutazione consente di definire il peso di un articolo. Se si specifica un numero positivo, è possibile assegnare un valore più alto a un elemento. Se si specifica un numero negativo, l'elemento ridurrà il numero totale di punti.
-  filter:
-    dropdown: Filtra l'elenco dei ruoli
-    options:
-      all: Mostra tutto
+        shortIntro: Consente di filtrare per indirizzi IP e sottoreti
+        intro: Il tipo di regola dell'indirizzo IP consente di filtrare gli indirizzi IP o le sottoreti.
+        ipAddress:
+          title: Indirizzo IP
+          intro: Inserisci un indirizzo IP che non è autorizzato ad effettuare invii.
+        placeholder: 0.0.0.0
+        subnet:
+          title: Sottorete
+          intro: Inserisci una sottomaschera di rete che non è autorizzata ad effettuare invii.
+        label: Indirizzo IP/Sottorete
+      provider:
+        title: Provider
+        country:
+          intro: Immettere il codice ISO di un paese che non è autorizzato a inviare alcun messaggio. Tutti gli indirizzi IP registrati in questo paese saranno contrassegnati come spam.
+          infoCountryBlock: Se si aggiunge un Paese alla regola, significa che nessuno potrà effettuare invii da questo Paese. Se da un lato questo suona bene, dall'altro potrebbe bloccare un utente reale dall'invio di un modulo. Fate attenzione a questa opzione. La corretta geolocalizzazione degli indirizzi IP non è mai garantita.
+          title: Paese
+        action:
+          configureGeoip2: Configurazione GeoIP2
+        asNumber:
+          title: Numero di AS
+          intro: Immettere un numero di AS che non è autorizzato a effettuare invii. Tutti gli indirizzi IP appartenenti a questo AS saranno bloccati.
+        shortIntro: Permetti di filtrare con informazioni specifiche relative al provider
+        infoGeoip2: Per poter utilizzare il tipo 'provider' è necessario configurare il database MindMax GeoLite2, diversamente questa opzione non avrà alcun effetto.
+        label: Numero AS/Paese
+        intro: La regola provider permette di filtrare per numero di AS e per codice Paese.
+      unicodeBlock:
+        shortIntro: Filtra l'input in base ai caratteri usati.
+        block:
+          title: Blocco
+          intro: Selezionare uno dei blocchi che devono essere valutati durante l'inserimento. Inserire quindi la valutazione corrispondente.
+          hintExtended: Sono disponibili estensioni e aggiunte per alcuni blocchi che dovrebbero essere aggiunti alle regole.
+          exampleCounting: Supponiamo che tu abbia creato una regola con il blocco "Emoticon" e una valutazione di 3 punti. In un invio un utente inserisce 5 emoticons. L'invio viene valutato 3 punti perchè è stata usata una emoticon.
+          explanationCounting: Per la validazione ogni blocco viene contato una volta sola, anche se sono stati utilizzati diversi caratteri per blocco.
+        intro: Il tipo di regola di blocco Unicode consente di valutare l'uso di determinati caratteri.
+        label: Blocco Unicode
+        title: Blocco Unicode
+      word:
+        title: Termine
+        label: Termine/Schema
+        regex:
+          title: Espressione regolare
+          validation:
+            invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
+          intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
+        text:
+          title: Testo
+          intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
+        shortIntro: Permette di filtrare termini specifici o schemi
+        intro: La regola termini permette di filtrare usando termini ed Espressioni Regolari.
+      userAgent:
+        regex:
+          validation:
+            invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
+          title: Espressione regolare
+          intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
+        text:
+          title: Testo
+          intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
+        intro: La regola user agent permette di filtrare per parole ed Espressioni Regolari nello user agent dell'utente.
+        shortIntro: Permette di filtrare per parole specifiche o schemi nello user agent
+        title: User agent
+        label: User Agent (Termine/Schema)
+      website:
+        url:
+          title: URL
+          intro: Inserisci un URL che non è autorizzato ad effettuare invii.
+          infoProtocol: E' consigliabile iniziare l'URL con il protocollo o con le due barre per URLs con protocollo indipendente. Se il valore non inizia con il protocollo la regola potrebbe identificare URLs non corretti.
+        shortIntro: Permetti di filtrare siti web specifici
+        label: URL/Dominio
+        title: Sito web
+        placeholder: https://esempio.com
+        intro: La regola siti web permette di filtrare per URLs.
+      rating:
+        infoCalculationMethod: La valutazione spam sarà calcolata moltiplicando la valutazione dell'oggetto per il fattore di valutazione che è stato definito nella regola.
+        infoDefaultAndDataType: La valutazione è un numero compreso tra %minValue% e %maxValue%. Se non viene definita alcuna valutazione, quella predefinita è %one%.
+        infoValueEqualZero: Se la valutazione è impostata a %zero% l'oggetto non verrà identificato come spam dato che il valore della valutazione sarà %zero% in ogni caso.
+        placeholder: Valutazione
+        title: Valutazione
+        intro: Il campo valutazione consente di definire il peso di un articolo. Se si specifica un numero positivo, è possibile assegnare un valore più alto a un elemento. Se si specifica un numero negativo, l'elemento ridurrà il numero totale di punti.
+    filter:
+      dropdown: Filtra l'elenco dei ruoli
+      options:
+        all: Mostra tutto
 dashboard:
   chart:
     spam: Spam

@@ -91,237 +91,237 @@ dashboard:
   chart:
     valid: Gültig
     spam: Spam
-
-# Rules
     annotation:
       statisticOnly: Nur Statistik
   dateRange:
     dropdown: Sichtbaren Datumsbereich auswählen
-rule:
-  title: Regeln
-  backToList: Zu den Regeln
 
-  list:
-    name: Name
-    type: Typ
-    status: Status
-    actions: Aktionen
+rules:
+  fieldRule:
+    title: Regeln
+    backToList: Zu den Regeln
 
-  createChooseType:
-    title: Typ wählen
-    intro: Bitte wählen Sie den Typ der Regel, die Sie erstellen möchten. Die verfügbaren Typen werden für verschiedene Felder verwendet und können für eine Regel nicht nachträglich geändert werden.
-
-  create:
-    title: Regel erstellen
-
-    label:
-      ruleType: Regeltyp
-  edit:
-    title: Regel %ruleName% bearbeiten
-
-  form:
-    ruleType: Regeltyp
-
-    rule:
-      title: Regel
+    list:
       name: Name
-      description: Beschreibung
+      type: Typ
       status: Status
-      spamRatingFactor: Spam-Bewertungsfaktor
-      spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher die Einträge dieser Regel verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Einträge verstärkt, ist der Wert kleiner als 1.0, werden die Einträge abgeschwächt.
+      actions: Aktionen
 
-    items:
-      title: Einträge
-      type: Typ
-      rating: Bewertung
+    createChooseType:
+      title: Typ wählen
+      intro: Bitte wählen Sie den Typ der Regel, die Sie erstellen möchten. Die verfügbaren Typen werden für verschiedene Felder verwendet und können für eine Regel nicht nachträglich geändert werden.
 
-      value: Wert
-    addMultipleItems:
-      items: Einträge
-      itemsHelp: Geben Sie ein Element pro Zeile ein.
-      rating: Bewertung
-      ratingHelp: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt wird, werden die Einträge werden nicht als Spam erkannt.
+    create:
+      title: Regel erstellen
 
-      type: Typ
-    status:
-      unsavedChanges: '%counter% nicht-gespeicherte Änderungen'
-      savingChanges: Speichern von %counter% Änderungen
-      nothingToSave: Nichts zu speichern
-    filter:
-      title: Einträge filtern
-      useWildcard: Verwenden Sie %wildcard% als Platzhalter.
-      itemSpamRating: Spam-Bewertung des Eintrags
-    noItemsInTable:
-      title: Noch keine Einträge vorhanden
-      text: Diese Regel enthält noch keine Einträge.
-    nothingFound:
-      title: Nichts gefunden
-      text: Es gibt keine Einträge, die Ihrem Filter entsprechen.
-    modal:
-      importTxtFile:
-        title: Textdatei importieren
-        file: Datei
-        fileHelp: Bitte wählen Sie die Textdatei (*.txt), die Sie von Ihrem Computer importieren möchten.
-        action: Datei importieren
-      importCsvFile:
-        title: CSV-Datei importieren
-        file: Datei
-        fileHelp: Bitte wählen Sie die CSV-Datei (*.csv), die Sie von Ihrem Computer importieren möchten.
-        action: Datei importieren
-      addingItems:
-        title: Einträge hinzufügen
-        messageCompleted: Die angegebenen Daten wurden verarbeitet. Oben finden Sie die Zusammenfassung der hinzugefügten, übersprungenen und ungültigen Einträge. Sie können dieses Fenster jetzt schließen.
-        progress:
-          dataProcessed: Daten verarbeitet
-          processingPleaseWait: Daten verarbeiten…
-          processingStats: '%processedBytes% von %totalBytes% verarbeitet'
-          abortHint: Wenn Sie dieses Fenster schliessen, wird der Prozess angehalten und Sie müssen ihn später erneut starten.
-        summary:
-          addedLabel: Hinzugefügt
-          addedTooltip: Diese Einträge wurden der Regel hinzugefügt.
-          skippedLabel: Übersprungen
-          skippedTooltip: Diese Einträge sind bereits vorhanden, so dass sie beim Import übersprungen wurden.
-          invalidLabel: Ungültig
-          invalidTooltip: Ungültige Einträge, zum Beispiel wenn der Eintragstyp nicht vorhanden ist oder der Wert das falsche Format hat.
-      deleteSelectedItems:
-        title: Ausgewählte Einträge löschen
-        confirm: Möchten Sie die %counter% ausgewählten Einträge wirklich löschen?
-        confirmOne: Möchten Sie den ausgewählte Eintrag wirklich löschen?
-        confirmDelete: Ja, Einträge löschen
-        progress:
-          deletingPleaseWait: Einträge werden gelöscht… Bitte warten…
-  delete:
-    title: Regel %ruleName% löschen
-    confirm: Wollen Sie die Regel %ruleName% wirklich löschen?
+      label:
+        ruleType: Regeltyp
+    edit:
+      title: Regel %ruleName% bearbeiten
 
-    message:
-      successfullyDeleted: Die Regel %ruleName% wurde erfolgreich gelöscht.
+    form:
+      ruleType: Regeltyp
 
-  type:
-    domain:
-      title: Domain
-      shortIntro: Filtert nach Domains
-      intro: Der Domain-Regeltyp erlaubt das Filtern nach Domains.
-      label: Domain
-      placeholder: example.com
+      rule:
+        title: Regel
+        name: Name
+        description: Beschreibung
+        status: Status
+        spamRatingFactor: Spam-Bewertungsfaktor
+        spamRatingFactorHelp: Mit dem Spam-Bewertungsfaktor können Sie einen Faktor definieren, welcher die Einträge dieser Regel verstärkt oder abschwächt. Ist der Wert grösser als 1.0 werden die Einträge verstärkt, ist der Wert kleiner als 1.0, werden die Einträge abgeschwächt.
 
+      items:
+        title: Einträge
+        type: Typ
+        rating: Bewertung
+
+        value: Wert
+      addMultipleItems:
+        items: Einträge
+        itemsHelp: Geben Sie ein Element pro Zeile ein.
+        rating: Bewertung
+        ratingHelp: Die Standard-Bewertung ist 1.0. Wenn die Bewertung auf 0.0 gesetzt wird, werden die Einträge werden nicht als Spam erkannt.
+
+        type: Typ
+      status:
+        unsavedChanges: '%counter% nicht-gespeicherte Änderungen'
+        savingChanges: Speichern von %counter% Änderungen
+        nothingToSave: Nichts zu speichern
+      filter:
+        title: Einträge filtern
+        useWildcard: Verwenden Sie %wildcard% als Platzhalter.
+        itemSpamRating: Spam-Bewertung des Eintrags
+      noItemsInTable:
+        title: Noch keine Einträge vorhanden
+        text: Diese Regel enthält noch keine Einträge.
+      nothingFound:
+        title: Nichts gefunden
+        text: Es gibt keine Einträge, die Ihrem Filter entsprechen.
+      modal:
+        importTxtFile:
+          title: Textdatei importieren
+          file: Datei
+          fileHelp: Bitte wählen Sie die Textdatei (*.txt), die Sie von Ihrem Computer importieren möchten.
+          action: Datei importieren
+        importCsvFile:
+          title: CSV-Datei importieren
+          file: Datei
+          fileHelp: Bitte wählen Sie die CSV-Datei (*.csv), die Sie von Ihrem Computer importieren möchten.
+          action: Datei importieren
+        addingItems:
+          title: Einträge hinzufügen
+          messageCompleted: Die angegebenen Daten wurden verarbeitet. Oben finden Sie die Zusammenfassung der hinzugefügten, übersprungenen und ungültigen Einträge. Sie können dieses Fenster jetzt schließen.
+          progress:
+            dataProcessed: Daten verarbeitet
+            processingPleaseWait: Daten verarbeiten…
+            processingStats: '%processedBytes% von %totalBytes% verarbeitet'
+            abortHint: Wenn Sie dieses Fenster schliessen, wird der Prozess angehalten und Sie müssen ihn später erneut starten.
+          summary:
+            addedLabel: Hinzugefügt
+            addedTooltip: Diese Einträge wurden der Regel hinzugefügt.
+            skippedLabel: Übersprungen
+            skippedTooltip: Diese Einträge sind bereits vorhanden, so dass sie beim Import übersprungen wurden.
+            invalidLabel: Ungültig
+            invalidTooltip: Ungültige Einträge, zum Beispiel wenn der Eintragstyp nicht vorhanden ist oder der Wert das falsche Format hat.
+        deleteSelectedItems:
+          title: Ausgewählte Einträge löschen
+          confirm: Möchten Sie die %counter% ausgewählten Einträge wirklich löschen?
+          confirmOne: Möchten Sie den ausgewählte Eintrag wirklich löschen?
+          confirmDelete: Ja, Einträge löschen
+          progress:
+            deletingPleaseWait: Einträge werden gelöscht… Bitte warten…
+    delete:
+      title: Regel %ruleName% löschen
+      confirm: Wollen Sie die Regel %ruleName% wirklich löschen?
+
+      message:
+        successfullyDeleted: Die Regel %ruleName% wurde erfolgreich gelöscht.
+
+    type:
       domain:
         title: Domain
-        intro: Geben Sie eine Domain ein, welche in einer Einsendung nicht erlaubt ist. Wenn Sie eine Domain eintragen werden auch alle E-Mail-Adressen mit dieser Domain gefiltert.
+        shortIntro: Filtert nach Domains
+        intro: Der Domain-Regeltyp erlaubt das Filtern nach Domains.
+        label: Domain
+        placeholder: example.com
 
-    email:
-      title: E-Mail
-      shortIntro: Filtert nach E-Mail-Adressen
-      intro: Der E-Mail-Adressen-Regeltyp erlaubt das Filtern nach E-Mail-Adressen.
-      label: E-Mail-Adresse
-      placeholder: info@example.com
+        domain:
+          title: Domain
+          intro: Geben Sie eine Domain ein, welche in einer Einsendung nicht erlaubt ist. Wenn Sie eine Domain eintragen werden auch alle E-Mail-Adressen mit dieser Domain gefiltert.
 
       email:
-        title: E-Mail-Adresse
-        intro: Geben Sie eine E-Mail-Adresse ein, welche in einer Einsendung als Spam erkannt werden soll.
+        title: E-Mail
+        shortIntro: Filtert nach E-Mail-Adressen
+        intro: Der E-Mail-Adressen-Regeltyp erlaubt das Filtern nach E-Mail-Adressen.
+        label: E-Mail-Adresse
+        placeholder: info@example.com
 
-    ipAddress:
-      title: IP-Adresse
-      shortIntro: Filtert nach IP-Adressen und Subnetzen
-      intro: Der IP-Adressen-Regeltyp erlaubt das Filtern nach IP-Adressen und Subnetzen.
-      label: IP-Adresse/Subnetz
-      placeholder: 0.0.0.0
+        email:
+          title: E-Mail-Adresse
+          intro: Geben Sie eine E-Mail-Adresse ein, welche in einer Einsendung als Spam erkannt werden soll.
 
       ipAddress:
         title: IP-Adresse
-        intro: Geben Sie eine IP-Adresse ein, welche nicht berechtigt ist, eine Einsendung vorzunehmen.
+        shortIntro: Filtert nach IP-Adressen und Subnetzen
+        intro: Der IP-Adressen-Regeltyp erlaubt das Filtern nach IP-Adressen und Subnetzen.
+        label: IP-Adresse/Subnetz
+        placeholder: 0.0.0.0
 
-      subnet:
-        title: Subnetz
-        intro: Geben Sie ein Subnetz ein, welches nicht berechtigt ist, eine Einsendung vorzunehmen.
+        ipAddress:
+          title: IP-Adresse
+          intro: Geben Sie eine IP-Adresse ein, welche nicht berechtigt ist, eine Einsendung vorzunehmen.
 
-    provider:
-      title: Anbieter
-      shortIntro: Filtert nach AS-Nummer und Land
-      intro: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
-      infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
-      label: AS Nummer/Land
-      action:
-        configureGeoip2: GeoIP2 Konfiguration
+        subnet:
+          title: Subnetz
+          intro: Geben Sie ein Subnetz ein, welches nicht berechtigt ist, eine Einsendung vorzunehmen.
 
-      asNumber:
-        title: AS Nummer
-        intro: Geben Sie eine AS Nummer ein, welche nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche zu dieser AS Nummer gehören, werden blockiert.
+      provider:
+        title: Anbieter
+        shortIntro: Filtert nach AS-Nummer und Land
+        intro: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
+        infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
+        label: AS Nummer/Land
+        action:
+          configureGeoip2: GeoIP2 Konfiguration
 
-      country:
-        title: Land
-        intro: Geben Sie ein ISO-Ländercode ein, welcher nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche diesem Ländercode zugeordnet werden, werden blockiert.
-        infoCountryBlock: Wenn Sie ein Land zur Regel hinzufügen, bedeutet dass, dass niemand aus diesem Land eine Einsendung machen kann. Auf der einen Seite klingt das gut, auf der anderen Seite könnte diese Regel reale Benutzer davon abhalten, Einsendungen vorzunehmen. Bitte benutzen Sie diese Option vorsichtig. Die genaue Lokalisierung einer IP-Adresse ist nie garantiert.
+        asNumber:
+          title: AS Nummer
+          intro: Geben Sie eine AS Nummer ein, welche nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche zu dieser AS Nummer gehören, werden blockiert.
 
-    unicodeBlock:
-      title: Unicode-Block
-      shortIntro: Filtert die Eingaben aufgrund der verwendeten Zeichen.
-      intro: Der Unicode-Block-Regeltyp erlaubt die Verwendung von bestimmten Zeichen zu bewerten.
-      label: Unicode-Block
+        country:
+          title: Land
+          intro: Geben Sie ein ISO-Ländercode ein, welcher nicht berechtigt ist, eine Einsendung vorzunehmen. Alle IP-Adressen, welche diesem Ländercode zugeordnet werden, werden blockiert.
+          infoCountryBlock: Wenn Sie ein Land zur Regel hinzufügen, bedeutet dass, dass niemand aus diesem Land eine Einsendung machen kann. Auf der einen Seite klingt das gut, auf der anderen Seite könnte diese Regel reale Benutzer davon abhalten, Einsendungen vorzunehmen. Bitte benutzen Sie diese Option vorsichtig. Die genaue Lokalisierung einer IP-Adresse ist nie garantiert.
 
-      block:
-        title: Block
-        intro: Bitte wählen Sie einen der Blöcke aus, welcher bei der Eingabe entsprechend bewertet werden soll. Geben Sie anschliessend eine entsprechende Bewertung ein.
-        hintExtended: Bitte beachten Sie, dass es bei einigen Blöcken Erweiterungen und Ergänzungen gibt, welche ebenfalls als Regel-Eintrag erfasst werden müssen.
-        explanationCounting: Bei der Auswertung wird jeder Block nur einmal gezählt, auch wenn mehrere Charakter aus einem Block verwendet wurden.
-        exampleCounting: Angenommen, Sie erfassen einen Regeleintrag mit dem Block "Smileys" mit einer Bewertung von 3 Punkten. In einer Einsendung werden nun 5 Smileys verwendet. Die Einsendung wird nun mit 3 Punkten bewertet weil ein Smiley verwendet wurde.
+      unicodeBlock:
+        title: Unicode-Block
+        shortIntro: Filtert die Eingaben aufgrund der verwendeten Zeichen.
+        intro: Der Unicode-Block-Regeltyp erlaubt die Verwendung von bestimmten Zeichen zu bewerten.
+        label: Unicode-Block
 
-    userAgent:
-      title: User-Agent
-      shortIntro: Filtert nach Wörter und RegEx-Muster im User-Agent
-      intro: Der User-Agent-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular Expression Pattern zu filtern.
-      label: User-Agent (Wort/Muster)
-      text:
-        title: Text
-        intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
+        block:
+          title: Block
+          intro: Bitte wählen Sie einen der Blöcke aus, welcher bei der Eingabe entsprechend bewertet werden soll. Geben Sie anschliessend eine entsprechende Bewertung ein.
+          hintExtended: Bitte beachten Sie, dass es bei einigen Blöcken Erweiterungen und Ergänzungen gibt, welche ebenfalls als Regel-Eintrag erfasst werden müssen.
+          explanationCounting: Bei der Auswertung wird jeder Block nur einmal gezählt, auch wenn mehrere Charakter aus einem Block verwendet wurden.
+          exampleCounting: Angenommen, Sie erfassen einen Regeleintrag mit dem Block "Smileys" mit einer Bewertung von 3 Punkten. In einer Einsendung werden nun 5 Smileys verwendet. Die Einsendung wird nun mit 3 Punkten bewertet weil ein Smiley verwendet wurde.
 
-      regex:
-        title: Regular Expression
-        intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
+      userAgent:
+        title: User-Agent
+        shortIntro: Filtert nach Wörter und RegEx-Muster im User-Agent
+        intro: Der User-Agent-Regeltyp erlaubt es im User-Agent nach Wörtern und Regular Expression Pattern zu filtern.
+        label: User-Agent (Wort/Muster)
+        text:
+          title: Text
+          intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
 
-        validation:
-          invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
+        regex:
+          title: Regular Expression
+          intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
 
-    website:
-      title: Website
-      shortIntro: Filtert nach URLs
-      intro: Der Website-Regeltyp erlaubt das Filtern nach URLs.
-      label: URL/Domain
-      placeholder: 'https://example.com'
+          validation:
+            invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
 
-      url:
-        title: URL
-        intro: Geben Sie eine URL ein, welche als Spam erkannt werden soll.
-        infoProtocol: Es wird empfohlen, Ihre Eingabe mit dem Protokoll oder zwei Slashes für eine Protokoll-unabhängige URL zu starten. Wenn die Eingabe nicht mit dem Protokoll startet könnte die Regel falsche Domains als Spam erkennen.
+      website:
+        title: Website
+        shortIntro: Filtert nach URLs
+        intro: Der Website-Regeltyp erlaubt das Filtern nach URLs.
+        label: URL/Domain
+        placeholder: 'https://example.com'
 
-    word:
-      title: Wort
-      shortIntro: Filtert nach Wörter und RegEx-Muster
-      intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
-      label: Wort/Muster
-      text:
-        title: Text
-        intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
+        url:
+          title: URL
+          intro: Geben Sie eine URL ein, welche als Spam erkannt werden soll.
+          infoProtocol: Es wird empfohlen, Ihre Eingabe mit dem Protokoll oder zwei Slashes für eine Protokoll-unabhängige URL zu starten. Wenn die Eingabe nicht mit dem Protokoll startet könnte die Regel falsche Domains als Spam erkennen.
 
-      regex:
-        title: Regular Expression
-        intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
+      word:
+        title: Wort
+        shortIntro: Filtert nach Wörter und RegEx-Muster
+        intro: Der Word-Regeltyp erlaubt es nach Wörtern und Regular Expression Pattern zu filtern.
+        label: Wort/Muster
+        text:
+          title: Text
+          intro: Geben Sie ein Wort ein, welches als Spam erkannt werden soll. Sie können den Stern %star% als Platzhalter verwenden. Beim Suchen wird automatisch nach %value% gesucht, dass bedeutet, Sie müssen den Platzhalter vor- und nach dem gesuchten Wort nicht einfügen.
 
-        validation:
-          invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
+        regex:
+          title: Regular Expression
+          intro: Geben Sie ein Regular Expression Pattern ein, welches ein nicht erlaubtes Pattern findet. Das Pattern muss den Regular Expression Anforderungen von PHP entsprechen.
 
-    rating:
-      title: Bewertung
-      intro: Mit dem Feld Bewertung können Sie das Gewicht eines Eintrages festlegen. Wenn Sie eine positive Zahl angeben, können Sie einem Eintrag einen höheren Wert zuweisen. Wenn Sie eine negative Zahl für den Eintrag angeben, wird die Gesamtzahl der Punkte verringert.
-      infoCalculationMethod: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
-      infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %minValue% und %maxValue%. Wenn keine Bewertung definiert ist, ist die Standardbewertung %one%.
-      infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
-      placeholder: Bewertung
+          validation:
+            invalidRegexPattern: 'Das eingegebene Muster ist ungültig. Fehler: %error%'
 
-  filter:
-    options:
-      all: Alle anzeigen
-    dropdown: Liste der Regeln filtern
+      rating:
+        title: Bewertung
+        intro: Mit dem Feld Bewertung können Sie das Gewicht eines Eintrages festlegen. Wenn Sie eine positive Zahl angeben, können Sie einem Eintrag einen höheren Wert zuweisen. Wenn Sie eine negative Zahl für den Eintrag angeben, wird die Gesamtzahl der Punkte verringert.
+        infoCalculationMethod: Die Spam-Bewertung wird durch Multiplizieren der Eintrags-Bewertung mit dem Spam-Bewertungsfaktor, welcher in der Regel definiert wurde, berechnet.
+        infoDefaultAndDataType: Die Bewertung ist eine Dezimalzahl zwischen %minValue% und %maxValue%. Wenn keine Bewertung definiert ist, ist die Standardbewertung %one%.
+        infoValueEqualZero: Wenn die Bewertung auf %zero% gesetzt ist, wird der Eintrag nicht als Spam erkannt, da die Bewertung in diesem Fall %zero% ist.
+        placeholder: Bewertung
+
+    filter:
+      options:
+        all: Alle anzeigen
+      dropdown: Liste der Regeln filtern
 rulePackage:
   title: Regel-Pakete
   backToList: Zu den Regel-Paketen

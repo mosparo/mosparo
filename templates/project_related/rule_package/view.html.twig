@@ -13,7 +13,7 @@
 
     <div class="col-12 col-md-auto ms-auto mt-3 mt-md-0 rule-type-information">
         <div class="page-pretitle">
-            {{ 'rule.form.ruleType'|trans }}
+            {{ 'rules.fieldRule.form.ruleType'|trans }}
         </div>
         <div class="h1 page-title">
             {{ rt.type(rulePackage.type) }}
@@ -124,13 +124,13 @@
                             </a>
                         {% endif %}
                         <div class="dropdown">
-                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'rule.filter.dropdown'|trans }}">
+                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'rules.fieldRule.filter.dropdown'|trans }}">
                                 <i class="ti ti-filter"></i>
                             </button>
                             <div class="dropdown-menu">
                                 <a href="{{ path('rule_package_view', { '_projectId': activeProject.id, 'id': rulePackage.id }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
                                     <i class="ti ti-check {% if filter != '' %}invisible{% endif %}"></i>
-                                    {{ 'rule.filter.options.all'|trans }}
+                                    {{ 'rules.fieldRule.filter.options.all'|trans }}
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 {% for ruleType in ruleTypes %}

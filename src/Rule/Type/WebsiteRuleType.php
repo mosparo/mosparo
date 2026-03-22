@@ -7,18 +7,18 @@ use Mosparo\Rule\Tester\WebsiteRuleTester;
 final class WebsiteRuleType extends AbstractRuleType
 {
     protected string $key = 'website';
-    protected string $name = 'rule.type.website.title';
-    protected string $description = 'rule.type.website.shortIntro';
+    protected string $name = 'rules.fieldRule.type.website.title';
+    protected string $description = 'rules.fieldRule.type.website.shortIntro';
     protected string $icon = 'ti ti-world';
     protected array $subtypes = [
         [
             'key' => 'url',
-            'name' => 'rule.type.website.url.title'
+            'name' => 'rules.fieldRule.type.website.url.title'
         ],
     ];
     protected string $testerClass = WebsiteRuleTester::class;
     protected array $targetFieldKeys = ['formData.input[url]', 'formData.textarea'];
-    protected string $helpTemplate = 'project_related/rule/type/help/website.html.twig';
+    protected string $helpTemplate = 'project_related/rules/field_rule/type/help/website.html.twig';
 
     public function getValidatorPattern(): array
     {

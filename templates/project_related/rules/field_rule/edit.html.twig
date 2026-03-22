@@ -1,0 +1,7 @@
+{% extends 'project_related/rules/field_rule/form.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'rules.fieldRule.edit.title'|trans({ '%ruleName%': rule.name }) }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{{ parent() }} {{ 'rules.fieldRule.title'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
+{% block pageTitle %}{{ 'rules.fieldRule.edit.title'|trans({ '%ruleName%': rule.name }) }}{% endblock %}

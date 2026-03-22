@@ -2,9 +2,9 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% form_theme form 'project_related/rule/_form_theme.html.twig' %}
+{% form_theme form 'project_related/rules/field_rule/_form_theme.html.twig' %}
 
-{% set title = 'rule.create.title'|trans %}
+{% set title = 'rules.fieldRule.create.title'|trans %}
 
 {% block documentTitle %}{{ title }} - {{ parent() }}{% endblock %}
 
@@ -12,7 +12,7 @@
     <div class="container-tight pb-4">
         <div class="row">
             <div class="col text-center">
-                <img src="{{ asset(get_illustration_path('rule.svg'))|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+                <img src="{{ asset(get_illustration_path('rules.fieldRule.svg'))|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
             </div>
         </div>
 
@@ -28,7 +28,7 @@
                         {{ form_row(form.name) }}
 
                         <div class="form-label">
-                            {{ 'rule.create.label.ruleType'|trans }}
+                            {{ 'rules.fieldRule.create.label.ruleType'|trans }}
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -54,7 +54,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-12 col-md-auto mt-2 mt-md-0">
-                <a href="{{ path('rule_create_choose_type', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                <a href="{{ path('rules_field_rule_create_choose_type', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
                     <i class="ti ti-chevron-left"></i>
                     {{ 'action.back'|trans }}
                 </a>

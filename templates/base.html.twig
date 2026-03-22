@@ -233,13 +233,19 @@
                                             </a>
                                         </li>
 
-                                        <li class="nav-item {% if route starts with 'rule_' and not (route starts with 'rule_package_') %}active{% endif %}">
-                                            <a class="nav-link" href="{{ path('rule_list', {'_projectId': activeProject.id}) }}">
+                                        <li class="nav-item {% if route starts with 'rules_' and not (route starts with 'rule_package_') %}active{% endif %} dropdown">
+                                            <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
                                                 <i class="ti ti-tags"></i>
                                                 <span class="nav-link-title">
-                                                    {{ 'rule.title'|trans }}
+                                                    {{ 'rules.title'|trans }}
                                                 </span>
                                             </a>
+                                            <div class="dropdown-menu" data-bs-popper="none">
+                                                <a class="dropdown-item" href="{{ path('rules_field_rule_list', {'_projectId': activeProject.id}) }}">
+                                                    <i class="ti ti-input-search"></i>
+                                                    {{ 'rules.fieldRule.title'|trans }}
+                                                </a>
+                                            </div>
                                         </li>
 
                                         <li class="nav-item {% if route starts with 'rule_package_' %}active{% endif %}">

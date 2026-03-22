@@ -190,245 +190,248 @@ dashboard:
       blockedRequests: '%numberOfRequests% blocked requests'
 
 # Rules
-rule:
+rules:
   title: Rules
-  backToList: Back to rules
 
-  list:
-    name: Name
-    type: Type
-    status: Status
-    actions: Actions
+  fieldRule:
+    title: Field rules
+    backToList: Back to field rules
 
-  createChooseType:
-    title: Choose type
-    intro: Please choose the type of rule you want to create. The available types are used for different fields and cannot be changed for a rule afterward.
-
-  create:
-    title: Create rule
-
-    label:
-      ruleType: Rule type
-
-  edit:
-    title: Edit rule %ruleName%
-
-  form:
-    ruleType: Rule type
-
-    rule:
-      title: Rule
+    list:
       name: Name
-      description: Description
-      status: Status
-      spamRatingFactor: Spam rating factor
-      spamRatingFactorHelp: With the spam rating factor you can define a factor which strengthens or weakens the entries of this rule. If the value is greater than 1.0, the entries are strengthened, if the value is less than 1.0, the entries are weakened.
-
-    status:
-      unsavedChanges: '%counter% unsaved changes'
-      savingChanges: 'Saving %counter% changes'
-      nothingToSave: Nothing to save
-
-    items:
-      title: Items
       type: Type
-      value: Value
-      rating: Rating
+      status: Status
+      actions: Actions
+
+    createChooseType:
+      title: Choose type
+      intro: Please choose the type of field rule you want to create. The available types are used for different fields and cannot be changed for a field rule afterward.
+
+    create:
+      title: Create field rule
+
+      label:
+        ruleType: Rule type
+
+    edit:
+      title: Edit field rule %ruleName%
+
+    form:
+      ruleType: Field rule type
+
+      rule:
+        title: Field rule
+        name: Name
+        description: Description
+        status: Status
+        spamRatingFactor: Spam rating factor
+        spamRatingFactorHelp: With the spam rating factor you can define a factor which strengthens or weakens the entries of this field rule. If the value is greater than 1.0, the entries are strengthened, if the value is less than 1.0, the entries are weakened.
+
+      status:
+        unsavedChanges: '%counter% unsaved changes'
+        savingChanges: 'Saving %counter% changes'
+        nothingToSave: Nothing to save
+
+      items:
+        title: Items
+        type: Type
+        value: Value
+        rating: Rating
+
+      filter:
+        title: Filter items
+        useWildcard: Use %wildcard% as wildcard.
+        itemSpamRating: Item spam rating
+
+      noItemsInTable:
+        title: No items yet
+        text: This field rule does not contain any items yet.
+
+      nothingFound:
+        title: Nothing found
+        text: There are no items that match your filter.
+
+      addMultipleItems:
+        type: Type
+        items: Items
+        itemsHelp: Add one item per line.
+        rating: Rating
+        ratingHelp: If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.
+
+      modal:
+        importTxtFile:
+          title: Import text file
+          file: File
+          fileHelp: Please choose the text file (*.txt) you want to import from your computer.
+          action: Import file
+
+        importCsvFile:
+          title: Import CSV file
+          file: File
+          fileHelp: Please choose the CSV file (*.csv) you want to import from your computer.
+          action: Import file
+
+        addingItems:
+          title: Adding items
+          messageCompleted: The given data was processed. See the summary of the added, skipped, and invalid items above. You can close this window now.
+          progress:
+            dataProcessed: Data processed
+            processingPleaseWait: Processing data…
+            processingStats: Processed %processedBytes% of %totalBytes%
+            abortHint: If you close this window, the process will stop, and you must start again later.
+
+          summary:
+            addedLabel: Added
+            addedTooltip: These items are added to the rule.
+            skippedLabel: Skipped
+            skippedTooltip: These items already exist, so the import process skipped them.
+            invalidLabel: Invalid
+            invalidTooltip: Invalid items, for example when the item type is not existing or the value is in the wrong format.
+
+        deleteSelectedItems:
+          title: Delete selected items
+          confirm: Do you really want to delete the selected %counter% rule items?
+          confirmOne: Do you really want to delete the selected rule item?
+          confirmDelete: Yes, delete the items
+
+          progress:
+            deletingPleaseWait: Deleting items… Please wait…
+
+    delete:
+      title: Delete field rule %ruleName%
+      confirm: Do you really want to delete the field rule %ruleName%?
+
+      message:
+        successfullyDeleted: The field rule %ruleName% was deleted successfully.
 
     filter:
-      title: Filter items
-      useWildcard: Use %wildcard% as wildcard.
-      itemSpamRating: Item spam rating
+      dropdown: Filter the list of rules
+      options:
+        all: Show all
 
-    noItemsInTable:
-      title: No items yet
-      text: This rule does not contain any items yet.
-
-    nothingFound:
-      title: Nothing found
-      text: There are no items that match your filter.
-
-    addMultipleItems:
-      type: Type
-      items: Items
-      itemsHelp: Add one item per line.
-      rating: Rating
-      ratingHelp: If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.
-
-    modal:
-      importTxtFile:
-        title: Import text file
-        file: File
-        fileHelp: Please choose the text file (*.txt) you want to import from your computer.
-        action: Import file
-
-      importCsvFile:
-        title: Import CSV file
-        file: File
-        fileHelp: Please choose the CSV file (*.csv) you want to import from your computer.
-        action: Import file
-
-      addingItems:
-        title: Adding items
-        messageCompleted: The given data was processed. See the summary of the added, skipped, and invalid items above. You can close this window now.
-        progress:
-          dataProcessed: Data processed
-          processingPleaseWait: Processing data…
-          processingStats: Processed %processedBytes% of %totalBytes%
-          abortHint: If you close this window, the process will stop, and you must start again later.
-
-        summary:
-          addedLabel: Added
-          addedTooltip: These items are added to the rule.
-          skippedLabel: Skipped
-          skippedTooltip: These items already exist, so the import process skipped them.
-          invalidLabel: Invalid
-          invalidTooltip: Invalid items, for example when the item type is not existing or the value is in the wrong format.
-
-      deleteSelectedItems:
-        title: Delete selected items
-        confirm: Do you really want to delete the selected %counter% rule items?
-        confirmOne: Do you really want to delete the selected rule item?
-        confirmDelete: Yes, delete the items
-
-        progress:
-          deletingPleaseWait: Deleting items… Please wait…
-
-  delete:
-    title: Delete rule %ruleName%
-    confirm: Do you really want to delete the rule %ruleName%?
-
-    message:
-      successfullyDeleted: The rule %ruleName% was deleted successfully.
-
-  filter:
-    dropdown: Filter the list of rules
-    options:
-      all: Show all
-
-  type:
-    domain:
-      title: Domain
-      shortIntro: Allows to filter by specific domains
-      intro: The domain rule type allows to filter for domains.
-      label: Domain
-      placeholder: example.com
-
+    type:
       domain:
         title: Domain
-        intro: Enter a domain which is not allowed to submit a submission. If you enter a domain it will also catch all email addresses with this domain.
+        shortIntro: Allows to filter by specific domains
+        intro: The domain rule type allows to filter for domains.
+        label: Domain
+        placeholder: example.com
 
-    email:
-      title: Email
-      shortIntro: Allows to filter by specific email addresses
-      intro: The email rule type allows to filter for email addresses.
-      label: Email address
-      placeholder: info@example.com
+        domain:
+          title: Domain
+          intro: Enter a domain which is not allowed to submit a submission. If you enter a domain it will also catch all email addresses with this domain.
 
       email:
-        title: Email address
-        intro: Enter an email address which is not allowed to submit a submission.
+        title: Email
+        shortIntro: Allows to filter by specific email addresses
+        intro: The email rule type allows to filter for email addresses.
+        label: Email address
+        placeholder: info@example.com
 
-    ipAddress:
-      title: IP address
-      shortIntro: Allows to filter by ip addresses and subnets
-      intro: The IP address rule type allows to filter for IP addresses or subnets.
-      label: IP address/Subnet
-      placeholder: 0.0.0.0
+        email:
+          title: Email address
+          intro: Enter an email address which is not allowed to submit a submission.
 
       ipAddress:
         title: IP address
-        intro: Enter an IP address which is not allowed to make any submissions.
+        shortIntro: Allows to filter by ip addresses and subnets
+        intro: The IP address rule type allows to filter for IP addresses or subnets.
+        label: IP address/Subnet
+        placeholder: 0.0.0.0
 
-      subnet:
-        title: Subnet
-        intro: Enter a subnet with mask which is not allowed to make any submissions.
+        ipAddress:
+          title: IP address
+          intro: Enter an IP address which is not allowed to make any submissions.
 
-    provider:
-      title: Provider
-      shortIntro: Allows to filter by provider specific information
-      intro: The provider rule type allows to filter for AS numbers and country codes.
-      infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
-      label: AS number/Country
+        subnet:
+          title: Subnet
+          intro: Enter a subnet with mask which is not allowed to make any submissions.
 
-      action:
-        configureGeoip2: GeoIP2 Configuration
+      provider:
+        title: Provider
+        shortIntro: Allows to filter by provider specific information
+        intro: The provider rule type allows to filter for AS numbers and country codes.
+        infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
+        label: AS number/Country
 
-      asNumber:
-        title: AS number
-        intro: Enter an AS number which is not allowed to make any submissions. All IP addresses which belongs to this AS number will be blocked.
+        action:
+          configureGeoip2: GeoIP2 Configuration
 
-      country:
-        title: Country
-        intro: Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.
-        infoCountryBlock: If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side it could mean that this will block a real user from submitting a form. Please be careful with this option. The correct localization of IP addresses is never guaranteed.
+        asNumber:
+          title: AS number
+          intro: Enter an AS number which is not allowed to make any submissions. All IP addresses which belongs to this AS number will be blocked.
 
-    unicodeBlock:
-      title: Unicode block
-      shortIntro: Filters the input based on the characters used.
-      intro: The Unicode block rule type allows to evaluate the use of certain characters.
-      label: Unicode block
+        country:
+          title: Country
+          intro: Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.
+          infoCountryBlock: If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side it could mean that this will block a real user from submitting a form. Please be careful with this option. The correct localization of IP addresses is never guaranteed.
 
-      block:
-        title: Block
-        intro: Please select one of the blocks which should be rated accordingly during input. Then enter a corresponding rating.
-        hintExtended: Please note that there are extensions and additions to some blocks, which must also be added as a rule entry.
-        explanationCounting: In the validation, each block is counted only once, even if several characters from one block were used.
-        exampleCounting: Suppose you enter a rule entry with the "Smileys" block with a rating of 3 points. In a submission, the user uses 5 smileys. The submission is now rated with 3 points because a smiley was used.
+      unicodeBlock:
+        title: Unicode block
+        shortIntro: Filters the input based on the characters used.
+        intro: The Unicode block rule type allows to evaluate the use of certain characters.
+        label: Unicode block
 
-    userAgent:
-      title: User agent
-      shortIntro: Allows to filter by specific words or patterns in the user agent
-      intro: The user agent rule type allows to filter for words and Regular Expression patterns in the user agent of the user.
-      label: User agent (Word/Pattern)
+        block:
+          title: Block
+          intro: Please select one of the blocks which should be rated accordingly during input. Then enter a corresponding rating.
+          hintExtended: Please note that there are extensions and additions to some blocks, which must also be added as a rule entry.
+          explanationCounting: In the validation, each block is counted only once, even if several characters from one block were used.
+          exampleCounting: Suppose you enter a rule entry with the "Smileys" block with a rating of 3 points. In a submission, the user uses 5 smileys. The submission is now rated with 3 points because a smiley was used.
 
-      text:
-        title: Text
-        intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
+      userAgent:
+        title: User agent
+        shortIntro: Allows to filter by specific words or patterns in the user agent
+        intro: The user agent rule type allows to filter for words and Regular Expression patterns in the user agent of the user.
+        label: User agent (Word/Pattern)
 
-      regex:
-        title: Regular Expression
-        intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
+        text:
+          title: Text
+          intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
 
-        validation:
-          invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
+        regex:
+          title: Regular Expression
+          intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
 
-    website:
-      title: Website
-      shortIntro: Allows to filter by specific websites
-      intro: The website rule type allows to filter for URLs.
-      label: URL/Domain
-      placeholder: 'https://example.com'
+          validation:
+            invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
 
-      url:
-        title: URL
-        intro: Enter an URL which is not allowed to submit a submission.
-        infoProtocol: It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs. If the value does not start with the protocol the rule could match wrong URLs.
+      website:
+        title: Website
+        shortIntro: Allows to filter by specific websites
+        intro: The website rule type allows to filter for URLs.
+        label: URL/Domain
+        placeholder: 'https://example.com'
 
-    word:
-      title: Word
-      shortIntro: Allows to filter by specific words or patterns
-      intro: The word rule type allows to filter for words and Regular Expression patterns.
-      label: Word/Pattern
+        url:
+          title: URL
+          intro: Enter an URL which is not allowed to submit a submission.
+          infoProtocol: It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs. If the value does not start with the protocol the rule could match wrong URLs.
 
-      text:
-        title: Text
-        intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
+      word:
+        title: Word
+        shortIntro: Allows to filter by specific words or patterns
+        intro: The word rule type allows to filter for words and Regular Expression patterns.
+        label: Word/Pattern
 
-      regex:
-        title: Regular Expression
-        intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
+        text:
+          title: Text
+          intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
 
-        validation:
-          invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
+        regex:
+          title: Regular Expression
+          intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
 
-    rating:
-      title: Rating
-      intro: The rating field allows you to define an item's weight. If you specify a positive number, you can assign a higher value to an item. If you specify a negative number, the item will reduce the total number of points.
-      infoCalculationMethod: The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.
-      infoDefaultAndDataType: The rating is a float number from %minValue% to %maxValue%. If no rating is defined, the default rating is %one%.
-      infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
-      placeholder: Rating
+          validation:
+            invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
+
+      rating:
+        title: Rating
+        intro: The rating field allows you to define an item's weight. If you specify a positive number, you can assign a higher value to an item. If you specify a negative number, the item will reduce the total number of points.
+        infoCalculationMethod: The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.
+        infoDefaultAndDataType: The rating is a float number from %minValue% to %maxValue%. If no rating is defined, the default rating is %one%.
+        infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
+        placeholder: Rating
 
 # Rule package
 rulePackage:

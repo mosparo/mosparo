@@ -83,198 +83,199 @@ dashboard:
       statisticOnly: Statistiques uniquement
   dateRange:
     dropdown: Sélectionner la plage de dates visibles
-rule:
-  list:
-    name: Nom
-    type: Type
-    status: État
-    actions: Actions
-  type:
-    email:
-      label: Adresse e-mail
-      title: Adresse e-mail
-      shortIntro: Permet de filtrer par adresses e-mail spécifiques
-      intro: Le type de règle d'adresse e-mail permet de filtrer les adresses e-mail.
-      placeholder: info@exemple.com
+rules:
+  fieldRule:
+    list:
+      name: Nom
+      type: Type
+      status: État
+      actions: Actions
+    type:
       email:
+        label: Adresse e-mail
         title: Adresse e-mail
-        intro: Saisissez une adresse électronique qui n'est pas autorisée à soumettre une demande.
-    unicodeBlock:
-      label: Bloc unicode
-      title: Bloc unicode
-      shortIntro: Filtre l'entrée en fonction des caractères utilisées.
-      block:
-        title: Bloc
-        intro: Veuillez sélectionner l'un des blocs qui doit être évalué en conséquence lors de la saisie. Saisissez ensuite la note correspondante.
-        hintExtended: Veuillez noter qu'il existe des extensions et des ajouts à certains blocs, qui doivent également être ajoutés en tant qu'entrée de règle.
-        explanationCounting: Lors de la validation, chaque bloc n'est compté qu'une seule fois, même si plusieurs caractères d'un même bloc ont été utilisés.
-        exampleCounting: Supposons que vous saisissiez une entrée de règle dans le bloc "Smileys" avec une note de 3 points. Dans une soumission, l'utilisateur utilise 5 smileys. La soumission est maintenant évaluée à 3 points parce qu'un smiley a été utilisé.
-      intro: Le type de règle de bloc Unicode permet d'évaluer l'utilisation de certains caractères.
-    website:
-      label: URL/Domaine
-      title: Site Web
-      placeholder: https://exemple.com
-      url:
-        title: URL
-        intro: Entrez une URL qui n'est pas autorisée à soumettre une demande.
-        infoProtocol: Il est recommandé de commencer l'URL par le protocole ou par deux barres obliques pour les URL indépendants du protocole. Si la valeur ne commence pas par le protocole, la règle pourrait correspondre à des URL erronées.
-      intro: Le type de règle "site web" permet de filtrer les URL.
-      shortIntro: Permet de filtrer par site web spécifique
-    rating:
-      title: Évaluation
-      placeholder: Évaluation
-      infoValueEqualZero: Si l'évaluation est fixée à %zero%, l'élément ne sera pas détecté comme étant du spam puisque la valeur de l'évaluation du spam sera de toute façon %zero%.
-      infoCalculationMethod: La valeur de l'évaluation du spam est calculée en multipliant l'évaluation de l'élément et le facteur d'évaluation du spam défini dans la règle.
-      infoDefaultAndDataType: La note est un nombre flottant compris entre %minValue% et %maxValue%. Si aucune valeur n'est définie, la valeur par défaut est %one%.
-      intro: Le champ cote vous permet de définir le poids d'un article. Si vous indiquez un nombre positif, vous pouvez attribuer une valeur plus élevée à un élément. Si vous indiquez un nombre négatif, l'élément réduira le nombre total de points.
-    domain:
-      title: Domaine
-      shortIntro: Permet de filtrer par domaines spécifiques
-      intro: Le type de règle de domaine permet de filtrer les domaines.
-      label: Domaine
-      placeholder: exemple.com
+        shortIntro: Permet de filtrer par adresses e-mail spécifiques
+        intro: Le type de règle d'adresse e-mail permet de filtrer les adresses e-mail.
+        placeholder: info@exemple.com
+        email:
+          title: Adresse e-mail
+          intro: Saisissez une adresse électronique qui n'est pas autorisée à soumettre une demande.
+      unicodeBlock:
+        label: Bloc unicode
+        title: Bloc unicode
+        shortIntro: Filtre l'entrée en fonction des caractères utilisées.
+        block:
+          title: Bloc
+          intro: Veuillez sélectionner l'un des blocs qui doit être évalué en conséquence lors de la saisie. Saisissez ensuite la note correspondante.
+          hintExtended: Veuillez noter qu'il existe des extensions et des ajouts à certains blocs, qui doivent également être ajoutés en tant qu'entrée de règle.
+          explanationCounting: Lors de la validation, chaque bloc n'est compté qu'une seule fois, même si plusieurs caractères d'un même bloc ont été utilisés.
+          exampleCounting: Supposons que vous saisissiez une entrée de règle dans le bloc "Smileys" avec une note de 3 points. Dans une soumission, l'utilisateur utilise 5 smileys. La soumission est maintenant évaluée à 3 points parce qu'un smiley a été utilisé.
+        intro: Le type de règle de bloc Unicode permet d'évaluer l'utilisation de certains caractères.
+      website:
+        label: URL/Domaine
+        title: Site Web
+        placeholder: https://exemple.com
+        url:
+          title: URL
+          intro: Entrez une URL qui n'est pas autorisée à soumettre une demande.
+          infoProtocol: Il est recommandé de commencer l'URL par le protocole ou par deux barres obliques pour les URL indépendants du protocole. Si la valeur ne commence pas par le protocole, la règle pourrait correspondre à des URL erronées.
+        intro: Le type de règle "site web" permet de filtrer les URL.
+        shortIntro: Permet de filtrer par site web spécifique
+      rating:
+        title: Évaluation
+        placeholder: Évaluation
+        infoValueEqualZero: Si l'évaluation est fixée à %zero%, l'élément ne sera pas détecté comme étant du spam puisque la valeur de l'évaluation du spam sera de toute façon %zero%.
+        infoCalculationMethod: La valeur de l'évaluation du spam est calculée en multipliant l'évaluation de l'élément et le facteur d'évaluation du spam défini dans la règle.
+        infoDefaultAndDataType: La note est un nombre flottant compris entre %minValue% et %maxValue%. Si aucune valeur n'est définie, la valeur par défaut est %one%.
+        intro: Le champ cote vous permet de définir le poids d'un article. Si vous indiquez un nombre positif, vous pouvez attribuer une valeur plus élevée à un élément. Si vous indiquez un nombre négatif, l'élément réduira le nombre total de points.
       domain:
         title: Domaine
-        intro: Saisissez un domaine qui n'est pas autorisé à soumettre une demande. Si vous saisissez un domaine, toutes les adresses électroniques de ce domaine seront également prises en compte.
-    ipAddress:
-      title: Adresse IP
-      shortIntro: Permet de filtrer par adresses IP et sous-réseaux
-      intro: Le type de règle relative à l'adresse IP permet de filtrer les adresses IP ou les sous-réseaux.
-      label: Adresse IP/ Sous-réseau
-      placeholder: 0.0.0.0
+        shortIntro: Permet de filtrer par domaines spécifiques
+        intro: Le type de règle de domaine permet de filtrer les domaines.
+        label: Domaine
+        placeholder: exemple.com
+        domain:
+          title: Domaine
+          intro: Saisissez un domaine qui n'est pas autorisé à soumettre une demande. Si vous saisissez un domaine, toutes les adresses électroniques de ce domaine seront également prises en compte.
       ipAddress:
         title: Adresse IP
-        intro: Saisissez une adresse IP qui n'est pas autorisée à effectuer des soumissions.
-      subnet:
-        title: Sous-réseau
-        intro: Entrez un sous-réseau avec un masque qui n'est pas autorisé à faire des soumissions.
-    provider:
-      title: Fournisseur
-      action:
-        configureGeoip2: Configuration de GeoIP2
-      country:
-        title: Pays
-        intro: Entrez un code de pays ISO qui n'est pas autorisé à faire des soumissions. Toutes les adresses IP enregistrées dans ce pays seront marquées comme spam.
-        infoCountryBlock: Si vous ajoutez un pays à la règle, cela signifie que personne de ce pays ne peut soumettre un formulaire. Bien que cela semble intéressant d'un côté, cela pourrait empêcher un utilisateur réel de soumettre un formulaire. Soyez prudent avec cette option. La localisation correcte des adresses IP n'est jamais garantie.
-      shortIntro: Permet de filtrer les informations spécifiques au fournisseur
-      asNumber:
-        title: Numéro AS
-        intro: Entrez un numéro AS qui n'est pas autorisé à faire des soumissions. Toutes les adresses IP appartenant à ce numéro AS seront bloquées.
-      intro: Le type de règle fournisseur permet de filtrer les numéros AS et les codes pays.
-      infoGeoip2: Pour utiliser le type de fournisseur, il est nécessaire de configurer la base de données MindMax GeoLite2, sinon les éléments du fournisseur n'auront aucun effet.
-      label: Numéro AS/pays
-    userAgent:
-      title: Agent utilisateur
-      text:
-        title: Texte
-        intro: Saisissez un mot qui doit être classé comme spam. Vous pouvez utiliser l'étoile %star% comme caractère générique. La fonctionnalité de correspondance recherchera %value%, il n'est donc pas nécessaire d'ajouter le caractère générique au début ou à la fin de la valeur.
-      regex:
-        title: Expression régulière
-        validation:
-          invalidRegexPattern: 'Le modèle saisi est invalide. Erreur : %error%'
-        intro: Saisissez un motif d'expression régulière qui correspondra à un mot non autorisé. Le motif doit être conforme aux exigences de PHP en matière d'expressions régulières.
-      intro: Le type de règle "agent utilisateur" permet de filtrer les mots et les expressions régulières dans l'agent utilisateur de l'utilisateur.
-      shortIntro: Permet de filtrer en fonction de mots ou de motifs spécifiques dans l'agent utilisateur
-      label: Agent utilisateur (Mot/Modèle)
-    word:
-      title: Mot
-      label: Mot/Modèle
-      text:
-        title: Texte
-        intro: Saisissez un mot qui doit être classé comme spam. Vous pouvez utiliser l'étoile %star% comme caractère générique. La fonctionnalité de correspondance recherchera %value%, il n'est donc pas nécessaire d'ajouter le caractère générique au début ou à la fin de la valeur.
-      regex:
-        title: Expression régulière
-        validation:
-          invalidRegexPattern: 'Le modèle saisi est invalide. Erreur : %error%'
-        intro: Saisissez un motif d'expression régulière qui correspondra à un mot non autorisé. Le motif doit être conforme aux exigences de PHP en matière d'expressions régulières.
-      intro: Le type de règle « mot » permet de filtrer les mots et les expressions régulières.
-      shortIntro: Permet de filtrer par mots ou modèles spécifiques
-  form:
-    rule:
-      title: Règle
-      description: Description
-      name: Nom
-      status: État
-      spamRatingFactor: Facteur d'évaluation des spams
-      spamRatingFactorHelp: Le facteur d'évaluation du spam vous permet de définir un facteur qui renforce ou affaiblit les entrées de cette règle. Si la valeur est supérieure à 1,0, les entrées sont renforcées, si la valeur est inférieure à 1,0, les entrées sont affaiblies.
-    ruleType: Type de règle
-    items:
-      title: Éléments
-      type: Type
-      rating: Évaluation
-      value: Valeur
-    addMultipleItems:
-      items: Éléments
-      itemsHelp: Ajoutez un élément par ligne.
-      rating: Évaluation
-      ratingHelp: Si elle n'est pas définie, l'évaluation par défaut est de 1,0. Si l'évaluation est fixée à 0,0, les éléments ne seront pas considérés comme des spams.
-      type: Type
-    status:
-      unsavedChanges: '%counter% changements non sauvegardés'
-      savingChanges: Sauvegarde de %counter% changement(s)
-      nothingToSave: Rien à sauvegarder
-    filter:
-      title: Filtrer les objets
-      itemSpamRating: Note de spam de l'élément
-    noItemsInTable:
-      title: Pas encore d'élément
-      text: Cette règle ne contient pas encore d'élément.
-    nothingFound:
-      title: Aucun trouvé
-      text: Il n'y a aucun élément correspondant à votre filtre.
-    modal:
-      importTxtFile:
-        title: Importer un fichier texte
-        file: Fichier
-        fileHelp: Choisissez le fichier texte (*.txt) que vous souhaitez importer depuis votre ordinateur.
-        action: Importer un fichier
-      importCsvFile:
-        title: Importer un fichier CSV
-        file: Fichier
-        fileHelp: Choisissez le fichier CSV (*.csv) aue vous souhaitez importer depuis votre ordinateur.
-        action: Importer un fichier
-      addingItems:
-        title: Ajouter des éléments
-        messageCompleted: Les données fournies ont étés traitées. Vous trouverez le résumé des éléments ajoutés, passés, et invalide ci-dessus. Vous pouvez maintenant fermer cette fenêtre.
-        progress:
-          dataProcessed: Données traitées
-          processingPleaseWait: Traitement des données…
-          processingStats: Traité %processedBytes% sur %totalBytes%
-          abortHint: Si vous fermez cette fenêtre, le traitement sera interrompu, et vous devrez recommencer plus tard.
-        summary:
-          addedLabel: Ajouté
-          addedTooltip: Ces éléments sont ajoutés à la règle.
-          skippedLabel: Passé
-          skippedTooltip: Ces éléments existent déjà, l'import les a donc ignoré.
-          invalidLabel: Invalide
-          invalidTooltip: Éléments invalides, par example quand le type d'élément n'existe pas ou que la valeur est du mauvais format.
-      deleteSelectedItems:
-        title: Supprimer les éléments sélectionnés
-        confirm: Voulez-vous vraiment supprimer les %counter% éléments règles sélectionnés ?
-        confirmOne: Voulez-vous vraiment supprimer l'élément règle sélectionné ?
-        confirmDelete: Oui, supprimer les éléments
-        progress:
-          deletingPleaseWait: Suppression des éléments... Veuillez patienter…
-  title: Règles
-  backToList: Revenir aux règles
-  createChooseType:
-    title: Sélectionner un type
-    intro: Veuillez choisir le type de règle que vous souhaitez créer. Les types disponibles sont utilisés pour différents champs et ne peuvent pas être modifiés pour une règle par la suite.
-  create:
-    title: Créer une règle
-    label:
+        shortIntro: Permet de filtrer par adresses IP et sous-réseaux
+        intro: Le type de règle relative à l'adresse IP permet de filtrer les adresses IP ou les sous-réseaux.
+        label: Adresse IP/ Sous-réseau
+        placeholder: 0.0.0.0
+        ipAddress:
+          title: Adresse IP
+          intro: Saisissez une adresse IP qui n'est pas autorisée à effectuer des soumissions.
+        subnet:
+          title: Sous-réseau
+          intro: Entrez un sous-réseau avec un masque qui n'est pas autorisé à faire des soumissions.
+      provider:
+        title: Fournisseur
+        action:
+          configureGeoip2: Configuration de GeoIP2
+        country:
+          title: Pays
+          intro: Entrez un code de pays ISO qui n'est pas autorisé à faire des soumissions. Toutes les adresses IP enregistrées dans ce pays seront marquées comme spam.
+          infoCountryBlock: Si vous ajoutez un pays à la règle, cela signifie que personne de ce pays ne peut soumettre un formulaire. Bien que cela semble intéressant d'un côté, cela pourrait empêcher un utilisateur réel de soumettre un formulaire. Soyez prudent avec cette option. La localisation correcte des adresses IP n'est jamais garantie.
+        shortIntro: Permet de filtrer les informations spécifiques au fournisseur
+        asNumber:
+          title: Numéro AS
+          intro: Entrez un numéro AS qui n'est pas autorisé à faire des soumissions. Toutes les adresses IP appartenant à ce numéro AS seront bloquées.
+        intro: Le type de règle fournisseur permet de filtrer les numéros AS et les codes pays.
+        infoGeoip2: Pour utiliser le type de fournisseur, il est nécessaire de configurer la base de données MindMax GeoLite2, sinon les éléments du fournisseur n'auront aucun effet.
+        label: Numéro AS/pays
+      userAgent:
+        title: Agent utilisateur
+        text:
+          title: Texte
+          intro: Saisissez un mot qui doit être classé comme spam. Vous pouvez utiliser l'étoile %star% comme caractère générique. La fonctionnalité de correspondance recherchera %value%, il n'est donc pas nécessaire d'ajouter le caractère générique au début ou à la fin de la valeur.
+        regex:
+          title: Expression régulière
+          validation:
+            invalidRegexPattern: 'Le modèle saisi est invalide. Erreur : %error%'
+          intro: Saisissez un motif d'expression régulière qui correspondra à un mot non autorisé. Le motif doit être conforme aux exigences de PHP en matière d'expressions régulières.
+        intro: Le type de règle "agent utilisateur" permet de filtrer les mots et les expressions régulières dans l'agent utilisateur de l'utilisateur.
+        shortIntro: Permet de filtrer en fonction de mots ou de motifs spécifiques dans l'agent utilisateur
+        label: Agent utilisateur (Mot/Modèle)
+      word:
+        title: Mot
+        label: Mot/Modèle
+        text:
+          title: Texte
+          intro: Saisissez un mot qui doit être classé comme spam. Vous pouvez utiliser l'étoile %star% comme caractère générique. La fonctionnalité de correspondance recherchera %value%, il n'est donc pas nécessaire d'ajouter le caractère générique au début ou à la fin de la valeur.
+        regex:
+          title: Expression régulière
+          validation:
+            invalidRegexPattern: 'Le modèle saisi est invalide. Erreur : %error%'
+          intro: Saisissez un motif d'expression régulière qui correspondra à un mot non autorisé. Le motif doit être conforme aux exigences de PHP en matière d'expressions régulières.
+        intro: Le type de règle « mot » permet de filtrer les mots et les expressions régulières.
+        shortIntro: Permet de filtrer par mots ou modèles spécifiques
+    form:
+      rule:
+        title: Règle
+        description: Description
+        name: Nom
+        status: État
+        spamRatingFactor: Facteur d'évaluation des spams
+        spamRatingFactorHelp: Le facteur d'évaluation du spam vous permet de définir un facteur qui renforce ou affaiblit les entrées de cette règle. Si la valeur est supérieure à 1,0, les entrées sont renforcées, si la valeur est inférieure à 1,0, les entrées sont affaiblies.
       ruleType: Type de règle
-  edit:
-    title: Modifier la règle %ruleName%
-  delete:
-    title: Supprimer la règle %ruleName%
-    confirm: Voulez-vous vraiment supprimer la règle %ruleName% ?
-    message:
-      successfullyDeleted: La règle %ruleName% a bien été supprimée.
-  filter:
-    dropdown: Filtrer la liste des règles
-    options:
-      all: Afficher tout
+      items:
+        title: Éléments
+        type: Type
+        rating: Évaluation
+        value: Valeur
+      addMultipleItems:
+        items: Éléments
+        itemsHelp: Ajoutez un élément par ligne.
+        rating: Évaluation
+        ratingHelp: Si elle n'est pas définie, l'évaluation par défaut est de 1,0. Si l'évaluation est fixée à 0,0, les éléments ne seront pas considérés comme des spams.
+        type: Type
+      status:
+        unsavedChanges: '%counter% changements non sauvegardés'
+        savingChanges: Sauvegarde de %counter% changement(s)
+        nothingToSave: Rien à sauvegarder
+      filter:
+        title: Filtrer les objets
+        itemSpamRating: Note de spam de l'élément
+      noItemsInTable:
+        title: Pas encore d'élément
+        text: Cette règle ne contient pas encore d'élément.
+      nothingFound:
+        title: Aucun trouvé
+        text: Il n'y a aucun élément correspondant à votre filtre.
+      modal:
+        importTxtFile:
+          title: Importer un fichier texte
+          file: Fichier
+          fileHelp: Choisissez le fichier texte (*.txt) que vous souhaitez importer depuis votre ordinateur.
+          action: Importer un fichier
+        importCsvFile:
+          title: Importer un fichier CSV
+          file: Fichier
+          fileHelp: Choisissez le fichier CSV (*.csv) aue vous souhaitez importer depuis votre ordinateur.
+          action: Importer un fichier
+        addingItems:
+          title: Ajouter des éléments
+          messageCompleted: Les données fournies ont étés traitées. Vous trouverez le résumé des éléments ajoutés, passés, et invalide ci-dessus. Vous pouvez maintenant fermer cette fenêtre.
+          progress:
+            dataProcessed: Données traitées
+            processingPleaseWait: Traitement des données…
+            processingStats: Traité %processedBytes% sur %totalBytes%
+            abortHint: Si vous fermez cette fenêtre, le traitement sera interrompu, et vous devrez recommencer plus tard.
+          summary:
+            addedLabel: Ajouté
+            addedTooltip: Ces éléments sont ajoutés à la règle.
+            skippedLabel: Passé
+            skippedTooltip: Ces éléments existent déjà, l'import les a donc ignoré.
+            invalidLabel: Invalide
+            invalidTooltip: Éléments invalides, par example quand le type d'élément n'existe pas ou que la valeur est du mauvais format.
+        deleteSelectedItems:
+          title: Supprimer les éléments sélectionnés
+          confirm: Voulez-vous vraiment supprimer les %counter% éléments règles sélectionnés ?
+          confirmOne: Voulez-vous vraiment supprimer l'élément règle sélectionné ?
+          confirmDelete: Oui, supprimer les éléments
+          progress:
+            deletingPleaseWait: Suppression des éléments... Veuillez patienter…
+    title: Règles
+    backToList: Revenir aux règles
+    createChooseType:
+      title: Sélectionner un type
+      intro: Veuillez choisir le type de règle que vous souhaitez créer. Les types disponibles sont utilisés pour différents champs et ne peuvent pas être modifiés pour une règle par la suite.
+    create:
+      title: Créer une règle
+      label:
+        ruleType: Type de règle
+    edit:
+      title: Modifier la règle %ruleName%
+    delete:
+      title: Supprimer la règle %ruleName%
+      confirm: Voulez-vous vraiment supprimer la règle %ruleName% ?
+      message:
+        successfullyDeleted: La règle %ruleName% a bien été supprimée.
+    filter:
+      dropdown: Filtrer la liste des règles
+      options:
+        all: Afficher tout
 submission:
   view:
     verification:

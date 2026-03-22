@@ -76,15 +76,16 @@ form:
   choices:
     systemDefault: 默认设置
     browserLanguage: 浏览语言
-rule:
-  edit:
-    title: 编辑角色%ruleName%
-  createChooseType:
-    title: 选择类型
-  create:
-    title: 创建角色
-  form:
-    ruleType: 角色类型
+rules:
+  fieldRule:
+    edit:
+      title: 编辑角色%ruleName%
+    createChooseType:
+      title: 选择类型
+    create:
+      title: 创建角色
+    form:
+      ruleType: 角色类型
 projectGroup:
   action:
     edit: 编辑类别

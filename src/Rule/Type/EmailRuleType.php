@@ -7,18 +7,18 @@ use Mosparo\Rule\Tester\EmailRuleTester;
 final class EmailRuleType extends AbstractRuleType
 {
     protected string $key = 'email';
-    protected string $name = 'rule.type.email.title';
-    protected string $description = 'rule.type.email.shortIntro';
+    protected string $name = 'rules.fieldRule.type.email.title';
+    protected string $description = 'rules.fieldRule.type.email.shortIntro';
     protected string $icon = 'ti ti-at';
     protected array $subtypes = [
         [
             'key' => 'email',
-            'name' => 'rule.type.email.email.title',
+            'name' => 'rules.fieldRule.type.email.email.title',
         ],
     ];
     protected string $testerClass = EmailRuleTester::class;
     protected array $targetFieldKeys = ['formData.input[email]', 'formData.textarea'];
-    protected string $helpTemplate = 'project_related/rule/type/help/email.html.twig';
+    protected string $helpTemplate = 'project_related/rules/field_rule/type/help/email.html.twig';
 
     public function getValidatorPattern(): array
     {

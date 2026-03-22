@@ -2,14 +2,14 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% form_theme form 'project_related/rule/_form_theme.html.twig' %}
+{% form_theme form 'project_related/rules/field_rule/_form_theme.html.twig' %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
 
     <div class="col-12 col-md-auto ms-auto mt-3 mt-md-0 rule-type-information">
         <div class="page-pretitle">
-            {{ 'rule.form.ruleType'|trans }}
+            {{ 'rules.fieldRule.form.ruleType'|trans }}
         </div>
         <div class="h1 page-title">
             <div class="rule-type-label">
@@ -27,7 +27,7 @@
             <div class="col-12 col-lg-4">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h3 class="card-title">{{ 'rule.form.rule.title'|trans }}</h3>
+                        <h3 class="card-title">{{ 'rules.fieldRule.form.rule.title'|trans }}</h3>
                     </div>
                     <div class="card-body" id="rule-form-fields">
                         {{ form_row(form.name) }}
@@ -40,7 +40,7 @@
             <div class="col-12 col-lg-8">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">{{ 'rule.form.items.title'|trans }}</h3>
+                        <h3 class="card-title">{{ 'rules.fieldRule.form.items.title'|trans }}</h3>
                         <button type="button" class="btn btn-info btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#help-modal">
                             <i class="ti ti-question-mark"></i>
                             {{ 'action.help'|trans }}
@@ -113,14 +113,14 @@
 
             <div class="col-12 d-flex flex-column flex-md-row justify-content-between">
                 <div class="mt-2 mt-md-0 flex-1 order-last order-md-first">
-                    <a href="{{ path('rule_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-mobile-100" tabindex="1000">
+                    <a href="{{ path('rules_field_rule_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-mobile-100" tabindex="1000">
                         <i class="ti ti-chevron-left"></i>
-                        {{ 'rule.backToList'|trans }}
+                        {{ 'rules.fieldRule.backToList'|trans }}
                     </a>
                 </div>
 
                 <div class="mt-2 mt-md-0">
-                    <a href="{{ path('rule_export_items', { '_projectId': activeProject.id, 'id': rule.id }) }}" class="btn btn-secondary w-mobile-100" id="export-items" download="rule_items_{{ rule.id }}.csv">
+                    <a href="{{ path('rules_field_rule_export_items', { '_projectId': activeProject.id, 'id': rule.id }) }}" class="btn btn-secondary w-mobile-100" id="export-items" download="rule_items_{{ rule.id }}.csv">
                         <i class="ti ti-file-type-csv"></i>
                         {{ 'action.exportItems'|trans }}
                     </a>
@@ -129,14 +129,14 @@
                 {% if canManage %}
                     <div class="order-first order-md-last d-flex flex-column flex-md-row align-items-center justify-content-end flex-1">
                         <div class="status status-warning me-3 text-nowrap d-none" id="status-unsaved-changes">
-                            {{ 'rule.form.status.unsavedChanges'|trans({'%counter%': '<span></span>'})|raw }}
+                            {{ 'rules.fieldRule.form.status.unsavedChanges'|trans({'%counter%': '<span></span>'})|raw }}
                         </div>
                         <div class="status status-info me-3 text-nowrap d-none" id="status-saving-changes">
                             <div class="status-dot status-dot-animated"></div>
-                            {{ 'rule.form.status.savingChanges'|trans({'%counter%': '<span></span>'})|raw }}
+                            {{ 'rules.fieldRule.form.status.savingChanges'|trans({'%counter%': '<span></span>'})|raw }}
                         </div>
                         <div class="status status-gray me-3 text-nowrap d-none" id="status-no-changes">
-                            {{ 'rule.form.status.nothingToSave'|trans }}
+                            {{ 'rules.fieldRule.form.status.nothingToSave'|trans }}
                         </div>
                         <button type="button" class="btn btn-primary mt-2 mt-md-0 w-mobile-100" id="btn-saving-changes">
                             <i class="ti ti-device-floppy"></i>
@@ -177,13 +177,13 @@
                     <div class="modal-header">
                         <h5 class="modal-title">
                             <i class="ti ti-filter"></i>
-                            {{ 'rule.form.filter.title'|trans }}
+                            {{ 'rules.fieldRule.form.filter.title'|trans }}
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
                     </div>
                     <div class="modal-body position-relative">
                         <div class="form-group">
-                            <label class="form-label" for="filter-type">{{ 'rule.form.items.type'|trans }}</label>
+                            <label class="form-label" for="filter-type">{{ 'rules.fieldRule.form.items.type'|trans }}</label>
                             <select name="filter_type" id="filter-type" class="form-select">
                                 <option value="">{{ 'form.pleaseChoose'|trans }}</option>
                                 {% for type, label in typeOptions %}
@@ -193,19 +193,19 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="filter-value">{{ 'rule.form.items.value'|trans }}</label>
+                            <label class="form-label" for="filter-value">{{ 'rules.fieldRule.form.items.value'|trans }}</label>
                             <input name="filter_value" id="filter-value" class="form-control" value="">
                             <div class="form-text mb-0 help-text">
-                                {{ 'rule.form.filter.useWildcard'|trans({'%wildcard%': '<code>*</code>'})|raw }}
+                                {{ 'rules.fieldRule.form.filter.useWildcard'|trans({'%wildcard%': '<code>*</code>'})|raw }}
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="filter-srf-min">{{ 'rule.form.items.rating'|trans }}</label>
+                            <label class="form-label" for="filter-srf-min">{{ 'rules.fieldRule.form.items.rating'|trans }}</label>
                             <div class="input-group">
                                 <input type="number" class="form-control text-center" name="filter_srf_min" id="filter-srf-min">
                                 <span class="input-group-text"><i class="ti ti-math-lower"></i></span>
-                                <span class="input-group-text">{{ 'rule.form.filter.itemSpamRating'|trans }}</span>
+                                <span class="input-group-text">{{ 'rules.fieldRule.form.filter.itemSpamRating'|trans }}</span>
                                 <span class="input-group-text"><i class="ti ti-math-lower"></i></span>
                                 <input type="number" class="form-control text-center" name="filter_srf_max" id="filter-srf-max">
                             </div>
@@ -241,7 +241,7 @@
                     <div class="modal-body position-relative">
                         <form>
                             <div class="form-group">
-                                <label class="form-label form-label required" for="rule_add_multiple_items_type">{{ 'rule.form.addMultipleItems.type'|trans }}</label>
+                                <label class="form-label form-label required" for="rule_add_multiple_items_type">{{ 'rules.fieldRule.form.addMultipleItems.type'|trans }}</label>
                                 <select id="rule_add_multiple_items_type" name="rule_add_multiple_items[type]" class="form-select rule-item-type form-select">
                                     {% for value, label in typeOptions %}
                                         <option value="{{ value }}">{{ label }}</option>
@@ -249,14 +249,14 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label form-label required" for="rule_add_multiple_items_items">{{ 'rule.form.addMultipleItems.items'|trans }}</label>
+                                <label class="form-label form-label required" for="rule_add_multiple_items_items">{{ 'rules.fieldRule.form.addMultipleItems.items'|trans }}</label>
                                 <textarea id="rule_add_multiple_items_items" name="rule_add_multiple_items[items]" required="required" class="form-control"></textarea>
-                                <div class="form-text mb-0 help-text">{{ 'rule.form.addMultipleItems.itemsHelp'|trans }}</div>
+                                <div class="form-text mb-0 help-text">{{ 'rules.fieldRule.form.addMultipleItems.itemsHelp'|trans }}</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label form-label required" for="rule_add_multiple_items_rating">{{ 'rule.form.addMultipleItems.rating'|trans }}</label>
+                                <label class="form-label form-label required" for="rule_add_multiple_items_rating">{{ 'rules.fieldRule.form.addMultipleItems.rating'|trans }}</label>
                                 <input type="number" id="rule_add_multiple_items_rating" name="rule_add_multiple_items[rating]" required="required" min="-1000000" max="1000000" step="any" class="form-control" value="1.0">
-                                <div class="form-text mb-0 help-text">{{ 'rule.form.addMultipleItems.ratingHelp'|trans }}</div>
+                                <div class="form-text mb-0 help-text">{{ 'rules.fieldRule.form.addMultipleItems.ratingHelp'|trans }}</div>
                             </div>
                         </form>
                     </div>
@@ -277,14 +277,14 @@
                     <div class="modal-header">
                         <h5 class="modal-title">
                             <i class="ti ti-file-type-txt"></i>
-                            {{ 'rule.form.modal.importTxtFile.title'|trans }}
+                            {{ 'rules.fieldRule.form.modal.importTxtFile.title'|trans }}
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
                     </div>
                     <div class="modal-body position-relative">
                         <form>
                             <div class="form-group">
-                                <label class="form-label form-label required" for="rule_import_txt_file_type">{{ 'rule.form.addMultipleItems.type'|trans }}</label>
+                                <label class="form-label form-label required" for="rule_import_txt_file_type">{{ 'rules.fieldRule.form.addMultipleItems.type'|trans }}</label>
                                 <select id="rule_import_txt_file_type" name="rule_import_txt_file[type]" class="form-select rule-item-type form-select">
                                     {% for value, label in typeOptions %}
                                         <option value="{{ value }}">{{ label }}</option>
@@ -292,14 +292,14 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label form-label required" for="rule_import_txt_file_file">{{ 'rule.form.modal.importTxtFile.file'|trans }}</label>
+                                <label class="form-label form-label required" for="rule_import_txt_file_file">{{ 'rules.fieldRule.form.modal.importTxtFile.file'|trans }}</label>
                                 <input type="file" id="rule_import_txt_file_file" name="rule_import_txt_file[file]" required="required" class="form-control" accept="text/plain">
-                                <div class="form-text mb-0 help-text">{{ 'rule.form.modal.importTxtFile.fileHelp'|trans }}</div>
+                                <div class="form-text mb-0 help-text">{{ 'rules.fieldRule.form.modal.importTxtFile.fileHelp'|trans }}</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label form-label required" for="rule_import_txt_file_rating">{{ 'rule.form.addMultipleItems.rating'|trans }}</label>
+                                <label class="form-label form-label required" for="rule_import_txt_file_rating">{{ 'rules.fieldRule.form.addMultipleItems.rating'|trans }}</label>
                                 <input type="number" id="rule_import_txt_file_rating" name="rule_import_txt_file[rating]" required="required" min="-1000000" max="1000000" step="any" class="form-control" value="1.0">
-                                <div class="form-text mb-0 help-text">{{ 'rule.form.addMultipleItems.ratingHelp'|trans }}</div>
+                                <div class="form-text mb-0 help-text">{{ 'rules.fieldRule.form.addMultipleItems.ratingHelp'|trans }}</div>
                             </div>
                         </form>
                     </div>
@@ -307,7 +307,7 @@
                         <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
                         <button type="button" class="btn btn-primary ms-auto" id="btn-import-txt-file">
                             <i class="ti ti-file-upload"></i>
-                            {{ 'rule.form.modal.importTxtFile.action'|trans }}
+                            {{ 'rules.fieldRule.form.modal.importTxtFile.action'|trans }}
                         </button>
                     </div>
                 </div>
@@ -320,16 +320,16 @@
                     <div class="modal-header">
                         <h5 class="modal-title">
                             <i class="ti ti-file-type-csv"></i>
-                            {{ 'rule.form.modal.importCsvFile.title'|trans }}
+                            {{ 'rules.fieldRule.form.modal.importCsvFile.title'|trans }}
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
                     </div>
                     <div class="modal-body position-relative">
                         <form>
                             <div class="form-group">
-                                <label class="form-label form-label required" for="rule_import_csv_file_file">{{ 'rule.form.modal.importCsvFile.file'|trans }}</label>
+                                <label class="form-label form-label required" for="rule_import_csv_file_file">{{ 'rules.fieldRule.form.modal.importCsvFile.file'|trans }}</label>
                                 <input type="file" id="rule_import_csv_file_file" name="rule_import_csv_file[file]" required="required" class="form-control" accept="text/csv">
-                                <div class="form-text mb-0 help-text">{{ 'rule.form.modal.importCsvFile.fileHelp'|trans }}</div>
+                                <div class="form-text mb-0 help-text">{{ 'rules.fieldRule.form.modal.importCsvFile.fileHelp'|trans }}</div>
                             </div>
                         </form>
                     </div>
@@ -337,7 +337,7 @@
                         <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
                         <button type="button" class="btn btn-primary ms-auto" id="btn-import-csv-file">
                             <i class="ti ti-file-upload"></i>
-                            {{ 'rule.form.modal.importCsvFile.action'|trans }}
+                            {{ 'rules.fieldRule.form.modal.importCsvFile.action'|trans }}
                         </button>
                     </div>
                 </div>
@@ -356,33 +356,33 @@
                         </div>
                         <h3 class="modal-title">
                             <span id="progress-modal-title-please-wait">{{ 'general.pleaseWait'|trans }}</span>
-                            <span id="progress-modal-title-items-added" class="d-none">{{ 'rule.form.modal.addingItems.progress.dataProcessed'|trans }}</span>
+                            <span id="progress-modal-title-items-added" class="d-none">{{ 'rules.fieldRule.form.modal.addingItems.progress.dataProcessed'|trans }}</span>
                         </h3>
                         <div id="add-multiple-items-loader">
                             <div class="progress-bar-container">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <div id="progress-modal-status">{{ 'rule.form.modal.addingItems.progress.processingPleaseWait'|trans }}</div>
-                                    <div class="ms-auto">{{ 'rule.form.modal.addingItems.progress.processingStats'|trans({'%processedBytes%': '<strong id="adding-items-processed">0</strong>', '%totalBytes%': '<strong id="adding-items-total">0</strong>'})|raw }}</div>
+                                    <div id="progress-modal-status">{{ 'rules.fieldRule.form.modal.addingItems.progress.processingPleaseWait'|trans }}</div>
+                                    <div class="ms-auto">{{ 'rules.fieldRule.form.modal.addingItems.progress.processingStats'|trans({'%processedBytes%': '<strong id="adding-items-processed">0</strong>', '%totalBytes%': '<strong id="adding-items-total">0</strong>'})|raw }}</div>
                                 </div>
                                 <div class="progress mb-2">
                                     <div class="progress-bar" id="adding-items-progress-bar"></div>
                                 </div>
                                 <div class="d-flex flex-row justify-content-between mb-4">
-                                    <div class="text-success informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rule.form.modal.addingItems.summary.addedTooltip'|trans|escape('html_attr') }}">
-                                        {{ 'rule.form.modal.addingItems.summary.addedLabel'|trans|escape('html_attr') }}: <span id="number-of-added-items">0</span>
+                                    <div class="text-success informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rules.fieldRule.form.modal.addingItems.summary.addedTooltip'|trans|escape('html_attr') }}">
+                                        {{ 'rules.fieldRule.form.modal.addingItems.summary.addedLabel'|trans|escape('html_attr') }}: <span id="number-of-added-items">0</span>
                                     </div>
-                                    <div class="text-info informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rule.form.modal.addingItems.summary.skippedTooltip'|trans|escape('html_attr') }}">
-                                        {{ 'rule.form.modal.addingItems.summary.skippedLabel'|trans|escape('html_attr') }}: <span id="number-of-skipped-items">0</span>
+                                    <div class="text-info informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rules.fieldRule.form.modal.addingItems.summary.skippedTooltip'|trans|escape('html_attr') }}">
+                                        {{ 'rules.fieldRule.form.modal.addingItems.summary.skippedLabel'|trans|escape('html_attr') }}: <span id="number-of-skipped-items">0</span>
                                     </div>
-                                    <div class="text-danger informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rule.form.modal.addingItems.summary.invalidTooltip'|trans|escape('html_attr') }}">
-                                        {{ 'rule.form.modal.addingItems.summary.invalidLabel'|trans|escape('html_attr') }}: <span id="number-of-invalid-items">0</span>
+                                    <div class="text-danger informative-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'rules.fieldRule.form.modal.addingItems.summary.invalidTooltip'|trans|escape('html_attr') }}">
+                                        {{ 'rules.fieldRule.form.modal.addingItems.summary.invalidLabel'|trans|escape('html_attr') }}: <span id="number-of-invalid-items">0</span>
                                     </div>
                                 </div>
                                 <div class="alert alert-info mb-0 text-start">
-                                    {{ 'rule.form.modal.addingItems.progress.abortHint'|trans }}
+                                    {{ 'rules.fieldRule.form.modal.addingItems.progress.abortHint'|trans }}
                                 </div>
                                 <div class="alert alert-success mb-0 text-start d-none">
-                                    {{ 'rule.form.modal.addingItems.messageCompleted'|trans }}
+                                    {{ 'rules.fieldRule.form.modal.addingItems.messageCompleted'|trans }}
                                 </div>
                             </div>
                         </div>
@@ -407,10 +407,10 @@
                             {{ 'general.areYouSure'|trans }}
                         </h3>
                         <p class="text-secondary d-none" id="delete-selected-items-multiple">
-                            {{ 'rule.form.modal.deleteSelectedItems.confirm'|trans({ '%counter%': '<strong class="selected-rows-counter"></strong>' })|raw }}
+                            {{ 'rules.fieldRule.form.modal.deleteSelectedItems.confirm'|trans({ '%counter%': '<strong class="selected-rows-counter"></strong>' })|raw }}
                         </p>
                         <p class="text-secondary d-none" id="delete-selected-items-one">
-                            {{ 'rule.form.modal.deleteSelectedItems.confirmOne'|trans }}
+                            {{ 'rules.fieldRule.form.modal.deleteSelectedItems.confirmOne'|trans }}
                         </p>
                         <p class="text-secondary mb-0">
                             {{ 'general.infoUndo'|trans }}
@@ -420,13 +420,13 @@
                         <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
                         <button type="button" class="btn btn-danger ms-auto" id="execute-delete-selected-items">
                             <i class="ti ti-trash"></i>
-                            {{ 'rule.form.modal.deleteSelectedItems.confirmDelete'|trans }}
+                            {{ 'rules.fieldRule.form.modal.deleteSelectedItems.confirmDelete'|trans }}
                         </button>
                     </div>
                     <div class="modal-loader">
                         <div class="loader-content">
                             <div class="loader"></div>
-                            <span class="mt-5">{{ 'rule.form.modal.deleteSelectedItems.progress.deletingPleaseWait'|trans }}</span>
+                            <span class="mt-5">{{ 'rules.fieldRule.form.modal.deleteSelectedItems.progress.deletingPleaseWait'|trans }}</span>
                         </div>
                     </div>
                 </div>
@@ -453,8 +453,8 @@
             var usedChunkSize = baseChunkSize;
             var placeholderEl = $('<div></div>').addClass('empty')[0];
 
-            var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rule.form.noItemsInTable.title'|trans }}')[0];
-            var emptyTableTextEl = $('<p></p>').addClass('empty-subtitle text-secondary').appendTo(placeholderEl).text('{{ 'rule.form.noItemsInTable.text'|trans }}')[0];
+            var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.title'|trans }}')[0];
+            var emptyTableTextEl = $('<p></p>').addClass('empty-subtitle text-secondary').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.text'|trans }}')[0];
             var emptyTableActionEl = $('<div></div>').addClass('empty-action').appendTo(placeholderEl)[0];
             var emptyTableAddItemButtonEl = $('<button></button>')
                 .attr('type', 'button')
@@ -479,14 +479,14 @@
                 if (numberOfActiveFilters) {
                     counterEl.text(numberOfActiveFilters).removeClass('d-none');
 
-                    emptyTableTitleEl.textContent = '{{ 'rule.form.nothingFound.title'|trans }}';
-                    emptyTableTextEl.textContent = '{{ 'rule.form.nothingFound.text'|trans }}';
+                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.title'|trans }}';
+                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.text'|trans }}';
                     emptyTableAdjustFilterButtonEl.classList.remove('d-none');
                     emptyTableAddItemButtonEl.classList.add('d-none');
                 } else {
                     counterEl.text('').addClass('d-none');
-                    emptyTableTitleEl.textContent = '{{ 'rule.form.noItemsInTable.title'|trans }}';
-                    emptyTableTextEl.textContent = '{{ 'rule.form.noItemsInTable.text'|trans }}';
+                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.title'|trans }}';
+                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.text'|trans }}';
                     emptyTableAdjustFilterButtonEl.classList.add('d-none');
                     emptyTableAddItemButtonEl.classList.remove('d-none');
                 }
@@ -561,7 +561,7 @@
                     };
                     processingChanges = true;
 
-                    $.post('{{ path('rule_edit_save_changes', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                    $.post('{{ path('rules_field_rule_edit_save_changes', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
                         let fieldMappings = {
                             name: '#rule_form_name',
                             description: '#rule_form_description',
@@ -712,7 +712,7 @@
                                 items: JSON.stringify(items),
                             };
 
-                            await $.post('{{ path('rule_edit_add_multiple', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                            await $.post('{{ path('rules_field_rule_edit_add_multiple', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
                                 let percent = (processedBytes / totalBytes) * 100;
 
                                 $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(processedBytes));
@@ -755,7 +755,7 @@
                     rowHeight: 40,
                     addRowPos: 'top',
 
-                    ajaxURL: '{{ path('rule_load_items', {'_projectId': activeProject.id, 'id': rule.id}) }}',
+                    ajaxURL: '{{ path('rules_field_rule_load_items', {'_projectId': activeProject.id, 'id': rule.id}) }}',
                     ajaxParams: function() {
                         return {
                             token: '{{ csrf_token('manage-rule') }}',
@@ -810,9 +810,9 @@
                         }
                     },
                     columns:[
-                        { title: '{{ 'rule.form.items.type'|trans }}', field: 'type', width: '25%', minWidth: 100, resizable: false, vertAlign: 'middle', formatter: 'lookup', formatterParams: typeOptions,  {% if canManage %}editor: 'list', editorParams: { values: typeOptions }, editable: canEditCell,{% endif %} },
-                        { title: '{{ 'rule.form.items.value'|trans }}', field: 'value', width: '50%', resizable: false, vertAlign: 'middle', {% if valueOptions %}formatter: 'lookup', formatterParams: valueOptions,{% endif %} {% if canManage %}{% if valueOptions %}editor: 'list', editorParams: { values: valueOptions },{% else %}editor: 'input', validator: [{type: valueValidator}],{% endif %} editable: canEditCell,{% endif %} widthGrow: 4 },
-                        { title: '{{ 'rule.form.items.rating'|trans }}', field: 'spamRatingFactor', width: '15%', minWidth: 100, resizable: false, vertAlign: 'middle', hozAlign: 'right', {% if canManage %}editor: 'number', editable: canEditCell, validator: ['numeric', 'min:-1000000', 'max:1000000'], editorParams: {
+                        { title: '{{ 'rules.fieldRule.form.items.type'|trans }}', field: 'type', width: '25%', minWidth: 100, resizable: false, vertAlign: 'middle', formatter: 'lookup', formatterParams: typeOptions,  {% if canManage %}editor: 'list', editorParams: { values: typeOptions }, editable: canEditCell,{% endif %} },
+                        { title: '{{ 'rules.fieldRule.form.items.value'|trans }}', field: 'value', width: '50%', resizable: false, vertAlign: 'middle', {% if valueOptions %}formatter: 'lookup', formatterParams: valueOptions,{% endif %} {% if canManage %}{% if valueOptions %}editor: 'list', editorParams: { values: valueOptions },{% else %}editor: 'input', validator: [{type: valueValidator}],{% endif %} editable: canEditCell,{% endif %} widthGrow: 4 },
+                        { title: '{{ 'rules.fieldRule.form.items.rating'|trans }}', field: 'spamRatingFactor', width: '15%', minWidth: 100, resizable: false, vertAlign: 'middle', hozAlign: 'right', {% if canManage %}editor: 'number', editable: canEditCell, validator: ['numeric', 'min:-1000000', 'max:1000000'], editorParams: {
                                 min: -1000000,
                                 max: 1000000,
                                 step: 'any',
@@ -1045,7 +1045,7 @@
                         };
 
                         $('#delete-selected-items-modal .modal-loader').addClass('visible');
-                        $.post('{{ path('rule_edit_delete_selected', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                        $.post('{{ path('rules_field_rule_edit_delete_selected', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
                             if (responseData.success) {
                                 table.refreshFilter();
                                 $('#delete-selected-items-modal').modal('hide');
@@ -1177,7 +1177,7 @@
                                 };
                                 parser.pause();
 
-                                $.post('{{ path('rule_edit_add_multiple', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
+                                $.post('{{ path('rules_field_rule_edit_add_multiple', {_projectId: activeProject.id, id: rule.id}) }}', data, function (responseData) {
                                     let percent = (results.meta.cursor / totalBytes) * 100;
 
                                     $('#adding-items-processed').text(convertBytesIntoHumanReadableFormat(results.meta.cursor));

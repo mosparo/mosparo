@@ -1,7 +1,0 @@
-{% extends 'project_related/rule/form.html.twig' %}
-
-{% trans_default_domain 'mosparo' %}
-
-{% block documentTitle %}{{ 'rule.edit.title'|trans({ '%ruleName%': rule.name }) }} - {{ parent() }}{% endblock %}
-{% block pagePreTitle %}{{ parent() }} {{ 'rule.title'|trans }} <i class="ti ti-chevron-right"></i>{% endblock %}
-{% block pageTitle %}{{ 'rule.edit.title'|trans({ '%ruleName%': rule.name }) }}{% endblock %}

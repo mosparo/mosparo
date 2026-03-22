@@ -26,10 +26,10 @@ class RuleFormType extends AbstractType
         $readonly = $options['readonly'];
 
         $builder
-            ->add('name', TextType::class, ['label' => 'rule.form.rule.name', 'disabled' => $readonly, 'attr' => ['data-field-name' => 'name']])
-            ->add('description', TextareaType::class, ['label' => 'rule.form.rule.description', 'required' => false, 'disabled' => $readonly, 'attr' => ['data-field-name' => 'description']])
+            ->add('name', TextType::class, ['label' => 'rules.fieldRule.form.rule.name', 'disabled' => $readonly, 'attr' => ['data-field-name' => 'name']])
+            ->add('description', TextareaType::class, ['label' => 'rules.fieldRule.form.rule.description', 'required' => false, 'disabled' => $readonly, 'attr' => ['data-field-name' => 'description']])
             ->add('status', ChoiceType::class, [
-                'label' => 'rule.form.rule.status',
+                'label' => 'rules.fieldRule.form.rule.status',
                 'choices' => ['state.inactive' => 0, 'state.active' => 1],
                 'disabled' => $readonly,
                 'attr' => [
@@ -38,10 +38,10 @@ class RuleFormType extends AbstractType
                 ],
             ])
             ->add('spamRatingFactor', NumberType::class, [
-                'label' => 'rule.form.rule.spamRatingFactor',
+                'label' => 'rules.fieldRule.form.rule.spamRatingFactor',
                 'required' => false,
                 'disabled' => $readonly,
-                'help' => 'rule.form.rule.spamRatingFactorHelp',
+                'help' => 'rules.fieldRule.form.rule.spamRatingFactorHelp',
                 'html5' => true,
                 'scale' => 1,
                 'attr' => [

@@ -76,148 +76,149 @@ dashboard:
   title: Nástěnka
   dateRange:
     dropdown: Vyberte viditelný rozsah dat
-rule:
-  list:
-    name: Název
-    type: Typ
-    status: Stav
-    actions: Akce
-  createChooseType:
-    title: Zvolte typ
-    intro: Vyberte typ pravidla, které chcete vytvořit. Dostupné typy se používají pro různá pole a nelze je pro pravidlo dodatečně změnit.
-  create:
-    title: Vytvořit pravidlo
-  edit:
-    title: Upravit pravidlo %ruleName%
-  form:
-    ruleType: Typ pravidla
-    rule:
-      title: Pravidlo
+rules:
+  fieldRule:
+    list:
       name: Název
-      description: Popis
-      status: Stav
-      spamRatingFactor: Faktor hodnocení spamu
-      spamRatingFactorHelp: Pomocí faktoru hodnocení spamu můžete definovat faktor, který posiluje nebo oslabuje záznamy tohoto pravidla. Pokud je hodnota větší než 1,0, jsou položky posíleny, pokud je hodnota menší než 1,0, jsou položky poníženy.
-    addMultipleItems:
-      itemsHelp: Přidejte jednu položku na řádek.
-      items: Položky
-      rating: Hodnocení
-      ratingHelp: Pokud není nastaveno, je výchozí hodnocení 1,0. Pokud je hodnocení nastaveno na 0,0, položky nebudou hodnoceny jako spam.
-    items:
-      title: Položky
       type: Typ
-      rating: Hodnocení
-  delete:
-    message:
-      successfullyDeleted: Pravidlo %ruleName% bylo úspěšně odstraněno.
-    title: Odstranit pravidlo %ruleName%
-    confirm: Opravdu chcete odstranit pravidlo %ruleName%?
-  type:
-    domain:
-      shortIntro: Umožňuje filtrovat podle konkrétních domén
-      title: Doména
+      status: Stav
+      actions: Akce
+    createChooseType:
+      title: Zvolte typ
+      intro: Vyberte typ pravidla, které chcete vytvořit. Dostupné typy se používají pro různá pole a nelze je pro pravidlo dodatečně změnit.
+    create:
+      title: Vytvořit pravidlo
+    edit:
+      title: Upravit pravidlo %ruleName%
+    form:
+      ruleType: Typ pravidla
+      rule:
+        title: Pravidlo
+        name: Název
+        description: Popis
+        status: Stav
+        spamRatingFactor: Faktor hodnocení spamu
+        spamRatingFactorHelp: Pomocí faktoru hodnocení spamu můžete definovat faktor, který posiluje nebo oslabuje záznamy tohoto pravidla. Pokud je hodnota větší než 1,0, jsou položky posíleny, pokud je hodnota menší než 1,0, jsou položky poníženy.
+      addMultipleItems:
+        itemsHelp: Přidejte jednu položku na řádek.
+        items: Položky
+        rating: Hodnocení
+        ratingHelp: Pokud není nastaveno, je výchozí hodnocení 1,0. Pokud je hodnocení nastaveno na 0,0, položky nebudou hodnoceny jako spam.
+      items:
+        title: Položky
+        type: Typ
+        rating: Hodnocení
+    delete:
+      message:
+        successfullyDeleted: Pravidlo %ruleName% bylo úspěšně odstraněno.
+      title: Odstranit pravidlo %ruleName%
+      confirm: Opravdu chcete odstranit pravidlo %ruleName%?
+    type:
       domain:
+        shortIntro: Umožňuje filtrovat podle konkrétních domén
         title: Doména
-        intro: Zadejte doménu, která nemá povoleno odeslání. V případě zadání, budou zachyceny také všechny e-mailové adresy s touto doménou.
-      placeholder: domena.cz
-      label: Doména
-      intro: Typ pravidla domény umožňuje filtrovat dle domény.
-    email:
-      title: E-mail
-      placeholder: info@domena.cz
-      label: E-mailová adresa
+        domain:
+          title: Doména
+          intro: Zadejte doménu, která nemá povoleno odeslání. V případě zadání, budou zachyceny také všechny e-mailové adresy s touto doménou.
+        placeholder: domena.cz
+        label: Doména
+        intro: Typ pravidla domény umožňuje filtrovat dle domény.
       email:
-        title: E-mailová adresa
-        intro: Zadejte e-mailovou adresu, která není oprávněna odeslat příspěvek.
-      shortIntro: Umožňuje filtrovat podle konkrétních e-mailových adres
-      intro: Typ pravidla e-mailu umožňuje filtrovat e-mailové adresy.
-    ipAddress:
-      shortIntro: Umožňuje filtrovat podle IP adres a podsítí
-      title: IP adresa
-      label: IP adresa/podsíť
-      placeholder: 0.0.0.0
+        title: E-mail
+        placeholder: info@domena.cz
+        label: E-mailová adresa
+        email:
+          title: E-mailová adresa
+          intro: Zadejte e-mailovou adresu, která není oprávněna odeslat příspěvek.
+        shortIntro: Umožňuje filtrovat podle konkrétních e-mailových adres
+        intro: Typ pravidla e-mailu umožňuje filtrovat e-mailové adresy.
       ipAddress:
-        intro: Zadejte IP adresu, která nemá povoleno odesílat žádné požadavky.
+        shortIntro: Umožňuje filtrovat podle IP adres a podsítí
         title: IP adresa
-      subnet:
-        intro: Zadejte podsíť s maskou, která nemá povoleno odesílat žádné požadavky.
-        title: Podsíť
-      intro: Typ pravidla IP adresy umožňuje filtrovat IP adresy nebo podsítě.
-    provider:
-      title: Poskytovatel
-      shortIntro: Umožnuje filtrovat dle informací konkrétního poskytovatele
-      intro: Typ pravidla pro poskytovatele umožňuje filtrovat čísla AS a kódy zemí.
-      label: Číslo AS/země
-      action:
-        configureGeoip2: Konfigurace GeoIP2
-      asNumber:
-        title: Číslo AS
-        intro: Zadejte číslo přidruženého systému, který nesmí odesílat žádné požadavky. Všechny IP adresy, které patří k tomuto číslu přidruženého systému, budou zablokovány.
-      country:
-        title: Země
-        infoCountryBlock: Pokud přidáte zemi do pravidla, znamená to, že nikdo z této země nemůže odeslat požadavek. To sice na jednu stranu zní dobře, ale může to znamenat, že to skutečnému uživateli zablokuje možnost odeslat formulář. Buďte prosím s touto možností opatrní. Správná lokalizace IP adres není nikdy zaručena.
-        intro: Zadejte kód země ISO, který není povolen pro odeslání požadavku. Všechny IP adresy registrované v této zemi budou označeny jako spam.
-      infoGeoip2: Pro použití typu poskytovatele je nutné nakonfigurovat databázi MindMax GeoLite2, jinak nebudou mít položky poskytovatele žádný účinek.
-    unicodeBlock:
-      shortIntro: Filtruje vstup na základě použitých znaků.
-      title: Blok Unicode
-      label: Blok Unicode
-      intro: Typ blokového pravidla Unicode umožňuje vyhodnotit použití určitých znaků.
-      block:
-        title: Blok
-        intro: Vyberte jeden z bloků, který by měl být při zadávání odpovídajícím způsobem ohodnocen. Poté zadejte odpovídající hodnocení.
-        hintExtended: Vezměte prosím na vědomí, že existují rozšíření a doplňky některých bloků, které musí být také přidány jako položka pravidla.
-        explanationCounting: Při ověřování se každý blok započítává pouze jednou, i když bylo použito několik znaků z jednoho bloku.
-        exampleCounting: Předpokládejme, že zadáte položku pravidla s blokem "Smajlíci" s hodnocením 3 body. Uživatel při odesílání použije 5 smajlíků. Záznam je nyní ohodnocen 3 body, protože byl použit smajlík.
-    userAgent:
-      title: Uživatelský agent
-      label: Uživatelský agent (Slovo/Vzor)
-      text:
-        title: Text
-        intro: Zadejte slovo, které má být vyhodnoceno jako spam. Jako zástupný znak můžete použít hvězdičku %star%. Funkce pro porovnávání bude hledat %value%, takže nemusíte přidávat zástupný znak na začátek nebo na konec hodnoty.
-      regex:
-        title: Regulární výraz
-        intro: Zadejte vzor regulárního výrazu, který bude odpovídat nepovolenému slovu. Vzor musí splňovat požadavky na regulární výrazy PHP.
-        validation:
-          invalidRegexPattern: 'Zadaný vzor je neplatný. Chyba: %error%'
-      shortIntro: Umožňuje filtrovat podle určitých slov nebo vzorů v agentu uživatele
-      intro: Typ pravidla pro agenta uživatele umožňuje filtrovat slova a vzory regulárních výrazů v uživatelském agentovi uživatele.
-    website:
-      shortIntro: Umožňuje filtrovat podle konkrétních webových stránek
-      title: Webové stránky
-      url:
-        title: URL
-        intro: Zadejte adresu URL, která nemá povoleno odeslání.
-        infoProtocol: Doporučujeme začínat adresu URL protokolem nebo dvěma lomítky pro adresy URL nezávislé na protokolu. Pokud hodnota nezačíná protokolem, mohlo by pravidlo odpovídat nesprávným URL.
-      intro: Typ pravidla pro webové stránky umožňuje filtrovat adresy URL.
-      label: URL/doména
-      placeholder: https://domena.cz
-    word:
-      text:
-        title: Text
-        intro: Zadejte slovo, které má být vyhodnoceno jako spam. Jako zástupný znak můžete použít hvězdičku %star%. Funkce pro porovnávání bude hledat %value%, takže nemusíte přidávat zástupný znak na začátek nebo na konec hodnoty.
-      regex:
-        title: Regulární výraz
-        intro: Zadejte vzor regulárního výrazu, který bude odpovídat nepovolenému slovu. Vzor musí splňovat požadavky na regulární výrazy PHP.
-        validation:
-          invalidRegexPattern: 'Zadaný vzor je neplatný. Chyba: %error%'
-      title: Slovo
-      shortIntro: Umožňuje filtrovat podle určitých slov nebo vzorů
-      intro: Typ pravidla pro slova umožňuje filtrovat slova a vzory regulárních výrazů.
-      label: Slovo/gesto
-    rating:
-      title: Hodnocení
-      placeholder: Hodnocení
-      intro: Pole hodnocení umožňuje určit váhu položky. Pokud zadáte kladné číslo, můžete položce přiřadit vyšší hodnotu. Pokud zadáte záporné číslo, snížíte položce celkový počet bodů.
-      infoCalculationMethod: Hodnocení spamu se vypočítá vynásobením hodnocení položky a faktoru hodnocení spamu, který je definován v pravidle.
-      infoDefaultAndDataType: Hodnocení je pohyblivé číslo od %minValue% do %maxValue%. Není-li hodnoceí definováno, je výchozí hodnocení %one%.
-      infoValueEqualZero: Pokud je hodnocení nastaveno na %zero%, položka nebude detekována jako spam, protože hodnota hodnocení spamu bude v každém případě %zero%.
-  title: Pravidla
-  backToList: Zpět na pravidla
-  filter:
-    dropdown: Filtrovat seznam pravidel
-    options:
-      all: Zobrazit vše
+        label: IP adresa/podsíť
+        placeholder: 0.0.0.0
+        ipAddress:
+          intro: Zadejte IP adresu, která nemá povoleno odesílat žádné požadavky.
+          title: IP adresa
+        subnet:
+          intro: Zadejte podsíť s maskou, která nemá povoleno odesílat žádné požadavky.
+          title: Podsíť
+        intro: Typ pravidla IP adresy umožňuje filtrovat IP adresy nebo podsítě.
+      provider:
+        title: Poskytovatel
+        shortIntro: Umožnuje filtrovat dle informací konkrétního poskytovatele
+        intro: Typ pravidla pro poskytovatele umožňuje filtrovat čísla AS a kódy zemí.
+        label: Číslo AS/země
+        action:
+          configureGeoip2: Konfigurace GeoIP2
+        asNumber:
+          title: Číslo AS
+          intro: Zadejte číslo přidruženého systému, který nesmí odesílat žádné požadavky. Všechny IP adresy, které patří k tomuto číslu přidruženého systému, budou zablokovány.
+        country:
+          title: Země
+          infoCountryBlock: Pokud přidáte zemi do pravidla, znamená to, že nikdo z této země nemůže odeslat požadavek. To sice na jednu stranu zní dobře, ale může to znamenat, že to skutečnému uživateli zablokuje možnost odeslat formulář. Buďte prosím s touto možností opatrní. Správná lokalizace IP adres není nikdy zaručena.
+          intro: Zadejte kód země ISO, který není povolen pro odeslání požadavku. Všechny IP adresy registrované v této zemi budou označeny jako spam.
+        infoGeoip2: Pro použití typu poskytovatele je nutné nakonfigurovat databázi MindMax GeoLite2, jinak nebudou mít položky poskytovatele žádný účinek.
+      unicodeBlock:
+        shortIntro: Filtruje vstup na základě použitých znaků.
+        title: Blok Unicode
+        label: Blok Unicode
+        intro: Typ blokového pravidla Unicode umožňuje vyhodnotit použití určitých znaků.
+        block:
+          title: Blok
+          intro: Vyberte jeden z bloků, který by měl být při zadávání odpovídajícím způsobem ohodnocen. Poté zadejte odpovídající hodnocení.
+          hintExtended: Vezměte prosím na vědomí, že existují rozšíření a doplňky některých bloků, které musí být také přidány jako položka pravidla.
+          explanationCounting: Při ověřování se každý blok započítává pouze jednou, i když bylo použito několik znaků z jednoho bloku.
+          exampleCounting: Předpokládejme, že zadáte položku pravidla s blokem "Smajlíci" s hodnocením 3 body. Uživatel při odesílání použije 5 smajlíků. Záznam je nyní ohodnocen 3 body, protože byl použit smajlík.
+      userAgent:
+        title: Uživatelský agent
+        label: Uživatelský agent (Slovo/Vzor)
+        text:
+          title: Text
+          intro: Zadejte slovo, které má být vyhodnoceno jako spam. Jako zástupný znak můžete použít hvězdičku %star%. Funkce pro porovnávání bude hledat %value%, takže nemusíte přidávat zástupný znak na začátek nebo na konec hodnoty.
+        regex:
+          title: Regulární výraz
+          intro: Zadejte vzor regulárního výrazu, který bude odpovídat nepovolenému slovu. Vzor musí splňovat požadavky na regulární výrazy PHP.
+          validation:
+            invalidRegexPattern: 'Zadaný vzor je neplatný. Chyba: %error%'
+        shortIntro: Umožňuje filtrovat podle určitých slov nebo vzorů v agentu uživatele
+        intro: Typ pravidla pro agenta uživatele umožňuje filtrovat slova a vzory regulárních výrazů v uživatelském agentovi uživatele.
+      website:
+        shortIntro: Umožňuje filtrovat podle konkrétních webových stránek
+        title: Webové stránky
+        url:
+          title: URL
+          intro: Zadejte adresu URL, která nemá povoleno odeslání.
+          infoProtocol: Doporučujeme začínat adresu URL protokolem nebo dvěma lomítky pro adresy URL nezávislé na protokolu. Pokud hodnota nezačíná protokolem, mohlo by pravidlo odpovídat nesprávným URL.
+        intro: Typ pravidla pro webové stránky umožňuje filtrovat adresy URL.
+        label: URL/doména
+        placeholder: https://domena.cz
+      word:
+        text:
+          title: Text
+          intro: Zadejte slovo, které má být vyhodnoceno jako spam. Jako zástupný znak můžete použít hvězdičku %star%. Funkce pro porovnávání bude hledat %value%, takže nemusíte přidávat zástupný znak na začátek nebo na konec hodnoty.
+        regex:
+          title: Regulární výraz
+          intro: Zadejte vzor regulárního výrazu, který bude odpovídat nepovolenému slovu. Vzor musí splňovat požadavky na regulární výrazy PHP.
+          validation:
+            invalidRegexPattern: 'Zadaný vzor je neplatný. Chyba: %error%'
+        title: Slovo
+        shortIntro: Umožňuje filtrovat podle určitých slov nebo vzorů
+        intro: Typ pravidla pro slova umožňuje filtrovat slova a vzory regulárních výrazů.
+        label: Slovo/gesto
+      rating:
+        title: Hodnocení
+        placeholder: Hodnocení
+        intro: Pole hodnocení umožňuje určit váhu položky. Pokud zadáte kladné číslo, můžete položce přiřadit vyšší hodnotu. Pokud zadáte záporné číslo, snížíte položce celkový počet bodů.
+        infoCalculationMethod: Hodnocení spamu se vypočítá vynásobením hodnocení položky a faktoru hodnocení spamu, který je definován v pravidle.
+        infoDefaultAndDataType: Hodnocení je pohyblivé číslo od %minValue% do %maxValue%. Není-li hodnoceí definováno, je výchozí hodnocení %one%.
+        infoValueEqualZero: Pokud je hodnocení nastaveno na %zero%, položka nebude detekována jako spam, protože hodnota hodnocení spamu bude v každém případě %zero%.
+    title: Pravidla
+    backToList: Zpět na pravidla
+    filter:
+      dropdown: Filtrovat seznam pravidel
+      options:
+        all: Zobrazit vše
 rulePackage:
   list:
     refreshedAt: Aktualizováno v

@@ -1,0 +1,19 @@
+{% trans_default_domain 'mosparo' %}
+
+<p>{{ 'rules.fieldRule.type.unicodeBlock.intro'|trans }}</p>
+
+<strong>{{ 'rules.fieldRule.type.unicodeBlock.block.title'|trans }}</strong>
+<p>
+    {{ 'rules.fieldRule.type.unicodeBlock.block.intro'|trans }}
+</p>
+<p>
+    {{ 'rules.fieldRule.type.unicodeBlock.block.hintExtended'|trans }}
+</p>
+<p>
+    {{ 'rules.fieldRule.type.unicodeBlock.block.explanationCounting'|trans }}
+</p>
+<p>
+    <u>{{ 'general.example'|trans }}:</u> {{ 'rules.fieldRule.type.unicodeBlock.block.exampleCounting'|trans }}
+</p>
+
+{% include 'project_related/rules/field_rule/type/help/_rating.html.twig' %}

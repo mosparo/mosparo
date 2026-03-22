@@ -1,13 +1,12 @@
-{% extends 'project_related/project_related_base.html.twig' %}
+{% extends 'project_related/rules/rules_base.html.twig' %}
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'rule.title'|trans }} - {{ parent() }}{% endblock %}
-{% block pageTitle %}{{ 'rule.title'|trans }}{% endblock %}
+{% block documentTitle %}{{ 'rules.fieldRule.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'rules.fieldRule.title'|trans }}{% endblock %}
 
 {% block pageTitleColumn %}
     {{ parent() }}
-
 
     <div class="col-auto ms-auto">
         <div class="btn-list">
@@ -17,17 +16,17 @@
             </a>
 
             <div class="dropdown">
-                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'rule.filter.dropdown'|trans }}">
+                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'rules.fieldRule.filter.dropdown'|trans }}">
                     <i class="ti ti-filter"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <a href="{{ path('rule_list', { '_projectId': activeProject.id }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
+                    <a href="{{ path('rules_field_rule_list', { '_projectId': activeProject.id }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
                         <i class="ti ti-check {% if filter != '' %}invisible{% endif %}"></i>
-                        {{ 'rule.filter.options.all'|trans }}
+                        {{ 'rules.fieldRule.filter.options.all'|trans }}
                     </a>
                     <div class="dropdown-divider"></div>
                     {% for ruleType in ruleTypes %}
-                        <a href="{{ path('rule_list_filtered', { '_projectId': activeProject.id, 'filter': ruleType.key }) }}" class="dropdown-item {% if filter == ruleType.key %}active{% endif %} {% if not numberOfRulesByType[ruleType.key] is defined %}disabled{% endif %}">
+                        <a href="{{ path('rules_field_rule_list_filtered', { '_projectId': activeProject.id, 'filter': ruleType.key }) }}" class="dropdown-item {% if filter == ruleType.key %}active{% endif %} {% if not numberOfRulesByType[ruleType.key] is defined %}disabled{% endif %}">
                             <i class="ti {% if filter == ruleType.key %}ti-check{% else %}{{ ruleType.icon }}{% endif %}"></i>
                             {{ ruleType.name|trans }}
 
@@ -40,23 +39,21 @@
             </div>
 
             {% if canManage %}
-                <a href="{{ path('rule_create_choose_type', { '_projectId': activeProject.id }) }}" class="btn btn-success add-button">
+                <a href="{{ path('rules_field_rule_create_choose_type', { '_projectId': activeProject.id }) }}" class="btn btn-success add-button">
                     <i class="ti ti-plus"></i>
-                    <span>{{ 'rule.create.title'|trans }}</span>
+                    <span>{{ 'rules.fieldRule.create.title'|trans }}</span>
                 </a>
             {% endif %}
         </div>
     </div>
 {% endblock %}
 
-{% block pageBody %}
-    <div class="container-xl">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div id="rules">
+{% block rulesPageBody %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div id="rules">
 
-                    </div>
                 </div>
             </div>
         </div>

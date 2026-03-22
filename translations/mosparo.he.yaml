@@ -73,90 +73,91 @@ dashboard:
       statisticOnly: סטטיסטיקה בלבד
   dateRange:
     dropdown: בחירת טווח המידע המוצג
-rule:
-  create:
-    title: יצירת חוק
-  edit:
-    title: עריכת חוק %ruleName%
-  form:
-    rule:
-      title: חוק
-      spamRatingFactor: פקטור דירוג ספאם
-      description: תיאור
-      name: שם
-      status: מצב
-      spamRatingFactorHelp: באמצעות פקטור דירוג הספאם באפשרותך להגדיר פקטור המחזק או מחליש את המוגדר בחוק. ערכים מעל 1.0 מחוזקים, ערכים מתחת ל 1.0 מוחלשים.
-    items:
-      title: פריטים
-      type: סוג
-      rating: דירוג
-    addMultipleItems:
-      items: פריטים
-      rating: דירוג
-      itemsHelp: יש להוסיף פריט אחד בשורה.
-      ratingHelp: כשאינו מוגדר ערך ברירת המחדל הוא 1.0. אם הערך מוגדר ל0.0, הפריטים לא ידורגו כפריטי ספאם.
-    ruleType: סוג חוק
-  delete:
-    title: מחיקת חוק %ruleName%
-    message:
-      successfullyDeleted: החוק %ruleName% נמחק בהצלחה.
-    confirm: האם בוודאות ברצונך למחוק את החוק %ruleName%?
-  filter:
-    dropdown: סינון רשימת החוקים
-    options:
-      all: הצגת הכל
-  type:
-    domain:
-      shortIntro: אפשור סינון לפי domains
-    email:
-      shortIntro: ניתן לסנן לפי כתובות דואל מוגדרות
+rules:
+  fieldRule:
+    create:
+      title: יצירת חוק
+    edit:
+      title: עריכת חוק %ruleName%
+    form:
+      rule:
+        title: חוק
+        spamRatingFactor: פקטור דירוג ספאם
+        description: תיאור
+        name: שם
+        status: מצב
+        spamRatingFactorHelp: באמצעות פקטור דירוג הספאם באפשרותך להגדיר פקטור המחזק או מחליש את המוגדר בחוק. ערכים מעל 1.0 מחוזקים, ערכים מתחת ל 1.0 מוחלשים.
+      items:
+        title: פריטים
+        type: סוג
+        rating: דירוג
+      addMultipleItems:
+        items: פריטים
+        rating: דירוג
+        itemsHelp: יש להוסיף פריט אחד בשורה.
+        ratingHelp: כשאינו מוגדר ערך ברירת המחדל הוא 1.0. אם הערך מוגדר ל0.0, הפריטים לא ידורגו כפריטי ספאם.
+      ruleType: סוג חוק
+    delete:
+      title: מחיקת חוק %ruleName%
+      message:
+        successfullyDeleted: החוק %ruleName% נמחק בהצלחה.
+      confirm: האם בוודאות ברצונך למחוק את החוק %ruleName%?
+    filter:
+      dropdown: סינון רשימת החוקים
+      options:
+        all: הצגת הכל
+    type:
+      domain:
+        shortIntro: אפשור סינון לפי domains
       email:
-        title: כתובת דואל
-        intro: יש להזין כתובת דואל שאינה מורשית להגיש טופס.
-      title: דואל
-      intro: חוק הדואל מאפשר סינון לפי כתובות דואל.
-      label: כתובת דואל
-    ipAddress:
-      title: כתובת IP
-      shortIntro: מאפשר סינון לפי כתובת רשת ותתי רשתות
-      intro: חוק כתובת IP מאפשר סינון על פי כתובת IP או תת רשת.
+        shortIntro: ניתן לסנן לפי כתובות דואל מוגדרות
+        email:
+          title: כתובת דואל
+          intro: יש להזין כתובת דואל שאינה מורשית להגיש טופס.
+        title: דואל
+        intro: חוק הדואל מאפשר סינון לפי כתובות דואל.
+        label: כתובת דואל
       ipAddress:
         title: כתובת IP
-        intro: יש להזין כתובת IP שאינה מורשית להגשת טפסים.
-      subnet:
-        intro: יש להזין כתובת תת רשת שאינה מורשית להגשת טפסים.
-        title: תת רשת
-    word:
-      text:
-        title: מלל
-      shortIntro: איפשור סינון לפי מילים וביטויים
-      title: מילה
-    rating:
-      title: דירוג
-      infoValueEqualZero: אם הדירוג הוא %zero%, הפריט לא יזוהה כספאם בגלל שציון הספאם תמיד יהיה %zero%.
-      infoDefaultAndDataType: הדירוג הוא מספר עשרוני בין %minValue% ל %maxValue%. אם לא מוגדר ערכך ברירת החדל היא %one%.
-      infoCalculationMethod: דירוג הספאם יחושב על ידי מכפלת דירוג הפריט בפקטור הדירוג המוגדר בחוק.
-      placeholder: דירוג
-      intro: שדה הדירוג מאפשר להגדיר את משקל הפריט. מספר חיובי מגדיל את המשקל. מספר שלילי מקטין את הניקוד.
-    website:
-      shortIntro: איפשר סינון לפי אתרים
-      title: אתר
-    provider:
-      action:
-        configureGeoip2: הגדרות GeoIP2
-      country:
-        title: מדינה
-      title: ספק
-  list:
-    name: שם
-    type: סוג
-    status: מצב
-    actions: פעולות
-  backToList: חזרה לחוקים
-  title: חוקים
-  createChooseType:
-    title: בחירת סוג
-    intro: נא למלא את סוג החוק שברצונך ליצור. הסוגים הזמינים משמשים בשדות שונים ללא ניתן לשנותם עבור חוק מאוחר יותר.
+        shortIntro: מאפשר סינון לפי כתובת רשת ותתי רשתות
+        intro: חוק כתובת IP מאפשר סינון על פי כתובת IP או תת רשת.
+        ipAddress:
+          title: כתובת IP
+          intro: יש להזין כתובת IP שאינה מורשית להגשת טפסים.
+        subnet:
+          intro: יש להזין כתובת תת רשת שאינה מורשית להגשת טפסים.
+          title: תת רשת
+      word:
+        text:
+          title: מלל
+        shortIntro: איפשור סינון לפי מילים וביטויים
+        title: מילה
+      rating:
+        title: דירוג
+        infoValueEqualZero: אם הדירוג הוא %zero%, הפריט לא יזוהה כספאם בגלל שציון הספאם תמיד יהיה %zero%.
+        infoDefaultAndDataType: הדירוג הוא מספר עשרוני בין %minValue% ל %maxValue%. אם לא מוגדר ערכך ברירת החדל היא %one%.
+        infoCalculationMethod: דירוג הספאם יחושב על ידי מכפלת דירוג הפריט בפקטור הדירוג המוגדר בחוק.
+        placeholder: דירוג
+        intro: שדה הדירוג מאפשר להגדיר את משקל הפריט. מספר חיובי מגדיל את המשקל. מספר שלילי מקטין את הניקוד.
+      website:
+        shortIntro: איפשר סינון לפי אתרים
+        title: אתר
+      provider:
+        action:
+          configureGeoip2: הגדרות GeoIP2
+        country:
+          title: מדינה
+        title: ספק
+    list:
+      name: שם
+      type: סוג
+      status: מצב
+      actions: פעולות
+    backToList: חזרה לחוקים
+    title: חוקים
+    createChooseType:
+      title: בחירת סוג
+      intro: נא למלא את סוג החוק שברצונך ליצור. הסוגים הזמינים משמשים בשדות שונים ללא ניתן לשנותם עבור חוק מאוחר יותר.
 rulePackage:
   title: אוסף חוקים
   backToList: חזרה לאוסף החוקים

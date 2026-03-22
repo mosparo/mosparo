@@ -1,13 +1,13 @@
 {% trans_default_domain 'mosparo' %}
 
-<p>{{ 'rule.type.word.intro'|trans }}</p>
+<p>{{ 'rules.fieldRule.type.word.intro'|trans }}</p>
 
 <ul>
     <li>
-        <strong>{{ 'rule.type.word.text.title'|trans }}</strong>
+        <strong>{{ 'rules.fieldRule.type.word.text.title'|trans }}</strong>
         <p>
             {{
-                'rule.type.word.text.intro'|trans({
+                'rules.fieldRule.type.word.text.intro'|trans({
                     '%star%': '<code>*</code>',
                     '%value%': '<code>*value*</code>'
                 })|raw
@@ -18,9 +18,9 @@
         </p>
     </li>
     <li>
-        <strong>{{ 'rule.type.word.regex.title'|trans }}</strong>
+        <strong>{{ 'rules.fieldRule.type.word.regex.title'|trans }}</strong>
         <p>
-            {{ 'rule.type.word.regex.intro'|trans }}
+            {{ 'rules.fieldRule.type.word.regex.intro'|trans }}
         </p>
         <p>
             <u>{{ 'general.example'|trans }}:</u> <code>/(seo|s3o)/is</code>
@@ -28,4 +28,4 @@
     </li>
 </ul>
 
-{% include 'project_related/rule/type/help/_rating.html.twig' %}
+{% include 'project_related/rules/field_rule/type/help/_rating.html.twig' %}

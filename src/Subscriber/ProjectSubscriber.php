@@ -197,9 +197,9 @@ class ProjectSubscriber implements EventSubscriberInterface
     {
         $checkForProject = $this->projectHelper->getActiveProject();
         $managerRoutes = [
-            'rule_create_choose_type' => ProjectMember::ROLE_EDITOR,
-            'rule_create_with_type' => ProjectMember::ROLE_EDITOR,
-            'rule_delete' => ProjectMember::ROLE_EDITOR,
+            'rules_field_rule_create_choose_type' => ProjectMember::ROLE_EDITOR,
+            'rules_field_rule_create_with_type' => ProjectMember::ROLE_EDITOR,
+            'rules_field_rule_delete' => ProjectMember::ROLE_EDITOR,
             'rule_package_add_choose_type' => ProjectMember::ROLE_EDITOR,
             'rule_package_add_with_type' => ProjectMember::ROLE_EDITOR,
             'rule_package_edit' => ProjectMember::ROLE_EDITOR,
@@ -220,8 +220,8 @@ class ProjectSubscriber implements EventSubscriberInterface
             'tools_import_simulate' => ProjectMember::ROLE_OWNER,
         ];
 
-        if ($activeRoute === 'rule_edit' && $request->getMethod() === 'POST') {
-            $managerRoutes['rule_edit'] = ProjectMember::ROLE_EDITOR;
+        if ($activeRoute === 'rules_field_rule_edit' && $request->getMethod() === 'POST') {
+            $managerRoutes['rules_field_rule_edit'] = ProjectMember::ROLE_EDITOR;
         }
 
         if ($activeRoute === 'project_delete') {

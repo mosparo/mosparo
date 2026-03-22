@@ -1,0 +1,20 @@
+{% trans_default_domain 'mosparo' %}
+
+<p>{{ 'rules.fieldRule.type.website.intro'|trans }}</p>
+
+<ul>
+    <li>
+        <strong>{{ 'rules.fieldRule.type.website.url.title'|trans }}</strong>
+        <p>{{ 'rules.fieldRule.type.website.url.intro'|trans }}</p>
+        <p>
+            <u>{{ 'general.example'|trans }}:</u> <code>//example.com/spam/test-form.html</code>
+        </p>
+        <p>
+            <strong>
+                {{ 'rules.fieldRule.type.website.url.infoProtocol'|trans }}
+            </strong>
+        </p>
+    </li>
+</ul>
+
+{% include 'project_related/rules/field_rule/type/help/_rating.html.twig' %}

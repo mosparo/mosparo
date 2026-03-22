@@ -27,8 +27,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/project/{_projectId}/rules')]
-class RuleController extends AbstractController implements ProjectRelatedInterface
+#[Route('/project/{_projectId}/rules/field-rules')]
+class FieldRuleController extends AbstractController implements ProjectRelatedInterface
 {
     use ProjectRelatedTrait;
 
@@ -45,8 +45,8 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         $this->ruleTypeManager = $ruleTypeManager;
     }
 
-    #[Route('/', name: 'rule_list')]
-    #[Route('/filter/{filter}', name: 'rule_list_filtered')]
+    #[Route('/', name: 'rules_field_rule_list')]
+    #[Route('/filter/{filter}', name: 'rules_field_rule_list_filtered')]
     public function index(Request $request, MosparoDataTableFactory $dataTableFactory, $filter = ''): Response
     {
         $filteredType = null;
@@ -55,19 +55,19 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         }
 
         $table = $dataTableFactory->create(['autoWidth' => true])
-            ->add('name', TextColumn::class, ['label' => 'rule.list.name'])
+            ->add('name', TextColumn::class, ['label' => 'rules.fieldRule.list.name'])
             ->add('type', TwigColumn::class, [
-                'label' => 'rule.list.type',
-                'template' => 'project_related/rule/list/_rule_type.html.twig'
+                'label' => 'rules.fieldRule.list.type',
+                'template' => 'project_related/rules/field_rule/list/_rule_type.html.twig'
             ])
             ->add('status', TwigColumn::class, [
-                'label' => 'rule.list.status',
-                'template' => 'project_related/rule/list/_status.html.twig'
+                'label' => 'rules.fieldRule.list.status',
+                'template' => 'project_related/rules/field_rule/list/_status.html.twig'
             ])
             ->add('actions', TwigColumn::class, [
-                'label' => 'rule.list.actions',
+                'label' => 'rules.fieldRule.list.actions',
                 'className' => 'buttons',
-                'template' => 'project_related/rule/list/_actions.html.twig'
+                'template' => 'project_related/rules/field_rule/list/_actions.html.twig'
             ])
             ->addOrderBy('name')
             ->createAdapter(ORMAdapter::class, [
@@ -101,7 +101,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             $numberOfRulesByType[$result['type']] = $result['countRules'];
         }
 
-        return $this->render('project_related/rule/list.html.twig', [
+        return $this->render('project_related/rules/field_rule/list.html.twig', [
             'datatable' => $table,
             'ruleTypes' => $this->ruleTypeManager->getRuleTypes(),
             'numberOfRulesByType' => $numberOfRulesByType,
@@ -109,15 +109,15 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    #[Route('/create/choose-type', name: 'rule_create_choose_type')]
+    #[Route('/create/choose-type', name: 'rules_field_rule_create_choose_type')]
     public function createChooseType(RuleTypeManager $ruleTypeManager): Response
     {
-        return $this->render('project_related/rule/create_choose_type.html.twig', [
+        return $this->render('project_related/rules/field_rule/create_choose_type.html.twig', [
             'ruleTypes' => $ruleTypeManager->getRuleTypes()
         ]);
     }
 
-    #[Route('/create/{type}', name: 'rule_create_with_type')]
+    #[Route('/create/{type}', name: 'rules_field_rule_create_with_type')]
     public function createWithType(Request $request, $type, EntityManagerInterface $entityManager): Response
     {
         $ruleType = $this->ruleTypeManager->getRuleType($type);
@@ -126,7 +126,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         $rule->setType($type);
 
         $form = $this->createFormBuilder($rule, ['translation_domain' => 'mosparo'])
-            ->add('name', TextType::class, ['label' => 'rule.form.rule.name'])
+            ->add('name', TextType::class, ['label' => 'rules.fieldRule.form.rule.name'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -134,17 +134,17 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             $entityManager->persist($rule);
             $entityManager->flush();
 
-            return $this->redirectToRoute('rule_edit', ['_projectId' => $this->getActiveProject()->getId(), 'id' => $rule->getId()]);
+            return $this->redirectToRoute('rules_field_rule_edit', ['_projectId' => $this->getActiveProject()->getId(), 'id' => $rule->getId()]);
         }
 
-        return $this->render('project_related/rule/create_with_type.html.twig', [
+        return $this->render('project_related/rules/field_rule/create_with_type.html.twig', [
             'rule' => $rule,
             'form' => $form->createView(),
             'ruleType' => $ruleType
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'rule_edit')]
+    #[Route('/{id}/edit', name: 'rules_field_rule_edit')]
     public function edit(Request $request, Rule $rule, EntityManagerInterface $entityManager, InterfaceHelper $interfaceHelper): Response
     {
         $readOnly = false;
@@ -164,18 +164,18 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
             $session->getFlashBag()->add(
                 'success',
                 $this->translator->trans(
-                    'rule.edit.message.successfullySaved',
+                    'rules.fieldRule.edit.message.successfullySaved',
                     [],
                     'mosparo'
                 )
             );
 
-            return $this->redirectToRoute('rule_list', ['_projectId' => $this->getActiveProject()->getId()]);
+            return $this->redirectToRoute('rules_field_rule_list', ['_projectId' => $this->getActiveProject()->getId()]);
         }
 
         $valueOptions = $this->getValueOptions($request, $ruleType);
 
-        return $this->render('project_related/rule/edit.html.twig', [
+        return $this->render('project_related/rules/field_rule/edit.html.twig', [
             'rule' => $rule,
             'typeOptions' => $this->buildFrontendChoices($ruleType->getSubtypes()),
             'valueOptions' => $valueOptions,
@@ -188,7 +188,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    #[Route('/{id}/load-items', name: 'rule_load_items')]
+    #[Route('/{id}/load-items', name: 'rules_field_rule_load_items')]
     public function loadItems(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         $submittedToken = $request->query->get('token');
@@ -285,7 +285,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    #[Route('/{id}/save-changes', name: 'rule_edit_save_changes')]
+    #[Route('/{id}/save-changes', name: 'rules_field_rule_edit_save_changes')]
     public function saveChanges(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         $submittedToken = $request->request->get('token');
@@ -374,7 +374,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    #[Route('/{id}/add-multiple', name: 'rule_edit_add_multiple')]
+    #[Route('/{id}/add-multiple', name: 'rules_field_rule_edit_add_multiple')]
     public function addMultiple(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         $submittedToken = $request->request->get('token');
@@ -489,7 +489,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ] + $chunkSizeData);
     }
 
-    #[Route('/{id}/delete-selected', name: 'rule_edit_delete_selected')]
+    #[Route('/{id}/delete-selected', name: 'rules_field_rule_edit_delete_selected')]
     public function deleteSelected(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         $submittedToken = $request->request->get('token');
@@ -531,7 +531,7 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'rule_delete')]
+    #[Route('/{id}/delete', name: 'rules_field_rule_delete')]
     public function delete(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         if ($request->request->has('delete-token')) {
@@ -555,22 +555,22 @@ class RuleController extends AbstractController implements ProjectRelatedInterfa
                 $session->getFlashBag()->add(
                     'success',
                     $this->translator->trans(
-                        'rule.delete.message.successfullyDeleted',
+                        'rules.fieldRule.delete.message.successfullyDeleted',
                         ['%ruleName%' => $rule->getName()],
                         'mosparo'
                     )
                 );
 
-                return $this->redirectToRoute('rule_list', ['_projectId' => $this->getActiveProject()->getId()]);
+                return $this->redirectToRoute('rules_field_rule_list', ['_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 
-        return $this->render('project_related/rule/delete.html.twig', [
+        return $this->render('project_related/rules/field_rule/delete.html.twig', [
             'rule' => $rule,
         ]);
     }
 
-    #[Route('/{id}/export-items', name: 'rule_export_items')]
+    #[Route('/{id}/export-items', name: 'rules_field_rule_export_items')]
     public function exportItems(Request $request, Rule $rule, EntityManagerInterface $entityManager): Response
     {
         $qb = $entityManager->createQueryBuilder();
