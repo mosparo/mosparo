@@ -261,17 +261,17 @@ rulePackage:
       value: Значення
       rating: Рейтинг
     list:
-      rules:
+      fieldRules:
         spamRatingFactor: Коефіцієнт рейтингу спаму
         actions: Дії
         name: Назва
         type: Тип
         numberOfRuleItems: Число елементів
-      ruleItems:
+      fieldRuleItems:
         type: Тип
         value: Значення
         spamRatingFactor: Коефіцієнт рейтингу спаму
-    rule:
+    fieldRule:
       title: Переглянути правило «%ruleName%»
       details:
         title: Подробиці правила

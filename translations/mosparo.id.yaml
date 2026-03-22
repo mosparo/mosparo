@@ -246,7 +246,7 @@ rulePackage:
       type: Tipe
       value: Nilai
       rating: Peringkat
-    rule:
+    fieldRule:
       details:
         spamRatingFactor: Faktor peringkat spam
         name: Nama
@@ -257,13 +257,13 @@ rulePackage:
         title: Item yang disertakan
       backToRulePackage: Kembali ke aturan dipilih
     list:
-      rules:
+      fieldRules:
         actions: Tindakan
         type: Tipe
         numberOfRuleItems: Jumlah item
         spamRatingFactor: Faktor peringkat spam
         name: Nama
-      ruleItems:
+      fieldRuleItems:
         type: Tipe
         value: Nilai
         spamRatingFactor: Faktor peringkat spam

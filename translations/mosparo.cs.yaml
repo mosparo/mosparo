@@ -253,17 +253,17 @@ rulePackage:
       ruleDetails: Podrobnosti pravidla
     title: Zobrazit sadu pravidel %rulePackageName%
     list:
-      rules:
+      fieldRules:
         type: Typ
         numberOfRuleItems: Počet položek
         actions: Akce
         name: Název
         spamRatingFactor: Faktor hodnocení spamu
-      ruleItems:
+      fieldRuleItems:
         value: Hodnota
         spamRatingFactor: Faktor hodnocení spamu
         type: Typ
-    rule:
+    fieldRule:
       title: Zobrazit pravidlo %ruleName%
       details:
         title: Podrobnosti pravidla

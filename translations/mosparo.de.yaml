@@ -384,17 +384,17 @@ rulePackage:
       rating: Bewertung
 
     list:
-      ruleItems:
+      fieldRuleItems:
         value: Wert
         type: Typ
         spamRatingFactor: Spam-Bewertungsfaktor
-      rules:
+      fieldRules:
         spamRatingFactor: Spam-Bewertungsfaktor
         name: Name
         type: Typ
         actions: Aktionen
         numberOfRuleItems: Anzahl Einträge
-    rule:
+    fieldRule:
       details:
         spamRatingFactor: Spam-Bewertungsfaktor
         type: Typ

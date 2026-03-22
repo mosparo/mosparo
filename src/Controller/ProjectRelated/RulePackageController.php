@@ -357,20 +357,20 @@ class RulePackageController extends AbstractController implements ProjectRelated
         }
 
         $table = $this->dataTableFactory->create(['autoWidth' => true])
-            ->add('name', TextColumn::class, ['label' => 'rulePackage.view.list.rules.name'])
+            ->add('name', TextColumn::class, ['label' => 'rulePackage.view.list.fieldRules.name'])
             ->add('type', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.rules.type',
-                'template' => 'project_related/rule_package/view/rule_list/_type.html.twig'
+                'label' => 'rulePackage.view.list.fieldRules.type',
+                'template' => 'project_related/rule_package/view/field_rule_list/_type.html.twig'
             ])
             ->add('numberOfRuleItems', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.rules.numberOfRuleItems',
-                'template' => 'project_related/rule_package/view/rule_list/_numberOfRuleItems.html.twig'
+                'label' => 'rulePackage.view.list.fieldRules.numberOfRuleItems',
+                'template' => 'project_related/rule_package/view/field_rule_list/_numberOfRuleItems.html.twig'
             ])
-            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'rulePackage.view.list.rules.spamRatingFactor'])
+            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'rulePackage.view.list.fieldRules.spamRatingFactor'])
             ->add('actions', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.rules.actions',
+                'label' => 'rulePackage.view.list.fieldRules.actions',
                 'className' => 'buttons',
-                'template' => 'project_related/rule_package/view/rule_list/_actions.html.twig'
+                'template' => 'project_related/rule_package/view/field_rule_list/_actions.html.twig'
             ])
             ->createAdapter(ORMAdapter::class, [
                 'entity' => RulePackageRuleCache::class,
@@ -418,8 +418,8 @@ class RulePackageController extends AbstractController implements ProjectRelated
         ]);
     }
 
-    #[Route('/{id}/view/rule/{ruleUuid}', name: 'rule_package_view_rule')]
-    public function viewRule(Request $request, RulePackage $rulePackage, string $ruleUuid): Response
+    #[Route('/{id}/view/field-rule/{ruleUuid}', name: 'rule_package_view_field_rule')]
+    public function viewFieldRule(Request $request, RulePackage $rulePackage, string $ruleUuid): Response
     {
         $rulePackageRuleCacheRepository = $this->entityManager->getRepository(RulePackageRuleCache::class);
         $rulePackageRuleCache = $rulePackageRuleCacheRepository->findOneBy(['uuid' => $ruleUuid]);
@@ -430,14 +430,14 @@ class RulePackageController extends AbstractController implements ProjectRelated
 
         $table = $this->dataTableFactory->create(['autoWidth' => true])
             ->add('type', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.ruleItems.type',
-                'template' => 'project_related/rule_package/view/rule_item_list/_type.html.twig'
+                'label' => 'rulePackage.view.list.fieldRuleItems.type',
+                'template' => 'project_related/rule_package/view/field_rule_item_list/_type.html.twig'
             ])
             ->add('value', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.ruleItems.value',
-                'template' => 'project_related/rule_package/view/rule_item_list/_value.html.twig'
+                'label' => 'rulePackage.view.list.fieldRuleItems.value',
+                'template' => 'project_related/rule_package/view/field_rule_item_list/_value.html.twig'
             ])
-            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'rulePackage.view.list.ruleItems.spamRatingFactor'])
+            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'rulePackage.view.list.fieldRuleItems.spamRatingFactor'])
             ->createAdapter(ORMAdapter::class, [
                 'entity' => RulePackageRuleItemCache::class,
                 'query' => function (QueryBuilder $builder) use ($rulePackageRuleCache) {
@@ -454,7 +454,7 @@ class RulePackageController extends AbstractController implements ProjectRelated
             return $table->getResponse();
         }
 
-        return $this->render('project_related/rule_package/view_rule.html.twig', [
+        return $this->render('project_related/rule_package/view_field_rule.html.twig', [
             'rulePackage' => $rulePackage,
             'rule' => $rulePackageRuleCache,
             'datatable' => $table

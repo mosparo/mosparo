@@ -197,17 +197,17 @@ rulePackage:
       spamRatingFactor: פקטור דירוג ספאם
       rating: דירוג
     list:
-      rules:
+      fieldRules:
         name: שם
         actions: פעולות
         type: סוג
         spamRatingFactor: פקטור דירוג ספאם
         numberOfRuleItems: מספר פריטים
-      ruleItems:
+      fieldRuleItems:
         spamRatingFactor: פקטור דירוג ספאם
         type: סוג
         value: ערך
-    rule:
+    fieldRule:
       title: צפיה בחוק %ruleName%
       details:
         title: פרטי חוק

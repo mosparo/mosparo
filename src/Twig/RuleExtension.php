@@ -68,7 +68,7 @@ class RuleExtension extends AbstractExtension
 
         $rulePackageRuleCache = $this->rulePackageRuleCacheRepository->findOneBy(['uuid' => $uuid]);
         if ($rulePackageRuleCache) {
-            return $this->router->generate('rule_package_view_rule', [
+            return $this->router->generate('rule_package_view_field_rule', [
                 '_projectId' => $rulePackageRuleCache->getProject()->getId(),
                 'id' => $rulePackageRuleCache->getRulePackageCache()->getRulePackage()->getId(),
                 'ruleUuid' => $rulePackageRuleCache->getUuid()

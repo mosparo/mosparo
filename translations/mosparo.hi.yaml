@@ -770,17 +770,17 @@ rulePackage:
       rating: रेटिंग
       name: नाम
     list:
-      rules:
+      fieldRules:
         name: नाम
         numberOfRuleItems: मदों की संख्या
         actions: कार्रवाइयां
         type: प्रकार
         spamRatingFactor: स्पैम रेटिंग कारक
-      ruleItems:
+      fieldRuleItems:
         type: प्रकार
         value: मान
         spamRatingFactor: स्पैम रेटिंग कारक
-    rule:
+    fieldRule:
       title: नियम %ruleName% देखें
       details:
         title: नियम विवरण

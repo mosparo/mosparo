@@ -449,17 +449,17 @@ rulePackage:
       value: Valeur
       rating: Évaluation
     list:
-      rules:
+      fieldRules:
         name: Nom
         type: Type
         spamRatingFactor: Facteur d'évaluation du spam
         numberOfRuleItems: Nombre d'articles
         actions: Actions
-      ruleItems:
+      fieldRuleItems:
         type: Type
         spamRatingFactor: Facteur d'évaluation du spam
         value: Valeur
-    rule:
+    fieldRule:
       details:
         spamRatingFactor: Facteur d'évaluation du spam
         title: Détails de la règle

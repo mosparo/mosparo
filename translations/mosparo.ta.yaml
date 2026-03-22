@@ -1003,7 +1003,7 @@ rulePackage:
         type: வகை
         value: மதிப்பு
         spamRatingFactor: ச்பேம் மதிப்பீட்டு காரணி
-    rule:
+    fieldRule:
       title: விதி %ruleName% ஐக் காண்க
       details:
         title: விதி விவரங்கள்

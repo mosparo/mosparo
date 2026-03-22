@@ -317,13 +317,13 @@ rulePackage:
       rating: Valutazione
     title: Visualizza gruppo di regole %rulePackageName%
     list:
-      rules:
+      fieldRules:
         name: Nome
         type: Tipo
         spamRatingFactor: Fattore di valutazione spam
         actions: Azioni
         numberOfRuleItems: Numero di oggetti
-      ruleItems:
+      fieldRuleItems:
         type: Tipo
         value: Valore
         spamRatingFactor: Fattore di valutazione spam
