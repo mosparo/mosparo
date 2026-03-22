@@ -1,31 +1,31 @@
 <?php
 
-namespace Mosparo\Rule\Tester;
+namespace Mosparo\Rules\FieldRule\Tester;
 
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use Kir\StringUtils\Matching\Wildcards\Pattern;
-use Mosparo\Rule\RuleItemEntityInterface;
+use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 
-class UserAgentRuleTester extends AbstractRuleTester
+class WordRuleTester extends AbstractRuleTester
 {
     public function buildExpressions(QueryBuilder $qb, Orx $orExpr, array $fieldData, ?string $value)
     {
         $orExpr->add($qb->expr()->andX()
-            ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('uaText')))
+            ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('text')))
             ->add($qb->expr()->like($qb->createNamedParameter($value), 'i.preparedValue'))
         );
 
-        $orExpr->add($qb->expr()->eq('i.type', $qb->createNamedParameter('uaRegex')));
+        $orExpr->add($qb->expr()->eq('i.type', $qb->createNamedParameter('regex')));
     }
 
     public function validateData($key, $value, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
         $result = false;
-        if ($item->getType() === 'uaText') {
+        if ($item->getType() === 'text') {
             $result = $this->validateTextItem($value, $item->getValue());
-        } else if ($item->getType() === 'uaRegex') {
+        } else if ($item->getType() === 'regex') {
             $result = $this->validateRegexItem($value, $item->getValue());
         }
 

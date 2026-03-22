@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
-use Mosparo\Rule\Tester\ProviderRuleTester;
+use Mosparo\Rules\FieldRule\Tester\ProviderRuleTester;
 
 final class ProviderRuleType extends AbstractRuleType
 {

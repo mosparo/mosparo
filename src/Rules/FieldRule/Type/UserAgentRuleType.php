@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
-use Mosparo\Rule\Tester\UserAgentRuleTester;
+use Mosparo\Rules\FieldRule\Tester\UserAgentRuleTester;
 
 final class UserAgentRuleType extends AbstractRuleType
 {

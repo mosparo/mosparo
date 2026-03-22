@@ -2,12 +2,12 @@
 
 namespace Mosparo\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Mosparo\Repository\RulePackageRuleCacheRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Mosparo\Rule\RuleEntityInterface;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Repository\RulePackageRuleCacheRepository;
+use Mosparo\Rules\FieldRule\RuleEntityInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RulePackageRuleCacheRepository::class)]

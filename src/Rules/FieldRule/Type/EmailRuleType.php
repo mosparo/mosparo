@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
-use Mosparo\Rule\Tester\EmailRuleTester;
+use Mosparo\Rules\FieldRule\Tester\EmailRuleTester;
 
 final class EmailRuleType extends AbstractRuleType
 {

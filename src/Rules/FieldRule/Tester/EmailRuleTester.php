@@ -1,11 +1,11 @@
 <?php
 
-namespace Mosparo\Rule\Tester;
+namespace Mosparo\Rules\FieldRule\Tester;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
-use Mosparo\Rule\RuleItemEntityInterface;
+use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 use Mosparo\Util\HashUtil;
 
 class EmailRuleTester extends AbstractRuleTester

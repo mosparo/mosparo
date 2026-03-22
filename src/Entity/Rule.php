@@ -4,9 +4,9 @@ namespace Mosparo\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Mosparo\Repository\RuleRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Mosparo\Rule\RuleEntityInterface;
+use Mosparo\Repository\RuleRepository;
+use Mosparo\Rules\FieldRule\RuleEntityInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RuleRepository::class)]

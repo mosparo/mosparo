@@ -10,9 +10,9 @@ use Mosparo\Entity\RuleItem;
 use Mosparo\Entity\RulePackageRuleCache;
 use Mosparo\Entity\RulePackageRuleItemCache;
 use Mosparo\Entity\Submission;
-use Mosparo\Rule\RuleItemIterator;
-use Mosparo\Rule\RuleTypeManager;
-use Mosparo\Rule\Type\RuleTypeInterface;
+use Mosparo\Rules\FieldRule\RuleItemIterator;
+use Mosparo\Rules\FieldRule\RuleTypeManager;
+use Mosparo\Rules\FieldRule\Type\RuleTypeInterface;
 use Mosparo\Util\TokenGenerator;
 
 class RuleTesterHelper

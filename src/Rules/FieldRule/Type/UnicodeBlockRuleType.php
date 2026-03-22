@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
-use Mosparo\Rule\Tester\UnicodeBlockRuleTester;
+use Mosparo\Rules\FieldRule\Tester\UnicodeBlockRuleTester;
 use zepi\Unicode\UnicodeIndex;
 
 final class UnicodeBlockRuleType extends AbstractRuleType

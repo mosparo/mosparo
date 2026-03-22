@@ -1,10 +1,10 @@
 <?php
 
-namespace Mosparo\Rule\Tester;
+namespace Mosparo\Rules\FieldRule\Tester;
 
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
-use Mosparo\Rule\RuleItemEntityInterface;
+use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 
 interface RuleTesterInterface
 {

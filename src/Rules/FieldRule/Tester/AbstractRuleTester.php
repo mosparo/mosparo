@@ -1,9 +1,9 @@
 <?php
 
-namespace Mosparo\Rule\Tester;
+namespace Mosparo\Rules\FieldRule\Tester;
 
 use Mosparo\Entity\RulePackageRuleCache;
-use Mosparo\Rule\RuleItemEntityInterface;
+use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 
 abstract class AbstractRuleTester implements RuleTesterInterface
 {

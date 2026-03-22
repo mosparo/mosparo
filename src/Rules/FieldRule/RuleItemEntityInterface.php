@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Rule;
+namespace Mosparo\Rules\FieldRule;
 
 interface RuleItemEntityInterface
 {

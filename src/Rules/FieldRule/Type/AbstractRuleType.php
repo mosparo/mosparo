@@ -1,6 +1,6 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
 abstract class AbstractRuleType implements RuleTypeInterface
 {

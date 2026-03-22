@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
-use Mosparo\Rule\Tester\IpAddressRuleTester;
+use Mosparo\Rules\FieldRule\Tester\IpAddressRuleTester;
 
 final class IpAddressRuleType extends AbstractRuleType
 {

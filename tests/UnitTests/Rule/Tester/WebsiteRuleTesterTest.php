@@ -4,7 +4,7 @@ namespace Mosparo\Tests\UnitTests\Rule\Tester;
 
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
-use Mosparo\Rule\Tester\WebsiteRuleTester;
+use Mosparo\Rules\FieldRule\Tester\WebsiteRuleTester;
 
 class WebsiteRuleTesterTest extends TestCaseWithItems
 {

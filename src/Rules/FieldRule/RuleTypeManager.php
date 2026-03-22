@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule;
+namespace Mosparo\Rules\FieldRule;
 
-use Mosparo\Rule\Type\RuleTypeInterface;
+use Mosparo\Rules\FieldRule\Type\RuleTypeInterface;
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 
 class RuleTypeManager

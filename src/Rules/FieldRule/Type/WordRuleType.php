@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
-use Mosparo\Rule\Tester\WordRuleTester;
+use Mosparo\Rules\FieldRule\Tester\WordRuleTester;
 
 final class WordRuleType extends AbstractRuleType
 {

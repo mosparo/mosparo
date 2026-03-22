@@ -2,8 +2,8 @@
 
 namespace Mosparo\Twig;
 
-use Mosparo\Rule\RuleTypeManager;
-use Mosparo\Rule\Type\RuleTypeInterface;
+use Mosparo\Rules\FieldRule\RuleTypeManager;
+use Mosparo\Rules\FieldRule\Type\RuleTypeInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

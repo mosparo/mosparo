@@ -1,10 +1,10 @@
 <?php
 
-namespace Mosparo\Rule;
+namespace Mosparo\Rules\FieldRule;
 
+use Doctrine\ORM\Mapping as ORM;
 use IPLib\Address\IPv6;
 use IPLib\Factory;
-use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Util\HashUtil;
 
 trait PreparedRuleItemTrait

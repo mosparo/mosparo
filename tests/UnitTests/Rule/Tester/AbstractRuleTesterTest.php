@@ -8,7 +8,7 @@ use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\RulePackageCache;
 use Mosparo\Entity\RulePackageRuleCache;
 use Mosparo\Entity\RulePackageRuleItemCache;
-use Mosparo\Rule\Tester\WordRuleTester;
+use Mosparo\Rules\FieldRule\Tester\WordRuleTester;
 
 class AbstractRuleTesterTest extends TestCaseWithItems
 {

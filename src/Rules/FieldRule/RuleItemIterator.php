@@ -1,9 +1,8 @@
 <?php
 
-namespace Mosparo\Rule;
+namespace Mosparo\Rules\FieldRule;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\Entity\RuleItem;
 use Mosparo\Entity\RulePackageRuleItemCache;

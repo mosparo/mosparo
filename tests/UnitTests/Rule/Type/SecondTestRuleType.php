@@ -2,7 +2,7 @@
 
 namespace Mosparo\Tests\UnitTests\Rule\Type;
 
-use Mosparo\Rule\Type\AbstractRuleType;
+use Mosparo\Rules\FieldRule\Type\AbstractRuleType;
 
 final class SecondTestRuleType extends AbstractRuleType
 {

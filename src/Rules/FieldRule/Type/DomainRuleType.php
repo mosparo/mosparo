@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
-use Mosparo\Rule\Tester\DomainRuleTester;
+use Mosparo\Rules\FieldRule\Tester\DomainRuleTester;
 
 final class DomainRuleType extends AbstractRuleType
 {

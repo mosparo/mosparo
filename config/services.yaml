@@ -63,7 +63,7 @@ services:
             calls:
                 - [ setProjectHelper ]
 
-        Mosparo\Rule\Type\RuleTypeInterface:
+        Mosparo\Rules\FieldRule\Type\RuleTypeInterface:
             tags: ['mosparo.ruleType']
 
     # makes classes in src/ available to be used as services
@@ -156,8 +156,7 @@ services:
         tags:
             - { name: twig.extension }
 
-    Mosparo\Rule\RuleTypeManager:
-        class: Mosparo\Rule\RuleTypeManager
+    Mosparo\Rules\FieldRule\RuleTypeManager:
         arguments: [ !tagged mosparo.ruleType ]
 
     Mosparo\Helper\GeoIp2Helper:

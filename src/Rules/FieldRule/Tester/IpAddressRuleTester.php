@@ -1,12 +1,12 @@
 <?php
 
-namespace Mosparo\Rule\Tester;
+namespace Mosparo\Rules\FieldRule\Tester;
 
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use IPLib\Factory;
 use IPLib\Range\Subnet;
-use Mosparo\Rule\RuleItemEntityInterface;
+use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 use Mosparo\Util\HashUtil;
 
 class IpAddressRuleTester extends AbstractRuleTester

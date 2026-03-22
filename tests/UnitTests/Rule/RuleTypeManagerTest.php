@@ -2,8 +2,8 @@
 
 namespace Mosparo\Tests\UnitTests\Rule;
 
-use Mosparo\Rule\RuleTypeManager;
-use Mosparo\Rule\Type\AbstractRuleType;
+use Mosparo\Rules\FieldRule\RuleTypeManager;
+use Mosparo\Rules\FieldRule\Type\AbstractRuleType;
 use Mosparo\Tests\UnitTests\Rule\Type\SecondTestRuleType;
 use Mosparo\Tests\UnitTests\Rule\Type\TestRuleType;
 use PHPUnit\Framework\TestCase;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Mosparo\Rule\Type;
+namespace Mosparo\Rules\FieldRule\Type;
 
-use Mosparo\Rule\Tester\WebsiteRuleTester;
+use Mosparo\Rules\FieldRule\Tester\WebsiteRuleTester;
 
 final class WebsiteRuleType extends AbstractRuleType
 {
