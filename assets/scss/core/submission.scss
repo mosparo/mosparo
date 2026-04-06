@@ -142,6 +142,8 @@
 
 .submission-data {
     white-space: break-spaces;
+    word-break: break-all;
+    display: inline-block;
 
     u {
         border: 1px solid rgba(255, 50, 50, 0.75);
@@ -157,4 +159,45 @@
             margin-left: 1px;
         }
     }
+}
+
+.submission-rule-button {
+    color: var(--tblr-info);
+
+    padding: 0.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 2rem;
+    height: 2rem;
+
+    border-radius: var(--tblr-border-radius-sm);
+}
+
+.submission-rule-button:focus,
+.submission-rule-button:hover,
+.submission-rule-button:active {
+    background: var(--tblr-info);
+    color: var(--tblr-info-fg);
+
+    text-decoration: none;
+}
+
+.submission-rule-button i {
+    font-size: 1.25rem;
+}
+
+table .submission-rule-button {
+    margin: -0.38rem -1.125rem -0.38rem -0.5rem;
+}
+
+table.table-bordered.table-sm .submission-rule-button {
+    margin: calc(-0.25rem + 1px);
+}
+
+table.table tbody tr th.rating-details-type,
+table.table tfoot tr th.rating-details-summary {
+    background: var(--tblr-bg-surface-tertiary);
 }

@@ -45,7 +45,10 @@ class Submission implements ProjectRelatedEntityInterface
     private ?DateTimeInterface $verifiedAt = null;
 
     #[ORM\Column(type: 'json')]
-    private array $matchedRuleItems = [];
+    private array $matchedRuleItems = []; // @deprecated since 1.5, remove in upcoming version
+
+    #[ORM\OneToOne(targetEntity: DetectionResult::class, mappedBy: 'submission', cascade: ['persist'], orphanRemoval: true)]
+    private ?DetectionResult $detectionResult = null;
 
     #[ORM\Column(type: 'json')]
     private array $ignoredFields = [];
@@ -158,6 +161,18 @@ class Submission implements ProjectRelatedEntityInterface
     public function setMatchedRuleItems(array $matchedRuleItems): self
     {
         $this->matchedRuleItems = $matchedRuleItems;
+
+        return $this;
+    }
+
+    public function getDetectionResult(): ?DetectionResult
+    {
+        return $this->detectionResult;
+    }
+
+    public function setDetectionResult(DetectionResult $detectionResult): self
+    {
+        $this->detectionResult = $detectionResult;
 
         return $this;
     }

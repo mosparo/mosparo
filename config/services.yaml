@@ -64,7 +64,10 @@ services:
                 - [ setProjectHelper ]
 
         Mosparo\Rules\FieldRule\Type\RuleTypeInterface:
-            tags: ['mosparo.ruleType']
+            tags: ['mosparo.fieldRuleType']
+
+        Mosparo\Rules\SubmissionRule\SubmissionRuleInterface:
+          tags: ['mosparo.submissionRule']
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -157,7 +160,10 @@ services:
             - { name: twig.extension }
 
     Mosparo\Rules\FieldRule\RuleTypeManager:
-        arguments: [ !tagged mosparo.ruleType ]
+        arguments: [ !tagged mosparo.fieldRuleType ]
+
+    Mosparo\Rules\SubmissionRule\SubmissionRuleManager:
+      arguments: [ !tagged mosparo.submissionRule ]
 
     Mosparo\Helper\GeoIp2Helper:
         arguments:

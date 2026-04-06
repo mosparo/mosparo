@@ -1,0 +1,7 @@
+{% trans_default_domain 'mosparo' %}
+
+{% if value == true %}
+    <span class="text-success"><strong>{{ 'state.enabled'|trans }}</strong></span>
+{% elseif value == false %}
+    <span class="text-danger"><strong>{{ 'state.disabled'|trans }}</strong></span>
+{% endif %}

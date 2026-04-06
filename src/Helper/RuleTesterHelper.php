@@ -5,14 +5,17 @@ namespace Mosparo\Helper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\Entity\DetectionResult;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
 use Mosparo\Entity\RulePackageRuleCache;
 use Mosparo\Entity\RulePackageRuleItemCache;
 use Mosparo\Entity\Submission;
+use Mosparo\Entity\SubmissionRule;
 use Mosparo\Rules\FieldRule\RuleItemIterator;
 use Mosparo\Rules\FieldRule\RuleTypeManager;
 use Mosparo\Rules\FieldRule\Type\RuleTypeInterface;
+use Mosparo\Rules\SubmissionRule\SubmissionRuleManager;
 use Mosparo\Util\TokenGenerator;
 
 class RuleTesterHelper
@@ -31,6 +34,8 @@ class RuleTesterHelper
 
     protected RuleCacheHelper $ruleCacheHelper;
 
+    protected SubmissionRuleManager $submissionRuleManager;
+
     protected array $rules = [];
 
     protected array $results = [];
@@ -43,6 +48,7 @@ class RuleTesterHelper
         RulePackageHelper $rulePackageHelper,
         GeoIp2Helper $geoIp2Helper,
         RuleCacheHelper $ruleCacheHelper,
+        SubmissionRuleManager $submissionRuleManager
     ) {
         $this->entityManager = $entityManager;
         $this->ruleTypeManager = $ruleTypeManager;
@@ -51,6 +57,7 @@ class RuleTesterHelper
         $this->rulePackageHelper = $rulePackageHelper;
         $this->geoIp2Helper = $geoIp2Helper;
         $this->ruleCacheHelper = $ruleCacheHelper;
+        $this->submissionRuleManager = $submissionRuleManager;
     }
 
     public function simulateRequest($value, $type = 'textField', $useRules = true, $useRulePackages = true): Submission
@@ -132,10 +139,12 @@ class RuleTesterHelper
         return $submission;
     }
 
-    public function checkRequest(Submission $submission, array $securitySettings = [], bool $useRules = true,  bool$useRulePackages = true): void
+    public function checkRequest(Submission $submission, array $securitySettings = [], bool $useRules = true,  bool $useRulePackages = true, bool $useSubmissionRules = true): void
     {
+        $submission->setDetectionResult((new DetectionResult())->setSubmission($submission));
         $this->loadRuleTesters();
 
+        // Check the field rules
         foreach ($submission->getData() as $groupKey => $groupData) {
             // We do not check the metadata
             if ($groupKey === 'metadata') {
@@ -149,23 +158,37 @@ class RuleTesterHelper
                             continue;
                         }
 
-                        $this->checkFieldData($groupKey, $fieldData, $subValue, $useRules, $useRulePackages);
+                        $this->checkFieldData($submission->getDetectionResult(), $groupKey, $fieldData, $subValue, $useRules, $useRulePackages);
                     }
                 } else {
                     if (!trim($fieldData['value'])) {
                         continue;
                     }
 
-                    $this->checkFieldData($groupKey, $fieldData, $fieldData['value'], $useRules, $useRulePackages);
+                    $this->checkFieldData($submission->getDetectionResult(), $groupKey, $fieldData, $fieldData['value'], $useRules, $useRulePackages);
                 }
             }
         }
 
+        // Check the submission rules
+        if ($useSubmissionRules) {
+            $submissionRuleRepository = $this->entityManager->getRepository(SubmissionRule::class);
+            $enabledSubmissionRules = $submissionRuleRepository->findBy(['enabled' => true]);
+            foreach ($enabledSubmissionRules as $storedSubmissionRule) {
+                $submissionRule = $this->submissionRuleManager->getRule($storedSubmissionRule->getKey());
+                if (!$submissionRule) {
+                    continue;
+                }
+
+                $submissionRule->checkSubmission($storedSubmissionRule, $submission);
+            }
+        }
+
         // Analyze the results
-        $this->analyzeResults($submission, $this->results, $securitySettings);
+        $this->analyzeResults($submission, $securitySettings);
     }
 
-    protected function checkFieldData(string $groupKey, array $fieldData, mixed $value, bool $useRules = true,  bool$useRulePackages = true)
+    protected function checkFieldData(DetectionResult $detectionResult, string $groupKey, array $fieldData, mixed $value, bool $useRules = true,  bool$useRulePackages = true)
     {
         $value = strtolower($value);
         $path = $groupKey . '.' . $fieldData['fieldPath'];
@@ -220,11 +243,7 @@ class RuleTesterHelper
             $result = $tester->validateData($fieldData['name'], $value, $item);
 
             if ($result) {
-                if (!isset($this->results[$path])) {
-                    $this->results[$path] = [];
-                }
-
-                $this->results[$path] = array_merge($this->results[$path], [$result]);
+                $detectionResult->addMatchedFieldRuleItem($path, $result);
             }
 
             $ruleItemIterator->detach($item);
@@ -280,16 +299,9 @@ class RuleTesterHelper
         }
     }
 
-    protected function analyzeResults(Submission $submission, array $results, array $securitySettings = []): void
+    protected function analyzeResults(Submission $submission, array $securitySettings = []): void
     {
-        $score = 0;
-
-        foreach ($results as $issues) {
-            foreach ($issues as $issue) {
-                $score += $issue['rating'];
-            }
-        }
-
+        $score = $submission->getDetectionResult()->countPoints();
         $activeProject = $this->projectHelper->getActiveProject();
 
         $spamStatus = $activeProject->getStatus();
@@ -301,7 +313,6 @@ class RuleTesterHelper
 
         $submission->setSpamRating($score);
         $submission->setSpamDetectionRating($spamScore);
-        $submission->setMatchedRuleItems($results);
 
         if ($score >= $submission->getSpamDetectionRating() && $spamStatus) {
             $submission->setSpam(true);

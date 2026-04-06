@@ -241,6 +241,10 @@
                                                 </span>
                                             </a>
                                             <div class="dropdown-menu" data-bs-popper="none">
+                                                <a class="dropdown-item" href="{{ path('rules_submission_rule_list', {'_projectId': activeProject.id}) }}">
+                                                    <i class="ti ti-mail-search"></i>
+                                                    {{ 'rules.submissionRule.title'|trans }}
+                                                </a>
                                                 <a class="dropdown-item" href="{{ path('rules_field_rule_list', {'_projectId': activeProject.id}) }}">
                                                     <i class="ti ti-input-search"></i>
                                                     {{ 'rules.fieldRule.title'|trans }}

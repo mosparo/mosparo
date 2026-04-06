@@ -7,6 +7,31 @@
             padding-right: 0.5rem;
         }
     }
+
+    .table-bordered-sm {
+        tbody {
+            tr:first-child {
+                th,
+                td {
+                    border-top: 1px solid var(--tblr-table-border-color) !important;
+                }
+            }
+
+            tr {
+                th:first-child,
+                td:first-child {
+                    border-left: 1px solid var(--tblr-table-border-color) !important;
+                    padding-left: 0.25rem;
+                }
+
+                th:last-child,
+                td:last-child {
+                    border-right: 1px solid var(--tblr-table-border-color) !important;
+                    padding-right: 0.25rem;
+                }
+            }
+        }
+    }
 }
 
 .table {

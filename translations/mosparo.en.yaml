@@ -439,9 +439,35 @@ rules:
 
     list:
       name: Name
-      type: Type
       status: Status
       actions: Actions
+
+    configure:
+      title: Configure rule %ruleName%
+
+    form:
+      enableRule: Enable rule
+      rating: Rating
+      ratingHelp: Please set the number of points that this rule should add to the submission if it matches your submission. The rating is added to the submission once, not per field.
+
+      message:
+        successfullySaved: The submission rule was successfully saved.
+
+submissionRule:
+  randomValues:
+    title: Random values
+    summary: Detects random values in one or multiple form fields.
+    description: This submission rule detects random values in one or multiple fields of your form. The random values are usually 15 or more characters long and consist of characters and numbers, but do not contain any valid information.
+
+    field:
+      numberOfMatchingFields: Number of matching fields
+      numberOfMatchingFieldsHelp: Please specify how many fields of your form must contain such a random value to match this submission rule.
+      matchTextarea: Match textarea
+      matchTextareaHelp: Textarea fields may contain random values by default, for example, if someone adds a URL to the textarea. With this option, you can enable the submission rule for textareas too.
+      numberOfRandomCharacters: Number of characters to match
+      numberOfRandomCharactersHelp: Normally, these random values are 15 or more characters long. If you have random values with fewer than 15 characters, you can adjust the rule logic with this setting. But please be aware that a number too low can match other things, like names.
+      requireBothCases: Requires lowercase and uppercase characters
+      requireBothCasesHelp: The random values normally consist of uppercase and lowercase characters as well as numbers. The rule, therefore, only matches if both uppercase and lowercase characters are found in a string. To match it independently of the case, please turn off this option.
 
 # Rule package
 rulePackage:
@@ -639,6 +665,7 @@ submission:
 
   view:
     title: Submission %submissionId%
+    goToDetails: Details
 
     action:
       openVerificationIssues: Verification issues
@@ -822,6 +849,15 @@ submission:
         ten:
           title: 'Step 10: Verify the response'
           intro: mosparo will answer your API request with a JSON string. Decode the JSON string and check if a key %codeStart%valid%codeEnd% exists and is set to %codeStart%true%codeEnd%. If that's the case, ensure that the key %codeStart%verificationSignature%codeEnd% is set as well and is equal to the verification signature generated in step 6. If that's the case, the response is valid.
+
+    ratingDetails:
+      title: Rating details
+      origin: Origin
+      details: Details
+      rating: Rating
+      submissionRules: Submission rules
+      fieldRules: Field rules
+      total: Total
 
 # Settings
 settings:
@@ -1966,6 +2002,8 @@ state:
   ignored: Ignored
   yes: Yes
   no: No
+  enabled: Enabled
+  disabled: Disabled
 
 # Roles
 roles:

@@ -1,0 +1,69 @@
+{% extends 'project_related/rules/rules_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'rules.submissionRule.configure.title'|trans({ '%ruleName%': submissionRule.name|trans }) }} - {{ 'rules.submissionRule.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pagePreTitle %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset(get_illustration_path('rule.svg'))|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">
+                            {{ 'rules.submissionRule.configure.title'|trans({ '%ruleName%': submissionRule.name|trans }) }}
+                        </h2>
+
+                        <p>{{ submissionRule.description|trans }}</p>
+
+                        {{ form_row(form.enabled) }}
+
+                        <div class="mb-3">
+                            {{ form_widget(form.configValues) }}
+                        </div>
+
+                        {{ form_row(form.rating) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto mt-2 mt-md-0">
+                <a href="{{ path('rules_submission_rule_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'rules.submissionRule.backToList'|trans }}
+                </a>
+            </div>
+            <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-device-floppy"></i>
+                    {{ 'action.save'|trans }}
+                </button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $('#form_enabled').change(function () {
+                let formEl = $(this).parents('form');
+                let fields = formEl.find('input:not([type="hidden"]), textarea, select').not(this);
+
+                fields.prop('disabled', !$(this).prop('checked'));
+            }).trigger('change');
+        </script>
+    {% endcspscript %}
+{% endblock %}

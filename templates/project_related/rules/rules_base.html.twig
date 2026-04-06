@@ -14,6 +14,12 @@
         <div class="d-none d-lg-block col-lg-2">
             <ul class="nav nav-pills nav-vertical">
                 <li class="nav-item">
+                    <a href="{{ path('rules_submission_rule_list', { '_projectId': activeProject.id }) }}" class="nav-link {% if app.request.attributes.get('_route') == 'rules_submission_rule_list' %}active{% endif %}">
+                        <i class="ti ti-mail-search"></i>
+                        {{ 'rules.submissionRule.title'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ path('rules_field_rule_list', { '_projectId': activeProject.id }) }}" class="nav-link {% if app.request.attributes.get('_route') == 'rules_field_rule_list' %}active{% endif %}">
                         <i class="ti ti-input-search"></i>
                         {{ 'rules.fieldRule.title'|trans }}
