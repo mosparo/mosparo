@@ -63,6 +63,14 @@ const getColors = function (chartType)
 const renderChart = function (chartElement, nonce, series, chartType, dateFormat, annotations)
 {
     let colors = getColors(chartType);
+
+    if (typeof annotations !== 'undefined') {
+        for (let idx in annotations.xaxis) {
+            annotations.xaxis[idx].borderColor = colors.annotationsLineColor;
+            annotations.xaxis[idx].label.style.color = colors.annotationsLabelColor;
+        }
+    }
+
     let chartOptions = {
         series: series,
         chart: {
