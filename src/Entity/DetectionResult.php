@@ -78,7 +78,6 @@ class DetectionResult implements ProjectRelatedEntityInterface
 
     public function addMatchedSubmissionRule(string $key, array $result): void
     {
-        dump($result);
         $this->matchedSubmissionRules[$key] = $result;
     }
 

@@ -54,7 +54,10 @@
                                 {{ form_row(form.translations) }}
                             </div>
                             <div class="col-12 col-md-4 mb-3">
-                                {{ form_row(form.rules) }}
+                                {{ form_row(form.submissionRules) }}
+                            </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                {{ form_row(form.fieldRules) }}
                             </div>
                             <div class="col-12 col-md-4 mb-3">
                                 {{ form_row(form.rulePackages) }}
@@ -69,23 +72,23 @@
                             {{ 'tools.importExport.infoRulesWithManyItems'|trans }}
                         </div>
 
-                        <div id="handlingExistingRulesContainer" class="d-none mt-3">
-                            {{ form_label(form.handlingExistingRules) }}
+                        <div id="handlingExistingFieldRulesContainer" class="d-none mt-3">
+                            {{ form_label(form.handlingExistingFieldRules) }}
                             <div class="row">
                                 <div class="col-12 col-md-4 mb-3 mb-md-0">
-                                    {{ form_widget(form.handlingExistingRules[0]) }}
+                                    {{ form_widget(form.handlingExistingFieldRules[0]) }}
                                     <p class="form-text mb-0 help-text">
                                         {{ 'tools.import.form.choice.overrideHelp'|trans }}
                                     </p>
                                 </div>
                                 <div class="col-12 col-md-4 mb-3 mb-md-0">
-                                    {{ form_widget(form.handlingExistingRules[1]) }}
+                                    {{ form_widget(form.handlingExistingFieldRules[1]) }}
                                     <p class="form-text mb-0 help-text">
                                         {{ 'tools.import.form.choice.appendHelp'|trans }}
                                     </p>
                                 </div>
                                 <div class="col-12 col-md-4 mb-0">
-                                    {{ form_widget(form.handlingExistingRules[2]) }}
+                                    {{ form_widget(form.handlingExistingFieldRules[2]) }}
                                     <p class="form-text mb-0 help-text">
                                         {{ 'tools.import.form.choice.addHelp'|trans }}
                                     </p>
@@ -113,12 +116,14 @@
     {% cspscript %}
         <script>
             $(document).ready(function () {
-                $('#form_rules').change(function () {
-                    let container = $('#handlingExistingRulesContainer');
+                $('#form_fieldRules').change(function () {
+                    let container = $('#handlingExistingFieldRulesContainer');
                     if ($(this).is(':checked')) {
                         container.removeClass('d-none');
+                        container.find('input').prop('required', true);
                     } else {
                         container.addClass('d-none');
+                        container.find('input').prop('required', false);
                     }
                 }).trigger('change');
             });

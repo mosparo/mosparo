@@ -134,23 +134,44 @@
                                             </div>
                                         </div>
                                     {% endif %}
-                                    {% if changes.rules is defined and changes.rules %}
+                                    {% if changes.submissionRules is defined and changes.submissionRules %}
                                         <div class="accordion-item">
                                             <div class="accordion-header">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-rules" aria-expanded="false">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-submission-rules" aria-expanded="false">
                                                     <div class="accordion-button-icon">
-                                                        <i class="ti ti-tags"></i>
+                                                        <i class="ti ti-mail-search"></i>
                                                     </div>
                                                     <span class="visible-when-active d-xl-inline">
-                                                        {{ 'tools.eiParts.rules'|trans }}
+                                                        {{ 'tools.eiParts.submissionRules'|trans }}
                                                     </span>
-                                                    {%  set numberOfChanges = changes.rules|length %}
+                                                    {%  set numberOfChanges = changes.submissionRules|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
                                                 </button>
                                             </div>
-                                            <div id="acc-rules" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
+                                            <div id="acc-submission-rules" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
                                                 <div class="accordion-body">
-                                                    {{ _self.changesTable('rules', changes.rules) }}
+                                                    {{ _self.changesTable('submissionRules', changes.submissionRules) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if changes.fieldRules is defined and changes.fieldRules %}
+                                        <div class="accordion-item">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-field-rules" aria-expanded="false">
+                                                    <div class="accordion-button-icon">
+                                                        <i class="ti ti-mail-search"></i>
+                                                    </div>
+                                                    <span class="visible-when-active d-xl-inline">
+                                                        {{ 'tools.eiParts.fieldRules'|trans }}
+                                                    </span>
+                                                    {%  set numberOfChanges = changes.fieldRules|length %}
+                                                    <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+                                                </button>
+                                            </div>
+                                            <div id="acc-field-rules" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
+                                                <div class="accordion-body">
+                                                    {{ _self.changesTable('fieldRules', changes.fieldRules) }}
                                                 </div>
                                             </div>
                                         </div>
@@ -248,7 +269,15 @@
                     <th>{{ 'tools.import.simulate.table.translationKey'|trans }}</th>
                     <th>{{ 'tools.import.simulate.table.text'|trans }}</th>
                 </tr>
-            {% elseif type == 'rules' %}
+            {% elseif type == 'submissionRules' %}
+                <tr>
+                    <th width="1%"></th>
+                    <th>{{ 'tools.import.simulate.table.submissionRule'|trans }}</th>
+                    <th width="1%" class="text-center">{{ 'tools.import.simulate.table.status'|trans }}</th>
+                    <th width="1%" class="text-end">{{ 'tools.import.simulate.table.rating'|trans }}</th>
+                    <th width="1%" class="text-center">{{ 'tools.import.simulate.table.modifyConfigValues'|trans }}</th>
+                </tr>
+            {% elseif type == 'fieldRules' %}
                 <tr>
                     <td colspan="3"></td>
                     <th colspan="3" class="text-center">{{ 'tools.import.simulate.table.items'|trans }}</th>
@@ -367,7 +396,35 @@
                         <td>{{ change.importedTranslation.translationKey|trans }}</td>
                         <td>{{ change.importedTranslation.text }}</td>
                     </tr>
-                {% elseif type == 'rules' %}
+                {% elseif type == 'submissionRules' %}
+                    <tr>
+                        <td>
+                            <span class="text-azure mode-icon" title="{{ 'tools.import.simulate.table.modify'|trans }}">
+                                <i class="ti ti-pencil"></i>
+                            </span>
+                        </td>
+                        <td>
+                            {% set submissionRule = get_submission_rule(change.importedRule.key) %}
+                            {{ submissionRule.name|trans }}
+                            <div class="text-muted">{{ submissionRule.summary|trans }}</div>
+                        </td>
+                        <td class="text-center">
+                            {% if change.importedRule.enabled %}
+                                <span class="text-success"><strong>{{ 'state.enabled'|trans }}</strong></span>
+                            {% else %}
+                                <span class="text-danger"><strong>{{ 'state.disabled'|trans }}</strong></span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">{{ change.importedRule.rating }}</td>
+                        <td class="text-center">
+                            {% if change.modifyConfigValues %}
+                                <span class="text-success"><strong>{{ 'state.yes'|trans }}</strong></span>
+                            {% else %}
+                                <span class="text-danger"><strong>{{ 'state.no'|trans }}</strong></span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% elseif type == 'fieldRules' %}
                     <tr>
                         <td>
                             {% if change.mode == 'add' %}

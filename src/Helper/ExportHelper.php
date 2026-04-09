@@ -7,6 +7,7 @@ use Mosparo\Entity\Project;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
+use Mosparo\Entity\SubmissionRule;
 use Mosparo\Entity\Translation;
 use Mosparo\Exception\ExportException;
 use Mosparo\Specifications\Specifications;
@@ -35,9 +36,17 @@ class ExportHelper
         return $fileName;
     }
 
-    public function exportProject(Project $project, bool $exportGeneralSettings, bool $exportDesignSettings, bool $exportSecuritySettings, bool $exportTranslations, bool $exportRules, bool $exportRulePackages): array
-    {
-        if (!$exportGeneralSettings && !$exportDesignSettings && !$exportSecuritySettings && !$exportTranslations && !$exportRules && !$exportRulePackages) {
+    public function exportProject(
+        Project $project,
+        bool $exportGeneralSettings,
+        bool $exportDesignSettings,
+        bool $exportSecuritySettings,
+        bool $exportTranslations,
+        bool $exportSubmissionRules,
+        bool $exportFieldRules,
+        bool $exportRulePackages
+    ): array {
+        if (!$exportGeneralSettings && !$exportDesignSettings && !$exportSecuritySettings && !$exportTranslations && !$exportSubmissionRules && !$exportFieldRules && !$exportRulePackages) {
             throw new ExportException('Select at least one element that you want to export.', ExportException::EMPTY_REQUEST);
         }
 
@@ -75,8 +84,12 @@ class ExportHelper
             $data['translations'] = $this->exportTranslations();
         }
 
-        if ($exportRules) {
-            $data['rules'] = $this->exportRules();
+        if ($exportSubmissionRules) {
+            $data['submissionRules'] = $this->exportSubmissionRules();
+        }
+
+        if ($exportFieldRules) {
+            $data['fieldRules'] = $this->exportFieldRules();
         }
 
         if ($exportRulePackages) {
@@ -223,7 +236,24 @@ class ExportHelper
         return $translations;
     }
 
-    protected function exportRules(): array
+    protected function exportSubmissionRules(): array
+    {
+        $rules = [];
+        $ruleRepository = $this->entityManager->getRepository(SubmissionRule::class);
+
+        foreach ($ruleRepository->findAll() as $rule) {
+            $rules[] = [
+                'key' => $rule->getKey(),
+                'enabled' => $rule->isEnabled(),
+                'configValues' => $rule->getConfigValues(),
+                'rating' => $rule->getRating() ?? 1,
+            ];
+        }
+
+        return $rules;
+    }
+
+    protected function exportFieldRules(): array
     {
         $rules = [];
         $ruleRepository = $this->entityManager->getRepository(Rule::class);

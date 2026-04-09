@@ -150,4 +150,31 @@ class SubmissionRule implements ProjectRelatedEntityInterface
 
         return $this;
     }
+
+    public function isEqual(array $rule): bool
+    {
+        if ($rule['enabled'] !== $this->isEnabled()) {
+            return false;
+        }
+
+        if (!$this->areConfigValuesEqual($rule['configValues'])) {
+            return false;
+        }
+
+        if (floatval($rule['rating']) !== $this->getRating()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function areConfigValuesEqual(array $otherConfigValues): bool
+    {
+        $configValues = $this->getConfigValues();
+
+        ksort($configValues);
+        ksort($otherConfigValues);
+
+        return ($configValues === $otherConfigValues);
+    }
 }

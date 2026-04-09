@@ -8,10 +8,12 @@ use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
+use Mosparo\Entity\SubmissionRule;
 use Mosparo\Entity\Translation;
 use Mosparo\Enum\RulePackageType;
 use Mosparo\Enum\TranslationKey;
 use Mosparo\Exception\ImportException;
+use Mosparo\Rules\SubmissionRule\SubmissionRuleManager;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
 
@@ -25,6 +27,8 @@ class ImportHelper
 
     protected RulePackageHelper $rulePackageHelper;
 
+    protected SubmissionRuleManager $submissionRuleManager;
+
     protected string $importDirectory;
 
     public function __construct(
@@ -32,12 +36,14 @@ class ImportHelper
         ProjectHelper $projectHelper,
         DesignHelper $designHelper,
         RulePackageHelper $rulePackageHelper,
+        SubmissionRuleManager $submissionRuleManager,
         string $importDirectory
     ) {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->designHelper = $designHelper;
         $this->rulePackageHelper = $rulePackageHelper;
+        $this->submissionRuleManager = $submissionRuleManager;
         $this->importDirectory = $importDirectory;
     }
 
@@ -151,8 +157,10 @@ class ImportHelper
                 $this->executeSecurityGuidelineChanges($sectionChanges);
             } else if ($sectionKey === 'translations') {
                 $this->executeTranslationChanges($sectionChanges);
-            } else if ($sectionKey === 'rules') {
-                $this->executeRuleChanges($sectionChanges);
+            } else if ($sectionKey === 'submissionRules') {
+                $this->executeSubmissionRuleChanges($sectionChanges);
+            }  else if ($sectionKey === 'fieldRules') {
+                $this->executeFieldRuleChanges($sectionChanges);
             } else if ($sectionKey === 'rulePackages') {
                 $modifiedRulePackages = $this->executeRulePackageChanges($sectionChanges);
             }
@@ -228,7 +236,8 @@ class ImportHelper
             !empty($changes['securitySettings'] ?? []) ||
             !empty($changes['securityGuidelines'] ?? []) ||
             !empty($changes['translations'] ?? []) ||
-            !empty($changes['rules'] ?? []) ||
+            !empty($changes['submissionRules'] ?? []) ||
+            !empty($changes['fieldRules'] ?? []) ||
             !empty($changes['rulePackages'] ?? [])
         );
     }
@@ -270,11 +279,19 @@ class ImportHelper
             }
         }
 
-        if ($jobData['importRules']) {
-            if (isset($importData['project']['rules'])) {
-                $changes['rules'] = $this->findRuleChanges($importData['project']['rules'], $jobData['handlingExistingRules']);
+        if ($jobData['importSubmissionRules']) {
+            if (isset($importData['project']['submissionRules'])) {
+                $changes['submissionRules'] = $this->findSubmissionRuleChanges($importData['project']['submissionRules']);
             } else {
-                $notInImport[] = 'rules';
+                $notInImport[] = 'submissionRules';
+            }
+        }
+
+        if ($jobData['importFieldRules']) {
+            if (isset($importData['project']['fieldRules'])) {
+                $changes['fieldRules'] = $this->findFieldRuleChanges($importData['project']['fieldRules'], $jobData['handlingExistingFieldRules']);
+            } else {
+                $notInImport[] = 'fieldRules';
             }
         }
 
@@ -530,8 +547,43 @@ class ImportHelper
         return $changes;
     }
 
+    protected function findSubmissionRuleChanges(array $rules): array
+    {
+        $changes = [];
+        $submissionRuleRepository = $this->entityManager->getRepository(SubmissionRule::class);
 
-    protected function findRuleChanges(array $rules, string $handlingExistingRules): array
+        foreach ($rules as $rule) {
+            $storedSubmissionRule = $submissionRuleRepository->findOneBy([
+                'key' => $rule['key'],
+            ]);
+
+            $submissionRule = $this->submissionRuleManager->getRule($rule['key']);
+            if (!$submissionRule) {
+                // Skip non-existing submission rule identifiers.
+                continue;
+            }
+
+            if ($storedSubmissionRule !== null) {
+                if ($storedSubmissionRule->isEqual($rule)) {
+                    // Everything up to date, no change required.
+                    continue;
+                }
+
+                $modifyConfigValues = !$storedSubmissionRule->areConfigValuesEqual($rule['configValues']);
+            } else {
+                $modifyConfigValues = true;
+            }
+
+            $changes[] = [
+                'importedRule' => $rule,
+                'modifyConfigValues' => $modifyConfigValues,
+            ];
+        }
+
+        return $changes;
+    }
+
+    protected function findFieldRuleChanges(array $rules, string $handlingExistingRules): array
     {
         $changes = [];
         $ruleRepository = $this->entityManager->getRepository(Rule::class);
@@ -801,7 +853,38 @@ class ImportHelper
         }
     }
 
-    protected function executeRuleChanges(array $sectionChanges)
+    protected function executeSubmissionRuleChanges(array $sectionChanges)
+    {
+        $submissionRuleRepository = $this->entityManager->getRepository(SubmissionRule::class);
+
+        foreach ($sectionChanges as $change) {
+            $importedRule = $change['importedRule'];
+            $storedSubmissionRule = $submissionRuleRepository->findOneBy([
+                'key' => $importedRule['key'],
+            ]);
+
+            $submissionRule = $this->submissionRuleManager->getRule($importedRule['key']);
+            if (!$submissionRule) {
+                throw new ImportException('Submission rule not found.', ImportException::SUBMISSION_RULE_NOT_FOUND);
+            }
+
+            if (!$storedSubmissionRule) {
+                $storedSubmissionRule = new SubmissionRule();
+                $storedSubmissionRule->setKey($submissionRule->getKey());
+
+                $this->entityManager->persist($storedSubmissionRule);
+            }
+
+            $storedSubmissionRule->setEnabled($importedRule['enabled']);
+            $storedSubmissionRule->setRating($importedRule['rating']);
+
+            foreach ($importedRule['configValues'] as $key => $value) {
+                $storedSubmissionRule->setConfigValue($key, $value);
+            }
+        }
+    }
+
+    protected function executeFieldRuleChanges(array $sectionChanges)
     {
         $ruleRepository = $this->entityManager->getRepository(Rule::class);
 

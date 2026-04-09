@@ -1295,7 +1295,7 @@ tools:
         noMatchingRules: No rule matched the test value.
 
   importExport:
-    infoRulesWithManyItems: Rules with hundreds of items can consume a lot of memory when exporting or importing these rules. This can lead to an error when you try to do it in the browser. Please increase the memory limit of the PHP process in such a case or use the CLI command to import or export the rules.
+    infoRulesWithManyItems: Field rules with hundreds of items can consume a lot of memory when exporting or importing these field rules. This can lead to an error when you try to do it in the browser. Please increase the memory limit of the PHP process in such a case or use the CLI command to import or export the field rules.
 
   export:
     title: Export
@@ -1312,21 +1312,21 @@ tools:
     intro: If you want to copy the data from another project into this one, please choose the file to import and which data you want to import. If you import the rules, please choose how mosparo should handle existing rules.
     intro2: After you've selected all the data, please click the button below. mosparo will analyze the file and gives you a summary of what will be changed before anything is imported.
     importData: Data to import
-    infoOverrideData: The settings, as well as the rule packages, will always be overridden in the project. For the rules, you have to choose what mosparo should do with existing rules. Rule packages created before version 1.4.0 of mosparo may have a different ID and not match the import file.
+    infoOverrideData: The settings, as well as the rule packages, will always be overridden in the project. For the field rules, you have to choose what mosparo should do with existing field rules. Rule packages created before version 1.4.0 of mosparo may have a different ID and not match the import file.
 
     backToImport: Back to import
 
     form:
       importFile: File to import
-      handlingExistingRules: Handling of existing rules
+      handlingExistingFieldRules: Handling of existing field rules
 
       choice:
         override: Override
-        overrideHelp: All existing rules will be overridden with the rule from the import file. All additional rule items will be deleted.
+        overrideHelp: All existing field rules will be overridden with the field rule from the import file. All additional field rule items will be deleted.
         append: Append
-        appendHelp: mosparo will append the rule items from the file to the existing rules but will not delete any rule items.
+        appendHelp: mosparo will append the field rule items from the file to the existing field rules but will not delete any rule items.
         add: Add
-        addHelp: mosparo will add existing rules as new rules. The new rules will receive a new identifier.
+        addHelp: mosparo will add existing field rules as new rules. The new field rules will receive a new identifier.
 
     message:
       changesSuccessfullyExecuted: The changes were executed successfully.
@@ -1334,6 +1334,7 @@ tools:
     errorMessage:
       selectAtLeastOneElement: Select at least one element that you want to import.
       fileUploadError: The file was not uploaded correctly. Please check the log file.
+      selectHandlingMode: Select one of the handling modes of the existing rules.
 
     simulate:
       title: Available changes
@@ -1367,6 +1368,9 @@ tools:
         locale: Locale
         translationKey: Base text
         text: Translated text
+        submissionRule: Submission rule
+        rating: Rating
+        modifyConfigValues: Modify values
 
       errorMessage:
         jobDataFileNotFound: Job data file for token does not exist.
@@ -1389,8 +1393,10 @@ tools:
     securitySettingsHelp: Includes all settings related to the security of a project.
     translations: Translations
     translationsHelp: Includes all translations that were added to a project.
-    rules: Rules
-    rulesHelp: Includes all rules of a project.
+    submissionRules: Submission rules
+    submissionRulesHelp: Includes all configured submission rules of a project.
+    fieldRules: Field rules
+    fieldRulesHelp: Includes all field rules of a project.
     rulePackages: Rule packages
     rulePackagesHelp: Includes all rule packages of a project.
 
