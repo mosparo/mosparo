@@ -1024,6 +1024,7 @@ settings:
     form:
       locale: Ländereinstellung
       localeHelp: Bitte geben Sie die Sprachumgebung entweder als zweistelligen Sprachcode (ISO 639-1; z. B. de) oder in Kombination mit einem Ländercode (z. B. de_DE) ein.
+      localePlaceholder: de oder de_DE
       translationKey: Ausgangstext
       text: Übersetzter Text
       usePlaceholders: Dieser Ausgangstext enthält Platzhalter (%datetime% oder %seconds%). Bitte fügen Sie diese Platzhalter an der richtigen Stelle in Ihrem übersetzten Text ein. mosparo ersetzt die Platzhalter durch die dynamischen Werte.

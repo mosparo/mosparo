@@ -1222,7 +1222,8 @@ settings:
 
     form:
       locale: Locale
-      localeHelp: Please enter the locale either as a two-character language code (ISO 639-1; for example, de) or combined with a country code (for example, de_DE).
+      localeHelp: Please enter the locale either as a two-character language code (ISO 639-1; for example, en) or combined with a country code (for example, en_US).
+      localePlaceholder: en or en_US
       translationKey: Base text
       text: Translated text
       usePlaceholders: This base text contains placeholders (%datetime% or %seconds%). Please place these placeholders at the correct position in your translated text. mosparo will replace the placeholders with the dynamic values.
