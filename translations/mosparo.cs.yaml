@@ -1058,10 +1058,6 @@ tools:
     simulate:
       title: Dostupné změny
       noChangesFound: Projekt je již stejný jako data v importním souboru a nejsou k dispozici žádné změny.
-      changes:
-        notActive: Tato sekce není pro tento import aktivní.
-        noChangesRequired: V této sekci nejsou nutné žádné změny, protože vše je již aktuální.
-        notInExport: Tato sekce není v souboru importu dostupná.
       table:
         status: Stav
         add: Přidat

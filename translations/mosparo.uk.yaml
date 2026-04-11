@@ -14,6 +14,9 @@ project:
     apiDebugMode: Режим налагодження API
     apiDebugModeHelp: Якщо ввімкнено режим налагодження API, API перевірка поверне більше інформації про процес перевірки. Ця інформація може допомогти зрозуміти, чому перевірку не пройдено. Використовуйте цей параметр, щоб допомогти інтегрувати mosparo у вашу форму.
     verificationSimulationModeHelp: Ви можете змоделювати процес перевірки, якщо ввімкнено режим симуляції перевірки. Відкрийте деталі заявки і натисніть кнопку у верхньому правому куті. Інструмент моделювання покаже вам, як має виглядати ваш запит і які дані mosparo очікує отримати для перевірки заявки.
+    projectGroup: Проєктна група
+    projectGroupHelp: Ви можете використовувати проєктні групи для організації ваших проєктів. Оберіть проєктну групу, у якій ви хочете зберігати цей проєкт.
+    languageSource: Джерело мови
   infoCreateProjectOrRequestAccess: Створіть новий проєкт або запросіть доступ до іншого проєкту.
   title: Проєкти
   infoNoProjectAvailable: Немає доступних проєктів
@@ -21,18 +24,23 @@ project:
     title: Створити проєкт
     message:
       successfullyCreatedAndConfigured: Новий проєкт було успішно створено та налаштовано.
-  backToList: Назад до проєктів
+  backToList: Назад до списку проєктів
   action:
-    manage: Керування проєктом
+    manage: Керувати проєктами
     delete: Видалити проєкт
     goto: Перейти до проєкту
     id: ID проєкту
+    settings: Налаштування
+    create: Створити
   delete:
     message:
       successfullyDeleted: Проєкт «%projectName%» успішно видалено.
     title: Видалити проєкт «%projectName%»
     confirm: Ви дійсно хочете видалити проєкт «%projectName%»?
     disconnectFirst: Переконайтеся, що ви від'єднали свій вебсайт або інтеграцію з цим проєктом, перш ніж видалити його.
+    deleteRulePackages:
+      intro1: У цьому проєкті присутні пакети правил. Ви не можете видалити проєкт.
+      intro2: Спочатку видаліть пакети правил, а потім видаліть проєкт.
   roles:
     reader: Читач
     editor: Редактор
@@ -41,6 +49,7 @@ project:
     status: Стан
     actions: Дії
     name: Назва
+    projects: Проєкти
   createWizard:
     design:
       introStartWizard: Ваш проєкт успішно створено. Щоб почати користуватися ним, оберіть дизайн і продовжіть.
@@ -63,6 +72,8 @@ project:
       active: Показати активні проєкти
   search:
     placeholder: Пошук…
+  searchTitle: Проєкти для %searchQuery%
+  infoNoProjectsInThisGroup: Немає жодного проєкту в цій групі.
 rules:
   fieldRule:
     form:
@@ -78,11 +89,43 @@ rules:
         items: Елементи
         rating: Рейтинг
         ratingHelp: Якщо не встановлено, типовим значенням є 1.0. Якщо рейтинг встановлено на 0.0, елементи не будуть оцінені як спам-елементи.
+        type: Тип
       ruleType: Тип правила
       items:
         title: Елементи
         type: Тип
         rating: Рейтинг
+        value: Значення
+      status:
+        unsavedChanges: '%counter% незбережених змін'
+        savingChanges: Збереження %counter% змін
+        nothingToSave: Нічого зберігати
+      filter:
+        title: Фільтрування елементів
+        useWildcard: Використовуйте %wildcard% як підстановний знак.
+        itemSpamRating: Рейтинг спаму елемента
+      noItemsInTable:
+        title: Ще немає жодних елементів
+        text: Це правило ще не містить жодних елементів.
+      nothingFound:
+        title: Нічого не знайдено
+        text: Немає елементів, які відповідають вашому фільтру.
+      modal:
+        importTxtFile:
+          title: Імпортування текстового файлу
+          file: Файл
+          fileHelp: Виберіть текстовий файл (*.txt), який хочете імпортувати зі свого комп’ютера.
+          action: Імпортувати файл
+        importCsvFile:
+          title: Імпортування CSV-файлу
+          file: Файл
+          fileHelp: Виберіть файл CSV (*.csv), який хочете імпортувати зі свого комп’ютера.
+          action: Імпортувати файл
+        addingItems:
+          title: Додавання елементів
+          messageCompleted: Надані дані були оброблені. Дивіться підсумок доданих, пропущених та недійсних елементів вище. Зараз ви можете закрити це вікно.
+          progress:
+            dataProcessed: Дані оброблено
     edit:
       title: Редагувати правило «%ruleName%»
     title: Правила
@@ -97,6 +140,8 @@ rules:
       intro: Виберіть тип правила, яке ви хочете створити. Доступні типи використовуються для різних полів і не можуть бути змінені для правила пізніше.
     create:
       title: Створити правило
+    label:
+      ruleType: Тип правил
     delete:
       title: Видалити правило «%ruleName%»
       confirm: Ви дійсно хочете видалити правило «%ruleName%»?
@@ -527,3 +572,27 @@ settings:
       successfullySaved: Налаштування було успішно збережено.
   title: Налаштування проєкту
   backToSettings: Повернутися до налаштувань
+projectGroup:
+  mainGroup: Головна група
+  action:
+    edit: Редагувати групу
+    delete: Видалити групу
+    openMainGroup: Повернутися до головної групи
+    openParentGroupName: Повернутися до %name%
+  form:
+    name: Назва
+    description: Опис
+    parentGroup: Батьківська група
+    tooltip:
+      activeGroup: Ви редагуєте цю групу.
+    message:
+      successfullySaved: Група проєктів %projectGroupName% була успішно збережена.
+  delete:
+    title: Видалити групу проєктів %projectGroupName%
+    confirm: Дійсно бажаєте видалити групу проєктів %projectGroupName%?
+    reassignChildren: Всі проєктні групи і проєкти в цій проєктній групі будуть призначені автоматично до батьківської проєктної групи.
+    message:
+      successfullyDeleted: Група проєктів %projectGroupName% була успішно видалена.
+projectGroupSelector:
+  noGroupsAvailable: Немає доступних груп.
+  noProjectsAvailable: Немає доступних проєктів
