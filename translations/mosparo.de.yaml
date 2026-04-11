@@ -844,7 +844,7 @@ settings:
       title: Arbeitsnachweis-Mechanismus
       intro: Der Arbeitsnachweis-Mechanismus (Proof of Work) lässt den Browser automatisch viele Hashes berechnen, um das richtige Ergebnis zu finden. Der Browser benötigt für diese Berechnung Zeit, die ein Spam-Bot nicht gerne aufwendet.
       subtitle: Dynamische Komplexität
-      introDynamicComplexity: Bei der dynamischen Komplexität wird das automatische Rätsel mit einem größeren Zahlenbereich generiert, was bedeutet, dass der Browser mehr berechnen muss und mehr Zeit verschwendet. Wenn die dynamische Komplexität auf der IP-Adresse basiert, haben nur Clients mit vielen Einsendungen in einem bestimmten Zeitbereich komplexere Rätsel.
+      introDynamicComplexity: Bei der dynamischen Komplexität wird das automatische Rätsel mit einem grösseren Zahlenbereich generiert, was bedeutet, dass der Browser mehr berechnen muss und mehr Zeit verschwendet. Wenn die dynamische Komplexität auf der IP-Adresse basiert, haben nur Clients mit vielen Einsendungen in einem bestimmten Zeitbereich komplexere Rätsel.
     crypto:
       numberRange: Zahlenbereich
       maximumTimeToSolve: Max. Zeit zur Lösung
