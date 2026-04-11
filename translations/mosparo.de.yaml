@@ -115,13 +115,28 @@ dashboard:
     spam: Spam
     annotation:
       statisticOnly: Nur Statistik
+    delayed: Verzögert
+    blocked: Blockiert
   dateRange:
     dropdown: Sichtbaren Datumsbereich auswählen
 
+  submissions:
+    summary:
+      validSubmission: 1 gültige Einsendung
+      validSubmissions: '%numberOfSubmissions% gültige Einsendungen'
+      spamSubmission: 1 Spam-Einsendung
+      spamSubmissions: '%numberOfSubmissions% Spam-Einsendungen'
+  requests:
+    title: Verzögerte oder blockierte Anfragen
+    summary:
+      delayedRequest: 1 verzögerte Anfrage
+      delayedRequests: '%numberOfRequests% verzögerte Anfragen'
+      blockedRequest: 1 blockierte Anfrage
+      blockedRequests: '%numberOfRequests% blockierte Anfragen'
 rules:
   fieldRule:
-    title: Regeln
-    backToList: Zu den Regeln
+    title: Feldregeln
+    backToList: Zurück zu den Feldregeln
 
     list:
       name: Name
@@ -131,7 +146,7 @@ rules:
 
     createChooseType:
       title: Typ wählen
-      intro: Bitte wählen Sie den Typ der Regel, die Sie erstellen möchten. Die verfügbaren Typen werden für verschiedene Felder verwendet und können für eine Regel nicht nachträglich geändert werden.
+      intro: Bitte wählen Sie den Typ der Feldregel, die Sie erstellen möchten. Die verfügbaren Typen werden für verschiedene Felder verwendet und können für eine Feldregel nicht nachträglich geändert werden.
 
     create:
       title: Regel erstellen
@@ -344,6 +359,22 @@ rules:
       options:
         all: Alle anzeigen
       dropdown: Liste der Regeln filtern
+  title: Regeln
+  submissionRule:
+    title: Einsende-Regeln
+    backToList: Zurück zu den Einsende-Regeln
+    list:
+      name: Name
+      status: Status
+      actions: Aktionen
+    configure:
+      title: Regel %ruleName% konfigurieren
+    form:
+      enableRule: Regel aktivieren
+      rating: Bewertung
+      ratingHelp: Bitte geben Sie die Punktzahl an, um die diese Regel die Bewertung erhöhen soll, wenn sie mit Ihrer Bewertung übereinstimmt. Die Bewertung wird einmalig zur Bewertung hinzugefügt, nicht für jedes Feld einzeln.
+      message:
+        successfullySaved: Die Einsende-Regel wurde erfolgreich gespeichert.
 rulePackage:
   title: Regel-Pakete
   backToList: Zu den Regel-Paketen
@@ -395,8 +426,8 @@ rulePackage:
       importFirst: Dieses Regelpaket enthält keine Daten. Bitte importieren Sie die Daten des Regelpakets manuell.
       noRulePackageCache: Es ist kein Regelpaket-Cache für dieses Regelpaket gespeichert. Das bedeutet, dass der Download nicht erfolgreich war oder etwas anderes schief gelaufen ist.
     includedRules:
-      title: Beinhaltete Regeln
-      ruleDetails: Details der Regel
+      title: Beinhaltete Feldregeln
+      ruleDetails: Details der Feldregel
       name: Name
       description: Beschreibung
       spamRatingFactor: Spam-Bewertungsfaktor
@@ -679,6 +710,15 @@ submission:
         errorMessage: Fehlermeldung
         message: Meldung
         debugInformation: Debug-Informationen
+    goToDetails: Details
+    ratingDetails:
+      title: Details zur Bewertung
+      origin: Ursprung
+      details: Details
+      rating: Bewertung
+      submissionRules: Einsenderegeln
+      fieldRules: Feldregeln
+      total: Total
   filter:
     options:
       spam: Spam-Einsendungen
@@ -1384,6 +1424,33 @@ administration:
       submissions: Einsendung
       executionTime: Ausführungsdauer
       cleanupStatus: Status
+  throughputStatistics:
+    title: Durchsatzstatistiken
+    description: Zeigt die von mosparo für alle Projekte verarbeiteten Einsendungen- und Anfragestatistiken an.
+    chartTitles:
+      submissions: Einsendungen aller Projekte
+      requests: Anfragen aller Projekte
+    requests:
+      delays:
+        title: Aktive Verzögerungen
+        numberOfActiveDelays: Anzahl der aktiven Verzögerungen
+        longestActiveDelay: Längste aktive Verzögerung
+        noActiveDelays: Derzeit gibt es keine aktiven Verzögerungen.
+      lockouts:
+        title: Aktive Sperren
+        numberOfActiveLockouts: Anzahl der aktiven Sperren
+        longestActiveLockout: Längste aktive Sperre
+        noActiveLockouts: Derzeit gibt es keine aktiven Sperren.
+    reset:
+      delay:
+        title: Verzögerungen zurücksetzen
+        confirm: Sind Sie sicher, dass Sie alle Verzögerungen zurücksetzen möchten? Wenn Sie das tun, können alle, bei denen es zuvor zu Verzögerungen kam, die Formulare ohne weitere Hürden erneut anfordern.
+        successfullyResetted: Die Verzögerungen wurden erfolgreich zurückgesetzt.
+      lockout:
+        title: Sperren zurücksetzen
+        confirm: Sind Sie sicher, dass Sie alle Sperren zurücksetzen möchten? Wenn Sie das tun, können alle, welche zuvor blockiert wurden, die Formulare ohne weitere Hürden erneut absenden.
+        successfullyResetted: Die Sperren wurden erfolgreich zurückgesetzt.
+    backToOverview: Zurück zur Übersicht
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. Ist eine Internetverbindung vorhanden, sucht mosparo automatisch nach Updates, indem die Versionsdatei von der mosparo-Website heruntergeladen wird. Auch für das Herunterladen von Updates, der GeoIP2-Datenbanken und Regel-Pakete benötigen Sie eine aktive Internetverbindung.
@@ -1583,6 +1650,8 @@ state:
   no: Nein
 
 # Roles
+  enabled: Aktiviert
+  disabled: Deaktiviert
 roles:
   administrator: Administrator
   user: Benutzer
@@ -1735,6 +1804,9 @@ tools:
         locale: Sprache
         translationKey: Ausgangstext
         text: Übersetzter Text
+        submissionRule: Einsenderegel
+        rating: Bewertung
+        modifyConfigValues: Werte aktualisieren
       title: Verfügbare Änderungen
       intro: mosparo hat den Import simuliert und die folgenden Änderungen festgestellt. Bitte überprüfen Sie diese und führen Sie die Änderungen aus, wenn alles in Ordnung ist.
       errorMessage:
@@ -1755,17 +1827,19 @@ tools:
     form:
       choice:
         override: Überschreiben
-        overrideHelp: Alle bestehenden Regeln werden mit der Regel aus der Importdatei überschrieben. Alle zusätzlichen Einträge werden gelöscht.
+        overrideHelp: Alle bestehenden Feldregeln werden mit der Feldregel aus der Importdatei überschrieben. Alle zusätzlichen Einträge werden gelöscht.
         append: Anfügen
         add: Hinzufügen
-        appendHelp: mosparo wird die Einträge aus der Importdatei an die bestehenden Regeln anhängen, aber keine Einträge löschen.
-        addHelp: mosparo fügt bestehende Regeln als neue Regeln hinzu. Die neuen Regeln erhalten eine neue Identifikation (UUID).
+        appendHelp: mosparo wird die Einträge aus der Importdatei an die bestehenden Feldregeln anhängen, aber keine Einträge löschen.
+        addHelp: mosparo fügt bestehende Feldregeln als neue Feldregeln hinzu. Die neuen Feldregeln erhalten eine neue Identifikation (UUID).
       importFile: Zu importierende Datei
+      handlingExistingFieldRules: Umgang mit bestehenden Feldregeln
     intro: Wenn Sie die Daten aus einem anderen Projekt in dieses Projekt kopieren möchten, wählen Sie bitte die zu importierende Datei und die zu importierenden Daten aus. Wenn Sie die Regeln importieren, wählen Sie bitte aus, wie mosparo bestehende Regeln behandeln soll.
-    infoOverrideData: Die Einstellungen und auch die Regelpakete werden im Projekt immer überschrieben. Bei den Regeln müssen Sie auswählen, was mosparo mit bestehenden Regeln machen soll. Regelpakete, die vor Version 1.4.0 von mosparo erstellt wurden, haben möglicherweise eine andere ID und passen nicht zur Importdatei.
+    infoOverrideData: Die Einstellungen und auch die Regelpakete werden im Projekt immer überschrieben. Bei den Feldregeln müssen Sie auswählen, was mosparo mit bestehenden Feldregeln machen soll. Regelpakete, die vor Version 1.4.0 von mosparo erstellt wurden, haben möglicherweise eine andere ID und passen nicht zur Importdatei.
     errorMessage:
       selectAtLeastOneElement: Wählen Sie mindestens ein Element aus, das Sie importieren möchten.
       fileUploadError: Die Datei wurde nicht korrekt hochgeladen. Bitte prüfen Sie die Protokolldatei.
+      selectHandlingMode: Wählen Sie einen der Bearbeitungsmodi der vorhandenen Regeln aus.
     backToImport: Zurück zum Importieren
     intro2: Nachdem Sie alle Daten ausgewählt haben, klicken Sie bitte auf die Schaltfläche unten. mosparo analysiert die Datei und gibt Ihnen eine Zusammenfassung, was geändert wird, bevor irgendetwas importiert wird.
     message:
@@ -1829,8 +1903,12 @@ tools:
     rulePackagesHelp: Enthält alle Regel-Pakete eines Projekts.
     translations: Übersetzungen
     translationsHelp: Enthält alle Übersetzungen, die einem Projekt hinzugefügt wurden.
+    submissionRules: Einsenderegeln
+    submissionRulesHelp: Enthält alle konfigurierten Einsenderegeln eines Projekts.
+    fieldRules: Feldregeln
+    fieldRulesHelp: Enthält alle Feldregeln eines Projekts.
   importExport:
-    infoRulesWithManyItems: Regeln mit Hunderten von Elementen können beim Exportieren oder Importieren dieser Regeln viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser durchzuführen. Bitte erhöhen Sie in einem solchen Fall die Speicherbegrenzung des PHP-Prozesses oder verwenden Sie den CLI-Befehl, um die Regeln zu importieren oder zu exportieren.
+    infoRulesWithManyItems: Feldregeln mit Hunderten von Elementen können beim Exportieren oder Importieren dieser Feldregeln viel Arbeitsspeicher beanspruchen. Dies kann zu einem Fehler führen, wenn Sie versuchen, dies im Browser durchzuführen. Bitte erhöhen Sie in einem solchen Fall die Speicherbegrenzung des PHP-Prozesses oder verwenden Sie den CLI-Befehl, um die Feld-Regeln zu importieren oder zu exportieren.
 dataTable:
   name: Name
   empty: Leer
@@ -1979,3 +2057,17 @@ tooltip:
   publicKey: Öffentlicher Schlüssel
   privateKey: Geheimer Schlüssel
   deleted: Gelöscht
+submissionRule:
+  randomValues:
+    title: Zufallswerte
+    summary: Erkennt Zufallswerte in einem oder mehreren Formularfeldern.
+    description: Diese Einsende-Regel erkennt zufällige Werte in einem oder mehreren Feldern Ihres Formulars. Die zufälligen Werte sind in der Regel 15 oder mehr Zeichen lang und bestehen aus Buchstaben und Zahlen, enthalten jedoch keine gültigen Informationen.
+    field:
+      numberOfMatchingFields: Anzahl der übereinstimmenden Felder
+      numberOfMatchingFieldsHelp: Bitte geben Sie an, wie viele Felder Ihres Formulars einen solchen Zufallswert enthalten müssen, um diese Einsende-Regel zu erfüllen.
+      matchTextarea: Mehrzeiliges Textfeld einschliessen
+      matchTextareaHelp: Mehrzeilige Textfelder können standardmässig zufällige Werte enthalten, beispielsweise wenn jemand eine URL in dem Textfeld eingibt. Mit dieser Option können Sie die Einsende-Regel auch für mehrzeiligen Textfelder aktivieren.
+      numberOfRandomCharacters: Anzahl der zu suchenden Zeichen
+      numberOfRandomCharactersHelp: Normalerweise sind diese Zufallswerte mindestens 15 Zeichen lang. Wenn Sie Zufallswerte mit weniger als 15 Zeichen haben, können Sie die Regel mit dieser Einstellung anpassen. Beachten Sie jedoch, dass ein zu niedriger Wert mit anderen Begriffen, wie beispielsweise Namen, übereinstimmen könnte.
+      requireBothCases: Klein- und Grossbuchstaben sind zwingend erforderlich
+      requireBothCasesHelp: Die Zufallswerte bestehen in der Regel aus Gross- und Kleinbuchstaben sowie Zahlen. Die Regel greift daher nur, wenn in einer Zeichenfolge sowohl Gross- als auch Kleinbuchstaben vorkommen. Um die Übereinstimmung unabhängig von der Gross-/Kleinschreibung zu erzielen, deaktivieren Sie bitte diese Option.

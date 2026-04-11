@@ -149,8 +149,8 @@ project:
       successfullyDeleted: The project %projectName% was deleted successfully.
 
     deleteRulePackages:
-        intro1: There are rule packages present in this project. You cannot delete the project.
-        intro2: Please delete the rule packages first and then delete the project.
+      intro1: There are rule packages present in this project. You cannot delete the project.
+      intro2: Please delete the rule packages first and then delete the project.
 
   roles:
     reader: Reader
@@ -334,7 +334,7 @@ rules:
 
       ipAddress:
         title: IP address
-        shortIntro: Allows to filter by ip addresses and subnets
+        shortIntro: Allows to filter by IP addresses and subnets
         intro: The IP address rule type allows to filter for IP addresses or subnets.
         label: IP address/Subnet
         placeholder: 0.0.0.0
