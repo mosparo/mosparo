@@ -1753,7 +1753,6 @@ tools:
         notInExportMessage: Einige der ausgewählten Daten sind in der Importdatei nicht enthalten. Bitte exportieren Sie das Projekt erneut und wählen Sie alle erforderlichen Daten aus.
     title: Importieren
     form:
-      handlingExistingRules: Behandlung bestehender Regeln
       choice:
         override: Überschreiben
         overrideHelp: Alle bestehenden Regeln werden mit der Regel aus der Importdatei überschrieben. Alle zusätzlichen Einträge werden gelöscht.
@@ -1822,10 +1821,8 @@ tools:
   eiParts:
     generalSettings: Haupteinstellungen
     securitySettings: Sicherheitseinstellungen
-    rules: Regeln
     designSettingsHelp: Umfasst alle Einstellungen, die sich auf die Darstellung eines Projekts beziehen.
     securitySettingsHelp: Umfasst alle Einstellungen, die sich auf die Sicherheit eines Projekts beziehen.
-    rulesHelp: Enthält alle Regeln eines Projekts.
     generalSettingsHelp: Enthält die allgemeinen Einstellungen eines Projekts wie den Namen, die Beschreibung, die Hosts sowie den Spam-Score.
     rulePackages: Regel-Pakete
     designSettings: Darstellungseinstellungen

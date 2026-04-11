@@ -722,7 +722,6 @@ tools:
     backToImport: இறக்குமதி செய்ய மீண்டும்
     form:
       importFile: இறக்குமதி செய்ய கோப்பு
-      handlingExistingRules: இருக்கும் விதிகளைக் கையாளுதல்
       choice:
         override: மேலெழுதவும்
         overrideHelp: தற்போதுள்ள அனைத்து விதிகளும் இறக்குமதி கோப்பிலிருந்து விதியுடன் மீறப்படும். அனைத்து கூடுதல் விதி உருப்படிகளும் நீக்கப்படும்.
@@ -751,8 +750,6 @@ tools:
     designSettingsHelp: ஒரு திட்டத்தின் வடிவமைப்பு தொடர்பான அனைத்து அமைப்புகளும் அடங்கும்.
     securitySettings: பாதுகாப்பு அமைப்புகள்
     securitySettingsHelp: ஒரு திட்டத்தின் பாதுகாப்பு தொடர்பான அனைத்து அமைப்புகளும் அடங்கும்.
-    rules: விதிகள்
-    rulesHelp: ஒரு திட்டத்தின் அனைத்து விதிகளும் அடங்கும்.
     rulePackages: விதிகள்
     rulePackagesHelp: ஒரு திட்டத்தின் அனைத்து விதிகளும் அடங்கும்.
     translations: மொழிபெயர்ப்புகள்
@@ -1129,17 +1126,7 @@ rulePackage:
       type: வகை
       value: மதிப்பு
       rating: செயல்வரம்பு
-    list:
-      rules:
-        name: பெயர்
-        type: வகை
-        numberOfRuleItems: பொருட்களின் எண்ணிக்கை
-        spamRatingFactor: ச்பேம் மதிப்பீட்டு காரணி
-        actions: செயல்கள்
-      ruleItems:
-        type: வகை
-        value: மதிப்பு
-        spamRatingFactor: ச்பேம் மதிப்பீட்டு காரணி
+    list: {}
     fieldRule:
       title: விதி %ruleName% ஐக் காண்க
       details:
