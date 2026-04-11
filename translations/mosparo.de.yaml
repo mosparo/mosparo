@@ -135,8 +135,8 @@ dashboard:
       blockedRequests: '%numberOfRequests% blockierte Anfragen'
 rules:
   fieldRule:
-    title: Regeln
-    backToList: Zu den Regeln
+    title: Feldregeln
+    backToList: Zurück zu den Feldregeln
 
     list:
       name: Name
@@ -146,7 +146,7 @@ rules:
 
     createChooseType:
       title: Typ wählen
-      intro: Bitte wählen Sie den Typ der Regel, die Sie erstellen möchten. Die verfügbaren Typen werden für verschiedene Felder verwendet und können für eine Regel nicht nachträglich geändert werden.
+      intro: Bitte wählen Sie den Typ der Feldregel, die Sie erstellen möchten. Die verfügbaren Typen werden für verschiedene Felder verwendet und können für eine Feldregel nicht nachträglich geändert werden.
 
     create:
       title: Regel erstellen
@@ -1450,6 +1450,7 @@ administration:
         title: Sperren zurücksetzen
         confirm: Sind Sie sicher, dass Sie alle Sperren zurücksetzen möchten? Wenn Sie das tun, können alle, welche zuvor blockiert wurden, die Formulare ohne weitere Hürden erneut absenden.
         successfullyResetted: Die Sperren wurden erfolgreich zurückgesetzt.
+    backToOverview: Zurück zur Übersicht
 downloadCheck:
   cardTitle: Internet-Verbindung
   intro: Eine ausgehende Internetverbindung ist keine Voraussetzung für mosparo. Ist eine Internetverbindung vorhanden, sucht mosparo automatisch nach Updates, indem die Versionsdatei von der mosparo-Website heruntergeladen wird. Auch für das Herunterladen von Updates, der GeoIP2-Datenbanken und Regel-Pakete benötigen Sie eine aktive Internetverbindung.
