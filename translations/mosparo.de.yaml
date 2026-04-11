@@ -42,11 +42,11 @@ project:
     languageSource: Sprachquelle
     projectGroup: Projektgruppe
     projectGroupHelp: Sie können Projektgruppen verwenden, um Ihre Projekte zu organisieren. Wählen Sie die Projektgruppe, in der Sie dieses Projekt speichern möchten.
-    silentModeEnabled: Stummschaltungsmodus aktivieren
-    silentModeEnabledHelp: Wenn diese Option aktiviert ist, akzeptiert mosparo jede Übermittlung im Frontend. Sobald das Backend die Übermittlung überprüft hat, blockiert mosparo diese, damit das Backend die Situation mit dem Benutzer klären kann. Bitte beachten Sie, dass im Stummschaltungsmodus jede Übermittlung Ihr Backend durchläuft, was zu einer zusätzlichen Belastung führen kann.
+    silentModeEnabled: Stiller Modus aktivieren
+    silentModeEnabledHelp: Wenn diese Option aktiviert ist, akzeptiert mosparo jede Einsendung im Frontend. Sobald das Backend die Einsendung verifiziert, erhält das Backend die bewertung als Spam. Das Backend kann dann entscheiden, wie diese Information verarbeitet wird. Bitte beachten Sie, dass im stillen Modus jede Übermittlung Ihr Backend durchläuft, was zu einer zusätzlichen Belastung führen kann.
     spamDataReturned: Spam-Erkennungsdaten zur Verifizierungsantwort hinzufügen
     spamDataReturnedHelp: Wenn diese Option aktiviert ist, fügt die Verifizierungs-API die Daten zur Spam-Erkennung zur API-Antwort hinzu. Anhand dieser Daten erhalten Sie genauere Informationen darüber, warum eine Übermittlung als Spam eingestuft wurde oder nicht.
-    metadataAllowed: Metadaten sind zulässig
+    metadataAllowed: Metadaten erlaubt
     metadataAllowedHelp: Wenn diese Option aktiviert ist, akzeptieren die Validierungs- und Verifizierungs-APIs Metadaten. Diese Metadaten werden in der Übermittlung gespeichert. Mit Metadaten können Sie zusätzliche Informationen speichern, die weder ein Formularfeld noch Client-Informationen darstellen.
     metadataReturned: Metadaten zur Verifizierungsantwort hinzufügen
     metadataReturnedHelp: Wenn diese Option aktiviert ist, fügt die Verifizierungs-API die Metadaten zur API-Antwort hinzu.
