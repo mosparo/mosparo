@@ -60,7 +60,7 @@ project:
 
     deleteRulePackages:
       intro1: Dieses Projekt enthält Regelpakete. Sie können das Projekt nicht löschen.
-      intro2: Bitte löschen Sie zuerst die Regelpakete und anschließend das Projekt.
+      intro2: Bitte löschen Sie zuerst die Regelpakete und anschliessend das Projekt.
   roles:
     reader: Leser
     editor: Bearbeiter
@@ -192,7 +192,7 @@ rules:
           action: Datei importieren
         addingItems:
           title: Einträge hinzufügen
-          messageCompleted: Die angegebenen Daten wurden verarbeitet. Oben finden Sie die Zusammenfassung der hinzugefügten, übersprungenen und ungültigen Einträge. Sie können dieses Fenster jetzt schließen.
+          messageCompleted: Die angegebenen Daten wurden verarbeitet. Oben finden Sie die Zusammenfassung der hinzugefügten, übersprungenen und ungültigen Einträge. Sie können dieses Fenster jetzt schliessen.
           progress:
             dataProcessed: Daten verarbeitet
             processingPleaseWait: Daten verarbeiten…
@@ -463,7 +463,7 @@ rulePackage:
 # Submission
     process:
       title: Löschen des Regelpakets %rulePackageName%
-      intro: Bitte warten Sie, während mosparo das Regelpaket löscht. Dies kann je nach Größe des Regelpakets eine Weile dauern.
+      intro: Bitte warten Sie, während mosparo das Regelpaket löscht. Dies kann je nach Grösse des Regelpakets eine Weile dauern.
       alert:
         doNotLeave: Bitte verlassen Sie diese Seite nicht, während der Vorgang abgeschlossen wird. Wenn Sie diese Seite verlassen, wird der Vorgang abgebrochen und das Regelpaket möglicherweise nicht gelöscht.
         processCompleted: Das Regelpaket wurde gelöscht. Sie können diese Seite nun verlassen.
@@ -473,8 +473,8 @@ rulePackage:
   updateCache:
     title: Cache aktualisieren
     intro:
-      all: Um die Regelpakete verwenden zu können, müssen sie importiert werden. Dazu erstellt mosparo einen lokalen Cache mit dem Inhalt jedes Regelpakets. Je nach Größe der Regelpakete kann dies einen Moment dauern.
-      one: Um das Regelpaket zu verwenden, muss es importiert werden. Dazu erstellt mosparo einen lokalen Cache mit dem Inhalt des Regelpakets. Je nach Größe des Regelpakets kann dies einen Moment dauern.
+      all: Um die Regelpakete verwenden zu können, müssen sie importiert werden. Dazu erstellt mosparo einen lokalen Cache mit dem Inhalt jedes Regelpakets. Je nach Grösse der Regelpakete kann dies einen Moment dauern.
+      one: Um das Regelpaket zu verwenden, muss es importiert werden. Dazu erstellt mosparo einen lokalen Cache mit dem Inhalt des Regelpakets. Je nach Grösse des Regelpakets kann dies einen Moment dauern.
     hintCronjob: Sie können diesen Schritt mithilfe von Cron-Jobs automatisieren. Weitere Informationen hierzu finden Sie in der Dokumentation von %linkStart%mosparo%linkEnd%.
     alert:
       doNotLeave: Bitte verlassen Sie diese Seite nicht, während der Vorgang abgeschlossen wird. Wenn Sie diese Seite verlassen, wird der Vorgang abgebrochen und der Cache wird nicht aktualisiert.
@@ -560,7 +560,7 @@ submission:
         country: Land
 
       metadata:
-        title: Metadata
+        title: Metadaten
         noMetadataAvailable: Es sind keine Metadaten verfügbar
     generalVerifications:
       minimumTime:
@@ -901,7 +901,7 @@ settings:
       title: Arbeitsnachweis-Mechanismus
       intro: Der Arbeitsnachweis-Mechanismus (Proof of Work) lässt den Browser automatisch viele Hashes berechnen, um das richtige Ergebnis zu finden. Der Browser benötigt für diese Berechnung Zeit, die ein Spam-Bot nicht gerne aufwendet.
       subtitle: Dynamische Komplexität
-      introDynamicComplexity: Bei der dynamischen Komplexität wird das automatische Rätsel mit einem größeren Zahlenbereich generiert, was bedeutet, dass der Browser mehr berechnen muss und mehr Zeit verschwendet. Wenn die dynamische Komplexität auf der IP-Adresse basiert, haben nur Clients mit vielen Einsendungen in einem bestimmten Zeitbereich komplexere Rätsel.
+      introDynamicComplexity: Bei der dynamischen Komplexität wird das automatische Rätsel mit einem grösseren Zahlenbereich generiert, was bedeutet, dass der Browser mehr berechnen muss und mehr Zeit verschwendet. Wenn die dynamische Komplexität auf der IP-Adresse basiert, haben nur Clients mit vielen Einsendungen in einem bestimmten Zeitbereich komplexere Rätsel.
     crypto:
       numberRange: Zahlenbereich
       maximumTimeToSolve: Max. Zeit zur Lösung
@@ -916,7 +916,7 @@ settings:
     title: Darstellung
 
     subtitles:
-      dimensionSettings: Abmessungen und Schriftgröße
+      dimensionSettings: Abmessungen und Schriftgrösse
       colorSettings: Farben
       colors:
         normal: Normal
@@ -983,7 +983,7 @@ settings:
       invisiblePageOverlay: Seiten-Overlay
       checkboxRadius: Radius des Kontrollkästchens
       checkboxBorderWidth: Rahmenbreite des Kontrollkästchen
-      fontSize: Schriftgröße
+      fontSize: Schriftgrösse
       lineHeight: Zeilenhöhe
     choices:
       boxSize:
