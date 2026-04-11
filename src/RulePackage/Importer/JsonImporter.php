@@ -47,7 +47,7 @@ class JsonImporter implements ImporterInterface
 
         $validator = new Validator();
         $validator->resolver()->registerFile('http://schema.mosparo.io/rule-package.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_RULE_PACKAGE));
-        $validator->resolver()->registerFile('http://schema.mosparo.io/field-rule.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_RULE));
+        $validator->resolver()->registerFile('http://schema.mosparo.io/field-rule.json', Specifications::getJsonSchemaPath(Specifications::JSON_SCHEMA_FIELD_RULE));
 
         $result = $validator->validate($json, 'http://schema.mosparo.io/rule-package.json');
 
