@@ -283,16 +283,6 @@ dashboard:
   title: Cruscotto
 rulePackage:
   view:
-    rule:
-      title: Visualizza regola %ruleName%
-      details:
-        name: Nome
-        type: Tipo
-        spamRatingFactor: Fattore di valutazione spam
-        title: Dettagli regola
-      items:
-        title: Oggetti inclusi
-      backToRulePackage: Torna all'elenco delle regole
     details:
       lastUpdatedAt: Ultimo aggiornamento il
       spamRatingFactor: Fattore di valutazione spam
@@ -929,7 +919,6 @@ tools:
   import:
     backToImport: Torna all'importazione
     form:
-      handlingExistingRules: Gestione regole esistenti
       choice:
         add: Aggiungi
         override: Sovrascrivi
@@ -986,10 +975,8 @@ tools:
     infoOverrideData: Le impostazioni, così come i pacchetti di regole, verranno sempre sovrascritti nel progetto. Per quanto riguarda le regole, dovrai decidere come mosparo dovrà comportarsi con quelle esistenti. I pacchetti di regole creati prima della versione 1.4.0 di mosparo potrebbero avere un ID differente e non corrispondere al file di importazione.
   eiParts:
     generalSettings: Impostazioni generali
-    rules: Regole
     rulePackagesHelp: Include tutti i gruppi di regole di un progetto.
     designSettings: Impostazioni grafiche
-    rulesHelp: Include tutte le regole di un progetto.
     securitySettings: Impostazioni di sicurezza
     rulePackages: Gruppo di regole
     designSettingsHelp: Include tutte le impostazioni relative alla grafica del progetto.

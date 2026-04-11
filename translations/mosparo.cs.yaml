@@ -1046,7 +1046,6 @@ tools:
     intro: Pokud chcete zkopírovat data z jiného projektu do tohoto projektu, vyberte soubor, který chcete importovat, a data, která chcete importovat. Pokud importujete pravidla, zvolte, jak má mosparo zacházet se stávajícími pravidly.
     importData: Data k importu
     form:
-      handlingExistingRules: Nakládání se stávajícími pravidly
       choice:
         override: Přepsat
         append: Připojit
@@ -1099,11 +1098,9 @@ tools:
     designSettings: Nastavení designu
     designSettingsHelp: Zahrnuje všechna nastavení související s designem projektu.
     securitySettings: Nastavení zabezpečení
-    rulesHelp: Zahrnuje všechna pravidla projektu.
     rulePackages: Sady pravidel
     securitySettingsHelp: Zahrnuje všechna nastavení související se zabezpečením projektu.
     rulePackagesHelp: Zahrnuje všechny sady pravidel projektu.
-    rules: Pravidla
 projectGroup:
   mainGroup: Hlavní skupina
   action:

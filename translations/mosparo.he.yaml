@@ -362,7 +362,6 @@ tools:
     title: יבוא
     infoOverrideData: ההגדרות, כמו גם החוקים, תמיד יהיו יידרסו בפרויקט. אוסף החוקים יתואם מול כתובת האתר. לגבי החוקים, עליך לבחור מה צריך לעשות עם חוקים קיימים.
     form:
-      handlingExistingRules: טיפול בחוקים הקיימים
       choice:
         override: דריסה
         append: הוספה
@@ -418,11 +417,9 @@ tools:
     designSettingsHelp: כולל את כל ההגדרות הקשורות לתכנון פרויקט.
     designSettings: הגדרות תכנון
     securitySettings: הגדרות אבטחה
-    rulesHelp: כולל את כל חוקי הפרויקט.
     rulePackages: אוסף חוקים
     generalSettings: הגדרות כלליות
     securitySettingsHelp: כולל את כל ההגדרות הקשורות לאבטחת הפרויקט.
-    rules: חוקים
     rulePackagesHelp: כולל את כל החוקים של פרויקט.
   title: כלים
 administration:
