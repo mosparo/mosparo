@@ -1640,7 +1640,7 @@ administration:
   throughputStatistics:
     title: Throughput statistics
     description: Shows the submission and request statistics processed by mosparo across all projects.
-    backToOverview: Back to througput statistics
+    backToOverview: Back to overview
 
     chartTitles:
       submissions: Submissions from all projects
