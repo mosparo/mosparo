@@ -137,10 +137,12 @@
                                 </div>
                             </div>
 
-                            <a href="#rating-details" class="btn btn-secondary-outline">
-                                <i class="ti ti-calculator"></i>
-                                {{ 'submission.view.goToDetails'|trans }}
-                            </a>
+                            {% if submission.spamRating != 0 %}
+                                <a href="#rating-details" class="btn btn-secondary-outline">
+                                    <i class="ti ti-calculator"></i>
+                                    {{ 'submission.view.goToDetails'|trans }}
+                                </a>
+                            {% endif %}
                         </div>
                         <div class="">
                             <h4 class="mb-0">{{ 'submission.view.spam.submittedAt'|trans }}</h4>
@@ -532,130 +534,136 @@
                     {% endif %}
                 {% endfor %}
 
-                <div class="card mb-3" id="rating-details">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="ti ti-calculator"></i>
-                            {{ 'submission.view.ratingDetails.title'|trans }}
-                        </h3>
-                    </div>
-                    <div class="card-table table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th class="w-25">{{ 'submission.view.ratingDetails.origin'|trans }}</th>
-                                    <th>{{ 'submission.view.ratingDetails.details'|trans }}</th>
-                                    <th class="w-1">{{ 'submission.view.ratingDetails.rating'|trans }}</th>
-                                    <th class="w-1"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% set rating = 0 %}
-
-                                <tr>
-                                    <th colspan="4" class="rating-details-type">{{ 'submission.view.ratingDetails.submissionRules'|trans }}</th>
-                                </tr>
-                                {% for match in submission.detectionResult.matchedSubmissionRules %}
-                                    {% set rating = rating + match.rating %}
-                                    {% set submissionRule = get_submission_rule(match.identifier) %}
+                {% if submission.spamRating != 0 %}
+                    <div class="card mb-3" id="rating-details">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-calculator"></i>
+                                {{ 'submission.view.ratingDetails.title'|trans }}
+                            </h3>
+                        </div>
+                        <div class="card-table table-responsive">
+                            <table class="table">
+                                <thead>
                                     <tr>
-                                        <th>
-                                            {% if submissionRule %}
-                                                {{ submissionRule.name|trans }}
-                                            {% else %}
-                                                {{ match.identifier }}
-                                            {% endif %}
-                                        </th>
-                                        <td class="ps-3">
-                                            {% if match.matchingFields %}
-                                                <table class="table table-bordered table-sm table-bordered-sm">
-                                                    <tbody>
-                                                        {% for matchingFieldKey in match.matchingFields %}
-                                                            {% set parts = matchingFieldKey|split('.', 2) %}
-                                                            {% set groupKey = parts[0] %}
-                                                            {% set field = submission.data[groupKey]|find(field => field.fieldPath == parts[1]) %}
-                                                            {% if field %}
-                                                                <tr>
-                                                                    <td class="w-33">{{ _self.fieldName(groupKey, field) }}</td>
-                                                                    <td class="w-66"><code class="submission-data word-break-all">{{ field.value }}</code></td>
-                                                                </tr>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-end">
-                                            {% if match.rating >= 0 %}
-                                                <span class="text-danger">{{ match.rating|format_number({fraction_digit: 2}) }}</span>
-                                            {% elseif match.rating < 0 %}
-                                                <span class="text-success">{{ match.rating|format_number({fraction_digit: 2}) }}</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <a href="{{ path('rules_submission_rule_configure', {'key': match.identifier, '_projectId': activeProject.id}) }}" class="submission-rule-button" target="_blank">
-                                                <i class="ti ti-info-circle"></i>
-                                            </a>
-                                        </td>
+                                        <th class="w-25">{{ 'submission.view.ratingDetails.origin'|trans }}</th>
+                                        <th>{{ 'submission.view.ratingDetails.details'|trans }}</th>
+                                        <th class="w-1">{{ 'submission.view.ratingDetails.rating'|trans }}</th>
+                                        <th class="w-1"></th>
                                     </tr>
-                                {% endfor %}
+                                </thead>
+                                <tbody>
+                                    {% set rating = 0 %}
 
-                                <tr>
-                                    <th colspan="4" class="rating-details-type">{{ 'submission.view.ratingDetails.fieldRules'|trans }}</th>
-                                </tr>
-                                {% for fieldKey, matches in submission.detectionResult.matchedFieldRuleItems %}
-                                    {% set first = true %}
-                                    {% for match in matches %}
-                                        {% set rating = rating + match.rating %}
+                                    {% if submission.detectionResult.matchedSubmissionRules|length %}
                                         <tr>
-                                            {% if first %}
-                                                <th rowspan="{{ matches|length }}">
-                                                    {% set parts = fieldKey|split('.', 2) %}
-                                                    {% set groupKey = parts[0] %}
-                                                    {% set field = submission.data[groupKey]|find(field => field.fieldPath == parts[1]) %}
-
-                                                    {{ _self.fieldName(groupKey, field) }}
+                                            <th colspan="4" class="rating-details-type">{{ 'submission.view.ratingDetails.submissionRules'|trans }}</th>
+                                        </tr>
+                                        {% for match in submission.detectionResult.matchedSubmissionRules %}
+                                            {% set rating = rating + match.rating %}
+                                            {% set submissionRule = get_submission_rule(match.identifier) %}
+                                            <tr>
+                                                <th>
+                                                    {% if submissionRule %}
+                                                        {{ submissionRule.name|trans }}
+                                                    {% else %}
+                                                        {{ match.identifier }}
+                                                    {% endif %}
                                                 </th>
-                                                {% set first = false %}
-                                            {% endif %}
-                                            <td class="ps-3">
-                                                <code class="submission-data">{{ match.value }}</code>
-                                            </td>
-                                            <td class="text-end">
-                                                {% if match.rating >= 0 %}
-                                                    <span class="text-danger">{{ match.rating|format_number({fraction_digit: 2}) }}</span>
-                                                {% elseif match.rating < 0 %}
-                                                    <span class="text-success">{{ match.rating|format_number({fraction_digit: 2}) }}</span>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% set url = get_rule_detail_url(match.uuid) %}
-                                                {% if url != '' %}
-                                                    <a href="{{ url }}#{{ match.uuid }}" class="submission-rule-button" target="_blank">
+                                                <td class="ps-3">
+                                                    {% if match.matchingFields %}
+                                                        <table class="table table-bordered table-sm table-bordered-sm">
+                                                            <tbody>
+                                                                {% for matchingFieldKey in match.matchingFields %}
+                                                                    {% set parts = matchingFieldKey|split('.', 2) %}
+                                                                    {% set groupKey = parts[0] %}
+                                                                    {% set field = submission.data[groupKey]|find(field => field.fieldPath == parts[1]) %}
+                                                                    {% if field %}
+                                                                        <tr>
+                                                                            <td class="w-33">{{ _self.fieldName(groupKey, field) }}</td>
+                                                                            <td class="w-66"><code class="submission-data word-break-all">{{ field.value }}</code></td>
+                                                                        </tr>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-end">
+                                                    {% if match.rating >= 0 %}
+                                                        <span class="text-danger">{{ match.rating|format_number({fraction_digit: 2}) }}</span>
+                                                    {% elseif match.rating < 0 %}
+                                                        <span class="text-success">{{ match.rating|format_number({fraction_digit: 2}) }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="{{ path('rules_submission_rule_configure', {'key': match.identifier, '_projectId': activeProject.id}) }}" class="submission-rule-button" target="_blank">
                                                         <i class="ti ti-info-circle"></i>
                                                     </a>
-                                                {% endif %}
-                                            </td>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    {% if submission.detectionResult.matchedFieldRuleItems|length %}
+                                        <tr>
+                                            <th colspan="4" class="rating-details-type">{{ 'submission.view.ratingDetails.fieldRules'|trans }}</th>
                                         </tr>
-                                    {% endfor %}
-                                {% endfor %}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="2" class="rating-details-summary">{{ 'submission.view.ratingDetails.total'|trans }}</th>
-                                    <th class="rating-details-summary text-end">
-                                        {% if rating >= 0 %}
-                                            <span class="text-danger">{{ rating|format_number({fraction_digit: 2}) }}</span>
-                                        {% elseif rating < 0 %}
-                                            <span class="text-success">{{ rating|format_number({fraction_digit: 2}) }}</span>
-                                        {% endif %}
-                                    </th>
-                                    <th class="rating-details-summary"></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                        {% for fieldKey, matches in submission.detectionResult.matchedFieldRuleItems %}
+                                            {% set first = true %}
+                                            {% for match in matches %}
+                                                {% set rating = rating + match.rating %}
+                                                <tr>
+                                                    {% if first %}
+                                                        <th rowspan="{{ matches|length }}">
+                                                            {% set parts = fieldKey|split('.', 2) %}
+                                                            {% set groupKey = parts[0] %}
+                                                            {% set field = submission.data[groupKey]|find(field => field.fieldPath == parts[1]) %}
+
+                                                            {{ _self.fieldName(groupKey, field) }}
+                                                        </th>
+                                                        {% set first = false %}
+                                                    {% endif %}
+                                                    <td class="ps-3">
+                                                        <code class="submission-data">{{ match.value }}</code>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        {% if match.rating > 0 %}
+                                                            <span class="text-danger">{{ match.rating|format_number({fraction_digit: 2}) }}</span>
+                                                        {% elseif match.rating <= 0 %}
+                                                            <span class="text-success">{{ match.rating|format_number({fraction_digit: 2}) }}</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% set url = get_rule_detail_url(match.uuid) %}
+                                                        {% if url != '' %}
+                                                            <a href="{{ url }}#{{ match.uuid }}" class="submission-rule-button" target="_blank">
+                                                                <i class="ti ti-info-circle"></i>
+                                                            </a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2" class="rating-details-summary">{{ 'submission.view.ratingDetails.total'|trans }}</th>
+                                        <th class="rating-details-summary text-end">
+                                            {% if rating > 0 %}
+                                                <span class="text-danger">{{ rating|format_number({fraction_digit: 2}) }}</span>
+                                            {% elseif rating <= 0 %}
+                                                <span class="text-success">{{ rating|format_number({fraction_digit: 2}) }}</span>
+                                            {% endif %}
+                                        </th>
+                                        <th class="rating-details-summary"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
 
