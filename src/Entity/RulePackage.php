@@ -36,7 +36,7 @@ class RulePackage implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'boolean')]
     private ?bool $status;
 
-    #[ORM\OneToOne(targetEntity: RulePackageCache::class, mappedBy: 'rulePackage', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: RulePackageCache::class, mappedBy: 'rulePackage', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private ?RulePackageCache $rulePackageCache = null;
 
     #[ORM\OneToMany(targetEntity: RulePackageProcessingJob::class, mappedBy: 'rulePackage', cascade: ['persist', 'remove'], orphanRemoval: true)]

@@ -30,7 +30,7 @@ class RulePackageCache implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'integer')]
     private int $refreshInterval = 86400;
 
-    #[ORM\OneToMany(targetEntity: RulePackageRuleCache::class, mappedBy: 'rulePackageCache', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: RulePackageRuleCache::class, mappedBy: 'rulePackageCache', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $rules;
 
     #[ORM\Column(type: 'integer', nullable: true)]

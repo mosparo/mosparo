@@ -35,7 +35,7 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
     #[ORM\Column(type: 'string', length: 30)]
     private ?string $type;
 
-    #[ORM\OneToMany(targetEntity: RulePackageRuleItemCache::class, mappedBy: 'rulePackageRuleCache', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: RulePackageRuleItemCache::class, mappedBy: 'rulePackageRuleCache', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $items;
 
     #[ORM\Column(type: 'integer', nullable: true)]
