@@ -27,7 +27,27 @@
                         {{ form_row(form.enabled) }}
 
                         <div class="mb-3">
-                            {{ form_widget(form.configValues) }}
+                            {% for child in form.configValues %}
+                                {% if 'integer' in child.vars.block_prefixes %}
+                                    <div class="form-group">
+                                        {{ form_label(child) }}
+                                        <div class="input-group">
+                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                                <i class="ti ti-minus"></i>
+                                            </button>
+                                            {{ form_widget(child) }}
+                                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                                <i class="ti ti-plus"></i>
+                                            </button>
+                                        </div>
+                                        {{ form_errors(child) }}
+                                        {{ form_help(child) }}
+                                    </div>
+                                {% else %}
+                                    {{ form_row(child) }}
+                                {% endif %}
+                            {% endfor %}
+                            {# { form_widget(form.configValues) }#}
                         </div>
 
                         {{ form_row(form.rating) }}

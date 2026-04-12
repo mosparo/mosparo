@@ -5,7 +5,7 @@ namespace Mosparo\Rules\SubmissionRule\Rules;
 use Mosparo\Entity\Submission;
 use Mosparo\Entity\SubmissionRule;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class RandomValueSubmissionRule extends AbstractSubmissionRule
@@ -32,18 +32,20 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
     public function addSettingsFormFields(FormBuilderInterface $formBuilder): void
     {
         $formBuilder
-            ->add('numberOfMatchingFields', NumberType::class, [
+            ->add('numberOfMatchingFields', IntegerType::class, [
                 'label' => 'submissionRule.randomValues.field.numberOfMatchingFields',
                 'help' => 'submissionRule.randomValues.field.numberOfMatchingFieldsHelp',
+                'attr' => ['class' => 'text-end', 'min' => 1, 'autocomplete' => 'off'],
             ])
             ->add('matchTextarea', CheckboxType::class, [
                 'label' => 'submissionRule.randomValues.field.matchTextarea',
                 'help' => 'submissionRule.randomValues.field.matchTextareaHelp',
                 'required' => false,
             ])
-            ->add('numberOfRandomCharacters', NumberType::class, [
+            ->add('numberOfRandomCharacters', IntegerType::class, [
                 'label' => 'submissionRule.randomValues.field.numberOfRandomCharacters',
                 'help' => 'submissionRule.randomValues.field.numberOfRandomCharactersHelp',
+                'attr' => ['class' => 'text-end', 'min' => 5, 'autocomplete' => 'off'],
             ])
             ->add('requireBothCases', CheckboxType::class, [
                 'label' => 'submissionRule.randomValues.field.requireBothCases',

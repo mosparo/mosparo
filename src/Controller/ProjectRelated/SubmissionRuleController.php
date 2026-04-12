@@ -98,6 +98,7 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
                 'attr' => [
                     'min' => 0.1,
                     'step' => 'any',
+                    'class' => 'text-end',
                 ]
             ])
             ->add('submitted', HiddenType::class, ['mapped' => false, 'data' => 1]) // Dummy field, otherwise, the form would not save when the rule is disabled
