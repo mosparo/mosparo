@@ -361,8 +361,8 @@ rules:
       dropdown: Liste der Regeln filtern
   title: Regeln
   submissionRule:
-    title: Einsende-Regeln
-    backToList: Zurück zu den Einsende-Regeln
+    title: Einsenderegeln
+    backToList: Zurück zu den Einsenderegeln
     list:
       name: Name
       status: Status
@@ -374,7 +374,7 @@ rules:
       rating: Bewertung
       ratingHelp: Bitte geben Sie die Punktzahl an, um die diese Regel die Bewertung erhöhen soll, wenn sie mit Ihrer Bewertung übereinstimmt. Die Bewertung wird einmalig zur Bewertung hinzugefügt, nicht für jedes Feld einzeln.
       message:
-        successfullySaved: Die Einsende-Regel wurde erfolgreich gespeichert.
+        successfullySaved: Die Einsenderegel wurde erfolgreich gespeichert.
 rulePackage:
   title: Regel-Pakete
   backToList: Zu den Regel-Paketen
@@ -2062,12 +2062,12 @@ submissionRule:
   randomValues:
     title: Zufallswerte
     summary: Erkennt Zufallswerte in einem oder mehreren Formularfeldern.
-    description: Diese Einsende-Regel erkennt zufällige Werte in einem oder mehreren Feldern Ihres Formulars. Die zufälligen Werte sind in der Regel 15 oder mehr Zeichen lang und bestehen aus Buchstaben und Zahlen, enthalten jedoch keine gültigen Informationen.
+    description: Diese Einsenderegel erkennt zufällige Werte in einem oder mehreren Feldern Ihres Formulars. Die zufälligen Werte sind in der Regel 15 oder mehr Zeichen lang und bestehen aus Buchstaben und Zahlen, enthalten jedoch keine gültigen Informationen.
     field:
       numberOfMatchingFields: Anzahl der übereinstimmenden Felder
-      numberOfMatchingFieldsHelp: Bitte geben Sie an, wie viele Felder Ihres Formulars einen solchen Zufallswert enthalten müssen, um diese Einsende-Regel zu erfüllen.
+      numberOfMatchingFieldsHelp: Bitte geben Sie an, wie viele Felder Ihres Formulars einen solchen Zufallswert enthalten müssen, um diese Einsenderegel zu erfüllen.
       matchTextarea: Mehrzeiliges Textfeld einschliessen
-      matchTextareaHelp: Mehrzeilige Textfelder können standardmässig zufällige Werte enthalten, beispielsweise wenn jemand eine URL in dem Textfeld eingibt. Mit dieser Option können Sie die Einsende-Regel auch für mehrzeiligen Textfelder aktivieren.
+      matchTextareaHelp: Mehrzeilige Textfelder können standardmässig zufällige Werte enthalten, beispielsweise wenn jemand eine URL in dem Textfeld eingibt. Mit dieser Option können Sie die Einsenderegel auch für mehrzeiligen Textfelder aktivieren.
       numberOfRandomCharacters: Anzahl der zu suchenden Zeichen
       numberOfRandomCharactersHelp: Normalerweise sind diese Zufallswerte mindestens 15 Zeichen lang. Wenn Sie Zufallswerte mit weniger als 15 Zeichen haben, können Sie die Regel mit dieser Einstellung anpassen. Beachten Sie jedoch, dass ein zu niedriger Wert mit anderen Begriffen, wie beispielsweise Namen, übereinstimmen könnte.
       requireBothCases: Klein- und Grossbuchstaben sind zwingend erforderlich
