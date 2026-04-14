@@ -170,7 +170,7 @@ rule:
         action: Datei importieren
       addingItems:
         title: Einträge hinzufügen
-        messageCompleted: Die angegebenen Daten wurden verarbeitet. Oben finden Sie die Zusammenfassung der hinzugefügten, übersprungenen und ungültigen Einträge. Sie können dieses Fenster jetzt schließen.
+        messageCompleted: Die angegebenen Daten wurden verarbeitet. Oben finden Sie die Zusammenfassung der hinzugefügten, übersprungenen und ungültigen Einträge. Sie können dieses Fenster jetzt schliessen.
         progress:
           dataProcessed: Daten verarbeitet
           processingPleaseWait: Daten verarbeiten…
@@ -334,6 +334,7 @@ rulePackage:
 
   message:
     errorWhileUpdating: 'Beim Aktualisieren des Regel-Pakets trat ein Fehler auf:'
+    errorWhileUpdatingWithoutReason: Beim Aktualisieren des Regelpakets ist ein Fehler aufgetreten. Möglicherweise ist die URL ungültig, der Server hat nicht rechtzeitig geantwortet oder es liegt ein anderes allgemeines Problem mit diesem Regelpaket vor. Wenden Sie sich für weitere Informationen an einen Administrator.
 
   list:
     name: Name
@@ -844,7 +845,7 @@ settings:
       title: Arbeitsnachweis-Mechanismus
       intro: Der Arbeitsnachweis-Mechanismus (Proof of Work) lässt den Browser automatisch viele Hashes berechnen, um das richtige Ergebnis zu finden. Der Browser benötigt für diese Berechnung Zeit, die ein Spam-Bot nicht gerne aufwendet.
       subtitle: Dynamische Komplexität
-      introDynamicComplexity: Bei der dynamischen Komplexität wird das automatische Rätsel mit einem größeren Zahlenbereich generiert, was bedeutet, dass der Browser mehr berechnen muss und mehr Zeit verschwendet. Wenn die dynamische Komplexität auf der IP-Adresse basiert, haben nur Clients mit vielen Einsendungen in einem bestimmten Zeitbereich komplexere Rätsel.
+      introDynamicComplexity: Bei der dynamischen Komplexität wird das automatische Rätsel mit einem grösseren Zahlenbereich generiert, was bedeutet, dass der Browser mehr berechnen muss und mehr Zeit verschwendet. Wenn die dynamische Komplexität auf der IP-Adresse basiert, haben nur Clients mit vielen Einsendungen in einem bestimmten Zeitbereich komplexere Rätsel.
     crypto:
       numberRange: Zahlenbereich
       maximumTimeToSolve: Max. Zeit zur Lösung
