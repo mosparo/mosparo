@@ -153,12 +153,12 @@ rule:
       ratingHelp: அமைக்காவிட்டால், இயல்புநிலை மதிப்பீடு 1.0 ஆகும். மதிப்பீடு 0.0 ஆக அமைக்கப்பட்டால், உருப்படிகள் ச்பேம் உருப்படிகளாக மதிப்பிடப்படாது.
       type: வகை
     status:
-      unsavedChanges: '%எதிர்% சேமிக்கப்படாத மாற்றங்கள்'
-      savingChanges: '%கவுண்டர்% மாற்றங்களைச் சேமிக்கிறது'
+      unsavedChanges: '%counter% சேமிக்கப்படாத மாற்றங்கள்'
+      savingChanges: '%counter% மாற்றங்களைச் சேமிக்கிறது'
       nothingToSave: சேமிக்க எதுவும் இல்லை
     filter:
       title: பொருட்களை வடிகட்டவும்
-      useWildcard: '%வைல்ட்கார்டு% ஐ வைல்டு கார்டாகப் பயன்படுத்தவும்.'
+      useWildcard: '%wildcard% ஐ வைல்டு கார்டாகப் பயன்படுத்தவும்.'
       itemSpamRating: உருப்படி ச்பேம் மதிப்பீடு
     noItemsInTable:
       title: இதுவரை உருப்படிகள் இல்லை
@@ -978,7 +978,7 @@ administration:
           title: செயல்முறை பணிகள்
           intro: mosparo ச்பேமை நம்பகத்தன்மையுடன் பிடிக்க சேமிக்கப்பட்ட தரவை மேம்படுத்த வேண்டும். பணிகள் முடியும் வரை காத்திருக்கவும்.
           processingPleaseWait: பணிகளைச் செயலாக்குகிறது…
-          processingStats: '%மொத்தப் பணிகளில்% செயலாக்கப்பட்ட %செயல்படுத்தப்பட்ட பணிகள்%'
+          processingStats: '%processedTasks% செயலாக்கப்பட்ட %totalTasks%'
           doNotLeave: தயவுசெய்து இந்தப் பக்கத்தை விட்டு வெளியேறாதீர்கள் அல்லது செயல்முறையை நிறுத்தாதீர்கள். செயல்முறை நீண்ட காலத்திற்கு மாறாமல் இருந்தால், இந்தப் பக்கத்தைப் புதுப்பிக்கவும்.
     finalized:
       title: புதுப்பிப்பு செயல்படுத்தப்பட்டது
@@ -1298,12 +1298,12 @@ submission:
           intro: எல்லா தரவுகளும் சேகரிக்கப்பட்டு தயாரிக்கப்பட்டன. இப்போது, நீங்கள் தரவை பநிஇ க்கு அனுப்பலாம்.
         ten:
           title: 'படி 10: பதிலை சரிபார்க்கவும்'
-          intro: உங்கள் பநிஇ கோரிக்கையை சாதொபொகு சரம் மூலம் மோச்பரோ பதிலளிப்பார். சாதொபொகு சரம் டிகோட் செய்து, ஒரு முக்கிய %codeStart%valid%codeend% இருக்கிறதா என்று சரிபார்க்கவும், %codeStart%true%codeEnd% ஆக அமைக்கப்பட்டுள்ளது. அப்படியானால், முக்கிய %codeStart%verificationSignature%codeEnd% அமைக்கப்பட்டிருப்பதை உறுதிசெய்து, படி 6 இல் உருவாக்கப்பட்ட சரிபார்ப்பு கையொப்பத்திற்கு சமம். அப்படியானால், பதில் செல்லுபடியாகும்.
+          intro: உங்கள் பநிஇ கோரிக்கையை சாதொபொகு சரம் மூலம் மோச்பரோ பதிலளிப்பார். சாதொபொகு சரம் டிகோட் செய்து, ஒரு முக்கிய %codeStart%valid%codeEnd% இருக்கிறதா என்று சரிபார்க்கவும், %codeStart%true%codeEnd% ஆக அமைக்கப்பட்டுள்ளது. அப்படியானால், முக்கிய %codeStart%verificationSignature%codeEnd% அமைக்கப்பட்டிருப்பதை உறுதிசெய்து, படி 6 இல் உருவாக்கப்பட்ட சரிபார்ப்பு கையொப்பத்திற்கு சமம். அப்படியானால், பதில் செல்லுபடியாகும்.
     verificationIssues:
       title: சரிபார்ப்பு சிக்கல்கள்
       intro: சமர்ப்பித்தலின் சரிபார்ப்பின் போது பின்வரும் சிக்கல்கள் கண்டறியப்பட்டன. சமர்ப்பிப்பு ஏன் நிராகரிக்கப்பட்டது என்பதை நீங்கள் புரிந்து கொள்ள விரும்பினால் இந்தத் செய்தி உதவியாக இருக்கும்.
       labels:
-        fieldIssue: புலம் %பெயர்%
+        fieldIssue: புலம் %name%
         generalIssue: பொதுவான சிக்கல்
         errorMessage: பிழை செய்தி
         message: செய்தி
@@ -1646,18 +1646,18 @@ tabulator:
     item: பொருள்
     items: பொருட்கள்
   pagination:
-    pageSize: பக்க அளவு
-    pageTitle: பக்கத்தைக் காட்டு
-    first: '%s%முதல்%e%'
-    firstTitle: முதல் பக்கம்
-    last: '%s%கடைசி%e%'
-    lastTitle: கடைசி பக்கம்
-    prev: '%with%Prev%e%'
-    prevTitle: முந்தைய பக்கம்
-    next: '%s%அடுத்து%e%'
-    nextTitle: அடுத்த பக்கம்
-    all: அனைத்தும்
-    counter: '%vd%பக்கம்%e% %page% %vd%இல்%e%%vm%/%e% %totalPages%'
+    pageSize: Page size
+    pageTitle: Show page
+    first: '%s%First%e%'
+    firstTitle: First page
+    last: '%s%Last%e%'
+    lastTitle: Last page
+    prev: '%s%Prev%e%'
+    prevTitle: Previous page
+    next: '%s%Next%e%'
+    nextTitle: Next page
+    all: All
+    counter: '%vd%Page%e% %page% %vd%of%e%%vm%/%e% %totalPages%'
   filter:
     default: நெடுவரிசையை வடிகட்டி…
 multiSelect:
