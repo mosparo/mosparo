@@ -11,6 +11,7 @@ use Opis\JsonSchema\Validator;
 use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\NativeHttpClient;
+use Symfony\Component\HttpClient\NoPrivateNetworkHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -92,7 +93,7 @@ class UpdateHelper
     {
         $this->configHelper = $configHelper;
         $this->connectionHelper = $connectionHelper;
-        $this->client = $client;
+        $this->client = new NoPrivateNetworkHttpClient($client);
         $this->fileSystem = $fileSystem;
         $this->cache = $cache;
         $this->projectDirectory = $projectDirectory;
