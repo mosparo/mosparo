@@ -143,7 +143,7 @@ class RulePackageController extends AbstractController implements ProjectRelated
             if (in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
                 try {
                     $this->rulePackageHelper->fetchRulePackage($rulePackage);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $hasError = true;
                     $errorMessage = $e->getMessage();
                 }
