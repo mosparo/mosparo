@@ -15,6 +15,7 @@ use Mosparo\Entity\RulePackageRuleCache;
 use Mosparo\Specifications\Specifications;
 use Opis\JsonSchema\Validator;
 use Symfony\Component\HttpClient\NativeHttpClient;
+use Symfony\Component\HttpClient\NoPrivateNetworkHttpClient;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -32,13 +33,22 @@ class RulePackageHelper
 
     protected ProjectHelper $projectHelper;
 
+    protected bool $allowPrivateNetworks;
+
+    protected bool $allowRedirects;
+
+    protected int $minimumRefreshInterval;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $router,
         HttpClientInterface $client,
         ConnectionHelper $connectionHelper,
         CleanupHelper $cleanupHelper,
-        ProjectHelper $projectHelper
+        ProjectHelper $projectHelper,
+        bool $allowPrivateNetworks,
+        bool $allowRedirects,
+        int $minimumRefreshInterval
     ) {
         $this->entityManager = $entityManager;
         $this->router = $router;
@@ -46,6 +56,9 @@ class RulePackageHelper
         $this->connectionHelper = $connectionHelper;
         $this->cleanupHelper = $cleanupHelper;
         $this->projectHelper = $projectHelper;
+        $this->allowPrivateNetworks = $allowPrivateNetworks;
+        $this->allowRedirects = $allowRedirects;
+        $this->minimumRefreshInterval = max(60, $minimumRefreshInterval); // 60 seconds is the hardcoded minimum limit
     }
 
     public function fetchAll(): void
@@ -126,6 +139,12 @@ class RulePackageHelper
             $client = new NativeHttpClient();
         }
 
+        if ($this->allowPrivateNetworks) {
+            $client = new NoPrivateNetworkHttpClient($client, ['127.0.0.0/8', '::1/128']);
+        } else {
+            $client = new NoPrivateNetworkHttpClient($client);
+        }
+
         $this->verifyUrl($rulePackage->getSource());
 
         $urls = [
@@ -136,7 +155,8 @@ class RulePackageHelper
             'headers' => [
                 'X-mosparo-host' => $this->router->generate('dashboard', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'X-mosparo-project-uuid' => $rulePackage->getProject()->getUuid()
-            ]
+            ],
+            'max_redirects' => ($this->allowRedirects) ? 3 : 0,
         ];
 
         $files = [];
@@ -144,7 +164,7 @@ class RulePackageHelper
             $response = $client->request('GET', $url, $args);
 
             if ($response->getStatusCode() !== 200) {
-                throw new Exception('Cannot download the rulePackage file.');
+                throw new Exception('Cannot download the rule package file.');
             }
 
             $files[$fileType] = $response->getContent();
@@ -209,8 +229,9 @@ class RulePackageHelper
             $this->entityManager->persist($rulePackageCache);
         }
 
-        if ($rulePackageCache->getRefreshInterval() != $data['refreshInterval']) {
-            $rulePackageCache->setRefreshInterval($data['refreshInterval']);
+        $refreshInterval = max($data['refreshInterval'], $this->minimumRefreshInterval);
+        if ($rulePackageCache->getRefreshInterval() !== $refreshInterval) {
+            $rulePackageCache->setRefreshInterval($refreshInterval);
         }
 
         $rulePackageCache->setRefreshedAt(new DateTime());

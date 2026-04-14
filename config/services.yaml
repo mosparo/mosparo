@@ -214,6 +214,12 @@ services:
         arguments:
             $isDebug: '%kernel.debug%'
 
+    Mosparo\Helper\RulePackageHelper:
+        arguments:
+            $allowPrivateNetworks: '%env(bool:MOSPARO_RULE_PACKAGE_ALLOW_PRIVATE_NETWORKS)%'
+            $allowRedirects: '%env(bool:MOSPARO_RULE_PACKAGE_ALLOW_REDIRECTS)%'
+            $minimumRefreshInterval: '%env(int:MOSPARO_RULE_PACKAGE_MINIMUM_REFRESH_INTERVAL)%'
+
     Mosparo\Command\UpdateMosparoCommand:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
