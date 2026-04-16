@@ -83,6 +83,7 @@ The installation is straightforward. There are different installation methods, b
 4. Upload all the files in the extracted directory to this new virtual host
    - macOS/Linux: Please be aware of hidden files (for example, `.env`). You must upload all the files, including the hidden ones.
 5. Open your browser and access the virtual host (for example, by accessing the subdomain in your browser)
+   - If you cannot access mosparo, please head over to our [troubleshooting section](https://documentation.mosparo.io/docs/installation/install/normal#troubleshooting) to find possible reasons for your issue.
 6. Follow the installation wizard to install mosparo
 
 ### From source
@@ -118,6 +119,7 @@ npm install
 npm run dev
 ```
 6. Open your browser and access the virtual host (for example, by accessing the subdomain in your browser)
+   - If you cannot access mosparo, please head over to our [troubleshooting section](https://documentation.mosparo.io/docs/installation/install/normal#troubleshooting) to find possible reasons for your issue.
 7. Follow the installation wizard to install mosparo
 
 ## Documentation
