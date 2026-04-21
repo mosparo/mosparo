@@ -555,7 +555,7 @@
                                 <tbody>
                                     {% set rating = 0 %}
 
-                                    {% if submission.detectionResult.matchedSubmissionRules|length %}
+                                    {% if submission.detectionResult.matchedSubmissionRules is defined and submission.detectionResult.matchedSubmissionRules|length %}
                                         <tr>
                                             <th colspan="4" class="rating-details-type">{{ 'submission.view.ratingDetails.submissionRules'|trans }}</th>
                                         </tr>
@@ -605,7 +605,7 @@
                                         {% endfor %}
                                     {% endif %}
 
-                                    {% if submission.detectionResult.matchedFieldRuleItems|length %}
+                                    {% if submission.detectionResult.matchedFieldRuleItems is defined and submission.detectionResult.matchedFieldRuleItems|length %}
                                         <tr>
                                             <th colspan="4" class="rating-details-type">{{ 'submission.view.ratingDetails.fieldRules'|trans }}</th>
                                         </tr>
