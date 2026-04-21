@@ -443,7 +443,7 @@ class UpdateHelper
         }
 
         $fileHandler = fopen($destinationFilePath, 'w');
-        foreach ($this->client->stream($response) as $chunk) {
+        foreach ($client->stream($response) as $chunk) {
             fwrite($fileHandler, $chunk->getContent());
         }
     }

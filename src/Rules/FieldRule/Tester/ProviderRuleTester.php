@@ -24,12 +24,13 @@ class ProviderRuleTester extends AbstractRuleTester
         }
     }
 
-    public function validateData($key, $value, RuleItemEntityInterface $item): array
+    public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
         $result = false;
         if ($item->getType() === $key) {
-            $result = ($item->getValue() == $value);
+            // Use the original value to match country codes correctly
+            $result = ($item->getValue() == $originalValue);
         }
 
         if ($result !== false) {

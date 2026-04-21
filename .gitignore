@@ -30,4 +30,5 @@ yarn-error.log
 /.idea/
 
 /public/resources/
+!/public/resources/.gitkeep
 /tests/ApplicationTests/test-data.db

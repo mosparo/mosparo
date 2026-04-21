@@ -4,6 +4,7 @@ set -Eeuxo pipefail
 set -o history -o histexpand
 
 [ -d /mosparo/var ] && rm -rf /mosparo/var
+[ -d /mosparo/public/resources ] && rm -rf /mosparo/public/resources
 [ -d /mosparo-data/resources ] || mkdir /mosparo-data/resources
 [ -d /mosparo-data/var ] || mkdir /mosparo-data/var
 [ -d /mosparo-data/var/data ] || mkdir /mosparo-data/var/data

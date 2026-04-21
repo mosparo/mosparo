@@ -53,7 +53,7 @@ trait PreparedRuleItemTrait
             $value = str_replace('*', '%', $value);
         }
 
-        $inTextTypes = ['text', 'uaText', 'email', 'url', 'domain'];
+        $inTextTypes = ['text', 'wExact', 'wFull', 'uaText', 'email', 'url', 'domain'];
         if (in_array($type, $inTextTypes)) {
             $value = '%' . trim($value, '%') . '%';
         }
@@ -65,6 +65,11 @@ trait PreparedRuleItemTrait
 
         if ($type === 'subnet') {
             $range = Factory::parseRangeString($value);
+
+            // The range is invalid, so we cannot continue.
+            if (!$range) {
+                return $value;
+            }
 
             if (!$range->asPattern()) {
                 $prefix = $range->getNetworkPrefix();

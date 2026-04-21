@@ -39,10 +39,10 @@ class EmailRuleTester extends AbstractRuleTester
         }
     }
 
-    public function validateData($key, $value, RuleItemEntityInterface $item): array
+    public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
-        $value = trim(strtolower($value));
+        $value = trim($lowercaseValue);
         $itemValue = trim(strtolower($item->getValue()));
 
         if ($value === $itemValue || preg_match('/(^|\s+)' . preg_quote($itemValue, '/') . '(\s+|$)/', $value)) {

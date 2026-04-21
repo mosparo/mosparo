@@ -75,7 +75,7 @@ project:
     design:
       title: Personalizacja wyglądu
       introStartWizard: Twój projekt został pomyślnie utworzony. Aby rozpocząć korzystanie z niego, wybierz projekt i kontynuuj.
-      infoAdvancedMode: Proszę wybrać kolory, które będą obowiązywać na Państwa stronie internetowej. Kolor tła jest niezbędny do obliczenia prawidłowego współczynnika kontrastu, kolor pierwszego planu reprezentuje kolor tekstu, a kolor akcentowy jest używany dla elementów specjalnych w kontenerze Mosparo.
+      infoAdvancedMode: Proszę wybrać kolory, które będą obowiązywać na Państwa stronie internetowej. Kolor tła jest niezbędny do obliczenia prawidłowego współczynnika kontrastu, kolor pierwszego planu reprezentuje kolor tekstu, a kolor akcentowy jest używany dla elementów specjalnych w kontenerze mosparo.
     security:
       title: Włącz funkcje bezpieczeństwa
       introSecurity: Wybierz funkcje bezpieczeństwa, które chcesz włączyć.
@@ -83,7 +83,7 @@ project:
     connection:
       title: Szczegóły połączenia
       savedSuccessfully: Projekt i ustawienia zabezpieczeń zostały pomyślnie zapisane. Projekt jest teraz gotowy do użycia na stronie internetowej.
-      introConnection: Aby korzystać z Mosparo na stronie internetowej, należy dodać integrację do witryny, a następnie połączyć ją z projektem Mosparo. W tym celu skopiuj i wklej poniższe informacje w odpowiednie pole integracji.
+      introConnection: Aby korzystać z mosparo na stronie internetowej, należy dodać integrację do witryny, a następnie połączyć ją z projektem mosparo. W tym celu skopiuj i wklej poniższe informacje w odpowiednie pole integracji.
       infoSettings: Po zamknięciu kreatora szczegóły połączenia można znaleźć w ustawieniach projektu.
 action:
   saveAndContinue: Zapisz i kontynuuj

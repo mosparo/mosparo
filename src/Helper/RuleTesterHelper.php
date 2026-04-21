@@ -188,9 +188,9 @@ class RuleTesterHelper
         $this->analyzeResults($submission, $securitySettings);
     }
 
-    protected function checkFieldData(DetectionResult $detectionResult, string $groupKey, array $fieldData, mixed $value, bool $useRules = true,  bool$useRulePackages = true)
+    protected function checkFieldData(DetectionResult $detectionResult, string $groupKey, array $fieldData, mixed $originalValue, bool $useRules = true,  bool$useRulePackages = true)
     {
-        $value = strtolower($value);
+        $value = strtolower($originalValue);
         $path = $groupKey . '.' . $fieldData['fieldPath'];
 
         $qb = $this->entityManager->createQueryBuilder();
@@ -240,7 +240,7 @@ class RuleTesterHelper
                 continue;
             }
 
-            $result = $tester->validateData($fieldData['name'], $value, $item);
+            $result = $tester->validateData($fieldData['name'], $value, $originalValue, $item);
 
             if ($result) {
                 $detectionResult->addMatchedFieldRuleItem($path, $result);

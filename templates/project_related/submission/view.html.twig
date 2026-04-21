@@ -57,9 +57,22 @@
 {% block pageTitleColumn %}
     {{ parent() }}
 
-    {% if submission.issues or activeProject.verificationSimulationMode %}
+    {% if previousSubmission or nextSubmission or submission.issues or activeProject.verificationSimulationMode %}
         <div class="col-12 col-md-auto ms-auto mt-2 mt-md-0">
             <div class="btn-list">
+                {% if previousSubmission %}
+                    <a href="{{ path('submission_view', { '_projectId': activeProject.id, 'id': previousSubmission.id}) }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'submission.view.actionDescription.goToNewerSubmission'|trans }}">
+                        <i class="ti ti-chevron-left"></i>
+                        {{ 'submission.view.action.goToNewerSubmission'|trans }}
+                    </a>
+                {% endif %}
+                {% if nextSubmission %}
+                    <a href="{{ path('submission_view', { '_projectId': activeProject.id, 'id': nextSubmission.id}) }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'submission.view.actionDescription.goToOlderSubmission'|trans }}">
+                        {{ 'submission.view.action.goToOlderSubmission'|trans }}
+                        <i class="ti ti-icon-right ti-chevron-right"></i>
+                    </a>
+                {% endif %}
+
                 {% if submission.issues %}
                     <button type="button" class="btn btn-outline-purple" data-bs-toggle="modal" data-bs-target="#verification-issues-modal">
                         <i class="ti ti-input-x"></i>
@@ -466,12 +479,12 @@
                                                     <ul>
                                                         {% for subValue in field.value %}
                                                             <li>
-                                                                <code class="submission-data">{{ subValue|mark_invisible_characters }}</code>
+                                                                <code class="submission-data">{{ subValue|escape|mark_invisible_characters }}</code>
                                                             </li>
                                                         {% endfor %}
                                                     </ul>
                                                 {% elseif field.value is defined and not (field.value is iterable) and field.value|trim != '' %}
-                                                    <code class="submission-data">{{ field.value|mark_invisible_characters }}</code>
+                                                    <code class="submission-data">{{ field.value|escape|mark_invisible_characters }}</code>
                                                 {% else %}
                                                     <em>{{ 'general.empty'|trans }}</em>
                                                 {% endif %}

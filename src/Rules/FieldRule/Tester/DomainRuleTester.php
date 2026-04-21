@@ -50,14 +50,13 @@ class DomainRuleTester extends AbstractRuleTester
         }
     }
 
-    public function validateData($key, $value, RuleItemEntityInterface $item): array
+    public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array
     {
         $matchingItems = [];
-        $value = strtolower($value);
         $itemValue = strtolower($item->getValue());
 
         $pattern = '/(^|\.|\/\/|@)' . preg_quote(trim($itemValue, './'), '/') . '($|\/|#|\?|&)/is';
-        if (preg_match($pattern, $value)) {
+        if (preg_match($pattern, $lowercaseValue)) {
             $matchingItems = [
                 'type' => $item->getType(),
                 'value' => $item->getValue(),

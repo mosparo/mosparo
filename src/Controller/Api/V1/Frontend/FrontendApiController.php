@@ -366,9 +366,13 @@ class FrontendApiController extends AbstractController
             $this->ruleTesterHelper->checkRequest($submission, $securitySettings);
         }
 
-        $submission->setSubmitToken($submitToken);
+        $submission->setSubmitToken($submitToken, true);
 
         $this->entityManager->persist($submission);
+        $this->entityManager->flush();
+
+        // Make a second transaction and set the last submission to prevent deadlocks on the insert transaction above.
+        $submitToken->setLastSubmission($submission);
         $this->entityManager->flush();
 
         // Increase the day statistic if it is spam. We count anyway, even if the silent mode is enabled

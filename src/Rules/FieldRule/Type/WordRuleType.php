@@ -16,6 +16,14 @@ final class WordRuleType extends AbstractRuleType
             'name' => 'rules.fieldRule.type.word.text.title',
         ],
         [
+            'key' => 'wExact',
+            'name' => 'rules.fieldRule.type.word.wExact.title',
+        ],
+        [
+            'key' => 'wFull',
+            'name' => 'rules.fieldRule.type.word.wFull.title',
+        ],
+        [
             'key' => 'regex',
             'name' => 'rules.fieldRule.type.word.regex.title'
         ]
