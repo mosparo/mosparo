@@ -564,8 +564,8 @@ function mosparo(containerId, url, uuid, publicKey, options)
         let processedFields = [];
         this.formElement.querySelectorAll(this.options.inputFieldSelector).forEach(function (el) {
             let name = el.getAttribute('name');
-            // Ignore mosparo fields
-            if (name.indexOf('_mosparo_') === 0) {
+            // Ignore fields with empty names and mosparo fields
+            if (!name || name.indexOf('_mosparo_') === 0) {
                 return;
             }
 
