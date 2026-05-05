@@ -31,8 +31,12 @@
 
                         {% if hasError %}
                             <div class="alert alert-danger">
-                                {{ 'rulePackage.message.errorWhileUpdating'|trans }}
-                                {{ errorMessage|trans }}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    {{ 'rulePackage.message.errorWhileUpdating'|trans }}
+                                    {{ errorMessage|trans }}
+                                {% else %}
+                                    {{ 'rulePackage.message.errorWhileUpdatingWithoutReason'|trans }}
+                                {% endif %}
                             </div>
                         {% endif %}
 

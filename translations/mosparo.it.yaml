@@ -569,6 +569,8 @@ submission:
     action:
       openVerificationSimulation: Simulazione di validiazione
       openVerificationIssues: Problemi di verifica
+      goToNewerSubmission: Più recente
+      goToOlderSubmission: Meno recenti
     ignoredFields:
       title: Campi ignorati
       intro: I campi seguenti non sono stati trasmessi a causa della loro tipologia (nell'esempio password o caricamento file).
@@ -581,6 +583,9 @@ submission:
         generalIssue: Problema generale
       title: Problemi di verifica
       intro: Sono stati rilevati i seguenti problemi durante la verifica dell’invio. Queste informazioni possono essere utili per capire perché l’invio è stato rifiutato.
+    actionDescription:
+      goToNewerSubmission: Vai all'invio più recente
+      goToOlderSubmission: Vai all'invio meno recente
   filter:
     options:
       valid: Invii validi

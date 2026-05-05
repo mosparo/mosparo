@@ -389,6 +389,7 @@ rulePackage:
 
   message:
     errorWhileUpdating: 'Beim Aktualisieren des Regel-Pakets trat ein Fehler auf:'
+    errorWhileUpdatingWithoutReason: Beim Aktualisieren des Regelpakets ist ein Fehler aufgetreten. Möglicherweise ist die URL ungültig, der Server hat nicht rechtzeitig geantwortet oder es liegt ein anderes allgemeines Problem mit diesem Regelpaket vor. Wenden Sie sich für weitere Informationen an einen Administrator.
 
   list:
     name: Name

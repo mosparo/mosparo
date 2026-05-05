@@ -484,6 +484,7 @@ rulePackage:
 
   message:
     errorWhileUpdating: 'An error occurred while updating the rule package:'
+    errorWhileUpdatingWithoutReason: An error occurred while updating the rule package. Maybe the URL is invalid, the server did not respond in time, or there is another general issue with this rule package. Ask an administrator for more information.
 
   list:
     name: Name

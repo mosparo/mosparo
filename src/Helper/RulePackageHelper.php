@@ -22,6 +22,7 @@ use Mosparo\RulePackage\ImporterInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\NativeHttpClient;
+use Symfony\Component\HttpClient\NoPrivateNetworkHttpClient;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -39,6 +40,12 @@ class RulePackageHelper
 
     protected ProjectHelper $projectHelper;
 
+    protected bool $allowPrivateNetworks;
+
+    protected bool $allowRedirects;
+
+    protected int $minimumRefreshInterval;
+
     protected LoggerInterface $logger;
 
     protected string $rulePackageDirectory;
@@ -53,7 +60,10 @@ class RulePackageHelper
         CleanupHelper $cleanupHelper,
         ProjectHelper $projectHelper,
         LoggerInterface $logger,
-        string $rulePackageDirectory
+        string $rulePackageDirectory,
+        bool $allowPrivateNetworks,
+        bool $allowRedirects,
+        int $minimumRefreshInterval
     ) {
         $this->entityManager = $entityManager;
         $this->router = $router;
@@ -63,6 +73,9 @@ class RulePackageHelper
         $this->projectHelper = $projectHelper;
         $this->logger = $logger;
         $this->rulePackageDirectory = $rulePackageDirectory;
+        $this->allowPrivateNetworks = $allowPrivateNetworks;
+        $this->allowRedirects = $allowRedirects;
+        $this->minimumRefreshInterval = max(60, $minimumRefreshInterval); // 60 seconds is the hardcoded minimum limit
     }
 
     public function hasRulePackages(?Project $project = null): bool
@@ -189,6 +202,12 @@ class RulePackageHelper
             $client = new NativeHttpClient();
         }
 
+        if ($this->allowPrivateNetworks) {
+            $client = new NoPrivateNetworkHttpClient($client, ['127.0.0.0/8', '::1/128']);
+        } else {
+            $client = new NoPrivateNetworkHttpClient($client);
+        }
+
         $this->verifyUrl($rulePackage->getSource());
 
         $urls = [
@@ -199,7 +218,8 @@ class RulePackageHelper
             'headers' => [
                 'X-mosparo-host' => $this->router->generate('dashboard', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'X-mosparo-project-uuid' => $rulePackage->getProject()->getUuid()
-            ]
+            ],
+            'max_redirects' => ($this->allowRedirects) ? 3 : 0,
         ];
 
         $files = [];
@@ -207,7 +227,7 @@ class RulePackageHelper
             $response = $client->request('GET', $url, $args);
 
             if ($response->getStatusCode() !== 200) {
-                throw new Exception('Cannot download the rulePackage file.');
+                throw new Exception('Cannot download the rule package file.');
             }
 
             if ($fileType === 'content') {

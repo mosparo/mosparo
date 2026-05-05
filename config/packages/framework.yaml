@@ -26,6 +26,7 @@ framework:
 
     http_client:
         default_options:
+            max_redirects: 0
             headers:
                 'User-Agent': 'mosparo HTTP client'
 

@@ -1224,6 +1224,8 @@ submission:
     action:
       openVerificationSimulation: சரிபார்ப்பு உருவகப்படுத்துதல்
       openVerificationIssues: சரிபார்ப்பு சிக்கல்கள்
+      goToNewerSubmission: புதியது
+      goToOlderSubmission: பழையது
     spam:
       title: ச்பேம்
       isSpam: ச்பேம்
@@ -1375,11 +1377,14 @@ submission:
       title: சரிபார்ப்பு சிக்கல்கள்
       intro: சமர்ப்பித்தலின் சரிபார்ப்பின் போது பின்வரும் சிக்கல்கள் கண்டறியப்பட்டன. சமர்ப்பிப்பு ஏன் நிராகரிக்கப்பட்டது என்பதை நீங்கள் புரிந்து கொள்ள விரும்பினால் இந்தத் செய்தி உதவியாக இருக்கும்.
       labels:
-        fieldIssue: புலம் %பெயர்%
+        fieldIssue: புலம் %name%
         generalIssue: பொதுவான சிக்கல்
         errorMessage: பிழை செய்தி
         message: செய்தி
         debugInformation: பிழைத்திருத்த செய்தி
+    actionDescription:
+      goToNewerSubmission: புதிய சமர்ப்பிப்புக்குச் செல்லவும்
+      goToOlderSubmission: பழைய சமர்ப்பிப்புக்குச் செல்லவும்
   submitTokenMissing: டோக்கனைச் சமர்ப்பிக்கவில்லை
 downloadCheck:
   cardTitle: இணைய இணைப்பு
