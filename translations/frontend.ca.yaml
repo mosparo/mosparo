@@ -1,13 +1,14 @@
 accessibility:
-  checkingData: Estem comprovant les dades. Els preguem paciència.
-  dataValid: Les dades són vàlides. Podeu enviar el formulari.
-label: Accepto que les entrades del formulari seràn comprovades com a spam i emmagatzemades amb encriptació durant 14 dies.
+  checkingData: La protecció antibrossa està comprovant les vostres dades. Espereu.
+  dataValid: Les dades són vàlides. Podeu enviar el formulari ara.
+  protectedBy: El mosparo protegeix aquest formulari contra l'spam.
+label: Accepto que les entrades del formulari es comproven per detectar brossa i s'emmagatzemen xifrades durant 14 dies.
 error:
-  gotNoToken: mosparo no ha retornat un submit token.
-  internalError: Alguna cosa no ha anat bé. Si us plau torneu a intentar-ho.
-  noSubmitTokenAvailable: submit token no disponible. La validació d'aquest formulari no és possible.
-  spamDetected: Les teves dades han sigut comprovades per la nostra protecció de spam.
-  lockedOut: Estàs bloquejat. Si us plau torneu a intentar-ho després de %datetime%.
-  delay: La teva sol·licitud s'ha enlentit. Si us plau espereu durant %seconds% segons.
+  gotNoToken: El mosparo no ha retornat cap testimoni de tràmet.
+  internalError: Alguna cosa no ha anat bé. Torneu a intentar-ho.
+  noSubmitTokenAvailable: No hi ha cap testimoni de tràmet disponible. No és possible validar aquest formulari.
+  spamDetected: El nostre sistema de protecció antibrossa ha capturat les vostres dades.
+  lockedOut: Esteu bloquejat/da. Torneu a provar d'aquí a %datetime%.
+  delay: La vostra sol·licitud s'ha enlentit. Espereu durant %seconds% segons.
 hp:
-  fieldTitle: Deixa aquest espai en blanc
+  fieldTitle: Deixeu aquest espai en blanc
