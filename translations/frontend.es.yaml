@@ -1,6 +1,6 @@
-label: Acepto que las entradas del formulario se comprueben en busca de spam y se almacenen encriptadas durante 14 días.
+label: Acepto que los datos introducidos en el formulario se comprueben para detectar spam y se almacenen cifrados por 14 días.
 accessibility:
-  checkingData: La protección antispam está verificando sus datos. Por favor, espere.
+  checkingData: La protección antispam está verificando sus datos. Espere.
   dataValid: Sus datos son válidos. Puede enviar el formulario.
   protectedBy: Este formulario está protegido contra spam por mosparo.
 error:
