@@ -67,8 +67,31 @@ project:
     reader: Lector
     editor: Editor
     owner: Propietari
+  action:
+    manage: Gestiona els projectes
+    id: Id. de projecte
+    settings: Paràmetres
+    delete: Suprimeix el projecte
+    goto: Ves al projecte
+    create: Crea
+  create:
+    title: Crea un projecte
+    message:
+      successfullyCreatedAndConfigured: El projecte nou s'ha creat i configurat correctament.
+  createWizard:
+    design:
+      title: Seleccioneu un disseny
+      introStartWizard: El vostre projecte s'ha creat correctament. Per a començar a utilitzar-lo, seleccioneu el disseny i continueu.
+      infoAdvancedMode: Després de l'auxiliar, podeu canviar al mode avançat o invisible als paràmetres del disseny. El mode avançat us permet ajustar el disseny amb precisió al vostre lloc web, mentre que el mode invisible no mostrarà cap quadre visible del mosparo.
+    security:
+      title: Activa les funcions de seguretat
+      introSecurity: Trieu les funcions de seguretat que voleu activar.
+  delete:
+    confirm: Realment voleu suprimir el projecte %projectName%?
 dashboard:
   title: Tauler
+  chart:
+    spam: Brossa
 submission:
   list:
     id: Id.
