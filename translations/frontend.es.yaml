@@ -2,7 +2,7 @@ label: Acepto que los datos introducidos en el formulario se comprueben para det
 accessibility:
   checkingData: La protección antispam está verificando sus datos. Espere.
   dataValid: Sus datos son válidos. Puede enviar el formulario.
-  protectedBy: Este formulario está protegido contra spam por mosparo.
+  protectedBy: mosparo protege este formulario contra el spam.
 error:
   gotNoToken: mosparo no devolvió ningún token de envío.
   noSubmitTokenAvailable: No hay token de envío disponible. No es posible validar este formulario.
@@ -11,4 +11,4 @@ error:
   internalError: Se ha producido un error. Por favor, inténtelo de nuevo.
   delay: Tu solicitud se ha retrasado. Espere %seconds% segundos.
 hp:
-  fieldTitle: Deja este campo en blanco
+  fieldTitle: Deje este campo vacío
