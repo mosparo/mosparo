@@ -24,7 +24,7 @@ ipAllowList:
 honeypotField:
   nameHasInvalidCharacter: 문자, 숫자, 대시 기호(-)만 사용해 주세요.
 securityGuideline:
-  atLeastOneCriteriaRequired: 보안 가이드라인에는 최소한 하나의 기준이 필요합니다.
+  atLeastOneCriterionRequired: 보안 가이드라인에는 최소한 하나의 기준이 필요합니다.
   asNumberNotNumeric: AS 번호는 숫자가 아닙니다.
 webCronJob:
   webCronJobIntervalAtLeast5Minutes: 웹 크론 작업 간격은 최소 5분 이상이어야 합니다.

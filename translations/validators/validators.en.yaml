@@ -31,7 +31,7 @@ honeypotField:
   nameHasInvalidCharacter: Please use only letters, numbers and the dash sign (-).
 
 securityGuideline:
-  atLeastOneCriteriaRequired: The security guideline requires at least one criteria.
+  atLeastOneCriterionRequired: The security guideline requires at least one criterion.
   asNumberNotNumeric: The AS number is not a number.
 
 webCronJob:

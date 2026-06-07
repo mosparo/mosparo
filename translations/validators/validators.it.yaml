@@ -25,7 +25,7 @@ administration:
         autorizzazioni. Inserisci il tuo indirizzo IP alla lista.
 securityGuideline:
   asNumberNotNumeric: Il numero AS non è un numero.
-  atLeastOneCriteriaRequired: Le linee guida di sicurezza richiedono almeno un 
+  atLeastOneCriterionRequired: Le linee guida di sicurezza richiedono almeno un 
     criterio.
 webCronJob:
   webCronJobIntervalAtLeast5Minutes: L'intervallo del web cron job deve essere 

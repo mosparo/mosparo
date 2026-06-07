@@ -162,7 +162,7 @@ class SecurityGuidelineFormType extends AbstractType implements EventSubscriberI
                 'No criteria defined. Guideline is not valid.',
                 0,
                 null,
-                'securityGuideline.atLeastOneCriteriaRequired'
+                'securityGuideline.atLeastOneCriterionRequired'
             );
         }
     }

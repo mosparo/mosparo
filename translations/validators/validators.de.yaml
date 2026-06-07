@@ -33,7 +33,7 @@ honeypotField:
     Bindestrich (-).
 securityGuideline:
   asNumberNotNumeric: Die AS-Nummer ist keine Nummer.
-  atLeastOneCriteriaRequired: Die Sicherheitsleitlinie benötigt mindestens ein 
+  atLeastOneCriterionRequired: Die Sicherheitsleitlinie benötigt mindestens ein 
     Kriterium.
 
 hosts:

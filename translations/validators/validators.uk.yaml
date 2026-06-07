@@ -24,7 +24,7 @@ administration:
 ipAllowList:
   itemInvalid: Елемент «%item%» не є дійсною IP-адресою або підмережею.
 securityGuideline:
-  atLeastOneCriteriaRequired: Настанова з безпеки вимагає принаймні одного критерію.
+  atLeastOneCriterionRequired: Настанова з безпеки вимагає принаймні одного критерію.
   asNumberNotNumeric: Номер AS не є числом.
 hosts:
   hostContainsProtocol: Цей хост містить протокол. Введіть хост без протоколу (наприклад, example.com замість https://example.com).

@@ -27,7 +27,7 @@ honeypotField:
   nameHasInvalidCharacter: N'utilisez que des lettres, nombres ou tirets (-) 
     s'il vous plaît.
 securityGuideline:
-  atLeastOneCriteriaRequired: Les directives de sécurité nécessitent au moins un
+  atLeastOneCriterionRequired: Les directives de sécurité nécessitent au moins un
     critère.
 webCronJob:
   geoIpRefreshIntervalAtLeast1Day: L'intervall de rafraichissement de GeoIP2 

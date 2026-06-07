@@ -28,7 +28,7 @@ honeypotField:
   nameHasInvalidCharacter: தயவுசெய்து கடிதங்கள், எண்கள் மற்றும் கோடு அடையாளம் 
     (-) மட்டுமே பயன்படுத்தவும்.
 securityGuideline:
-  atLeastOneCriteriaRequired: பாதுகாப்பு வழிகாட்டுதலுக்கு குறைந்தது ஒரு 
+  atLeastOneCriterionRequired: பாதுகாப்பு வழிகாட்டுதலுக்கு குறைந்தது ஒரு 
     அளவுகோல்கள் தேவை.
   asNumberNotNumeric: அச் எண் ஒரு எண் அல்ல.
 webCronJob:

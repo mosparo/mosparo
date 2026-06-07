@@ -9,7 +9,7 @@ password:
       constraint:
         notBlank: Palun sisesta oma e-posti aadress.
 securityGuideline:
-  atLeastOneCriteriaRequired: Turvareegel eeldab vähemalt ühte kriteeriumi 
+  atLeastOneCriterionRequired: Turvareegel eeldab vähemalt ühte kriteeriumi 
     olemasolu.
   asNumberNotNumeric: AS-number pole number.
 administration:
