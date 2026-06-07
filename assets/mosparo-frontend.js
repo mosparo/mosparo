@@ -259,6 +259,22 @@ function mosparo(containerId, url, uuid, publicKey, options)
         return Math.random().toString().substring(2, 16);
     }
 
+    this.getSubmitToken = function () {
+        if (!this.submitTokenElement) {
+            return null;
+        }
+
+        return this.submitTokenElement.value;
+    }
+
+    this.getValidationToken = function () {
+        if (!this.validationTokenElement) {
+            return null;
+        }
+
+        return this.validationTokenElement.value;
+    }
+
     this.requestSubmitToken = function (submitToken) {
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         this.containerElement.classList.add('mosparo__loading');
