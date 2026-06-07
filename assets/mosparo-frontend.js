@@ -22,7 +22,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
         isMultiStepForm: false,
         submitToken: null,
         isLastStep: false,
-        forceInvisible: false,
+        forceInvisible: null,
 
         // Callbacks
         onBeforeGetFormData: null,
@@ -93,6 +93,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
         // Load the css resource, if needed
         if (this.options.loadCssResource) {
             this.loadCssResource();
+        }
+
+        // If the forceInvisible option is not set (null), we automatically force it if we protect a multistep
+        // form and if we are not in the last step.
+        if (this.options.forceInvisible === null) {
+            this.options.forceInvisible = (this.options.isMultiStepForm && !this.options.isLastStep);
         }
 
         let forceInvisibleClass = null;
