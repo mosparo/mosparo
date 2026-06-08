@@ -43,7 +43,14 @@ class StatisticHelper
                 ->setParameter(':startDate', $startDate->format('Y-m-d'));
         }
 
-        $data = ['numberOfValidSubmissions' => 0, 'numberOfSpamSubmissions' => 0, 'numberOfDelayedRequests' => 0, 'numberOfBlockedRequests' => 0, 'numbersByDate' => []];
+        $data = [
+            'numberOfValidSubmissions' => 0,
+            'numberOfSpamSubmissions' => 0,
+            'numberOfDelayedRequests' => 0,
+            'numberOfBlockedRequests' => 0,
+            'lastSubmissionAt' => null,
+            'numbersByDate' => []
+        ];
         foreach ($builder->getQuery()->getResult() as $dayStatistic) {
             $data['numberOfValidSubmissions'] += $dayStatistic->getNumberOfValidSubmissions();
             $data['numberOfSpamSubmissions'] += $dayStatistic->getNumberOfSpamSubmissions();
@@ -56,8 +63,11 @@ class StatisticHelper
                 'numberOfSpamSubmissions' => $dayStatistic->getNumberOfSpamSubmissions(),
                 'numberOfDelayedRequests' => $dayStatistic->getNumberOfDelayedRequests(),
                 'numberOfBlockedRequests' => $dayStatistic->getNumberOfBlockedRequests(),
-
             ];
+
+            if (($data['lastSubmissionAt'] === null || $data['lastSubmissionAt'] < $dayStatistic->getUpdatedAt()) && $dayStatistic->getUpdatedAt() !== null) {
+                $data['lastSubmissionAt'] = $dayStatistic->getUpdatedAt()->format(\DateTimeInterface::ATOM);
+            }
         };
 
         return $data;
