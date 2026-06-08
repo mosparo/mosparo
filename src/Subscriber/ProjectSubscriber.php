@@ -124,7 +124,14 @@ class ProjectSubscriber implements EventSubscriberInterface
             }
 
             $apiEndpoint = $this->getApiEndpoint($request, $activeRoute);
-            $requestData = array_merge($request->query->all(), $request->request->all());
+
+            // Convert the `range` parameter to an int since the query parameters are
+            // always strings. Required for the StatisticApiController.
+            $queryData = $request->query->all();
+            if (isset($queryData['range'])) {
+                $queryData['range'] = intval($queryData['range']);
+            }
+            $requestData = array_merge($queryData, $request->request->all());
 
             // Verify the request signature
             $requestHelper = new RequestHelper($publicKey, $activeProject->getPrivateKey());
@@ -138,6 +145,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                         'receivedHmacHash' => $requestSignature,
                         'payload' => $apiEndpoint . $requestHelper->toJson($requestData),
                     ];
+                    dump($apiEndpoint . $requestHelper->toJson($requestData));
                 }
 
                 $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Request invalid.'] + $debugInformation, 400));
