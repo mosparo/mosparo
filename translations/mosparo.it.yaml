@@ -385,6 +385,7 @@ rulePackage:
   backToList: Torna al gruppo di regole
   message:
     errorWhileUpdating: 'Si è verificato un errore aggiornando il gruppo di regole:'
+    errorWhileUpdatingWithoutReason: Si è verificato un errore durante l'aggiornamento del pacchetto di regole. L'URL potrebbe non essere valido, il server non ha risposto in tempo o si è verificato un altro problema generale con questo pacchetto di regole. Contatta un amministratore per ulteriori informazioni.
   add:
     title: Aggiungi gruppo di regole
   addChooseType:
