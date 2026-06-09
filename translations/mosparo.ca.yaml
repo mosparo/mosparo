@@ -1,1 +1,212 @@
-{}
+header:
+  pleaseChoose: Trieu-ne un…
+  noProjectsFound: No s'ha trobat cap projecte
+  account: Compte
+projectGroup:
+  mainGroup: Grup principal
+  action:
+    edit: Edita el grup
+    delete: Suprimeix el grup
+    openMainGroup: Torna al grup principal
+    openParentGroupName: Torna a %name%
+    openParentGroup: Obre el grup contenidor
+    openGroup: Obre el grup
+    backToList: Torna a la llista de projectes
+  create:
+    title: Crea un grup de projectes
+  edit:
+    title: Edita el grup de projectes %projectGroupName%
+  form:
+    name: Nom
+    description: Descripció
+    parentGroup: Grup contenidor
+    tooltip:
+      activeGroup: Esteu editant aquest grup.
+    message:
+      successfullySaved: El grup de projectes %projectGroupName% s'ha desat correctament.
+  delete:
+    title: Suprimeix el grup de projectes %projectGroupName%
+    confirm: Segur que voleu suprimir el grup de projectes %projectGroupName%?
+    reassignChildren: Tots els grups de projectes i els projectes d'aquest grup s'assignaran automàticament al grup de projectes contenidor.
+    message:
+      successfullyDeleted: El grup de projectes %projectGroupName% s'ha suprimit correctament.
+projectGroupSelector:
+  noGroupsAvailable: No hi ha cap grup disponible.
+  noProjectsAvailable: No hi ha cap projecte disponible
+project:
+  title: Projectes
+  searchTitle: Projectes per a %searchQuery%
+  backToList: Torna a la llista de projectes
+  infoNoProjectAvailable: No hi ha cap projecte disponible
+  infoCreateProjectOrRequestAccess: Creeu un projecte nou o sol·liciteu accés a un altre projecte.
+  infoNoProjectsInThisGroup: No hi ha cap projecte en aquest grup.
+  list:
+    name: Nom
+    projects: Projectes
+    status: Estat
+    actions: Accions
+    last: Darrers
+    valid: Vàlids
+    spam: Brossa
+  filter:
+    dropdown: Filtra la llista de projectes
+    options:
+      all: Mostra-ho tot
+      active: Mostra els projectes actius
+      inactive: Mostra els projectes inactius
+  search:
+    placeholder: Cerca…
+  statistics:
+    dropdown: Mostra estadístiques de
+  form:
+    name: Nom
+    description: Descripció
+    hosts: Amfitrions
+    status: Estat
+  roles:
+    reader: Lector
+    editor: Editor
+    owner: Propietari
+  action:
+    manage: Gestiona els projectes
+    id: Id. de projecte
+    settings: Paràmetres
+    delete: Suprimeix el projecte
+    goto: Ves al projecte
+    create: Crea
+  create:
+    title: Crea un projecte
+    message:
+      successfullyCreatedAndConfigured: El projecte nou s'ha creat i configurat correctament.
+  createWizard:
+    design:
+      title: Seleccioneu un disseny
+      introStartWizard: El vostre projecte s'ha creat correctament. Per a començar a utilitzar-lo, seleccioneu el disseny i continueu.
+      infoAdvancedMode: Després de l'auxiliar, podeu canviar al mode avançat o invisible als paràmetres del disseny. El mode avançat us permet ajustar el disseny amb precisió al vostre lloc web, mentre que el mode invisible no mostrarà cap quadre visible del mosparo.
+    security:
+      title: Activa les funcions de seguretat
+      introSecurity: Trieu les funcions de seguretat que voleu activar.
+  delete:
+    confirm: Realment voleu suprimir el projecte %projectName%?
+dashboard:
+  title: Tauler
+  chart:
+    spam: Brossa
+submission:
+  list:
+    id: Id.
+    page: Pàgina
+    spam: Brossa
+    verification: Verificació
+    actions: Accions
+  view:
+    spam:
+      title: Brossa
+    verification:
+      title: Verificació
+    source:
+      title: Font
+    data:
+      value: Valor
+      rating: Valoració
+      formData:
+        hasPoints: Punts
+      client:
+        title: Client
+        userAgent: Agent d'usuari
+        country: País
+settings:
+  general:
+    connectionDetails:
+      host: Amfitrió
+  projectMember:
+    list:
+      user: Usuari
+      actions: Accions
+  security:
+    title: Seguretat
+    form:
+      delayMultiplicator: Multiplicador
+      lockoutMultiplicator: Multiplicador
+  design:
+    title: Disseny
+    subtitles:
+      colorSettings: Colors
+    cr:
+      value: Valor
+      text: Text
+    form:
+      color:
+        background: Fons
+        border: Vora
+        checkbox: Casella de selecció
+        text: Text
+        shadow: Ombra
+    choices:
+      boxSize:
+        small: Petit
+        medium: Mitjà
+        large: Gran
+administration:
+  title: Administració
+  settings:
+    mailSettings:
+      form:
+        host: Amfitrió
+        port: Port
+        user: Usuari
+        password: Contrasenya
+  user:
+    title: Usuaris
+    list:
+      user: Usuari
+      actions: Accions
+    form:
+      password: Contrasenya
+      email: Adreça electrònica
+  geoip2:
+    settings:
+      title: Paràmetres
+    version:
+      typeCountry: 'País:'
+    downloadAndUpdate:
+      web:
+        title: Web
+        action: Baixa la base de dades
+  update:
+    title: Actualitza
+    check:
+      title: Estat
+    execute:
+      log: Procés
+    settings:
+      form:
+        channelStable: Estable
+    buttons:
+      continue: Continua
+    version:
+      titleNotAvailable: No hi ha cap actualització disponible
+  system:
+    general:
+      title: Generals
+      serverInfo: Servidor
+      extensions: Extensions
+    usedLibrariesAndResources:
+      license: Llicència
+    website: Lloc web
+account:
+  title: Compte
+  settings:
+    form:
+      locale: Llengua
+      timezone: Fus horari
+  twoFactor:
+    action:
+      configure: Configura
+      reconfigure: Reconfigura
+      disable: Desactiva
+      continue: Continua
+      verify: Verifica
+  backToOverview: Torna al tauler
+rulePackage:
+  backToList: Torna als paquets de regles
