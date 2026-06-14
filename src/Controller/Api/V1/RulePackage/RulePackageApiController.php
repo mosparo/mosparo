@@ -169,7 +169,7 @@ class RulePackageApiController extends AbstractController
                 'description' => $rule->getDescription(),
                 'numberOfItems' => $rule->getNumberOfItems(),
                 'spamRatingFactor' => $rule->getSpamRatingFactor(),
-                'updatedAt' => $rule->getUpdatedAt()->format(\DateTimeInterface::ATOM),
+                'updatedAt' => $rule->getUpdatedAt()?->format(\DateTimeInterface::ATOM) ?? null,
                 'listRoute' => $this->generateUrl('rule_package_api_rule_items', [
                     'rulePackage' => $rulePackage->getId(),
                     'rulePackageRuleCache' => $rule->getId(),
