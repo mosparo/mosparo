@@ -125,12 +125,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
             $apiEndpoint = $this->getApiEndpoint($request, $activeRoute);
 
-            // Convert the `range` parameter to an int since the query parameters are
-            // always strings. Required for the StatisticApiController.
-            $queryData = $request->query->all();
-            if (isset($queryData['range'])) {
-                $queryData['range'] = intval($queryData['range']);
-            }
+            $queryData = $this->prepareQueryData($request->query->all());
             $requestData = array_merge($queryData, $request->request->all());
 
             // Verify the request signature
@@ -271,5 +266,24 @@ class ProjectSubscriber implements EventSubscriberInterface
         }
 
         return $apiEndpoint;
+    }
+
+    /**
+     * The value of a query parameter is always a string. But some API endpoints expect
+     * integers as query parameters, so we need to convert them before we can continue.
+     *
+     * @param array $queryData
+     * @return array
+     */
+    protected function prepareQueryData(array $queryData): array
+    {
+        $intParameters = ['range', 'page', 'perPage'];
+        foreach ($queryData as $key => $value) {
+            if (in_array($key, $intParameters)) {
+                $queryData[$key] = intval($value);
+            }
+        }
+
+        return $queryData;
     }
 }
