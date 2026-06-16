@@ -263,6 +263,7 @@ action:
   close: Tanca
   manage: Gestiona
   configure: Configura
+  use: Usa
 general:
   example: Exemple
   empty: Buit
@@ -342,3 +343,4 @@ tools:
         itemsAdd: Afegeix
         itemsModify: Modifica
         itemsRemove: Elimina
+        priority: Prioritat
