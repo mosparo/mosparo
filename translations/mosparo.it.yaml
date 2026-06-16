@@ -32,6 +32,7 @@ project:
     projectGroupHelp: Puoi utilizzare i gruppi di progetti per organizzare i tuoi progetti. Seleziona il gruppo di progetti nel quale vuoi archiviare questo progetto.
     projectGroup: Gruppo di progetti
     languageSource: Fonte della lingua
+    silentModeEnabled: Abilita modalità silenziosa
   delete:
     confirm: Vuoi davvero eliminare il progetto %projectName%?
     title: Elimina progetto %projectName%
@@ -60,6 +61,9 @@ project:
     actions: Azioni
     status: Stato
     projects: Progetti
+    last: Ultimo
+    valid: Valido
+    spam: Spam
   filter:
     options:
       all: Mostra tutto
@@ -74,6 +78,14 @@ project:
     editor: Editore
   searchTitle: Progetti per %searchQuery%
   infoNoProjectsInThisGroup: Non ci sono progetti in questo gruppo.
+  statistics:
+    dropdown: Mostra statistiche da
+    options:
+      disabled: Non mostrare le statistiche
+      showLastDay: Giorno precedente
+      showMultipleDays: '%days% giorni'
+    noDataInTimeRangeOneDay: Nessun dato nel giorno passato
+    noDataInTimeRangeDays: Nessun dato nei %days% giorni passati
 header:
   pleaseChoose: Prego, selezionare…
   account: Account

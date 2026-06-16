@@ -63,6 +63,7 @@ project:
     description: Descripció
     hosts: Amfitrions
     status: Estat
+    projectGroup: Grup de projectes
   roles:
     reader: Lector
     editor: Editor
@@ -86,6 +87,8 @@ project:
     security:
       title: Activa les funcions de seguretat
       introSecurity: Trieu les funcions de seguretat que voleu activar.
+    connection:
+      title: Detalls de la connexió
   delete:
     confirm: Realment voleu suprimir el projecte %projectName%?
 dashboard:
@@ -115,6 +118,14 @@ submission:
         title: Client
         userAgent: Agent d'usuari
         country: País
+    verificationSimulation:
+      labels:
+        authorization: Autorització
+        username: Nom d'usuari
+        password: Contrasenya
+        method: Mètode
+        headers: Capçaleres
+        response: Resposta
 settings:
   general:
     connectionDetails:
@@ -128,6 +139,19 @@ settings:
     form:
       delayMultiplicator: Multiplicador
       lockoutMultiplicator: Multiplicador
+    guideline:
+      list:
+        name: Nom
+        priority: Prioritat
+        actions: Accions
+      form:
+        guideline:
+          name: Nom
+          description: Descripció
+          priority: Prioritat
+        criteria:
+          title: Criteris
+          subnets: Subxarxes
   design:
     title: Disseny
     subtitles:
@@ -147,6 +171,8 @@ settings:
         small: Petit
         medium: Mitjà
         large: Gran
+    dropdown:
+      advanced: Avançat
 administration:
   title: Administració
   settings:
@@ -182,10 +208,14 @@ administration:
     settings:
       form:
         channelStable: Estable
+        channelBeta: Beta
     buttons:
       continue: Continua
     version:
       titleNotAvailable: No hi ha cap actualització disponible
+    checkRequirements:
+      action:
+        recheck: Torna a comprovar
   system:
     general:
       title: Generals
@@ -210,3 +240,105 @@ account:
   backToOverview: Torna al tauler
 rulePackage:
   backToList: Torna als paquets de regles
+security:
+  login:
+    passwordLabel: Contrasenya
+password:
+  request:
+    form:
+      email: Adreça electrònica
+  email:
+    greeting: Hola!
+  form:
+    password: Contrasenya
+action:
+  add: Afegeix
+  remove: Elimina
+  save: Desa
+  view: Visualitza
+  edit: Edita
+  delete: Suprimeix
+  actions: Accions
+  help: Ajuda
+  close: Tanca
+  manage: Gestiona
+  configure: Configura
+general:
+  example: Exemple
+  empty: Buit
+  unlimited: Il·limitat
+state:
+  active: Actiu
+  inactive: Inactiu
+  ignored: Ignorat
+  yes: Sí
+  no: No
+roles:
+  user: Usuari
+  inactive: Inactiu
+datatable:
+  datatable:
+    processing: S'està processant…
+    search: 'Cerca:'
+    loadingRecords: S'està carregant…
+    searchPlaceholder: Cerca
+    paginate:
+      first: Primer
+      previous: Anterior
+      next: Següent
+      last: Últim
+setup:
+  buttons:
+    continue: Continua
+    install: Instal·la
+    recheck: Torna a comprovar
+  prerequisites:
+    title: Requisits
+    types:
+      general: Generals
+    results:
+      available: Disponibles
+      missing: Mancants
+    optional: opcionals
+  database:
+    title: Base de dades
+    form:
+      port: Port
+      host: Amfitrió
+      database: Base de dades
+      user: Usuari
+      password: Contrasenya
+  other:
+    form:
+      password: Contrasenya
+interface:
+  colorModes:
+    light: Clar
+    dark: Fosc
+tools:
+  title: Eines
+  ruleTester:
+    types:
+      userAgent: Agent d'usuari
+    result:
+      table:
+        value: Valor
+        rating: Valoració
+  export:
+    title: Exporta
+  import:
+    title: Importa
+    form:
+      choice:
+        add: Afegeix
+    simulate:
+      table:
+        name: Nom
+        type: Tipus
+        status: Estat
+        add: Afegeix
+        modify: Modifica
+        items: Elements
+        itemsAdd: Afegeix
+        itemsModify: Modifica
+        itemsRemove: Elimina
