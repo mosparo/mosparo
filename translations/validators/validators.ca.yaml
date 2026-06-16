@@ -1,13 +1,11 @@
 settings:
   mosparoName:
-    colonNotAllowed: El signe dos punts (:) no està permès en el nom de la 
-      instal·lació del mosparo.
+    colonNotAllowed: El signe dos punts (:) no està permès en el nom de la instal·lació del mosparo.
 password:
   form:
     constraint:
       notBlank: Introduïu una contrasenya.
-      length: La vostra contrasenya ha de tenir com a mínim {{ limit }} 
-        caràcters.
+      length: La vostra contrasenya ha de tenir com a mínim {{ limit }} caràcters.
       passwordMustMatch: Els camps de contrasenya han de coincidir.
   request:
     form:
@@ -20,30 +18,19 @@ tools:
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: La vostra adreça IP no està permesa a la llista de 
-        permís. Afegiu la vostra adreça IP a la llista.
+      ownIpNotInAllowList: La vostra adreça IP no està permesa a la llista de permís. Afegiu la vostra adreça IP a la llista.
 ipAllowList:
   itemInvalid: L'element «%item%» no és una adreça IP ni una subxarxa vàlida.
 honeypotField:
-  nameHasInvalidCharacter: Utilitzeu només lletres, nombres i el signe de 
-    guionet (-).
+  nameHasInvalidCharacter: Utilitzeu només lletres, nombres i el signe de guionet (-).
 securityGuideline:
-  atLeastOneCriteriaRequired: La directriu de seguretat requereix com a mínim un
-    criteri.
   asNumberNotNumeric: El número AS no és un nombre.
 webCronJob:
-  webCronJobIntervalAtLeast5Minutes: L'interval de la tasca cron web ha de ser 
-    de 5 minuts o més.
-  geoIpRefreshIntervalAtLeast1Day: L'interval de renovació de GeoIP2 ha de ser 
-    d'almenys un dia o més.
+  webCronJobIntervalAtLeast5Minutes: L'interval de la tasca cron web ha de ser de 5 minuts o més.
+  geoIpRefreshIntervalAtLeast1Day: L'interval de renovació de GeoIP2 ha de ser d'almenys un dia o més.
 hosts:
-  hostContainsProtocol: Aquest amfitrió conté un protocol. Introduïu l'amfitrió 
-    sense protocol (per exemple, example.com en lloc de https://example.com).
-  hostContainsInvalidCharacter: Aquest nom d'amfitrió conté caràcters no vàlids.
-    En aquest camp només es permeten caràcters (a-z), nombres (0-9), guionets, 
-    punts, dos punts i l'asterisc (*).
+  hostContainsProtocol: Aquest amfitrió conté un protocol. Introduïu l'amfitrió sense protocol (per exemple, example.com en lloc de https://example.com).
+  hostContainsInvalidCharacter: Aquest nom d'amfitrió conté caràcters no vàlids. En aquest camp només es permeten caràcters (a-z), nombres (0-9), guionets, punts, dos punts i l'asterisc (*).
 translation:
   locale:
-    invalidFormat: Especifiqueu la configuració local en el format correcte. 
-      Introduïu un codi de llengua de dos caràcters o una combinació del codi de
-      llengua de dos caràcters amb el codi del país.
+    invalidFormat: Especifiqueu la configuració local en el format correcte. Introduïu un codi de llengua de dos caràcters o una combinació del codi de llengua de dos caràcters amb el codi del país.
