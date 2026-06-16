@@ -274,7 +274,7 @@ rules:
 
       provider:
         title: Anbieter
-        shortIntro: Filtert nach AS-Nummer und Land
+        shortIntro: Filtert nach providerspezifischen Informationen
         intro: Der Provider-Regeltyp erlaubt das Filtern nach AS-Nummer und Land.
         infoGeoip2: Um den Provider-Regeltyp verwenden zu können, ist es erforderlich, dass die MindMax GeoLite2 Datenbank konfiguriert ist. Ansonsten hat der Regeltyp keinen Einfluss.
         label: AS Nummer/Land
