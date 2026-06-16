@@ -96,61 +96,14 @@ dashboard:
   chart:
     spam: Brossa
 rule:
-  title: Regles
-  list:
-    name: Nom
-    type: Tipus
-    status: Estat
-    actions: Accions
   form:
-    rule:
-      title: Regla
-      name: Nom
-      description: Descripció
-      status: Estat
-    items:
-      title: Elements
-      type: Tipus
-      rating: Valoració
-    addMultipleItems:
-      items: Elements
-      rating: Valoració
     modal:
-      deleteSelectedItems:
-        progress:
-          deletingPleaseWait: S'estan suprimint els elements… Espereu…
+      deleteSelectedItems: {}
   type:
-    domain:
-      title: Domini
-      placeholder: exemple.com
-      domain:
-        title: Domini
-      label: Domini
-    email:
-      title: Adreça electrònica
-    ipAddress:
-      placeholder: 0.0.0.0
-      subnet:
-        title: Subxarxa
-    provider:
-      title: Proveïdor
-      country:
-        title: País
-    userAgent:
-      text:
-        title: Text
-    website:
-      title: Lloc web
-      url:
-        title: URL
-      label: URL/domini
-    word:
-      title: Paraula
-      text:
-        title: Text
-    rating:
-      title: Valoració
-      placeholder: Valoració
+    ipAddress: {}
+    provider: {}
+    userAgent: {}
+    word: {}
 submission:
   list:
     id: Id.
@@ -400,5 +353,3 @@ tools:
         itemsModify: Modifica
         itemsRemove: Elimina
         priority: Prioritat
-  eiParts:
-    rules: Regles
