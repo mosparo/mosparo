@@ -13,7 +13,7 @@ honeypotField:
   nameHasInvalidCharacter: कृपया केवल अक्षरों, संख्याओं और डैश चिह्न (-) का उपयोग
     करें।
 securityGuideline:
-  atLeastOneCriteriaRequired: सुरक्षा दिशानिर्देश के लिए कम से कम एक मानदंड की आवश्यकता
+  atLeastOneCriterionRequired: सुरक्षा दिशानिर्देश के लिए कम से कम एक मानदंड की आवश्यकता
     होती है।
   asNumberNotNumeric: AS संख्या कोई संख्या नहीं है।
 webCronJob:

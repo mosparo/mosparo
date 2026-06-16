@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20260326190248 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE submission_rule (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, rule_key VARCHAR(50) NOT NULL, enabled BOOLEAN NOT NULL, rating DOUBLE PRECISION DEFAULT NULL, project_id INTEGER NOT NULL, CONSTRAINT FK_D4DEC7A3166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE INDEX IDX_D4DEC7A3166D1F9C ON submission_rule (project_id)');
+        $this->addSql('CREATE INDEX sr_key_idx ON submission_rule (project_id, rule_key)');
+        $this->addSql('CREATE TABLE submission_rule_config_value (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(255) NOT NULL, value CLOB DEFAULT NULL, submission_rule_id INTEGER NOT NULL, project_id INTEGER NOT NULL, CONSTRAINT FK_7B30B7E058AF9887 FOREIGN KEY (submission_rule_id) REFERENCES submission_rule (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_7B30B7E0166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE INDEX IDX_7B30B7E058AF9887 ON submission_rule_config_value (submission_rule_id)');
+        $this->addSql('CREATE INDEX IDX_7B30B7E0166D1F9C ON submission_rule_config_value (project_id)');
+    }
+
+    public function down(Schema $schema): void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('DROP TABLE submission_rule');
+        $this->addSql('DROP TABLE submission_rule_config_value');
+    }
+}

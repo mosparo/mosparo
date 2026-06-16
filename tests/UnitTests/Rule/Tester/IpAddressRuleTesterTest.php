@@ -4,7 +4,7 @@ namespace Mosparo\Tests\UnitTests\Rule\Tester;
 
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
-use Mosparo\Rule\Tester\IpAddressRuleTester;
+use Mosparo\Rules\FieldRule\Tester\IpAddressRuleTester;
 
 class IpAddressRuleTesterTest extends TestCaseWithItems
 {

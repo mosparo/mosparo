@@ -27,6 +27,22 @@
         font-weight: normal;
     }
 
+    &.mosparo__force-invisible-mode {
+        border: 0 solid transparent !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        min-width: unset !important;
+        max-width: unset !important;
+        padding: 0 !important;
+        position: static !important;
+
+        .mosparo__label,
+        .mosparo__checkbox_column {
+            display: none !important;
+        }
+    }
+
     .mosparo__label {
         display: var(--mosparo-content-display, block);
     }

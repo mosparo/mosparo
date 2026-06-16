@@ -1,0 +1,8 @@
+{% trans_default_domain 'mosparo' %}
+
+<div class="d-flex action-buttons-list">
+    <a href="{{ path('rules_submission_rule_configure', { '_projectId': activeProject.id, 'key': row.key}) }}" class="btn btn-primary me-2">
+        <i class="ti ti-settings"></i>
+        {{ 'action.configure'|trans }}
+    </a>
+</div>

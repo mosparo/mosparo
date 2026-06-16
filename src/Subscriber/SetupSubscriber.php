@@ -74,8 +74,9 @@ class SetupSubscriber implements EventSubscriberInterface
 
     protected function checkForUpdate(RequestEvent $event)
     {
-        // If the two versions aren't the same, redirect to the update controller
-        if (Kernel::VERSION != $this->installedVersion) {
+        // If the two versions aren't the same, redirect to the update controller. Do not redirect, if the
+        // installed version is set to "test", which is used for the ApplicationTests.
+        if (Kernel::VERSION !== $this->installedVersion && $this->installedVersion !== 'test') {
             $request = $event->getRequest();
             $route = $request->attributes->get('_route');
 

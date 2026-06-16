@@ -38,6 +38,9 @@ project:
     message:
       successfullyDeleted: Il progetto %projectName% è stato eliminato correttamente.
     disconnectFirst: Assicurati di aver disconnesso il tuo sito o il codice di integrazione con questo progetto prima di eliminarlo.
+    deleteRulePackages:
+      intro1: Sono presenti pacchetti di regole in questo progetto. Non puoi cancellarlo.
+      intro2: Cancella i pacchetti di regole prima di cancellare il progetto.
   createWizard:
     connection:
       savedSuccessfully: Le impostazioni della grafica e della sicurezza sono state salvate. Ora il progetto è pronto per essere utilizzato.
@@ -75,205 +78,206 @@ header:
   pleaseChoose: Prego, selezionare…
   account: Account
   noProjectsFound: Nessun progetto trovato
-rule:
-  edit:
-    title: Modifica regola %ruleName%
-  list:
-    name: Nome
-    type: Tipo
-    status: Stato
-    actions: Azioni
-  create:
-    title: Crea regola
-    label:
-      ruleType: Tipo regola
-  createChooseType:
-    title: Scegli il tipo
-    intro: Seleziona il tipo di ruolo che vuoi creare. I tipi disponibili sono utilizzati per diversi campi e non possono essere modificati per regole successive.
-  title: Regole
-  backToList: Ritorna alle regole
-  form:
-    rule:
-      description: Descrizione
+rules:
+  fieldRule:
+    edit:
+      title: Modifica regola %ruleName%
+    list:
       name: Nome
+      type: Tipo
       status: Stato
-      title: Regola
-      spamRatingFactorHelp: Con il fattore di valutazione spam puoi definire un fattore per inasprire o addolcire la valutazione di questa regola. Se il valore è maggiore di 1.0 la valutazione è inasprita, se il valore è inferiore a 1.0 la valutazione è addolcita.
-      spamRatingFactor: Fattore di valutazione spam
-    addMultipleItems:
-      items: Oggetti
-      rating: Valutazione
-      ratingHelp: Se non impostata, la valutazione predefinita è 1.0. Se la valutazione viene impostata a 0.0 l'oggetto non verrà identificato come spam.
-      itemsHelp: Aggiungi un oggetto per ogni riga.
-      type: Tipo
-    ruleType: Tipo ruolo
-    items:
-      type: Tipo
-      title: Oggetti
-      rating: Valutazione
-      value: Valore
-    status:
-      unsavedChanges: '%counter% modifiche non salvate'
-      savingChanges: Sto salvando %counter% modifiche
-      nothingToSave: Niente da salvare
-    filter:
-      useWildcard: Utilizza %wildcard% come carattere jolly.
-      itemSpamRating: Valutazione spam
-      title: Filtra elementi
-    noItemsInTable:
-      title: Ancora nessun oggetto
-      text: Questa regola ancora non contiene oggetti.
-    nothingFound:
-      title: Non trovo niente
-      text: Non ci sono oggetti che corrispondono al tuo filtro.
-    modal:
-      importTxtFile:
-        title: Importa file di testo
-        file: File
-        fileHelp: Seleziona il file di testo (*.txt) che vuoi importare dal tuo PC.
-        action: Importa file
-      importCsvFile:
-        title: Importa file CSV
-        file: File
-        fileHelp: Seleziona il file CSV (*.csv) che vuoi importare dal tuo PC.
-        action: Importa file
-      addingItems:
-        title: Aggiungi oggetti
-        messageCompleted: I dati sono stati processati. Qui sopra puoi vedere il sommario degli oggetti aggiunti, ignorati e non validi. Ora puoi chiudere questa finestra.
-        progress:
-          dataProcessed: Dati processati
-          processingPleaseWait: Sto processando i dati…
-          processingStats: Processati %processedBytes% di %totalBytes%
-          abortHint: Se chiudi questa finestra il processo verrà terminato e dovrai riavviarlo di nuovo.
-        summary:
-          addedLabel: Aggiunti
-          addedTooltip: Questi oggetti sono stati aggiunti alla regola.
-          skippedLabel: Ignorati
-          skippedTooltip: Questi oggetti esistono già, quindi il processo di importazione li ha ignorati.
-          invalidLabel: Non validi
-          invalidTooltip: Oggetti non validi, ad esempio il tipo di oggetto non esiste o il suo valore è espresso in un formato errato.
-      deleteSelectedItems:
-        title: Cancella gli oggetti selezionati
-        confirm: Vuoi veramente cancellare i %counter$ oggetti selezionati?
-        confirmOne: Vuoi veramente cancellare l'oggetto selezionato?
-        confirmDelete: Sì, cancella gli oggetti
-        progress:
-          deletingPleaseWait: Sto cancellando gli oggetti... Attendere…
-  delete:
-    confirm: Vuoi davvero eliminare la regola %ruleName%?
-    title: Elimina regola %ruleName%
-    message:
-      successfullyDeleted: La regola %ruleName% è stata eliminata correttamente.
-  type:
-    domain:
-      title: Dominio
-      shortIntro: Consente di filtrare per domini specifici
-      placeholder: esempio.com
+      actions: Azioni
+    create:
+      title: Crea regola
+      label:
+        ruleType: Tipo regola
+    createChooseType:
+      title: Scegli il tipo
+      intro: Seleziona il tipo di ruolo che vuoi creare. I tipi disponibili sono utilizzati per diversi campi e non possono essere modificati per regole successive.
+    title: Regole
+    backToList: Ritorna alle regole
+    form:
+      rule:
+        description: Descrizione
+        name: Nome
+        status: Stato
+        title: Regola
+        spamRatingFactorHelp: Con il fattore di valutazione spam puoi definire un fattore per inasprire o addolcire la valutazione di questa regola. Se il valore è maggiore di 1.0 la valutazione è inasprita, se il valore è inferiore a 1.0 la valutazione è addolcita.
+        spamRatingFactor: Fattore di valutazione spam
+      addMultipleItems:
+        items: Oggetti
+        rating: Valutazione
+        ratingHelp: Se non impostata, la valutazione predefinita è 1.0. Se la valutazione viene impostata a 0.0 l'oggetto non verrà identificato come spam.
+        itemsHelp: Aggiungi un oggetto per ogni riga.
+        type: Tipo
+      ruleType: Tipo ruolo
+      items:
+        type: Tipo
+        title: Oggetti
+        rating: Valutazione
+        value: Valore
+      status:
+        unsavedChanges: '%counter% modifiche non salvate'
+        savingChanges: Sto salvando %counter% modifiche
+        nothingToSave: Niente da salvare
+      filter:
+        useWildcard: Utilizza %wildcard% come carattere jolly.
+        itemSpamRating: Valutazione spam
+        title: Filtra elementi
+      noItemsInTable:
+        title: Ancora nessun oggetto
+        text: Questa regola ancora non contiene oggetti.
+      nothingFound:
+        title: Non trovo niente
+        text: Non ci sono oggetti che corrispondono al tuo filtro.
+      modal:
+        importTxtFile:
+          title: Importa file di testo
+          file: File
+          fileHelp: Seleziona il file di testo (*.txt) che vuoi importare dal tuo PC.
+          action: Importa file
+        importCsvFile:
+          title: Importa file CSV
+          file: File
+          fileHelp: Seleziona il file CSV (*.csv) che vuoi importare dal tuo PC.
+          action: Importa file
+        addingItems:
+          title: Aggiungi oggetti
+          messageCompleted: I dati sono stati processati. Qui sopra puoi vedere il sommario degli oggetti aggiunti, ignorati e non validi. Ora puoi chiudere questa finestra.
+          progress:
+            dataProcessed: Dati processati
+            processingPleaseWait: Sto processando i dati…
+            processingStats: Processati %processedBytes% di %totalBytes%
+            abortHint: Se chiudi questa finestra il processo verrà terminato e dovrai riavviarlo di nuovo.
+          summary:
+            addedLabel: Aggiunti
+            addedTooltip: Questi oggetti sono stati aggiunti alla regola.
+            skippedLabel: Ignorati
+            skippedTooltip: Questi oggetti esistono già, quindi il processo di importazione li ha ignorati.
+            invalidLabel: Non validi
+            invalidTooltip: Oggetti non validi, ad esempio il tipo di oggetto non esiste o il suo valore è espresso in un formato errato.
+        deleteSelectedItems:
+          title: Cancella gli oggetti selezionati
+          confirm: Vuoi veramente cancellare i %counter$ oggetti selezionati?
+          confirmOne: Vuoi veramente cancellare l'oggetto selezionato?
+          confirmDelete: Sì, cancella gli oggetti
+          progress:
+            deletingPleaseWait: Sto cancellando gli oggetti... Attendere…
+    delete:
+      confirm: Vuoi davvero eliminare la regola %ruleName%?
+      title: Elimina regola %ruleName%
+      message:
+        successfullyDeleted: La regola %ruleName% è stata eliminata correttamente.
+    type:
       domain:
         title: Dominio
-        intro: Inserisci un dominio che non sarà autorizzato ad effettuare invii. Utilizzando un dominio verranno anche intercettate tutte le email contenenti il dominio stesso.
-      intro: Il tipo di regola di dominio consente di filtrare i domini.
-      label: Dominio
-    email:
-      title: Email
-      intro: Il tipo di regola email consente di filtrare gli indirizzi email.
-      shortIntro: Consente di filtrare per indirizzi email specifici
-      placeholder: info@esempio.com
+        shortIntro: Consente di filtrare per domini specifici
+        placeholder: esempio.com
+        domain:
+          title: Dominio
+          intro: Inserisci un dominio che non sarà autorizzato ad effettuare invii. Utilizzando un dominio verranno anche intercettate tutte le email contenenti il dominio stesso.
+        intro: Il tipo di regola di dominio consente di filtrare i domini.
+        label: Dominio
       email:
-        title: Indirizzo email
-        intro: Inserisci un indirizzo email che non è autorizzato ad effettuare invii.
-      label: Indirizzo email
-    ipAddress:
-      title: Indirizzo IP
-      shortIntro: Consente di filtrare per indirizzi IP e sottoreti
-      intro: Il tipo di regola dell'indirizzo IP consente di filtrare gli indirizzi IP o le sottoreti.
+        title: Email
+        intro: Il tipo di regola email consente di filtrare gli indirizzi email.
+        shortIntro: Consente di filtrare per indirizzi email specifici
+        placeholder: info@esempio.com
+        email:
+          title: Indirizzo email
+          intro: Inserisci un indirizzo email che non è autorizzato ad effettuare invii.
+        label: Indirizzo email
       ipAddress:
         title: Indirizzo IP
-        intro: Inserisci un indirizzo IP che non è autorizzato ad effettuare invii.
-      placeholder: 0.0.0.0
-      subnet:
-        title: Sottorete
-        intro: Inserisci una sottomaschera di rete che non è autorizzata ad effettuare invii.
-      label: Indirizzo IP/Sottorete
-    provider:
-      title: Provider
-      country:
-        intro: Immettere il codice ISO di un paese che non è autorizzato a inviare alcun messaggio. Tutti gli indirizzi IP registrati in questo paese saranno contrassegnati come spam.
-        infoCountryBlock: Se si aggiunge un Paese alla regola, significa che nessuno potrà effettuare invii da questo Paese. Se da un lato questo suona bene, dall'altro potrebbe bloccare un utente reale dall'invio di un modulo. Fate attenzione a questa opzione. La corretta geolocalizzazione degli indirizzi IP non è mai garantita.
-        title: Paese
-      action:
-        configureGeoip2: Configurazione GeoIP2
-      asNumber:
-        title: Numero di AS
-        intro: Immettere un numero di AS che non è autorizzato a effettuare invii. Tutti gli indirizzi IP appartenenti a questo AS saranno bloccati.
-      shortIntro: Permetti di filtrare con informazioni specifiche relative al provider
-      infoGeoip2: Per poter utilizzare il tipo 'provider' è necessario configurare il database MindMax GeoLite2, diversamente questa opzione non avrà alcun effetto.
-      label: Numero AS/Paese
-      intro: La regola provider permette di filtrare per numero di AS e per codice Paese.
-    unicodeBlock:
-      shortIntro: Filtra l'input in base ai caratteri usati.
-      block:
-        title: Blocco
-        intro: Selezionare uno dei blocchi che devono essere valutati durante l'inserimento. Inserire quindi la valutazione corrispondente.
-        hintExtended: Sono disponibili estensioni e aggiunte per alcuni blocchi che dovrebbero essere aggiunti alle regole.
-        exampleCounting: Supponiamo che tu abbia creato una regola con il blocco "Emoticon" e una valutazione di 3 punti. In un invio un utente inserisce 5 emoticons. L'invio viene valutato 3 punti perchè è stata usata una emoticon.
-        explanationCounting: Per la validazione ogni blocco viene contato una volta sola, anche se sono stati utilizzati diversi caratteri per blocco.
-      intro: Il tipo di regola di blocco Unicode consente di valutare l'uso di determinati caratteri.
-      label: Blocco Unicode
-      title: Blocco Unicode
-    word:
-      title: Termine
-      label: Termine/Schema
-      regex:
-        title: Espressione regolare
-        validation:
-          invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
-        intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
-      text:
-        title: Testo
-        intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
-      shortIntro: Permette di filtrare termini specifici o schemi
-      intro: La regola termini permette di filtrare usando termini ed Espressioni Regolari.
-      wExact:
-        title: Parola esatta
-        intro: Inserisci una parola che deve corrispondere esattamente. Per essere rilevata, la parola deve essere delimitata da caratteri non alfanumerici (come un punto o una virgola) all'interno del valore, oppure deve trovarsi all'inizio o alla fine dello stesso. Una parola contenuta in un'altra non verrà considerata (ad esempio, 'data' in 'database' non produrrà alcuna corrispondenza).
-      wFull:
-        title: Campo intero
-        intro: Inserisci il valore completo di un campo che deve essere classificato come spam. Puoi usare questa tipologia per far corrispondere l'intero contenuto di un campo (ad esempio, per intercettare il contenuto integrale di un campo nome). Gli spazi all'inizio o alla fine del testo verranno ignorati.
-    userAgent:
-      regex:
-        validation:
-          invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
-        title: Espressione regolare
-        intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
-      text:
-        title: Testo
-        intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
-      intro: La regola user agent permette di filtrare per parole ed Espressioni Regolari nello user agent dell'utente.
-      shortIntro: Permette di filtrare per parole specifiche o schemi nello user agent
-      title: User agent
-      label: User Agent (Termine/Schema)
-    website:
-      url:
-        title: URL
-        intro: Inserisci un URL che non è autorizzato ad effettuare invii.
-        infoProtocol: E' consigliabile iniziare l'URL con il protocollo o con le due barre per URLs con protocollo indipendente. Se il valore non inizia con il protocollo la regola potrebbe identificare URLs non corretti.
-      shortIntro: Permetti di filtrare siti web specifici
-      label: URL/Dominio
-      title: Sito web
-      placeholder: https://esempio.com
-      intro: La regola siti web permette di filtrare per URLs.
-    rating:
-      infoCalculationMethod: La valutazione spam sarà calcolata moltiplicando la valutazione dell'oggetto per il fattore di valutazione che è stato definito nella regola.
-      infoDefaultAndDataType: La valutazione è un numero compreso tra %minValue% e %maxValue%. Se non viene definita alcuna valutazione, quella predefinita è %one%.
-      infoValueEqualZero: Se la valutazione è impostata a %zero% l'oggetto non verrà identificato come spam dato che il valore della valutazione sarà %zero% in ogni caso.
-      placeholder: Valutazione
-      title: Valutazione
-      intro: Il campo valutazione consente di definire il peso di un articolo. Se si specifica un numero positivo, è possibile assegnare un valore più alto a un elemento. Se si specifica un numero negativo, l'elemento ridurrà il numero totale di punti.
-  filter:
-    dropdown: Filtra l'elenco dei ruoli
-    options:
-      all: Mostra tutto
+        shortIntro: Consente di filtrare per indirizzi IP e sottoreti
+        intro: Il tipo di regola dell'indirizzo IP consente di filtrare gli indirizzi IP o le sottoreti.
+        ipAddress:
+          title: Indirizzo IP
+          intro: Inserisci un indirizzo IP che non è autorizzato ad effettuare invii.
+        placeholder: 0.0.0.0
+        subnet:
+          title: Sottorete
+          intro: Inserisci una sottomaschera di rete che non è autorizzata ad effettuare invii.
+        label: Indirizzo IP/Sottorete
+      provider:
+        title: Provider
+        country:
+          intro: Immettere il codice ISO di un paese che non è autorizzato a inviare alcun messaggio. Tutti gli indirizzi IP registrati in questo paese saranno contrassegnati come spam.
+          infoCountryBlock: Se si aggiunge un Paese alla regola, significa che nessuno potrà effettuare invii da questo Paese. Se da un lato questo suona bene, dall'altro potrebbe bloccare un utente reale dall'invio di un modulo. Fate attenzione a questa opzione. La corretta geolocalizzazione degli indirizzi IP non è mai garantita.
+          title: Paese
+        action:
+          configureGeoip2: Configurazione GeoIP2
+        asNumber:
+          title: Numero di AS
+          intro: Immettere un numero di AS che non è autorizzato a effettuare invii. Tutti gli indirizzi IP appartenenti a questo AS saranno bloccati.
+        shortIntro: Permetti di filtrare con informazioni specifiche relative al provider
+        infoGeoip2: Per poter utilizzare il tipo 'provider' è necessario configurare il database MindMax GeoLite2, diversamente questa opzione non avrà alcun effetto.
+        label: Numero AS/Paese
+        intro: La regola provider permette di filtrare per numero di AS e per codice Paese.
+      unicodeBlock:
+        shortIntro: Filtra l'input in base ai caratteri usati.
+        block:
+          title: Blocco
+          intro: Selezionare uno dei blocchi che devono essere valutati durante l'inserimento. Inserire quindi la valutazione corrispondente.
+          hintExtended: Sono disponibili estensioni e aggiunte per alcuni blocchi che dovrebbero essere aggiunti alle regole.
+          exampleCounting: Supponiamo che tu abbia creato una regola con il blocco "Emoticon" e una valutazione di 3 punti. In un invio un utente inserisce 5 emoticons. L'invio viene valutato 3 punti perchè è stata usata una emoticon.
+          explanationCounting: Per la validazione ogni blocco viene contato una volta sola, anche se sono stati utilizzati diversi caratteri per blocco.
+        intro: Il tipo di regola di blocco Unicode consente di valutare l'uso di determinati caratteri.
+        label: Blocco Unicode
+        title: Blocco Unicode
+      word:
+        title: Termine
+        label: Termine/Schema
+        regex:
+          title: Espressione regolare
+          validation:
+            invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
+          intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
+        text:
+          title: Testo
+          intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
+        shortIntro: Permette di filtrare termini specifici o schemi
+        intro: La regola termini permette di filtrare usando termini ed Espressioni Regolari.
+        wExact:
+          title: Parola esatta
+          intro: Inserisci una parola che deve corrispondere esattamente. Per essere rilevata, la parola deve essere delimitata da caratteri non alfanumerici (come un punto o una virgola) all'interno del valore, oppure deve trovarsi all'inizio o alla fine dello stesso. Una parola contenuta in un'altra non verrà considerata (ad esempio, 'data' in 'database' non produrrà alcuna corrispondenza).
+        wFull:
+          title: Campo intero
+          intro: Inserisci il valore completo di un campo che deve essere classificato come spam. Puoi usare questa tipologia per far corrispondere l'intero contenuto di un campo (ad esempio, per intercettare il contenuto integrale di un campo nome). Gli spazi all'inizio o alla fine del testo verranno ignorati.
+      userAgent:
+        regex:
+          validation:
+            invalidRegexPattern: 'Lo schema inserito non è valido. Errore: %error%'
+          title: Espressione regolare
+          intro: Inserisci un'Espressione Regolare per identificare un termine non consentito. Lo schema dovrà essere conforme alle Espressioni Regolari di PHP.
+        text:
+          title: Testo
+          intro: Inserisci un termine da considerare come spam. Puoi usare il simbolo %star% come jolly. La funzionalità di verifica cercherà il termine %value% quindi non sei costretto ad inserire il carattere jolly all'inizio o alla fine della stringa.
+        intro: La regola user agent permette di filtrare per parole ed Espressioni Regolari nello user agent dell'utente.
+        shortIntro: Permette di filtrare per parole specifiche o schemi nello user agent
+        title: User agent
+        label: User Agent (Termine/Schema)
+      website:
+        url:
+          title: URL
+          intro: Inserisci un URL che non è autorizzato ad effettuare invii.
+          infoProtocol: E' consigliabile iniziare l'URL con il protocollo o con le due barre per URLs con protocollo indipendente. Se il valore non inizia con il protocollo la regola potrebbe identificare URLs non corretti.
+        shortIntro: Permetti di filtrare siti web specifici
+        label: URL/Dominio
+        title: Sito web
+        placeholder: https://esempio.com
+        intro: La regola siti web permette di filtrare per URLs.
+      rating:
+        infoCalculationMethod: La valutazione spam sarà calcolata moltiplicando la valutazione dell'oggetto per il fattore di valutazione che è stato definito nella regola.
+        infoDefaultAndDataType: La valutazione è un numero compreso tra %minValue% e %maxValue%. Se non viene definita alcuna valutazione, quella predefinita è %one%.
+        infoValueEqualZero: Se la valutazione è impostata a %zero% l'oggetto non verrà identificato come spam dato che il valore della valutazione sarà %zero% in ogni caso.
+        placeholder: Valutazione
+        title: Valutazione
+        intro: Il campo valutazione consente di definire il peso di un articolo. Se si specifica un numero positivo, è possibile assegnare un valore più alto a un elemento. Se si specifica un numero negativo, l'elemento ridurrà il numero totale di punti.
+    filter:
+      dropdown: Filtra l'elenco dei ruoli
+      options:
+        all: Mostra tutto
 dashboard:
   chart:
     spam: Spam
@@ -285,16 +289,6 @@ dashboard:
   title: Cruscotto
 rulePackage:
   view:
-    rule:
-      title: Visualizza regola %ruleName%
-      details:
-        name: Nome
-        type: Tipo
-        spamRatingFactor: Fattore di valutazione spam
-        title: Dettagli regola
-      items:
-        title: Oggetti inclusi
-      backToRulePackage: Torna all'elenco delle regole
     details:
       lastUpdatedAt: Ultimo aggiornamento il
       spamRatingFactor: Fattore di valutazione spam
@@ -319,13 +313,13 @@ rulePackage:
       rating: Valutazione
     title: Visualizza gruppo di regole %rulePackageName%
     list:
-      rules:
+      fieldRules:
         name: Nome
         type: Tipo
         spamRatingFactor: Fattore di valutazione spam
         actions: Azioni
         numberOfRuleItems: Numero di oggetti
-      ruleItems:
+      fieldRuleItems:
         type: Tipo
         value: Valore
         spamRatingFactor: Fattore di valutazione spam
@@ -379,6 +373,12 @@ rulePackage:
       successfullyDeleted: L'elenco delle regole %rulePackageName% è stato cancellato correttamente.
     title: Cancella l'elenco delle regole %rulePackageName%
     confirm: Vuoi veramente cancellare l'elenco delle regole %rulePackageName%?
+    process:
+      title: Sto cancellando il pacchetto di regole %rulePackageName%
+      intro: Prego attendere mentre Mosparo cancella il pacchetto di regole. Può servire del tempo a seconda delle dimensioni del pacchetto.
+      alert:
+        doNotLeave: Non abbandonare questa pagine fin quando il processo non sarà completato. Se lasci questa pagina il processo verrà arrestato e il pacchetto di regole potrebbe non venir cancellato.
+        processCompleted: Il pacchetto di regole è stato cancellato. Ora puoi lasciare questa pagina.
   title: Gruppo di regole
   edit:
     title: Modifica gruppo di regole %rulePackageName%
@@ -391,6 +391,27 @@ rulePackage:
   addChooseType:
     title: Scegli tipologia
     intro: Scegli il tipo di pacchetto di regole che vuoi aggiungere. Puoi scegliere tra tipi automatici e manuali. I tipi automatici aggiorneranno il pacchetto di regole automaticamente, mentre quelli manuali devono essere aggiornati tramite un'azione o uno strumento esterno.
+  updateCache:
+    title: Aggiorna la cache
+    intro:
+      all: Per utilizzare i pacchetti di regole, è necessario importarli. Mosparo genererà una cache locale con il contenuto di ogni singolo pacchetto. La dimensione dei pacchetti di regole influirà sul tempo necessario.
+      one: Per utilizzare i pacchetti di regole, è necessario importarli. Mosparo genererà una cache locale con il contenuto di ogni singolo pacchetto. La dimensione dei pacchetti di regole influirà sul tempo necessario.
+    hintCronjob: Puoi automatizzare questa operazione con un cron job. Maggiori informazioni possono essere trovate in %linkStart%mosparo's documentation%linkEnd%.
+    alert:
+      doNotLeave: Non abbandonare questa pagine finché il processo non sarà completato. Se lasci questa pagina il processo verrà interrotto e la cache non sarà aggiornata.
+      processCompleted: Il processo è completo. Ora puoi lasciare questa pagina.
+    progress:
+      rulePackage: Pacchetto di regole
+      status: Stato
+      progress: Avanzamento
+    status:
+      pleaseWait: Prego attendere...
+      importing: Sto importando...
+      cleanup: Sto ripulendo...
+      completed: Completato
+      upToDate: Aggiornato
+      tooSoon: Troppo presto
+      failed: Fallito
 submission:
   list:
     page: Pagina
@@ -435,6 +456,8 @@ submission:
       pageTitle: Titolo pagina
       requestedAt: Richiesto il
       title: Sorgente
+      formActionUrl: URL azione modulo
+      formId: ID del modulo
     generalVerifications:
       minimumTime:
         text: Il modulo è stato inviato troppo velocemente. Sono stati impiegati solo %seconds% secondi, che è un tempo inferiore al tempo minimo di %minimumTimeSeconds% secondi.
@@ -642,8 +665,14 @@ settings:
           asNumbers: Numero AS
           asNumbersHelp: "Aggiungi il numero AS per il quale la linea guida dovrà essere considerata. Puoi visualizzare il numero AS dei dettagli dell'invio. Ad es.: 123456"
           intro: Definire il criterio per questa linea guida. Insieme al criterio è possibile definire per quale origine andrà utilizzata questa linea guida.
-          intro2: La linea guida verrà utilizzata per l'utente quando uno di questi criteri corrisponderà. Per poter salvare la linea guida è necessario aggiungere almeno un criterio.
+          intro2: Puoi specificare criteri in entrambe le categorie, oppure solo criteri basati su IP o solo basati su modulo. La linea guida verrà applicata all'utente non appena uno di questi criteri per categoria (basato su IP o basato su modulo) sarà soddisfatto. È necessario aggiungere almeno un criterio per salvare la linea guida.
           subnetsHelp: "Aggiungere la sottorete per la quale questa linea guida verrà considerata. E' possibile definire una sottorete IPv4 oppure IPv6. Puoi vedere l'indirizzo IP nei dettagli dell'invio. Ad es.: 192.168.1.0/24"
+          formPageUrls: URL delle pagine del modulo
+          formPageUrlsHelp: "Aggiungi gli URL dei moduli per i quali questa linea guida dovrebbe essere considerata. Puoi definire un URL assoluto o utilizzare l'asterisco (*) come carattere jolly. Esempio: https://example.com/contact/\""
+          formActionUrls: URL delle azioni del modulo
+          formActionUrlsHelp: "Aggiungi gli URL delle azioni dei moduli per i quali questa linea guida dovrebbe essere considerata. Puoi definire un URL assoluto o utilizzare l'asterisco (*) come carattere jolly. Esempio: https://example.com/contact/"
+          formIds: ID dei moduli
+          formIdsHelp: "Aggiungi gli ID dei moduli per i quali questa linea guida dovrebbe essere considerata. Definisci l'ID senza il simbolo cancelletto (#). Esempio: contact-form"
         guideline:
           title: Linea guida
           name: Nome
@@ -654,6 +683,13 @@ settings:
           title: Impostazioni di sovrascrittura
           intro: Seleziona la casella di sovrascrittura per le impostazioni che desideri sovrascrivere rispetto a quelle del progetto o delle impostazioni di sicurezza generali. Se non sovrascrivi un'impostazione, mosparo utilizzerà quella del progetto o delle impostazioni generali. Se configuri lo stesso valore presente nel progetto o nelle impostazioni generali, il valore personalizzato verrà rimosso dalla politica di sicurezza.
         infoGeoIp2Disabled: GeoIP2 non è disponibile. Configura il database GeoIP2 per poter usare il codice Stato e il numero AS come criteri.
+        categories:
+          ipBased:
+            label: Basato su IP
+            intro: I criteri basati su IP utilizzano l'indirizzo IP dell'utente per determinare la policy di sicurezza richiesta. Questi criteri aiutano a identificare l'utente che accede a un modulo (ad esempio, abbinando il tuo indirizzo IP per impostare policy di sicurezza meno restrittive).
+          formBased:
+            label: Basato sul modulo
+            intro: I criteri basati su modulo utilizzano le informazioni del modulo in cui mosparo è integrato per determinare la policy di sicurezza richiesta. Questi criteri aiutano a differenziare tra diversi moduli all'interno dello stesso progetto (ad esempio, impostazioni di sicurezza diverse per un modulo di login rispetto a un modulo di contatto).
       list:
         name: Nome
         priority: Priorità
@@ -790,6 +826,8 @@ settings:
       boxRadius: Raggio cornice
       checkboxRadius: Raggio casella di spunta
       checkboxBorderWidth: Spessore bordo casella di spunta
+      fontSize: Dimensione carattere
+      lineHeight: Interlinea
     subtitles:
       colors:
         normal: Normale
@@ -799,13 +837,14 @@ settings:
         loading: Durante il caricamento
       invisibleSimpleDesign: Design semplificato invisibile
       colorSettings: Colori
-      dimensionSettings: Dimensioni
+      dimensionSettings: Dimensioni e tipo di carattere
       simpleDesign: Design semplificato
       colorAndDimensionSettings: Colori e dimensioni
       preview: Anteprima
       dimensions:
         mosparoBox: Cornice mosparo
         checkbox: Casella di spunta
+        text: Testo
     cr:
       value: Valore
       text: Testo
@@ -892,7 +931,6 @@ tools:
   import:
     backToImport: Torna all'importazione
     form:
-      handlingExistingRules: Gestione regole esistenti
       choice:
         add: Aggiungi
         override: Sovrascrivi
@@ -937,10 +975,6 @@ tools:
         wrongSpecificationsVersion: Il file di importazione è stato generato con specifiche diverse dalla versione in uso di questa installazione di mosparo.
         jobDataFileNotFound: Il file dei dati del lavoro per il token non esiste.
       title: Modifiche disponibili
-      changes:
-        notActive: Questa sezione non è attiva per questa importazione.
-        notInExport: Questa sezione non è disponibile sul file da importare.
-        noChangesRequired: Per questa sezione non ci sono modifiche da fare perchè tutto è già aggiornato.
       noChangesFound: 'I dati del progetto sono gli stessi del file di importazione: non ci sono modifiche da fare.'
       intro: mosparo ha simulato l'importazione e ha rilevato le seguenti modifiche. Per favore verificale e procedi con le modifiche solo se va tutto bene.
       notRedoable: Non puoi annullare le modifiche dopo averle eseguite. Puoi esportare il progetto prima di eseguire le modifiche per avere un backup della configurazione.
@@ -953,10 +987,8 @@ tools:
     infoOverrideData: Le impostazioni, così come i pacchetti di regole, verranno sempre sovrascritti nel progetto. Per quanto riguarda le regole, dovrai decidere come mosparo dovrà comportarsi con quelle esistenti. I pacchetti di regole creati prima della versione 1.4.0 di mosparo potrebbero avere un ID differente e non corrispondere al file di importazione.
   eiParts:
     generalSettings: Impostazioni generali
-    rules: Regole
     rulePackagesHelp: Include tutti i gruppi di regole di un progetto.
     designSettings: Impostazioni grafiche
-    rulesHelp: Include tutte le regole di un progetto.
     securitySettings: Impostazioni di sicurezza
     rulePackages: Gruppo di regole
     designSettingsHelp: Include tutte le impostazioni relative alla grafica del progetto.
@@ -1157,6 +1189,7 @@ administration:
       title: Impostazioni interfaccia
       form:
         defaultColorMode: Modalità colore predefinita
+        defaultNumberOfItemsPerPage: Numero predefinito di elementi per pagina
     description: Configura le impostazioni da applicare alla tua installazione di mosparo.
   user:
     help:
@@ -1296,6 +1329,7 @@ account:
       dateFormat: Formato data
       timezone: Fuso orario
       colorMode: Modalità colore
+      numberOfItemsPerPage: Numero di elementi per pagina
     title: Impostazioni utente
     message:
       successfullySaved: Le impostazioni sono state salvate.
@@ -1442,6 +1476,9 @@ action:
   reset: Ripristina
   toggleDropdown: Attiva/Disattiva menu a tendina
   filter: Filtra
+  updateCache: Aggiorna cache
+  goToRulePackage: Vai al pacchetto di regole
+  goToRulePackages: Vai ai pacchetti di regole
 state:
   inactive: Inattivo
   ignored: Ignorato

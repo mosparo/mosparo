@@ -1,0 +1,75 @@
+{% extends 'project_related/settings/settings_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% if isNew %}
+    {% set pageTitle = 'settings.translation.add.title'|trans %}
+{% else %}
+    {% set pageTitle = 'settings.translation.edit.title'|trans %}
+{% endif %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset(get_illustration_path('translations.svg'))|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">
+                            {{ pageTitle }}
+                        </h2>
+
+                        {{ form_row(form.locale) }}
+                        {{ form_row(form.translationKey) }}
+                        {{ form_row(form.text) }}
+
+                        <div id="alert-use-placeholders" class="alert alert-info d-none">
+                            {{ 'settings.translation.form.usePlaceholders'|trans }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto mt-2 mt-md-0">
+                <a href="{{ path('settings_translation_list', { '_projectId': activeProject.id }) }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'settings.translation.backToList'|trans }}
+                </a>
+            </div>
+            <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-device-floppy"></i>
+                    {{ 'action.save'|trans }}
+                </button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#form_translationKey').change(function () {
+                    let val = $(this).find('option:selected').text();
+                    console.log(val.indexOf('%'));
+                    if (val.indexOf('%') !== -1) {
+                        $('#alert-use-placeholders').removeClass('d-none');
+                    } else {
+                        $('#alert-use-placeholders').addClass('d-none');
+                    }
+                }).trigger('change');
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

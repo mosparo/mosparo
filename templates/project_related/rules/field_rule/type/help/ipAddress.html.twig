@@ -1,0 +1,22 @@
+{% trans_default_domain 'mosparo' %}
+
+<p>{{ 'rules.fieldRule.type.ipAddress.intro'|trans }}</p>
+
+<ul>
+    <li>
+        <strong>{{ 'rules.fieldRule.type.ipAddress.ipAddress.title'|trans }}</strong>
+        <p>{{ 'rules.fieldRule.type.ipAddress.ipAddress.intro'|trans }}</p>
+        <p>
+            <u>{{ 'general.example'|trans }}:</u> <code>192.168.10.10</code> or <code>abcd:ef01::1</code>
+        </p>
+    </li>
+    <li>
+        <strong>{{ 'rules.fieldRule.type.ipAddress.subnet.title'|trans }}</strong>
+        <p>{{ 'rules.fieldRule.type.ipAddress.subnet.intro'|trans }}</p>
+        <p>
+            <u>{{ 'general.example'|trans }}:</u> <code>192.168.10.0/24</code> or <code>abcd:ef01::/48</code>
+        </p>
+    </li>
+</ul>
+
+{% include 'project_related/rules/field_rule/type/help/_rating.html.twig' %}

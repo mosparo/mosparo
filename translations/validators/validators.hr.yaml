@@ -23,7 +23,7 @@ honeypotField:
   nameHasInvalidCharacter: Koristi samo slova, brojke i crticu (-).
 securityGuideline:
   asNumberNotNumeric: AS broj nije broj.
-  atLeastOneCriteriaRequired: Sigurnosna smjernica zahtijeva barem jedan 
+  atLeastOneCriterionRequired: Sigurnosna smjernica zahtijeva barem jedan 
     kriterij.
 webCronJob:
   webCronJobIntervalAtLeast5Minutes: Interval web cron posla mora biti barem 5 
@@ -40,3 +40,8 @@ hosts:
     zvjezdica (*).
   hostContainsProtocol: Ovaj host sadrži protokol. Unesite host bez protokola 
     (na primjer, example.com umjesto https://example.com).
+translation:
+  locale:
+    invalidFormat: Navedite jezik u ispravnom formatu. Unesite dvoznamenkasti 
+      jezični kod ili kombinaciju dvoznamenkastog jezičnog koda zajedno s kodom 
+      države.

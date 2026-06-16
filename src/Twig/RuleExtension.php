@@ -2,10 +2,10 @@
 
 namespace Mosparo\Twig;
 
-use Mosparo\Repository\RuleRepository;
 use Mosparo\Repository\RulePackageRuleCacheRepository;
-use Mosparo\Rule\RuleEntityInterface;
-use Mosparo\Rule\RuleTypeManager;
+use Mosparo\Repository\RuleRepository;
+use Mosparo\Rules\FieldRule\RuleEntityInterface;
+use Mosparo\Rules\FieldRule\RuleTypeManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -63,12 +63,12 @@ class RuleExtension extends AbstractExtension
     {
         $rule = $this->ruleRepository->findOneBy(['uuid' => $uuid]);
         if ($rule) {
-            return $this->router->generate('rule_edit', ['_projectId' => $rule->getProject()->getId(), 'id' => $rule->getId()]);
+            return $this->router->generate('rules_field_rule_edit', ['_projectId' => $rule->getProject()->getId(), 'id' => $rule->getId()]);
         }
 
         $rulePackageRuleCache = $this->rulePackageRuleCacheRepository->findOneBy(['uuid' => $uuid]);
         if ($rulePackageRuleCache) {
-            return $this->router->generate('rule_package_view_rule', [
+            return $this->router->generate('rule_package_view_field_rule', [
                 '_projectId' => $rulePackageRuleCache->getProject()->getId(),
                 'id' => $rulePackageRuleCache->getRulePackageCache()->getRulePackage()->getId(),
                 'ruleUuid' => $rulePackageRuleCache->getUuid()

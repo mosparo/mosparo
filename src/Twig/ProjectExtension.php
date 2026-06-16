@@ -3,6 +3,7 @@
 namespace Mosparo\Twig;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Entity\DayStatistic;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Twig\Tree\ProjectTreeNode;
@@ -33,6 +34,7 @@ class ProjectExtension extends AbstractExtension implements GlobalsInterface
             new TwigFunction('can_user_manage_project', [$this, 'canUserManageProject']),
             new TwigFunction('get_by_user_accessible_projects', [$this, 'getByUserAccessibleProjects']),
             new TwigFunction('get_by_user_accessible_project_tree', [$this, 'getByUserAccessibleProjectTree']),
+            new TwigFunction('get_project_statistics', [$this, 'getProjectStatistic']),
         ];
     }
 
@@ -90,5 +92,29 @@ class ProjectExtension extends AbstractExtension implements GlobalsInterface
         } else {
             return 0;
         }
+    }
+
+    public function getProjectStatistic(Project $project, int $days): array
+    {
+        $this->projectHelper->disableDoctrineFilter();
+
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('SUM(ds.numberOfValidSubmissions) AS valid, SUM(ds.numberOfSpamSubmissions) AS spam, MAX(ds.updatedAt) AS last')
+            ->from(DayStatistic::class, 'ds')
+            ->where('ds.project = :project')
+            ->andWhere('ds.date >= :date')
+            ->setParameter('project', $project->getId())
+            ->setParameter('date', (new \DateTime())->sub(new \DateInterval(sprintf('P%dD', $days)))->format('Y-m-d'))
+            ->orderBy('ds.date', 'DESC')
+        ;
+
+        $data = $qb->getQuery()->getSingleResult();
+        if (isset($data['last']) && $data['last']) {
+            $data['last'] = new \DateTime($data['last']);
+        }
+
+        $this->projectHelper->enableDoctrineFilter();
+
+        return $data;
     }
 }

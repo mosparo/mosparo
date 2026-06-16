@@ -50,6 +50,18 @@ class Project
     #[ORM\Column(type: 'string', length: 7)]
     private ?string $statisticStorageLimit;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    private bool $silentModeEnabled = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    private bool $spamDataReturned = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    private bool $metadataAllowed = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    private bool $metadataReturned = false;
+
     #[ORM\Column(type: 'boolean')]
     private bool $apiDebugMode = false;
 
@@ -87,6 +99,8 @@ class Project
         'boxBorderWidth' => 3,
         'checkboxRadius' => 20,
         'checkboxBorderWidth' => 3,
+        'fontSize' => ['value' => 16, 'unit' => 'px'],
+        'lineHeight' => ['value' => 22, 'unit' => 'px'],
         'colorBackground' => 'rgb(255, 255, 255)',
         'colorBorder' => 'rgb(0, 0, 0)',
         'colorCheckbox' => 'rgb(0, 0, 0)',
@@ -285,6 +299,54 @@ class Project
     public function setStatisticStorageLimit(string $statisticStorageLimit): self
     {
         $this->statisticStorageLimit = $statisticStorageLimit;
+
+        return $this;
+    }
+
+    public function isSilentModeEnabled(): ?bool
+    {
+        return $this->silentModeEnabled;
+    }
+
+    public function setSilentModeEnabled(bool $silentModeEnabled): self
+    {
+        $this->silentModeEnabled = $silentModeEnabled;
+
+        return $this;
+    }
+
+    public function isSpamDataReturned(): ?bool
+    {
+        return $this->spamDataReturned;
+    }
+
+    public function setSpamDataReturned(bool $spamDataReturned): self
+    {
+        $this->spamDataReturned = $spamDataReturned;
+
+        return $this;
+    }
+
+    public function isMetadataAllowed(): ?bool
+    {
+        return $this->metadataAllowed;
+    }
+
+    public function setMetadataAllowed(bool $metadataAllowed): self
+    {
+        $this->metadataAllowed = $metadataAllowed;
+
+        return $this;
+    }
+
+    public function isMetadataReturned(): ?bool
+    {
+        return $this->metadataReturned;
+    }
+
+    public function setMetadataReturned(bool $metadataReturned): self
+    {
+        $this->metadataReturned = $metadataReturned;
 
         return $this;
     }

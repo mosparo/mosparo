@@ -37,6 +37,15 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
     #[ORM\Column(type: 'json')]
     private array $asNumbers = [];
 
+    #[ORM\Column(type: 'json')]
+    private array $formPageUrls = [];
+
+    #[ORM\Column(type: 'json')]
+    private array $formActionUrls = [];
+
+    #[ORM\Column(type: 'json')]
+    private array $formIds = [];
+
     #[ORM\OneToMany(targetEntity: SecurityGuidelineConfigValue::class, mappedBy: 'securityGuideline', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $configValues;
 
@@ -57,6 +66,7 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
     public function __construct()
     {
         $this->uuid = uuid_create(UUID_TYPE_RANDOM);
+        $this->formOrigins = new ArrayCollection();
         $this->configValues = new ArrayCollection();
     }
 
@@ -115,6 +125,10 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
 
     public function getSubnets(): array
     {
+        if (empty($this->subnets)) {
+            return [];
+        }
+
         return array_values($this->subnets);
     }
 
@@ -127,6 +141,10 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
 
     public function getCountryCodes(): array
     {
+        if (empty($this->countryCodes)) {
+            return [];
+        }
+
         return array_values($this->countryCodes);
     }
 
@@ -139,6 +157,10 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
 
     public function getAsNumbers(): array
     {
+        if (empty($this->asNumbers)) {
+            return [];
+        }
+
         return array_values($this->asNumbers);
     }
 
@@ -149,9 +171,61 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
         return $this;
     }
 
+    public function getFormPageUrls(): array
+    {
+        if (empty($this->formPageUrls)) {
+            return [];
+        }
+
+        return array_values($this->formPageUrls);
+    }
+
+    public function setFormPageUrls(array $formPageUrls): self
+    {
+        $this->formPageUrls = $formPageUrls;
+
+        return $this;
+    }
+
+    public function getFormActionUrls(): array
+    {
+        if (empty($this->formActionUrls)) {
+            return [];
+        }
+
+        return array_values($this->formActionUrls);
+    }
+
+    public function setFormActionUrls(array $formActionUrls): self
+    {
+        $this->formActionUrls = $formActionUrls;
+
+        return $this;
+    }
+
+    public function getFormIds(): array
+    {
+        if (empty($this->formIds)) {
+            return [];
+        }
+
+        return array_values($this->formIds);
+    }
+
+    public function setFormIds(array $formIds): self
+    {
+        $this->formIds = $formIds;
+
+        return $this;
+    }
+
+
     public function hasCriteria(): bool
     {
-        return !(empty($this->getSubnets()) && empty($this->getCountryCodes()) && empty($this->getAsNumbers()));
+        return !(
+            empty($this->getSubnets()) && empty($this->getCountryCodes()) && empty($this->getAsNumbers()) &&
+            empty($this->getFormPageUrls()) && empty($this->getFormActionUrls()) && empty($this->getFormIds())
+        );
     }
 
     public function getConfigValues(bool $withProjectDefaults = true): ?array
@@ -317,6 +391,18 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
             return false;
         }
 
+        if ($guideline['formPageUrls'] !== $this->getFormPageUrls()) {
+            return false;
+        }
+
+        if ($guideline['formActionUrls'] !== $this->getFormActionUrls()) {
+            return false;
+        }
+
+        if ($guideline['formIds'] !== $this->getFormIds()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -361,6 +447,9 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
             'subnets' => $this->getSubnets(),
             'countryCodes' => $this->getCountryCodes(),
             'asNumbers' => $this->getAsNumbers(),
+            'formPageUrls' => $this->getFormPageUrls(),
+            'formActionUrls' => $this->getFormActionUrls(),
+            'formIds' => $this->getFormIds(),
             'securitySettings' => $securitySettings,
         ];
     }

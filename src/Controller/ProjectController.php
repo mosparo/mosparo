@@ -11,10 +11,11 @@ use Mosparo\Form\DesignSettingsFormType;
 use Mosparo\Form\ProjectFormType;
 use Mosparo\Helper\CleanupHelper;
 use Mosparo\Helper\DesignHelper;
+use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\ProjectGroupHelper;
 use Mosparo\Helper\ProjectHelper;
+use Mosparo\Helper\RulePackageHelper;
 use Mosparo\Util\TokenGenerator;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,29 +36,51 @@ class ProjectController extends AbstractController
 
     protected TranslatorInterface $translator;
 
-    public function __construct(EntityManagerInterface $entityManager,  ProjectHelper $projectHelper, DesignHelper $designHelper, CleanupHelper $cleanupHelper, TranslatorInterface $translator)
+    protected LocaleHelper $localeHelper;
+
+    public function __construct(EntityManagerInterface $entityManager,  ProjectHelper $projectHelper, DesignHelper $designHelper, CleanupHelper $cleanupHelper, TranslatorInterface $translator, LocaleHelper $localeHelper)
     {
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->designHelper = $designHelper;
         $this->cleanupHelper = $cleanupHelper;
         $this->translator = $translator;
+        $this->localeHelper = $localeHelper;
     }
 
     #[Route('/', name: 'project_list_root')]
     #[Route('/group/{projectGroup}', name: 'project_list_group')]
     #[Route('/filter/{filter}', name: 'project_list_filtered_root')]
     #[Route('/group/{projectGroup}/filter/{filter}', name: 'project_list_filtered_group')]
-    public function list(DataTableFactory $dataTableFactory, Request $request, $filter = '', ProjectGroup $projectGroup = null): Response
+    public function list(Request $request, $filter = '', ProjectGroup $projectGroup = null): Response
     {
         // Load the view from the user configuration
         $user = $this->getUser();
         $view = 'boxes';
+        $statistic = 3;
         if ($user instanceof User) {
             $userView = $user->getConfigValue('projectListView');
+            $userStatistic = $user->getConfigValue('projectListStatistic');
 
             if ($userView !== null) {
                 $view = $userView;
+            }
+
+            if ($userStatistic !== null) {
+                $statistic = $userStatistic;
+            }
+        }
+
+        $statisticOptions = [-1, 1, 2, 3, 5, 7, 10, 14, 21, 30];
+        if ($request->query->has('statistic') && $request->query->get('statistic')) {
+            $queryStatistic = intval($request->query->get('statistic'));
+            if (in_array($queryStatistic, $statisticOptions)) {
+                $statistic = $queryStatistic;
+            }
+
+            if ($user instanceof User && $userStatistic !== $statistic) {
+                $user->setConfigValue('projectListStatistic', $statistic);
+                $this->entityManager->flush();
             }
         }
 
@@ -102,16 +125,21 @@ class ProjectController extends AbstractController
             $listQuery['q'] = $searchQuery;
         }
 
+        [ , $dateFormat, , ] = $this->localeHelper->determineLocaleValues($request);
+
         return $this->render('project/list.html.twig', [
             'treeNode' => $tree,
             'numberOfSubmissionsByProject' => $numberOfSubmissionsByProject,
             'view' => $view,
             'projectGroup' => $projectGroup,
             'filter' => $filter,
+            'statistic' => $statistic,
+            'statisticOptions' => $statisticOptions,
             'searchQuery' => $searchQuery,
             'baseQuery' => $baseQuery,
             'listQuery' => http_build_query($listQuery),
             'routeSuffix' => $routeSuffix,
+            'dateFormat' => $dateFormat,
         ]);
     }
 
@@ -268,7 +296,7 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/{_projectId}/delete', name: 'project_delete')]
-    public function delete(Request $request): Response
+    public function delete(Request $request, RulePackageHelper $rulePackageHelper): Response
     {
         $project = $this->projectHelper->getActiveProject();
 
@@ -307,6 +335,7 @@ class ProjectController extends AbstractController
 
         return $this->render('project/delete.html.twig', [
             'project' => $project,
+            'hasRulePackages' => $rulePackageHelper->hasRulePackages(),
         ]);
     }
 }

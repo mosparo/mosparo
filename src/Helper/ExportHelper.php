@@ -7,6 +7,8 @@ use Mosparo\Entity\Project;
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Entity\SecurityGuideline;
+use Mosparo\Entity\SubmissionRule;
+use Mosparo\Entity\Translation;
 use Mosparo\Exception\ExportException;
 use Mosparo\Specifications\Specifications;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -34,9 +36,17 @@ class ExportHelper
         return $fileName;
     }
 
-    public function exportProject(Project $project, bool $exportGeneralSettings, bool $exportDesignSettings, bool $exportSecuritySettings, bool $exportRules, bool $exportRulePackages): array
-    {
-        if (!$exportGeneralSettings && !$exportDesignSettings && !$exportSecuritySettings && !$exportRules && !$exportRulePackages) {
+    public function exportProject(
+        Project $project,
+        bool $exportGeneralSettings,
+        bool $exportDesignSettings,
+        bool $exportSecuritySettings,
+        bool $exportTranslations,
+        bool $exportSubmissionRules,
+        bool $exportFieldRules,
+        bool $exportRulePackages
+    ): array {
+        if (!$exportGeneralSettings && !$exportDesignSettings && !$exportSecuritySettings && !$exportTranslations && !$exportSubmissionRules && !$exportFieldRules && !$exportRulePackages) {
             throw new ExportException('Select at least one element that you want to export.', ExportException::EMPTY_REQUEST);
         }
 
@@ -53,6 +63,10 @@ class ExportHelper
             $data['status'] = $project->getStatus();
             $data['spamScore'] = $project->getSpamScore();
             $data['statisticStorageLimit'] = $project->getStatisticStorageLimit();
+            $data['silentModeEnabled'] = $project->isSilentModeEnabled();
+            $data['spamDataReturned'] = $project->isSpamDataReturned();
+            $data['metadataAllowed'] = $project->isMetadataAllowed();
+            $data['metadataReturned'] = $project->isMetadataReturned();
             $data['apiDebugMode'] = $project->isApiDebugMode();
             $data['verificationSimulationMode'] = $project->isVerificationSimulationMode();
         }
@@ -66,8 +80,16 @@ class ExportHelper
             $data['securityGuidelines'] = $this->exportSecurityGuidelines();
         }
 
-        if ($exportRules) {
-            $data['rules'] = $this->exportRules();
+        if ($exportTranslations) {
+            $data['translations'] = $this->exportTranslations();
+        }
+
+        if ($exportSubmissionRules) {
+            $data['submissionRules'] = $this->exportSubmissionRules();
+        }
+
+        if ($exportFieldRules) {
+            $data['fieldRules'] = $this->exportFieldRules();
         }
 
         if ($exportRulePackages) {
@@ -202,7 +224,36 @@ class ExportHelper
         return $securityGuidelines;
     }
 
-    protected function exportRules(): array
+    protected function exportTranslations(): array
+    {
+        $translations = [];
+        $translationsRepository = $this->entityManager->getRepository(Translation::class);
+
+        foreach ($translationsRepository->findAll() as $translation) {
+            $translations[] = $translation->toArray();
+        }
+
+        return $translations;
+    }
+
+    protected function exportSubmissionRules(): array
+    {
+        $rules = [];
+        $ruleRepository = $this->entityManager->getRepository(SubmissionRule::class);
+
+        foreach ($ruleRepository->findAll() as $rule) {
+            $rules[] = [
+                'key' => $rule->getKey(),
+                'enabled' => $rule->isEnabled(),
+                'configValues' => $rule->getConfigValues(),
+                'rating' => $rule->getRating() ?? 1,
+            ];
+        }
+
+        return $rules;
+    }
+
+    protected function exportFieldRules(): array
     {
         $rules = [];
         $ruleRepository = $this->entityManager->getRepository(Rule::class);

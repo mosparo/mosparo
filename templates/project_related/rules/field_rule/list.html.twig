@@ -1,0 +1,84 @@
+{% extends 'project_related/rules/rules_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'rules.fieldRule.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'rules.fieldRule.title'|trans }}{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/usage/rules" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" title="{{ 'rules.fieldRule.filter.dropdown'|trans }}">
+                    <i class="ti ti-filter"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="{{ path('rules_field_rule_list', { '_projectId': activeProject.id }) }}" class="dropdown-item {% if filter == '' %}active{% endif %}">
+                        <i class="ti ti-check {% if filter != '' %}invisible{% endif %}"></i>
+                        {{ 'rules.fieldRule.filter.options.all'|trans }}
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    {% for ruleType in ruleTypes %}
+                        <a href="{{ path('rules_field_rule_list_filtered', { '_projectId': activeProject.id, 'filter': ruleType.key }) }}" class="dropdown-item {% if filter == ruleType.key %}active{% endif %} {% if not numberOfRulesByType[ruleType.key] is defined %}disabled{% endif %}">
+                            <i class="ti {% if filter == ruleType.key %}ti-check{% else %}{{ ruleType.icon }}{% endif %}"></i>
+                            {{ ruleType.name|trans }}
+
+                            {% if numberOfRulesByType[ruleType.key] is defined %}
+                                <span class="badge bg-primary ms-2">{{ numberOfRulesByType[ruleType.key] }}</span>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if canManage %}
+                <a href="{{ path('rules_field_rule_create_choose_type', { '_projectId': activeProject.id }) }}" class="btn btn-success add-button">
+                    <i class="ti ti-plus"></i>
+                    <span>{{ 'rules.fieldRule.create.title'|trans }}</span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block rulesPageBody %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div id="rules">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js')|add_path_prefix }}"></script>
+    {% cspscript %}
+        <script>
+            $(function() {
+                $('#rules').initDataTables({{ datatable_settings(datatable) }}, {
+                    autoWidth: false,
+                    searching: false,
+                    info: false,
+                    responsive: true,
+                    columnDefs: [
+                        { width: "40%", targets: 0 },
+                        { width: "1%", targets: 3 }
+                    ]
+                });
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

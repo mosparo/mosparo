@@ -2,11 +2,11 @@
 
 namespace Mosparo\Entity;
 
-use Mosparo\Repository\RuleItemRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Mosparo\Rule\PreparedRuleItemTrait;
-use Mosparo\Rule\RuleEntityInterface;
-use Mosparo\Rule\RuleItemEntityInterface;
+use Mosparo\Repository\RuleItemRepository;
+use Mosparo\Rules\FieldRule\PreparedRuleItemTrait;
+use Mosparo\Rules\FieldRule\RuleEntityInterface;
+use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RuleItemRepository::class)]

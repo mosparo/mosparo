@@ -2,11 +2,12 @@
 
 namespace Mosparo\Entity;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Mosparo\Repository\RulePackageRuleCacheRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-use Mosparo\Rule\RuleEntityInterface;
+use Doctrine\ORM\Mapping as ORM;
+use Mosparo\Repository\RulePackageRuleCacheRepository;
+use Mosparo\Rules\FieldRule\RuleEntityInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: RulePackageRuleCacheRepository::class)]
@@ -34,8 +35,11 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
     #[ORM\Column(type: 'string', length: 30)]
     private ?string $type;
 
-    #[ORM\OneToMany(targetEntity: RulePackageRuleItemCache::class, mappedBy: 'rulePackageRuleCache', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: RulePackageRuleItemCache::class, mappedBy: 'rulePackageRuleCache', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $items;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $numberOfItems = null;
 
     #[ORM\Column(type: 'float', nullable: true)]
     private ?float $spamRatingFactor = null;
@@ -43,6 +47,9 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -63,6 +70,10 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
     public function setRulePackageCache(?RulePackageCache $rulePackageCache): self
     {
         $this->rulePackageCache = $rulePackageCache;
+
+        if ($rulePackageCache) {
+            $rulePackageCache->addRule($this);
+        }
 
         return $this;
     }
@@ -156,6 +167,18 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
         return null;
     }
 
+    public function getNumberOfItems(): ?int
+    {
+        return $this->numberOfItems;
+    }
+
+    public function setNumberOfItems(?int $numberOfItems): self
+    {
+        $this->numberOfItems = $numberOfItems;
+
+        return $this;
+    }
+
     public function getSpamRatingFactor(): ?float
     {
         return $this->spamRatingFactor;
@@ -178,5 +201,27 @@ class RulePackageRuleCache implements ProjectRelatedEntityInterface, RuleEntityI
         $this->project = $project;
 
         return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getId() . '-' . spl_object_id($this);
+    }
+
+    public function getHash(): string
+    {
+        return md5($this->uuid . $this->type . $this->name . $this->description . $this->spamRatingFactor);
     }
 }

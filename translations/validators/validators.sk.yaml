@@ -23,7 +23,7 @@ honeypotField:
   nameHasInvalidCharacter: Použite iba písmená, čísla a znamenie dash (-).
 securityGuideline:
   asNumberNotNumeric: Číslo AS nie je číslo.
-  atLeastOneCriteriaRequired: Bezpečnostná príručka vyžaduje minimálne jedno kritériá.
+  atLeastOneCriterionRequired: Bezpečnostná príručka vyžaduje minimálne jedno kritériá.
 webCronJob:
   webCronJobIntervalAtLeast5Minutes: Web cron pracovný interval musí byť aspoň 5 minút
     alebo viac.

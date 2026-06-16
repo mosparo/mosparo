@@ -269,6 +269,14 @@ class CleanupHelper
                 // Delete the submit tokens
                 if ($reallyDeletableSubmitTokenIds) {
                     $query = $this->entityManager->createQuery('
+                            DELETE Mosparo\Entity\PartialSubmission ps
+                            WHERE ps.submitToken IN (:deletableSubmitTokenIds)
+                        ')
+                        ->setParameter('deletableSubmitTokenIds', $reallyDeletableSubmitTokenIds, ArrayParameterType::INTEGER);
+                    $query->execute();
+                    unset($query);
+
+                    $query = $this->entityManager->createQuery('
                             DELETE Mosparo\Entity\SubmitToken st
                             WHERE st.id IN (:deletableSubmitTokenIds)
                         ')
@@ -279,6 +287,14 @@ class CleanupHelper
 
                 // Delete the submissions
                 if ($deletableSubmissionIds) {
+                    $query = $this->entityManager->createQuery('
+                            DELETE Mosparo\Entity\DetectionResult dr 
+                            WHERE dr.submission IN (:deletableSubmissionIds)
+                        ')
+                        ->setParameter('deletableSubmissionIds', $reallyDeletableSubmissionIds, ArrayParameterType::INTEGER);
+                    $query->execute();
+                    unset($query);
+
                     $query = $this->entityManager->createQuery('
                             DELETE Mosparo\Entity\Submission s
                             WHERE s.id IN (:deletableSubmissionIds)
@@ -423,6 +439,22 @@ class CleanupHelper
             ->getQuery()->execute();
         unset($qb);
 
+        // Delete all submission rule config values
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\SubmissionRuleConfigValue', 'srcv')
+            ->where('srcv.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+        unset($qb);
+
+        // Delete all submission rules
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete('Mosparo\Entity\SubmissionRule', 'sr')
+            ->where('sr.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()->execute();
+        unset($qb);
+
         // Delete all rule packages rule item cache
         $qb = $this->entityManager->createQueryBuilder();
         $qb->delete('Mosparo\Entity\RulePackageRuleItemCache', 'rsric')
@@ -465,10 +497,28 @@ class CleanupHelper
         $query->execute();
         unset($query);
 
+        // Delete the partial submissions
+        $query = $this->entityManager->createQuery('
+                DELETE Mosparo\Entity\PartialSubmission ps
+                WHERE ps.project = :project
+            ')
+            ->setParameter('project', $project);
+        $query->execute();
+        unset($query);
+
         // Delete the submit tokens
         $query = $this->entityManager->createQuery('
                 DELETE Mosparo\Entity\SubmitToken st
                 WHERE st.project = :project
+            ')
+            ->setParameter('project', $project);
+        $query->execute();
+        unset($query);
+
+        // Delete the detection result
+        $query = $this->entityManager->createQuery('
+                DELETE Mosparo\Entity\DetectionResult dr
+                WHERE s.project = :project
             ')
             ->setParameter('project', $project);
         $query->execute();
@@ -534,16 +584,24 @@ class CleanupHelper
                     )
                 ')
                 ->setMaxResults($maxResults);
-            $submissionIds = $query->getResult();
+            $submissionIds = $query->getSingleColumnResult();
             if (!$submissionIds) {
                 break;
             }
 
             $deleteQuery = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\DetectionResult dr 
+                    WHERE dr.submission IN (:ids)
+                ')
+                ->setParameter('ids', $submissionIds, ArrayParameterType::INTEGER);
+            $deleteQuery->execute();
+            unset($deleteQuery);
+
+            $deleteQuery = $this->entityManager->createQuery('
                     DELETE Mosparo\Entity\Submission s
                     WHERE s.id IN (:ids)
                 ')
-                ->setParameter('ids', $submissionIds);
+                ->setParameter('ids', $submissionIds, ArrayParameterType::INTEGER);
             $deleteQuery->execute();
             unset($deleteQuery);
 
@@ -580,16 +638,24 @@ class CleanupHelper
                 ')
                 ->setParameter('limit', (new DateTime())->sub($this->submitTokenRetentionPeriod))
                 ->setMaxResults($maxResults);
-            $submitTokenIds = $query->getResult();
+            $submitTokenIds = $query->getSingleColumnResult();
             if (!$submitTokenIds) {
                 break;
             }
 
             $deleteQuery = $this->entityManager->createQuery('
+                    DELETE Mosparo\Entity\PartialSubmission ps
+                    WHERE ps.submitToken IN (:ids)
+                ')
+                ->setParameter('ids', $submitTokenIds, ArrayParameterType::INTEGER);
+            $deleteQuery->execute();
+            unset($deleteQuery);
+
+            $deleteQuery = $this->entityManager->createQuery('
                     DELETE Mosparo\Entity\SubmitToken st
                     WHERE st.id IN (:ids)
                 ')
-                ->setParameter('ids', $submitTokenIds);
+                ->setParameter('ids', $submitTokenIds, ArrayParameterType::INTEGER);
             $deleteQuery->execute();
             unset($deleteQuery);
 

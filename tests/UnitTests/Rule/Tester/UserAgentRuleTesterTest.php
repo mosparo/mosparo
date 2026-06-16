@@ -4,7 +4,7 @@ namespace Mosparo\Tests\UnitTests\Rule\Tester;
 
 use Mosparo\Entity\Rule;
 use Mosparo\Entity\RuleItem;
-use Mosparo\Rule\Tester\UserAgentRuleTester;
+use Mosparo\Rules\FieldRule\Tester\UserAgentRuleTester;
 
 class UserAgentRuleTesterTest extends TestCaseWithItems
 {

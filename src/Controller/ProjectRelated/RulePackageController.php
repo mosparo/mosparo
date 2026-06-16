@@ -4,21 +4,24 @@ namespace Mosparo\Controller\ProjectRelated;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Mosparo\DataTable\MosparoDataTableFactory;
 use Mosparo\Entity\RulePackage;
+use Mosparo\Entity\RulePackageProcessingJob;
 use Mosparo\Entity\RulePackageRuleCache;
 use Mosparo\Entity\RulePackageRuleItemCache;
+use Mosparo\Enum\ProcessingJobType;
+use Mosparo\Enum\RulePackageResult;
 use Mosparo\Enum\RulePackageType;
 use Mosparo\Enum\RulePackageTypeCategory;
-use Mosparo\Exception;
 use Mosparo\Form\RulePackageFormType;
 use Mosparo\Helper\RulePackageHelper;
-use Mosparo\Rule\RuleTypeManager;
+use Mosparo\Rules\FieldRule\RuleTypeManager;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\NumberColumn;
 use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\TwigColumn;
-use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,7 +34,7 @@ class RulePackageController extends AbstractController implements ProjectRelated
 
     protected EntityManagerInterface $entityManager;
 
-    protected DataTableFactory $dataTableFactory;
+    protected MosparoDataTableFactory $dataTableFactory;
 
     protected RuleTypeManager $ruleTypeManager;
 
@@ -41,7 +44,7 @@ class RulePackageController extends AbstractController implements ProjectRelated
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        DataTableFactory $dataTableFactory,
+        MosparoDataTableFactory $dataTableFactory,
         RuleTypeManager $ruleTypeManager,
         RulePackageHelper $rulePackageHelper,
         TranslatorInterface $translator
@@ -96,7 +99,8 @@ class RulePackageController extends AbstractController implements ProjectRelated
         }
 
         return $this->render('project_related/rule_package/list.html.twig', [
-            'datatable' => $table
+            'datatable' => $table,
+            'hasRulePackages' => $this->rulePackageHelper->hasRulePackages(),
         ]);
     }
 
@@ -140,15 +144,6 @@ class RulePackageController extends AbstractController implements ProjectRelated
                 $this->entityManager->persist($rulePackage);
             }
 
-            if (in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
-                try {
-                    $this->rulePackageHelper->fetchRulePackage($rulePackage);
-                } catch (\Exception $e) {
-                    $hasError = true;
-                    $errorMessage = $e->getMessage();
-                }
-            }
-
             if (!$hasError) {
                 $this->entityManager->flush();
 
@@ -162,7 +157,11 @@ class RulePackageController extends AbstractController implements ProjectRelated
                     )
                 );
 
-                return $this->redirectToRoute('rule_package_list', ['_projectId' => $this->getActiveProject()->getId()]);
+                if (in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
+                    return $this->redirectToRoute('rule_package_update_cache', ['_projectId' => $this->getActiveProject()->getId(), 'id' => $rulePackage->getId()]);
+                } else {
+                    return $this->redirectToRoute('rule_package_list', ['_projectId' => $this->getActiveProject()->getId()]);
+                }
             }
         }
 
@@ -182,20 +181,16 @@ class RulePackageController extends AbstractController implements ProjectRelated
             $submittedToken = $request->request->get('delete-token');
 
             if ($this->isCsrfTokenValid('delete-rule-package', $submittedToken)) {
-                $this->entityManager->remove($rulePackage);
+                $processingJob = (new RulePackageProcessingJob())
+                    ->setRulePackage($rulePackage)
+                    ->setType(ProcessingJobType::DELETE_RULE_PACKAGE)
+                    ->setProject($rulePackage->getProject())
+                ;
+
+                $this->entityManager->persist($processingJob);
                 $this->entityManager->flush();
 
-                $session = $request->getSession();
-                $session->getFlashBag()->add(
-                    'success',
-                    $this->translator->trans(
-                        'rulePackage.delete.message.successfullyDeleted',
-                        ['%rulePackageName%' => $rulePackage->getName()],
-                        'mosparo'
-                    )
-                );
-
-                return $this->redirectToRoute('rule_package_list', ['_projectId' => $this->getActiveProject()->getId()]);
+                return $this->redirectToRoute('rule_package_delete_process', ['id' => $processingJob->getId(), '_projectId' => $this->getActiveProject()->getId()]);
             }
         }
 
@@ -204,24 +199,156 @@ class RulePackageController extends AbstractController implements ProjectRelated
         ]);
     }
 
+    #[Route('/job/{id}/delete/process', name: 'rule_package_delete_process')]
+    public function deleteRulePackageProcess(RulePackageProcessingJob $processingJob): Response
+    {
+        return $this->render('project_related/rule_package/delete-process.html.twig', [
+            'processingJob' => $processingJob,
+        ]);
+    }
+
+    #[Route('/job/{id}/delete/process/execute', name: 'rule_package_delete_process_execute')]
+    public function deleteRulePackageProcessExecute(RulePackageProcessingJob $processingJob): Response
+    {
+        $response = new JsonResponse();
+
+        $error = false;
+        $errorMessage = null;
+        $cleanupProgress = null;
+        try {
+            $result = $this->rulePackageHelper->cleanupForRulePackage(
+                $processingJob,
+                $this->rulePackageHelper->getCacheDirectory($processingJob->getRulePackage()->getId()),
+                false,
+                time(),
+                1
+            );
+
+            if ($result === RulePackageResult::COMPLETED) {
+                $this->entityManager->remove($processingJob->getRulePackage());
+                $this->entityManager->flush();
+
+                $cleanupProgress = 100;
+            } else {
+                $this->entityManager->flush();
+
+                $cleanupProgress = $processingJob->getCleanupTasks() ? ($processingJob->getProcessedCleanupTasks() / $processingJob->getCleanupTasks()) * 100 : 0;
+            }
+        } catch (\Exception $e) {
+            $result = RulePackageResult::UNKNOWN_ERROR;
+            $error = true;
+            $errorMessage = $e->getMessage();
+        }
+
+        $completed = false;
+        if ($result !== RulePackageResult::UNFINISHED) {
+            $completed = true;
+        }
+
+        $response->setData([
+            'result' => $result,
+            'completed' => $completed,
+            'error' => $error,
+            'errorMessage' => $errorMessage,
+            'cleanupProgress' => round($cleanupProgress, 2),
+        ]);
+
+        return $response;
+    }
+
+    #[Route('/update-cache', name: 'rule_package_update_cache_all')]
+    #[Route('/{id}/update-cache', name: 'rule_package_update_cache')]
+    public function updateCache(?RulePackage $rulePackage = null): Response
+    {
+        if (!$this->rulePackageHelper->hasRulePackages()) {
+            return $this->redirectToRoute('rule_package_list', ['_projectId' => $this->getActiveProject()->getId()]);
+        }
+
+        if ($rulePackage) {
+            $rulePackages = [$rulePackage];
+        } else {
+            $rulePackages = $this->entityManager->getRepository(RulePackage::class)->findBy([
+                'type' => [RulePackageType::AUTOMATICALLY_FROM_URL, RulePackageType::AUTOMATICALLY_FROM_FILE],
+            ]);
+        }
+
+        $rulePackageUrls = [];
+        foreach ($rulePackages as $rulePackage) {
+            $rulePackageUrls[$rulePackage->getId()] = $this->generateUrl('rule_package_update_cache_execute', [
+                '_projectId' => $rulePackage->getProject()->getId(),
+                'id' => $rulePackage->getId(),
+            ]);
+        }
+
+        return $this->render('project_related/rule_package/update-cache.html.twig', [
+            'rulePackages' => $rulePackages,
+            'rulePackageUrls' => $rulePackageUrls,
+        ]);
+    }
+
+    #[Route('/{id}/update-cache/execute', name: 'rule_package_update_cache_execute')]
+    public function updateCacheExecute(Request $request, RulePackage $rulePackage): Response
+    {
+        $response = new JsonResponse();
+
+        $pj = $rulePackage->getFirstProcessingJob(ProcessingJobType::UPDATE_CACHE);
+        $error = false;
+        $errorMessage = null;
+        $importProgress = null;
+        $cleanupProgress = null;
+        try {
+            $result = $this->rulePackageHelper->fetchRulePackage($rulePackage, time(), 1); // Short timeouts lead to faster updates in the UI
+
+            if (!$pj) {
+                $pj = $rulePackage->getFirstProcessingJob(ProcessingJobType::UPDATE_CACHE);
+            }
+
+            if (in_array($result, [RulePackageResult::COMPLETED, RulePackageResult::ALREADY_UP_TO_DATE])) {
+                $importProgress = 100;
+                $cleanupProgress = 100;
+            } else if ($pj) {
+                $importProgress = $pj->getImportTasks() ? ($pj->getProcessedImportTasks() / $pj->getImportTasks()) * 100 : 0;
+                $cleanupProgress = $pj->getCleanupTasks() ? ($pj->getProcessedCleanupTasks() / $pj->getCleanupTasks()) * 100 : 0;
+            }
+        } catch (\Exception $e) {
+            $result = RulePackageResult::UNKNOWN_ERROR;
+            $error = true;
+            $errorMessage = $e->getMessage();
+        }
+
+        if ($result === RulePackageResult::UNKNOWN_ERROR) {
+            if ($pj) {
+                $this->entityManager->remove($pj);
+                $this->entityManager->flush();
+            }
+
+            $this->rulePackageHelper->deleteCacheDirectory($rulePackage->getId());
+        }
+
+        $completed = false;
+        if ($result !== RulePackageResult::UNFINISHED) {
+            $completed = true;
+        }
+
+        $response->setData([
+            'result' => $result,
+            'completed' => $completed,
+            'error' => $error,
+            'errorMessage' => $errorMessage,
+            'importCompleted' => ($importProgress === 100),
+            'importProgress' => round($importProgress, 2),
+            'cleanupProgress' => round($cleanupProgress, 2),
+        ]);
+
+        return $response;
+    }
+
     #[Route('/{id}/view', name: 'rule_package_view')]
     #[Route('/{id}/view/filter/{filter}', name: 'rule_package_view_filtered')]
     public function view(Request $request, RulePackage $rulePackage, $filter = ''): Response
     {
         $hasError = false;
         $errorMessage = '';
-        if (in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
-            try {
-                $result = $this->rulePackageHelper->fetchRulePackage($rulePackage);
-
-                if ($result) {
-                    $this->entityManager->flush();
-                }
-            } catch (\Exception $e) {
-                $hasError = true;
-                $errorMessage = $e->getMessage();
-            }
-        }
 
         $filteredType = null;
         if (in_array($filter, $this->ruleTypeManager->getRuleTypeKeys())) {
@@ -229,20 +356,20 @@ class RulePackageController extends AbstractController implements ProjectRelated
         }
 
         $table = $this->dataTableFactory->create(['autoWidth' => true])
-            ->add('name', TextColumn::class, ['label' => 'rulePackage.view.list.rules.name'])
+            ->add('name', TextColumn::class, ['label' => 'rulePackage.view.list.fieldRules.name'])
             ->add('type', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.rules.type',
-                'template' => 'project_related/rule_package/view/rule_list/_type.html.twig'
+                'label' => 'rulePackage.view.list.fieldRules.type',
+                'template' => 'project_related/rule_package/view/field_rule_list/_type.html.twig'
             ])
             ->add('numberOfRuleItems', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.rules.numberOfRuleItems',
-                'template' => 'project_related/rule_package/view/rule_list/_numberOfRuleItems.html.twig'
+                'label' => 'rulePackage.view.list.fieldRules.numberOfRuleItems',
+                'template' => 'project_related/rule_package/view/field_rule_list/_numberOfRuleItems.html.twig'
             ])
-            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'rulePackage.view.list.rules.spamRatingFactor'])
+            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'rulePackage.view.list.fieldRules.spamRatingFactor'])
             ->add('actions', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.rules.actions',
+                'label' => 'rulePackage.view.list.fieldRules.actions',
                 'className' => 'buttons',
-                'template' => 'project_related/rule_package/view/rule_list/_actions.html.twig'
+                'template' => 'project_related/rule_package/view/field_rule_list/_actions.html.twig'
             ])
             ->createAdapter(ORMAdapter::class, [
                 'entity' => RulePackageRuleCache::class,
@@ -290,8 +417,8 @@ class RulePackageController extends AbstractController implements ProjectRelated
         ]);
     }
 
-    #[Route('/{id}/view/rule/{ruleUuid}', name: 'rule_package_view_rule')]
-    public function viewRule(Request $request, RulePackage $rulePackage, string $ruleUuid): Response
+    #[Route('/{id}/view/field-rule/{ruleUuid}', name: 'rule_package_view_field_rule')]
+    public function viewFieldRule(Request $request, RulePackage $rulePackage, string $ruleUuid): Response
     {
         $rulePackageRuleCacheRepository = $this->entityManager->getRepository(RulePackageRuleCache::class);
         $rulePackageRuleCache = $rulePackageRuleCacheRepository->findOneBy(['uuid' => $ruleUuid]);
@@ -302,14 +429,14 @@ class RulePackageController extends AbstractController implements ProjectRelated
 
         $table = $this->dataTableFactory->create(['autoWidth' => true])
             ->add('type', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.ruleItems.type',
-                'template' => 'project_related/rule_package/view/rule_item_list/_type.html.twig'
+                'label' => 'rulePackage.view.list.fieldRuleItems.type',
+                'template' => 'project_related/rule_package/view/field_rule_item_list/_type.html.twig'
             ])
             ->add('value', TwigColumn::class, [
-                'label' => 'rulePackage.view.list.ruleItems.value',
-                'template' => 'project_related/rule_package/view/rule_item_list/_value.html.twig'
+                'label' => 'rulePackage.view.list.fieldRuleItems.value',
+                'template' => 'project_related/rule_package/view/field_rule_item_list/_value.html.twig'
             ])
-            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'rulePackage.view.list.ruleItems.spamRatingFactor'])
+            ->add('spamRatingFactor', NumberColumn::class, ['label' => 'rulePackage.view.list.fieldRuleItems.spamRatingFactor'])
             ->createAdapter(ORMAdapter::class, [
                 'entity' => RulePackageRuleItemCache::class,
                 'query' => function (QueryBuilder $builder) use ($rulePackageRuleCache) {
@@ -326,7 +453,7 @@ class RulePackageController extends AbstractController implements ProjectRelated
             return $table->getResponse();
         }
 
-        return $this->render('project_related/rule_package/view_rule.html.twig', [
+        return $this->render('project_related/rule_package/view_field_rule.html.twig', [
             'rulePackage' => $rulePackage,
             'rule' => $rulePackageRuleCache,
             'datatable' => $table

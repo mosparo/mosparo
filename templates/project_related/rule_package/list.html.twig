@@ -10,11 +10,17 @@
 
     <div class="col-auto ms-auto">
         <div class="btn-list">
-            <a href="https://documentation.mosparo.io/docs/usage/rule_packages" class="btn btn-info" target="_blank">
+            <a href="https://documentation.mosparo.io/docs/usage/rule_packages" class="btn btn-info hide-text" target="_blank">
                 <i class="ti ti-question-mark"></i>
-                {{ 'action.help'|trans }}
+                <span>{{ 'action.help'|trans }}</span>
             </a>
             {% if canManage %}
+                {% if hasRulePackages %}
+                    <a href="{{ path('rule_package_update_cache_all', {'_projectId': activeProject.id}) }}" class="btn btn-teal hide-text">
+                        <i class="ti ti-refresh"></i>
+                        <span>{{ 'action.updateCache'|trans }}</span>
+                    </a>
+                {% endif %}
                 <a href="{{ path('rule_package_add_choose_type', { '_projectId': activeProject.id }) }}" class="btn btn-success add-button">
                     <i class="ti ti-plus"></i>
                     <span>{{ 'rulePackage.add.title'|trans }}</span>

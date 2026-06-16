@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",
+        "ext-fileinfo": "*",
         "ext-filter": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
@@ -30,8 +31,8 @@
         "geoip2/geoip2": "~2.0",
         "gracious/doctrine-encryption-bundle": "^4.0",
         "mlocati/ip-lib": "^1.16",
-        "mosparo/php-api-client": "^1.0",
-        "mosparo/specifications": "^5.0",
+        "mosparo/php-api-client": "^2.0",
+        "mosparo/specifications": "^7.0",
         "nelmio/security-bundle": "^3.0",
         "omines/datatables-bundle": "^0.8.0",
         "opis/json-schema": "^2.2",
@@ -80,7 +81,7 @@
         "zepi/unicode": "^3.0"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "doctrine/doctrine-fixtures-bundle": "^4.3",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "^6.4",
         "symfony/css-selector": "^6.4",

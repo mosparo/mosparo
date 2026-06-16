@@ -1,0 +1,54 @@
+{% extends 'project_related/rules/rules_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'rules.submissionRule.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'rules.submissionRule.title'|trans }}{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/usage/rules" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block rulesPageBody %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div id="submission-rules">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Insert this at the end of your body element, but before the closing tag -->
+    <script src="{{ asset('bundles/datatables/js/datatables.js')|add_path_prefix }}"></script>
+    {% cspscript %}
+        <script>
+            $(function() {
+                $('#submission-rules').initDataTables({{ datatable_settings(datatable) }}, {
+                    autoWidth: false,
+                    searching: false,
+                    info: false,
+                    responsive: true,
+                    columnDefs: [
+                        { width: "70%", targets: 0 },
+                        { width: "1%", targets: 2 }
+                    ]
+                });
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

@@ -128,10 +128,22 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'help' => 'tools.eiParts.securitySettingsHelp',
                 'data' => true,
             ])
-            ->add('rules', CheckboxType::class, [
-                'label' => 'tools.eiParts.rules',
+            ->add('translations', CheckboxType::class, [
+                'label' => 'tools.eiParts.translations',
                 'required' => false,
-                'help' => 'tools.eiParts.rulesHelp',
+                'help' => 'tools.eiParts.translationsHelp',
+                'data' => true,
+            ])
+            ->add('submissionRules', CheckboxType::class, [
+                'label' => 'tools.eiParts.submissionRules',
+                'required' => false,
+                'help' => 'tools.eiParts.submissionRulesHelp',
+                'data' => true,
+            ])
+            ->add('fieldRules', CheckboxType::class, [
+                'label' => 'tools.eiParts.fieldRules',
+                'required' => false,
+                'help' => 'tools.eiParts.fieldRulesHelp',
                 'data' => true,
             ])
             ->add('rulePackages', CheckboxType::class, [
@@ -153,7 +165,9 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     $form->get('generalSettings')->getData(),
                     $form->get('designSettings')->getData(),
                     $form->get('securitySettings')->getData(),
-                    $form->get('rules')->getData(),
+                    $form->get('translations')->getData(),
+                    $form->get('submissionRules')->getData(),
+                    $form->get('fieldRules')->getData(),
                     $form->get('rulePackages')->getData(),
                 );
 
@@ -214,18 +228,28 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'required' => false,
                 'help' => 'tools.eiParts.securitySettingsHelp',
             ])
-            ->add('rules', CheckboxType::class, [
-                'label' => 'tools.eiParts.rules',
+            ->add('translations', CheckboxType::class, [
+                'label' => 'tools.eiParts.translations',
                 'required' => false,
-                'help' => 'tools.eiParts.rulesHelp',
+                'help' => 'tools.eiParts.translationsHelp',
+            ])
+            ->add('submissionRules', CheckboxType::class, [
+                'label' => 'tools.eiParts.submissionRules',
+                'required' => false,
+                'help' => 'tools.eiParts.submissionRulesHelp',
+            ])
+            ->add('fieldRules', CheckboxType::class, [
+                'label' => 'tools.eiParts.fieldRules',
+                'required' => false,
+                'help' => 'tools.eiParts.fieldRulesHelp',
             ])
             ->add('rulePackages', CheckboxType::class, [
                 'label' => 'tools.eiParts.rulePackages',
                 'required' => false,
                 'help' => 'tools.eiParts.rulePackagesHelp',
             ])
-            ->add('handlingExistingRules', ChoiceType::class, [
-                'label' => 'tools.import.form.handlingExistingRules',
+            ->add('handlingExistingFieldRules', ChoiceType::class, [
+                'label' => 'tools.import.form.handlingExistingFieldRules',
                 'required' => true,
                 'expanded' => true,
                 'multiple' => false,
@@ -257,12 +281,27 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                 'importGeneralSettings' => $form->get('generalSettings')->getData(),
                 'importDesignSettings' => $form->get('designSettings')->getData(),
                 'importSecuritySettings' => $form->get('securitySettings')->getData(),
-                'importRules' => $form->get('rules')->getData(),
+                'importTranslations' => $form->get('translations')->getData(),
+                'importSubmissionRules' => $form->get('submissionRules')->getData(),
+                'importFieldRules' => $form->get('fieldRules')->getData(),
                 'importRulePackages' => $form->get('rulePackages')->getData(),
-                'handlingExistingRules' => $form->get('handlingExistingRules')->getData(),
+                'handlingExistingFieldRules' => $form->get('handlingExistingFieldRules')->getData(),
             ];
 
-            if (!$importData['importGeneralSettings'] && !$importData['importDesignSettings'] && !$importData['importSecuritySettings'] && !$importData['importRules'] && !$importData['importRulePackages']) {
+            if ($importData['importFieldRules'] && !$importData['handlingExistingFieldRules']) {
+                $error = true;
+                $errorMessage = 'tools.import.errorMessage.selectHandlingMode';
+            }
+
+            if (
+                !$importData['importGeneralSettings'] &&
+                !$importData['importDesignSettings'] &&
+                !$importData['importSecuritySettings'] &&
+                !$importData['importTranslations'] &&
+                !$importData['importSubmissionRules'] &&
+                !$importData['importFieldRules'] &&
+                !$importData['importRulePackages']
+            ) {
                 $error = true;
                 $errorMessage = 'tools.import.errorMessage.selectAtLeastOneElement';
             } else {
@@ -302,13 +341,14 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
 
         $jobData = null;
         $importData = null;
-        $changes = null;
         $hasChanges = false;
+        $changes = null;
         $error = false;
         $errorMessage = null;
+        $notInImport = null;
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $importHelper->executeImport($token);
+                $refreshRulePackages = $importHelper->executeImport($token);
             } catch (ImportException $e) {
                 $error = true;
                 $errorMessage = $e->getMessage();
@@ -343,12 +383,16 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     )
                 );
 
-                return $this->redirectToRoute('tools_import', ['_projectId' => $this->getActiveProject()->getId()]);
+                if ($refreshRulePackages) {
+                    return $this->redirectToRoute('rule_package_update_cache_all', ['_projectId' => $this->getActiveProject()->getId()]);
+                } else {
+                    return $this->redirectToRoute('tools_import', ['_projectId' => $this->getActiveProject()->getId()]);
+                }
             }
         }
 
         try {
-            [$jobData, $importData, $hasChanges, $changes] = $importHelper->simulateImport($token);
+            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $importHelper->simulateImport($token);
 
             $jobData['changes'] = $changes;
 
@@ -385,6 +429,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
             'changes' => $changes,
             'jobData' => $jobData,
             'importData' => $importData,
+            'notInImport' => $notInImport,
             'error' => $error,
             'errorMessage' => $errorMessage,
         ]);

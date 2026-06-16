@@ -18,6 +18,7 @@ parameters:
     env(default_timezone): 'UTC'
 
     env(default_color_mode): 'light'
+    env(default_number_of_items_per_page): '50'
 
     env(database_system): 'mysql'
     env(database_driver): 'pdo_mysql'
@@ -62,8 +63,11 @@ services:
             calls:
                 - [ setProjectHelper ]
 
-        Mosparo\Rule\Type\RuleTypeInterface:
-            tags: ['mosparo.ruleType']
+        Mosparo\Rules\FieldRule\Type\RuleTypeInterface:
+            tags: ['mosparo.fieldRuleType']
+
+        Mosparo\Rules\SubmissionRule\SubmissionRuleInterface:
+          tags: ['mosparo.submissionRule']
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -155,19 +159,26 @@ services:
         tags:
             - { name: twig.extension }
 
-    Mosparo\Rule\RuleTypeManager:
-        class: Mosparo\Rule\RuleTypeManager
-        arguments: [ !tagged mosparo.ruleType ]
+    Mosparo\Rules\FieldRule\RuleTypeManager:
+        arguments: [ !tagged mosparo.fieldRuleType ]
+
+    Mosparo\Rules\SubmissionRule\SubmissionRuleManager:
+      arguments: [ !tagged mosparo.submissionRule ]
 
     Mosparo\Helper\GeoIp2Helper:
-        class: Mosparo\Helper\GeoIp2Helper
         arguments:
             $downloadDirectory: '%kernel.project_dir%/var/data/geoip2'
 
     Mosparo\Helper\ImportHelper:
-        class: Mosparo\Helper\ImportHelper
         arguments:
             $importDirectory: '%kernel.project_dir%/var/data/import'
+
+    Mosparo\Helper\RulePackageHelper:
+        arguments:
+            $rulePackageDirectory: '%kernel.project_dir%/var/data/rule-packages'
+            $allowPrivateNetworks: '%env(bool:MOSPARO_RULE_PACKAGE_ALLOW_PRIVATE_NETWORKS)%'
+            $allowRedirects: '%env(bool:MOSPARO_RULE_PACKAGE_ALLOW_REDIRECTS)%'
+            $minimumRefreshInterval: '%env(int:MOSPARO_RULE_PACKAGE_MINIMUM_REFRESH_INTERVAL)%'
 
     Mosparo\Helper\SetupHelper:
         arguments:
@@ -198,6 +209,7 @@ services:
     Mosparo\Helper\InterfaceHelper:
         arguments:
             $defaultColorMode: '%env(default_color_mode)%'
+            $defaultNumberOfItemsPerPage: '%env(default_number_of_items_per_page)%'
 
     Mosparo\Helper\DesignHelper:
         arguments:
@@ -213,12 +225,6 @@ services:
     Mosparo\Helper\Migration\V14OptimizeRulesHelper:
         arguments:
             $isDebug: '%kernel.debug%'
-
-    Mosparo\Helper\RulePackageHelper:
-        arguments:
-            $allowPrivateNetworks: '%env(bool:MOSPARO_RULE_PACKAGE_ALLOW_PRIVATE_NETWORKS)%'
-            $allowRedirects: '%env(bool:MOSPARO_RULE_PACKAGE_ALLOW_REDIRECTS)%'
-            $minimumRefreshInterval: '%env(int:MOSPARO_RULE_PACKAGE_MINIMUM_REFRESH_INTERVAL)%'
 
     Mosparo\Command\UpdateMosparoCommand:
         arguments:
@@ -267,3 +273,8 @@ services:
         tags:
             - { name: security.expression_language_provider }
             - { name: routing.expression_language_provider }
+
+    Mosparo\DataTable\MosparoDataTableFactory:
+        arguments:
+            $config: '%datatables.config%'
+            $renderer: '@datatables.renderer'

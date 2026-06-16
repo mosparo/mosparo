@@ -1,0 +1,40 @@
+{% trans_default_domain 'mosparo' %}
+
+<p>{{ 'rules.fieldRule.type.provider.intro'|trans }}</p>
+
+{% if is_granted('ROLE_ADMIN') %}
+    <p>
+        <strong>
+            {{ 'rules.fieldRule.type.provider.infoGeoip2'|trans }}
+        </strong>
+    </p>
+
+    <a href="{{ path('administration_geoip2_settings') }}" class="btn btn-secondary mb-3">
+        <i class="ti ti-map-pin"></i>
+        {{ 'rules.fieldRule.type.provider.action.configureGeoip2'|trans }}
+    </a>
+{% endif %}
+
+<ul>
+    <li>
+        <strong>{{ 'rules.fieldRule.type.provider.asNumber.title'|trans }}</strong>
+        <p>{{ 'rules.fieldRule.type.provider.asNumber.intro'|trans }}</p>
+        <p>
+            <u>{{ 'general.example'|trans }}:</u> <code>123456</code>
+        </p>
+    </li>
+    <li>
+        <strong>{{ 'rules.fieldRule.type.provider.country.title'|trans }}</strong>
+        <p>{{ 'rules.fieldRule.type.provider.country.intro'|trans }}</p>
+        <p>
+            <u>{{ 'general.example'|trans }}:</u> <code>CH</code>
+        </p>
+        <p>
+            <strong>
+                {{ 'rules.fieldRule.type.provider.country.infoCountryBlock'|trans }}
+            </strong>
+        </p>
+    </li>
+</ul>
+
+{% include 'project_related/rules/field_rule/type/help/_rating.html.twig' %}

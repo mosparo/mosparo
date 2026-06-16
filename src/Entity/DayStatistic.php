@@ -4,6 +4,7 @@ namespace Mosparo\Entity;
 
 use Mosparo\Repository\DayStatisticRepository;
 use Doctrine\ORM\Mapping as ORM;
+use \DateTimeInterface;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: DayStatisticRepository::class)]
@@ -23,6 +24,15 @@ class DayStatistic implements ProjectRelatedEntityInterface
 
     #[ORM\Column(type: 'integer')]
     private int $numberOfSpamSubmissions = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private int $numberOfDelayedRequests = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private int $numberOfBlockedRequests = 0;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -63,6 +73,42 @@ class DayStatistic implements ProjectRelatedEntityInterface
     public function setNumberOfSpamSubmissions(int $numberOfSpamSubmissions): self
     {
         $this->numberOfSpamSubmissions = $numberOfSpamSubmissions;
+
+        return $this;
+    }
+
+    public function getNumberOfDelayedRequests(): ?int
+    {
+        return $this->numberOfDelayedRequests;
+    }
+
+    public function setNumberOfDelayedRequests(int $numberOfDelayedRequests): self
+    {
+        $this->numberOfDelayedRequests = $numberOfDelayedRequests;
+
+        return $this;
+    }
+
+    public function getNumberOfBlockedRequests(): ?int
+    {
+        return $this->numberOfBlockedRequests;
+    }
+
+    public function setNumberOfBlockedRequests(int $numberOfBlockedRequests): self
+    {
+        $this->numberOfBlockedRequests = $numberOfBlockedRequests;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

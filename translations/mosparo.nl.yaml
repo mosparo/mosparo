@@ -76,16 +76,17 @@ dashboard:
     spam: Spam
     annotation:
       statisticOnly: Alleen analytics
-rule:
-  backToList: Terug naar de regels
-  list:
-    name: Naam
-    type: Type
-    status: Status
-    actions: Acties
-  createChooseType:
-    title: Kies een type
-    intro: Kies het type regel dat u wilt maken. De beschikbare typen worden gebruikt voor verschillende velden en kunnen later niet worden gewijzigd voor een andere regel.
-  create:
-    title: Maak een regel aan
-  title: Regels
+rules:
+  fieldRule:
+    backToList: Terug naar de regels
+    list:
+      name: Naam
+      type: Type
+      status: Status
+      actions: Acties
+    createChooseType:
+      title: Kies een type
+      intro: Kies het type regel dat u wilt maken. De beschikbare typen worden gebruikt voor verschillende velden en kunnen later niet worden gewijzigd voor een andere regel.
+    create:
+      title: Maak een regel aan
+    title: Regels

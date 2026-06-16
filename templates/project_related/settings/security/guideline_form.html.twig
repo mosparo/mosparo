@@ -39,7 +39,7 @@
                         <div class="card-header">
                             <h3 class="card-title">{{ 'settings.security.guideline.form.criteria.title'|trans }}</h3>
                         </div>
-                        <div class="card-body rule-items">
+                        <div class="card-body guideline-criteria">
                             <p>
                                 {{ 'settings.security.guideline.form.criteria.intro'|trans }}
                             </p>
@@ -47,18 +47,121 @@
                                 {{ 'settings.security.guideline.form.criteria.intro2'|trans }}
                             </p>
 
-                            {% if not geoIp2Active %}
-                                <div class="alert alert-info">
-                                    {{ 'settings.security.guideline.form.infoGeoIp2Disabled'|trans }}
+                            <h3 class="mb-0">{{ 'settings.security.guideline.form.categories.ipBased.label'|trans }}</h3>
+                            <p>{{ 'settings.security.guideline.form.categories.ipBased.intro'|trans }}</p>
+
+                            <div class="card-tabs mb-3">
+                                <ul class="nav nav-tabs" data-bs-toggle="tabs">
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-ip-based-subnets" class="nav-link active tab-with-items-counter" data-bs-toggle="tab">
+                                            <i class="ti ti-network"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.security.guideline.form.criteria.subnets'|trans }}
+                                            </span>
+                                            <span class="badge bg-secondary ms-2 items-counter">0</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-ip-based-country-codes" class="nav-link tab-with-items-counter" data-bs-toggle="tab">
+                                            <i class="ti ti-world-pin"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.security.guideline.form.criteria.countryCodes'|trans }}
+                                            </span>
+                                            <span class="badge bg-secondary ms-2 items-counter">0</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-ip-based-as-numbers" class="nav-link tab-with-items-counter" data-bs-toggle="tab">
+                                            <i class="ti ti-affiliate"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.security.guideline.form.criteria.asNumbers'|trans }}
+                                            </span>
+                                            <span class="badge bg-secondary ms-2 items-counter">0</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="card tab-pane active show" id="tabs-ip-based-subnets">
+                                        <div class="card-body">
+                                            {{ form_widget(form.subnets) }}
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-ip-based-country-codes">
+                                        <div class="card-body">
+                                            {% if not geoIp2Active %}
+                                                <div class="alert alert-info">
+                                                    {{ 'settings.security.guideline.form.infoGeoIp2Disabled'|trans }}
+                                                </div>
+                                            {% else %}
+                                                {{ form_widget(form.countryCodes) }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-ip-based-as-numbers">
+                                        <div class="card-body">
+                                            {% if not geoIp2Active %}
+                                                <div class="alert alert-info">
+                                                    {{ 'settings.security.guideline.form.infoGeoIp2Disabled'|trans }}
+                                                </div>
+                                            {% else %}
+                                                {{ form_widget(form.asNumbers) }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
-                            {% endif %}
+                            </div>
 
-                            {{ form_row(form.subnets) }}
+                            <h3 class="mb-0">{{ 'settings.security.guideline.form.categories.formBased.label'|trans }}</h3>
+                            <p>{{ 'settings.security.guideline.form.categories.formBased.intro'|trans }}</p>
 
-                            {% if geoIp2Active %}
-                                {{ form_row(form.countryCodes) }}
-                                {{ form_row(form.asNumbers) }}
-                            {% endif %}
+                            <div class="card-tabs">
+                                <ul class="nav nav-tabs" data-bs-toggle="tabs">
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-form-based-page-urls" class="nav-link active tab-with-items-counter" data-bs-toggle="tab">
+                                            <i class="ti ti-world"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.security.guideline.form.criteria.formPageUrls'|trans }}
+                                            </span>
+                                            <span class="badge bg-secondary ms-2 items-counter">0</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-form-based-action-urls" class="nav-link tab-with-items-counter" data-bs-toggle="tab">
+                                            <i class="ti ti-world-cog"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.security.guideline.form.criteria.formActionUrls'|trans }}
+                                            </span>
+                                            <span class="badge bg-secondary ms-2 items-counter">0</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item only-icon">
+                                        <a href="#tabs-form-based-ids" class="nav-link tab-with-items-counter" data-bs-toggle="tab">
+                                            <i class="ti ti-tag"></i>
+                                            <span class="visible-when-active d-xl-inline">
+                                                {{ 'settings.security.guideline.form.criteria.formIds'|trans }}
+                                            </span>
+                                            <span class="badge bg-secondary ms-2 items-counter">0</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="card tab-pane active show" id="tabs-form-based-page-urls">
+                                        <div class="card-body">
+                                            {{ form_widget(form.formPageUrls) }}
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-form-based-action-urls">
+                                        <div class="card-body">
+                                            {{ form_widget(form.formActionUrls) }}
+                                        </div>
+                                    </div>
+                                    <div class="card tab-pane" id="tabs-form-based-ids">
+                                        <div class="card-body">
+                                            {{ form_widget(form.formIds) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -121,4 +224,36 @@
     {{ parent() }}
 
     {% include 'project_related/settings/security/form/scripts.html.twig' %}
+
+    {% cspscript %}
+        <script>
+            function updateItemsCounter()
+            {
+                $('.tab-with-items-counter').each(function () {
+                    let id = $(this).attr('href');
+                    let tabBody = $(id);
+                    let counter = 0;
+                    tabBody.find('.collection-list li').each(function () {
+                        if ($(this).find('input').val()) {
+                            counter++;
+                        }
+                    });
+
+                    let counterEl = $(this).find('.items-counter');
+                    if (counter) {
+                        counterEl.removeClass('bg-secondary').addClass('bg-blue').text(counter);
+                    } else {
+                        counterEl.addClass('bg-secondary').removeClass('bg-blue').text(counter);
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                updateItemsCounter();
+
+                $('.guideline-criteria').on('change', 'input', updateItemsCounter);
+                $('.collection-list').on('collection-item-removed', updateItemsCounter);
+            });
+        </script>
+    {% endcspscript %}
 {% endblock %}

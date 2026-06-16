@@ -14,7 +14,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('account_settings') }}">
-                                <img src="{{ asset('build/images/icons/personal-settings.svg')|add_path_prefix }}" alt="" class="illustration-list" />
+                                <img src="{{ asset(get_illustration_path('personal-settings.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'account.settings.title'|trans }}</p>
@@ -35,7 +35,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('account_change_password') }}">
-                                <img src="{{ asset('build/images/icons/password.svg')|add_path_prefix }}" alt="" class="illustration-list" />
+                                <img src="{{ asset(get_illustration_path('password.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'account.changePassword.title'|trans }}</p>
@@ -56,7 +56,7 @@
                     <div class="empty">
                         <div class="empty-img">
                             <a href="{{ path('account_two_factor_status') }}">
-                                <img src="{{ asset('build/images/icons/two-factor.svg')|add_path_prefix }}" alt="" class="illustration-list" />
+                                <img src="{{ asset(get_illustration_path('two-factor.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>
                         </div>
                         <p class="empty-title">{{ 'account.twoFactor.title'|trans }}</p>

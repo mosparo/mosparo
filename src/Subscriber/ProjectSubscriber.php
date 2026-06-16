@@ -124,7 +124,9 @@ class ProjectSubscriber implements EventSubscriberInterface
             }
 
             $apiEndpoint = $this->getApiEndpoint($request, $activeRoute);
-            $requestData = array_merge($request->query->all(), $request->request->all());
+
+            $queryData = $this->prepareQueryData($request->query->all());
+            $requestData = array_merge($queryData, $request->request->all());
 
             // Verify the request signature
             $requestHelper = new RequestHelper($publicKey, $activeProject->getPrivateKey());
@@ -138,6 +140,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                         'receivedHmacHash' => $requestSignature,
                         'payload' => $apiEndpoint . $requestHelper->toJson($requestData),
                     ];
+                    dump($apiEndpoint . $requestHelper->toJson($requestData));
                 }
 
                 $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Request invalid.'] + $debugInformation, 400));
@@ -197,9 +200,9 @@ class ProjectSubscriber implements EventSubscriberInterface
     {
         $checkForProject = $this->projectHelper->getActiveProject();
         $managerRoutes = [
-            'rule_create_choose_type' => ProjectMember::ROLE_EDITOR,
-            'rule_create_with_type' => ProjectMember::ROLE_EDITOR,
-            'rule_delete' => ProjectMember::ROLE_EDITOR,
+            'rules_field_rule_create_choose_type' => ProjectMember::ROLE_EDITOR,
+            'rules_field_rule_create_with_type' => ProjectMember::ROLE_EDITOR,
+            'rules_field_rule_delete' => ProjectMember::ROLE_EDITOR,
             'rule_package_add_choose_type' => ProjectMember::ROLE_EDITOR,
             'rule_package_add_with_type' => ProjectMember::ROLE_EDITOR,
             'rule_package_edit' => ProjectMember::ROLE_EDITOR,
@@ -220,8 +223,8 @@ class ProjectSubscriber implements EventSubscriberInterface
             'tools_import_simulate' => ProjectMember::ROLE_OWNER,
         ];
 
-        if ($activeRoute === 'rule_edit' && $request->getMethod() === 'POST') {
-            $managerRoutes['rule_edit'] = ProjectMember::ROLE_EDITOR;
+        if ($activeRoute === 'rules_field_rule_edit' && $request->getMethod() === 'POST') {
+            $managerRoutes['rules_field_rule_edit'] = ProjectMember::ROLE_EDITOR;
         }
 
         if ($activeRoute === 'project_delete') {
@@ -254,7 +257,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
     protected function getApiEndpoint(Request $request, string $activeRoute): string
     {
-        $apiEndpoint = $this->router->generate($activeRoute);
+        $apiEndpoint = $this->router->generate($activeRoute, $request->attributes->get('_route_params'));
 
         // If mosparo is set up with a prefix, remove the prefix from the API URL
         $prefix = $request->headers->get('x-forwarded-prefix', null);
@@ -263,5 +266,24 @@ class ProjectSubscriber implements EventSubscriberInterface
         }
 
         return $apiEndpoint;
+    }
+
+    /**
+     * The value of a query parameter is always a string. But some API endpoints expect
+     * integers as query parameters, so we need to convert them before we can continue.
+     *
+     * @param array $queryData
+     * @return array
+     */
+    protected function prepareQueryData(array $queryData): array
+    {
+        $intParameters = ['range', 'page', 'perPage'];
+        foreach ($queryData as $key => $value) {
+            if (in_array($key, $intParameters)) {
+                $queryData[$key] = intval($value);
+            }
+        }
+
+        return $queryData;
     }
 }

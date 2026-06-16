@@ -43,6 +43,12 @@
                         {{ 'settings.design.title'|trans }}
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ path('settings_translation_list', { '_projectId': activeProject.id }) }}" class="nav-link {% if app.request.attributes.get('_route') == 'settings_translation_list' %}active{% endif %}">
+                        <i class="ti ti-language"></i>
+                        {{ 'settings.translation.title'|trans }}
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="col-12 col-lg-10">

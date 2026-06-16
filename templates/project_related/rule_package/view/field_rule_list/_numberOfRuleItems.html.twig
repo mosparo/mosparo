@@ -1,0 +1,5 @@
+{% if row.numberOfItems %}
+    {{ row.numberOfItems }}
+{% else %}
+    {{ rule_package_count_rule_items(row) }}
+{% endif %}

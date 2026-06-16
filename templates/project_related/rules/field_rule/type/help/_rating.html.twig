@@ -1,0 +1,24 @@
+{% trans_default_domain 'mosparo' %}
+
+<h4>{{ 'rules.fieldRule.type.rating.title'|trans }}</h4>
+<p>
+    {{ 'rules.fieldRule.type.rating.intro'|trans }}
+</p>
+<p>
+    {{ 'rules.fieldRule.type.rating.infoCalculationMethod'|trans }}
+</p>
+<p>
+    {{
+        'rules.fieldRule.type.rating.infoDefaultAndDataType'|trans({
+            '%minValue%': '<code>' ~ (-1000000)|number_format ~ '</code>',
+            '%maxValue%': '<code>' ~ (1000000)|number_format ~ '</code>',
+            '%one%': '<code>1.0</code>'
+        })|raw
+    }}
+    {{
+        'rules.fieldRule.type.rating.infoValueEqualZero'|trans({
+            '%zero%': '<code>0.0</code>',
+        })|raw
+    }}
+
+</p>

@@ -56,6 +56,9 @@ project:
   list:
     name: Name
     projects: Projects
+    last: Last
+    valid: Valid
+    spam: Spam
     status: Status
     actions: Actions
 
@@ -68,6 +71,16 @@ project:
 
   search:
     placeholder: Search for…
+
+  statistics:
+    dropdown: Show statistics from
+    options:
+      disabled: Do not show the statistics
+      showLastDay: Past day
+      showMultipleDays: '%days% days'
+
+    noDataInTimeRangeOneDay: No data in the past day
+    noDataInTimeRangeDays: No data in the past %days% days
 
   action:
     manage: Manage projects
@@ -113,7 +126,15 @@ project:
     spamScoreHelp: Defines the number from which a submission will be rated a spam. If the rating of a submission is above this number, the submission is rated as spam.
     statisticStorageLimit: Statistic storage
     statisticStorageLimitHelp: Defines how long mosparo should keep the statistics in the database. This option has no connection to the storage range of the submissions, after which the submissions get deleted from the database (14 days).
+    silentModeEnabled: Enable the silent mode
+    silentModeEnabledHelp: If enabled, mosparo will accept every submission in the frontend. When the backend verifies the submission, mosparo will block the submission so that the backend can handle the situation with the user. Please remember that when using silent mode, every submission will pass through your backend, which can generate additional load.
+    spamDataReturned: Add spam detection data to verification response
+    spamDataReturnedHelp: If enabled, the verification API adds the spam detection data to the API response. With the data, you get more details on why a submission was spam or not.
     languageSource: Language source
+    metadataAllowed: Metadata allowed
+    metadataAllowedHelp: If enabled, the validation and verification APIs will accept metadata. This metadata is saved in the submission. With metadata, you can store additional information that does not represent a form field or client information.
+    metadataReturned: Add metadata to verification response
+    metadataReturnedHelp: If enabled, the verification API adds the metadata to the API response.
     apiDebugMode: API debug mode
     apiDebugModeHelp: If the API debug mode is enabled, the verification API will return more information about the verification process. This information can be relevant to understand why a verification failed. Use this option to help integrate mosparo into your form.
     verificationSimulationMode: Verification simulation mode
@@ -126,6 +147,10 @@ project:
 
     message:
       successfullyDeleted: The project %projectName% was deleted successfully.
+
+    deleteRulePackages:
+      intro1: There are rule packages present in this project. You cannot delete the project.
+      intro2: Please delete the rule packages first and then delete the project.
 
   roles:
     reader: Reader
@@ -142,258 +167,315 @@ dashboard:
   chart:
     valid: Valid
     spam: Spam
+    delayed: Delayed
+    blocked: Blocked
 
     annotation:
       statisticOnly: Statistic only
 
+  submissions:
+    summary:
+      validSubmission: 1 valid submission
+      validSubmissions: '%numberOfSubmissions% valid submissions'
+      spamSubmission: 1 spam submission
+      spamSubmissions: '%numberOfSubmissions% spam submissions'
+
+  requests:
+    title: Delayed or blocked Requests
+
+    summary:
+      delayedRequest: 1 delayed request
+      delayedRequests: '%numberOfRequests% delayed requests'
+      blockedRequest: 1 blocked request
+      blockedRequests: '%numberOfRequests% blocked requests'
+
 # Rules
-rule:
+rules:
   title: Rules
-  backToList: Back to rules
 
-  list:
-    name: Name
-    type: Type
-    status: Status
-    actions: Actions
+  fieldRule:
+    title: Field rules
+    backToList: Back to field rules
 
-  createChooseType:
-    title: Choose type
-    intro: Please choose the type of rule you want to create. The available types are used for different fields and cannot be changed for a rule afterward.
-
-  create:
-    title: Create rule
-
-    label:
-      ruleType: Rule type
-
-  edit:
-    title: Edit rule %ruleName%
-
-  form:
-    ruleType: Rule type
-
-    rule:
-      title: Rule
+    list:
       name: Name
-      description: Description
-      status: Status
-      spamRatingFactor: Spam rating factor
-      spamRatingFactorHelp: With the spam rating factor you can define a factor which strengthens or weakens the entries of this rule. If the value is greater than 1.0, the entries are strengthened, if the value is less than 1.0, the entries are weakened.
-
-    status:
-      unsavedChanges: '%counter% unsaved changes'
-      savingChanges: 'Saving %counter% changes'
-      nothingToSave: Nothing to save
-
-    items:
-      title: Items
       type: Type
-      value: Value
-      rating: Rating
+      status: Status
+      actions: Actions
+
+    createChooseType:
+      title: Choose type
+      intro: Please choose the type of field rule you want to create. The available types are used for different fields and cannot be changed for a field rule afterward.
+
+    create:
+      title: Create field rule
+
+      label:
+        ruleType: Rule type
+
+    edit:
+      title: Edit field rule %ruleName%
+
+    form:
+      ruleType: Field rule type
+
+      rule:
+        title: Field rule
+        name: Name
+        description: Description
+        status: Status
+        spamRatingFactor: Spam rating factor
+        spamRatingFactorHelp: With the spam rating factor you can define a factor which strengthens or weakens the entries of this field rule. If the value is greater than 1.0, the entries are strengthened, if the value is less than 1.0, the entries are weakened.
+
+      status:
+        unsavedChanges: '%counter% unsaved changes'
+        savingChanges: 'Saving %counter% changes'
+        nothingToSave: Nothing to save
+
+      items:
+        title: Items
+        type: Type
+        value: Value
+        rating: Rating
+
+      filter:
+        title: Filter items
+        useWildcard: Use %wildcard% as wildcard.
+        itemSpamRating: Item spam rating
+
+      noItemsInTable:
+        title: No items yet
+        text: This field rule does not contain any items yet.
+
+      nothingFound:
+        title: Nothing found
+        text: There are no items that match your filter.
+
+      addMultipleItems:
+        type: Type
+        items: Items
+        itemsHelp: Add one item per line.
+        rating: Rating
+        ratingHelp: If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.
+
+      modal:
+        importTxtFile:
+          title: Import text file
+          file: File
+          fileHelp: Please choose the text file (*.txt) you want to import from your computer.
+          action: Import file
+
+        importCsvFile:
+          title: Import CSV file
+          file: File
+          fileHelp: Please choose the CSV file (*.csv) you want to import from your computer.
+          action: Import file
+
+        addingItems:
+          title: Adding items
+          messageCompleted: The given data was processed. See the summary of the added, skipped, and invalid items above. You can close this window now.
+          progress:
+            dataProcessed: Data processed
+            processingPleaseWait: Processing data…
+            processingStats: Processed %processedBytes% of %totalBytes%
+            abortHint: If you close this window, the process will stop, and you must start again later.
+
+          summary:
+            addedLabel: Added
+            addedTooltip: These items are added to the rule.
+            skippedLabel: Skipped
+            skippedTooltip: These items already exist, so the import process skipped them.
+            invalidLabel: Invalid
+            invalidTooltip: Invalid items, for example when the item type is not existing or the value is in the wrong format.
+
+        deleteSelectedItems:
+          title: Delete selected items
+          confirm: Do you really want to delete the selected %counter% rule items?
+          confirmOne: Do you really want to delete the selected rule item?
+          confirmDelete: Yes, delete the items
+
+          progress:
+            deletingPleaseWait: Deleting items… Please wait…
+
+    delete:
+      title: Delete field rule %ruleName%
+      confirm: Do you really want to delete the field rule %ruleName%?
+
+      message:
+        successfullyDeleted: The field rule %ruleName% was deleted successfully.
 
     filter:
-      title: Filter items
-      useWildcard: Use %wildcard% as wildcard.
-      itemSpamRating: Item spam rating
+      dropdown: Filter the list of rules
+      options:
+        all: Show all
 
-    noItemsInTable:
-      title: No items yet
-      text: This rule does not contain any items yet.
-
-    nothingFound:
-      title: Nothing found
-      text: There are no items that match your filter.
-
-    addMultipleItems:
-      type: Type
-      items: Items
-      itemsHelp: Add one item per line.
-      rating: Rating
-      ratingHelp: If not set, the default rating is 1.0. If the rating is set to 0.0, the items will not be rated as spam items.
-
-    modal:
-      importTxtFile:
-        title: Import text file
-        file: File
-        fileHelp: Please choose the text file (*.txt) you want to import from your computer.
-        action: Import file
-
-      importCsvFile:
-        title: Import CSV file
-        file: File
-        fileHelp: Please choose the CSV file (*.csv) you want to import from your computer.
-        action: Import file
-
-      addingItems:
-        title: Adding items
-        messageCompleted: The given data was processed. See the summary of the added, skipped, and invalid items above. You can close this window now.
-        progress:
-          dataProcessed: Data processed
-          processingPleaseWait: Processing data…
-          processingStats: Processed %processedBytes% of %totalBytes%
-          abortHint: If you close this window, the process will stop, and you must start again later.
-
-        summary:
-          addedLabel: Added
-          addedTooltip: These items are added to the rule.
-          skippedLabel: Skipped
-          skippedTooltip: These items already exist, so the import process skipped them.
-          invalidLabel: Invalid
-          invalidTooltip: Invalid items, for example when the item type is not existing or the value is in the wrong format.
-
-      deleteSelectedItems:
-        title: Delete selected items
-        confirm: Do you really want to delete the selected %counter% rule items?
-        confirmOne: Do you really want to delete the selected rule item?
-        confirmDelete: Yes, delete the items
-
-        progress:
-          deletingPleaseWait: Deleting items… Please wait…
-
-  delete:
-    title: Delete rule %ruleName%
-    confirm: Do you really want to delete the rule %ruleName%?
-
-    message:
-      successfullyDeleted: The rule %ruleName% was deleted successfully.
-
-  filter:
-    dropdown: Filter the list of rules
-    options:
-      all: Show all
-
-  type:
-    domain:
-      title: Domain
-      shortIntro: Allows to filter by specific domains
-      intro: The domain rule type allows to filter for domains.
-      label: Domain
-      placeholder: example.com
-
+    type:
       domain:
         title: Domain
-        intro: Enter a domain which is not allowed to submit a submission. If you enter a domain it will also catch all email addresses with this domain.
+        shortIntro: Allows to filter by specific domains
+        intro: The domain rule type allows to filter for domains.
+        label: Domain
+        placeholder: example.com
 
-    email:
-      title: Email
-      shortIntro: Allows to filter by specific email addresses
-      intro: The email rule type allows to filter for email addresses.
-      label: Email address
-      placeholder: info@example.com
+        domain:
+          title: Domain
+          intro: Enter a domain which is not allowed to submit a submission. If you enter a domain it will also catch all email addresses with this domain.
 
       email:
-        title: Email address
-        intro: Enter an email address which is not allowed to submit a submission.
+        title: Email
+        shortIntro: Allows to filter by specific email addresses
+        intro: The email rule type allows to filter for email addresses.
+        label: Email address
+        placeholder: info@example.com
 
-    ipAddress:
-      title: IP address
-      shortIntro: Allows to filter by ip addresses and subnets
-      intro: The IP address rule type allows to filter for IP addresses or subnets.
-      label: IP address/Subnet
-      placeholder: 0.0.0.0
+        email:
+          title: Email address
+          intro: Enter an email address which is not allowed to submit a submission.
 
       ipAddress:
         title: IP address
-        intro: Enter an IP address which is not allowed to make any submissions.
+        shortIntro: Allows to filter by IP addresses and subnets
+        intro: The IP address rule type allows to filter for IP addresses or subnets.
+        label: IP address/Subnet
+        placeholder: 0.0.0.0
 
-      subnet:
-        title: Subnet
-        intro: Enter a subnet with mask which is not allowed to make any submissions.
+        ipAddress:
+          title: IP address
+          intro: Enter an IP address which is not allowed to make any submissions.
 
-    provider:
-      title: Provider
-      shortIntro: Allows to filter by provider specific information
-      intro: The provider rule type allows to filter for AS numbers and country codes.
-      infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
-      label: AS number/Country
+        subnet:
+          title: Subnet
+          intro: Enter a subnet with mask which is not allowed to make any submissions.
 
-      action:
-        configureGeoip2: GeoIP2 Configuration
+      provider:
+        title: Provider
+        shortIntro: Allows to filter by provider specific information
+        intro: The provider rule type allows to filter for AS numbers and country codes.
+        infoGeoip2: To use the provider type it is required to configure the MindMax GeoLite2 database, otherwise, the provider items will not have any effect.
+        label: AS number/Country
 
-      asNumber:
-        title: AS number
-        intro: Enter an AS number which is not allowed to make any submissions. All IP addresses which belongs to this AS number will be blocked.
+        action:
+          configureGeoip2: GeoIP2 Configuration
 
-      country:
-        title: Country
-        intro: Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.
-        infoCountryBlock: If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side it could mean that this will block a real user from submitting a form. Please be careful with this option. The correct localization of IP addresses is never guaranteed.
+        asNumber:
+          title: AS number
+          intro: Enter an AS number which is not allowed to make any submissions. All IP addresses which belongs to this AS number will be blocked.
 
-    unicodeBlock:
-      title: Unicode block
-      shortIntro: Filters the input based on the characters used.
-      intro: The Unicode block rule type allows to evaluate the use of certain characters.
-      label: Unicode block
+        country:
+          title: Country
+          intro: Enter an ISO country code which is not allowed to make any submissions. All IP addresses which are registred in this country will be marked as spam.
+          infoCountryBlock: If you add a country to the rule, it means that nobody from this country can make a submission. While this sounds good on one side it could mean that this will block a real user from submitting a form. Please be careful with this option. The correct localization of IP addresses is never guaranteed.
 
-      block:
-        title: Block
-        intro: Please select one of the blocks which should be rated accordingly during input. Then enter a corresponding rating.
-        hintExtended: Please note that there are extensions and additions to some blocks, which must also be added as a rule entry.
-        explanationCounting: In the validation, each block is counted only once, even if several characters from one block were used.
-        exampleCounting: Suppose you enter a rule entry with the "Smileys" block with a rating of 3 points. In a submission, the user uses 5 smileys. The submission is now rated with 3 points because a smiley was used.
+      unicodeBlock:
+        title: Unicode block
+        shortIntro: Filters the input based on the characters used.
+        intro: The Unicode block rule type allows to evaluate the use of certain characters.
+        label: Unicode block
 
-    userAgent:
-      title: User agent
-      shortIntro: Allows to filter by specific words or patterns in the user agent
-      intro: The user agent rule type allows to filter for words and Regular Expression patterns in the user agent of the user.
-      label: User agent (Word/Pattern)
+        block:
+          title: Block
+          intro: Please select one of the blocks which should be rated accordingly during input. Then enter a corresponding rating.
+          hintExtended: Please note that there are extensions and additions to some blocks, which must also be added as a rule entry.
+          explanationCounting: In the validation, each block is counted only once, even if several characters from one block were used.
+          exampleCounting: Suppose you enter a rule entry with the "Smileys" block with a rating of 3 points. In a submission, the user uses 5 smileys. The submission is now rated with 3 points because a smiley was used.
 
-      text:
-        title: Text
-        intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
+      userAgent:
+        title: User agent
+        shortIntro: Allows to filter by specific words or patterns in the user agent
+        intro: The user agent rule type allows to filter for words and Regular Expression patterns in the user agent of the user.
+        label: User agent (Word/Pattern)
 
-      regex:
-        title: Regular Expression
-        intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
+        text:
+          title: Text
+          intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
 
-        validation:
-          invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
+        regex:
+          title: Regular Expression
+          intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
 
-    website:
-      title: Website
-      shortIntro: Allows to filter by specific websites
-      intro: The website rule type allows to filter for URLs.
-      label: URL/Domain
-      placeholder: 'https://example.com'
+          validation:
+            invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
 
-      url:
-        title: URL
-        intro: Enter an URL which is not allowed to submit a submission.
-        infoProtocol: It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs. If the value does not start with the protocol the rule could match wrong URLs.
+      website:
+        title: Website
+        shortIntro: Allows to filter by specific websites
+        intro: The website rule type allows to filter for URLs.
+        label: URL/Domain
+        placeholder: 'https://example.com'
 
-    word:
-      title: Word
-      shortIntro: Allows to filter by specific words or patterns
-      intro: The word rule type allows to filter for words and Regular Expression patterns.
-      label: Word/Pattern
+        url:
+          title: URL
+          intro: Enter an URL which is not allowed to submit a submission.
+          infoProtocol: It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs. If the value does not start with the protocol the rule could match wrong URLs.
 
-      text:
-        title: Text
-        intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
+      word:
+        title: Word
+        shortIntro: Allows to filter by specific words or patterns
+        intro: The word rule type allows to filter for words and Regular Expression patterns.
+        label: Word/Pattern
 
-      wExact:
-        title: Exact word
-        intro: Enter a word that should be matched exactly. To match it, the word must be delimited by a non-word character (like a dot, a comma) in the value or needs to be written at the start and/or at the end of a value. A word in another word is not matched (for example, "data" in "database" will not match).
+        text:
+          title: Text
+          intro: Enter a word which should be rated as spam. You can use the star %star% as wildcard. The matching functionality will search for %value%, so you do not have to add the wildcard character at the beginning or at the end of the value.
 
-      wFull:
-        title: Entire field
-        intro: Enter the full value of a field that should be rated as spam. You can use this type to match the entire content of a field, for example, to match the whole content of a name field. Spaces around the content will be ignored.
+        wExact:
+          title: Exact word
+          intro: Enter a word that should be matched exactly. To match it, the word must be delimited by a non-word character (like a dot, a comma) in the value or needs to be written at the start and/or at the end of a value. A word in another word is not matched (for example, "data" in "database" will not match).
 
-      regex:
-        title: Regular Expression
-        intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
+        wFull:
+          title: Entire field
+          intro: Enter the full value of a field that should be rated as spam. You can use this type to match the entire content of a field, for example, to match the whole content of a name field. Spaces around the content will be ignored.
 
-        validation:
-          invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
+        regex:
+          title: Regular Expression
+          intro: Enter a Regular Expression pattern which will match a not allowed word. The pattern has to follow the PHP Regular Expression requirements.
 
-    rating:
-      title: Rating
-      intro: The rating field allows you to define an item's weight. If you specify a positive number, you can assign a higher value to an item. If you specify a negative number, the item will reduce the total number of points.
-      infoCalculationMethod: The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.
-      infoDefaultAndDataType: The rating is a float number from %minValue% to %maxValue%. If no rating is defined, the default rating is %one%.
-      infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
-      placeholder: Rating
+          validation:
+            invalidRegexPattern: 'The entered pattern is invalid. Error: %error%'
+
+      rating:
+        title: Rating
+        intro: The rating field allows you to define an item's weight. If you specify a positive number, you can assign a higher value to an item. If you specify a negative number, the item will reduce the total number of points.
+        infoCalculationMethod: The spam rating value will be calculated by multiplying the item rating and the spam rating factor which is defined in the rule.
+        infoDefaultAndDataType: The rating is a float number from %minValue% to %maxValue%. If no rating is defined, the default rating is %one%.
+        infoValueEqualZero: If the rating is set to %zero%, the item will not be detected as spam since the spam rating value will be %zero% in any case.
+        placeholder: Rating
+
+  submissionRule:
+    title: Submission rules
+    backToList: Back to submission rules
+
+    list:
+      name: Name
+      status: Status
+      actions: Actions
+
+    configure:
+      title: Configure rule %ruleName%
+
+    form:
+      enableRule: Enable rule
+      rating: Rating
+      ratingHelp: Please set the number of points that this rule should add to the submission if it matches your submission. The rating is added to the submission once, not per field.
+
+      message:
+        successfullySaved: The submission rule was successfully saved.
+
+submissionRule:
+  randomValues:
+    title: Random values
+    summary: Detects random values in one or multiple form fields.
+    description: This submission rule detects random values in one or multiple fields of your form. The random values are usually 15 or more characters long and consist of characters and numbers, but do not contain any valid information.
+
+    field:
+      numberOfMatchingFields: Number of matching fields
+      numberOfMatchingFieldsHelp: Please specify how many fields of your form must contain such a random value to match this submission rule.
+      matchTextarea: Match textarea
+      matchTextareaHelp: Textarea fields may contain random values by default, for example, if someone adds a URL to the textarea. With this option, you can enable the submission rule for textareas too.
+      numberOfRandomCharacters: Number of characters to match
+      numberOfRandomCharactersHelp: Normally, these random values are 15 or more characters long. If you have random values with fewer than 15 characters, you can adjust the rule logic with this setting. But please be aware that a number too low can match other things, like names.
+      requireBothCases: Requires lowercase and uppercase characters
+      requireBothCasesHelp: The random values normally consist of uppercase and lowercase characters as well as numbers. The rule, therefore, only matches if both uppercase and lowercase characters are found in a string. To match it independently of the case, please turn off this option.
 
 # Rule package
 rulePackage:
@@ -452,8 +534,8 @@ rulePackage:
       noRulePackageCache: There is no rule package cache stored for this rule package. This means that the download was not successful or something else went wrong.
 
     includedRules:
-      title: Included rules
-      ruleDetails: Rule details
+      title: Included field rules
+      ruleDetails: Field rule details
       name: Name
       description: Description
       spamRatingFactor: Spam rating factor
@@ -463,14 +545,14 @@ rulePackage:
       rating: Rating
 
     list:
-      rules:
+      fieldRules:
         name: Name
         type: Type
         numberOfRuleItems: Number of items
         spamRatingFactor: Spam rating factor
         actions: Actions
 
-      ruleItems:
+      fieldRuleItems:
         type: Type
         value: Value
         spamRatingFactor: Spam rating factor
@@ -510,11 +592,11 @@ rulePackage:
         example:
           intro: This example shows the configuration required for the mosparo RPG profile. Please see the documentation for other options.
 
-    rule:
-      title: View rule %ruleName%
+    fieldRule:
+      title: View field rule %ruleName%
 
       details:
-        title: Rule details
+        title: Field rule details
         name: Name
         type: Type
         spamRatingFactor: Spam rating factor
@@ -524,9 +606,43 @@ rulePackage:
 
       backToRulePackage: Back to rule package
 
+  updateCache:
+    title: Update cache
+    intro:
+      all: To use the rule packages, they need to be imported. For this, mosparo will create a local cache with the content of each rule package. Depending on the size of the rule packages, this can take a moment.
+      one: To use the rule package, it need to be imported. For this, mosparo will create a local cache with the content of the rule package. Depending on the size of the rule package, this can take a moment.
+
+    hintCronjob: You can automate this step by using cron jobs. You can find more about that in %linkStart%mosparo's documentation%linkEnd%.
+
+    alert:
+      doNotLeave: Please do not leave this page while the process is completed. If you leave this page, the process will stop, and the cache will not be up to date.
+      processCompleted: The process is completed. You can leave this page now.
+
+    progress:
+      rulePackage: Rule package
+      status: Status
+      progress: Progress
+
+    status:
+      pleaseWait: Please wait...
+      importing: Importing...
+      cleanup: Cleanup...
+      completed: Completed
+      upToDate: Up-to-date
+      tooSoon: Too soon
+      failed: Failed
+
   delete:
     title: Delete rule package %rulePackageName%
     confirm: Do you really want to delete the rule package %rulePackageName%?
+
+    process:
+      title: Deleting rule package %rulePackageName%
+      intro: Please wait while mosparo deletes the rule package. This can take a while, depending on the size of the rule package.
+
+      alert:
+        doNotLeave: Please do not leave this page while the process is completed. If you leave this page, the process will stop, and the rule package may not be deleted.
+        processCompleted: The rule package is deleted. You can leave this page now.
 
     message:
       successfullyDeleted: The rule package %rulePackageName% was deleted successfully.
@@ -558,6 +674,7 @@ submission:
 
   view:
     title: Submission %submissionId%
+    goToDetails: Details
 
     action:
       goToNewerSubmission: Newer
@@ -588,6 +705,8 @@ submission:
       title: Source
       pageTitle: Page title
       pageUrl: Page URL
+      formActionUrl: Form action URL
+      formId: Form ID
       requestedAt: Requested at
 
     ignoredFields:
@@ -607,6 +726,10 @@ submission:
         invalid: Verification failed
         notVerified: Not verified
         hasPoints: Points
+
+      metadata:
+        title: Metadata
+        noMetadataAvailable: No metadata available
 
       client:
         title: Client
@@ -742,6 +865,15 @@ submission:
           title: 'Step 10: Verify the response'
           intro: mosparo will answer your API request with a JSON string. Decode the JSON string and check if a key %codeStart%valid%codeEnd% exists and is set to %codeStart%true%codeEnd%. If that's the case, ensure that the key %codeStart%verificationSignature%codeEnd% is set as well and is equal to the verification signature generated in step 6. If that's the case, the response is valid.
 
+    ratingDetails:
+      title: Rating details
+      origin: Origin
+      details: Details
+      rating: Rating
+      submissionRules: Submission rules
+      fieldRules: Field rules
+      total: Total
+
 # Settings
 settings:
   title: Project settings
@@ -785,6 +917,7 @@ settings:
       spamDetectionOptions: Spam detection options
       statisticsOptions: Statistic options
       languageOptions: Language options
+      metadataOptions: Metadata options
       developerOptions: Developer options
 
   projectMember:
@@ -853,16 +986,30 @@ settings:
           priority: Priority
           priorityHelp: Defines in which order the guidelines will be tested. The highest guideline will be tested first.
 
+        categories:
+          ipBased:
+            label: IP-based
+            intro: The IP-based criteria utilize the user's IP address to determine the required security policy. These criteria help match the user who accesses a form (for example, matching your own IP address for less restrictive security settings).
+          formBased:
+            label: Form-based
+            intro: The form-based criteria use the information of the form in which mosparo is integrated to determine the required security policy. These criteria help differentiate between different forms within the same project (for example, other security settings for a login form than for a contact form).
+
         criteria:
           title: Criteria
           intro: Please define the criteria for this guideline. With the criteria, you can define for which origin these security settings should be used.
-          intro2: The guideline will be used for the user as soon as one of these criteria matches. You must add at least one criterion to save the guideline.
+          intro2: You can specify criteria in both categories, or you can specify only IP- or form-based criteria. The guideline will be applied to the user as soon as one of these criteria per category (IP-based or form-based) is met. You must add at least one criterion to save the guideline.
           subnets: Subnets
           subnetsHelp: "Add the subnets for which this guideline should be considered. You can define IPv4 or IPv6 subnets. You can see the IP address in the submission details. Example: 192.168.1.0/24"
           countryCodes: Country codes
           countryCodesHelp: "Add the country codes (ISO alpha-2) for which this guideline should be considered. You can see the country code in the submission details. Example: CH"
           asNumbers: AS numbers
           asNumbersHelp: "Add the AS numbers for which this guideline should be considered. You can see the AS number in the submission details. Example: 123456"
+          formPageUrls: Form page URLs
+          formPageUrlsHelp: 'Add the URLs of the forms for which this guideline should be considered. You can define an absolute URL or use the asterisk (*) as a wildcard. Example: https://example.com/contact/'
+          formActionUrls: Form action URLs
+          formActionUrlsHelp: 'Add the form action URLs for which this guideline should be considered. You can define an absolute URL or use the asterisk (*) as a wildcard. Example: https://example.com/contact/'
+          formIds: Form IDs
+          formIdsHelp: 'Add the form IDs for which this guideline should be considered. Please specify the ID without the hash sign (#). Example: contact-form'
 
         settings:
           title: Override settings
@@ -976,7 +1123,7 @@ settings:
     title: Design
 
     subtitles:
-      dimensionSettings: Dimensions
+      dimensionSettings: Dimensions and font size
       colorSettings: Colors
       simpleDesign: Simple design
       invisibleSimpleDesign: Invisible simple design
@@ -985,12 +1132,18 @@ settings:
       dimensions:
         mosparoBox: mosparo Box
         checkbox: Checkbox
+        text: Text
       colors:
         normal: Normal
         focus: On focus and hover
         loading: When loading
         success: Success
         failure: Failure
+        invisible: Invisible
+
+    intro:
+      colors:
+        invisible: If you use mosparo in a multistep form, the invisible mode is used to store data in mosparo when you switch between steps.
 
     dropdown:
       title: Design mode
@@ -1015,6 +1168,8 @@ settings:
       boxBorderWidth: Border width
       checkboxRadius: Checkbox radius
       checkboxBorderWidth: Checkbox border width
+      fontSize: Font size
+      lineHeight: Line height
       showMosparoLogo: Show mosparo logo below the checkbox
       showPingAnimation: Show ping animation to highlight the checkbox
       invisibleLogo: Logo
@@ -1063,6 +1218,46 @@ settings:
     simpleDesign:
       introColors: Please choose the colors which your website has. The background color is required to calculate the correct contrast ratio, the foreground color represents your text color, and the accent color is used for the special elements of the mosparo box.
       introPreview: On the right side, you'll see a preview of the mosparo box on your website.
+
+  translation:
+    title: Translations
+    backToList: Back to translations
+
+    list:
+      locale: Locale
+      translationKey: Base text
+      text: Translated text
+      actions: Actions
+
+    add:
+      title: Add translation
+
+    edit:
+      title: Edit translation
+
+    form:
+      locale: Locale
+      localeHelp: Please enter the locale either as a two-character language code (ISO 639-1; for example, en) or combined with a country code (for example, en_US).
+      localePlaceholder: en or en_US
+      translationKey: Base text
+      text: Translated text
+      usePlaceholders: This base text contains placeholders (%datetime% or %seconds%). Please place these placeholders at the correct position in your translated text. mosparo will replace the placeholders with the dynamic values.
+
+      translationKeyGroup:
+        mainLabel: Main label
+        accessibility: Accessibility
+        error: Error
+        honeyPot: Honeypot
+
+      message:
+        successfullySaved: The translation was saved successfully.
+
+    delete:
+      title: Delete translation
+      confirm: Do you really want to delete the translation?
+
+      message:
+        successfullyRemoved: The translation was deleted successfully.
 
 tools:
   title: Tools
@@ -1116,7 +1311,7 @@ tools:
         noMatchingRules: No rule matched the test value.
 
   importExport:
-    infoRulesWithManyItems: Rules with hundreds of items can consume a lot of memory when exporting or importing these rules. This can lead to an error when you try to do it in the browser. Please increase the memory limit of the PHP process in such a case or use the CLI command to import or export the rules.
+    infoRulesWithManyItems: Field rules with hundreds of items can consume a lot of memory when exporting or importing these field rules. This can lead to an error when you try to do it in the browser. Please increase the memory limit of the PHP process in such a case or use the CLI command to import or export the field rules.
 
   export:
     title: Export
@@ -1133,21 +1328,21 @@ tools:
     intro: If you want to copy the data from another project into this one, please choose the file to import and which data you want to import. If you import the rules, please choose how mosparo should handle existing rules.
     intro2: After you've selected all the data, please click the button below. mosparo will analyze the file and gives you a summary of what will be changed before anything is imported.
     importData: Data to import
-    infoOverrideData: The settings, as well as the rule packages, will always be overridden in the project. For the rules, you have to choose what mosparo should do with existing rules. Rule packages created before version 1.4.0 of mosparo may have a different ID and not match the import file.
+    infoOverrideData: The settings, as well as the rule packages, will always be overridden in the project. For the field rules, you have to choose what mosparo should do with existing field rules. Rule packages created before version 1.4.0 of mosparo may have a different ID and not match the import file.
 
     backToImport: Back to import
 
     form:
       importFile: File to import
-      handlingExistingRules: Handling of existing rules
+      handlingExistingFieldRules: Handling of existing field rules
 
       choice:
         override: Override
-        overrideHelp: All existing rules will be overridden with the rule from the import file. All additional rule items will be deleted.
+        overrideHelp: All existing field rules will be overridden with the field rule from the import file. All additional field rule items will be deleted.
         append: Append
-        appendHelp: mosparo will append the rule items from the file to the existing rules but will not delete any rule items.
+        appendHelp: mosparo will append the field rule items from the file to the existing field rules but will not delete any rule items.
         add: Add
-        addHelp: mosparo will add existing rules as new rules. The new rules will receive a new identifier.
+        addHelp: mosparo will add existing field rules as new rules. The new field rules will receive a new identifier.
 
     message:
       changesSuccessfullyExecuted: The changes were executed successfully.
@@ -1155,6 +1350,7 @@ tools:
     errorMessage:
       selectAtLeastOneElement: Select at least one element that you want to import.
       fileUploadError: The file was not uploaded correctly. Please check the log file.
+      selectHandlingMode: Select one of the handling modes of the existing rules.
 
     simulate:
       title: Available changes
@@ -1163,9 +1359,7 @@ tools:
       noChangesFound: The project is already the same as the data in the import file, and no changes are available.
 
       changes:
-        notActive: This section is not active for this import.
-        notInExport: This section is not available in the import file.
-        noChangesRequired: For this section are no changes required since everything is up to date already.
+        notInExportMessage: Some of the selected data are not available in the import file. Please export the project again and select all the required data.
 
       table:
         name: Name
@@ -1187,6 +1381,12 @@ tools:
         guidelineNew: New guideline
         guidelineModify: Modification required
         guidelineEqual: No modification required
+        locale: Locale
+        translationKey: Base text
+        text: Translated text
+        submissionRule: Submission rule
+        rating: Rating
+        modifyConfigValues: Modify values
 
       errorMessage:
         jobDataFileNotFound: Job data file for token does not exist.
@@ -1207,8 +1407,12 @@ tools:
     designSettingsHelp: Includes all settings related to the design of a project.
     securitySettings: Security settings
     securitySettingsHelp: Includes all settings related to the security of a project.
-    rules: Rules
-    rulesHelp: Includes all rules of a project.
+    translations: Translations
+    translationsHelp: Includes all translations that were added to a project.
+    submissionRules: Submission rules
+    submissionRulesHelp: Includes all configured submission rules of a project.
+    fieldRules: Field rules
+    fieldRulesHelp: Includes all field rules of a project.
     rulePackages: Rule packages
     rulePackagesHelp: Includes all rule packages of a project.
 
@@ -1237,6 +1441,7 @@ administration:
       title: Interface settings
       form:
         defaultColorMode: Default color mode
+        defaultNumberOfItemsPerPage: Default number of items per page
 
     mailSettings:
       title: Mail settings
@@ -1448,6 +1653,39 @@ administration:
         infoAbsolutePath: You maybe have to adjust the path of the %pathToBinConsole% file. It could be possible that you have to fill in the absolute path.
         infoRateLimit: Please remember that the number of downloads a license key can make is limited. Please do not use the download functionality to often.
 
+  throughputStatistics:
+    title: Throughput statistics
+    description: Shows the submission and request statistics processed by mosparo across all projects.
+    backToOverview: Back to overview
+
+    chartTitles:
+      submissions: Submissions from all projects
+      requests: Requests from all projects
+
+    requests:
+      delays:
+        title: Active delays
+        numberOfActiveDelays: Number of active delays
+        longestActiveDelay: Longest active delay
+        noActiveDelays: There are no active delays at the moment.
+
+      lockouts:
+        title: Active lockouts
+        numberOfActiveLockouts: Number of active lockouts
+        longestActiveLockout: Longest active lockout
+        noActiveLockouts: There are no active lockouts at the moment.
+
+    reset:
+      delay:
+        title: Reset delays
+        confirm: Are you sure that you wanna reset all delays? If you do that, everyone who was delayed before can request the forms again without any hurdles.
+        successfullyResetted: The delays were reset successfully.
+
+      lockout:
+        title: Reset lockouts
+        confirm: Are you sure that you wanna reset all lockouts? If you do that, everyone who was blocked before can request the forms again without any hurdles.
+        successfullyResetted: The lockouts were reset successfully.
+
   update:
     title: Update
     description: Check for new versions and update your mosparo installation.
@@ -1611,6 +1849,7 @@ account:
       timeFormat: Time format
       timezone: Timezone
       colorMode: Color mode
+      numberOfItemsPerPage: Number of items per page
 
     message:
       successfullySaved: Your settings were saved successfully.
@@ -1765,6 +2004,9 @@ action:
   howToImport: How to import
   toggleDropdown: Toggle dropdown
   filter: Filter
+  updateCache: Update cache
+  goToRulePackage: Go to rule package
+  goToRulePackages: Go to rule packages
 
 # General values
 general:
@@ -1782,6 +2024,8 @@ state:
   ignored: Ignored
   yes: Yes
   no: No
+  enabled: Enabled
+  disabled: Disabled
 
 # Roles
 roles:

@@ -8,7 +8,7 @@ use Mosparo\Entity\Project;
 use Mosparo\Enum\RulePackageType;
 use Mosparo\Exception\ImportException;
 use Mosparo\Helper\ImportHelper;
-use Mosparo\Rule\RuleTypeManager;
+use Mosparo\Rules\FieldRule\RuleTypeManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -115,7 +115,7 @@ class ImportCommand extends Command
         ];
 
         try {
-            [$jobData, $importData, $hasChanges, $changes] = $this->importHelper->simulateImport(null, $importData);
+            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $this->importHelper->simulateImport(null, $importData);
         } catch (ImportException $e) {
             $output->writeln($formatter->formatBlock([$e->getMessage()], 'error', true));
             return Command::FAILURE;

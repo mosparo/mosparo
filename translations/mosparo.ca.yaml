@@ -45,6 +45,9 @@ project:
     projects: Projectes
     status: Estat
     actions: Accions
+    last: Darrers
+    valid: Vàlids
+    spam: Brossa
   filter:
     dropdown: Filtra la llista de projectes
     options:
@@ -53,6 +56,8 @@ project:
       inactive: Mostra els projectes inactius
   search:
     placeholder: Cerca…
+  statistics:
+    dropdown: Mostra estadístiques de
   form:
     name: Nom
     description: Descripció
@@ -87,58 +92,6 @@ dashboard:
   title: Tauler
   chart:
     spam: Brossa
-rule:
-  title: Regles
-  list:
-    name: Nom
-    type: Tipus
-    status: Estat
-    actions: Accions
-  form:
-    rule:
-      title: Regla
-      name: Nom
-      description: Descripció
-      status: Estat
-    items:
-      title: Elements
-    addMultipleItems:
-      items: Elements
-      rating: Valoració
-    modal:
-      deleteSelectedItems:
-        progress:
-          deletingPleaseWait: S'estan suprimint els elements… Espereu…
-  type:
-    domain:
-      title: Domini
-      placeholder: exemple.com
-      domain:
-        title: Domini
-    email:
-      title: Adreça electrònica
-    ipAddress:
-      placeholder: 0.0.0.0
-      subnet:
-        title: Subxarxa
-    provider:
-      title: Proveïdor
-      country:
-        title: País
-    userAgent:
-      text:
-        title: Text
-    website:
-      title: Lloc web
-      url:
-        title: URL
-    word:
-      title: Paraula
-      text:
-        title: Text
-    rating:
-      title: Valoració
-      placeholder: Valoració
 submission:
   list:
     id: Id.
