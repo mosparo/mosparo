@@ -3,3 +3,631 @@ project:
     silentModeEnabled: Activar modo silencioso
     silentModeEnabledHelp: Si se activa, mosparo aceptará cualquier envío en el frontend. Cuando el backend compruebe el envío, mosparo bloqueará los envíos hasta que el backend pueda gestionar la situación con el usuario. Por favor recuerda que cuando se utiliza el modo silencio, cualquier envío pasará a través de tu backend, lo cual puede generar carga adicional.
     spamDataReturned: Añadir detección de spam a la verificación de respuesta
+    name: Nombre
+    description: Descripción
+    hosts: Anfitriones
+    status: Estado
+    projectGroup: Grupo de proyectos
+  title: Proyectos
+  list:
+    name: Nombre
+    projects: Proyectos
+    status: Estado
+    actions: Acciones
+    spam: Basura
+  action:
+    settings: Configuración
+    create: Crear
+    manage: Gestionar proyectos
+    id: Id. de proyecto
+    delete: Eliminar proyecto
+    goto: Ir al proyecto
+  roles:
+    reader: Lector
+    editor: Editor
+    owner: Propietario
+  filter:
+    options:
+      all: Mostrar todo
+      active: Mostrar proyectos activos
+      inactive: Mostrar proyectos inactivos
+    dropdown: Filtrar la lista de proyectos
+  search:
+    placeholder: Buscar…
+  create:
+    title: Crear proyecto
+  infoNoProjectsInThisGroup: No hay ningún proyecto en este grupo.
+  infoCreateProjectOrRequestAccess: Cree un proyecto nuevo o solicite acceso a otro proyecto.
+  createWizard:
+    connection:
+      title: Detalles de conexión
+    security:
+      title: Activar funcionalidades de seguridad
+tools:
+  import:
+    simulate:
+      table:
+        criteria: Criterios
+        securitySettings: Configuración de seguridad
+        guidelineNew: Directriz nueva
+        guidelineModify: Modificación requerida
+        guidelineEqual: No se requiere ninguna modificación
+        locale: Configuración regional
+        translationKey: Texto de base
+        text: Texto traducido
+        submissionRule: Regla de envío
+        name: Nombre
+        type: Tipo
+        status: Estado
+        add: Añadir
+        modify: Modificar
+        items: Elementos
+        itemsAdd: Añadir
+        itemsModify: Modificar
+        itemsRemove: Quitar
+        priority: Prioridad
+        modifyConfigValues: Modificar valores
+        rating: Valoración
+        source: Fuente
+    title: Importar
+    form:
+      choice:
+        add: Añadir
+  title: Herramientas
+  ruleTester:
+    types:
+      userAgent: Agente de usuario
+      ipAddress: Dirección IP
+    result:
+      table:
+        value: Valor
+        rating: Valoración
+  export:
+    title: Exportar
+  eiParts:
+    submissionRules: Reglas de envío
+    submissionRulesHelp: Incluye todas las reglas de envío configuradas de un proyecto.
+    fieldRules: Reglas de campo
+    fieldRulesHelp: Incluye todas las reglas de campo de un proyecto.
+    rulePackages: Paquetes de reglas
+    rulePackagesHelp: Incluye todos los paquetes de reglas de un proyecto.
+    translations: Traducciones
+projectGroup:
+  form:
+    name: Nombre
+    description: Descripción
+    parentGroup: Grupo contenedor
+    tooltip:
+      activeGroup: Está editando este grupo.
+    message:
+      successfullySaved: El grupo de proyectos %projectGroupName% se guardó correctamente.
+  mainGroup: Grupo principal
+  action:
+    edit: Editar grupo
+    delete: Eliminar grupo
+    openMainGroup: Volver al grupo principal
+    openParentGroupName: Volver a %name%
+    openParentGroup: Abrir grupo contenedor
+    openGroup: Abrir grupo
+    backToList: Volver a lista de proyectos
+  create:
+    title: Crear grupo de proyectos
+  edit:
+    title: Editar grupo de proyectos %projectGroupName%
+  delete:
+    title: Eliminar grupo de proyectos %projectGroupName%
+    confirm: ¿Realmente quiere eliminar el grupo de proyectos %projectGroupName%?
+    reassignChildren: Todos los grupos y proyectos contenidos en este grupo de proyectos se asignarán automáticamente al grupo contenedor.
+dashboard:
+  title: Tablero
+  chart:
+    valid: Válido
+    spam: Basura
+submission:
+  title: Envíos
+  list:
+    id: Id.
+    page: Página
+    spam: Basura
+    verification: Verificación
+    valid: Válido
+    actions: Acciones
+    ipAddress: Dirección IP
+  view:
+    spam:
+      title: Basura
+    verification:
+      title: Verificación
+    source:
+      title: Fuente
+    data:
+      value: Valor
+      rating: Valoración
+      formData:
+        hasPoints: Puntos
+      client:
+        title: Cliente
+        userAgent: Agente de usuario
+        country: País
+        ipAddress: Dirección IP
+      fieldMustBeEmpty: El campo debe estar vacío
+    verificationSimulation:
+      labels:
+        authorization: Autorización
+        username: Nombre de usuario
+        password: Contraseña
+        method: Método
+        headers: Cabeceras
+        response: Respuesta
+    ratingDetails:
+      rating: Valoración
+      submissionRules: Reglas de envío
+    verificationIssues:
+      labels:
+        message: Mensaje
+    title: Envío %submissionId%
+    goToDetails: Detalles
+    action:
+      goToNewerSubmission: Más recientes
+      goToOlderSubmission: Más antiguos
+  filter:
+    dropdown: Filtrar la lista de envíos
+    options:
+      all: Todos los envíos
+      spam: Envíos basura
+      valid: Envíos válidos
+settings:
+  general:
+    action:
+      reissue: Reemitir
+    connectionDetails:
+      host: Anfitrión
+  projectMember:
+    list:
+      user: Usuario
+      role: Rol
+      actions: Acciones
+    form:
+      role: Rol
+  security:
+    title: Seguridad
+    guideline:
+      list:
+        name: Nombre
+        priority: Prioridad
+        actions: Acciones
+      form:
+        guideline:
+          title: Directriz
+          name: Nombre
+          description: Descripción
+          priority: Prioridad
+        criteria:
+          title: Criterios
+          subnets: Subredes
+          countryCodes: Códigos de país
+          formActionUrls: URL de acción de formulario
+          formPageUrls: URL de página de formulario
+      edit:
+        title: Editar directriz %guidelineName%
+      add:
+        title: Añadir directriz
+    form:
+      delayMultiplicator: Multiplicador
+      lockoutMultiplicator: Multiplicador
+      proofOfWorkComplexity: Complejidad
+    crypto:
+      speed: Velocidad
+      numberRange: Intervalo numérico
+    originBasedSecuritySettings:
+      add:
+        title: Añadir directriz
+  design:
+    title: Diseño
+    subtitles:
+      colorSettings: Colores
+      preview: Previsualización
+      colors:
+        normal: Normal
+        success: Éxito
+        failure: Fallo
+      dimensions:
+        checkbox: Casilla
+    dropdown:
+      simple: Simple
+      advanced: Avanzado
+    cr:
+      value: Valor
+      text: Texto
+    form:
+      invisibleLogo: Logo
+      color:
+        background: Fondo
+        border: Borde
+        checkbox: Casilla
+        text: Texto
+        shadow: Sombra
+      help:
+        websiteBackground: Elija el color de fondo de su sitio web. Este color se usa para calcular la relación de contraste.
+    choices:
+      boxSize:
+        small: Pequeño
+        medium: Mediano
+        large: Grande
+  translation:
+    delete:
+      confirm: ¿Realmente quiere eliminar la traducción?
+      title: Eliminar traducción
+    form:
+      translationKeyGroup:
+        accessibility: Accesibilidad
+        mainLabel: Etiqueta principal
+      text: Texto traducido
+      locale: Configuración regional
+      translationKey: Texto de base
+    list:
+      text: Texto traducido
+      actions: Acciones
+      locale: Configuración regional
+      translationKey: Texto de base
+    add:
+      title: Añadir traducción
+    edit:
+      title: Editar traducción
+    title: Traducciones
+administration:
+  title: Administración
+  settings:
+    mailSettings:
+      form:
+        host: Anfitrión
+        port: Puerto
+        user: Usuario
+        password: Contraseña
+  security:
+    loginThrottling:
+      unit:
+        requests: Solicitudes
+        minutes: Minutos
+  user:
+    title: Usuarios
+    roles: Roles
+    list:
+      user: Usuario
+      roles: Roles
+      actions: Acciones
+    form:
+      email: Correo electrónico
+      password: Contraseña
+  cronJobs:
+    setup:
+      title: Puesta en marcha
+      titles:
+        address: Dirección
+        commands: Órdenes
+        example: Ejemplo
+    settings:
+      title: Configuración
+  geoip2:
+    title: GeoIP2
+    settings:
+      title: Configuración
+    version:
+      typeCountry: 'País:'
+  update:
+    title: Actualización
+    check:
+      title: Estado
+    checkRequirements:
+      action:
+        recheck: Volver a comprobar
+    execute:
+      log: Proceso
+    settings:
+      form:
+        channelStable: Estable
+        channelBeta: Beta
+        channelDevelop: Desarrollo
+      title: Configuración de actualizaciones
+    buttons:
+      continue: Continuar
+  system:
+    general:
+      title: Generales
+      serverInfo: Servidor
+      extensions: Extensiones
+    logo:
+      title: Logo
+    usedLibrariesAndResources:
+      license: Licencia
+    website: Sitio web
+  cleanupStatistic:
+    list:
+      cleanupExecutor: Ejecutor
+      submissions: Envío
+      cleanupStatus: Estado
+  throughputStatistics:
+    reset:
+      delay:
+        title: Restablecer demoras
+    requests:
+      delays:
+        numberOfActiveDelays: Número de demoras activas
+        title: Demoras activas
+    chartTitles:
+      requests: Solicitudes de todos los proyectos
+      submissions: Envíos de todos los proyectos
+header:
+  pleaseChoose: Elija…
+  noProjectsFound: No se encontró ningún proyecto
+  account: Cuenta
+rulePackage:
+  view:
+    includedRules:
+      rating: Valoración
+      name: Nombre
+      description: Descripción
+      items: Elementos
+      type: Tipo
+      value: Valor
+    list:
+      fieldRules:
+        name: Nombre
+        type: Tipo
+        numberOfRuleItems: Número de elementos
+        actions: Acciones
+      fieldRuleItems:
+        type: Tipo
+        value: Valor
+    details:
+      source: Fuente
+      status: Estado
+    howtoImport:
+      arguments:
+        value: Valor
+        description: Descripción
+    fieldRule:
+      details:
+        name: Nombre
+        type: Tipo
+  list:
+    name: Nombre
+    type: Tipo
+    status: Estado
+    actions: Acciones
+  form:
+    name: Nombre
+    status: Estado
+  updateCache:
+    progress:
+      status: Estado
+      progress: Progreso
+    status:
+      importing: Importando…
+rules:
+  fieldRule:
+    form:
+      addMultipleItems:
+        rating: Valoración
+        type: Tipo
+        items: Elementos
+      items:
+        rating: Valoración
+        title: Elementos
+        type: Tipo
+        value: Valor
+      filter:
+        title: Filtrar elementos
+      rule:
+        description: Descripción
+        name: Nombre
+        status: Estado
+      modal:
+        importTxtFile:
+          file: Archivo
+        importCsvFile:
+          file: Archivo
+    type:
+      rating:
+        placeholder: Valoración
+        title: Valoración
+      domain:
+        title: Dominio
+        label: Dominio
+        placeholder: ejemplo.com
+        domain:
+          title: Dominio
+      email:
+        title: Correo electrónico
+        placeholder: inf@ejemplo.com
+      ipAddress:
+        placeholder: 0.0.0.0
+        subnet:
+          title: Subred
+        title: Dirección IP
+        ipAddress:
+          title: Dirección IP
+      website:
+        label: URL/dominio
+        title: Sitio web
+        url:
+          title: URL
+      userAgent:
+        text:
+          title: Texto
+      word:
+        title: Palabra
+        label: Palabra/pauta
+        text:
+          title: Texto
+    list:
+      type: Tipo
+      name: Nombre
+      status: Estado
+      actions: Acciones
+  submissionRule:
+    title: Reglas de envío
+    form:
+      rating: Valoración
+    list:
+      name: Nombre
+      status: Estado
+      actions: Acciones
+  title: Reglas
+account:
+  title: Cuenta
+  settings:
+    form:
+      locale: Idioma
+      timezone: Huso horario
+      dateFormat: Formato de fechas
+      timeFormat: Formato de horas
+      numberOfItemsPerPage: Número de elementos por página
+  twoFactor:
+    action:
+      configure: Configurar
+      reconfigure: Reconfigurar
+      disable: Desactivar
+      continue: Continuar
+      verify: Verificar
+security:
+  login:
+    passwordLabel: Contraseña
+  logout:
+    title: Salir
+password:
+  request:
+    form:
+      email: Correo electrónico
+  email:
+    greeting: ¡Hola!
+  form:
+    password: Contraseña
+action:
+  add: Añadir
+  remove: Quitar
+  save: Guardar
+  view: Ver
+  edit: Editar
+  delete: Eliminar
+  actions: Acciones
+  help: Ayuda
+  close: Cerrar
+  manage: Gestionar
+  use: Usar
+  configure: Configurar
+  test: Probar
+  export: Exportar
+  back: Volver
+  reset: Restablecer
+  filter: Filtrar
+general:
+  example: Ejemplo
+  empty: Vacío
+state:
+  yes: Sí
+  no: No
+roles:
+  user: Usuario
+interface:
+  colorModes:
+    light: Claro
+    dark: Oscuro
+datatable:
+  datatable:
+    processing: Procesando…
+    loadingRecords: Cargando…
+    paginate:
+      first: Primero
+      previous: Anterior
+      next: Siguiente
+      last: Último
+setup:
+  buttons:
+    continue: Continuar
+    install: Instalar
+    recheck: Recomprobar
+  start:
+    title: Puesta en marcha
+  prerequisites:
+    title: Requisitos
+    types:
+      general: Generales
+    results:
+      available: Disponibles
+      missing: Faltantes
+      okay: Correctos
+      writable: Escribibles
+      minPhpVersion:
+        required: 'Requerida:'
+        available: 'Disponible:'
+    optional: opcional
+  database:
+    title: Base de datos
+    form:
+      system: Sistema
+      host: Anfitrión
+      port: Puerto
+      database: Base de datos
+      user: Usuario
+      password: Contraseña
+    system:
+      mysql: MySQL/MariaDB
+      postgres: PostgreSQL
+      sqlite: SQLite
+    port:
+      default: Predeterminado
+  other:
+    form:
+      password: Contraseña
+dataTable:
+  name: Nombre
+  value: Valor
+  empty: Vacío
+dateRange:
+  forever: Para siempre
+unit:
+  day: Día
+  days: Días
+  minutes: Minutos
+  second: Segundo
+  seconds: Segundos
+  secondsShort: s
+  submission: Envío
+  submissions: Envíos
+tabulator:
+  data:
+    loading: Cargando…
+    error: Error
+  groups:
+    item: elemento
+    items: elementos
+  pagination:
+    all: Todo
+cleanupStatus:
+  unknown:
+    label: Desconocido
+  incomplete:
+    label: Incompleto
+  complete:
+    label: Completo
+cleanupExecutor:
+  unknown:
+    label: Desconocido
+rulePackageType:
+  category:
+    automatically:
+      label: Automáticamente
+    manually:
+      label: Manualmente
+unknown:
+  label: Desconocido
+example:
+  titleSingular: Ejemplo
+  titlePlural: Ejemplos
+argument:
+  titleSingular: Argumento
+  titlePlural: Argumentos
+tooltip:
+  host: Anfitrión
+  deleted: Eliminado
