@@ -105,7 +105,6 @@ class ProjectExtension extends AbstractExtension implements GlobalsInterface
             ->andWhere('ds.date >= :date')
             ->setParameter('project', $project->getId())
             ->setParameter('date', (new \DateTime())->sub(new \DateInterval(sprintf('P%dD', $days)))->format('Y-m-d'))
-            ->orderBy('ds.date', 'DESC')
         ;
 
         $data = $qb->getQuery()->getSingleResult();
