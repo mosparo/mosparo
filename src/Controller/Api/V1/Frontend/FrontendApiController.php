@@ -96,7 +96,10 @@ class FrontendApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'No project available.']);
         }
 
-        if (!$request->request->has('pageTitle') || !$request->request->has('pageUrl') || !$request->request->has('formActionUrl')) {
+        // Adding new required parameters for the API endpoint means that we need to ensure that the frontend JavaScript file
+        // is correctly loaded again. If the file is cached in the browser cache, it will end in invalid requests to the API
+        // since the browser does not set the new required parameters when requesting the submit token.
+        if (!$request->request->has('pageTitle') || !$request->request->has('pageUrl')) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Required parameters missing.']);
         }
 
@@ -104,6 +107,9 @@ class FrontendApiController extends AbstractController
         $this->cleanupHelper->cleanup(cleanupExecutor: CleanupExecutor::FRONTEND_API);
 
         // Determine the security settings
+        // Important to note here is that the pageUrl, formActionUrl, and formId are parameters the frontend JavaScript must
+        // set in the request to the API endpoint. Still, they can be manipulated by the user. So, we cannot be sure that
+        // the information is set correctly.
         $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp(), [
             'pageUrl' => $request->request->get('pageUrl'),
             'formActionUrl' => $request->request->get('formActionUrl'),
@@ -178,6 +184,9 @@ class FrontendApiController extends AbstractController
             return $response;
         }
 
+        // Adding new required parameters for the API endpoint means that we need to ensure that the frontend JavaScript file
+        // is correctly loaded again. If the file is cached in the browser cache, it will end in invalid requests to the API
+        // since the browser does not set the new required parameters when requesting the submit token.
         if (!$request->request->has('formData') && !$request->request->has('metadata')) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data and metadata not set.']);
         }
@@ -244,6 +253,9 @@ class FrontendApiController extends AbstractController
 
         $activeProject = $this->projectHelper->getActiveProject();
 
+        // Adding new required parameters for the API endpoint means that we need to ensure that the frontend JavaScript file
+        // is correctly loaded again. If the file is cached in the browser cache, it will end in invalid requests to the API
+        // since the browser does not set the new required parameters when requesting the submit token.
         if (!$request->request->has('formData')) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not set.']);
         }

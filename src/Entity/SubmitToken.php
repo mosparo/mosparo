@@ -107,7 +107,7 @@ class SubmitToken implements ProjectRelatedEntityInterface
         return $this->formActionUrl;
     }
 
-    public function setFormActionUrl(string $formActionUrl): self
+    public function setFormActionUrl(?string $formActionUrl): self
     {
         $this->formActionUrl = $formActionUrl;
 
@@ -119,7 +119,7 @@ class SubmitToken implements ProjectRelatedEntityInterface
         return $this->formId;
     }
 
-    public function setFormId(string $formId): self
+    public function setFormId(?string $formId): self
     {
         if (strlen($formId) > 254) {
             $formId = substr($formId, 0, 254);
