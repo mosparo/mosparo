@@ -106,21 +106,31 @@ git clone git@github.com:mosparo/mosparo.git
 ```bash
 cd mosparo
 ```
-3. Execute composer
-```bash
-composer install
+3. _(Optional)_ If you want to use the latest stable version, you should check out the tag of the last version
 ```
-4. Install the yarn dependencies
+git checkout tags/[lastVersionTag]
+```
+_Please replace `[lastversionTag]` with the name of the latest tag (see https://github.com/mosparo/mosparo/tags)._
+
+4. Execute composer
+```bash
+composer install –-no-dev
+```
+5. Install the frontend dependencies
 ```bash
 npm install
 ```
-5. Build the frontend resources (use `npm run dev` if you build it for development purposes)
+6. Build the frontend resources (use `npm run dev` if you build it for development purposes)
 ```bash
 npm run build
 ```
-6. Open your browser and access the virtual host (for example, by accessing the subdomain in your browser)
+7. If you want to run mosparo in production, create the file `.env.local` and add the following content:
+```dotenv title=.env.local
+APP_ENV=prod
+```
+8. Open your browser and access the virtual host (for example, by accessing the subdomain in your browser)
    - If you cannot access mosparo, please head over to our [troubleshooting section](https://documentation.mosparo.io/docs/installation/install/normal#troubleshooting) to find possible reasons for your issue.
-7. Follow the installation wizard to install mosparo
+9. Follow the installation wizard to install mosparo
 
 ## Documentation
 
