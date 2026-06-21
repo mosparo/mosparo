@@ -114,9 +114,9 @@ composer install
 ```bash
 npm install
 ```
-5. Build the frontend resources
+5. Build the frontend resources (use `npm run dev` if you build it for development purposes)
 ```bash
-npm run dev
+npm run build
 ```
 6. Open your browser and access the virtual host (for example, by accessing the subdomain in your browser)
    - If you cannot access mosparo, please head over to our [troubleshooting section](https://documentation.mosparo.io/docs/installation/install/normal#troubleshooting) to find possible reasons for your issue.
