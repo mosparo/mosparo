@@ -135,6 +135,7 @@ submission:
       formData:
         hasPoints: Punts
         title: Dades del formulari
+        honeypot: Esquer
       client:
         title: Client
         userAgent: Agent d'usuari
@@ -173,6 +174,9 @@ settings:
     list:
       user: Usuari
       actions: Accions
+    form:
+      message:
+        errorUserNotFound: No s'ha trobat l'usuari.
   security:
     title: Seguretat
     form:
@@ -204,6 +208,11 @@ settings:
         title: Afegeix una directriu
     crypto:
       numberRange: Interval numèric
+    message:
+      guidelineSuccessfullySaved: La directriu de seguretat s'ha desat correctament.
+    honeypot:
+      title: Esquer
+      intro: Un camp esquer és un camp amagat del formulari. Els humans no el podran veure, però és probable que els bots de spam hi introdueixin algun contingut. Si això ocorre, sabrem que no es tracta d'un humà i en podrem bloquejar l'enviament.
   design:
     title: Disseny
     subtitles:
@@ -293,6 +302,7 @@ administration:
       web:
         title: Web
         action: Baixa la base de dades
+    title: GeoIP2
   update:
     title: Actualitza
     check:
@@ -392,6 +402,7 @@ rulePackage:
       progress: Progrés
     status:
       importing: S'està important…
+      cleanup: Neteja…
 security:
   login:
     passwordLabel: Contrasenya
@@ -519,6 +530,8 @@ tools:
         locale: Configuració local
         rating: Valoració
         text: Text traduït
+        guidelineModify: Cal modificar
+        guidelineEqual: No cal cap modificació
       title: Canvis disponibles
   eiParts:
     translations: Traduccions
@@ -568,6 +581,7 @@ rules:
         type: Tipus
         value: Valor
         rating: Valoració
+        title: Elements
       nothingFound:
         title: No s'ha trobat res
         text: No hi ha cap element que coincideixi amb el filtre.
@@ -605,9 +619,56 @@ rules:
         ipAddress:
           title: Adreça IP
         title: Adreça IP
+        subnet:
+          title: Subxarxa
+      domain:
+        title: Domini
+        label: Domini
+        placeholder: exemple.cat
+        domain:
+          title: Domini
+      email:
+        title: Adreça electrònica
+        placeholder: informacio@exemple.cat
+      provider:
+        title: Proveïdor
+      userAgent:
+        text:
+          title: Text
+      website:
+        title: Lloc web
+        label: URL/domini
+        placeholder: https://exemple.cat
+        url:
+          title: URL
+      word:
+        title: Paraula
+        text:
+          title: Text
   submissionRule:
     form:
       rating: Valoració
+    list:
+      name: Nom
+      status: Estat
+      actions: Accions
+  title: Regles
 cleanupStatus:
   unknown:
     label: Desconegut
+rulePackageType:
+  category:
+    automatically:
+      label: Automàticament
+    manually:
+      label: Manualment
+unknown:
+  label: Desconegut
+example:
+  titleSingular: Exemple
+  titlePlural: Exemples
+argument:
+  titleSingular: Argument
+  titlePlural: Arguments
+tooltip:
+  host: Amfitrió
