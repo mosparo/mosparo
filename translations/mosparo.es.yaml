@@ -43,6 +43,14 @@ project:
       title: Detalles de conexión
     security:
       title: Activar funcionalidades de seguridad
+      introSecurity: Elija las funcionalidades de seguridad que le gustaría activar.
+  backToList: Volver a la lista de proyectos
+  statistics:
+    dropdown: Mostrar estadísticas a partir de
+    options:
+      disabled: No mostrar las estadísticas
+      showLastDay: Día anterior
+      showMultipleDays: '%days% días'
 tools:
   import:
     simulate:
@@ -138,19 +146,28 @@ submission:
       title: Basura
     verification:
       title: Verificación
+      minimumTime:
+        timeDifferenceInSeconds: '%seconds% segundos'
     source:
       title: Fuente
+      pageTitle: Título de página
+      pageUrl: URL de página
     data:
       value: Valor
       rating: Valoración
       formData:
         hasPoints: Puntos
+        title: Datos de formulario
+        honeypot: Señuelo
       client:
         title: Cliente
         userAgent: Agente de usuario
         country: País
         ipAddress: Dirección IP
       fieldMustBeEmpty: El campo debe estar vacío
+      metadata:
+        title: Metadatos
+      points: '%totalPoints% puntos'
     verificationSimulation:
       labels:
         authorization: Autorización
@@ -159,9 +176,23 @@ submission:
         method: Método
         headers: Cabeceras
         response: Respuesta
+        formData: Datos de formulario
+        submitToken: Ficha de envío
+        validationToken: Ficha de validación
+        privateKey: Clave privada
+        validationSignature: Firma de validación
+        verificationSignature: Firma de verificación
+        requestData: Datos de solicitud
+        requestSignature: Firma de solicitud
+      buttons:
+        customIntegration: Integración personalizada
+        apiDocumentation: Documentación de la API
     ratingDetails:
       rating: Valoración
       submissionRules: Reglas de envío
+      origin: Origen
+      details: Detalles
+      total: Total
     verificationIssues:
       labels:
         message: Mensaje
@@ -170,6 +201,18 @@ submission:
     action:
       goToNewerSubmission: Más recientes
       goToOlderSubmission: Más antiguos
+    ignoredFields:
+      title: Campos ignorados
+    generalVerifications:
+      title: Verificaciones generales
+      features:
+        minimumTime: Tiempo mínimo
+        equalSubmissions: Envíos iguales
+      minimumTime:
+        minimumTime: 'Tiempo mínimo:'
+        measuredTime: 'Tiempo medido:'
+      equalSubmissions:
+        maximumAllowed: 'Máximo permitido:'
   filter:
     dropdown: Filtrar la lista de envíos
     options:
@@ -182,6 +225,14 @@ settings:
       reissue: Reemitir
     connectionDetails:
       host: Anfitrión
+      title: Detalles de conexión
+    title: Configuración general
+    help:
+      integrateMosparo: Integrar mosparo
+    apiKeys:
+      title: Claves de API
+      publicKey: Clave pública
+      privateKey: Clave privada
   projectMember:
     list:
       user: Usuario
@@ -189,6 +240,7 @@ settings:
       actions: Acciones
     form:
       role: Rol
+    title: Miembros del proyecto
   security:
     title: Seguridad
     guideline:
@@ -216,12 +268,23 @@ settings:
       delayMultiplicator: Multiplicador
       lockoutMultiplicator: Multiplicador
       proofOfWorkComplexity: Complejidad
+      minimumTimeSeconds: Tiempo mínimo
+      honeypotFieldName: Nombre de campo
+      proofOfWorkDynamicComplexityMaxComplexity: Complejidad máxima
+      honeypotFieldActive: Activar campo señuelo
     crypto:
       speed: Velocidad
       numberRange: Intervalo numérico
     originBasedSecuritySettings:
       add:
         title: Añadir directriz
+    proofOfWork:
+      subtitle: Complejidad dinámica
+    minimumTime:
+      title: Tiempo mínimo
+    honeypot:
+      title: Señuelo
+      intro: Un campo señuelo es un campo oculto del formulario. Los humanos no podrán verlo, pero es probable que los bots de spam introduzcan algún contenido en este campo. Si eso ocurre, sabremos que no se trata de un humano y podremos bloquear el envío.
   design:
     title: Diseño
     subtitles:
@@ -231,14 +294,19 @@ settings:
         normal: Normal
         success: Éxito
         failure: Fallo
+        loading: Al cargar
       dimensions:
         checkbox: Casilla
+        text: Texto
+      simpleDesign: Diseño simple
     dropdown:
       simple: Simple
       advanced: Avanzado
+      title: Modo de diseño
     cr:
       value: Valor
       text: Texto
+      title: Relación de contraste
     form:
       invisibleLogo: Logo
       color:
@@ -254,6 +322,8 @@ settings:
         small: Pequeño
         medium: Mediano
         large: Grande
+    preview:
+      background: Previsualizar fondo
   translation:
     delete:
       confirm: ¿Realmente quiere eliminar la traducción?
@@ -262,6 +332,7 @@ settings:
       translationKeyGroup:
         accessibility: Accesibilidad
         mainLabel: Etiqueta principal
+        honeyPot: Señuelo
       text: Texto traducido
       locale: Configuración regional
       translationKey: Texto de base
@@ -275,6 +346,12 @@ settings:
     edit:
       title: Editar traducción
     title: Traducciones
+  title: Configuración de proyecto
+  advanced:
+    title: Configuración avanzada
+    subtitle:
+      languageOptions: Opciones de idioma
+      developerOptions: Opciones de desarrollo
 administration:
   title: Administración
   settings:
@@ -314,6 +391,9 @@ administration:
       title: Configuración
     version:
       typeCountry: 'País:'
+    downloadAndUpdate:
+      web:
+        title: Web
   update:
     title: Actualización
     check:
@@ -460,6 +540,10 @@ rules:
         label: Palabra/pauta
         text:
           title: Texto
+      provider:
+        title: Proveedor
+        country:
+          title: País
     list:
       type: Tipo
       name: Nombre
@@ -542,6 +626,8 @@ datatable:
       previous: Anterior
       next: Siguiente
       last: Último
+    search: 'Buscar:'
+    searchPlaceholder: Buscar
 setup:
   buttons:
     continue: Continuar
