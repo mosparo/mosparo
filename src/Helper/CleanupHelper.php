@@ -518,7 +518,7 @@ class CleanupHelper
         // Delete the detection result
         $query = $this->entityManager->createQuery('
                 DELETE Mosparo\Entity\DetectionResult dr
-                WHERE s.project = :project
+                WHERE dr.project = :project
             ')
             ->setParameter('project', $project);
         $query->execute();
