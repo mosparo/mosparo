@@ -58,12 +58,19 @@ project:
     placeholder: Cerca…
   statistics:
     dropdown: Mostra estadístiques de
+    options:
+      disabled: No mostris les estadístiques
+      showMultipleDays: '%days% dies'
   form:
     name: Nom
     description: Descripció
     hosts: Amfitrions
     status: Estat
     projectGroup: Grup de projectes
+    metadataAllowed: Metadades permeses
+    metadataReturned: Afegeix metadades a la resposta de verificació
+    apiDebugMode: Mode de depuració de l'API
+    verificationSimulationMode: Mode de simulació de verificació
   roles:
     reader: Lector
     editor: Editor
@@ -89,12 +96,20 @@ project:
       introSecurity: Trieu les funcions de seguretat que voleu activar.
     connection:
       title: Detalls de la connexió
+      introConnection: Per a utilitzar el mosparo en un lloc web, cal afegir la integració al lloc web i després connectar el lloc web amb aquest projecte del mosparo. Per a aquest pas, copieu i enganxeu la informació següent al camp correcte de la integració.
+      infoSettings: Després d'aquest auxiliar, podeu trobar aquests detalls de la connexió als paràmetres del projecte.
   delete:
     confirm: Realment voleu suprimir el projecte %projectName%?
+    title: Suprimeix el projecte %projectName%
+    disconnectFirst: Assegureu-vos d'haver desconnectat el vostre lloc web o la vostra integració d'aquest projecte abans de suprimir-lo.
+    message:
+      successfullyDeleted: El projecte %projectName% s'ha suprimit correctament.
 dashboard:
   title: Tauler
   chart:
     spam: Brossa
+  dateRange:
+    dropdown: Seleccioneu l'interval de dates visibles
 submission:
   list:
     id: Id.
@@ -102,6 +117,7 @@ submission:
     spam: Brossa
     verification: Verificació
     actions: Accions
+    ipAddress: Adreça IP
   view:
     spam:
       title: Brossa
@@ -109,15 +125,26 @@ submission:
       title: Verificació
     source:
       title: Font
+      pageTitle: Títol de la pàgina
+      pageUrl: URL de la pàgina
+      formActionUrl: URL d'acció del formulari
+      formId: Id. del formulari
     data:
       value: Valor
       rating: Valoració
       formData:
         hasPoints: Punts
+        title: Dades del formulari
+        honeypot: Esquer
       client:
         title: Client
         userAgent: Agent d'usuari
         country: País
+        ipAddress: Adreça IP
+      metadata:
+        title: Metadades
+      points: '%totalPoints% punts'
+      fieldMustBeEmpty: El camp ha d'estar buit
     verificationSimulation:
       labels:
         authorization: Autorització
@@ -126,6 +153,19 @@ submission:
         method: Mètode
         headers: Capçaleres
         response: Resposta
+    verificationIssues:
+      labels:
+        message: Missatge
+    goToDetails: Detalls
+    ratingDetails:
+      details: Detalls
+      total: Total
+      rating: Valoració
+    ignoredFields:
+      title: Camps ignorats
+    action:
+      goToNewerSubmission: Més recents
+      goToOlderSubmission: Més antics
 settings:
   general:
     connectionDetails:
@@ -134,11 +174,16 @@ settings:
     list:
       user: Usuari
       actions: Accions
+    form:
+      message:
+        errorUserNotFound: No s'ha trobat l'usuari.
   security:
     title: Seguretat
     form:
       delayMultiplicator: Multiplicador
       lockoutMultiplicator: Multiplicador
+      minimumTimeSeconds: Temps mínim
+      honeypotFieldName: Nom del camp
     guideline:
       list:
         name: Nom
@@ -149,13 +194,35 @@ settings:
           name: Nom
           description: Descripció
           priority: Prioritat
+          title: Directriu
         criteria:
           title: Criteris
           subnets: Subxarxes
+          countryCodes: Codis de país
+      add:
+        title: Afegeix una directriu
+      edit:
+        title: Edita la directriu %guidelineName%
+    originBasedSecuritySettings:
+      add:
+        title: Afegeix una directriu
+    crypto:
+      numberRange: Interval numèric
+    message:
+      guidelineSuccessfullySaved: La directriu de seguretat s'ha desat correctament.
+    honeypot:
+      title: Esquer
+      intro: Un camp esquer és un camp amagat del formulari. Els humans no el podran veure, però és probable que els bots de spam hi introdueixin algun contingut. Si això ocorre, sabrem que no es tracta d'un humà i en podrem bloquejar l'enviament.
   design:
     title: Disseny
     subtitles:
       colorSettings: Colors
+      dimensions:
+        checkbox: Casella de selecció
+        text: Text
+      colors:
+        invisible: Invisible
+        loading: En carregar
     cr:
       value: Valor
       text: Text
@@ -166,6 +233,8 @@ settings:
         checkbox: Casella de selecció
         text: Text
         shadow: Ombra
+      help:
+        websiteBackground: Trieu el color de fons del vostre lloc web. Aquest color s'usa per a calcular la relació de contrast.
     choices:
       boxSize:
         small: Petit
@@ -173,6 +242,32 @@ settings:
         large: Gran
     dropdown:
       advanced: Avançat
+    preview:
+      background: Previsualitza el fons
+  translation:
+    title: Traduccions
+    list:
+      locale: Configuració local
+      actions: Accions
+      text: Text traduït
+    form:
+      locale: Configuració local
+      translationKeyGroup:
+        accessibility: Accessibilitat
+        error: Error
+        mainLabel: Etiqueta principal
+      message:
+        successfullySaved: S'ha desat la traducció correctament.
+      text: Text traduït
+    add:
+      title: Afegeix una traducció
+    edit:
+      title: Edita la traducció
+    delete:
+      title: Suprimeix la traducció
+      confirm: Realment voleu suprimir la traducció?
+      message:
+        successfullyRemoved: S'ha suprimit la traducció correctament.
 administration:
   title: Administració
   settings:
@@ -182,6 +277,14 @@ administration:
         port: Port
         user: Usuari
         password: Contrasenya
+    title: Paràmetres del sistema
+    mainSettings:
+      title: Paràmetres principals
+    localeSettings:
+      title: Paràmetres de configuració local
+      form:
+        defaultLocale: Llengua per defecte
+        defaultTimezone: Fus horari per defecte
   user:
     title: Usuaris
     list:
@@ -199,6 +302,7 @@ administration:
       web:
         title: Web
         action: Baixa la base de dades
+    title: GeoIP2
   update:
     title: Actualitza
     check:
@@ -209,6 +313,8 @@ administration:
       form:
         channelStable: Estable
         channelBeta: Beta
+        channelDevelop: Desenvolupament
+      title: Paràmetres d'actualització
     buttons:
       continue: Continua
     version:
@@ -224,6 +330,21 @@ administration:
     usedLibrariesAndResources:
       license: Llicència
     website: Lloc web
+  security:
+    loginThrottling:
+      unit:
+        minutes: Minuts
+  cronJobs:
+    setup:
+      titles:
+        address: Adreça
+        commands: Ordres
+        example: Exemple
+    settings:
+      title: Paràmetres
+  cleanupStatistic:
+    list:
+      cleanupStatus: Estat
 account:
   title: Compte
   settings:
@@ -240,6 +361,48 @@ account:
   backToOverview: Torna al tauler
 rulePackage:
   backToList: Torna als paquets de regles
+  list:
+    name: Nom
+    type: Tipus
+    status: Estat
+    actions: Accions
+  form:
+    name: Nom
+    status: Estat
+  view:
+    details:
+      source: Font
+      status: Estat
+    includedRules:
+      name: Nom
+      description: Descripció
+      items: Elements
+      type: Tipus
+      value: Valor
+      rating: Valoració
+    howtoImport:
+      arguments:
+        value: Valor
+        description: Descripció
+    list:
+      fieldRules:
+        name: Nom
+        type: Tipus
+        actions: Accions
+      fieldRuleItems:
+        type: Tipus
+        value: Valor
+    fieldRule:
+      details:
+        name: Nom
+        type: Tipus
+  updateCache:
+    progress:
+      status: Estat
+      progress: Progrés
+    status:
+      importing: S'està important…
+      cleanup: Neteja…
 security:
   login:
     passwordLabel: Contrasenya
@@ -264,6 +427,11 @@ action:
   manage: Gestiona
   configure: Configura
   use: Usa
+  test: Prova
+  export: Exporta
+  back: Enrere
+  reset: Reinicialitza
+  filter: Filtre
 general:
   example: Exemple
   empty: Buit
@@ -309,6 +477,13 @@ setup:
       database: Base de dades
       user: Usuari
       password: Contrasenya
+      system: Sistema
+    system:
+      mysql: MySQL/MariaDB
+      postgres: PostgreSQL
+      sqlite: SQLite
+    port:
+      default: Per defecte
   other:
     form:
       password: Contrasenya
@@ -321,6 +496,7 @@ tools:
   ruleTester:
     types:
       userAgent: Agent d'usuari
+      ipAddress: Adreça IP
     result:
       table:
         value: Valor
@@ -344,3 +520,155 @@ tools:
         itemsModify: Modifica
         itemsRemove: Elimina
         priority: Prioritat
+        criteria: Criteris
+        source: Font
+        oldValue: Valor antic
+        newValue: Valor nou
+        modifyConfigValues: Modifica els valors
+        securitySettings: Paràmetres de seguretat
+        guidelineNew: Directriu nova
+        locale: Configuració local
+        rating: Valoració
+        text: Text traduït
+        guidelineModify: Cal modificar
+        guidelineEqual: No cal cap modificació
+      title: Canvis disponibles
+  eiParts:
+    translations: Traduccions
+dataTable:
+  name: Nom
+  value: Valor
+  empty: Buit
+unit:
+  day: Dia
+  days: Dies
+  minutes: Minuts
+  second: Segon
+  seconds: Segons
+tabulator:
+  data:
+    loading: S'està carregant…
+    error: Error
+  groups:
+    item: element
+    items: elements
+  pagination:
+    all: Tot
+    first: '%s%Primer%e%'
+    firstTitle: Primera pàgina
+    last: '%s%Últim%e%'
+    lastTitle: Última pàgina
+rules:
+  fieldRule:
+    list:
+      name: Nom
+      type: Tipus
+      status: Estat
+      actions: Accions
+    createChooseType:
+      title: Trieu el tipus
+    create:
+      label:
+        ruleType: Tipus de regla
+    form:
+      rule:
+        title: Regla de camp
+        name: Nom
+        description: Descripció
+        status: Estat
+      ruleType: Tipus de regla de camp
+      items:
+        type: Tipus
+        value: Valor
+        rating: Valoració
+        title: Elements
+      nothingFound:
+        title: No s'ha trobat res
+        text: No hi ha cap element que coincideixi amb el filtre.
+      addMultipleItems:
+        type: Tipus
+        items: Elements
+        rating: Valoració
+      modal:
+        importTxtFile:
+          title: Importa un fitxer de text
+          file: Fitxer
+          action: Importa un fitxer
+        importCsvFile:
+          title: Importa un fitxer CSV
+          file: Fitxer
+          action: Importa un fitxer
+        addingItems:
+          progress:
+            processingPleaseWait: S'estan processant les dades…
+        deleteSelectedItems:
+          confirmDelete: Sí, suprimeix els elements
+          progress:
+            deletingPleaseWait: S'estan suprimint els elements… Espereu…
+      filter:
+        title: Filtra els elements
+    filter:
+      options:
+        all: Mostra-ho tot
+    type:
+      rating:
+        title: Valoració
+        placeholder: Valoració
+      ipAddress:
+        placeholder: 0.0.0.0
+        ipAddress:
+          title: Adreça IP
+        title: Adreça IP
+        subnet:
+          title: Subxarxa
+      domain:
+        title: Domini
+        label: Domini
+        placeholder: exemple.cat
+        domain:
+          title: Domini
+      email:
+        title: Adreça electrònica
+        placeholder: informacio@exemple.cat
+      provider:
+        title: Proveïdor
+      userAgent:
+        text:
+          title: Text
+      website:
+        title: Lloc web
+        label: URL/domini
+        placeholder: https://exemple.cat
+        url:
+          title: URL
+      word:
+        title: Paraula
+        text:
+          title: Text
+  submissionRule:
+    form:
+      rating: Valoració
+    list:
+      name: Nom
+      status: Estat
+      actions: Accions
+  title: Regles
+cleanupStatus:
+  unknown:
+    label: Desconegut
+rulePackageType:
+  category:
+    automatically:
+      label: Automàticament
+    manually:
+      label: Manualment
+unknown:
+  label: Desconegut
+example:
+  titleSingular: Exemple
+  titlePlural: Exemples
+argument:
+  titleSingular: Argument
+  titlePlural: Arguments
+tooltip:
+  host: Amfitrió
