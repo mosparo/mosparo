@@ -43,6 +43,8 @@ class UpdateController extends AbstractController
 
     protected DesignHelper $designHelper;
 
+	protected ProjectHelper $projectHelper;
+
     protected TranslatorInterface $translator;
 
     protected bool $updatesEnabled;
@@ -54,6 +56,7 @@ class UpdateController extends AbstractController
         ConnectionHelper $connectionHelper,
         ConfigHelper $configHelper,
         DesignHelper $designHelper,
+		ProjectHelper $projectHelper,
         TranslatorInterface $translator,
         bool $updatesEnabled
     ) {
@@ -63,6 +66,7 @@ class UpdateController extends AbstractController
         $this->connectionHelper = $connectionHelper;
         $this->configHelper = $configHelper;
         $this->designHelper = $designHelper;
+		$this->projectHelper = $projectHelper;
         $this->translator = $translator;
         $this->updatesEnabled = $updatesEnabled;
     }
@@ -214,6 +218,10 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
+		// Unset the project so we do not have any problems with the possibly changed structure of the project table.
+		// See https://github.com/mosparo/mosparo/issues/432
+		$this->projectHelper->unsetActiveProject();
+
         [$temporaryLogFilePath, $temporaryLogFileUrl] = $this->updateHelper->defineTemporaryLogFile();
         $session->set('temporaryLogFile', $temporaryLogFilePath);
 
@@ -341,13 +349,13 @@ class UpdateController extends AbstractController
     }
 
     #[Route('/finalize/process', name: 'administration_update_finalize_process')]
-    public function finalizeProcess(Request $request, ProjectHelper $projectHelper, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
+    public function finalizeProcess(Request $request, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
     {
         if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
             return $this->redirectToRoute('dashboard');
         }
 
-        $projectHelper->unsetActiveProject();
+        $this->projectHelper->unsetActiveProject();
 
         // Process the rules for version 1.4
         if ($v14OptimizeRulesHelper->hasOpenTasks()) {
@@ -358,13 +366,13 @@ class UpdateController extends AbstractController
     }
 
     #[Route('/finalize/process/v1.4', name: 'administration_update_finalize_process_v1_4')]
-    public function finalizeProcessV14(Request $request, ProjectHelper $projectHelper, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
+    public function finalizeProcessV14(Request $request, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
     {
         if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
             return $this->redirectToRoute('dashboard');
         }
 
-        $projectHelper->unsetActiveProject();
+        $this->projectHelper->unsetActiveProject();
 
         if ($request->request->has('process') && $request->request->get('process')) {
             $submittedToken = $request->request->get('token');

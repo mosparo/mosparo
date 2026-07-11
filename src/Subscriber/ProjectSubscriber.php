@@ -76,6 +76,14 @@ class ProjectSubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $activeRoute = $request->attributes->get('_route');
+
+		// Since the update might adjust the project database structure, we do not want to load the project from
+		// the new source files but with the old database structure, before the migrations were executed.
+		// See https://github.com/mosparo/mosparo/issues/432
+		if ($activeRoute === 'administration_update_finalize') {
+			return;
+		}
+
         $activeProject = null;
         $projectRepository = $this->entityManager->getRepository(Project::class);
 
