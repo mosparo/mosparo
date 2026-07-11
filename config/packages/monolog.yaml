@@ -44,6 +44,7 @@ when@prod:
                 type: fingers_crossed
                 action_level: error
                 handler: main_grouped
+                channels: ["!deprecation"]
                 excluded_http_codes: [ 404, 405 ]
                 buffer_size: 50
             main_grouped:
@@ -60,5 +61,5 @@ when@prod:
             console:
                 type: console
                 process_psr_3_messages: false
-                channels: [ "!event", "!doctrine" ]
+                channels: [ "!event", "!doctrine", "!deprecation" ]
 
