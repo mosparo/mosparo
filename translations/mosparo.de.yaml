@@ -1690,27 +1690,7 @@ interface:
 
 # Datatables
 datatable:
-  datatable:
-    processing: Bitte warten…
-    search: "Suche:"
-    lengthMenu: _MENU_ Zeilen anzeigen
-    info: _START_ bis _END_ von _TOTAL_ Einträgen
-    infoEmpty: Keine Daten vorhanden
-    infoFiltered: (gefiltert von _MAX_ Einträgen)
-    loadingRecords: Wird geladen…
-    zeroRecords: Keine passenden Einträge gefunden
-    emptyTable: Keine Daten in der Tabelle vorhanden
-    searchPlaceholder: Suchbegriff eingeben
-    paginate:
-      first: Erste
-      previous: Zurück
-      next: Nächste
-      last: Letzte
-    aria:
-      sortAscending: ": aktivieren, um Spalte aufsteigend zu sortieren"
-      sortDescending: ": aktivieren, um Spalte absteigend zu sortieren"
-
-# Setup
+  datatable: {}
 setup:
   buttons:
     continue: Weiter

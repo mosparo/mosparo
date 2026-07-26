@@ -617,17 +617,7 @@ interface:
   colorModes:
     light: Claro
     dark: Oscuro
-datatable:
-  datatable:
-    processing: Procesando…
-    loadingRecords: Cargando…
-    paginate:
-      first: Primero
-      previous: Anterior
-      next: Siguiente
-      last: Último
-    search: 'Buscar:'
-    searchPlaceholder: Buscar
+datatable: {}
 setup:
   buttons:
     continue: Continuar

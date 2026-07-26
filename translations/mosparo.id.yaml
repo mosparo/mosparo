@@ -852,25 +852,7 @@ form:
   addMultipleItems: Tambahkan beberapa item
   clearField: Kosongkan kolom
 datatable:
-  datatable:
-    search: 'Mencari:'
-    lengthMenu: Tampilkan _MENU_ entri
-    infoEmpty: Menampilkan 0 hingga 0 dari 0 entri
-    infoFiltered: (difilter dari total _MAX_ entri)
-    zeroRecords: Tidak ada catatan yang cocok ditemukan
-    emptyTable: Tak ada data yang tersedia pada tabel ini
-    searchPlaceholder: Mencari
-    paginate:
-      previous: Sebelumnya
-      next: Selanjutnya
-      last: Akhir
-      first: Pertama
-    processing: Memproses…
-    loadingRecords: Memuat…
-    info: Menampilkan _START_ ke _END_ dari _TOTAL_ entri
-    aria:
-      sortAscending: ': aktifkan untuk mengurutkan kolom naik'
-      sortDescending: ': aktifkan untuk mengurutkan kolom naik'
+  datatable: {}
 setup:
   prerequisites:
     types:

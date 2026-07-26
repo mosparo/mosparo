@@ -411,25 +411,7 @@ roles:
   user: उपयोक्ता
   inactive: निष्क्रिय
 datatable:
-  datatable:
-    infoFiltered: (_MAX_ कुल प्रविष्टियों से फिल्टर किया गया)
-    loadingRecords: लोड हो रहा है…
-    searchPlaceholder: खोजें
-    processing: प्रसंस्करण…
-    search: 'खोजें:'
-    lengthMenu: _MENU_ प्रविष्टियां दिखाएं
-    info: _TOTAL_ प्रविष्टियों में से _START_ से _END_ तक दिखाया जा रहा है
-    paginate:
-      previous: पिछला
-      last: अंतिम
-      first: पहला
-      next: अगला
-    infoEmpty: 0 से 0 में से 0 प्रविष्टियां दिखाई जा रही हैं
-    zeroRecords: कोई मेल खाता रिकॉर्ड नहीं मिला
-    emptyTable: तालिका में आंकड़े उपलब्ध नहीं है
-    aria:
-      sortAscending: ': कॉलम को आरोही क्रम में छांटने हेतु सक्रिय करें'
-      sortDescending: ': कॉलम को अवरोही क्रम में छांटने हेतु सक्रिय करें'
+  datatable: {}
 setup:
   database:
     introduction: कृपया डेटाबेस सिस्टम चुनें और अपना डेटाबेस कनेक्शन कॉन्फ़िगर करें।
