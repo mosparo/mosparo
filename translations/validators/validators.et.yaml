@@ -45,3 +45,8 @@ translation:
     invalidFormat: Palun sisesta lokaat korrektses vormingus. See peab olema kas
       kahetäheline keelekood või kombinatsioon kahetähelisest keelekoodist ja 
       maakoodist.
+rules:
+  fieldRule:
+    value:
+      alreadyExists: See väärtus on juba valitud reeglis olemas.
+      invalidFormat: See väärtus on antud reeglitüübi puhul vigane.
