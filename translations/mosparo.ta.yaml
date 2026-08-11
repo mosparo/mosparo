@@ -1562,25 +1562,7 @@ interface:
     light: ஒளி
     dark: இருண்ட
 datatable:
-  datatable:
-    processing: செயலாக்கம்…
-    search: 'தேடல்:'
-    lengthMenu: _மெனு_ உள்ளீடுகளைக் காட்டு
-    info: _Start_ முதல் _total_ உள்ளீடுகளின் _end_ வரை காட்டுகிறது
-    infoEmpty: 0 உள்ளீடுகளில் 0 முதல் 0 வரை காட்டுகிறது
-    infoFiltered: (_MAX_ மொத்த உள்ளீடுகளிலிருந்து வடிகட்டப்படுகிறது)
-    loadingRecords: ஏற்றுகிறது…
-    zeroRecords: பொருந்தக்கூடிய பதிவுகள் எதுவும் கிடைக்கவில்லை
-    emptyTable: அட்டவணையில் தரவு எதுவும் கிடைக்கவில்லை
-    searchPlaceholder: தேடல்
-    paginate:
-      first: முதல்
-      previous: முந்தைய
-      next: அடுத்தது
-      last: கடைசி
-    aria:
-      sortAscending: ': நெடுவரிசை ஏறுதலை வரிசைப்படுத்த செயல்படுத்தவும்'
-      sortDescending: ': நெடுவரிசை இறங்கலை வரிசைப்படுத்த செயல்படுத்தவும்'
+  datatable: {}
 setup:
   buttons:
     continue: தொடரவும்

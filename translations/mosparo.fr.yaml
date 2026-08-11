@@ -882,25 +882,7 @@ account:
     message:
       successfullyChanged: Votre mot de passe a bien été modifié.
 datatable:
-  datatable:
-    loadingRecords: Chargement…
-    paginate:
-      first: Premier
-      previous: Précédent
-      next: Suivant
-      last: Dernier
-    processing: Traitement en cours…
-    search: 'Recherche :'
-    lengthMenu: Afficher les _MENU_ entrées
-    info: Affichage de _START_ à _END_ sur _TOTAL_ entrées
-    infoEmpty: Affichage de 0 à 0 sur 0 entrées
-    infoFiltered: (filtrées sur _MAX_ entrées au total)
-    zeroRecords: Aucune correspondance trouvée
-    emptyTable: Aucune donnée disponible dans le tableau
-    searchPlaceholder: Rechercher
-    aria:
-      sortAscending: ": activez pour trier la colonne dans l'ordre ascendant"
-      sortDescending: ": activez pour trier la colonne dans l'ordre descendant"
+  datatable: {}
 password:
   email:
     help: Si vous rencontrez des problèmes avec le bouton ci-dessus, copiez-collez l'URL ci-dessous dans votre navigateur.
