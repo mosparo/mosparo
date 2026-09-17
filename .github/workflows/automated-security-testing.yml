@@ -1,0 +1,27 @@
+name: Daily Docker image security scan
+on:
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan mosparo/mosparo
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'mosparo/mosparo:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL'
+
+      - name: Scan mosparo/mosparo-unprivileged
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'mosparo/mosparo-unprivileged:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL'
