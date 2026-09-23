@@ -92,8 +92,38 @@ class VerificationApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.']);
         }
 
-        $submitToken->setVerifiedAt(new DateTime());
-        $submission->setVerifiedAt(new DateTime());
+		$submitToken->setVerifiedAt(new DateTime());
+		$submission->setVerifiedAt(new DateTime());
+
+		$requestData = $request->request->all();
+		$formData = $requestData['formData'] ?? [];
+
+		$requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
+		$formSignature = $requestHelper->createFormDataHmacHash($formData);
+		if (!hash_equals($formSignature, $request->request->get('formSignature'))) {
+			$submission->setValid(false);
+
+			$issue = [
+				'error' => true,
+			    'errorMessage' => 'Verification failed.',
+			    'debugInformation' => [
+					'reason' => 'form_data_signature_invalid',
+				    'expectedSignature' => StringUtil::obfuscateString($formSignature),
+				    'receivedSignature' => $request->request->get('formSignature'),
+				    'signaturePayload' => $formData,
+				],
+			];
+
+			$submission->addIssue($issue);
+
+			$entityManager->flush();
+
+			if (!$activeProject->isApiDebugMode()) {
+				unset($issue['debugInformation']);
+			}
+
+			return new JsonResponse($issue);
+		}
 
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
             $metadata = json_decode($request->request->get('metadata'), true);
@@ -178,8 +208,6 @@ class VerificationApiController extends AbstractController
             return new JsonResponse($issue);
         }
 
-        $requestData = $request->request->all();
-        $formData = $requestData['formData'] ?? [];
         $verificationSignature = '';
         $verificationResult = $this->verificationHelper->verifyFormData($submission, $formData);
         if ($verificationResult['valid']) {
@@ -224,9 +252,6 @@ class VerificationApiController extends AbstractController
                     return new JsonResponse($issue);
                 }
             }
-
-            $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
-            $formSignature = $requestHelper->createFormDataHmacHash($formData);
 
             $validationSignature = $requestHelper->createHmacHash($submission->getValidationToken());
             $verificationSignature = $requestHelper->createHmacHash($validationSignature . $formSignature);
