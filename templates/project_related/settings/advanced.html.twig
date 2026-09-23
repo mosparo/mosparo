@@ -80,6 +80,16 @@
                     </div>
                     <div class="card-body">
                         {{ form_row(form.apiDebugMode) }}
+
+						<div class="alert alert-danger">
+							<p>
+								{{ 'settings.advanced.apiDebugMode.intro'|trans }}
+							</p>
+							<p>
+								{{ 'settings.advanced.apiDebugMode.reissue'|trans({'%linkStart%': '<a href="' ~ path('settings_reissue_keys', {'_projectId': activeProject.id}) ~ '">', '%linkEnd%': '</a>'})|raw }}
+							</p>
+						</div>
+
                         {{ form_row(form.verificationSimulationMode) }}
                     </div>
                 </div>

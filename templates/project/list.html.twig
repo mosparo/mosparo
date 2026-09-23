@@ -228,6 +228,12 @@
                     {% for project in treeNode.projects %}
                         <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
                             <div class="card card-md card-link mb-3 w-100 clickable-card">
+								{% if project.apiDebugMode %}
+									<div class="ribbon bg-orange" data-bs-toggle="tooltip" aria-label="{{ 'tooltip.apiDebugModeEnabled'|trans }}" data-bs-original-title="{{ 'tooltip.apiDebugModeEnabled'|trans }}">
+										<i class="ti ti-alert-triangle"></i>
+									</div>
+								{% endif %}
+
                                 <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="card-body d-flex flex-column">
                                     <div class="text-center">
                                         <svg class="mb-4 illustration-list" viewBox="0 0 24 24" stroke="#000000" xmlns="http://www.w3.org/2000/svg">
@@ -447,6 +453,12 @@
                                                 {% endif %}
 
                                                 {{ project.name }}
+
+												{% if project.apiDebugMode %}
+													<span class="status status-orange ms-2" data-bs-toggle="tooltip" aria-label="{{ 'tooltip.apiDebugModeEnabled'|trans }}" data-bs-original-title="{{ 'tooltip.apiDebugModeEnabled'|trans }}">
+														<i class="ti ti-alert-triangle"></i>
+													</span>
+												{% endif %}
                                             </td>
                                             {% if statistic != -1 %}
                                                 {% set statistics = get_project_statistics(project, statistic) %}

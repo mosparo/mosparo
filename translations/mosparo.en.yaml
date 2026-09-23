@@ -920,6 +920,10 @@ settings:
       metadataOptions: Metadata options
       developerOptions: Developer options
 
+    apiDebugMode:
+      intro: The API debug mode can give an attacker some hints about your project. Therefore, the API debug mode should only be used for development purposes in development environments.
+      reissue: If you enabled the API debug mode for a productive project, please %linkStart%reissue the API keys%linkEnd%.
+
   projectMember:
     title: Project members
     backToList: Back to project members
@@ -2300,3 +2304,4 @@ tooltip:
   publicKey: Public key
   privateKey: Private key
   deleted: Deleted
+  apiDebugModeEnabled: API debug mode is enabled
