@@ -14,10 +14,24 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        type: [standard, unprivileged]
-    env:
-      tagSuffix: ${{ matrix.type == 'unprivileged' && '-unprivileged' || '' }}
-      
+        include:
+          - type: standard
+            dockerfile: Dockerfile
+            imageSuffix: ''
+            tagSuffix: ''
+            platforms: linux/arm/v7,linux/386,linux/amd64,linux/arm/v5,linux/arm64/v8
+          - type: unprivileged
+            dockerfile: Dockerfile
+            imageSuffix: '-unprivileged'
+            tagSuffix: ''
+            platforms: linux/arm/v7,linux/386,linux/amd64,linux/arm/v5,linux/arm64/v8
+          # Alpine Linux is not available for linux/arm/v5, it provides linux/arm/v6 instead
+          - type: unprivileged
+            dockerfile: Dockerfile.alpine
+            imageSuffix: '-unprivileged'
+            tagSuffix: '-alpine'
+            platforms: linux/arm/v7,linux/386,linux/amd64,linux/arm/v6,linux/arm64/v8
+
     steps:
       - name: Prepare environment variables
         id: prep
@@ -46,10 +60,10 @@ jobs:
         uses: docker/metadata-action@v5
         id: meta
         with:
-          images: "mosparo/mosparo${{ env.tagSuffix }}"
+          images: "mosparo/mosparo${{ matrix.imageSuffix }}"
           tags: |
-            type=raw,value=${{ env.MOSPARO_VERSION }}
-            type=raw,value=latest,enable=${{ steps.prep.outputs.is_stable }}
+            type=raw,value=${{ env.MOSPARO_VERSION }}${{ matrix.tagSuffix }}
+            type=raw,value=latest${{ matrix.tagSuffix }},enable=${{ steps.prep.outputs.is_stable }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -61,8 +75,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/arm/v7,linux/386,linux/amd64,linux/arm/v5,linux/arm64/v8
+          platforms: ${{ matrix.platforms }}
           context: "docker/${{ matrix.type }}/"
+          file: "docker/${{ matrix.type }}/${{ matrix.dockerfile }}"
           tags: ${{ steps.meta.outputs.tags }}
           pull: true
           build-args: |
