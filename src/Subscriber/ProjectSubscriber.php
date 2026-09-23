@@ -12,6 +12,7 @@ use Mosparo\Entity\SecurityGuideline;
 use Mosparo\Entity\Submission;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Util\IpUtil;
+use Mosparo\Util\StringUtil;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -145,7 +146,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                 if ($activeProject->isApiDebugMode()) {
                     $debugInformation['debugInformation'] = [
                         'reason' => 'hmac_hash_invalid',
-                        'expectedHmacHash' => $expectedHash,
+                        'expectedHmacHash' => StringUtil::obfuscateString($expectedHash),
                         'receivedHmacHash' => $requestSignature,
                         'payload' => $apiEndpoint . $requestHelper->toJson($requestData),
                     ];

@@ -12,6 +12,7 @@ use Mosparo\Helper\SecurityHelper;
 use Mosparo\Helper\StatisticHelper;
 use Mosparo\Helper\VerificationHelper;
 use Mosparo\Repository\SubmitTokenRepository;
+use Mosparo\Util\StringUtil;
 use Mosparo\Util\TimeUtil;
 use Mosparo\Verification\GeneralVerification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -160,7 +161,7 @@ class VerificationApiController extends AbstractController
                 'errorMessage' => 'Verification failed.',
                 'debugInformation' => [
                     'reason' => 'validation_signature_invalid',
-                    'expectedSignature' => $validationSignature,
+                    'expectedSignature' => StringUtil::obfuscateString($validationSignature),
                     'receivedSignature' => $request->request->get('validationSignature'),
                     'signaturePayload' => $submission->getValidationToken(),
                 ],
@@ -334,7 +335,7 @@ class VerificationApiController extends AbstractController
             if ($activeProject->isApiDebugMode()) {
                 $responseData['debugInformation'] = [
                     'reason' => 'validation_signature_invalid',
-                    'expectedSignature' => $validationSignature,
+                    'expectedSignature' => StringUtil::obfuscateString($validationSignature),
                     'receivedSignature' => $request->request->get('validationSignature'),
                     'signaturePayload' => $submission->getValidationToken(),
                 ];
