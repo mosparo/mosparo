@@ -29,28 +29,30 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
         ;
     }
 
-    public function addSettingsFormFields(FormBuilderInterface $formBuilder): void
+    public function addSettingsFormFields(FormBuilderInterface $formBuilder, bool $disabled): void
     {
         $formBuilder
             ->add('numberOfMatchingFields', IntegerType::class, [
                 'label' => 'submissionRule.randomValues.field.numberOfMatchingFields',
                 'help' => 'submissionRule.randomValues.field.numberOfMatchingFieldsHelp',
-                'attr' => ['class' => 'text-end', 'min' => 1, 'autocomplete' => 'off'],
+                'attr' => ['class' => 'text-end', 'min' => 1, 'autocomplete' => 'off', 'disabled' => $disabled],
             ])
             ->add('matchTextarea', CheckboxType::class, [
                 'label' => 'submissionRule.randomValues.field.matchTextarea',
                 'help' => 'submissionRule.randomValues.field.matchTextareaHelp',
                 'required' => false,
+                'attr' => ['disabled' => $disabled],
             ])
             ->add('numberOfRandomCharacters', IntegerType::class, [
                 'label' => 'submissionRule.randomValues.field.numberOfRandomCharacters',
                 'help' => 'submissionRule.randomValues.field.numberOfRandomCharactersHelp',
-                'attr' => ['class' => 'text-end', 'min' => 5, 'autocomplete' => 'off'],
+                'attr' => ['class' => 'text-end', 'min' => 5, 'autocomplete' => 'off', 'disabled' => $disabled],
             ])
             ->add('requireBothCases', CheckboxType::class, [
                 'label' => 'submissionRule.randomValues.field.requireBothCases',
                 'help' => 'submissionRule.randomValues.field.requireBothCasesHelp',
                 'required' => false,
+				'attr' => ['disabled' => $disabled],
             ])
         ;
     }

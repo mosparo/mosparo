@@ -31,12 +31,13 @@
                                 {% if 'integer' in child.vars.block_prefixes %}
                                     <div class="form-group">
                                         {{ form_label(child) }}
+										{% set disabled = child.vars.attr.disabled ?? false %}
                                         <div class="input-group">
-                                            <button class="btn btn-icon-only btn-decrease-value" type="button">
+                                            <button class="btn btn-icon-only btn-decrease-value" type="button" {% if disabled %}disabled{% endif %}>
                                                 <i class="ti ti-minus"></i>
                                             </button>
                                             {{ form_widget(child) }}
-                                            <button class="btn btn-icon-only btn-increase-value" type="button">
+                                            <button class="btn btn-icon-only btn-increase-value" type="button" {% if disabled %}disabled{% endif %}>
                                                 <i class="ti ti-plus"></i>
                                             </button>
                                         </div>
@@ -63,10 +64,12 @@
                 </a>
             </div>
             <div class="col-12 col-md-auto ms-auto order-first order-md-last">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="ti ti-device-floppy"></i>
-                    {{ 'action.save'|trans }}
-                </button>
+				{% if canManage %}
+					<button type="submit" class="btn btn-primary w-100">
+						<i class="ti ti-device-floppy"></i>
+						{{ 'action.save'|trans }}
+					</button>
+				{% endif %}
             </div>
         </div>
         {{ form_end(form) }}
@@ -76,14 +79,16 @@
 {% block javascripts %}
     {{ parent() }}
 
-    {% cspscript %}
-        <script>
-            $('#form_enabled').change(function () {
-                let formEl = $(this).parents('form');
-                let fields = formEl.find('input:not([type="hidden"]), textarea, select').not(this);
+	{% if canManage %}
+		{% cspscript %}
+			<script>
+				$('#form_enabled').change(function () {
+					let formEl = $(this).parents('form');
+					let fields = formEl.find('input:not([type="hidden"]), textarea, select').not(this);
 
-                fields.prop('disabled', !$(this).prop('checked'));
-            }).trigger('change');
-        </script>
-    {% endcspscript %}
+					fields.prop('disabled', !$(this).prop('checked'));
+				}).trigger('change');
+			</script>
+		{% endcspscript %}
+	{% endif %}
 {% endblock %}

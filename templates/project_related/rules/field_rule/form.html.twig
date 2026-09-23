@@ -455,21 +455,23 @@
 
             var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.title'|trans }}')[0];
             var emptyTableTextEl = $('<p></p>').addClass('empty-subtitle text-secondary').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.text'|trans }}')[0];
-            var emptyTableActionEl = $('<div></div>').addClass('empty-action').appendTo(placeholderEl)[0];
-            var emptyTableAddItemButtonEl = $('<button></button>')
-                .attr('type', 'button')
-                .addClass('btn btn-success add-item-btn')
-                .append($('<i></i>').addClass('ti ti-square-plus'))
-                .append($('<div></div>').text('{{ 'form.addItem'|trans }}'))
-                .appendTo(emptyTableActionEl)[0];
-            var emptyTableAdjustFilterButtonEl = $('<button></button>')
-                .attr('type', 'button')
-                .attr('data-bs-toggle', 'modal')
-                .attr('data-bs-target', '#filter-modal')
-                .addClass('btn btn-pink d-none')
-                .append($('<i></i>').addClass('ti ti-filter'))
-                .append($('<div></div>').text('{{ 'action.filter'|trans }}'))
-                .appendTo(emptyTableActionEl)[0];
+			var emptyTableActionEl = $('<div></div>').addClass('empty-action {% if not canManage %}d-none{% endif %}').appendTo(placeholderEl)[0];
+			{% if canManage %}
+				var emptyTableAddItemButtonEl = $('<button></button>')
+					.attr('type', 'button')
+					.addClass('btn btn-success add-item-btn')
+					.append($('<i></i>').addClass('ti ti-square-plus'))
+					.append($('<div></div>').text('{{ 'form.addItem'|trans }}'))
+					.appendTo(emptyTableActionEl)[0];
+			{% endif %}
+			var emptyTableAdjustFilterButtonEl = $('<button></button>')
+				.attr('type', 'button')
+				.attr('data-bs-toggle', 'modal')
+				.attr('data-bs-target', '#filter-modal')
+				.addClass('btn btn-pink d-none')
+				.append($('<i></i>').addClass('ti ti-filter'))
+				.append($('<div></div>').text('{{ 'action.filter'|trans }}'))
+				.appendTo(emptyTableActionEl)[0];
 
             function updateFiltersCounter()
             {
@@ -481,14 +483,22 @@
 
                     emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.title'|trans }}';
                     emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.text'|trans }}';
-                    emptyTableAdjustFilterButtonEl.classList.remove('d-none');
-                    emptyTableAddItemButtonEl.classList.add('d-none');
+					emptyTableActionEl.classList.remove('d-none');
+					emptyTableAdjustFilterButtonEl.classList.remove('d-none');
+					{% if canManage %}
+                    	emptyTableAddItemButtonEl.classList.add('d-none');
+					{% endif %}
                 } else {
                     counterEl.text('').addClass('d-none');
                     emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.title'|trans }}';
                     emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.text'|trans }}';
-                    emptyTableAdjustFilterButtonEl.classList.add('d-none');
-                    emptyTableAddItemButtonEl.classList.remove('d-none');
+					emptyTableAdjustFilterButtonEl.classList.add('d-none');
+					{% if canManage %}
+						emptyTableActionEl.classList.remove('d-none');
+                    	emptyTableAddItemButtonEl.classList.remove('d-none');
+					{% else %}
+						emptyTableActionEl.classList.add('d-none');
+					{% endif %}
                 }
             }
 

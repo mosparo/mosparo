@@ -157,7 +157,7 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
         $form = $this->createForm(RuleFormType::class, $rule, [ 'rule_type' => $ruleType, 'readonly' => $readOnly, 'locale' => $request->getLocale() ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && !$readOnly) {
+        if (!$readOnly && $form->isSubmitted() && $form->isValid() && !$readOnly) {
             $entityManager->flush();
 
             $session = $request->getSession();

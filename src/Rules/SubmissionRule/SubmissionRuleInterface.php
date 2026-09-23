@@ -14,6 +14,6 @@ interface SubmissionRuleInterface
     public function getDescription(): string;
     public function getDefaultRating(): float;
     public function setDefaultSettings(SubmissionRule $submissionRule): void;
-    public function addSettingsFormFields(FormBuilderInterface $formBuilder): void;
+    public function addSettingsFormFields(FormBuilderInterface $formBuilder, bool $disabled): void;
     public function checkSubmission(SubmissionRule $storedSubmissionRule, Submission $submission): void;
 }

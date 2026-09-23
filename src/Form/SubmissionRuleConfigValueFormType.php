@@ -16,7 +16,7 @@ class SubmissionRuleConfigValueFormType extends AbstractType
             return;
         }
 
-        $submissionRule->addSettingsFormFields($builder);
+        $submissionRule->addSettingsFormFields($builder, $options['disabled']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -24,6 +24,7 @@ class SubmissionRuleConfigValueFormType extends AbstractType
         $resolver->setDefaults([
             'submissionRule' => null,
             'translation_domain' => 'mosparo',
+			'disabled' => true,
         ]);
     }
 }

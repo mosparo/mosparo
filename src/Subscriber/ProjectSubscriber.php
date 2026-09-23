@@ -211,7 +211,12 @@ class ProjectSubscriber implements EventSubscriberInterface
         $managerRoutes = [
             'rules_field_rule_create_choose_type' => ProjectMember::ROLE_EDITOR,
             'rules_field_rule_create_with_type' => ProjectMember::ROLE_EDITOR,
+			'rules_field_rule_edit' => ProjectMember::ROLE_EDITOR,
+			'rules_field_rule_edit_save_changes' => ProjectMember::ROLE_EDITOR,
+			'rules_field_rule_edit_add_multiple' => ProjectMember::ROLE_EDITOR,
+			'rules_field_rule_edit_delete_selected' => ProjectMember::ROLE_EDITOR,
             'rules_field_rule_delete' => ProjectMember::ROLE_EDITOR,
+			'rules_submission_rule_configure' => ProjectMember::ROLE_EDITOR,
             'rule_package_add_choose_type' => ProjectMember::ROLE_EDITOR,
             'rule_package_add_with_type' => ProjectMember::ROLE_EDITOR,
             'rule_package_edit' => ProjectMember::ROLE_EDITOR,
@@ -232,9 +237,13 @@ class ProjectSubscriber implements EventSubscriberInterface
             'tools_import_simulate' => ProjectMember::ROLE_OWNER,
         ];
 
-        if ($activeRoute === 'rules_field_rule_edit' && $request->getMethod() === 'POST') {
-            $managerRoutes['rules_field_rule_edit'] = ProjectMember::ROLE_EDITOR;
+        if ($activeRoute === 'rules_field_rule_edit' && $request->getMethod() === 'GET') {
+            $managerRoutes['rules_field_rule_edit'] = ProjectMember::ROLE_READER;
         }
+
+		if ($activeRoute === 'rules_submission_rule_configure' && $request->getMethod() === 'GET') {
+			$managerRoutes['rules_submission_rule_configure'] = ProjectMember::ROLE_READER;
+		}
 
         if ($activeRoute === 'project_delete') {
             $managerRoutes['project_delete'] = ProjectMember::ROLE_OWNER;
