@@ -1,0 +1,118 @@
+# With this Dockerfile it is possible to build the unprivileged image on Alpine Linux instead of Debian
+
+FROM php:8.3-fpm-alpine
+
+ARG MOSPARO_VERSION
+ARG MOSPARO_CHANNEL=stable
+
+ARG UID=33
+ARG GID=33
+
+ENV TERM=xterm
+
+# Docker related
+ENV MOSPARO_RUN_PHP_FPM=1
+ENV MOSPARO_RUN_NGINX=1
+
+# mosparo related
+ENV MOSPARO_UPDATES_ENABLED=0
+ENV TRUSTED_PROXIES='127.0.0.1,REMOTE_ADDR'
+
+# OCI annotations to image
+LABEL org.opencontainers.image.authors="mosparo Core Developers" \
+      org.opencontainers.image.title="mosparo-unprivileged" \
+      org.opencontainers.image.description="The Modern Spam Protection for your form." \
+      org.opencontainers.image.documentation="https://documentation.mosparo.io/" \
+      org.opencontainers.image.base.name="php:8.3-fpm-alpine" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://github.com/mosparo/mosparo" \
+      org.opencontainers.image.vendor="mosparo Core Developers" \
+      org.opencontainers.image.version="${MOSPARO_VERSION}" \
+      org.opencontainers.image.url="https://github.com/mosparo/mosparo"
+
+WORKDIR /mosparo
+
+# curl is already part of the base image and is used by /usr/bin/mosparo-health-check. The build
+# dependencies are installed as a virtual package so they can be dropped again after the extensions
+# have been built. musl has no locale support and no locale-gen, but mosparo does not use
+# setlocale(), all locale aware formatting is done by ICU through intl.
+RUN apk add --no-cache \
+        nginx \
+        icu-libs \
+        libpng \
+        libpq \
+        libzip \
+        sqlite-libs \
+        libmemcached-libs \
+        libsasl \
+        zlib && \
+    apk add --no-cache --virtual .build-deps \
+        ${PHPIZE_DEPS} \
+        icu-dev \
+        libpng-dev \
+        postgresql-dev \
+        sqlite-dev \
+        libzip-dev \
+        libmemcached-dev \
+        cyrus-sasl-dev \
+        openssl-dev \
+        zlib-dev && \
+    docker-php-ext-install -j$(nproc) gd intl opcache pdo_mysql pdo_pgsql pdo_sqlite zip && \
+    pecl install redis-6.1.0 && \
+    pecl install memcached-3.3.0 && \
+    docker-php-ext-enable redis memcached && \
+    pecl clear-cache && \
+    apk del --no-network .build-deps && \
+    rm -rf /tmp/* /var/tmp/*
+
+# Alpine only provides unzip as a BusyBox applet, the real unzip is installed for the extraction
+RUN apk add --no-cache --virtual .fetch-deps unzip && \
+    curl -fsSLO "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    unzip "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    rm "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    apk del --no-network .fetch-deps
+
+# nginx on Alpine has no pid directive (it uses the compiled in /run/nginx/nginx.pid) and includes
+# /etc/nginx/conf.d/*.conf in the main context and /etc/nginx/http.d/*.conf in the http context.
+# Both includes are used here instead of patching nginx.conf. /var/log/nginx has to be writable
+# because nginx opens its built in default error log before it reads the configuration.
+RUN mkdir -p /etc/nginx/conf.d \
+    && printf 'pid /tmp/nginx.pid;\n' > /etc/nginx/conf.d/unprivileged.conf \
+    && printf 'proxy_temp_path /tmp/proxy_temp;\nclient_body_temp_path /tmp/client_temp;\nfastcgi_temp_path /tmp/fastcgi_temp;\nuwsgi_temp_path /tmp/uwsgi_temp;\nscgi_temp_path /tmp/scgi_temp;\n' > /etc/nginx/http.d/unprivileged-temp-paths.conf \
+    && sed -i '/^user nginx;/d' /etc/nginx/nginx.conf \
+    && sed -i 's,/var/log/nginx/access.log,/dev/stdout,' /etc/nginx/nginx.conf \
+    && sed -i 's,/var/log/nginx/error.log,/dev/stdout,' /etc/nginx/nginx.conf \
+    && sed -i '/user = www-data/d' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i '/group = www-data/d' /usr/local/etc/php-fpm.d/www.conf \
+    && mkdir -p /var/lib/nginx \
+    && mkdir -p /var/log/nginx \
+    && mkdir -p /mosparo/public/resources \
+    && mkdir -p /mosparo/var \
+    && mkdir -p /mosparo-config \
+    && chown -R $UID:0 /var/lib/nginx /var/log/nginx \
+    && chmod -R g+w /var/lib/nginx /var/log/nginx \
+    && chown -R $UID:0 /etc/nginx \
+    && chmod -R g+w /etc/nginx \
+    && chown -R $UID:0 /mosparo \
+    && chmod -R g+w /mosparo \
+    && touch /mosparo-config/.keepdir \
+    && chown -R $UID:0 /mosparo-config \
+    && chmod -R g+w /mosparo-config
+
+ADD config/nginx.conf /etc/nginx/http.d/default.conf
+ADD --chmod=0755 scripts/run.sh /usr/bin/run
+ADD --chmod=0755 scripts/health.sh /usr/bin/mosparo-health-check
+
+HEALTHCHECK --interval=1m --timeout=5s CMD /usr/bin/mosparo-health-check
+
+USER $UID
+
+VOLUME /mosparo-config/
+VOLUME /mosparo/public/resources
+VOLUME /mosparo/var
+
+EXPOSE 8080
+
+ENTRYPOINT []
+
+CMD ["/usr/bin/run"]
