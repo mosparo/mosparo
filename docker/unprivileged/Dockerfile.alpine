@@ -32,12 +32,11 @@ LABEL org.opencontainers.image.authors="mosparo Core Developers" \
 
 WORKDIR /mosparo
 
-# bash is required by /usr/bin/run and /usr/bin/mosparo-health-check, curl is already part of the
-# base image. The build dependencies are installed as a virtual package so they can be dropped
-# again after the extensions have been built. musl has no locale support and no locale-gen, but
-# mosparo does not use setlocale(), all locale aware formatting is done by ICU through intl.
+# curl is already part of the base image and is used by /usr/bin/mosparo-health-check. The build
+# dependencies are installed as a virtual package so they can be dropped again after the extensions
+# have been built. musl has no locale support and no locale-gen, but mosparo does not use
+# setlocale(), all locale aware formatting is done by ICU through intl.
 RUN apk add --no-cache \
-        bash \
         nginx \
         icu-libs \
         libpng \
