@@ -5,8 +5,12 @@
         {{ row.submitToken.pageTitle }}
     </div>
     <div class="origin-page-url-container">
-        <a href="{{ row.submitToken.pageUrl }}" target="_blank" class="origin-page-url">{{ row.submitToken.pageUrl|replace({'https://': ''}) }}</a>
-        <i class="ti ti-external-link"></i>
+        {% if row.submitToken.pageUrl starts with 'https://' or row.submitToken.pageUrl starts with 'http://' %}
+            <a href="{{ row.submitToken.pageUrl }}" target="_blank" class="origin-page-url">{{ row.submitToken.pageUrl|replace({'https://': ''}) }}</a>
+            <i class="ti ti-external-link"></i>
+        {% else %}
+            <code>{{ row.submitToken.pageUrl|replace({'https://': ''}) }}</code>
+        {% endif %}
     </div>
 {% else %}
     <span class="status status-warning">

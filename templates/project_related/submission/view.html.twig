@@ -284,8 +284,12 @@
                         <div class="mb-3">
                             <h4 class="mb-0">{{ 'submission.view.source.pageUrl'|trans }}</h4>
                             <div>
-                                <a href="{{ submission.submitToken.pageUrl }}" target="_blank">{{ submission.submitToken.pageUrl }}</a>
-                                <i class="ti ti-external-link"></i>
+                                {% if submission.submitToken.pageUrl starts with 'https://' or submission.submitToken.pageUrl starts with 'http://' %}
+                                    <a href="{{ submission.submitToken.pageUrl }}" target="_blank">{{ submission.submitToken.pageUrl }}</a>
+                                    <i class="ti ti-external-link"></i>
+                                {% else %}
+                                    <code>{{ submission.submitToken.pageUrl }}</code>
+                                {% endif %}
                             </div>
                         </div>
 
