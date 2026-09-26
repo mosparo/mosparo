@@ -24,7 +24,7 @@ class SubmissionRuleConfigValueFormType extends AbstractType
         $resolver->setDefaults([
             'submissionRule' => null,
             'translation_domain' => 'mosparo',
-			'disabled' => true,
+            'disabled' => true,
         ]);
     }
 }

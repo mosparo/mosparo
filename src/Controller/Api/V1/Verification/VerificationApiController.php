@@ -92,38 +92,38 @@ class VerificationApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.']);
         }
 
-		$submitToken->setVerifiedAt(new DateTime());
-		$submission->setVerifiedAt(new DateTime());
+        $submitToken->setVerifiedAt(new DateTime());
+        $submission->setVerifiedAt(new DateTime());
 
-		$requestData = $request->request->all();
-		$formData = $requestData['formData'] ?? [];
+        $requestData = $request->request->all();
+        $formData = $requestData['formData'] ?? [];
 
-		$requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
-		$formSignature = $requestHelper->createFormDataHmacHash($formData);
-		if (!hash_equals($formSignature, $request->request->get('formSignature'))) {
-			$submission->setValid(false);
+        $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
+        $formSignature = $requestHelper->createFormDataHmacHash($formData);
+        if (!hash_equals($formSignature, $request->request->get('formSignature'))) {
+            $submission->setValid(false);
 
-			$issue = [
-				'error' => true,
-			    'errorMessage' => 'Verification failed.',
-			    'debugInformation' => [
-					'reason' => 'form_data_signature_invalid',
-				    'expectedSignature' => StringUtil::obfuscateString($formSignature),
-				    'receivedSignature' => $request->request->get('formSignature'),
-				    'signaturePayload' => $formData,
-				],
-			];
+            $issue = [
+                'error' => true,
+                'errorMessage' => 'Verification failed.',
+                'debugInformation' => [
+                    'reason' => 'form_data_signature_invalid',
+                    'expectedSignature' => StringUtil::obfuscateString($formSignature),
+                    'receivedSignature' => $request->request->get('formSignature'),
+                    'signaturePayload' => $formData,
+                ],
+            ];
 
-			$submission->addIssue($issue);
+            $submission->addIssue($issue);
 
-			$entityManager->flush();
+            $entityManager->flush();
 
-			if (!$activeProject->isApiDebugMode()) {
-				unset($issue['debugInformation']);
-			}
+            if (!$activeProject->isApiDebugMode()) {
+                unset($issue['debugInformation']);
+            }
 
-			return new JsonResponse($issue);
-		}
+            return new JsonResponse($issue);
+        }
 
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
             $metadata = json_decode($request->request->get('metadata'), true);
@@ -183,7 +183,7 @@ class VerificationApiController extends AbstractController
         }
 
         $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
-		if (!hash_equals($validationSignature, $request->request->get('validationSignature'))) {
+        if (!hash_equals($validationSignature, $request->request->get('validationSignature'))) {
             $submission->setValid(false);
 
             $issue = array_merge([
@@ -351,7 +351,7 @@ class VerificationApiController extends AbstractController
         }
 
         $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
-		if (!hash_equals($validationSignature, $request->request->get('validationSignature'))) {
+        if (!hash_equals($validationSignature, $request->request->get('validationSignature'))) {
             $responseData = [
                 'error' => true,
                 'errorMessage' => 'Validation signature invalid.',

@@ -74,10 +74,10 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
             return $this->redirectToRoute('rules_submission_rule_list');
         }
 
-		$readOnly = false;
-		if (!$this->projectHelper->canManage()) {
-			$readOnly = true;
-		}
+        $readOnly = false;
+        if (!$this->projectHelper->canManage()) {
+            $readOnly = true;
+        }
 
         $isNew = false;
         $submissionRuleRepository = $this->entityManager->getRepository(SubmissionRule::class);

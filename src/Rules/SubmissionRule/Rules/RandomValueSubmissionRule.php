@@ -52,7 +52,7 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
                 'label' => 'submissionRule.randomValues.field.requireBothCases',
                 'help' => 'submissionRule.randomValues.field.requireBothCasesHelp',
                 'required' => false,
-				'attr' => ['disabled' => $disabled],
+                'attr' => ['disabled' => $disabled],
             ])
         ;
     }

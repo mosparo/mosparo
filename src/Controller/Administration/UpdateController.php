@@ -43,7 +43,7 @@ class UpdateController extends AbstractController
 
     protected DesignHelper $designHelper;
 
-	protected ProjectHelper $projectHelper;
+    protected ProjectHelper $projectHelper;
 
     protected TranslatorInterface $translator;
 
@@ -56,7 +56,7 @@ class UpdateController extends AbstractController
         ConnectionHelper $connectionHelper,
         ConfigHelper $configHelper,
         DesignHelper $designHelper,
-		ProjectHelper $projectHelper,
+        ProjectHelper $projectHelper,
         TranslatorInterface $translator,
         bool $updatesEnabled
     ) {
@@ -66,7 +66,7 @@ class UpdateController extends AbstractController
         $this->connectionHelper = $connectionHelper;
         $this->configHelper = $configHelper;
         $this->designHelper = $designHelper;
-		$this->projectHelper = $projectHelper;
+        $this->projectHelper = $projectHelper;
         $this->translator = $translator;
         $this->updatesEnabled = $updatesEnabled;
     }
@@ -218,9 +218,9 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
-		// Unset the project so we do not have any problems with the possibly changed structure of the project table.
-		// See https://github.com/mosparo/mosparo/issues/432
-		$this->projectHelper->unsetActiveProject();
+        // Unset the project so we do not have any problems with the possibly changed structure of the project table.
+        // See https://github.com/mosparo/mosparo/issues/432
+        $this->projectHelper->unsetActiveProject();
 
         [$temporaryLogFilePath, $temporaryLogFileUrl] = $this->updateHelper->defineTemporaryLogFile();
         $session->set('temporaryLogFile', $temporaryLogFilePath);
