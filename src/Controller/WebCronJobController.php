@@ -59,7 +59,7 @@ class WebCronJobController extends AbstractController
         }
 
         $webCronJobSecretKey  = $this->configHelper->getEnvironmentConfigValue('webCronJobSecretKey', '');
-        if ($key !== $webCronJobSecretKey) {
+        if (empty($key) || !hash_equals($webCronJobSecretKey, $key)) {
             return new response('401 Unauthorized', 401);
         }
 
