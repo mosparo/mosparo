@@ -15,6 +15,7 @@ use Mosparo\Enum\TranslationKey;
 use Mosparo\Exception\ImportException;
 use Mosparo\Rules\SubmissionRule\SubmissionRuleManager;
 use Mosparo\Specifications\Specifications;
+use Mosparo\Util\TokenGenerator;
 use Opis\JsonSchema\Validator;
 
 class ImportHelper
@@ -49,13 +50,15 @@ class ImportHelper
 
     public function getImportFilePathAndName(Project $project)
     {
-        return [$this->importDirectory, $project->getId() . '_import_' . uniqid() . '.json'];
+        $tokenGenerator = new TokenGenerator();
+        return [$this->importDirectory, $project->getId() . '_import_' . $tokenGenerator->generateShortToken() . '.json'];
     }
 
     public function storeJobData(array $importData, $token = ''): string
     {
         if (!$token) {
-            $token = uniqid();
+            $tokenGenerator = new TokenGenerator();
+            $token = $tokenGenerator->generateShortToken();
         }
 
         file_put_contents($this->importDirectory . '/job_data_' . $token . '.json', json_encode($importData));
