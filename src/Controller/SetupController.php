@@ -267,7 +267,7 @@ class SetupController extends AbstractController
         // Create user
         try {
             $this->setupHelper->createUser($session->get('setupUserEmailAddress'), $session->get('setupUserPassword'));
-        } catch (UserAlreadyExistsException|AdminUserAlreadyExistsException $e) {
+        } catch (UserAlreadyExistsException|AdminUserAlreadyExistsException) {
             // Ignore this exception since the user exists, everything should be good.
         }
 
