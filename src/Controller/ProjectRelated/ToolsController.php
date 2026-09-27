@@ -6,6 +6,7 @@ use Mosparo\Exception\ExportException;
 use Mosparo\Exception\ImportException;
 use Mosparo\Helper\ExportHelper;
 use Mosparo\Helper\ImportHelper;
+use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\RuleTesterHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -331,7 +332,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
     }
 
     #[Route('/import/simulate/{token}', name: 'tools_import_simulate')]
-    public function importSimulate(Request $request, ImportHelper $importHelper, $token = ''): Response
+    public function importSimulate(Request $request, ImportHelper $importHelper, ProjectHelper $projectHelper, $token = ''): Response
     {
         $form = $this->createFormBuilder(['token' => $token], ['translation_domain' => 'mosparo'])
             ->add('token', HiddenType::class)
@@ -348,7 +349,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         $notInImport = null;
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $refreshRulePackages = $importHelper->executeImport($token);
+                $refreshRulePackages = $importHelper->executeImport($token, $projectHelper->getActiveProject(), []);
             } catch (ImportException $e) {
                 $error = true;
                 $errorMessage = $e->getMessage();
@@ -392,7 +393,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         }
 
         try {
-            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $importHelper->simulateImport($token);
+            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $importHelper->simulateImport($token, $projectHelper->getActiveProject(), []);
 
             $jobData['changes'] = $changes;
 

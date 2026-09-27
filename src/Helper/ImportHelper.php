@@ -83,18 +83,14 @@ class ImportHelper
         return $data;
     }
 
-    public function simulateImport(?string $token, array $jobData = []): array
+    public function simulateImport(?string $token, Project $project, array $jobData = []): array
     {
         if ($token !== null) {
             $jobData = $this->loadJobData($token);
         }
 
-        // Get the project to make sure we're using the right project
-        $projectRepository = $this->entityManager->getRepository(Project::class);
-        $project = $projectRepository->find($jobData['projectId'] ?? 0);
-
-        if (!$project) {
-            throw new ImportException(sprintf('Cannot find project by id %d.', $jobData['projectId'] ?? 0), ImportException::PROJECT_NOT_AVAILABLE);
+        if ($project->getId() !== ($jobData['projectId'] ?? 0)) {
+            throw new ImportException('The given project is not the same as the project ID in the job data.', ImportException::PROJECT_NOT_AVAILABLE);
         }
 
         $importData = $this->loadImportData($jobData);
@@ -123,18 +119,14 @@ class ImportHelper
         return [$jobData, $importData, $this->hasChanges($changes), $changes, $notInImport];
     }
 
-    public function executeImport(?string $token, array $jobData = []): bool
+    public function executeImport(?string $token, Project $project, array $jobData = []): bool
     {
         if ($token !== null) {
             $jobData = $this->loadJobData($token);
         }
 
-        // Get the project to make sure we're using the right project
-        $projectRepository = $this->entityManager->getRepository(Project::class);
-        $project = $projectRepository->find($jobData['projectId'] ?? 0);
-
-        if (!$project) {
-            throw new ImportException(sprintf('Cannot find project by id %d.', $jobData['projectId'] ?? 0), ImportException::PROJECT_NOT_AVAILABLE);
+        if ($project->getId() !== ($jobData['projectId'] ?? 0)) {
+            throw new ImportException('The given project is not the same as the project ID in the job data.', ImportException::PROJECT_NOT_AVAILABLE);
         }
 
         $activeProject = $this->projectHelper->getActiveProject();

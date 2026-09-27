@@ -115,7 +115,7 @@ class ImportCommand extends Command
         ];
 
         try {
-            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $this->importHelper->simulateImport(null, $importData);
+            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $this->importHelper->simulateImport(null, $project, $importData);
         } catch (ImportException $e) {
             $output->writeln($formatter->formatBlock([$e->getMessage()], 'error', true));
             return Command::FAILURE;
@@ -255,7 +255,7 @@ class ImportCommand extends Command
          */
         try {
             $jobData['changes'] = $changes;
-            $this->importHelper->executeImport(null, $jobData);
+            $this->importHelper->executeImport(null, $project, $jobData);
         } catch (ImportException $e) {
             $output->writeln($formatter->formatBlock([$e->getMessage()], 'error', true));
             return Command::FAILURE;
