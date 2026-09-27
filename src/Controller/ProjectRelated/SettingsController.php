@@ -496,13 +496,15 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    #[Route('/design/switch-mode', name: 'settings_design_switch_mode')]
+    #[Route('/design/switch-mode', name: 'settings_design_switch_mode', methods: ['POST'])]
     public function switchDesignMode(Request $request, EntityManagerInterface $entityManager, DesignHelper $designHelper): Response
     {
         $project = $this->getActiveProject();
+        $token = $request->request->getString('_token');
+        $mode = $request->request->getString('mode');
 
-        if ($request->query->has('mode') && in_array($request->query->get('mode'), ['simple', 'advanced', 'invisible-simple'])) {
-            $project->setConfigValue('designMode', $request->query->get('mode'));
+        if ($this->isCsrfTokenValid('design-switch-mode', $token) && in_array($mode, ['simple', 'advanced', 'invisible-simple'], true)) {
+            $project->setConfigValue('designMode', $mode);
 
             $entityManager->flush();
         }

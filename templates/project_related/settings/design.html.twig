@@ -563,20 +563,20 @@
                             </button>
                             <div class="dropdown-menu">
                                 <span class="dropdown-header">{{ 'settings.design.dropdown.groupTitleVisible'|trans }}</span>
-                                <a href="{{ path('settings_design_switch_mode', { '_projectId': activeProject.id, mode: 'simple' }) }}" class="dropdown-item {% if mode == 'simple' %}active{% endif %}">
+                                <button type="submit" form="design-switch-mode-form" name="mode" value="simple" class="dropdown-item {% if mode == 'simple' %}active{% endif %}">
                                     <i class="ti ti-check {% if mode != 'simple' %}invisible{% endif %}"></i>
                                     {{ 'settings.design.dropdown.simple'|trans }}
-                                </a>
-                                <a href="{{ path('settings_design_switch_mode', { '_projectId': activeProject.id, mode: 'advanced' }) }}" class="dropdown-item {% if mode == 'advanced' %}active{% endif %}">
+                                </button>
+                                <button type="submit" form="design-switch-mode-form" name="mode" value="advanced" class="dropdown-item {% if mode == 'advanced' %}active{% endif %}">
                                     <i class="ti ti-check {% if mode != 'advanced' %}invisible{% endif %}"></i>
                                     {{ 'settings.design.dropdown.advanced'|trans }}
-                                </a>
+                                </button>
                                 <div class="dropdown-divider"></div>
                                 <span class="dropdown-header">{{ 'settings.design.dropdown.groupTitleInvisible'|trans }}</span>
-                                <a href="{{ path('settings_design_switch_mode', { '_projectId': activeProject.id, mode: 'invisible-simple' }) }}" class="dropdown-item {% if mode == 'invisible-simple' %}active{% endif %}">
+                                <button type="submit" form="design-switch-mode-form" name="mode" value="invisible-simple" class="dropdown-item {% if mode == 'invisible-simple' %}active{% endif %}">
                                     <i class="ti ti-check {% if mode != 'invisible-simple' %}invisible{% endif %}"></i>
                                     {{ 'settings.design.dropdown.simple'|trans }}
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -588,6 +588,10 @@
                     </div>
                 </div>
             {{ form_end(form) }}
+
+            <form id="design-switch-mode-form" method="post" action="{{ path('settings_design_switch_mode', { '_projectId': activeProject.id }) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('design-switch-mode') }}">
+            </form>
         </div>
     </div>
 {% endblock %}
