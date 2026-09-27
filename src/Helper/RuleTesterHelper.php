@@ -311,13 +311,17 @@ class RuleTesterHelper
             $spamScore = $securitySettings['spamScore'] ?? $spamScore;
         }
 
-        $submission->setSpamRating($score);
+        $submission->setSpamRating(max($score, $submission->getSpamRating() ?? 0));
         $submission->setSpamDetectionRating($spamScore);
 
-        if ($score >= $submission->getSpamDetectionRating() && $spamStatus) {
-            $submission->setSpam(true);
-        } else {
-            $submission->setSpam(false);
+        // We only change the spam flag if the submission is not already identified as spam.
+        if (!$submission->isSpam()) {
+            if ($score >= $submission->getSpamDetectionRating() && $spamStatus) {
+                $submission->setSpam(true);
+            } else {
+                // The flag `spam` is `null` by default, so we have to set it to false if the submission is valid.
+                $submission->setSpam(false);
+            }
         }
 
         if (!$submission->isSpam() || $activeProject->isSilentModeEnabled()) {
