@@ -15,7 +15,6 @@ class VerificationHelper
      */
     public function verifyFormData(Submission $submission, array $formData): array
     {
-        $issues = [];
         $submissionData = $submission->getData();
         $submittedFormData = $submissionData['formData'];
 
