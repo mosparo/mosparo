@@ -497,7 +497,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     }
 
     #[Route('/design/switch-mode', name: 'settings_design_switch_mode', methods: ['POST'])]
-    public function switchDesignMode(Request $request, EntityManagerInterface $entityManager, DesignHelper $designHelper): Response
+    public function switchDesignMode(Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = $this->getActiveProject();
         $token = $request->request->getString('_token');
