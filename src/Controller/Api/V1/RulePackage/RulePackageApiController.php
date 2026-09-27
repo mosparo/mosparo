@@ -152,7 +152,7 @@ class RulePackageApiController extends AbstractController
             return new JsonResponse([
                 'result' => false,
                 'error' => true,
-                'errorMessage' => 'Page out of bound',
+                'errorMessage' => 'Page out of bound.',
             ]);
         }
 
@@ -211,7 +211,7 @@ class RulePackageApiController extends AbstractController
             return new JsonResponse([
                 'result' => false,
                 'error' => true,
-                'errorMessage' => 'Page out of bound',
+                'errorMessage' => 'Page out of bound.',
             ]);
         }
 
