@@ -209,6 +209,9 @@ class ProjectSubscriber implements EventSubscriberInterface
     {
         $checkForProject = $this->projectHelper->getActiveProject();
         $managerRoutes = [
+            'project_create_wizard_design' => ProjectMember::ROLE_OWNER,
+            'project_create_wizard_security' => ProjectMember::ROLE_OWNER,
+            'project_create_wizard_connection' => ProjectMember::ROLE_OWNER,
             'rules_field_rule_create_choose_type' => ProjectMember::ROLE_EDITOR,
             'rules_field_rule_create_with_type' => ProjectMember::ROLE_EDITOR,
             'rules_field_rule_edit' => ProjectMember::ROLE_EDITOR,
@@ -222,6 +225,7 @@ class ProjectSubscriber implements EventSubscriberInterface
             'rule_package_edit' => ProjectMember::ROLE_EDITOR,
             'rule_package_delete' => ProjectMember::ROLE_EDITOR,
             'settings_general' => ProjectMember::ROLE_OWNER,
+            'settings_advanced' => ProjectMember::ROLE_OWNER,
             'settings_member_list' => ProjectMember::ROLE_OWNER,
             'settings_member_add' => ProjectMember::ROLE_OWNER,
             'settings_member_edit' => ProjectMember::ROLE_OWNER,
@@ -232,6 +236,11 @@ class ProjectSubscriber implements EventSubscriberInterface
             'settings_security_guideline_edit' => ProjectMember::ROLE_OWNER,
             'settings_security_guideline_remove' => ProjectMember::ROLE_OWNER,
             'settings_design' => ProjectMember::ROLE_OWNER,
+            'settings_design_switch_mode' => ProjectMember::ROLE_OWNER,
+            'settings_translation_list' => ProjectMember::ROLE_OWNER,
+            'settings_translation_add' => ProjectMember::ROLE_OWNER,
+            'settings_translation_edit' => ProjectMember::ROLE_OWNER,
+            'settings_translation_remove' => ProjectMember::ROLE_OWNER,
             'settings_reissue_keys' => ProjectMember::ROLE_OWNER,
             'tools_import' => ProjectMember::ROLE_OWNER,
             'tools_import_simulate' => ProjectMember::ROLE_OWNER,
