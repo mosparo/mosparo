@@ -94,7 +94,7 @@ class ProjectSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            $publicKey = $request->request->get('publicKey');
+            $publicKey = $request->request->getString('publicKey');
             $activeProject = $projectRepository->findOneBy(['publicKey' => $publicKey]);
 
             if ($activeProject === null) {
@@ -167,7 +167,7 @@ class ProjectSubscriber implements EventSubscriberInterface
             $activeProjectId = false;
 
             if ($request->attributes->has('_projectId')) {
-                $activeProjectId = $request->attributes->get('_projectId', false);
+                $activeProjectId = $request->attributes->getInt('_projectId', false);
 
                 if ($activeProjectId !== false && $session->get('lastActiveProjectId', false) !== $activeProjectId) {
                     $session->set('lastActiveProjectId', $activeProjectId);
@@ -257,7 +257,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         if ($activeRoute === 'project_delete') {
             $managerRoutes['project_delete'] = ProjectMember::ROLE_OWNER;
 
-            $projectId = $request->attributes->get('_projectId');
+            $projectId = $request->attributes->getInt('_projectId');
             $projectRepository = $this->entityManager->getRepository(Project::class);
 
             $project = $projectRepository->find($projectId);

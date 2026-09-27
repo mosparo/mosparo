@@ -61,8 +61,8 @@ class RulePackageApiController extends AbstractController
             $this->entityManager->getConnection()->getConfiguration()->setMiddlewares([]);
 
             $sentContent = false;
-            $offset = intval($request->query->get('offset', 0));
-            $maxEntities = intval($request->query->get('maxItems', 100000));
+            $offset = $request->query->getInt('offset', 0);
+            $maxEntities = $request->query->getInt('maxItems', 100000);
 
             $qb = $this->entityManager->createQueryBuilder()
                 ->select('rprc')
@@ -144,9 +144,17 @@ class RulePackageApiController extends AbstractController
             $totalRules = $this->rulePackageHelper->countRulesForRulePackage($rulePackageCache);
         }
 
-        $page = $request->get('page', 1);
-        $perPage = $request->get('perPage', 1000);
-        $totalPages = ceil($totalRules / $perPage);
+        $page = max(1, $request->query->getInt('page', 1));
+        $perPage = max(1, $request->query->getInt('perPage', 1000));
+        $totalPages = max(1, (int) ceil($totalRules / $perPage));
+
+        if ($page > $totalPages) {
+            return new JsonResponse([
+                'result' => false,
+                'error' => true,
+                'errorMessage' => 'Page out of bound',
+            ]);
+        }
 
         $qb = $this->entityManager->createQueryBuilder()
             ->select('rprc')
@@ -195,11 +203,16 @@ class RulePackageApiController extends AbstractController
             $totalRuleItems = $this->rulePackageHelper->countRuleItemsForRule($rulePackageRuleCache);
         }
 
-        $page = $request->get('page', 1);
-        $perPage = $request->get('perPage', 1000);
-        $totalPages = ceil($totalRuleItems / $perPage);
-        if (!$totalPages) {
-            $totalPages = 1;
+        $page = max(1, $request->query->getInt('page', 1));
+        $perPage = max(1, $request->query->getInt('perPage', 1000));
+        $totalPages = max(1, (int) ceil($totalRuleItems / $perPage));
+
+        if ($page > $totalPages) {
+            return new JsonResponse([
+                'result' => false,
+                'error' => true,
+                'errorMessage' => 'Page out of bound',
+            ]);
         }
 
         $qb = $this->entityManager->createQueryBuilder()
@@ -235,7 +248,7 @@ class RulePackageApiController extends AbstractController
     #[Route('/{id}/batch', name: 'rule_package_api_batch', methods: ['POST'])]
     public function batch(Request $request, RulePackage $rulePackage): Response
     {
-        $tasks = $request->get('tasks');
+        $tasks = $request->request->all('tasks');
         if (!$tasks) {
             return new JsonResponse([
                 'result' => false,
@@ -428,7 +441,7 @@ class RulePackageApiController extends AbstractController
         }
 
         $rulePackage = $rulePackageRepository->findOneBy([
-            'id' => $request->request->get('rulePackageId'),
+            'id' => $request->request->getInt('rulePackageId'),
             'project' => $activeProject->getId(),
         ]);
         if ($rulePackage === null) {
@@ -453,16 +466,16 @@ class RulePackageApiController extends AbstractController
         }
 
         $verifiedHash = false;
-        $rulePackageContent = $request->request->get('rulePackageContent');
+        $rulePackageContent = $request->request->getString('rulePackageContent');
 
-        if ($request->request->has('rulePackageHash') && trim($request->request->get('rulePackageHash'))) {
-            if (!hash_equals(hash('sha256', $rulePackageContent), $request->request->get('rulePackageHash'))) {
+        if ($request->request->has('rulePackageHash') && trim($request->request->getString('rulePackageHash'))) {
+            if (!hash_equals(hash('sha256', $rulePackageContent), $request->request->getString('rulePackageHash'))) {
                 // Prepare the API debug data
                 $debugInformation = [];
                 if ($activeProject->isApiDebugMode()) {
                     $debugInformation['debugInformation'] = [
                         'reason' => 'rule_package_content_hash_invalid',
-                        'sentHash' => $request->request->get('rulePackageHash'),
+                        'sentHash' => $request->request->getString('rulePackageHash'),
                         'generatedHash' => hash('sha256', $rulePackageContent),
                     ];
                 }
