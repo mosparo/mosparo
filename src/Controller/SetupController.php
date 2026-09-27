@@ -258,6 +258,10 @@ class SetupController extends AbstractController
     #[Route('/install-continuation', name: 'setup_install_continuation')]
     public function installContinuation(Request $request): Response
     {
+        if ($this->setupHelper->isInstalled()) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         $session = $request->getSession();
 
         // Create user
