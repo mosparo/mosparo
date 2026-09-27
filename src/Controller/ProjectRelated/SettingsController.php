@@ -31,6 +31,7 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -153,6 +154,10 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     #[Route('/members/{id}/edit', name: 'settings_member_edit')]
     public function memberModify(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember = null): Response
     {
+        if ($projectMember && $projectMember->getProject() !== $this->getActiveProject()) {
+            throw new NotFoundHttpException();
+        }
+
         $isNew = false;
         $isOwner = false;
         $emailAddress = '';
@@ -248,6 +253,10 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     #[Route('/members/{id}/remove', name: 'settings_member_remove')]
     public function memberRemove(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember): Response
     {
+        if ($projectMember->getProject() !== $this->getActiveProject()) {
+            throw new NotFoundHttpException();
+        }
+
         if ($projectMember->getRole() === ProjectMember::ROLE_OWNER) {
             $numberOfOwner = 0;
             foreach ($this->getActiveProject()->getProjectMembers() as $member) {
