@@ -98,7 +98,7 @@ class RulePackageApiControllerTest extends ApiWebTestCase
         ]);
 
         $this->assertResponseIsSuccessful();
-        $this->assertEquals('{"result":true,"rules":[],"page":1,"totalPages":0}', $client->getResponse()->getContent());
+        $this->assertEquals('{"result":true,"rules":[],"page":1,"totalPages":1}', $client->getResponse()->getContent());
     }
 
     public function testCreatingAndGettingRule(): void
