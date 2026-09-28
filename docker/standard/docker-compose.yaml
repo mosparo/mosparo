@@ -17,7 +17,8 @@ services:
       - 3306
       - 33060
   mosparo_web:
-    image: mosparo/mosparo:latest
+    image: mosparo/mosparo:latest-alpine
+    #image: mosparo/mosparo:latest # We recommend using the Alpine-based image, but you can also use the Debian-based one.
     ports:
       - 8080:80
     restart: always
