@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -Eeuxo pipefail
-set -o history -o histexpand
+set -eux
 
 rm -rf /mosparo/var/cache/prod
 
