@@ -62,9 +62,14 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get remove ${PHPIZE_DEPS} -y
 
+# The application is handed to the unprivileged user in the same layer that creates it. A chown in a
+# later layer would store a second copy of every file in the image.
 RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
     unzip "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
-    rm "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip"
+    rm "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    mkdir -p /mosparo/public/resources /mosparo/var && \
+    chown -R $UID:0 /mosparo && \
+    chmod -R g+w /mosparo
 
 RUN sed -i '/user www-data;/d' /etc/nginx/nginx.conf \
     && sed -i 's,/run/nginx.pid,/tmp/nginx.pid,' /etc/nginx/nginx.conf \
@@ -74,15 +79,11 @@ RUN sed -i '/user www-data;/d' /etc/nginx/nginx.conf \
     && sed -i '/group = www-data/d' /usr/local/etc/php-fpm.d/www.conf \
     && sed -i "/^http {/a \    proxy_temp_path /tmp/proxy_temp;\n    client_body_temp_path /tmp/client_temp;\n    fastcgi_temp_path /tmp/fastcgi_temp;\n    uwsgi_temp_path /tmp/uwsgi_temp;\n    scgi_temp_path /tmp/scgi_temp;\n" /etc/nginx/nginx.conf \
     && mkdir -p /var/cache/nginx \
-    && mkdir -p /mosparo/public/resources \
-    && mkdir -p /mosparo/var \
     && mkdir -p /mosparo-config \
     && chown -R $UID:0 /var/cache/nginx \
     && chmod -R g+w /var/cache/nginx \
     && chown -R $UID:0 /etc/nginx \
     && chmod -R g+w /etc/nginx \
-    && chown -R $UID:0 /mosparo \
-    && chmod -R g+w /mosparo \
     && touch /mosparo-config/.keepdir \
     && chown -R $UID:0 /mosparo-config \
     && chmod -R g+w /mosparo-config
