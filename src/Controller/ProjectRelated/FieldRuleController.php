@@ -363,7 +363,7 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
             foreach ($processed as $key => $processedData) {
                 if ($processedData['uuid'] === $newItem->getUuid()) {
                     $entityManager->refresh($newItem);
-                    $processed[$key]['id'] = $item->getId();
+                    $processed[$key]['id'] = $newItem->getId();
                 }
             }
         }
