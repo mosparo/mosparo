@@ -406,7 +406,7 @@ rules:
         url:
           title: URL
           intro: Enter an URL which is not allowed to submit a submission.
-          infoProtocol: It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs. If the value does not start with the protocol the rule could match wrong URLs.
+          infoProtocol: It is recommended to start the URL with the schema or with two slashes for schema-independent URLs. If the value does not start with the schema, the rule could match the wrong URLs. mosparo will match the URLs schema-independently.
 
       word:
         title: Word

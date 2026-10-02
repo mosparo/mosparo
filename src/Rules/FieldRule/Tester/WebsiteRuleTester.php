@@ -7,57 +7,85 @@ use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 use Mosparo\Util\HashUtil;
+use Mosparo\Util\UrlUtil;
 
 class WebsiteRuleTester extends AbstractRuleTester
 {
     public function buildExpressions(QueryBuilder $qb, Orx $orExpr, array $fieldData, ?string $value)
     {
-        if (str_starts_with($fieldData['fieldPath'], 'input[url]')) {
-            $orExpr->add($qb->expr()->andX()
-                ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('url')))
-                ->add($qb->expr()->eq('i.hashedValue', $qb->createNamedParameter(HashUtil::hashFast($value))))
-            );
-        } else if (str_starts_with($fieldData['fieldPath'], 'textarea')) {
-            // This pattern is not perfect. With this pattern, we try to find everything that looks like a URL,
-            // the full validation will happen later.
-            preg_match_all('/(^|\n|\s)([a-zA-Z0-9]+):\/\/([\w\-\.]+\.)*[\w\-\.]+\.\w{2,}(.[^\s]*)($|\s|\n)/', $value, $matches, PREG_SET_ORDER);
-            if ($matches) {
-                $urls = [];
-                foreach ($matches as $match) {
-                    $url = HashUtil::hashFast(trim($match[0]));
-
-                    if (!in_array($url, $urls)) {
-                        $urls[] = $url;
-                    }
-                }
-
-                $orExpr->add($qb->expr()->andX()
-                    ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('url')))
-                    ->add($qb->expr()->in('i.hashedValue', $qb->createNamedParameter($urls, ArrayParameterType::STRING)))
-                );
-            }
+        if ($value === null) {
+            return;
         }
+
+        $hashes = $this->getUrlHashes($this->extractUrls($fieldData['fieldPath'], $value));
+        if (!$hashes) {
+            return;
+        }
+
+        $orExpr->add($qb->expr()->andX()
+            ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('url')))
+            ->add($qb->expr()->in('i.hashedValue', $qb->createNamedParameter($hashes, ArrayParameterType::STRING)))
+        );
     }
 
     public function validateData(string $key, mixed $lowercaseValue, mixed $originalValue, RuleItemEntityInterface $item): array
     {
-        $matchingItems = [];
-        $preparedValue = $item->getValue();
-        if (!preg_match('/((https?:)?\/\/)/i', $preparedValue)) {
-            $preparedValue = '//' . $preparedValue;
+        $itemUrl = UrlUtil::normalizeUrl(mb_strtolower($item->getValue()));
+
+        if ($itemUrl === '') {
+            return [];
         }
 
-        $preparedValue = mb_strtolower($preparedValue);
+        // validateData() does not know the field type ($key is the field name), so we use the URLs in the text and,
+        // if there are none, the value itself (for example, an input[url] field without scheme).
+        $urls = UrlUtil::extractUrls($lowercaseValue);
+        if (!$urls && !preg_match('/\s/', trim($lowercaseValue))) {
+            $urls = $this->extractUrls('input[url]', $lowercaseValue);
+        }
 
-        if (strpos($lowercaseValue, $preparedValue) !== false) {
-            $matchingItems = [
-                'type' => $item->getType(),
-                'value' => $item->getValue(),
-                'rating' => $this->calculateSpamRating($item),
-                'uuid' => $item->getParent()->getUuid(),
-            ];
+        $matchingItems = [];
+        foreach ($urls as $url) {
+            if (in_array($itemUrl, UrlUtil::getPrefixCandidates($url), true)) {
+                $matchingItems = [
+                    'type' => $item->getType(),
+                    'value' => $item->getValue(),
+                    'rating' => $this->calculateSpamRating($item),
+                    'uuid' => $item->getParent()->getUuid(),
+                ];
+
+                break;
+            }
         }
 
         return $matchingItems;
+    }
+
+    protected function extractUrls(string $fieldPath, string $value): array
+    {
+        if (str_starts_with($fieldPath, 'input[url]')) {
+            $url = UrlUtil::normalizeUrl($value);
+
+            return ($url !== '') ? [$url] : [];
+        } else if (str_starts_with($fieldPath, 'textarea')) {
+            return UrlUtil::extractUrls($value);
+        }
+
+        return [];
+    }
+
+    protected function getUrlHashes(array $urls, int $maxHashes = 500): array
+    {
+        $hashes = [];
+        foreach ($urls as $url) {
+            foreach (UrlUtil::getPrefixCandidates($url) as $candidate) {
+                $hashes[HashUtil::hashFast($candidate)] = true;
+
+                if (count($hashes) >= $maxHashes) {
+                    break 2;
+                }
+            }
+        }
+
+        return array_keys($hashes);
     }
 }
