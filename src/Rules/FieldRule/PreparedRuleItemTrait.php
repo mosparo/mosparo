@@ -15,6 +15,9 @@ trait PreparedRuleItemTrait
     #[ORM\Column(type: 'string', length: 32, nullable: true)]
     protected ?string $hashedValue = null;
 
+    #[ORM\Column(type: 'smallint', nullable: true)]
+    protected ?int $preparationVersion = null;
+
     public function setPreparedValue(?string $preparedValue): self
     {
         $this->preparedValue = $preparedValue;
@@ -39,11 +42,18 @@ trait PreparedRuleItemTrait
         return $this->hashedValue;
     }
 
+    public function getPreparationVersion(): ?int
+    {
+        return $this->preparationVersion;
+    }
+
     #[ORM\PreFlush]
     public function preFlush(): void
     {
-        $this->setPreparedValue($this->prepareValue($this->getType(), strtolower($this->getValue())));
-        $this->setHashedValue(HashUtil::hashFast(strtolower($this->getValue())));
+        $this->setPreparedValue($this->prepareValue($this->getType(), mb_strtolower($this->getValue())));
+        $this->setHashedValue(HashUtil::hashFast(mb_strtolower($this->getValue())));
+
+        $this->preparationVersion = RuleItemEntityInterface::PREPARATION_VERSION;
     }
 
     protected function prepareValue(string $type, string $value): string

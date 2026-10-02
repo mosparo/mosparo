@@ -7,6 +7,7 @@ use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\ConnectionHelper;
 use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\Migration\V14OptimizeRulesHelper;
+use Mosparo\Helper\Migration\OptimizeRuleItemsAfterUpdateHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Helper\UpdateHelper;
@@ -349,7 +350,7 @@ class UpdateController extends AbstractController
     }
 
     #[Route('/finalize/process', name: 'administration_update_finalize_process')]
-    public function finalizeProcess(Request $request, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
+    public function finalizeProcess(Request $request, V14OptimizeRulesHelper $v14OptimizeRulesHelper, OptimizeRuleItemsAfterUpdateHelper $optimizeRuleItemsAfterUpdateHelper)
     {
         if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
             return $this->redirectToRoute('dashboard');
@@ -360,6 +361,11 @@ class UpdateController extends AbstractController
         // Process the rules for version 1.4
         if ($v14OptimizeRulesHelper->hasOpenTasks()) {
             return $this->redirectToRoute('administration_update_finalize_process_v1_4', ['oldVersion' => $request->query->get('oldVersion')]);
+        }
+
+        // Optimize the rule items after the latest update, if the preparation version has changed
+        if ($optimizeRuleItemsAfterUpdateHelper->hasOpenTasks()) {
+            return $this->redirectToRoute('administration_update_finalize_process_optimize_rule_items', ['oldVersion' => $request->query->get('oldVersion')]);
         }
 
         return $this->redirectToRoute('administration_update_finalized', ['oldVersion' => $request->query->get('oldVersion')]);
@@ -395,6 +401,40 @@ class UpdateController extends AbstractController
 
         return $this->render('administration/update/process_v1_4.html.twig', [
             'numberOfTasks' => $v14OptimizeRulesHelper->countOpenTasks(),
+            'urlAfterProcess' => $this->generateUrl('administration_update_finalize_process', ['oldVersion' => $request->query->get('oldVersion')]),
+        ]);
+    }
+
+    #[Route('/finalize/process/rule-items', name: 'administration_update_finalize_process_optimize_rule_items')]
+    public function finalizeProcessRuleItems(Request $request, OptimizeRuleItemsAfterUpdateHelper $optimizeRuleItemsAfterUpdateHelper)
+    {
+        if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
+            return $this->redirectToRoute('dashboard');
+        }
+
+        $this->projectHelper->unsetActiveProject();
+
+        if ($request->request->has('process') && $request->request->get('process')) {
+            $submittedToken = $request->request->get('token');
+            if (!$this->isCsrfTokenValid('process-tasks', $submittedToken)) {
+                return new Response(null, 401);
+            }
+
+            $numberOfProcessedTasks = $optimizeRuleItemsAfterUpdateHelper->processOpenTasks();
+
+            if ($numberOfProcessedTasks === 0) {
+                return new JsonResponse([
+                    'finished' => true,
+                ]);
+            }
+
+            return new JsonResponse([
+                'processedTasks' => $numberOfProcessedTasks,
+            ]);
+        }
+
+        return $this->render('administration/update/process_rule_items.html.twig', [
+            'numberOfTasks' => $optimizeRuleItemsAfterUpdateHelper->countOpenTasks(),
             'urlAfterProcess' => $this->generateUrl('administration_update_finalize_process', ['oldVersion' => $request->query->get('oldVersion')]),
         ]);
     }

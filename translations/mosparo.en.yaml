@@ -1769,6 +1769,15 @@ administration:
           processingPleaseWait: Processing tasks…
           processingStats: Processed %processedTasks% of %totalTasks%
           doNotLeave: Please do not leave this page or abort the process. If the process does not change for a longer time, please refresh this page.
+          error: An error occurred while processing the rules. Please refresh the page and try again, or check the log file.
+
+        optimizeRuleItems:
+          title: Process rule items
+          intro: mosparo needs to optimize the stored data to catch spam reliably. Please wait while the rule items are processed.
+          processingPleaseWait: Processing rule items…
+          processingStats: Processed %processedTasks% of %totalTasks%
+          doNotLeave: Please do not leave this page or abort the process. If the process does not change for a longer time, please refresh this page.
+          error: An error occurred while processing the rule items. Please refresh the page and try again, or check the log file.
 
     finalized:
       title: Update executed

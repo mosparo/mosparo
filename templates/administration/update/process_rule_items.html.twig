@@ -2,23 +2,23 @@
 
 {% trans_default_domain 'mosparo' %}
 
-{% block documentTitle %}{{ 'administration.update.finalize.process.v14.title'|trans }} - {{ parent() }}{% endblock %}
+{% block documentTitle %}{{ 'administration.update.finalize.process.optimizeRuleItems.title'|trans }} - {{ parent() }}{% endblock %}
 
 {% block small_body %}
-    <h2 class="card-title text-center mb-4">{{ 'administration.update.finalize.process.v14.title'|trans }}</h2>
+    <h2 class="card-title text-center mb-4">{{ 'administration.update.finalize.process.optimizeRuleItems.title'|trans }}</h2>
 
     <div class="alert alert-danger d-none" id="tasks-error-message">
-        {{ 'administration.update.finalize.process.v14.error'|trans }}
+        {{ 'administration.update.finalize.process.optimizeRuleItems.error'|trans }}
     </div>
 
     <p>
-        {{ 'administration.update.finalize.process.v14.intro'|trans }}
+        {{ 'administration.update.finalize.process.optimizeRuleItems.intro'|trans }}
     </p>
 
     <div class="progress-bar-container my-4">
         <div class="d-flex justify-content-between mb-2">
-            <div id="progress-modal-status">{{ 'administration.update.finalize.process.v14.processingPleaseWait'|trans }}</div>
-            <div class="ms-auto">{{ 'administration.update.finalize.process.v14.processingStats'|trans({'%processedTasks%': '<strong id="tasks-processed">0</strong>', '%totalTasks%': '<strong>' ~ numberOfTasks ~ '</strong>'})|raw }}</div>
+            <div id="progress-modal-status">{{ 'administration.update.finalize.process.optimizeRuleItems.processingPleaseWait'|trans }}</div>
+            <div class="ms-auto">{{ 'administration.update.finalize.process.optimizeRuleItems.processingStats'|trans({'%processedTasks%': '<strong id="tasks-processed">0</strong>', '%totalTasks%': '<strong>' ~ numberOfTasks ~ '</strong>'})|raw }}</div>
         </div>
         <div class="progress">
             <div class="progress-bar" id="tasks-progress-bar"></div>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="alert alert-warning">
-        {{ 'administration.update.finalize.process.v14.doNotLeave'|trans }}
+        {{ 'administration.update.finalize.process.optimizeRuleItems.doNotLeave'|trans }}
     </div>
 {% endblock %}
 
@@ -44,7 +44,7 @@
 
             function processTasks()
             {
-                $.post('{{ path('administration_update_finalize_process_v1_4') }}', { process: true, token: '{{ csrf_token('process-tasks') }}'}, function (responseData) {
+                $.post('{{ path('administration_update_finalize_process_optimize_rule_items') }}', { process: true, token: '{{ csrf_token('process-tasks') }}'}, function (responseData) {
                     failedAttempts = 0;
 
                     if (responseData.finished) {

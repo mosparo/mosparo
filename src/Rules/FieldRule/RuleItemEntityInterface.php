@@ -4,6 +4,8 @@ namespace Mosparo\Rules\FieldRule;
 
 interface RuleItemEntityInterface
 {
+    public const PREPARATION_VERSION = 1;
+
     public function getUuid(): ?string;
     public function setUuid(string $uuid): self;
     public function getType(): ?string;

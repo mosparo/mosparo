@@ -226,6 +226,10 @@ services:
         arguments:
             $isDebug: '%kernel.debug%'
 
+    Mosparo\Helper\Migration\OptimizeRuleItemsAfterUpdateHelper:
+        arguments:
+            $isDebug: '%kernel.debug%'
+
     Mosparo\Command\UpdateMosparoCommand:
         arguments:
             $projectDirectory: '%kernel.project_dir%'

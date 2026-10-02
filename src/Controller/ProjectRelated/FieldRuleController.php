@@ -644,9 +644,9 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
     public function findMatchingValues(array $options, $pattern)
     {
         $matchingOptions = [];
-        $pattern = Pattern::create(strtolower($pattern));
+        $pattern = Pattern::create(mb_strtolower($pattern));
         foreach ($options as $key => $label) {
-            if ($pattern->match(strtolower($label))) {
+            if ($pattern->match(mb_strtolower($label))) {
                 $matchingOptions[] = $key;
             }
         }

@@ -47,7 +47,7 @@ class WebsiteRuleTester extends AbstractRuleTester
             $preparedValue = '//' . $preparedValue;
         }
 
-        $preparedValue = strtolower($preparedValue);
+        $preparedValue = mb_strtolower($preparedValue);
 
         if (strpos($lowercaseValue, $preparedValue) !== false) {
             $matchingItems = [

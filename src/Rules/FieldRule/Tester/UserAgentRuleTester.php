@@ -43,7 +43,7 @@ class UserAgentRuleTester extends AbstractRuleTester
 
     protected function validateTextItem($value, $itemValue): bool
     {
-        $itemValue = strtolower($itemValue);
+        $itemValue = mb_strtolower($itemValue);
 
         if (strpos($itemValue, '*') !== false || strpos($itemValue, '?') !== false) {
             $pattern = '*' . trim($itemValue, '*') . '*';

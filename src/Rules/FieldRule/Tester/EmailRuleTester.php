@@ -43,7 +43,7 @@ class EmailRuleTester extends AbstractRuleTester
     {
         $matchingItems = [];
         $value = trim($lowercaseValue);
-        $itemValue = trim(strtolower($item->getValue()));
+        $itemValue = trim(mb_strtolower($item->getValue()));
 
         if ($value === $itemValue || preg_match('/(^|\s+)' . preg_quote($itemValue, '/') . '(\s+|$)/', $value)) {
             $matchingItems = [

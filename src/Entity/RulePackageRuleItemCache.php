@@ -14,6 +14,7 @@ use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 #[ORM\Index(name: 'rpric_uuid_idx', fields: ['uuid'])]
 #[ORM\Index(name: 'rpric_hashed_idx', fields: ['project', 'type', 'hashedValue'])]
 #[ORM\Index(name: 'rpric_rprc_project_idx', fields: ['project', 'rulePackageRuleCache'])]
+#[ORM\Index(name: 'rpric_pv_idx', fields: ['preparationVersion'])]
 #[ORM\HasLifecycleCallbacks]
 class RulePackageRuleItemCache implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 {

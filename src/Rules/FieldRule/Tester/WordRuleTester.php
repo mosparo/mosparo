@@ -48,7 +48,7 @@ class WordRuleTester extends AbstractRuleTester
 
     protected function validateTextItem($value, $itemValue): bool
     {
-        $itemValue = strtolower($itemValue);
+        $itemValue = mb_strtolower($itemValue);
 
         if (strpos($itemValue, '*') !== false || strpos($itemValue, '?') !== false) {
             $pattern = '*' . trim($itemValue, '*') . '*';
@@ -66,12 +66,12 @@ class WordRuleTester extends AbstractRuleTester
 
     protected function validateWordExact($value, $itemValue): ?bool
     {
-        return (@preg_match('/(^|\W+)' . preg_quote($itemValue) . '($|\W+)/i', $value));
+        return (@preg_match('/(^|\W+)' . preg_quote($itemValue, '/') . '($|\W+)/iu', $value));
     }
 
     protected function validateWordFull($value, $itemValue): ?bool
     {
-        return trim($itemValue) === trim($value);
+        return trim(mb_strtolower($itemValue)) === trim(mb_strtolower($value));
     }
 
     protected function validateRegexItem($value, $itemValue): ?bool

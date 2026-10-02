@@ -48,7 +48,7 @@ class IpAddressRuleTester extends AbstractRuleTester
 
     protected function validateIpAddress($value, $itemValue): bool
     {
-        $itemValue = strtolower($itemValue);
+        $itemValue = mb_strtolower($itemValue);
 
         if ($value === $itemValue) {
             return true;

@@ -190,7 +190,7 @@ class RuleTesterHelper
 
     protected function checkFieldData(DetectionResult $detectionResult, string $groupKey, array $fieldData, mixed $originalValue, bool $useRules = true,  bool$useRulePackages = true)
     {
-        $value = strtolower($originalValue);
+        $value = mb_strtolower($originalValue);
         $path = $groupKey . '.' . $fieldData['fieldPath'];
 
         $qb = $this->entityManager->createQueryBuilder();
