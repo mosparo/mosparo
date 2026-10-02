@@ -276,6 +276,7 @@ class SetupController extends AbstractController
         $this->configHelper->writeEnvironmentConfig([
             'mosparo_installed' => true,
             'mosparo_installed_version' => Kernel::VERSION,
+            'mosparo_initial_version' => Kernel::VERSION, // Will stay on this version forever to keep track of the additional migrations
             'mosparo_assets_version' => $tokenGenerator->generateShortToken(),
         ]);
 
