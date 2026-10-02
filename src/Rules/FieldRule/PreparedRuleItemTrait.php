@@ -51,7 +51,7 @@ trait PreparedRuleItemTrait
     public function preFlush(): void
     {
         $this->setPreparedValue($this->prepareValue($this->getType(), mb_strtolower($this->getValue())));
-        $this->setHashedValue(HashUtil::hashFast(mb_strtolower($this->getValue())));
+        $this->setHashedValue($this->prepareHash($this->getType(), mb_strtolower($this->getValue())));
 
         $this->preparationVersion = RuleItemEntityInterface::PREPARATION_VERSION;
     }
@@ -102,6 +102,14 @@ trait PreparedRuleItemTrait
         }
 
         return $value;
+    }
+
+    protected function prepareHash(string $type, string $value): string
+    {
+        return match($type) {
+            'domain' => HashUtil::hashFast(trim($value, './')),
+            default => HashUtil::hashFast($value)
+        };
     }
 
     protected function findNextLowerPrefix($searchedPrefix, $prefixes): int
