@@ -361,8 +361,7 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
         // Add the IDs of the newly saved items to add them to the row in the frontend.
         foreach ($newItems as $newItem) {
             foreach ($processed as $key => $processedData) {
-                if ($processedData['uuid'] === $newItem->getUuid()) {
-                    $entityManager->refresh($newItem);
+                if (($processedData['uuid'] ?? null) === $newItem->getUuid()) {
                     $processed[$key]['id'] = $newItem->getId();
                 }
             }
