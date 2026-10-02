@@ -108,6 +108,7 @@ trait PreparedRuleItemTrait
     {
         return match($type) {
             'domain' => HashUtil::hashFast(trim($value, './')),
+            'email' => HashUtil::hashFast(trim($value)),
             default => HashUtil::hashFast($value)
         };
     }
