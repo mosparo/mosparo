@@ -33,6 +33,7 @@ honeypotField:
 securityGuideline:
   atLeastOneCriterionRequired: The security guideline requires at least one criterion.
   asNumberNotNumeric: The AS number is not a number.
+  dynamicComplexityHigher: The maximum complexity must be higher than or equal to the normal complexity.
 
 webCronJob:
   webCronJobIntervalAtLeast5Minutes: The web cron job interval must be at least 5 minutes or more.
