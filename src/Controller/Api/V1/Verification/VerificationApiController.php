@@ -118,6 +118,8 @@ class VerificationApiController extends AbstractController
 
             $entityManager->flush();
 
+            $this->statisticHelper->increaseDayStatisticForSubmission($submission);
+
             if (!$activeProject->isApiDebugMode()) {
                 unset($issue['debugInformation']);
             }
@@ -174,6 +176,8 @@ class VerificationApiController extends AbstractController
 
                 $entityManager->flush();
 
+                $this->statisticHelper->increaseDayStatisticForSubmission($submission);
+
                 if (!$activeProject->isApiDebugMode()) {
                     unset($issue['debugInformation']);
                 }
@@ -200,6 +204,8 @@ class VerificationApiController extends AbstractController
             $submission->addIssue($issue);
 
             $entityManager->flush();
+
+            $this->statisticHelper->increaseDayStatisticForSubmission($submission);
 
             if (!$activeProject->isApiDebugMode()) {
                 unset($issue['debugInformation']);
@@ -244,6 +250,8 @@ class VerificationApiController extends AbstractController
                     $submission->addIssue($issue);
 
                     $entityManager->flush();
+
+                    $this->statisticHelper->increaseDayStatisticForSubmission($submission);
 
                     if (!$activeProject->isApiDebugMode()) {
                         unset($issue['debugInformation']);
