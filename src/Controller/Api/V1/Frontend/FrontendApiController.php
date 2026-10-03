@@ -205,22 +205,26 @@ class FrontendApiController extends AbstractController
         $formData = [];
         if ($request->request->has('formData')) {
             $formData = json_decode($request->request->getString('formData'), true);
-            if ($formData === null || !isset($formData['fields'])) {
+            if ($formData === null || !$this->isValidFormFields($formData)) {
                 return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
             }
 
-            if (isset($formData['ignoredFields']) && $formData['ignoredFields']) {
-                $partialSubmission->appendIgnoredFields($formData['ignoredFields']);
+            if (isset($formData['ignoredFields']) && is_array($formData['ignoredFields'])) {
+                $partialSubmission->appendIgnoredFields(array_values(array_filter($formData['ignoredFields'], 'is_string')));
             }
         }
 
         $metadata = [];
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
-            $metadata['metadata'] = json_decode($request->request->getString('metadata'), true);
+            $decodedMetadata = json_decode($request->request->getString('metadata'), true);
+
+            if (is_array($decodedMetadata)) {
+                $metadata['metadata'] = $decodedMetadata;
+            }
         }
 
         $partialSubmission->appendData(array_merge([
-            'formData' => $formData['fields'],
+            'formData' => $formData['fields'] ?? [],
         ], $metadata));
 
         $partialSubmission->setUpdatedAt(new DateTime());
@@ -261,13 +265,17 @@ class FrontendApiController extends AbstractController
         }
 
         $formData = json_decode($request->request->getString('formData'), true);
-        if ($formData === null || !isset($formData['fields'])) {
+        if ($formData === null || !$this->isValidFormFields($formData)) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
         }
 
         $metadata = [];
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
-            $metadata['metadata'] = json_decode($request->request->getString('metadata'), true);
+            $decodedMetadata = json_decode($request->request->getString('metadata'), true);
+
+            if (is_array($decodedMetadata)) {
+                $metadata['metadata'] = $decodedMetadata;
+            }
         }
 
         // Add the client data
@@ -310,9 +318,15 @@ class FrontendApiController extends AbstractController
         if ($submitToken->getPartialSubmission()) {
             $partialSubmission = $submitToken->getPartialSubmission();
             $submission->appendData($partialSubmission->getData());
-            $submission->setIgnoredFields(array_merge($partialSubmission->getIgnoredFields(), $formData['ignoredFields']));
-        } else {
-            $submission->setIgnoredFields($formData['ignoredFields']);
+
+            $ignoredFields = [];
+            if (isset($formData['ignoredFields']) && is_array($formData['ignoredFields'])) {
+                $ignoredFields = array_values(array_filter($formData['ignoredFields'], 'is_string'));
+            }
+
+            $submission->setIgnoredFields(array_merge($partialSubmission->getIgnoredFields(), $ignoredFields));
+        } else if (isset($formData['ignoredFields']) && is_array($formData['ignoredFields'])) {
+            $submission->setIgnoredFields(array_values(array_filter($formData['ignoredFields'], 'is_string')));
         }
 
         // Check for the honeypot field
@@ -659,5 +673,27 @@ class FrontendApiController extends AbstractController
         }
 
         return (int) round($normalMaxNumber + (($delta / 100) * $percentage));
+    }
+
+    protected function isValidFormFields(mixed $formData): bool
+    {
+        if (!is_array($formData) || !isset($formData['fields']) || !is_array($formData['fields'])) {
+            return false;
+        }
+
+        foreach ($formData['fields'] as $field) {
+            if (!is_array($field) || !is_string($field['name'] ?? null) || !is_string($field['fieldPath'] ?? null)) {
+                return false;
+            }
+
+            $values = $field['value'] ?? null;
+            foreach ((is_array($values) ? $values : [$values]) as $value) {
+                if (!is_scalar($value)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
