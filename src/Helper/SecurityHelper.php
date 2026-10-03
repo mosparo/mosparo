@@ -126,7 +126,7 @@ class SecurityHelper
                 $lockout->setDuration((int) round($lockout->getDuration() * $lockoutMultiplicator));
             }
 
-            $endDateTime = $lockout->getStartedAt();
+            $endDateTime = clone $lockout->getStartedAt();
             $endDateTime->add(new DateInterval('PT' . $lockout->getDuration() . 'S'));
 
             $lockout->setValidUntil($endDateTime);
