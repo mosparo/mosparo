@@ -198,7 +198,7 @@ class RuleTesterHelper
             ->select('i');
 
         $fromCache = false;
-        $storedRuleItemIds = $this->ruleCacheHelper->getRuleItemIdsForValue($value);
+        $storedRuleItemIds = $this->ruleCacheHelper->getRuleItemIdsForValue($path, $value);
 
         if ($storedRuleItemIds) {
             $fromCache = true;
@@ -250,7 +250,7 @@ class RuleTesterHelper
         }
 
         if (!$fromCache) {
-            $this->ruleCacheHelper->storeRuleItemsForValue($value, $processedItemIds);
+            $this->ruleCacheHelper->storeRuleItemsForValue($path, $value, $processedItemIds);
         }
     }
 
