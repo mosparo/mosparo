@@ -960,7 +960,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             startNumber = 0
         }
 
-        for (let i = startNumber; i < maxNumber; i++) {
+        for (let i = startNumber; i <= maxNumber; i++) {
             let hash = await this.generateHash(submitToken + i);
 
             if (hash === targetHash) {
