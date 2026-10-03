@@ -669,7 +669,7 @@ class UpdateHelper
     {
         $zip = new \ZipArchive();
 
-        if (!($res = $zip->open($filePath))) {
+        if (($res = $zip->open($filePath)) !== true) {
             throw new Exception(sprintf('Could not open update file. Error: %s', $res));
         }
 
