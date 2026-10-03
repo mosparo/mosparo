@@ -95,6 +95,11 @@ class UserController extends AbstractController
             $isAdminUserAttributes['checked'] = 'checked';
         }
 
+        if ($user->getId() === $this->getUser()->getId()) {
+            $isActiveUserAttributes['disabled'] = 'disabled';
+            $isAdminUserAttributes['disabled'] = 'disabled';
+        }
+
         $canCreateProjectsAttributes = [];
         if ($user->hasRole('ROLE_CAN_CREATE_PROJECTS')) {
             $canCreateProjectsAttributes['checked'] = 'checked';
@@ -159,18 +164,20 @@ class UserController extends AbstractController
                 }
             }
 
-            $isActiveUser = false;
-            if ($form->get('isActiveUser')->getData()) {
-                $user->addRole('ROLE_USER');
-                $isActiveUser = true;
-            } else {
-                $user->removeRole('ROLE_USER');
-            }
+            if ($user->getId() !== $this->getUser()->getId()) {
+                $isActiveUser = false;
+                if ($form->get('isActiveUser')->getData()) {
+                    $user->addRole('ROLE_USER');
+                    $isActiveUser = true;
+                } else {
+                    $user->removeRole('ROLE_USER');
+                }
 
-            if ($form->get('isAdminUser')->getData() && $isActiveUser) {
-                $user->addRole('ROLE_ADMIN');
-            } else {
-                $user->removeRole('ROLE_ADMIN');
+                if ($form->get('isAdminUser')->getData() && $isActiveUser) {
+                    $user->addRole('ROLE_ADMIN');
+                } else {
+                    $user->removeRole('ROLE_ADMIN');
+                }
             }
 
             if ($form->get('canCreateProjects')->getData()) {
@@ -231,6 +238,13 @@ class UserController extends AbstractController
     #[Route('/{id}/delete', name: 'administration_user_delete')]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
+        if ($user->getId() === $this->getUser()->getId()) {
+            $session = $request->getSession();
+            $session->getFlashBag()->add('error', 'administration.user.delete.message.errorDeleteNotAllowed');
+
+            return $this->redirectToRoute('administration_user_list');
+        }
+
         $isOwnerInProject = false;
         foreach ($user->getProjectMemberships() as $membership) {
             if ($membership->getRole() === ProjectMember::ROLE_OWNER) {

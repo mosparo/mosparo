@@ -1567,6 +1567,7 @@ administration:
       message:
         successfullyDeleted: The user %email% was deleted successfully.
         errorUserIsOwner: The user is an owner of at least one project. You cannot delete owner of projects.
+        errorDeleteNotAllowed: You cannot delete your user.
 
   cronJobs:
     title: Cron jobs
