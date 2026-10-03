@@ -88,7 +88,7 @@ class SecurityHelper
                 $this->entityManager->persist($delay);
             } else {
                 $delay = $existingDelay;
-                $delay->setDuration($delay->getDuration() * $delayMultiplicator);
+                $delay->setDuration((int) round($delay->getDuration() * $delayMultiplicator));
             }
 
             $endDateTime = clone $delay->getStartedAt();
@@ -123,7 +123,7 @@ class SecurityHelper
                 $this->entityManager->persist($lockout);
             } else {
                 $lockout = $existingLockout;
-                $lockout->setDuration($lockout->getDuration() * $lockoutMultiplicator);
+                $lockout->setDuration((int) round($lockout->getDuration() * $lockoutMultiplicator));
             }
 
             $endDateTime = $lockout->getStartedAt();

@@ -653,11 +653,11 @@ class FrontendApiController extends AbstractController
             );
         }
 
-        $percentage = (100 / $numberOfMaxSubmissions) * $actualNumberOfSubmissions;
+        $percentage = (100 / max(1, $numberOfMaxSubmissions)) * $actualNumberOfSubmissions;
         if ($percentage > 100) {
             $percentage = 100;
         }
 
-        return $normalMaxNumber + (($delta / 100) * $percentage);
+        return (int) round($normalMaxNumber + (($delta / 100) * $percentage));
     }
 }
