@@ -88,8 +88,16 @@ class VerificationApiController extends AbstractController
         }
 
         $submission = $submitToken->getLastSubmission();
-        if (!$submission) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.']);
+        if (!$submission || !$submission->getValidationToken()) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => (!$submission) ? 'submission_not_found' : 'validation_token_missing',
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.'] + $debugInformation);
         }
 
         $submitToken->setVerifiedAt(new DateTime());
