@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: ProjectMemberRepository::class)]
+#[ORM\UniqueConstraint(name: 'project_user_idx', columns: ['user_id', 'project_id'])]
 class ProjectMember
 {
     const ROLE_READER = 'reader';

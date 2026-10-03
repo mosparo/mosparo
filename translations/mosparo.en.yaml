@@ -946,6 +946,7 @@ settings:
       message:
         successfullySaved: The project member was saved successfully.
         errorUserNotFound: The user was not found.
+        errorUserAlreadyMember: The user is already a member of this project.
         errorNeedsOwner: The project needs at least one owner.
 
     delete:

@@ -201,6 +201,22 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                     );
 
                     return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
+                } else if ($user->getProjectMemberships()) {
+                    foreach ($user->getProjectMemberships() as $membership) {
+                        if ($membership->getProject()->getId() === $this->getActiveProject()->getId()) {
+                            $session = $request->getSession();
+                            $session->getFlashBag()->add(
+                                'error',
+                                $this->translator->trans(
+                                    'settings.projectMember.form.message.errorUserAlreadyMember',
+                                    [],
+                                    'mosparo'
+                                )
+                            );
+
+                            return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
+                        }
+                    }
                 }
 
                 $projectMember->setUser($user);
