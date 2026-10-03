@@ -401,8 +401,8 @@ class FrontendApiController extends AbstractController
         $submitToken->setLastSubmission($submission);
         $this->entityManager->flush();
 
-        // Increase the day statistic if it is spam. We count anyway, even if the silent mode is enabled
-        if ($submission->isSpam()) {
+        // Increase the day statistic if it is spam. If the silent mode is enabled, the backend will increase the statistics.
+        if ($submission->isSpam() && !$activeProject->isSilentModeEnabled()) {
             $this->statisticHelper->increaseDayStatisticForSubmission($submission);
         }
 
