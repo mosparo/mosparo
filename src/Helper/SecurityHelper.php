@@ -146,7 +146,6 @@ class SecurityHelper
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('count(st.id) AS requests')
            ->from('Mosparo\Entity\SubmitToken', 'st')
-           ->leftJoin('Mosparo\Entity\Submission', 's', 'WITH', 'st.id = s.submitToken')
            ->where('st.ipAddress = :ip')
            ->andWhere('st.createdAt > :startTime')
            ->setParameter(':ip', HashUtil::hash($ipAddress))
@@ -165,7 +164,6 @@ class SecurityHelper
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('count(st.id) AS requests')
             ->from('Mosparo\Entity\SubmitToken', 'st')
-            ->leftJoin('Mosparo\Entity\Submission', 's', 'WITH', 'st.id = s.submitToken')
             ->andWhere('st.createdAt > :startTime')
             ->setParameter(':startTime', $startTime);
 
