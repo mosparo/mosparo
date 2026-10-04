@@ -95,10 +95,6 @@ class RuleItemIterator implements \Iterator
             return $this->iterator->valid();
         }
 
-        if (!$this->iterator) {
-            return false;
-        }
-
         return $this->iterator->valid();
     }
 
