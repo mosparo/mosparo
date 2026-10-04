@@ -81,7 +81,7 @@ class RuleItemIterator implements \Iterator
     {
         $this->prepareIterator();
 
-        if (!$this->iterator->valid()) {
+        if (!$this->iterator || !$this->iterator->valid()) {
             $this->iterator = null;
 
             $this->prepareIterator();
