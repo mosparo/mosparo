@@ -278,15 +278,11 @@ function mosparo(containerId, url, uuid, publicKey, options)
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         this.containerElement.classList.add('mosparo__loading');
 
-        let formActionUrl = this.formElement.getAttribute('action') ?? document.location.href;
-        if (formActionUrl.indexOf('http://') !== 0 || formActionUrl.indexOf('https://') !== 0) {
-            if (formActionUrl.indexOf('/') === 0) {
-                // Action URL is absolute, add host
-                formActionUrl = document.location.origin + formActionUrl;
-            } else if (['?', '&', '#'].indexOf(formActionUrl.substring(0, 1)) !== -1) {
-                // Action is a query URL or a hash
-                formActionUrl = document.location.href + formActionUrl;
-            }
+        let formActionUrl;
+        try {
+            formActionUrl = new URL(this.formElement.getAttribute('action') ?? '', document.location.href).href;
+        } catch {
+            formActionUrl = document.location.href;
         }
 
         let data = {
