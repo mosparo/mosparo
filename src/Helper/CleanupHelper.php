@@ -170,123 +170,120 @@ class CleanupHelper
             $this->projectHelper->unsetActiveProject();
         }
 
-        // Generally, we ignore all exceptions which could happen from here on.
-        // The part above and below this try-catch is important to make sure that
-        // the project filter is active again.
         try {
-            // Delete expired delays
-            $qb = $this->entityManager->createQueryBuilder();
-            $qb
-                ->delete('Mosparo\Entity\Delay', 'd')
-                ->where('d.validUntil < :now')
-                ->setParameter('now', new DateTime())
-                ->getQuery()->execute();
-            unset($qb);
+            // Generally, we ignore all exceptions which could happen from here on.
+            try {
+                // Delete expired delays
+                $qb = $this->entityManager->createQueryBuilder();
+                $qb
+                    ->delete('Mosparo\Entity\Delay', 'd')
+                    ->where('d.validUntil < :now')
+                    ->setParameter('now', new DateTime())
+                    ->getQuery()->execute();
+                unset($qb);
 
-            // Delete expired lockouts
-            $qb = $this->entityManager->createQueryBuilder();
-            $qb
-                ->delete('Mosparo\Entity\Lockout', 'l')
-                ->where('l.validUntil < :now')
-                ->setParameter('now', new DateTime())
-                ->getQuery()->execute();
-            unset($qb);
+                // Delete expired lockouts
+                $qb = $this->entityManager->createQueryBuilder();
+                $qb
+                    ->delete('Mosparo\Entity\Lockout', 'l')
+                    ->where('l.validUntil < :now')
+                    ->setParameter('now', new DateTime())
+                    ->getQuery()->execute();
+                unset($qb);
 
-            for ($iterationCounter = 0; $iterationCounter < $maxIterations; $iterationCounter++) {
-                // Find all deletable submissions and submit tokens
-                $query = $this->entityManager->createQuery('
-                        SELECT s.id, st.id AS stId
-                        FROM Mosparo\Entity\Submission s
-                        JOIN s.submitToken st
-                        WHERE (s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = FALSE AND s.valid IS NULL))
-                    ')
-                    ->setParameter('limit', (new DateTime())->sub($this->submissionRetentionPeriod))
-                    ->setParameter('limitDay', (new DateTime())->sub($this->submitTokenRetentionPeriod))
-                    ->setMaxResults($maxPerIteration);
-
-                $result = $query->getResult();
-                $deletableSubmissionIds = array_column($result, 'id');
-                $deletableSubmitTokenIds = array_unique(array_column($result, 'stId'));
-                unset($query);
-                unset($result);
-
-                // The first step was to find the submit tokens and submissions that reached the end of the retention
-                // period. We did that above. But now, we have to make sure that we do not try to delete anything that
-                // we still need. For this, we search for the submit tokens that are used by submissions that are not
-                // at the end of the retention period. These submit tokens cannot be deleted.
-                //
-                // Submit tokens that cannot be deleted yet are those that are used in multiple submissions.
-                // Example: The user validates the form data and creates a submission. The first time, mosparo
-                //          detects spam, which means that this submission is stored for 14 days (by default). But now,
-                //          the user adjusts the form and revalidates the form data. Now, everything is good, so
-                //          mosparo stores a second submission. But since the user does not really submit the form, the
-                //          retention period of the second submission is 24 hours (by default).
-                //          This means that the second submission is gonna be deleted before the first one, which is not
-                //          acceptable, so we have to prevent that.
-                $query = $this->entityManager->createQuery('
-                        SELECT st.id 
-                        FROM Mosparo\Entity\Submission s
-                        JOIN s.submitToken st
-                        WHERE st.id IN (:deletableSubmitTokenIds)
-                        AND s.id NOT IN (:deletableSubmissionIds)
-                    ')
-                    ->setParameter('deletableSubmitTokenIds', $deletableSubmitTokenIds, ArrayParameterType::INTEGER)
-                    ->setParameter('deletableSubmissionIds', $deletableSubmissionIds, ArrayParameterType::INTEGER)
-                ;
-                $result = array_unique($query->getSingleColumnResult());
-                unset($query);
-                $reallyDeletableSubmitTokenIds = array_diff($deletableSubmitTokenIds, $result);
-
-                // After we found the submit tokens that really can be deleted, we can query for the submission IDs that
-                // are ready for deletion. Only if the submit token is gonna be deleted, the submission can be deleted too.
-                $query = $this->entityManager->createQuery('
-                        SELECT s.id 
-                        FROM Mosparo\Entity\Submission s
-                        JOIN s.submitToken st
-                        WHERE st.id IN (:deletableSubmitTokenIds)
-                    ')
-                    ->setParameter('deletableSubmitTokenIds', $reallyDeletableSubmitTokenIds, ArrayParameterType::INTEGER)
-                ;
-                $reallyDeletableSubmissionIds = array_unique($query->getSingleColumnResult());
-
-                // If we have nothing left, it means that all the other submissions and submit tokens are still required.
-                if (count($reallyDeletableSubmissionIds) === 0) {
-                    // Break the loop when we have no more deletable submissions
-                    $notFinished = false;
-                    break;
-                }
-
-                // Remove the connection between submissions and submit tokens
-                $query = $this->entityManager->createQuery('
-                        UPDATE Mosparo\Entity\Submission s
-                        SET s.submitToken = NULL
-                        WHERE s.id IN (:deletableSubmissionIds)
-                    ')
-                    ->setParameter('deletableSubmissionIds', $reallyDeletableSubmissionIds, ArrayParameterType::INTEGER);
-                $query->execute();
-                unset($query);
-
-                // Delete the submit tokens
-                if ($reallyDeletableSubmitTokenIds) {
+                for ($iterationCounter = 0; $iterationCounter < $maxIterations; $iterationCounter++) {
+                    // Find all deletable submissions and submit tokens
                     $query = $this->entityManager->createQuery('
-                            DELETE Mosparo\Entity\PartialSubmission ps
-                            WHERE ps.submitToken IN (:deletableSubmitTokenIds)
+                            SELECT s.id, st.id AS stId
+                            FROM Mosparo\Entity\Submission s
+                            JOIN s.submitToken st
+                            WHERE (s.submittedAt < :limit OR (s.submittedAt < :limitDay AND s.spam = FALSE AND s.valid IS NULL))
+                            ORDER BY s.submittedAt
                         ')
-                        ->setParameter('deletableSubmitTokenIds', $reallyDeletableSubmitTokenIds, ArrayParameterType::INTEGER);
-                    $query->execute();
-                    unset($query);
+                        ->setParameter('limit', (new DateTime())->sub($this->submissionRetentionPeriod))
+                        ->setParameter('limitDay', (new DateTime())->sub($this->submitTokenRetentionPeriod))
+                        ->setMaxResults($maxPerIteration);
 
+                    $result = $query->getResult();
+                    $deletableSubmissionIds = array_column($result, 'id');
+                    $deletableSubmitTokenIds = array_unique(array_column($result, 'stId'));
+                    unset($query);
+                    unset($result);
+
+                    // The first step was to find the submit tokens and submissions that reached the end of the retention
+                    // period. We did that above. But now, we have to make sure that we do not try to delete anything that
+                    // we still need. For this, we search for the submit tokens that are used by submissions that are not
+                    // at the end of the retention period. These submit tokens cannot be deleted.
+                    //
+                    // Submit tokens that cannot be deleted yet are those that are used in multiple submissions.
+                    // Example: The user validates the form data and creates a submission. The first time, mosparo
+                    //          detects spam, which means that this submission is stored for 14 days (by default). But now,
+                    //          the user adjusts the form and revalidates the form data. Now, everything is good, so
+                    //          mosparo stores a second submission. But since the user does not really submit the form, the
+                    //          retention period of the second submission is 24 hours (by default).
+                    //          This means that the second submission is gonna be deleted before the first one, which is not
+                    //          acceptable, so we have to prevent that.
                     $query = $this->entityManager->createQuery('
-                            DELETE Mosparo\Entity\SubmitToken st
+                            SELECT st.id 
+                            FROM Mosparo\Entity\Submission s
+                            JOIN s.submitToken st
+                            WHERE st.id IN (:deletableSubmitTokenIds)
+                            AND s.id NOT IN (:deletableSubmissionIds)
+                        ')
+                        ->setParameter('deletableSubmitTokenIds', $deletableSubmitTokenIds, ArrayParameterType::INTEGER)
+                        ->setParameter('deletableSubmissionIds', $deletableSubmissionIds, ArrayParameterType::INTEGER);
+                    $result = array_unique($query->getSingleColumnResult());
+                    unset($query);
+                    $reallyDeletableSubmitTokenIds = array_diff($deletableSubmitTokenIds, $result);
+
+                    // After we found the submit tokens that really can be deleted, we can query for the submission IDs that
+                    // are ready for deletion. Only if the submit token is gonna be deleted, the submission can be deleted too.
+                    $query = $this->entityManager->createQuery('
+                            SELECT s.id 
+                            FROM Mosparo\Entity\Submission s
+                            JOIN s.submitToken st
                             WHERE st.id IN (:deletableSubmitTokenIds)
                         ')
                         ->setParameter('deletableSubmitTokenIds', $reallyDeletableSubmitTokenIds, ArrayParameterType::INTEGER);
+                    $reallyDeletableSubmissionIds = array_unique($query->getSingleColumnResult());
+
+                    // If we have nothing left, it means that all the other submissions and submit tokens are still required.
+                    if (count($reallyDeletableSubmissionIds) === 0) {
+                        // Break the loop when we have no more deletable submissions
+                        $notFinished = false;
+                        break;
+                    }
+
+                    // Remove the connection between submissions and submit tokens
+                    $query = $this->entityManager->createQuery('
+                            UPDATE Mosparo\Entity\Submission s
+                            SET s.submitToken = NULL
+                            WHERE s.id IN (:deletableSubmissionIds)
+                        ')
+                        ->setParameter('deletableSubmissionIds', $reallyDeletableSubmissionIds, ArrayParameterType::INTEGER);
                     $query->execute();
                     unset($query);
-                }
 
-                // Delete the submissions
-                if ($deletableSubmissionIds) {
+                    // Delete the submit tokens
+                    if ($reallyDeletableSubmitTokenIds) {
+                        $query = $this->entityManager->createQuery('
+                                DELETE Mosparo\Entity\PartialSubmission ps
+                                WHERE ps.submitToken IN (:deletableSubmitTokenIds)
+                            ')
+                            ->setParameter('deletableSubmitTokenIds', $reallyDeletableSubmitTokenIds, ArrayParameterType::INTEGER);
+                        $query->execute();
+                        unset($query);
+
+                        $query = $this->entityManager->createQuery('
+                                DELETE Mosparo\Entity\SubmitToken st
+                                WHERE st.id IN (:deletableSubmitTokenIds)
+                            ')
+                            ->setParameter('deletableSubmitTokenIds', $reallyDeletableSubmitTokenIds, ArrayParameterType::INTEGER);
+                        $query->execute();
+                        unset($query);
+                    }
+
+                    // Delete the submissions
                     $query = $this->entityManager->createQuery('
                             DELETE Mosparo\Entity\DetectionResult dr 
                             WHERE dr.submission IN (:deletableSubmissionIds)
@@ -302,85 +299,88 @@ class CleanupHelper
                         ->setParameter('deletableSubmissionIds', $reallyDeletableSubmissionIds, ArrayParameterType::INTEGER);
                     $query->execute();
                     unset($query);
+
+                    $cleanupStatistic
+                        ->increaseNumberOfDeletedSubmitTokens(count($reallyDeletableSubmitTokenIds))
+                        ->increaseNumberOfDeletedSubmissions(count($reallyDeletableSubmissionIds));
+
+                    // If it took more than the allowed timeout, stop the cleanup.
+                    if ($timeout > 0 && $maxIterations > 1 && (microtime(true) - $startTime) > $timeout) {
+                        $this->logger->info(sprintf(
+                            'Cleanup process aborted after %.2fs because the timeout of %ds was reached.',
+                            (microtime(true) - $startTime),
+                            $timeout
+                        ));
+                        break;
+                    }
                 }
 
-                $cleanupStatistic
-                    ->increaseNumberOfDeletedSubmitTokens(count($reallyDeletableSubmitTokenIds))
-                    ->increaseNumberOfDeletedSubmissions(count($reallyDeletableSubmissionIds));
+                // Cleanup incomplete submissions and submit tokens
+                $this->deleteSubmissionsWithoutAssignedSubmitTokens($cleanupStatistic);
+                $this->deleteSubmitTokensWithoutSubmissions($cleanupStatistic);
 
-                // If it took more than the allowed timeout, stop the cleanup.
-                if ($timeout > 0 && $maxIterations > 1 && (microtime(true) - $startTime) > $timeout) {
-                    $this->logger->info(sprintf(
-                        'Cleanup process aborted after %.2fs because the timeout of %ds was reached.',
-                        (microtime(true) - $startTime),
-                        $timeout
-                    ));
-                    break;
+                // Clear the day statistic
+                $this->cleanupDayStatistcs();
+            } catch (\Exception $e) {
+                // Throw the exception if we should not ignore exceptions.
+                if (!$ignoreExceptions) {
+                    throw $e;
                 }
+
+                $this->logger->critical($e->getMessage());
+
+                // Since there was an error, let's try that again in 10 minutes
+                $notFinished = true;
             }
 
-            // Cleanup incomplete submissions and submit tokens
-            $this->deleteSubmissionsWithoutAssignedSubmitTokens($cleanupStatistic);
-            $this->deleteSubmitTokensWithoutSubmissions($cleanupStatistic);
+            // Count the submit tokens and submissions for the statistic
+            $query = $this->entityManager->createQuery('SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st');
+            $cleanupStatistic->setNumberOfStoredSubmitTokens($query->getSingleScalarResult());
+            unset($query);
 
-            // Clear the day statistic
-            $this->cleanupDayStatistcs();
-        } catch (\Exception $e) {
-            // Throw the exception if we should not ignore exceptions.
-            if (!$ignoreExceptions) {
-                throw $e;
+            $query = $this->entityManager->createQuery('SELECT COUNT(s.id) FROM Mosparo\Entity\Submission s');
+            $cleanupStatistic->setNumberOfStoredSubmissions($query->getSingleScalarResult());
+            unset($query);
+
+            $additionalCleanupDate = null;
+            if ($notFinished) {
+                // Execute the next cleanup in 10 minutes
+                // We give the (database) server these 10 minutes to relax after deleting so many rows.
+                $additionalCleanupDate = (new DateTime())->add($this->cleanupUnfinishedInterval);
+                $cleanupStatistic->setCleanupStatus(CleanupStatus::INCOMPLETE);
+            } else {
+                $cleanupStatistic->setCleanupStatus(CleanupStatus::COMPLETE);
             }
 
-            $this->logger->critical($e->getMessage());
+            $additionalCleanup->set($additionalCleanupDate);
+            $this->cache->save($additionalCleanup);
 
-            // Since there was an error, let's try that again in 10 minutes
-            $notFinished = true;
+            // The next regular cleanup will be performed in (normally) 6 hours
+            $nextCleanup->set((new DateTime())->add($this->cleanupProcessInterval));
+            $this->cache->save($nextCleanup);
+
+            $executionTime = microtime(true) - $startTime;
+            $this->logger->info(sprintf(
+                'Cleanup process completed after %.2fs.',
+                $executionTime
+            ));
+
+            // Store the cleanup statistic object
+            $cleanupStatistic->setExecutionTime($executionTime);
+            $this->entityManager->persist($cleanupStatistic);
+            $this->entityManager->flush();
+        } finally {
+            // If the exception got thrown above, we have to set the project again and reset the cache item.
+
+            // Set the active project after the cleanup
+            if ($activeProject !== null) {
+                $this->projectHelper->setActiveProject($activeProject);
+            }
+
+            // Unlock the cleanup
+            $cleanupStartedAt->set(null);
+            $this->cache->save($cleanupStartedAt);
         }
-
-        // Count the submit tokens and submissions for the statistic
-        $query = $this->entityManager->createQuery('SELECT COUNT(st.id) FROM Mosparo\Entity\SubmitToken st');
-        $cleanupStatistic->setNumberOfStoredSubmitTokens($query->getSingleScalarResult());
-        unset($query);
-
-        $query = $this->entityManager->createQuery('SELECT COUNT(s.id) FROM Mosparo\Entity\Submission s');
-        $cleanupStatistic->setNumberOfStoredSubmissions($query->getSingleScalarResult());
-        unset($query);
-
-        // Set the active project after the cleanup
-        if ($activeProject !== null) {
-            $this->projectHelper->setActiveProject($activeProject);
-        }
-
-        $additionalCleanupDate = null;
-        if ($notFinished) {
-            // Execute the next cleanup in 10 minutes
-            // We give the (database) server these 10 minutes to relax after deleting so many rows.
-            $additionalCleanupDate = (new DateTime())->add($this->cleanupUnfinishedInterval);
-            $cleanupStatistic->setCleanupStatus(CleanupStatus::INCOMPLETE);
-        } else {
-            $cleanupStatistic->setCleanupStatus(CleanupStatus::COMPLETE);
-        }
-
-        $additionalCleanup->set($additionalCleanupDate);
-        $this->cache->save($additionalCleanup);
-
-        // The next regular cleanup will be performed in (normally) 6 hours
-        $nextCleanup->set((new DateTime())->add($this->cleanupProcessInterval));
-        $this->cache->save($nextCleanup);
-
-        $executionTime = microtime(true) - $startTime;
-        $this->logger->info(sprintf(
-            'Cleanup process completed after %.2fs.',
-            $executionTime
-        ));
-
-        // Store the cleanup statistic object
-        $cleanupStatistic->setExecutionTime($executionTime);
-        $this->entityManager->persist($cleanupStatistic);
-        $this->entityManager->flush();
-
-        $cleanupStartedAt->set(null);
-        $this->cache->save($cleanupStartedAt);
 
         return ($notFinished) ? CleanupResult::UNFINISHED : CleanupResult::COMPLETED;
     }
