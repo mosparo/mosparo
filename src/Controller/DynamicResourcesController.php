@@ -4,6 +4,7 @@ namespace Mosparo\Controller;
 
 use DateTime;
 use DateTimeZone;
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Helper\DesignHelper;
 use Mosparo\Repository\ProjectRepository;
@@ -20,6 +21,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 #[Route('/resources')]
 class DynamicResourcesController extends AbstractController
 {
+    protected EntityManagerInterface $entityManager;
+
     protected ProjectRepository $projectRepository;
 
     protected DesignHelper $designHelper;
@@ -30,8 +33,9 @@ class DynamicResourcesController extends AbstractController
 
     protected bool $prepareCssFilesInSharedCache;
 
-    public function __construct(ProjectRepository $projectRepository, DesignHelper $designHelper, UrlHelper $urlHelper, CacheInterface $cache, bool $prepareCssFilesInSharedCache)
+    public function __construct(EntityManagerInterface $entityManager, ProjectRepository $projectRepository, DesignHelper $designHelper, UrlHelper $urlHelper, CacheInterface $cache, bool $prepareCssFilesInSharedCache)
     {
+        $this->entityManager = $entityManager;
         $this->projectRepository = $projectRepository;
         $this->designHelper = $designHelper;
         $this->urlHelper = $urlHelper;
@@ -50,16 +54,35 @@ class DynamicResourcesController extends AbstractController
             // If we store the prepared CSS caches in the shared cache, we have load the content
             // from the cache and return it to the browser.
             $baseKey = 'design_' . $projectUuid;
+            $contentKey = $baseKey . '_content';
+            $hashKey = $baseKey . '_hash';
 
-            $cacheContent = $this->cache->getItem($baseKey . '_content');
-            $cacheHash = $this->cache->getItem($baseKey . '_hash');
+            $cacheContent = $this->cache->getItem($contentKey);
+            $cacheHash = $this->cache->getItem($hashKey);
 
-            if (!$cacheContent->isHit() || ($cacheHash->isHit() && $cacheHash->get() !== $hash)) {
-                // If the content is not cached or the hash is not correct, we have to
-                $project = $this->projectRepository->findOneBy(['uuid' => $projectUuid]);
+            $needsRegeneration = !$cacheContent->isHit() || !$cacheHash->isHit();
+
+            if (!$needsRegeneration && $cacheHash->get() !== $hash) {
+                $project = $this->projectRepository->findOneBy([
+                    'uuid' => $projectUuid
+                ]);
+
+                // Regenerate, if the given hash is the current one in the project which means we have a stale cache.
+                // Otherwise, redirect to the correct hash.
+                $needsRegeneration = $project && $project->getConfigValue('designConfigHash') === $hash;
+            }
+
+            if ($needsRegeneration) {
+                $project ??= $this->projectRepository->findOneBy(['uuid' => $projectUuid]);
 
                 if ($project) {
                     $this->designHelper->generateCssCache($project);
+
+                    $this->entityManager->flush();
+
+                    // Reload the two items from the cache
+                    $cacheContent = $this->cache->getItem($contentKey);
+                    $cacheHash = $this->cache->getItem($hashKey);
                 }
             }
 

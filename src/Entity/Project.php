@@ -439,6 +439,7 @@ class Project
 
         if (!$configValue) {
             $configValue = new ProjectConfigValue();
+            $configValue->setProject($this);
             $configValue->setName($key);
             $this->configValues->add($configValue);
         }
