@@ -267,6 +267,10 @@ services:
         arguments:
             $submissionRetentionPeriod: '%env(int:MOSPARO_SUBMISSION_RETENTION_PERIOD)%'
 
+    Mosparo\Controller\WebCronJobController:
+        arguments:
+            $cache: '@mosparo.cache.service'
+
     Mosparo\Helper\RuleCacheHelper:
         arguments:
             $cache: '@mosparo.cache.service'

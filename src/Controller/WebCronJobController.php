@@ -12,11 +12,11 @@ use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\RulePackageHelper;
 use Mosparo\Util\IpUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class WebCronJobController extends AbstractController
 {
@@ -30,13 +30,22 @@ class WebCronJobController extends AbstractController
 
     protected GeoIp2Helper $geoIp2Helper;
 
-    public function __construct(ConfigHelper $configHelper, ProjectHelper $projectHelper, CleanupHelper $cleanupHelper, RulePackageHelper $rulePackageHelper, GeoIp2Helper $geoIp2Helper)
-    {
+    protected CacheInterface $cache;
+
+    public function __construct(
+        ConfigHelper $configHelper,
+        ProjectHelper $projectHelper,
+        CleanupHelper $cleanupHelper,
+        RulePackageHelper $rulePackageHelper,
+        GeoIp2Helper $geoIp2Helper,
+        CacheInterface $cache
+    ) {
         $this->configHelper = $configHelper;
         $this->projectHelper = $projectHelper;
         $this->cleanupHelper = $cleanupHelper;
         $this->rulePackageHelper = $rulePackageHelper;
         $this->geoIp2Helper = $geoIp2Helper;
+        $this->cache = $cache;
     }
 
     #[Route('/cron-jobs/execute', name: 'cron_jobs_execute')]
@@ -64,9 +73,8 @@ class WebCronJobController extends AbstractController
         }
 
         // Check the last cron job execution
-        $cache = new FilesystemAdapter();
-        $nextCronJob = $cache->getItem('mosparoNextCronJob');
-        $cronJobStartedAt = $cache->getItem('mosparoCronJobStartedAt');
+        $nextCronJob = $this->cache->getItem('mosparoNextCronJob');
+        $cronJobStartedAt = $this->cache->getItem('mosparoCronJobStartedAt');
 
         if ($nextCronJob->get() !== null) {
             // Return, if the next cron job date is in the future
@@ -85,7 +93,7 @@ class WebCronJobController extends AbstractController
 
         // Lock the cron job execution
         $cronJobStartedAt->set(new DateTime());
-        $cache->save($cronJobStartedAt);
+        $this->cache->save($cronJobStartedAt);
 
         // Get the configured max exeuction time
         $maxExecutionTime = intval(ini_get('max_execution_time'));
@@ -97,37 +105,39 @@ class WebCronJobController extends AbstractController
         $maxTimeCleanup = floor($maxExecutionTime * 0.8);
         $start = time();
 
-        // Execute the cleanup process
-        $this->cleanupHelper->cleanup(1000000, true, false, $maxTimeCleanup, CleanupExecutor::WEB_CRON_JOB);
+        try {
+            // Execute the cleanup process
+            $this->cleanupHelper->cleanup(1000000, true, false, $maxTimeCleanup, CleanupExecutor::WEB_CRON_JOB);
 
-        // Download the rule packages, only execute this if we have more than 10% of the max execution time available.
-        if ((time() - $start) < ($maxExecutionTime * 0.9)) {
-            $this->rulePackageHelper->fetchAll($start, $maxExecutionTime * 0.6);
-        }
-
-        // Update the GeoIP2 database, only execute this if we have more than 10% of the max execution time available.
-        if ((time() - $start) < ($maxExecutionTime * 0.9)) {
-            $isGeoIp2Active = ($this->configHelper->getEnvironmentConfigValue('geoipActive'));
-            $nextGeoIp2Refresh = $cache->getItem('mosparoGeoIp2LastCronJobRefresh');
-
-            if ($isGeoIp2Active && ($nextGeoIp2Refresh->get() === null || $nextGeoIp2Refresh->get() > new DateTime())) {
-                $this->geoIp2Helper->downloadDatabase();
-
-                $geoIp2RefreshInterval = $this->configHelper->getEnvironmentConfigValue('geoIp2RefreshInterval', 7);
-                $nextGeoIp2RefreshDate = (new DateTime())->add(new DateInterval(sprintf('P%dD', $geoIp2RefreshInterval)));
-                $nextGeoIp2Refresh->set($nextGeoIp2RefreshDate);
-                $cache->save($nextGeoIp2Refresh);
+            // Download the rule packages, only execute this if we have more than 10% of the max execution time available.
+            if ((time() - $start) < ($maxExecutionTime * 0.9)) {
+                $this->rulePackageHelper->fetchAll($start, $maxExecutionTime * 0.6);
             }
+
+            // Update the GeoIP2 database, only execute this if we have more than 10% of the max execution time available.
+            if ((time() - $start) < ($maxExecutionTime * 0.9)) {
+                $isGeoIp2Active = ($this->configHelper->getEnvironmentConfigValue('geoipActive'));
+                $nextGeoIp2Refresh = $this->cache->getItem('mosparoGeoIp2LastCronJobRefresh');
+
+                if ($isGeoIp2Active && ($nextGeoIp2Refresh->get() === null || $nextGeoIp2Refresh->get() <= new DateTime())) {
+                    $this->geoIp2Helper->downloadDatabase();
+
+                    $geoIp2RefreshInterval = $this->configHelper->getEnvironmentConfigValue('geoIp2RefreshInterval', 7);
+                    $nextGeoIp2RefreshDate = (new DateTime())->add(new DateInterval(sprintf('P%dD', $geoIp2RefreshInterval)));
+                    $nextGeoIp2Refresh->set($nextGeoIp2RefreshDate);
+                    $this->cache->save($nextGeoIp2Refresh);
+                }
+            }
+        } finally {
+            // Plan the next cron job
+            $webCronJobInterval = $this->configHelper->getEnvironmentConfigValue('webCronJobInterval', 10);
+            $nextCronJobDate = (new DateTime())->add(new DateInterval(sprintf('PT%dM', $webCronJobInterval)));
+            $nextCronJob->set($nextCronJobDate);
+            $this->cache->save($nextCronJob);
+
+            $cronJobStartedAt->set(null);
+            $this->cache->save($cronJobStartedAt);
         }
-
-        // Plan the next cron job
-        $webCronJobInterval = $this->configHelper->getEnvironmentConfigValue('webCronJobInterval', 10);
-        $nextCronJobDate = (new DateTime())->add(new DateInterval(sprintf('PT%dM', $webCronJobInterval)));
-        $nextCronJob->set($nextCronJobDate);
-        $cache->save($nextCronJob);
-
-        $cronJobStartedAt->set(null);
-        $cache->save($cronJobStartedAt);
 
         return new Response('200 OK', 200);
     }
