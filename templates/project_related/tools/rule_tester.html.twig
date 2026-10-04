@@ -169,6 +169,8 @@
                     <div class="card-body">
                         <p>{{ 'tools.ruleTester.intro'|trans }}</p>
 
+                        {{ form_errors(form) }}
+
                         {{ form_row(form.value) }}
                         {{ form_row(form.type) }}
                         {{ form_row(form.useRules) }}

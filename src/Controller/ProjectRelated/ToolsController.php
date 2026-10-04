@@ -18,7 +18,9 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/project/{_projectId}/tools')]
@@ -49,7 +51,17 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
             'useRules' => true,
             'useRulePackages' => true,
         ];
-        $form = $this->createFormBuilder($data, ['translation_domain' => 'mosparo'])
+        $form = $this->createFormBuilder($data, [
+            'translation_domain' => 'mosparo',
+            'constraints' => [
+                new Callback(callback: function (array $value, ExecutionContextInterface $context) {
+                    if (!($value['useRules'] ?? false) && !($value['useRulePackages'] ?? false)) {
+                        $context
+                            ->addViolation('tools.ruleTester.chooseRuleOrRulePackages');
+                    }
+                }),
+            ]
+        ])
             ->add('value', TextareaType::class, [
                 'label' => 'tools.ruleTester.form.value',
                 'help' => 'tools.ruleTester.form.valueHelp',
