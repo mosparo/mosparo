@@ -209,6 +209,8 @@ class FrontendApiController extends AbstractController
                 return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
             }
 
+            $formData['fields'] = $this->normalizeFormFields($formData['fields']);
+
             if (isset($formData['ignoredFields']) && is_array($formData['ignoredFields'])) {
                 $partialSubmission->appendIgnoredFields(array_values(array_filter($formData['ignoredFields'], 'is_string')));
             }
@@ -268,6 +270,8 @@ class FrontendApiController extends AbstractController
         if ($formData === null || !$this->isValidFormFields($formData)) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
         }
+
+        $formData['fields'] = $this->normalizeFormFields($formData['fields']);
 
         $metadata = [];
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
@@ -688,12 +692,27 @@ class FrontendApiController extends AbstractController
 
             $values = $field['value'] ?? null;
             foreach ((is_array($values) ? $values : [$values]) as $value) {
-                if (!is_scalar($value)) {
+                if ($value !== null && !is_scalar($value)) {
                     return false;
                 }
             }
         }
 
         return true;
+    }
+
+    protected function normalizeFormFields(array $fields): array
+    {
+        foreach ($fields as $key => $field) {
+            $value = $field['value'] ?? '';
+
+            if (is_array($value)) {
+                $value = array_map(function (mixed $subValue) { return $subValue ?? ''; }, $value);
+            }
+
+            $fields[$key]['value'] = $value;
+        }
+
+        return $fields;
     }
 }

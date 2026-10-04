@@ -154,14 +154,14 @@ class RuleTesterHelper
             foreach ($groupData as $fieldData) {
                 if (is_array($fieldData['value'])) {
                     foreach ($fieldData['value'] as $subValue) {
-                        if (!trim($subValue)) {
+                        if ($subValue === null || !trim($subValue)) {
                             continue;
                         }
 
                         $this->checkFieldData($submission->getDetectionResult(), $groupKey, $fieldData, $subValue, $useRules, $useRulePackages);
                     }
                 } else {
-                    if (!trim($fieldData['value'])) {
+                    if ($fieldData['value'] === null || !trim($fieldData['value'])) {
                         continue;
                     }
 
