@@ -718,7 +718,14 @@ function mosparo(containerId, url, uuid, publicKey, options)
         request.onreadystatechange = function () {
             if (this.readyState === 4) {
                 if (this.status === 200) {
-                    let response = JSON.parse(this.responseText);
+                    let response;
+                    try {
+                        response = JSON.parse(this.responseText);
+                    } catch {
+                        callbackError('Failed to parse JSON response.');
+                        return;
+                    }
+
                     callbackSuccess(response);
                 } else {
                     callbackError(this.responseText);
