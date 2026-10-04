@@ -101,13 +101,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
             this.options.forceInvisible = (this.options.isMultiStepForm && !this.options.isLastStep);
         }
 
-        let forceInvisibleClass = null;
-        if (this.options.forceInvisible) {
-            forceInvisibleClass = 'mosparo__force-invisible-mode';
-        }
-
-        this.containerElement.classList.add('mosparo__container', 'mosparo__' + this.uuid, forceInvisibleClass);
+        this.containerElement.classList.add('mosparo__container', 'mosparo__' + this.uuid);
         this.containerElement.setAttribute('lang', this.messages.locale);
+
+        if (this.options.forceInvisible) {
+            this.containerElement.classList.add('mosparo__force-invisible-mode');
+        }
 
         // Find the form
         let forms = document.querySelectorAll('form');
