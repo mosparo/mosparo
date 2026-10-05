@@ -68,10 +68,14 @@ RUN apk add --no-cache \
 # Alpine only provides unzip as a BusyBox applet, the real unzip is installed for the extraction. The
 # application is handed to the unprivileged user in the same layer that creates it, because a chown in
 # a later layer would store a second copy of every file in the image.
+# The emoji data of symfony/intl is 36 MB and is only read by its EmojiTransliterator, which the
+# AsciiSlugger uses when it is created with withEmoji(). mosparo leaves the slugger at its default,
+# where emoji are disabled, so the data is never loaded and is removed from the image.
 RUN apk add --no-cache --virtual .fetch-deps unzip && \
     curl -fsSLO "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
     unzip "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
     rm "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
+    rm -rf /mosparo/vendor/symfony/intl/Resources/data/transliterator && \
     apk del --no-network .fetch-deps && \
     mkdir -p /mosparo/public/resources /mosparo/var && \
     chown -R $UID:0 /mosparo && \
