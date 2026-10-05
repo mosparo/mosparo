@@ -1,6 +1,7 @@
 settings:
   mosparoName:
-    colonNotAllowed: El carácter dos puntos (:) no está permitido en el nombre de la instalación de mosparo.
+    colonNotAllowed: El carácter dos puntos (:) no está permitido en el nombre 
+      de la instalación de mosparo.
 password:
   request:
     form:
@@ -16,8 +17,22 @@ tools:
     importFile:
       correctFile: Por favor, suba un fichero JSON válido.
 honeypotField:
-  nameHasInvalidCharacter: Por favor utilice sólo letras, números y el carácter guión (-).
+  nameHasInvalidCharacter: Por favor utilice sólo letras, números y el carácter 
+    guión (-).
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: Su dirección IP no está permitida en la lista de permitidas. Por favor añada su dirección IP a la lista.
+      ownIpNotInAllowList: Su dirección IP no está permitida en la lista de 
+        permitidas. Por favor añada su dirección IP a la lista.
+webCronJob:
+  webCronJobIntervalAtLeast5Minutes: El intérvalo del trabajo cron de la web 
+    debe ser por lo menos 5 minutos o más.
+  geoIpRefreshIntervalAtLeast1Day: El intérvalo de refresco de GeoIP2 debe ser 
+    al menos de un día o más.
+hosts:
+  hostContainsProtocol: Este servidor tiene un protocolo. Por favor introduzca 
+    el servidor sin el protocolo (por ejemplo, ejemplo.com en vez de 
+    https://ejemplo.com).
+  hostContainsInvalidCharacter: Este servidor contiene carácteres no válidos. En
+    este campo sólo se permiten, carácteres (a-z), números (0-9), guiones, 
+    puntos, dos puntos y el asterisco (*).
