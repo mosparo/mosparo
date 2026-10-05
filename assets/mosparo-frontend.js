@@ -617,7 +617,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
             let value = _this.getFieldValue(el);
 
-            if (name.indexOf('[]') === name.length - 2) {
+            if (name.length > 2 && name.endsWith('[]')) {
                 name = name.substring(0, name.length - 2);
                 if (value === '') {
                     value = [];
