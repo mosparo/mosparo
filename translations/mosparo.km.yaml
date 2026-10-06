@@ -1,1 +1,154 @@
-{}
+header:
+  pleaseChoose: សូមជ្រើសរើស…
+  noProjectsFound: រកមិនឃើញគម្រោងទេ
+  account: គណនី
+projectGroup:
+  mainGroup: ក្រុមមេ
+  action:
+    edit: កែសម្រួលក្រុម
+    delete: លុបក្រុម
+    openMainGroup: ត្រឡប់ទៅក្រុមមេ
+    openParentGroupName: ត្រឡប់ទៅ %name%
+    openParentGroup: បើកក្រុមមេ
+    openGroup: បើកក្រុម
+    backToList: ត្រឡប់ទៅបញ្ជីគម្រោង
+  create:
+    title: បង្កើតក្រុមគម្រោង
+  edit:
+    title: កែសម្រួលក្រុមគម្រោង %projectGroupName%
+  form:
+    name: ឈ្មោះ
+    description: ការពិពណ៌នា
+    parentGroup: ក្រុមមេ
+    tooltip:
+      activeGroup: អ្នកកំពុងកែសម្រួលក្រុមនេះ។
+    message:
+      successfullySaved: ក្រុមគម្រោង %projectGroupName% ត្រូវបានរក្សាទុកដោយជោគជ័យ។
+  delete:
+    title: លុបក្រុមគម្រោង %projectGroupName%
+    confirm: តើអ្នកពិតជាចង់លុបក្រុមគម្រោង %projectGroupName% មែនទេ?
+    reassignChildren: ក្រុមគម្រោង និងគម្រោងទាំងអស់នៅក្នុងក្រុមគម្រោងនេះ នឹងត្រូវបានកំណត់ទៅក្រុមគម្រោងមេដោយស្វ័យប្រវត្តិ។
+    message:
+      successfullyDeleted: ក្រុមគម្រោង %projectGroupName% ត្រូវបានលុបដោយជោគជ័យ។
+projectGroupSelector:
+  noGroupsAvailable: មិនមានក្រុមទេ។
+  noProjectsAvailable: មិនមានគម្រោងទេ
+project:
+  title: គម្រោង
+  searchTitle: គម្រោងសម្រាប់ %searchQuery%
+  backToList: ត្រឡប់ទៅបញ្ជីគម្រោង
+  infoNoProjectAvailable: មិនមានគម្រោងទេ
+  infoCreateProjectOrRequestAccess: បង្កើតគម្រោងថ្មី ឬស្នើសុំចូលប្រើគម្រោងផ្សេងទៀត។
+  infoNoProjectsInThisGroup: មិនមានគម្រោងនៅក្នុងក្រុមនេះទេ។
+  list:
+    name: ឈ្មោះ
+    projects: គម្រោង
+    last: ចុងក្រោយ
+    valid: មានសុពលភាព
+    spam: សារឥតបានការ
+    status: ស្ថានភាព
+    actions: សកម្មភាព
+  filter:
+    dropdown: ត្រងបញ្ជីគម្រោង
+    options:
+      all: បង្ហាញទាំងអស់
+      active: បង្ហាញគម្រោងសកម្ម
+      inactive: បង្ហាញគម្រោងអសកម្ម
+  search:
+    placeholder: ស្វែងរក…
+  statistics:
+    dropdown: បង្ហាញស្ថិតិពី
+    options:
+      disabled: មិនបង្ហាញស្ថិតិ
+      showLastDay: ថ្ងៃកន្លងទៅ
+      showMultipleDays: '%days% ថ្ងៃ'
+    noDataInTimeRangeOneDay: មិនមានទិន្នន័យក្នុងថ្ងៃកន្លងទៅទេ
+    noDataInTimeRangeDays: មិនមានទិន្នន័យក្នុងរយៈពេល %days% ថ្ងៃកន្លងទៅទេ
+  action:
+    manage: គ្រប់គ្រងគម្រោង
+    id: ID គម្រោង
+    settings: ការកំណត់
+    delete: លុបគម្រោង
+    goto: ទៅកាន់គម្រោង
+    create: បង្កើត
+  create:
+    title: បង្កើតគម្រោង
+    message:
+      successfullyCreatedAndConfigured: គម្រោងថ្មីត្រូវបានបង្កើត និងកំណត់រចនាសម្ព័ន្ធដោយជោគជ័យ។
+  createWizard:
+    design:
+      title: ជ្រើសរើសរចនា
+      introStartWizard: គម្រោងរបស់អ្នកត្រូវបានបង្កើតដោយជោគជ័យ។ ដើម្បីចាប់ផ្តើមប្រើប្រាស់ សូមជ្រើសរើសរចនា ហើយបន្ត។
+      infoAdvancedMode: បន្ទាប់ពី wizard អ្នកអាចប្តូរទៅរបៀបកម្រិតខ្ពស់ ឬរបៀបមើលមិនឃើញនៅក្នុងការកំណត់រចនា។ របៀបកម្រិតខ្ពស់អនុញ្ញាតឱ្យអ្នកកែសម្រួលរចនាឱ្យត្រូវនឹងគេហទំព័ររបស់អ្នក ខណៈរបៀបមើលមិនឃើញនឹងមិនបង្ហាញប្រអប់ mosparo ដែលមើលឃើញទេ។
+    security:
+      title: បើកមុខងារសន្តិសុខ
+      introSecurity: សូមជ្រើសរើសមុខងារសន្តិសុខដែលអ្នកចង់បើក។
+      infoSettings: អ្នកអាចបើក បិទ ឬកែសម្រួលមុខងារសន្តិសុខទាំងនេះនៅក្នុងការកំណត់សន្តិសុខបន្ទាប់ពី wizard។
+    connection:
+      title: ព័ត៌មានលម្អិតនៃការតភ្ជាប់
+      savedSuccessfully: ការកំណត់រចនា និងសន្តិសុខត្រូវបានរក្សាទុកដោយជោគជ័យ។ ឥឡូវនេះគម្រោងអាចប្រើប្រាស់នៅលើគេហទំព័របានហើយ។
+      introConnection: ដើម្បីប្រើ mosparo នៅលើគេហទំព័រ អ្នកត្រូវបន្ថែមការធ្វើសមាហរណកម្មទៅគេហទំព័រ រួចតភ្ជាប់គេហទំព័រជាមួយគម្រោង mosparo នេះ។ សម្រាប់ជំហាននេះ សូមចម្លងព័ត៌មានខាងក្រោមទៅក្នុងវាលត្រឹមត្រូវនៅក្នុងការធ្វើសមាហរណកម្ម។
+      infoSettings: បន្ទាប់ពី wizard នេះ អ្នកអាចរកព័ត៌មានលម្អិតនៃការតភ្ជាប់ទាំងនេះនៅក្នុងការកំណត់គម្រោង។
+  form:
+    name: ឈ្មោះ
+    description: ការពិពណ៌នា
+    projectGroup: ក្រុមគម្រោង
+    projectGroupHelp: អ្នកអាចប្រើក្រុមគម្រោងដើម្បីរៀបចំគម្រោងរបស់អ្នក។ ជ្រើសរើសក្រុមគម្រោងដែលអ្នកចង់រក្សាទុកគម្រោងនេះ។
+    hosts: Hosts
+    hostsHelp: Hosts ទាំងនេះត្រូវបានប្រើដើម្បីឆ្លើយតបជាមួយ header សន្តិសុខត្រឹមត្រូវ (CORS)។ host គឺជា domain (ឬ subdomain) ដែលបង្ហោះគេហទំព័ររបស់អ្នកដោយគ្មាន protocol និង path (ឧទាហរណ៍ example.com)។ អ្នកត្រូវបន្ថែម domain និង subdomain ទាំងអស់ដែលប្រើគម្រោងនេះ និងគ្រប់ទម្រង់ (ឧទាហរណ៍ www.example.com និង example.com)។ អ្នកអាចប្រើសញ្ញាផ្កាយ (*) នៅដើម host ជា wildcard (ឧទាហរណ៍ *.example.com)។ គួរប្រើសញ្ញាផ្កាយជា prefix ហើយមិនមែនជា wildcard សកលសម្រាប់ host ទាំងអស់ទេ។
+    status: ស្ថានភាព
+    statusHelp: បើក ឬបិទការរកឃើញសារឥតបានការ។ ប្រសិនបើអសកម្ម ប្រព័ន្ធនឹងកត់ត្រាការបញ្ជូនទាំងអស់ ប៉ុន្តែនឹងមិនរារាំងការបញ្ជូនណាមួយទេ។
+    spamScore: ពិន្ទុសារឥតបានការ
+    spamScoreHelp: កំណត់ចំនួនដែលការបញ្ជូនមួយនឹងត្រូវចាត់ថាជាសារឥតបានការ។ ប្រសិនបើការវាយតម្លៃនៃការបញ្ជូនលើសពីចំនួននេះ ការបញ្ជូននឹងត្រូវចាត់ថាជាសារឥតបានការ។
+    statisticStorageLimit: ការរក្សាទុកស្ថិតិ
+    statisticStorageLimitHelp: កំណត់រយៈពេលដែល mosparo គួររក្សាទុកស្ថិតិក្នុង database។ ជម្រើសនេះមិនពាក់ព័ន្ធនឹងរយៈពេលរក្សាទុកការបញ្ជូនទេ ដែលបន្ទាប់ពីនោះការបញ្ជូននឹងត្រូវលុបចេញពី database (14 ថ្ងៃ)។
+    silentModeEnabled: បើក silent mode
+    silentModeEnabledHelp: ប្រសិនបើបើក mosparo នឹងទទួលយកគ្រប់ការបញ្ជូននៅ frontend។ នៅពេល backend ផ្ទៀងផ្ទាត់ការបញ្ជូន mosparo នឹងរារាំងការបញ្ជូន ដើម្បីឱ្យ backend អាចដោះស្រាយស្ថានភាពជាមួយអ្នកប្រើ។ សូមចំណាំថា នៅពេលប្រើ silent mode គ្រប់ការបញ្ជូននឹងឆ្លងកាត់ backend របស់អ្នក ដែលអាចបង្កើតបន្ទុកបន្ថែម។
+    spamDataReturned: បន្ថែមទិន្នន័យរកឃើញសារឥតបានការទៅក្នុងការឆ្លើយតបផ្ទៀងផ្ទាត់
+    spamDataReturnedHelp: ប្រសិនបើបើក API ផ្ទៀងផ្ទាត់នឹងបន្ថែមទិន្នន័យរកឃើញសារឥតបានការទៅក្នុងការឆ្លើយតប API។ ជាមួយទិន្នន័យនេះ អ្នកនឹងទទួលបានព័ត៌មានលម្អិតបន្ថែមអំពីមូលហេតុដែលការបញ្ជូនជាសារឥតបានការ ឬមិនមែន។
+    languageSource: ប្រភពភាសា
+    metadataAllowed: អនុញ្ញាត metadata
+    metadataAllowedHelp: ប្រសិនបើបើក API ផ្ទៀងផ្ទាត់ និង verification នឹងទទួលយក metadata។ metadata នេះត្រូវបានរក្សាទុកក្នុងការបញ្ជូន។ ជាមួយ metadata អ្នកអាចរក្សាទុកព័ត៌មានបន្ថែមដែលមិនមែនជាវាលទម្រង់ ឬព័ត៌មាន client។
+    metadataReturned: បន្ថែម metadata ទៅក្នុងការឆ្លើយតបផ្ទៀងផ្ទាត់
+    metadataReturnedHelp: ប្រសិនបើបើក API ផ្ទៀងផ្ទាត់នឹងបន្ថែម metadata ទៅក្នុងការឆ្លើយតប API។
+    apiDebugMode: API debug mode
+    apiDebugModeHelp: ប្រសិនបើ API debug mode ត្រូវបានបើក API ផ្ទៀងផ្ទាត់នឹងត្រឡប់ព័ត៌មានបន្ថែមអំពីដំណើរការផ្ទៀងផ្ទាត់។ ព័ត៌មាននេះអាចមានសារៈសំខាន់ក្នុងការយល់ដឹងអំពីមូលហេតុដែលការផ្ទៀងផ្ទាត់បរាជ័យ។ ប្រើជម្រើសនេះដើម្បីជួយធ្វើសមាហរណកម្ម mosparo ទៅក្នុងទម្រង់របស់អ្នក។
+    verificationSimulationMode: មុខងារការផ្ទៀងផ្ទាត់​​ Simulation
+    verificationSimulationModeHelp: អ្នកអាចក្លែងធ្វើដំណើរការផ្ទៀងផ្ទាត់ ប្រសិនបើរបៀបក្លែងធ្វើការផ្ទៀងផ្ទាត់ត្រូវបានបើក។ សូមបើកព័ត៌មានលម្អិតនៃការបញ្ជូន ហើយចុចប៊ូតុងនៅជ្រុងខាងលើស្តាំ។ ឧបករណ៍ក្លែងធ្វើនឹងបង្ហាញអ្នកថា request របស់អ្នកគួរមានទម្រង់បែបណា និងទិន្នន័យអ្វីខ្លះដែល mosparo រំពឹងដើម្បីផ្ទៀងផ្ទាត់ការបញ្ជូន។
+  delete:
+    title: លុបគម្រោង %projectName%
+    confirm: តើអ្នកពិតជាចង់លុបគម្រោង %projectName% មែនទេ?
+    disconnectFirst: សូមប្រាកដថាអ្នកបានផ្តាច់គេហទំព័រ ឬការធ្វើសមាហរណកម្មរបស់អ្នកជាមួយគម្រោងនេះ មុនពេលលុបវា។
+    message:
+      successfullyDeleted: គម្រោង %projectName% ត្រូវបានលុបដោយជោគជ័យ។
+    deleteRulePackages:
+      intro1: មាន rule packages នៅក្នុងគម្រោងនេះ។ អ្នកមិនអាចលុបគម្រោងបានទេ។
+      intro2: សូមលុប rule packages ជាមុនសិន រួចលុបគម្រោង។
+  roles:
+    reader: អ្នកអាន
+    editor: អ្នកកែសម្រួល
+    owner: ម្ចាស់
+dashboard:
+  title: ផ្ទាំងគ្រប់គ្រង
+  dateRange:
+    dropdown: ជ្រើសរើសចន្លោះកាលបរិច្ឆេទដែលបង្ហាញ
+  chart:
+    valid: មានសុពលភាព
+    spam: សារឥតបានការ
+    delayed: ពន្យាពេល
+    blocked: រារាំង
+    annotation:
+      statisticOnly: ស្ថិតិប៉ុណ្ណោះ
+  submissions:
+    summary:
+      validSubmission: 1 ការបញ្ជូនមានសុពលភាព
+      validSubmissions: '%numberOfSubmissions% ការបញ្ជូនមានសុពលភាព'
+      spamSubmission: 1 ការបញ្ជូនសារឥតបានការ
+      spamSubmissions: '%numberOfSubmissions% ការបញ្ជូនសារឥតបានការ'
+  requests:
+    title: សំណើដែលពន្យាពេល ឬរារាំង
+    summary:
+      delayedRequest: 1 សំណើដែលពន្យាពេល
+      delayedRequests: '%numberOfRequests% សំណើដែលពន្យាពេល'
+      blockedRequest: 1 សំណើដែលរារាំង
+      blockedRequests: '%numberOfRequests% សំណើដែលរារាំង'
