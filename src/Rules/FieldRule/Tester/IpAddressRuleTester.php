@@ -18,9 +18,12 @@ class IpAddressRuleTester extends AbstractRuleTester
             ->add($qb->expr()->eq('i.hashedValue', $qb->createNamedParameter(HashUtil::hashFast($value))))
         );
 
+        $address = ($value !== null) ? Factory::parseAddressString($value) : null;
+        $expandedValue = $address ? $address->toString(true) : $value;
+
         $orExpr->add($qb->expr()->andX()
             ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('subnet')))
-            ->add($qb->expr()->like($qb->createNamedParameter($value), 'i.preparedValue'))
+            ->add($qb->expr()->like($qb->createNamedParameter($expandedValue), 'i.preparedValue'))
         );
     }
 

@@ -27,8 +27,9 @@ final class IpAddressRuleType extends AbstractRuleType
     public function getValidatorPattern(): array
     {
         return [
-            'ipAddress' => '^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|[0-9a-fA-F]{1,4}:(:?:?[0-9a-fA-F]{1,4}){0,7}(::)?)$',
-            'subnet' => '^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|[0-9a-fA-F]{1,4}:(:?:?[0-9a-fA-F]{1,4}){0,7}(::)?)/\d{1,3}$',
+            // These patterns are pretty open, because we need to correctly validate the addresses in the backend.
+            'ipAddress' => '^[0-9a-fA-F:.]+$',
+            'subnet' => '^[0-9a-fA-F:.]+/\d{1,3}$',
         ];
     }
 }

@@ -640,7 +640,7 @@
                         // Ensure, that the IP subnet suffix is below or equal the max suffix.
                         if (type === 'subnet' && result) {
                             let maxSuffix = 32;
-                            if (value.indexOf(':') > 0) {
+                            if (value.indexOf(':') !== -1) {
                                 maxSuffix = 128;
                             }
 
