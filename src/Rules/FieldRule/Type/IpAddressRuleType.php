@@ -2,6 +2,8 @@
 
 namespace Mosparo\Rules\FieldRule\Type;
 
+use IPLib\Factory;
+use IPLib\Range\Subnet;
 use Mosparo\Rules\FieldRule\Tester\IpAddressRuleTester;
 
 final class IpAddressRuleType extends AbstractRuleType
@@ -31,5 +33,20 @@ final class IpAddressRuleType extends AbstractRuleType
             'ipAddress' => '^[0-9a-fA-F:.]+$',
             'subnet' => '^[0-9a-fA-F:.]+/\d{1,3}$',
         ];
+    }
+
+    public function isValidValue(string $subtype, string $value): bool
+    {
+        $initialResult = parent::isValidValue($subtype, $value);
+
+        if (!$initialResult) {
+            return false;
+        }
+
+        if ($subtype === 'subnet') {
+            return Subnet::parseString($value) !== null;
+        } else {
+            return Factory::parseAddressString($value) !== null;
+        }
     }
 }

@@ -231,6 +231,8 @@ rules:
         unsavedChanges: '%counter% unsaved changes'
         savingChanges: 'Saving %counter% changes'
         nothingToSave: Nothing to save
+        savingFailed: Saving failed
+        savingFailedTooltip: The changes couldn't be saved. mosparo will retry automatically. If the problem persists, note your unsaved changes before reloading the page, since they will be lost.
 
       items:
         title: Items

@@ -31,4 +31,19 @@ final class WordRuleType extends AbstractRuleType
     protected string $testerClass = WordRuleTester::class;
     protected array $targetFieldKeys = ['formData.'];
     protected string $helpTemplate = 'project_related/rules/field_rule/type/help/word.html.twig';
+
+    public function isValidValue(string $subtype, string $value): bool
+    {
+        $initialResult = parent::isValidValue($subtype, $value);
+
+        if (!$initialResult) {
+            return false;
+        }
+
+        if ($subtype === 'regex') {
+            return @preg_match($value, '') !== false;
+        }
+
+        return true;
+    }
 }

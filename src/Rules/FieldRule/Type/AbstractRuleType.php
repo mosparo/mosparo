@@ -68,4 +68,23 @@ abstract class AbstractRuleType implements RuleTypeInterface
     {
         return [];
     }
+
+    public function isValidValue(string $subtype, string $value): bool
+    {
+        if (trim($value) === '') {
+            return false;
+        }
+
+        if (!in_array($subtype, array_column($this->getSubtypes(), 'key'), true)) {
+            return false;
+        }
+
+        // Use the same pattern as the editor. 'D' to ensure that $ does not accept a trailing line break.
+        $patterns = $this->getValidatorPattern();
+        if (isset($patterns[$subtype]) && !preg_match('~' . $patterns[$subtype] . '~D', $value)) {
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -15,4 +15,5 @@ interface RuleTypeInterface
     public function allowAddMultiple(): bool;
     public function formatValue(string $value, string $locale = ''): string;
     public function getValidatorPattern(): array;
+    public function isValidValue(string $subtype, string $value): bool;
 }

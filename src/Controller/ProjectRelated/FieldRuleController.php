@@ -196,8 +196,8 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
             return new Response(null, 401);
         }
 
-        $page = $request->query->get('page', 1);
-        $itemsPerPage = $request->query->get('size', 10);
+        $page = max(1, (int) $request->query->get('page', 1));
+        $itemsPerPage = max(1, (int) $request->query->get('size', 10));
 
         $data = [];
         $ruleType = $this->ruleTypeManager->getRuleType($rule->getType());
@@ -298,8 +298,11 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
             return new Response(null, 400);
         }
 
+        $ruleItemRepository = $entityManager->getRepository(RuleItem::class);
+        $ruleType = $this->ruleTypeManager->getRuleType($rule->getType());
         $processed = [];
         $newItems = [];
+        $rejected = [];
         foreach ($changes as $change) {
             $type = $change['type'] ?? null;
             if (!$type) {
@@ -307,17 +310,33 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
             }
 
             if ($type === 'field') {
-                $fieldName = $change['data']['name'];
-                $value = $change['data']['value'];
+                $fieldName = $change['data']['name'] ?? null;
+                $value = $change['data']['value'] ?? null;
+
+                if (!is_string($fieldName)) {
+                    continue;
+                }
+
+                if (
+                    ($fieldName === 'name' && (!is_string($value) || trim($value) === '')) ||
+                    ($fieldName === 'description' && !is_string($value)) ||
+                    (in_array($fieldName, ['status', 'spamRatingFactor']) && !is_numeric($value))
+                ) {
+                    $rejected[] = [
+                        'type' => 'field',
+                        'fieldName' => $fieldName,
+                    ];
+                    continue;
+                }
 
                 if ($fieldName === 'name') {
                     $rule->setName($value);
                 } else if ($fieldName === 'description') {
                     $rule->setDescription($value);
                 } else if ($fieldName === 'status') {
-                    $rule->setStatus($value);
+                    $rule->setStatus(($value) ? 1 : 0);
                 } else if ($fieldName === 'spamRatingFactor') {
-                    $rule->setSpamRatingFactor(floatval($value));
+                    $rule->setSpamRatingFactor(min(max(0.1, floatval($value ?? 1)), 1000000));
                 }
 
                 $processed[] = [
@@ -326,28 +345,51 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
                 ];
             } else if ($type === 'item') {
                 $id = $change['data']['id'] ?? null;
+                $uuid = $change['data']['uuid'] ?? null;
+                $itemType = $change['data']['type'] ?? null;
+                $itemValue = $change['data']['value'] ?? null;
+                if (($id && !is_numeric($id)) || !is_string($uuid) || !is_string($itemType) || !is_string($itemValue) || !$ruleType->isValidValue($itemType, $itemValue)) {
+                    $rejected[] = [
+                        'type' => 'item',
+                        'uuid' => $uuid,
+                    ];
+                    continue;
+                }
 
                 if (!$id) {
-                    $item = $entityManager->getRepository(RuleItem::class)->findOneBy([
-                        'uuid' => $change['data']['uuid'],
+                    $item = $ruleItemRepository->findOneBy([
+                        'rule' => $rule,
+                        'uuid' => $uuid,
                     ]);
 
                     if (!$item) {
                         $item = (new RuleItem())
                             ->setRule($rule)
-                            ->setUuid($change['data']['uuid']);
+                            ->setUuid($uuid);
 
                         $newItems[] = $item;
                         $entityManager->persist($item);
                     }
                 } else {
-                    $item = $entityManager->find(RuleItem::class, $id);
+                    $item = $ruleItemRepository->findOneBy([
+                        'id' => $id,
+                        'rule' => $rule,
+                    ]);
+
+                    if (!$item) {
+                        $rejected[] = [
+                            'type' => 'item',
+                            'uuid' => $uuid,
+                        ];
+                        continue;
+                    }
                 }
 
+                $rating = min(max(-1000000, floatval($change['data']['spamRatingFactor'] ?? 1)), 1000000);
                 $item
                     ->setType($change['data']['type'])
                     ->setValue($change['data']['value'])
-                    ->setSpamRatingFactor(floatval($change['data']['spamRatingFactor'] ?? 1));
+                    ->setSpamRatingFactor($rating);
 
                 $processed[] = [
                     'type' => 'item',
@@ -370,6 +412,7 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
         return new JsonResponse([
             'success' => true,
             'processed' => $processed,
+            'rejected' => $rejected,
         ]);
     }
 
@@ -390,9 +433,20 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
         $allowedTypes = array_map(function ($type) { return $type['key']; }, $ruleType->getSubtypes());
 
         $items = json_decode($request->request->get('items'), true);
+        if (!is_array($items)) {
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Data invalid'], 400);
+        }
+
+        $counters = ['added' => 0, 'skipped' => 0, 'invalid' => 0];
         $types = [];
         $values = [];
-        foreach ($items as $item) {
+        foreach ($items as $key => $item) {
+            if (!is_array($item) || !is_string($item[0] ?? null) || !is_string($item[1] ?? null)) {
+                unset($items[$key]);
+                $counters['invalid']++;
+                continue;
+            }
+
             $type = $item[0];
             if (!in_array($type, $allowedTypes)) {
                 continue;
@@ -433,7 +487,6 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
             $existingItems = $qb->getQuery()->getSingleColumnResult();
         }
 
-        $counters = ['added' => 0, 'skipped' => 0, 'invalid' => 0];
         foreach ($items as $itemData) {
             $type = $itemData[0];
             if (!in_array($type, $allowedTypes)) {
@@ -463,12 +516,26 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
                 }
             }
 
+            $value = $itemData[1];
+            if (!$ruleType->isValidValue($type, $value)) {
+                $counters['invalid']++;
+                continue;
+            }
+
+            $rating = min(max(-1000000, floatval($itemData[2] ?? 1)), 1000000);
             $item = new RuleItem();
             $item
                 ->setRule($rule)
-                ->setType($itemData[0])
-                ->setValue($itemData[1])
-                ->setSpamRatingFactor(floatval($itemData[2]));
+                ->setType($type)
+                ->setValue($value)
+                ->setSpamRatingFactor($rating);
+
+            // Add the new item to the existing ones so if we have a value multiple times, it will get skipped next time.
+            if (!$sameType) {
+                $existingItems[] = ['type' => $type, 'value' => $value];
+            } else {
+                $existingItems[] = $value;
+            }
 
             $entityManager->persist($item);
             $counters['added']++;
