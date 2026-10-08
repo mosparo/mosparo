@@ -13,14 +13,15 @@ class IpAddressRuleTester extends AbstractRuleTester
 {
     public function buildExpressions(QueryBuilder $qb, Orx $orExpr, array $fieldData, ?string $value)
     {
+        $address = ($value !== null) ? Factory::parseAddressString($value) : null;
+        $canonicalValue = $address ? $address->toString() : $value;
+
         $orExpr->add($qb->expr()->andX()
             ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('ipAddress')))
-            ->add($qb->expr()->eq('i.hashedValue', $qb->createNamedParameter(HashUtil::hashFast($value))))
+            ->add($qb->expr()->eq('i.hashedValue', $qb->createNamedParameter(HashUtil::hashFast($canonicalValue))))
         );
 
-        $address = ($value !== null) ? Factory::parseAddressString($value) : null;
         $expandedValue = $address ? $address->toString(true) : $value;
-
         $orExpr->add($qb->expr()->andX()
             ->add($qb->expr()->eq('i.type', $qb->createNamedParameter('subnet')))
             ->add($qb->expr()->like($qb->createNamedParameter($expandedValue), 'i.preparedValue'))
@@ -51,9 +52,13 @@ class IpAddressRuleTester extends AbstractRuleTester
 
     protected function validateIpAddress($value, $itemValue): bool
     {
-        $itemValue = mb_strtolower($itemValue);
+        $address = ($value !== null) ? Factory::parseAddressString($value) : null;
+        $expandedValue = $address ? $address->toString(true) : $value;
 
-        if ($value === $itemValue) {
+        $itemAddress = ($itemValue !== null) ? Factory::parseAddressString($itemValue) : null;
+        $expandedItemValue = $itemAddress ? $itemAddress->toString(true) : $itemValue;
+
+        if ($expandedValue === $expandedItemValue) {
             return true;
         }
 

@@ -4,6 +4,7 @@ namespace Mosparo\Rules\FieldRule;
 
 use Doctrine\ORM\Mapping as ORM;
 use IPLib\Address\IPv6;
+use IPLib\Factory;
 use IPLib\Range\Subnet;
 use Mosparo\Util\HashUtil;
 use Mosparo\Util\UrlUtil;
@@ -101,11 +102,14 @@ trait PreparedRuleItemTrait
 
     protected function prepareHash(string $type, string $value): string
     {
-        return match($type) {
-            'domain' => HashUtil::hashFast(trim($value, './')),
-            'email' => HashUtil::hashFast(trim($value)),
-            'url' => HashUtil::hashFast(UrlUtil::normalizeUrl($value)),
-            default => HashUtil::hashFast($value)
+        $value = match($type) {
+            'domain' => trim($value, './'),
+            'email' => trim($value),
+            'url' => UrlUtil::normalizeUrl($value),
+            'ipAddress' => Factory::parseAddressString($value)?->toString() ?? $value,
+            default => $value
         };
+
+        return HashUtil::hashFast($value);
     }
 }
