@@ -364,7 +364,7 @@ class DesignHelper
             return;
         }
 
-        if (!$this->prepareCssFilesInSharedCache) {
+        if ($this->prepareCssFilesInSharedCache) {
             $this->cache->delete('design_' . $project->getUuid() . '_content');
             $this->cache->delete('design_' . $project->getUuid() . '_hash');
         } else {
