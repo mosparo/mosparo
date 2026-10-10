@@ -6,7 +6,7 @@
 {% block pageTitle %}
     <span>
         {% if searchQuery %}
-            {{ 'project.searchTitle'|trans({'%searchQuery%': '<cite>' ~ searchQuery ~ '</cite>'})|raw }}
+            {{ 'project.searchTitle'|trans({'%searchQuery%': '<cite>' ~ searchQuery|escape ~ '</cite>'})|raw }}
         {% else %}
             {{ 'project.title'|trans }}
         {% endif %}
