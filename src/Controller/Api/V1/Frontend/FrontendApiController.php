@@ -500,6 +500,11 @@ class FrontendApiController extends AbstractController
             $locales = $this->findCorrectLocales($request);
 
             foreach ($locales as $locale) {
+                // Skip invalid locales by using the same RegEx pattern as Symfony does.
+                if (!preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale)) {
+                    continue;
+                }
+
                 $this->translator->setLocale($locale);
 
                 // Try to determine the locale for which we will return the messages. If we don't have the translation
