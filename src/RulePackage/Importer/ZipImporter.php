@@ -303,7 +303,7 @@ class ZipImporter implements ImporterInterface
             $rulePackageRuleCache->setUpdatedAt($rulePackageCache->getUpdatedAt());
 
             $rating = null;
-            if ($rule->spamRatingFactor) {
+            if ($rule->spamRatingFactor ?? null) {
                 $rating = (float) $rule->spamRatingFactor;
             }
             $rulePackageRuleCache->setSpamRatingFactor($rating);
