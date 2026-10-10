@@ -63,8 +63,8 @@
             function drawAdditionalLabels()
             {
                 let submissionTableContainer = $('#submissions');
-                drawAdditionalLabel(submissionTableContainer, 'th.spam-column', 'spam-column-label', '{{ 'submission.list.spam'|trans }}');
-                drawAdditionalLabel(submissionTableContainer, 'th.verification-column', 'verification-column-label', '{{ 'submission.list.verification'|trans }}');
+                drawAdditionalLabel(submissionTableContainer, 'th.spam-column', 'spam-column-label', '{{ 'submission.list.spam'|trans|escape('js') }}');
+                drawAdditionalLabel(submissionTableContainer, 'th.verification-column', 'verification-column-label', '{{ 'submission.list.verification'|trans|escape('js') }}');
             }
 
             function drawAdditionalLabel(container, columnSelector, labelClass, labelText)

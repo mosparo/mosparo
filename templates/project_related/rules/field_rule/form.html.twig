@@ -456,15 +456,15 @@
             var usedChunkSize = baseChunkSize;
             var placeholderEl = $('<div></div>').addClass('empty')[0];
 
-            var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.title'|trans }}')[0];
-            var emptyTableTextEl = $('<p></p>').addClass('empty-subtitle text-secondary').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.text'|trans }}')[0];
+            var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.title'|trans|escape('js') }}')[0];
+            var emptyTableTextEl = $('<p></p>').addClass('empty-subtitle text-secondary').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.text'|trans|escape('js') }}')[0];
             var emptyTableActionEl = $('<div></div>').addClass('empty-action {% if not canManage %}d-none{% endif %}').appendTo(placeholderEl)[0];
             {% if canManage %}
                 var emptyTableAddItemButtonEl = $('<button></button>')
                     .attr('type', 'button')
                     .addClass('btn btn-success add-item-btn')
                     .append($('<i></i>').addClass('ti ti-square-plus'))
-                    .append($('<div></div>').text('{{ 'form.addItem'|trans }}'))
+                    .append($('<div></div>').text('{{ 'form.addItem'|trans|escape('js') }}'))
                     .appendTo(emptyTableActionEl)[0];
             {% endif %}
             var emptyTableAdjustFilterButtonEl = $('<button></button>')
@@ -473,7 +473,7 @@
                 .attr('data-bs-target', '#filter-modal')
                 .addClass('btn btn-pink d-none')
                 .append($('<i></i>').addClass('ti ti-filter'))
-                .append($('<div></div>').text('{{ 'action.filter'|trans }}'))
+                .append($('<div></div>').text('{{ 'action.filter'|trans|escape('js') }}'))
                 .appendTo(emptyTableActionEl)[0];
 
             function updateFiltersCounter()
@@ -484,8 +484,8 @@
                 if (numberOfActiveFilters) {
                     counterEl.text(numberOfActiveFilters).removeClass('d-none');
 
-                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.title'|trans }}';
-                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.text'|trans }}';
+                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.title'|trans|escape('js') }}';
+                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.text'|trans|escape('js') }}';
                     emptyTableActionEl.classList.remove('d-none');
                     emptyTableAdjustFilterButtonEl.classList.remove('d-none');
                     {% if canManage %}
@@ -493,8 +493,8 @@
                     {% endif %}
                 } else {
                     counterEl.text('').addClass('d-none');
-                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.title'|trans }}';
-                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.text'|trans }}';
+                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.title'|trans|escape('js') }}';
+                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.text'|trans|escape('js') }}';
                     emptyTableAdjustFilterButtonEl.classList.add('d-none');
                     {% if canManage %}
                         emptyTableActionEl.classList.remove('d-none');
@@ -898,9 +898,9 @@
                         }
                     },
                     columns:[
-                        { title: '{{ 'rules.fieldRule.form.items.type'|trans }}', field: 'type', width: '25%', minWidth: 100, resizable: false, vertAlign: 'middle', formatter: 'lookup', formatterParams: typeOptions,  {% if canManage %}editor: 'list', editorParams: { values: typeOptions }, editable: canEditCell,{% endif %} },
-                        { title: '{{ 'rules.fieldRule.form.items.value'|trans }}', field: 'value', width: '50%', resizable: false, vertAlign: 'middle', {% if valueOptions %}formatter: 'lookup', formatterParams: valueOptions,{% endif %} {% if canManage %}{% if valueOptions %}editor: 'list', editorParams: { values: valueOptions },{% else %}editor: 'input', validator: [{type: valueValidator}],{% endif %} editable: canEditCell,{% endif %} widthGrow: 4 },
-                        { title: '{{ 'rules.fieldRule.form.items.rating'|trans }}', field: 'spamRatingFactor', width: '15%', minWidth: 100, resizable: false, vertAlign: 'middle', hozAlign: 'right', {% if canManage %}editor: 'number', editable: canEditCell, validator: ['numeric', 'min:-1000000', 'max:1000000'], editorParams: {
+                        { title: '{{ 'rules.fieldRule.form.items.type'|trans|escape('js') }}', field: 'type', width: '25%', minWidth: 100, resizable: false, vertAlign: 'middle', formatter: 'lookup', formatterParams: typeOptions,  {% if canManage %}editor: 'list', editorParams: { values: typeOptions }, editable: canEditCell,{% endif %} },
+                        { title: '{{ 'rules.fieldRule.form.items.value'|trans|escape('js') }}', field: 'value', width: '50%', resizable: false, vertAlign: 'middle', {% if valueOptions %}formatter: 'lookup', formatterParams: valueOptions,{% endif %} {% if canManage %}{% if valueOptions %}editor: 'list', editorParams: { values: valueOptions },{% else %}editor: 'input', validator: [{type: valueValidator}],{% endif %} editable: canEditCell,{% endif %} widthGrow: 4 },
+                        { title: '{{ 'rules.fieldRule.form.items.rating'|trans|escape('js') }}', field: 'spamRatingFactor', width: '15%', minWidth: 100, resizable: false, vertAlign: 'middle', hozAlign: 'right', {% if canManage %}editor: 'number', editable: canEditCell, validator: ['numeric', 'min:-1000000', 'max:1000000'], editorParams: {
                                 min: -1000000,
                                 max: 1000000,
                                 step: 'any',
@@ -936,28 +936,28 @@
                     langs: {
                         '{{ app.request.locale }}': {
                             'data': {
-                                'loading': '{{ 'tabulator.data.loading'|trans }}',
-                                'error': '{{ 'tabulator.data.error'|trans }}',
+                                'loading': '{{ 'tabulator.data.loading'|trans|escape('js') }}',
+                                'error': '{{ 'tabulator.data.error'|trans|escape('js') }}',
                             },
                             'groups': {
-                                'item': '{{ 'tabulator.groups.item'|trans }}',
-                                'items': '{{ 'tabulator.groups.items'|trans }}',
+                                'item': '{{ 'tabulator.groups.item'|trans|escape('js') }}',
+                                'items': '{{ 'tabulator.groups.items'|trans|escape('js') }}',
                             },
                             'pagination': {
-                                'page_size': '{{ 'tabulator.pagination.pageSize'|trans }}',
-                                'page_title': '{{ 'tabulator.pagination.pageTitle'|trans }}',
+                                'page_size': '{{ 'tabulator.pagination.pageSize'|trans|escape('js') }}',
+                                'page_title': '{{ 'tabulator.pagination.pageTitle'|trans|escape('js') }}',
                                 'first': '{{ 'tabulator.pagination.first'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-left-pipe"></i>'})|raw }}',
-                                'first_title': '{{ 'tabulator.pagination.firstTitle'|trans }}',
+                                'first_title': '{{ 'tabulator.pagination.firstTitle'|trans|escape('js') }}',
                                 'last': '{{ 'tabulator.pagination.last'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-right-pipe"></i>'})|raw }}',
-                                'last_title': '{{ 'tabulator.pagination.lastTitle'|trans }}',
+                                'last_title': '{{ 'tabulator.pagination.lastTitle'|trans|escape('js') }}',
                                 'prev': '{{ 'tabulator.pagination.prev'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-left"></i>'})|raw }}',
-                                'prev_title': '{{ 'tabulator.pagination.prevTitle'|trans }}',
+                                'prev_title': '{{ 'tabulator.pagination.prevTitle'|trans|escape('js') }}',
                                 'next': '{{ 'tabulator.pagination.next'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-right"></i>'})|raw }}',
-                                'next_title': '{{ 'tabulator.pagination.nextTitle'|trans }}',
-                                'all': '{{ 'tabulator.pagination.all'|trans }}',
+                                'next_title': '{{ 'tabulator.pagination.nextTitle'|trans|escape('js') }}',
+                                'all': '{{ 'tabulator.pagination.all'|trans|escape('js') }}',
                             },
                             'headerFilters': {
-                                'default': '{{ 'tabulator.filter.default'|trans }}',
+                                'default': '{{ 'tabulator.filter.default'|trans|escape('js') }}',
                             }
                         }
                     },

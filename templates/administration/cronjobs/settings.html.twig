@@ -179,9 +179,9 @@ php bin/console mosparo:geoip2:download-database
                         fieldGeoIp2RefreshInterval.prop('disabled', !$(this).prop('checked')).prop('required', $(this).prop('checked'));
                         fieldGeoIp2RefreshInterval.change(function () {
                             if (parseInt($(this).val()) === 1) {
-                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.day'|trans }}');
+                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.day'|trans|escape('js') }}');
                             } else {
-                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.days'|trans }}');
+                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.days'|trans|escape('js') }}');
                             }
                         }).trigger('change');
                     {% endif %}
