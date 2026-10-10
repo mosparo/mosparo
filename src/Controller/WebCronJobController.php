@@ -11,6 +11,7 @@ use Mosparo\Helper\GeoIp2Helper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\RulePackageHelper;
 use Mosparo\Util\IpUtil;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,13 +33,16 @@ class WebCronJobController extends AbstractController
 
     protected CacheInterface $cache;
 
+    protected LoggerInterface $logger;
+
     public function __construct(
         ConfigHelper $configHelper,
         ProjectHelper $projectHelper,
         CleanupHelper $cleanupHelper,
         RulePackageHelper $rulePackageHelper,
         GeoIp2Helper $geoIp2Helper,
-        CacheInterface $cache
+        CacheInterface $cache,
+        LoggerInterface $logger
     ) {
         $this->configHelper = $configHelper;
         $this->projectHelper = $projectHelper;
@@ -46,6 +50,7 @@ class WebCronJobController extends AbstractController
         $this->rulePackageHelper = $rulePackageHelper;
         $this->geoIp2Helper = $geoIp2Helper;
         $this->cache = $cache;
+        $this->logger = $logger;
     }
 
     #[Route('/cron-jobs/execute', name: 'cron_jobs_execute')]
@@ -105,27 +110,55 @@ class WebCronJobController extends AbstractController
         $maxTimeCleanup = floor($maxExecutionTime * 0.8);
         $start = time();
 
+        $hasError = false;
         try {
             // Execute the cleanup process
-            $this->cleanupHelper->cleanup(1000000, true, false, $maxTimeCleanup, CleanupExecutor::WEB_CRON_JOB);
+            try {
+                $this->cleanupHelper->cleanup(1000000, true, false, $maxTimeCleanup, CleanupExecutor::WEB_CRON_JOB);
+            } catch (\Throwable $e) {
+                $this->logger->error(sprintf(
+                    'Cleaning up the database via the web cron job failed. Error: %s',
+                    $e->getMessage()
+                ));
+                $hasError = true;
+            }
 
             // Download the rule packages, only execute this if we have more than 10% of the max execution time available.
             if ((time() - $start) < ($maxExecutionTime * 0.9)) {
-                $this->rulePackageHelper->fetchAll($start, $maxExecutionTime * 0.6);
+                try {
+                    $this->rulePackageHelper->fetchAll($start, $maxExecutionTime * 0.6);
+                } catch (\Throwable $e) {
+                    $this->logger->error(sprintf(
+                        'Fetching the rule packages via the web cron job failed. Error: %s',
+                        $e->getMessage()
+                    ));
+                    $hasError = true;
+                }
             }
 
             // Update the GeoIP2 database, only execute this if we have more than 10% of the max execution time available.
             if ((time() - $start) < ($maxExecutionTime * 0.9)) {
-                $isGeoIp2Active = ($this->configHelper->getEnvironmentConfigValue('geoipActive'));
-                $nextGeoIp2Refresh = $this->cache->getItem('mosparoGeoIp2LastCronJobRefresh');
+                try {
+                    $isGeoIp2Active = ($this->configHelper->getEnvironmentConfigValue('geoipActive'));
+                    $nextGeoIp2Refresh = $this->cache->getItem('mosparoGeoIp2LastCronJobRefresh');
 
-                if ($isGeoIp2Active && ($nextGeoIp2Refresh->get() === null || $nextGeoIp2Refresh->get() <= new DateTime())) {
-                    $this->geoIp2Helper->downloadDatabase();
+                    if ($isGeoIp2Active && ($nextGeoIp2Refresh->get() === null || $nextGeoIp2Refresh->get() <= new DateTime())) {
+                        $result = $this->geoIp2Helper->downloadDatabase();
+                        if ($result !== true) {
+                            $this->logger->error(sprintf('Updating the GeoIP2 database via the web cron job failed. Errors: %s', implode('; ', (array) $result)));
+                        }
 
-                    $geoIp2RefreshInterval = $this->configHelper->getEnvironmentConfigValue('geoIp2RefreshInterval', 7);
-                    $nextGeoIp2RefreshDate = (new DateTime())->add(new DateInterval(sprintf('P%dD', $geoIp2RefreshInterval)));
-                    $nextGeoIp2Refresh->set($nextGeoIp2RefreshDate);
-                    $this->cache->save($nextGeoIp2Refresh);
+                        $geoIp2RefreshInterval = $this->configHelper->getEnvironmentConfigValue('geoIp2RefreshInterval', 7);
+                        $nextGeoIp2RefreshDate = (new DateTime())->add(new DateInterval(sprintf('P%dD', $geoIp2RefreshInterval)));
+                        $nextGeoIp2Refresh->set($nextGeoIp2RefreshDate);
+                        $this->cache->save($nextGeoIp2Refresh);
+                    }
+                } catch (\Throwable $e) {
+                    $this->logger->error(sprintf(
+                        'Updating the GeoIP2 database via the web cron job failed. Error: %s',
+                        $e->getMessage()
+                    ));
+                    $hasError = true;
                 }
             }
         } finally {
@@ -139,6 +172,6 @@ class WebCronJobController extends AbstractController
             $this->cache->save($cronJobStartedAt);
         }
 
-        return new Response('200 OK', 200);
+        return new Response($hasError ? '500 Internal Server Error' : '200 OK', $hasError ? 500 : 200);
     }
 }

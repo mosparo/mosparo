@@ -92,16 +92,33 @@ class RulePackageHelper
         $projectRepository = $this->entityManager->getRepository(Project::class);
         $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
 
+        $activeProject = $this->projectHelper->getActiveProject();
+
         foreach ($projectRepository->findAll() as $project) {
             $this->projectHelper->setActiveProject($project);
 
             foreach ($rulePackageRepository->findBy(['status' => 1]) as $rulePackage) {
                 if (in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
-                    $this->fetchRulePackage($rulePackage, $startTime, $maxSeconds);
+                    try {
+                        $this->fetchRulePackage($rulePackage, $startTime, $maxSeconds);
+                    } catch (\Throwable $e) {
+                        $this->logger->error(sprintf(
+                            'Fetching a rule package failed. Project ID: %d; Rule package ID: %d; Error: %s',
+                            $project->getId(),
+                            $rulePackage->getId(),
+                            $e->getMessage()
+                        ));
+                    }
                 }
             }
 
             $this->entityManager->flush();
+        }
+
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
+        } else {
+            $this->projectHelper->unsetActiveProject();
         }
     }
 
