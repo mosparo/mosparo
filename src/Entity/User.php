@@ -197,7 +197,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
      */
     public function isBackupCode(string $code): bool
     {
-        return in_array($code, $this->backupCodes);
+        return in_array($code, $this->backupCodes, true);
     }
 
     /**
@@ -207,7 +207,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
      */
     public function invalidateBackupCode(string $code): void
     {
-        $key = array_search($code, $this->backupCodes);
+        $key = array_search($code, $this->backupCodes, true);
         if ($key !== false){
             unset($this->backupCodes[$key]);
         }
