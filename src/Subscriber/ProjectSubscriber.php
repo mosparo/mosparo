@@ -119,7 +119,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
             $authData = explode(':', base64_decode($authorizationHeader));
             if (count($authData) !== 2) {
-                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Authorization header invalid.', 401]));
+                $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Authorization header invalid.'], 401));
                 return;
             }
 
