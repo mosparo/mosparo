@@ -157,7 +157,7 @@ class FrontendApiController extends AbstractController
 
         if ($securitySettings['proofOfWorkActive'] && !$isIpOnAllowList) {
             $maxNumber = $this->findMaximumNumberForProofOfWorkRange($request, $securitySettings);
-            $number = mt_rand(1, $maxNumber);
+            $number = random_int(1, $maxNumber);
 
             $proofOfWorkResult = hash('sha256', $submitToken->gettoken() . $number);
             $submitToken->setProofOfWorkResult($proofOfWorkResult);
