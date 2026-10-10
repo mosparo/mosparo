@@ -596,10 +596,18 @@
                                                                     {% set groupKey = parts[0] %}
                                                                     {% set field = submission.data[groupKey]|find(field => field.fieldPath == parts[1]) %}
                                                                     {% if field %}
-                                                                        <tr>
-                                                                            <td class="w-33">{{ _self.fieldName(groupKey, field) }}</td>
-                                                                            <td class="w-66"><code class="submission-data word-break-all">{{ field.value }}</code></td>
-                                                                        </tr>
+                                                                        {% set fieldValues = field.value %}
+                                                                        {% if not fieldValues is iterable %}
+                                                                            {% set fieldValues = [field.value] %}
+                                                                        {% endif %}
+                                                                        {% for val in fieldValues %}
+                                                                            <tr>
+                                                                                <td class="w-33">{{ _self.fieldName(groupKey, field) }}</td>
+                                                                                <td class="w-66">
+                                                                                    <code class="submission-data word-break-all">{{ val }}</code>
+                                                                                </td>
+                                                                            </tr>
+                                                                        {% endfor %}
                                                                     {% endif %}
                                                                 {% endfor %}
                                                             </tbody>

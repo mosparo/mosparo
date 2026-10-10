@@ -76,17 +76,18 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
                 $isTextField = str_starts_with($fieldData['fieldPath'], 'input[text].');
                 $isTextarea = str_starts_with($fieldData['fieldPath'], 'textarea.');
                 if ($isTextField || ($matchTextarea && $isTextarea)) {
-                    $match = null;
-                    if ($isTextField && preg_match('/^[A-Za-z0-9]{' . $numberOfRandomCharacters . ',}$/', trim($fieldData['value']), $fieldMatches)) {
-                        $match = current($fieldMatches);
-                    } else if ($isTextarea && preg_match('/(\W|^)[A-Za-z0-9]{' . $numberOfRandomCharacters . ',}(\W|$)/', trim($fieldData['value']), $fieldMatches)) {
-                        $match = current($fieldMatches);
-                    }
+                    foreach ((is_array($fieldData['value']) ? $fieldData['value'] : [$fieldData['value']]) as $value) {
+                        if ($value === null || !trim($value)) {
+                            continue;
+                        }
 
-                    if ($match && $this->verifyMatch($match, $requireBothCases)) {
-                        $numberOfMatchingFields++;
-                        $matchingFields[] = $groupKey . '.' . $fieldData['fieldPath'];
-                        $matches[] = current($fieldMatches);
+                        [$match, $fieldMatch] = $this->checkIfFieldMatches($value, $isTextField, $isTextarea, $numberOfRandomCharacters, $requireBothCases);
+
+                        if ($match) {
+                            $numberOfMatchingFields++;
+                            $matchingFields[$groupKey . '.' . $fieldData['fieldPath']] = 1;
+                            $matches[] = $fieldMatch;
+                        }
                     }
                 }
             }
@@ -96,10 +97,28 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
             $submission->getDetectionResult()->addMatchedSubmissionRule($this->getKey(), [
                 'identifier' => $this->getKey(),
                 'rating' => $storedSubmissionRule->getRating(),
-                'matchingFields' => $matchingFields,
+                'matchingFields' => array_keys($matchingFields),
                 'matches' => $matches,
             ]);
         }
+    }
+
+    protected function checkIfFieldMatches(string $value, bool $isTextField, bool $isTextarea, int $numberOfRandomCharacters, bool $requireBothCases): array
+    {
+        if ($isTextField && preg_match('/^[A-Za-z0-9]{' . $numberOfRandomCharacters . ',}$/', trim($value), $fieldMatches)) {
+            $fieldMatch = current($fieldMatches);
+            if ($fieldMatch && $this->verifyMatch($fieldMatch, $requireBothCases)) {
+                return [true, $fieldMatch];
+            }
+        } else if ($isTextarea && preg_match_all('/\b[A-Za-z0-9]{' . $numberOfRandomCharacters . ',}\b/', $value, $fieldMatches)) {
+            foreach ($fieldMatches[0] as $textareaMatch) {
+                if ($this->verifyMatch($textareaMatch, $requireBothCases)) {
+                    return [true, $textareaMatch];
+                }
+            }
+        }
+
+        return [false, null];
     }
 
     protected function verifyMatch(string $match, bool $requireBothCases): bool
