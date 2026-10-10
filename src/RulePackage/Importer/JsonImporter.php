@@ -153,7 +153,7 @@ class JsonImporter implements ImporterInterface
 
             $this->entityManager->flush();
 
-            $this->rulePackageHelper->countNumberOfRuleItems($rulePackageRuleCache);
+            $this->rulePackageHelper->countRuleItemsForRule($rulePackageRuleCache);
         }
 
         // Remove all rules which are not in the data anymore
