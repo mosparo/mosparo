@@ -100,11 +100,22 @@ class VerificationApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.'] + $debugInformation);
         }
 
-        $submitToken->setVerifiedAt(new DateTime());
-        $submission->setVerifiedAt(new DateTime());
-
         $requestData = $request->request->all();
         $formData = $requestData['formData'] ?? [];
+        if (!is_array($formData)) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => 'form_data_invalid',
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Form data invalid.'] + $debugInformation);
+        }
+
+        $submitToken->setVerifiedAt(new DateTime());
+        $submission->setVerifiedAt(new DateTime());
 
         $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
         $formSignature = $requestHelper->createFormDataHmacHash($formData);
@@ -137,7 +148,7 @@ class VerificationApiController extends AbstractController
 
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
             $metadata = json_decode($request->request->getString('metadata'), true);
-            if ($metadata) {
+            if (is_array($metadata)) {
                 $submission->appendData([
                     'metadata' => $metadata,
                 ]);
@@ -362,8 +373,16 @@ class VerificationApiController extends AbstractController
         }
 
         $submission = $submitToken->getLastSubmission();
-        if (!$submission) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.']);
+        if (!$submission || !$submission->getValidationToken()) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => (!$submission) ? 'submission_not_found' : 'validation_token_missing',
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.'] + $debugInformation);
         }
 
         $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
@@ -386,7 +405,7 @@ class VerificationApiController extends AbstractController
         }
 
         $metadata = json_decode($request->request->getString('metadata'), true);
-        if ($metadata) {
+        if (is_array($metadata)) {
             $submission->appendData([
                 'metadata' => $metadata,
             ]);
