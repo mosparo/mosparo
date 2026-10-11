@@ -1,7 +1,6 @@
 settings:
   mosparoName:
-    colonNotAllowed: Der Doppelpunkt (:) ist im Namen der mosparo-Installation 
-      nicht erlaubt.
+    colonNotAllowed: Der Doppelpunkt (:) ist im Namen der mosparo-Installation nicht erlaubt.
 
 password:
   form:
@@ -19,38 +18,28 @@ tools:
   import:
     importFile:
       correctFile: Bitte laden Sie eine korrekte JSON-Datei hoch.
+  ruleTester:
+    chooseRuleOrRulePackages: Bitte wählen Sie, ob Sie entweder Regeln oder Regelpakete testen wollen.
 administration:
   security:
     backendAccess:
-      ownIpNotInAllowList: Ihre IP-Adresse ist in der Liste der erlaubten 
-        IP-Adressen nicht enthalten. Bitte fügen Sie Ihre IP-Adresse der Liste 
-        hinzu.
+      ownIpNotInAllowList: Ihre IP-Adresse ist in der Liste der erlaubten IP-Adressen nicht enthalten. Bitte fügen Sie Ihre IP-Adresse der Liste hinzu.
 ipAllowList:
-  itemInvalid: Der Eintrag „%item“ ist keine gültige IP-Adresse bzw. kein 
-    gültiges Subnetz.
+  itemInvalid: Der Eintrag „%item“ ist keine gültige IP-Adresse bzw. kein gültiges Subnetz.
 honeypotField:
-  nameHasInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den 
-    Bindestrich (-).
+  nameHasInvalidCharacter: Bitte benutzen Sie nur Buchstaben, Zahlen und den Bindestrich (-).
 securityGuideline:
   asNumberNotNumeric: Die AS-Nummer ist keine Nummer.
-  atLeastOneCriterionRequired: Die Sicherheitsleitlinie benötigt mindestens ein 
-    Kriterium.
+  atLeastOneCriterionRequired: Die Sicherheitsleitlinie benötigt mindestens ein Kriterium.
 
+  dynamicComplexityHigher: Die maximale Komplexität muss grösser oder gleich der normalen Komplexität sein.
 hosts:
-  hostContainsProtocol: Dieser Host enthält ein Protokoll. Bitte geben Sie den 
-    Host ohne Protokoll ein (zum Beispiel example.com anstelle von 
-    https://example.com).
-  hostContainsInvalidCharacter: Dieser Host enthält mindestens ein ungültiges 
-    Zeichen. In diesem Feld sind nur Buchstaben (a-z), Zahlen (0-9), 
-    Bindestriche, Punkte, Doppelpunkte und der Stern (*) erlaubt.
+  hostContainsProtocol: Dieser Host enthält ein Protokoll. Bitte geben Sie den Host ohne Protokoll ein (zum Beispiel example.com anstelle von https://example.com).
+  hostContainsInvalidCharacter: Dieser Host enthält mindestens ein ungültiges Zeichen. In diesem Feld sind nur Buchstaben (a-z), Zahlen (0-9), Bindestriche, Punkte, Doppelpunkte und der Stern (*) erlaubt.
 
 webCronJob:
-  geoIpRefreshIntervalAtLeast1Day: Das GeoIP2 Aktualisierungs-Intervall muss 
-    mindestens einen Tag betragen.
-  webCronJobIntervalAtLeast5Minutes: Das Job-Intervall muss mindestens 5 Minuten
-    betragen.
+  geoIpRefreshIntervalAtLeast1Day: Das GeoIP2 Aktualisierungs-Intervall muss mindestens einen Tag betragen.
+  webCronJobIntervalAtLeast5Minutes: Das Job-Intervall muss mindestens 5 Minuten betragen.
 translation:
   locale:
-    invalidFormat: Bitte geben Sie die Ländereinstellung im richtigen Format an.
-      Geben Sie einen zweistelligen Sprachcode oder eine Kombination aus dem 
-      zweistelligen Sprachcode und dem Ländercode ein.
+    invalidFormat: Bitte geben Sie die Ländereinstellung im richtigen Format an. Geben Sie einen zweistelligen Sprachcode oder eine Kombination aus dem zweistelligen Sprachcode und dem Ländercode ein.
