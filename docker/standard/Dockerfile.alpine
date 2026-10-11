@@ -39,11 +39,15 @@ RUN deluser www-data && \
 # curl is already part of the base image and is used by /usr/bin/mosparo-health-check, cron is part
 # of BusyBox. The build dependencies are installed as a virtual package so they can be dropped again
 # after the extensions have been built. musl has no locale support and no locale-gen, but mosparo
-# does not use setlocale(), all locale aware formatting is done by ICU through intl.
+# does not use setlocale(), all locale aware formatting is done by ICU through intl. Alpine ships
+# the ICU data in a separate package and icu-libs only pulls in icu-data-en, which leaves ICU with
+# English data only: format_datetime and format_number then render every locale in English.
+# icu-data-full provides the data for the other locales.
 RUN apk add --no-cache \
         nginx \
         sudo \
         icu-libs \
+        icu-data-full \
         libpng \
         libpq \
         libzip \
