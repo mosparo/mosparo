@@ -88,7 +88,7 @@ class UpdateMosparoCommand extends Command
             $output->writeln('');
             $output->writeln('<fg=yellow>#</>');
             $output->writeln('<fg=yellow># A new major version is available.</>');
-            $output->writeln('<fg=yellow># Please update to the latest version of your major version befor you can upgrade.</>');
+            $output->writeln('<fg=yellow># Please update to the latest version of your major version before you can upgrade.</>');
             $output->writeln('<fg=yellow>#</>');
             $output->writeln('');
         }
@@ -178,7 +178,16 @@ class UpdateMosparoCommand extends Command
         });
 
         // Start the update
-        $this->updateHelper->updateMosparo($versionData);
+        $result = $this->updateHelper->updateMosparo($versionData);
+
+        // If the update went wrong, show an error message.
+        if (!$result) {
+            $output->writeln('');
+            $output->writeln(sprintf('<bg=red;fg=white> %s failed! </>', ($isUpgrade) ? 'Upgrade' : 'Update'));
+            $output->writeln('');
+
+            return Command::FAILURE;
+        }
 
         // Cleanup the content
         $this->updateHelper->output(new UpdateMessage('global', UpdateMessage::STATUS_COMPLETED, sprintf('%s completed', ($isUpgrade) ? 'Upgrade' : 'Update')));
