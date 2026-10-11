@@ -329,7 +329,7 @@ rules:
         url:
           title: URL
           intro: Geben Sie eine URL ein, welche als Spam erkannt werden soll.
-          infoProtocol: Es wird empfohlen, Ihre Eingabe mit dem Protokoll oder zwei Slashes für eine Protokoll-unabhängige URL zu starten. Wenn die Eingabe nicht mit dem Protokoll startet könnte die Regel falsche Domains als Spam erkennen.
+          infoProtocol: Es wird empfohlen, Ihre Eingabe mit dem Schema oder zwei Slashes für eine Schema-unabhängige URL zu starten. Wenn die Eingabe nicht mit dem Schema startet könnte die Regel falsche Domains als Spam erkennen.
 
       word:
         title: Wort
@@ -785,6 +785,9 @@ settings:
       languageOptions: Sprach-Optionen
       spamDetectionOptions: Spamerkennungs-Optionen
       metadataOptions: Optionen für Metadaten
+    apiDebugMode:
+      intro: Der API-Debug-Modus kann einem Angreifer Hinweise auf Ihr Projekt geben. Daher sollte der API-Debug-Modus ausschliesslich zu Entwicklungszwecken in Entwicklungsumgebungen verwendet werden.
+      reissue: Falls Sie den API-Debug-Modus für ein produktives Projekt aktiviert hatten, führen Sie bitte eine %linkStart%Neuausstellung der API-Schlüssel%linkEnd% durch.
   projectMember:
     title: Projekt-Mitglieder
     backToList: Zu den Projekt-Mitgliedern
@@ -809,6 +812,7 @@ settings:
         errorUserNotFound: Der Benutzer wurde nicht gefunden.
         errorNeedsOwner: Das Projekt braucht mindestens einen Inhaber.
 
+        errorUserAlreadyMember: Der Benutzer ist bereits Mitglied dieses Projekts.
     delete:
       title: Projekt-Mitglied %projectMemberName% entfernen
       confirm: Wollen Sie das Projekt-Mitglied %projectMemberName% wirklich vom Projekt entfernen?
@@ -1180,6 +1184,7 @@ administration:
         successfullyDeleted: Der Benutzer %email% wurde erfolgreich gelöscht.
         errorUserIsOwner: Der Benutzer ist Besitzer von mindestens einem Projekt. Ein Besitzer eines Projektes kann nicht gelöscht werden.
 
+        errorDeleteNotAllowed: Sie können Ihr Benutzerkonto nicht löschen.
   geoip2:
     title: GeoIP2
     description: Konfigurieren Sie die GeoIP2-Integration.
@@ -1291,6 +1296,14 @@ administration:
           processingPleaseWait: Aufgaben verarbeiten…
           processingStats: '%processedTasks% von %totalTasks% verarbeitet'
           doNotLeave: Bitte verlassen Sie diese Seite nicht und brechen Sie den Vorgang nicht ab. Wenn sich der Fortschritt längere Zeit nicht ändert, aktualisieren Sie bitte diese Seite.
+          error: Bei der Verarbeitung der Regeln ist ein Fehler aufgetreten. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut oder überprüfen Sie die Protokolldatei.
+        optimizeRuleItems:
+          title: Verarbeite Regel-Einträge
+          intro: mosparo muss die gespeicherten Daten optimieren, um Spam zuverlässig zu erkennen. Bitte haben Sie einen Moment Geduld, während die Regel-Einträge verarbeitet werden.
+          processingPleaseWait: Verarbeite Regel-Einträge…
+          processingStats: '%processedTasks% von %totalTasks% verarbeitet'
+          doNotLeave: Bitte verlassen Sie diese Seite nicht und brechen Sie den Vorgang nicht ab. Sollte sich der Status des Vorgangs über einen längeren Zeitraum nicht ändern, aktualisieren Sie bitte diese Seite.
+          error: Bei der Verarbeitung der Regel-Einträge ist ein Fehler aufgetreten. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut oder überprüfen Sie die Protokolldatei.
     upgrade:
       updateFirst: Bevor Sie auf die nächste Hauptversion upgraden können, müssen Sie die neuste Version Ihrer bisherigen Hauptversion installieren.
       introAvailable: Eine neue Hauptversion ist verfügbar. Sie können das Update-Tool verwenden, um auf die neuste Hauptversion zu aktualisieren.
@@ -2072,6 +2085,7 @@ tooltip:
   publicKey: Öffentlicher Schlüssel
   privateKey: Geheimer Schlüssel
   deleted: Gelöscht
+  apiDebugModeEnabled: API-Debug-Modus aktiv
 submissionRule:
   randomValues:
     title: Zufallswerte
