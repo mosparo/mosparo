@@ -114,6 +114,8 @@ class ImportHelper
         // Set the originally active project
         if ($activeProject) {
             $this->projectHelper->setActiveProject($activeProject);
+        } else {
+            $this->projectHelper->unsetActiveProject();
         }
 
         return [$jobData, $importData, $this->hasChanges($changes), $changes, $notInImport];
@@ -179,7 +181,11 @@ class ImportHelper
         }
 
         // Set the originally active project
-        $this->projectHelper->setActiveProject($activeProject);
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
+        } else {
+            $this->projectHelper->unsetActiveProject();
+        }
 
         return $refreshRulePackages;
     }
@@ -343,7 +349,7 @@ class ImportHelper
             ];
         }
 
-        if (isset($importData['spamScore']) && $project->getSpamScore() !== $importData['spamScore']) {
+        if (isset($importData['spamScore']) && $project->getSpamScore() !== floatval($importData['spamScore'])) {
             $changes[] = [
                 'key' => 'spamScore',
                 'oldValue' => $project->getSpamScore(),
@@ -648,7 +654,7 @@ class ImportHelper
                     foreach ($items as $item) {
                         $itemChanges['remove'][] = [
                             'storedItemId' => $item->getId(),
-                            'storedRuleId' => $item->getId(),
+                            'storedRuleId' => $storedRuleId,
                         ];
                     }
                 }
@@ -842,8 +848,13 @@ class ImportHelper
                 }
             }
 
+            $translationKey = $importedTranslation['translationKey'];
+            if (!$translationKey instanceof TranslationKey) {
+                $translationKey = TranslationKey::tryFrom($translationKey);
+            }
+
             $translation->setLocale($importedTranslation['locale']);
-            $translation->setTranslationKey(TranslationKey::tryFrom($importedTranslation['translationKey']));
+            $translation->setTranslationKey($translationKey);
             $translation->setText($importedTranslation['text']);
         }
     }

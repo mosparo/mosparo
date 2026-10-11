@@ -9,6 +9,7 @@ use Mosparo\Enum\RulePackageType;
 use Mosparo\Exception\ImportException;
 use Mosparo\Helper\ImportHelper;
 use Mosparo\Rules\FieldRule\RuleTypeManager;
+use Mosparo\Rules\SubmissionRule\SubmissionRuleManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -30,15 +31,18 @@ class ImportCommand extends Command
 
     protected ImportHelper $importHelper;
 
+    protected SubmissionRuleManager $submissionRuleManager;
+
     protected RuleTypeManager $ruleTypeManager;
 
-    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, ImportHelper $importHelper, RuleTypeManager $ruleTypeManager)
+    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, ImportHelper $importHelper, SubmissionRuleManager $submissionRuleManager, RuleTypeManager $ruleTypeManager)
     {
         parent::__construct();
 
         $this->entityManager = $entityManager;
         $this->translator = $translator;
         $this->importHelper = $importHelper;
+        $this->submissionRuleManager = $submissionRuleManager;
         $this->ruleTypeManager = $ruleTypeManager;
     }
 
@@ -52,9 +56,11 @@ class ImportCommand extends Command
             ->addOption('generalSettings', null, InputOption::VALUE_NEGATABLE, 'Import the general settings of a project (name, description, hosts and spam score).', false)
             ->addOption('designSettings', null, InputOption::VALUE_NEGATABLE, 'Import the design settings of a project.', false)
             ->addOption('securitySettings', null, InputOption::VALUE_NEGATABLE, 'Import the security settings of a project.', false)
-            ->addOption('rules', null, InputOption::VALUE_NEGATABLE, 'Import the rules of a project.', false)
-            ->addOption('handlingExistingRules', null, InputOption::VALUE_REQUIRED, 'Define what should happen with existing rules (acceptable values: "override", "append", or "add").', 'override')
-            ->addOption('rulePackages', null, InputOption::VALUE_NEGATABLE, 'Import the rule packages a project.', false)
+            ->addOption('translations', null, InputOption::VALUE_NEGATABLE, 'Import the translations of a project.', false)
+            ->addOption('submissionRules', null, InputOption::VALUE_NEGATABLE, 'Import the submission rules of a project.', false)
+            ->addOption('fieldRules', null, InputOption::VALUE_NEGATABLE, 'Import the field rules of a project.', false)
+            ->addOption('handlingExistingFieldRules', null, InputOption::VALUE_REQUIRED, 'Define what should happen with existing field rules (acceptable values: "override", "append", or "add").', 'override')
+            ->addOption('rulePackages', null, InputOption::VALUE_NEGATABLE, 'Import the rule packages of a project.', false)
 
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force the import without showing the summary or waiting for confirmation.')
         ;
@@ -85,20 +91,22 @@ class ImportCommand extends Command
         $generalSettings = $input->getOption('generalSettings');
         $designSettings = $input->getOption('designSettings');
         $securitySettings = $input->getOption('securitySettings');
-        $rules = $input->getOption('rules');
-        $handlingExistingRules = $input->getOption('handlingExistingRules');
+        $translations = $input->getOption('translations');
+        $submissionRules = $input->getOption('submissionRules');
+        $fieldRules = $input->getOption('fieldRules');
+        $handlingExistingFieldRules = $input->getOption('handlingExistingFieldRules');
         $rulePackages = $input->getOption('rulePackages');
 
 
-        if (!$generalSettings && !$designSettings && !$securitySettings && !$rules && !$rulePackages) {
+        if (!$generalSettings && !$designSettings && !$securitySettings && !$translations && !$submissionRules && !$fieldRules && !$rulePackages) {
             $output->writeln($formatter->formatBlock(['Enable at least one section to import.'], 'error', true));
             return Command::FAILURE;
         }
 
 
-        if ($rules) {
-            if (!in_array($handlingExistingRules, ['override', 'append', 'add'])) {
-                $output->writeln($formatter->formatBlock(['Invalid value for handlingExistingRules.'], 'error', true));
+        if ($fieldRules) {
+            if (!in_array($handlingExistingFieldRules, ['override', 'append', 'add'])) {
+                $output->writeln($formatter->formatBlock(['Invalid value for handlingExistingFieldRules.'], 'error', true));
                 return Command::FAILURE;
             }
         }
@@ -109,9 +117,11 @@ class ImportCommand extends Command
             'importGeneralSettings' => $generalSettings,
             'importDesignSettings' => $designSettings,
             'importSecuritySettings' => $securitySettings,
-            'importRules' => $rules,
+            'importTranslations' => $translations,
+            'importSubmissionRules' => $submissionRules,
+            'importFieldRules' => $fieldRules,
             'importRulePackages' => $rulePackages,
-            'handlingExistingRules' => $handlingExistingRules,
+            'handlingExistingFieldRules' => $handlingExistingFieldRules,
         ];
 
         try {
@@ -131,8 +141,10 @@ class ImportCommand extends Command
                 'generalSettings' => ['number' => '1', 'name' => 'General settings', 'active' => $generalSettings, 'inFile' => isset($importData['project']['name'])],
                 'designSettings' => ['number' => '2', 'name' => 'Design settings', 'active' => $designSettings, 'inFile' => isset($importData['project']['design'])],
                 'securitySettings' => ['number' => '3', 'name' => 'Security settings', 'active' => $securitySettings, 'inFile' => isset($importData['project']['security'])],
-                'rules' => ['number' => '4', 'name' => 'Rules', 'active' => $rules, 'inFile' => isset($importData['project']['rules'])],
-                'rulePackages' => ['number' => '5', 'name' => 'Rule packages', 'active' => $rulePackages, 'inFile' => isset($importData['project']['rulePackages'])],
+                'translations' => ['number' => '4', 'name' => 'Translations', 'active' => $translations, 'inFile' => isset($importData['project']['translations'])],
+                'submissionRules' => ['number' => '5', 'name' => 'Submission rules', 'active' => $submissionRules, 'inFile' => isset($importData['project']['submissionRules'])],
+                'fieldRules' => ['number' => '6', 'name' => 'Field rules', 'active' => $fieldRules, 'inFile' => isset($importData['project']['fieldRules'])],
+                'rulePackages' => ['number' => '7', 'name' => 'Rule packages', 'active' => $rulePackages, 'inFile' => isset($importData['project']['rulePackages'])],
             ];
 
             $availableCommands = [
@@ -140,8 +152,10 @@ class ImportCommand extends Command
                 '1' => 'Show the general setting changes.',
                 '2' => 'Show the design setting changes.',
                 '3' => 'Show the security setting changes.',
-                '4' => 'Show the rule changes.',
-                '5' => 'Show the rule package changes.',
+                '4' => 'Show the translation changes.',
+                '5' => 'Show the submission rule changes.',
+                '6' => 'Show the field rule changes.',
+                '7' => 'Show the rule package changes.',
                 'abort' => 'Abort the import.',
                 'exit' => 'Abort the import.',
                 'execute' => 'Execute the changes.',
@@ -255,13 +269,17 @@ class ImportCommand extends Command
          */
         try {
             $jobData['changes'] = $changes;
-            $this->importHelper->executeImport(null, $project, $jobData);
+            $refreshRulePackages = $this->importHelper->executeImport(null, $project, $jobData);
         } catch (ImportException $e) {
             $output->writeln($formatter->formatBlock([$e->getMessage()], 'error', true));
             return Command::FAILURE;
         }
 
         $output->writeln($formatter->formatBlock(['The changes were successfully executed.'], 'info', true));
+
+        if ($refreshRulePackages) {
+            $output->writeln($formatter->formatBlock(['The import adjusted at least one rule package.', 'You should update the rule packages by executing `mosparo:rule-package:refresh`.'], 'comment', true));
+        }
 
         return Command::SUCCESS;
     }
@@ -322,7 +340,43 @@ class ImportCommand extends Command
                         $modeSecuritySettings,
                     ];
                 }
-            } else if ($sectionKey === 'rules') {
+            } else if ($sectionKey === 'translations') {
+                $headers = ['Action', 'Locale', 'Base text', 'Translated text'];
+
+                $values = [];
+                foreach ($changes as $change) {
+                    if ($change['mode'] === 'add') {
+                        $mode = 'Add';
+                    } else if ($change['mode'] === 'modify') {
+                        $mode = 'Modify';
+                    }
+
+                    $values[] = [
+                        $mode,
+                        $change['importedTranslation']['locale'],
+                        $change['importedTranslation']['translationKey']->trans($this->translator),
+                        $change['importedTranslation']['text'],
+                    ];
+                }
+            } else if ($sectionKey === 'submissionRules') {
+                $headers = ['Action', 'Name', 'Status', 'Rating', 'Modify values'];
+
+                $values = [];
+                foreach ($changes as $change) {
+                    $submissionRule = $this->submissionRuleManager->getRule($change['importedRule']['key']);
+                    if (!$submissionRule) {
+                        continue;
+                    }
+
+                    $values[] = [
+                        'Modify',
+                        $this->translator->trans($submissionRule->getName(), [], 'mosparo'),
+                        $change['importedRule']['enabled'] ? 'Enabled' : 'Disabled',
+                        $change['importedRule']['rating'],
+                        $change['modifyConfigValues'] ? 'Yes' : 'No',
+                    ];
+                }
+            } else if ($sectionKey === 'fieldRules') {
                 $headers = ['Action', 'Name', 'Type', 'Add items', 'Modify items', 'Remove items'];
 
                 $values = [];
