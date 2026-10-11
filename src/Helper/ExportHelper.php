@@ -97,7 +97,11 @@ class ExportHelper
         }
 
         // Change the active project back
-        $this->projectHelper->setActiveProject($activeProject);
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
+        } else {
+            $this->projectHelper->unsetActiveProject();
+        }
 
         return [
             'specificationsVersion' => Specifications::SPECIFICATIONS_VERSION,
