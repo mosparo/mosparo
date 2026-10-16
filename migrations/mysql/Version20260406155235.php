@@ -32,4 +32,9 @@ final class Version20260406155235 extends AbstractMigration
         $this->addSql('ALTER TABLE detection_result DROP FOREIGN KEY FK_9D26910F166D1F9C');
         $this->addSql('DROP TABLE detection_result');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

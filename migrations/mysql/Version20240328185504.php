@@ -28,4 +28,9 @@ final class Version20240328185504 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE submit_token ADD signature VARCHAR(40) DEFAULT NULL');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

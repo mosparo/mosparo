@@ -36,4 +36,9 @@ final class Version20230623044735 extends AbstractMigration
         $this->addSql('ALTER TABLE submit_token ADD CONSTRAINT FK_6C047AC8E1FD4933 FOREIGN KEY (submission_id) REFERENCES submission (id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6C047AC8E1FD4933 ON submit_token (submission_id)');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

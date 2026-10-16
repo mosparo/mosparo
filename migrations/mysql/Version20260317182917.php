@@ -28,4 +28,9 @@ final class Version20260317182917 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE day_statistic DROP number_of_delayed_requests, DROP number_of_blocked_requests');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

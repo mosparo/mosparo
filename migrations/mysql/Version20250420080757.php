@@ -56,4 +56,9 @@ final class Version20250420080757 extends AbstractMigration
             ALTER TABLE ruleset_rule_item_cache CHANGE rule_package_rule_cache_id ruleset_rule_cache_id INT NOT NULL
         SQL);
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

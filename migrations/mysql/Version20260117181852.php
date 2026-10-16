@@ -30,4 +30,9 @@ final class Version20260117181852 extends AbstractMigration
         $this->addSql('ALTER TABLE translation DROP FOREIGN KEY FK_B469456F166D1F9C');
         $this->addSql('DROP TABLE translation');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

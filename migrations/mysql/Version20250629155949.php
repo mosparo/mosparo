@@ -68,4 +68,9 @@ final class Version20250629155949 extends AbstractMigration
             ALTER TABLE rule_item DROP prepared_value, DROP hashed_value, CHANGE type type VARCHAR(255) NOT NULL
         SQL);
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

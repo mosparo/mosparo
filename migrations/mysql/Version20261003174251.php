@@ -31,4 +31,9 @@ final class Version20261003174251 extends AbstractMigration
     {
         $this->addSql('DROP INDEX project_user_idx ON project_member');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

@@ -28,4 +28,9 @@ final class Version20251221190529 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE rule_package_cache DROP number_of_rules');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

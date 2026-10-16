@@ -34,4 +34,9 @@ final class Version20261002174814 extends AbstractMigration
         $this->addSql('DROP INDEX ri_pv_idx ON rule_item');
         $this->addSql('ALTER TABLE rule_item DROP preparation_version');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

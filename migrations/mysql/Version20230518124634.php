@@ -32,4 +32,9 @@ final class Version20230518124634 extends AbstractMigration
     {
         // No down functionality available since the additional designMode value is acceptable.
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
