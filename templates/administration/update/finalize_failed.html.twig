@@ -1,0 +1,20 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.update.finalizeFailed.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    <h2 class="card-title text-center mb-4">{{ 'administration.update.finalizeFailed.title'|trans }}</h2>
+
+    <div class="alert alert-danger">
+        {{ 'administration.update.finalizeFailed.description'|trans }}
+    </div>
+
+    <div class="form-footer">
+        <a href="{{ path('administration_update_finalize') }}" class="btn btn-primary w-100">
+            <i class="ti ti-refresh-dot"></i>
+            {{ 'action.retry'|trans }}
+        </a>
+    </div>
+{% endblock %}

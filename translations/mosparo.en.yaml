@@ -1797,6 +1797,10 @@ administration:
         intro: Your MaxMind account ID and license key are required to download the GeoIP2 database.
         intro2: Please check the GeoIP2 configuration and enter your account ID.
 
+    finalizeFailed:
+      title: Finalizing the update failed
+      description: While mosparo tried to finalize the update, an error occurred. The problem is that a migration was not successfully executed in your database. Please try again using the button below, or review the mosparo log file and contact the mosparo team with the error message.
+
   system:
     title: System Information
     description: Find all the information about mosparo.
@@ -2024,6 +2028,7 @@ action:
   updateCache: Update cache
   goToRulePackage: Go to rule package
   goToRulePackages: Go to rule packages
+  retry: Retry
 
 # General values
 general:

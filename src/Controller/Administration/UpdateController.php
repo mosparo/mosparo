@@ -2,6 +2,7 @@
 
 namespace Mosparo\Controller\Administration;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Exception;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\ConnectionHelper;
@@ -14,8 +15,10 @@ use Mosparo\Helper\UpdateHelper;
 use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
 use Mosparo\Util\TokenGenerator;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Filesystem\Filesystem;
@@ -294,7 +297,7 @@ class UpdateController extends AbstractController
     }
 
     #[Route('/finalize', name: 'administration_update_finalize')]
-    public function finalize(Request $request, Filesystem $filesystem): Response
+    public function finalize(Request $request, Filesystem $filesystem, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
     {
         $oldInstalledVersion = $this->configHelper->getEnvironmentConfigValue('mosparo_installed_version');
         if ($oldInstalledVersion === Kernel::VERSION) {
@@ -311,8 +314,18 @@ class UpdateController extends AbstractController
         ));
 
         $output = new BufferedOutput();
-        $application->run($input, $output);
-        $output->fetch();
+        $result = $application->run($input, $output);
+        $migrationOutput = $output->fetch();
+
+        // Close the connection to start with a clean state.
+        $entityManager->getConnection()->close();
+
+        if ($result !== Command::SUCCESS) {
+            // If the migration failed, keep the old version in the config file so the finalization can be executed again.
+            $logger->error(sprintf('Executing the migration failed. %s', $migrationOutput));
+
+            return $this->render('administration/update/finalize_failed.html.twig');
+        }
 
         $tokenGenerator = new TokenGenerator();
 
