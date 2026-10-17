@@ -1959,7 +1959,7 @@ password:
       email: Email
 
     message:
-      failedToSendEmail: 'Due to a technical error, the email could not be sent. Please try again later. Error message: %errorMessage%'
+      failedToSendEmail: 'Due to a technical error, the email could not be sent. Please try again later.'
 
   email:
     subject: Your password reset request

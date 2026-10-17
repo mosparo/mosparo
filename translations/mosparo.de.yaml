@@ -1590,7 +1590,7 @@ password:
       email: E-Mail-Adresse
 
     message:
-      failedToSendEmail: 'Aufgrund eines technischen Fehlers konnte das E-Mail nicht versendet werden. Bitte versuchen Sie es später erneut. Fehlermeldung: %errorMessage%'
+      failedToSendEmail: 'Aufgrund eines technischen Fehlers konnte das E-Mail nicht versendet werden. Bitte versuchen Sie es später erneut.'
 
   email:
     subject: Ihr Passwort zurücksetzen
