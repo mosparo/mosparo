@@ -1,6 +1,7 @@
 <?php
 
 use Mosparo\Kernel;
+use Mosparo\Util\HeaderUtil;
 
 // If the request is a request for the project related css resource
 // redirect here directly without letting Symfony decide to speed up the process
@@ -44,12 +45,12 @@ return function (array $context) {
     if (file_exists($configFile) && ($context['TRUSTED_PROXIES'] ?? '') === '%default_trusted_proxies%') {
         $envConfig = include($configFile);
 
-        $replaceForwardedForHeader = $envConfig['replace_forwarded_for_header'] ?? '';
+        $replaceForwardedForHeader = HeaderUtil::convertHeaderName($envConfig['replace_forwarded_for_header'] ?? '');
         if ($replaceForwardedForHeader && isset($_SERVER[$replaceForwardedForHeader])) {
             $_SERVER['HTTP_X_FORWARDED_FOR'] = $_SERVER[$replaceForwardedForHeader];
         }
 
-        $replaceForwardedProtoHeader = $envConfig['replace_forwarded_proto_header'] ?? '';
+        $replaceForwardedProtoHeader = HeaderUtil::convertHeaderName($envConfig['replace_forwarded_proto_header'] ?? '');
         if ($replaceForwardedProtoHeader && isset($_SERVER[$replaceForwardedProtoHeader])) {
             $_SERVER['HTTP_X_FORWARDED_PROTO'] = $_SERVER[$replaceForwardedProtoHeader];
         }
