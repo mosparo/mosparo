@@ -23,7 +23,7 @@ class PasswordFormType extends AbstractType
         }
 
         $constraints[] = new Length([
-            'min' => 6,
+            'min' => 8,
             'minMessage' => 'password.form.constraint.length',
             // max length allowed by Symfony for security reasons
             'max' => 4096,
