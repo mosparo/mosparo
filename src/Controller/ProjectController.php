@@ -161,6 +161,8 @@ class ProjectController extends AbstractController
     #[Route('/group/{projectGroup}/create', name: 'project_create_group')]
     public function create(Request $request, ProjectGroupHelper $projectGroupHelper, ProjectGroup $projectGroup = null): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CAN_CREATE_PROJECTS');
+
         $project = new Project();
         if ($projectGroup) {
             $project->setProjectGroup($projectGroup);

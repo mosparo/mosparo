@@ -69,12 +69,12 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/cron-jobs/execute, roles: PUBLIC_ACCESS }
         - { path: ^/logout, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/password, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/administration/update/finalize, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
-        - { path: ^/cron-jobs/execute, roles: PUBLIC_ACCESS }
-        - { path: ^/project/create, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
+        - { path: ^/project/(group/[^/]+/)?create, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/project/\d+/create, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/project-group, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/administration, roles: ROLE_ADMIN, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
