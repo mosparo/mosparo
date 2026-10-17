@@ -46,5 +46,9 @@ hosts:
   hostContainsInvalidCharacter: This host contains invalid characters. In this field, only characters (a-z), numbers (0-9), dashes, dots, colons, and the star (*) are allowed.
 
 translation:
-    locale:
-        invalidFormat: Please specify the locale in the correct format. Enter a two-character language code or a combination of the two-character language code together with the country code.
+  locale:
+    invalidFormat: Please specify the locale in the correct format. Enter a two-character language code or a combination of the two-character language code together with the country code.
+
+rulePackage:
+  source:
+    invalidAbsolutePath: Please specify an absolute path without a scheme.

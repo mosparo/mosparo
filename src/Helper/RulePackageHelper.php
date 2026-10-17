@@ -262,13 +262,17 @@ class RulePackageHelper
 
     protected function loadFiles(RulePackage $rulePackage): array
     {
-        $urls = [
+        if (preg_match('#^[a-z][a-z0-9+.-]*://#i', $rulePackage->getSource())) {
+            throw new Exception(sprintf('Please specify an absolute path without scheme: "%s"', $rulePackage->getSource()));
+        }
+
+        $paths = [
             'content' => $rulePackage->getSource(),
             'hash' => $rulePackage->getSource() . '.sha256'
         ];
 
         $files = [];
-        foreach ($urls as $fileType => $filePath) {
+        foreach ($paths as $fileType => $filePath) {
             if (!file_exists($filePath)) {
                 throw new Exception(sprintf('The given file path "%s" does not exist.', $filePath));
             }
