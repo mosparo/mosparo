@@ -81,7 +81,7 @@ class SecurityHelper
         if ($count > $delayNumberOfRequests || $existingDelay !== null) {
             if ($existingDelay === null) {
                 $delay = new Delay();
-                $delay->setIpAddress($ipAddress);
+                $delay->setIpAddress(IpUtil::getAddressForRateLimiting($ipAddress));
                 $delay->setStartedAt(new DateTime());
                 $delay->setDuration($delayTime);
 
@@ -116,7 +116,7 @@ class SecurityHelper
         if ($count > $lockoutNumberOfRequests || $existingLockout !== null) {
             if ($existingLockout === null) {
                 $lockout = new Lockout();
-                $lockout->setIpAddress($ipAddress);
+                $lockout->setIpAddress(IpUtil::getAddressForRateLimiting($ipAddress));
                 $lockout->setStartedAt(new DateTime());
                 $lockout->setDuration($lockoutTime);
 
@@ -148,7 +148,7 @@ class SecurityHelper
            ->from('Mosparo\Entity\SubmitToken', 'st')
            ->where('st.ipAddress = :ip')
            ->andWhere('st.createdAt > :startTime')
-           ->setParameter(':ip', HashUtil::hash($ipAddress))
+           ->setParameter(':ip', HashUtil::hash(IpUtil::getAddressForRateLimiting($ipAddress)))
            ->setParameter(':startTime', $startTime);
 
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -180,7 +180,7 @@ class SecurityHelper
            ->where('l.ipAddress = :ip')
            ->andWhere('l.validUntil > :now')
            ->setMaxResults(1)
-           ->setParameter('ip', HashUtil::hash($ipAddress))
+           ->setParameter('ip', HashUtil::hash(IpUtil::getAddressForRateLimiting($ipAddress)))
            ->setParameter('now', new DateTime());
 
         return $qb->getQuery()->getOneOrNullResult();
@@ -194,7 +194,7 @@ class SecurityHelper
            ->where('d.ipAddress = :ip')
            ->andWhere('d.validUntil > :now')
            ->setMaxResults(1)
-           ->setParameter('ip', HashUtil::hash($ipAddress))
+           ->setParameter('ip', HashUtil::hash(IpUtil::getAddressForRateLimiting($ipAddress)))
            ->setParameter('now', new DateTime());
 
         return $qb->getQuery()->getOneOrNullResult();
@@ -215,7 +215,7 @@ class SecurityHelper
 
         if ($basedOnIp && $ipAddress) {
             $qb->andWhere('st.ipAddress = :ip')
-               ->setParameter('ip', HashUtil::hash($ipAddress));
+               ->setParameter('ip', HashUtil::hash(IpUtil::getAddressForRateLimiting($ipAddress)));
         }
 
         $result = $qb->getQuery()->getOneOrNullResult();

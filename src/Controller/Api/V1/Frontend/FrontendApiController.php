@@ -138,7 +138,7 @@ class FrontendApiController extends AbstractController
         // Create a new submit token
         if (!$submitToken) {
             $submitToken = new SubmitToken();
-            $submitToken->setIpAddress($request->getClientIp());
+            $submitToken->setIpAddress(IpUtil::getAddressForRateLimiting($request->getClientIp() ?? ''));
             $submitToken->setCreatedAt(new DateTime());
             $submitToken->setToken($this->tokenGenerator->generateToken());
 

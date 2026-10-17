@@ -2,6 +2,7 @@
 
 namespace Mosparo\Util;
 
+use IPLib\Address\IPv6;
 use IPLib\Factory;
 use IPLib\Range\Subnet;
 
@@ -65,5 +66,25 @@ class IpUtil
         } else {
             return (Factory::parseAddressString($ipAddress) !== null);
         }
+    }
+
+    public static function getAddressForRateLimiting(string $ipAddress): string
+    {
+        $address = Factory::parseAddressString($ipAddress);
+        if ($address === null) {
+            return $ipAddress;
+        }
+
+        if ($address instanceof IPv6) {
+            // IPv4-mapped (::ffff:1.2.3.4) and 6to4 addresses are handled as IPv4
+            $ipv4 = $address->toIPv4();
+            if ($ipv4 !== null) {
+                return $ipv4->toString();
+            }
+
+            return Factory::parseRangeString($address->toString() . '/64')->getStartAddress()->toString();
+        }
+
+        return $address->toString();
     }
 }
