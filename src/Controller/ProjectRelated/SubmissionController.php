@@ -154,8 +154,13 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
                 'formSignature' => $formDataSignature,
                 'formData' => $hashedFormData,
             ];
+            $maskedRequestData = array_merge($requestData, [
+                'validationSignature' => StringUtil::obfuscateString($requestData['validationSignature']),
+                'formSignature' => StringUtil::obfuscateString($requestData['formSignature']),
+            ]);
             $requestDataJson = $requestHelper->toJson($requestData);
             $requestSignature = $requestHelper->createHmacHash($apiEndpoint . $requestDataJson);
+            $verificationSignature = $requestHelper->createHmacHash($validationSignature . $formDataSignature);
             [$verifiedFields, $issues] = $this->generateVerifiedFields($submission);
             $verificationSimulationData['verificationSimulation'] = [
                 'formData' => $formData,
@@ -164,16 +169,16 @@ class SubmissionController extends AbstractController implements ProjectRelatedI
                 'formDataJson' => $requestHelper->toJson($hashedFormData),
                 'publicKey' => $activeProject->getPublicKey(),
                 'privateKey' => StringUtil::obfuscateString($activeProject->getPrivateKey()),
-                'formDataSignature' => $formDataSignature,
-                'validationSignature' => $validationSignature,
-                'verificationSignature' => $requestHelper->createHmacHash($validationSignature . $formDataSignature),
+                'formDataSignature' => StringUtil::obfuscateString($formDataSignature),
+                'validationSignature' => StringUtil::obfuscateString($validationSignature),
+                'verificationSignature' => StringUtil::obfuscateString($verificationSignature),
                 'apiEndpoint' => $apiEndpoint,
-                'requestData' => $requestData,
-                'requestDataJson' => $requestDataJson,
-                'requestSignature' => $requestSignature,
+                'requestData' => $maskedRequestData,
+                'requestDataJson' => $requestHelper->toJson($maskedRequestData),
+                'requestSignature' => StringUtil::obfuscateString($requestSignature),
                 'response' => [
                     'valid' => var_export($submission->isValid(), true),
-                    'verificationSignature' => $requestHelper->createHmacHash($validationSignature . $formDataSignature),
+                    'verificationSignature' => StringUtil::obfuscateString($verificationSignature),
                     'verifiedFields' => $verifiedFields,
                     'issues' => $issues,
                 ],
