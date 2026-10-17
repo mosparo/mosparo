@@ -799,8 +799,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             let date = new Date(response.until);
             this.showError(this.getMessage('errorLockedOut').replace('%datetime%', date.toLocaleString()));
         } else if (response.type === 'delay') {
-            let timeVal = '<span>%val%</span>'.replace('%val%', response.forSeconds);
-            this.showError(this.getMessage('errorDelay').replace('%seconds%', timeVal), false, true);
+            this.showDelayError(this.getMessage('errorDelay'), response.forSeconds);
             this.updateAccessibleStatus(this.getMessage('errorDelay').replace('%seconds%', response.forSeconds));
 
             this.countdownSeconds = response.forSeconds;
@@ -894,18 +893,30 @@ function mosparo(containerId, url, uuid, publicKey, options)
         return false;
     }
 
-    this.showError = function (error, withAccessible, withHtml)
+    this.showError = function (error, withAccessible)
     {
         this.errorMessageElement.classList.add('mosparo__error-message-visible');
+        this.errorMessageElement.textContent = error;
 
-        if (withHtml) {
-            this.errorMessageElement.innerHTML = error;
-        } else {
-            this.errorMessageElement.textContent = error;
+        if (withAccessible === undefined || withAccessible) {
+            this.updateAccessibleStatus(error);
+        }
+    }
 
-            if (withAccessible === undefined || withAccessible) {
-                this.updateAccessibleStatus(error);
+    this.showDelayError = function (message, seconds)
+    {
+        this.errorMessageElement.classList.add('mosparo__error-message-visible');
+        this.errorMessageElement.textContent = '';
+
+        let parts = message.split('%seconds%');
+        for (let i = 0; i < parts.length; i++) {
+            if (i > 0) {
+                let timeField = document.createElement('span');
+                timeField.textContent = seconds;
+                this.errorMessageElement.appendChild(timeField);
             }
+
+            this.errorMessageElement.appendChild(document.createTextNode(parts[i]));
         }
     }
 
