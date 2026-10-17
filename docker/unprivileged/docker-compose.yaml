@@ -22,7 +22,7 @@ services:
     ports:
       # Only reachable from the host itself (e.g. for a reverse proxy running on the host).
       # Docker bypasses host firewalls like ufw, so binding to all interfaces would expose mosparo directly.
-      # If your reverse proxy runs on another machine, bind to the LAN IP instead, e.g. 192.168.1.10:8080:80.
+      # If your reverse proxy runs on another machine, bind to the LAN IP instead, e.g. 192.168.1.10:8080:8080.
       # If your reverse proxy runs as a container in the same Docker network, you can remove the ports section.
       - 127.0.0.1:8080:8080
     restart: always
