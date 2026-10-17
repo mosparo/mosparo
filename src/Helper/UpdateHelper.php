@@ -215,7 +215,11 @@ class UpdateHelper
     public function defineTemporaryLogFile(): array
     {
         $directory = $this->getUpdateLogFileDirectory();
-        $fileName = '/update-log-' . uniqid() . '.html';
+
+        // Remove leftover log files from previous, aborted updates
+        $this->fileSystem->remove(glob($directory . '/update-log-*.html') ?: []);
+
+        $fileName = '/update-log-' . bin2hex(random_bytes(16)) . '.html';
         $filePath = $directory . $fileName;
 
         $fileUrl = '/update-log' . $fileName;
