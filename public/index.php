@@ -26,10 +26,16 @@ if (!defined('MOSPARO_FRONT_CONTROLLER_PREPARED')) {
             }
 
             if (isset($_SERVER['HTTP_X_FORWARDED_PREFIX']) && $_SERVER['HTTP_X_FORWARDED_PREFIX']) {
-                $targetUri = '/' . trim($_SERVER['HTTP_X_FORWARDED_PREFIX'], '/') . $targetUri;
+                $prefix = trim($_SERVER['HTTP_X_FORWARDED_PREFIX'], '/');
+
+                // Accept only simple path prefixes so the redirect cannot point to another host (e.g. "/\example.com")
+                if ($prefix !== '' && preg_match('#^[A-Za-z0-9/_.~%+-]+$#', $prefix)) {
+                    $targetUri = '/' . $prefix . $targetUri;
+                }
             }
 
             header('Cache-Control: no-cache, public');
+            header('Vary: X-Forwarded-Prefix');
             header('Location: ' . $targetUri, true, 307);
             exit;
         }
