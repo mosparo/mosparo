@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\ApiClient\RequestHelper;
+use Mosparo\Entity\SubmitToken;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\HmacSignatureHelper;
 use Mosparo\Helper\SecurityHelper;
@@ -114,8 +115,32 @@ class VerificationApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data invalid.'] + $debugInformation);
         }
 
-        $submitToken->setVerifiedAt(new DateTime());
-        $submission->setVerifiedAt(new DateTime());
+        // Mark the submit token as verified with a conditional update to prevent a race condition
+        $verifiedAt = new DateTime();
+        $affectedRows = $entityManager->createQueryBuilder()
+            ->update(SubmitToken::class, 'st')
+            ->set('st.verifiedAt', ':verifiedAt')
+            ->where('st.id = :id')
+            ->andWhere('st.verifiedAt IS NULL')
+            ->setParameter('verifiedAt', $verifiedAt)
+            ->setParameter('id', $submitToken->getId())
+            ->getQuery()
+            ->execute();
+
+        if ($affectedRows === 0) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => 'submit_token_not_valid',
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not found or not valid.'] + $debugInformation);
+        }
+
+        $submitToken->setVerifiedAt($verifiedAt);
+        $submission->setVerifiedAt($verifiedAt);
 
         $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
         $formSignature = $requestHelper->createFormDataHmacHash($formData);
