@@ -271,6 +271,10 @@ class SetupController extends AbstractController
             // Ignore this exception since the user exists, everything should be good.
         }
 
+        // Remove the credentials from the session, they are no longer needed
+        $session->remove('setupUserEmailAddress');
+        $session->remove('setupUserPassword');
+
         $tokenGenerator = new TokenGenerator();
 
         $this->configHelper->writeEnvironmentConfig([
