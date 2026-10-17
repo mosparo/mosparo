@@ -49,7 +49,7 @@ return function (array $context) {
             $_SERVER['HTTP_X_FORWARDED_FOR'] = $_SERVER[$replaceForwardedForHeader];
         }
 
-        $replaceForwardedProtoHeader = $envConfig['replaced_forwarded_proto_header'] ?? '';
+        $replaceForwardedProtoHeader = $envConfig['replace_forwarded_proto_header'] ?? '';
         if ($replaceForwardedProtoHeader && isset($_SERVER[$replaceForwardedProtoHeader])) {
             $_SERVER['HTTP_X_FORWARDED_PROTO'] = $_SERVER[$replaceForwardedProtoHeader];
         }
