@@ -507,6 +507,11 @@ class RulePackageApiController extends AbstractController
             }
 
             return new JsonResponse(['error' => true, 'errorMessage' => 'A general error occurred.'] + $debugInformation);
+        } finally {
+            // Remove the file after the process finished or failed.
+            if (isset($filePath) && file_exists($filePath)) {
+                unlink($filePath);
+            }
         }
 
         // Store the rule package cache

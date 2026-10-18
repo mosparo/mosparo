@@ -52,6 +52,8 @@ class RulePackageHelper
 
     protected ImporterInterface $importer;
 
+    protected array $downloadedFiles = [];
+
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $router,
@@ -151,12 +153,17 @@ class RulePackageHelper
             }
         }
 
-        $files = [];
-        if (!$isInProgress) {
-            $files = $this->organizeRulePackageFiles($rulePackage);
-        }
+        try {
+            $files = [];
+            if (!$isInProgress) {
+                $files = $this->organizeRulePackageFiles($rulePackage);
+            }
 
-        $result = $this->validateAndProcessContent($rulePackage, $files['content'] ?? null, $isInProgress, $startTime, $maxSeconds);
+            $result = $this->validateAndProcessContent($rulePackage, $files['content'] ?? null, $isInProgress, $startTime, $maxSeconds);
+        } finally {
+            // Remove the downloaded files after the process finished or failed.
+            $this->cleanupDownloadedFiles();
+        }
 
         if (in_array($result, [RulePackageResult::COMPLETED, RulePackageResult::ALREADY_UP_TO_DATE, RulePackageResult::NOT_AN_AUTOMATIC_TYPE, RulePackageResult::TOO_SOON_AFTER_THE_LAST_UPDATE])) {
             $this->deleteCacheDirectory($rulePackage->getId());
@@ -182,12 +189,8 @@ class RulePackageHelper
             $files = $this->loadFiles($rulePackage);
         }
 
-        $fileHash = $files['hash'];
-        if (strpos($fileHash, ' ') !== false) {
-            $fileHash = substr($fileHash, 0, strpos($fileHash, ' '));
-        }
-
-        if (hash_file('sha256', $files['content']) !== $fileHash) {
+        $fileHash = strtolower((string) strtok(trim($files['hash']), " \t\r\n"));
+        if (!hash_equals(hash_file('sha256', $files['content']), $fileHash)) {
             throw new Exception('Hash verification failed.');
         }
 
@@ -252,6 +255,7 @@ class RulePackageHelper
                 file_put_contents($tmpFilePath, $response->getContent());
 
                 $files[$fileType] = $tmpFilePath;
+                $this->downloadedFiles[] = $tmpFilePath;
             } else {
                 $files[$fileType] = $response->getContent();
             }
@@ -690,5 +694,15 @@ class RulePackageHelper
         }
 
         return RulePackageResult::COMPLETED;
+    }
+
+    protected function cleanupDownloadedFiles(): void
+    {
+        $filesystem = new Filesystem();
+        foreach ($this->downloadedFiles as $filePath) {
+            $filesystem->remove($filePath);
+        }
+
+        $this->downloadedFiles = [];
     }
 }
