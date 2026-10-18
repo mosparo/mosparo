@@ -7,6 +7,8 @@ use Mosparo\Entity\SubmissionRule;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\Positive;
 
 class RandomValueSubmissionRule extends AbstractSubmissionRule
 {
@@ -36,6 +38,9 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
                 'label' => 'submissionRule.randomValues.field.numberOfMatchingFields',
                 'help' => 'submissionRule.randomValues.field.numberOfMatchingFieldsHelp',
                 'attr' => ['class' => 'text-end', 'min' => 1, 'autocomplete' => 'off', 'disabled' => $disabled],
+                'constraints' => [
+                    new Positive(),
+                ],
             ])
             ->add('matchTextarea', CheckboxType::class, [
                 'label' => 'submissionRule.randomValues.field.matchTextarea',
@@ -47,6 +52,9 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
                 'label' => 'submissionRule.randomValues.field.numberOfRandomCharacters',
                 'help' => 'submissionRule.randomValues.field.numberOfRandomCharactersHelp',
                 'attr' => ['class' => 'text-end', 'min' => 5, 'autocomplete' => 'off', 'disabled' => $disabled],
+                'constraints' => [
+                    new GreaterThanOrEqual(value: 5),
+                ],
             ])
             ->add('requireBothCases', CheckboxType::class, [
                 'label' => 'submissionRule.randomValues.field.requireBothCases',
@@ -61,7 +69,7 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
     {
         $numberOfRequiredMatchingFields = intval($storedSubmissionRule->getConfigValue('numberOfMatchingFields') ?? 3);
         $matchTextarea = boolval($storedSubmissionRule->getConfigValue('matchTextarea') ?? false);
-        $numberOfRandomCharacters = intval($storedSubmissionRule->getConfigValue('numberOfRandomCharacters') ?? 3);
+        $numberOfRandomCharacters = intval($storedSubmissionRule->getConfigValue('numberOfRandomCharacters') ?? 15);
         $requireBothCases = boolval($storedSubmissionRule->getConfigValue('requireBothCases') ?? true);
 
         $numberOfMatchingFields = 0;

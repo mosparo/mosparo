@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/project/{_projectId}/rules/submission-rules')]
@@ -105,7 +106,10 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
                     'step' => 'any',
                     'class' => 'text-end',
                     'disabled' => $readOnly
-                ]
+                ],
+                'constraints' => [
+                    new GreaterThanOrEqual(value: 0.1),
+                ],
             ])
             ->add('submitted', HiddenType::class, ['mapped' => false, 'data' => 1]) // Dummy field, otherwise, the form would not save when the rule is disabled
         ;
@@ -153,7 +157,7 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
         foreach ($this->submissionRuleManager->getRules() as $rule) {
             $storedSubmissionRule = null;
             foreach ($storedSubmissionRules as $sr) {
-                if ($sr->getKey() === $sr->getKey()) {
+                if ($sr->getKey() === $rule->getKey()) {
                     $storedSubmissionRule = $sr;
                     break;
                 }
