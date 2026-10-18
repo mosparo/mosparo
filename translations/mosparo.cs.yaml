@@ -957,25 +957,7 @@ state:
   yes: Ano
   no: Ne
 datatable:
-  datatable:
-    processing: Zpracovávání…
-    aria:
-      sortAscending: ': aktivovat řazení vzestupně'
-      sortDescending: ': aktivovat řazení vzestupně'
-    search: 'Hledat:'
-    lengthMenu: Zobrazit položky _MENU_
-    info: Zobrazuji záznamy _START_ až _END_ z _TOTAL_
-    infoEmpty: Zobrazeno 0 až 0 z 0 záznamů
-    infoFiltered: (filtrováno z _MAX_ celkových položek)
-    loadingRecords: Načítání…
-    zeroRecords: Nebyly nalezeny žádné odpovídající záznamy
-    emptyTable: V tabulce nejsou k dispozici žádné údaje
-    searchPlaceholder: Vyhledávání
-    paginate:
-      first: První
-      previous: Předchozí
-      next: Další
-      last: Poslední
+  datatable: {}
 form:
   addMultipleItems: Přidat více položek
   choices:

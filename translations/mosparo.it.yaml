@@ -1529,26 +1529,7 @@ roles:
   user: Utente
   inactive: Inattivo
   administrator: Amministratore
-datatable:
-  datatable:
-    loadingRecords: Caricamento…
-    paginate:
-      previous: Precedente
-      next: Prossimo
-      first: Primo
-      last: Ultimo
-    search: 'Cerca:'
-    searchPlaceholder: Ricerca
-    infoFiltered: (filtered from _MAX_ total entries)
-    info: Showing _START_ to _END_ of _TOTAL_ entries
-    lengthMenu: Show _MENU_ entries
-    infoEmpty: Visualizzando da 0 a 0 di 0 voci
-    zeroRecords: Nessun record corrispondente trovato
-    processing: Sto elaborando…
-    aria:
-      sortAscending: ": attivare l'ordinamento ascendente delle colonne"
-      sortDescending: ": attivare l'ordinamento decrescente delle colonne"
-    emptyTable: Nessun dato disponibile nella tabella
+datatable: {}
 general:
   example: Esempio
   empty: Vuoto

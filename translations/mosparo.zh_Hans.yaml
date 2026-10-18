@@ -63,14 +63,7 @@ roles:
   administrator: 管理员
   inactive: 未激活
 datatable:
-  datatable:
-    search: 搜索：
-    processing: 处理中…
-    paginate:
-      last: 尾页
-      next: 下一页
-      first: 首页
-      previous: 前一页
+  datatable: {}
 form:
   addMultipleItems: 增加多个项目
   choices:
