@@ -15,6 +15,7 @@ use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\ProjectGroupHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\RulePackageHelper;
+use Mosparo\Twig\Tree\ProjectTreeNode;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -89,7 +90,7 @@ class ProjectController extends AbstractController
 
         // Find the subtree for the requested project group
         if ($projectGroup) {
-            $tree = $tree->findChildForProjectGroup($projectGroup);
+            $tree = $tree->findChildForProjectGroup($projectGroup) ?? new ProjectTreeNode($projectGroup);
             $routeSuffix = 'group';
         }
 
@@ -98,7 +99,7 @@ class ProjectController extends AbstractController
         if ($request->query->has('q') && trim($request->query->get('q'))) {
             $searchQuery = $request->query->get('q');
 
-            $tree->findNodesForSearchTerm($searchQuery);
+            $tree->findNodesForSearchTerm(mb_strtolower($searchQuery));
         }
 
         $activeProject = null;
