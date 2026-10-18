@@ -221,6 +221,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     new File([
                         'mimeTypes' => [
                             'application/json',
+                            'text/plain', // JSON files larger than 1 MB may not be detected correctly as JSON. We verify the schema anyway, so we can also accept text/plain.
                         ],
                         'mimeTypesMessage' => 'tools.import.importFile.correctFile',
                     ])

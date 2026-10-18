@@ -336,6 +336,7 @@ class RulePackageHelper
         // Prepare the importer
         try {
             $this->importer = match($processingJob->getMimetype()) {
+                'text/plain', // JSON files larger than 1 MB may not be detected correctly as JSON. We verify the schema anyway, so we can also accept text/plain.
                 'application/json' => new JsonImporter($this, $this->entityManager),
                 'application/zip' => new ZipImporter($this, $this->entityManager, $this->logger, $this->rulePackageDirectory, $startTime, $maxSeconds)
             };
