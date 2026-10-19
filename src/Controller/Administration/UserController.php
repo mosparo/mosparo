@@ -164,7 +164,7 @@ class UserController extends AbstractController
                 }
             }
 
-            if ($user->getId() !== $this->getUser()->getId()) {
+            if ($isNewUser || $user->getId() !== $this->getUser()->getId()) {
                 $isActiveUser = false;
                 if ($form->get('isActiveUser')->getData()) {
                     $user->addRole('ROLE_USER');
