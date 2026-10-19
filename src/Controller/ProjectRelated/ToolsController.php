@@ -213,7 +213,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
     #[Route('/import', name: 'tools_import')]
     public function import(Request $request, ImportHelper $importHelper): Response
     {
-        $form = $this->createFormBuilder(['handlingExistingRules' => 'override'], ['translation_domain' => 'mosparo'])
+        $form = $this->createFormBuilder(['handlingExistingFieldRules' => 'override'], ['translation_domain' => 'mosparo'])
             ->add('importFile', FileType::class, [
                 'label' => 'tools.import.form.importFile',
                 'required' => true,
@@ -280,6 +280,8 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         $error = false;
         $errorMessage = null;
         if ($form->isSubmitted() && $form->isValid()) {
+            $importHelper->removeOutdatedFiles();
+
             $importFile = $form->get('importFile')->getData();
 
             $originalFilename = pathinfo($importFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -318,7 +320,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
             ) {
                 $error = true;
                 $errorMessage = 'tools.import.errorMessage.selectAtLeastOneElement';
-            } else {
+            } else if (!$error) {
                 try {
                     $importFile->move(
                         $path,

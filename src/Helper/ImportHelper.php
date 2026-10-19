@@ -17,6 +17,8 @@ use Mosparo\Rules\SubmissionRule\SubmissionRuleManager;
 use Mosparo\Specifications\Specifications;
 use Mosparo\Util\TokenGenerator;
 use Opis\JsonSchema\Validator;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ImportHelper
 {
@@ -584,7 +586,7 @@ class ImportHelper
         return $changes;
     }
 
-    protected function findFieldRuleChanges(array $rules, string $handlingExistingRules): array
+    protected function findFieldRuleChanges(array $rules, string $handlingExistingFieldRules): array
     {
         $changes = [];
         $ruleRepository = $this->entityManager->getRepository(Rule::class);
@@ -602,7 +604,7 @@ class ImportHelper
                 'modify' => [],
                 'remove' => [],
             ];
-            if ($storedRule === null || $handlingExistingRules === 'add') {
+            if ($storedRule === null || $handlingExistingFieldRules === 'add') {
                 $mode = 'add';
                 $itemChanges['add'] = $rule['items'];
             } else if ($storedRule !== null) {
@@ -650,7 +652,7 @@ class ImportHelper
                 }
 
                 // OVERRIDE only: Remove the items which were not handled by the foreach above
-                if ($handlingExistingRules === 'override') {
+                if ($handlingExistingFieldRules === 'override') {
                     foreach ($items as $item) {
                         $itemChanges['remove'][] = [
                             'storedItemId' => $item->getId(),
@@ -675,7 +677,7 @@ class ImportHelper
 
             $changes[] = [
                 'mode' => $mode,
-                'submode' => $handlingExistingRules,
+                'submode' => $handlingExistingFieldRules,
                 'itemChanges' => $itemChanges,
                 'storedRule' => [
                     'id' => $storedRuleId,
@@ -994,5 +996,36 @@ class ImportHelper
         }
 
         return $modifiedRulePackages;
+    }
+
+    public function removeOutdatedFiles(): void
+    {
+        $filesystem = new Filesystem();
+
+        $files = array_merge(
+            glob($this->importDirectory . '/*_import_*.json') ?: [],
+            glob($this->importDirectory . '/job_data_*.json') ?: []
+        );
+
+        $yesterday = time() - 86400;
+        foreach ($files as $filePath) {
+            // If the file was already deleted, skip it.
+            if (!file_exists($filePath)) {
+                continue;
+            }
+
+            $mtime = filemtime($filePath);
+            if ($mtime === false) {
+                continue;
+            }
+
+            if ($mtime < $yesterday) {
+                try {
+                    $filesystem->remove($filePath);
+                } catch (IOException) {
+                    // We ignore the error.
+                }
+            }
+        }
     }
 }
