@@ -95,7 +95,7 @@ class UserController extends AbstractController
             $isAdminUserAttributes['checked'] = 'checked';
         }
 
-        if ($user->getId() === $this->getUser()->getId()) {
+        if (!$isNewUser && $user->getId() === $this->getUser()->getId()) {
             $isActiveUserAttributes['disabled'] = 'disabled';
             $isAdminUserAttributes['disabled'] = 'disabled';
         }
