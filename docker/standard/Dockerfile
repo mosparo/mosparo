@@ -53,6 +53,9 @@ RUN apt-get update && \
         libssl-dev \
         zlib1g-dev && \
     docker-php-ext-install -j$(nproc) gd intl opcache pdo_mysql pdo_pgsql pdo_sqlite zip && \
+    pecl install redis-6.1.0 && \
+    pecl install memcached-3.3.0 && \
+    docker-php-ext-enable redis memcached && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \

@@ -62,6 +62,10 @@ RUN apk add --no-cache \
         openssl-dev \
         zlib-dev && \
     docker-php-ext-install -j$(nproc) gd intl opcache pdo_mysql pdo_pgsql pdo_sqlite zip && \
+    pecl install redis-6.1.0 && \
+    pecl install memcached-3.3.0 && \
+    docker-php-ext-enable redis memcached && \
+    pecl clear-cache && \
     apk del --no-network .build-deps && \
     rm -rf /tmp/* /var/tmp/*
 
