@@ -67,7 +67,6 @@ RUN apk add --no-cache \
         openssl-dev \
         zlib-dev && \
     docker-php-ext-install -j$(nproc) gd intl opcache pdo_mysql pdo_pgsql pdo_sqlite zip && \
-    pecl clear-cache && \
     apk del --no-network .build-deps && \
     rm -rf /tmp/* /var/tmp/*
 
