@@ -1,6 +1,6 @@
 # With this Dockerfile it is possible to build the unprivileged image on Alpine Linux instead of Debian
 
-FROM php:8.3-fpm-alpine
+FROM php:8.3.36-fpm-alpine
 
 ARG MOSPARO_VERSION
 ARG MOSPARO_CHANNEL=stable
