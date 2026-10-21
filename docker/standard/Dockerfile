@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.3.36-fpm
 
 ARG MOSPARO_VERSION
 ARG MOSPARO_CHANNEL=stable
