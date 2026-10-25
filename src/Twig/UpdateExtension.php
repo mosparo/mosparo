@@ -41,7 +41,7 @@ class UpdateExtension extends AbstractExtension implements GlobalsInterface
             return [];
         }
 
-        if (!$this->automaticUpdateCheckEnabled ) {
+        if (!$this->automaticUpdateCheckEnabled) {
             return [
                 'updatesEnabled' => $this->updatesEnabled,
                 'isUpdateAvailable' => false,
@@ -49,13 +49,17 @@ class UpdateExtension extends AbstractExtension implements GlobalsInterface
         }
 
         $checkForUpdates = false;
-        if (!$this->updateHelper->hasCachedData() && $this->automaticUpdateCheckEnabled) {
+        if (!$this->updateHelper->hasCachedData()) {
             $checkForUpdates = true;
         }
 
         $isUpdateAvailable = false;
         try {
-            $isUpdateAvailable = ($this->updateHelper->isUpdateAvailable($checkForUpdates) || $this->updateHelper->isUpgradeAvailable($checkForUpdates));
+            if ($checkForUpdates) {
+                $this->updateHelper->getCachedUpdateData(true);
+            }
+
+            $isUpdateAvailable = ($this->updateHelper->isUpdateAvailable() || $this->updateHelper->isUpgradeAvailable());
         } catch (\Exception $e) {
             // Ignore all exceptions and do nothing
         }
