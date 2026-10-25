@@ -599,9 +599,9 @@ class FrontendApiController extends AbstractController
     {
         $project = $this->projectHelper->getActiveProject();
         $locales = [];
-        $browserLocale = null;
-        $staticLocale = null;
-        $htmlLocale = null;
+        $browserLocale = '';
+        $staticLocale = '';
+        $htmlLocale = '';
 
         if ($request->getPreferredLanguage()) {
             $browserLocale = $this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage());
@@ -632,8 +632,12 @@ class FrontendApiController extends AbstractController
         return array_unique(array_filter($locales));
     }
 
-    protected function addLocales(&$locales, $locale)
+    protected function addLocales(array &$locales, string $locale)
     {
+        if ($locale === '') {
+            return;
+        }
+
         if (strlen($locale) > 2) {
             $fallbackLocale = substr($locale, 0, 2);
 
@@ -649,7 +653,7 @@ class FrontendApiController extends AbstractController
 
     protected function isIpOnAllowList(string $ipAddress, array $securitySettings)
     {
-        return trim($securitySettings['ipAllowList']) && IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList']);
+        return trim($securitySettings['ipAllowList'] ?? '') && IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList'] ?? '');
     }
 
     protected function findMaximumNumberForProofOfWorkRange(Request $request, array $securitySettings): int

@@ -29,7 +29,7 @@ class StatisticHelper
      * @param \DateTime|null $startDate
      * @return array
      */
-    public function getStatisticData(DateTime $startDate = null): array
+    public function getStatisticData(?DateTime $startDate = null): array
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder

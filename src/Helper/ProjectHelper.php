@@ -51,7 +51,7 @@ class ProjectHelper
         return ($this->activeProject !== null);
     }
 
-    public function hasRequiredRole($requiredRoles, Project $project = null): bool
+    public function hasRequiredRole($requiredRoles, ?Project $project = null): bool
     {
         if ($project === null) {
             if ($this->activeProject === null) {
@@ -77,7 +77,7 @@ class ProjectHelper
         return false;
     }
 
-    public function canManage(Project $project = null): bool
+    public function canManage(?Project $project = null): bool
     {
         if ($project === null) {
             if ($this->activeProject === null) {

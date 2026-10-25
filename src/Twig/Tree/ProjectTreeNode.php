@@ -16,7 +16,7 @@ class ProjectTreeNode
 
     protected Collection $projects;
 
-    public function __construct(ProjectGroup $projectGroup = null)
+    public function __construct(?ProjectGroup $projectGroup = null)
     {
         $this->projectGroup = $projectGroup;
         $this->children = new ArrayCollection();

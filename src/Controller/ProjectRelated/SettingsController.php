@@ -152,7 +152,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
     #[Route('/members/add', name: 'settings_member_add')]
     #[Route('/members/{id}/edit', name: 'settings_member_edit')]
-    public function memberModify(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember = null): Response
+    public function memberModify(Request $request, EntityManagerInterface $entityManager, ?ProjectMember $projectMember = null): Response
     {
         if ($projectMember && $projectMember->getProject() !== $this->getActiveProject()) {
             throw new NotFoundHttpException();
@@ -361,7 +361,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     }
 
     #[Route('/security/edit-general', name: 'settings_security_edit_general')]
-    public function securityEditGeneralForm(Request $request, EntityManagerInterface $entityManager, SecurityGuideline $securityGuideline = null): Response
+    public function securityEditGeneralForm(Request $request, EntityManagerInterface $entityManager, ?SecurityGuideline $securityGuideline = null): Response
     {
         $project = $this->getActiveProject();
         $config = $project->getConfigValues();
@@ -398,7 +398,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
     #[Route('/security/guideline/add', name: 'settings_security_guideline_add')]
     #[Route('/security/guideline/{id}/edit', name: 'settings_security_guideline_edit')]
-    public function securityGuidelineForm(Request $request, EntityManagerInterface $entityManager, GeoIp2Helper $geoIp2Helper, SecurityGuideline $securityGuideline = null): Response
+    public function securityGuidelineForm(Request $request, EntityManagerInterface $entityManager, GeoIp2Helper $geoIp2Helper, ?SecurityGuideline $securityGuideline = null): Response
     {
         $project = $this->getActiveProject();
         $isNew = false;
@@ -580,7 +580,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
     #[Route('/translations/add', name: 'settings_translation_add')]
     #[Route('/translations/{id}/edit', name: 'settings_translation_edit')]
-    public function translationModify(Request $request, EntityManagerInterface $entityManager, Translation $translation = null): Response
+    public function translationModify(Request $request, EntityManagerInterface $entityManager, ?Translation $translation = null): Response
     {
         $isNew = false;
         if ($translation === null) {

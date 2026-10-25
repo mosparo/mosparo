@@ -661,7 +661,7 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
         $response->headers->set('X-Accel-Buffering', 'no');
         $response->setCallback(function () use ($entityManager, $qb, $numberOfIterations, $numberOfItemsPerIteration): void {
             $handle = fopen("php://output", 'w');
-            fputcsv($handle, ['Type', 'Value', 'Rating']);
+            fputcsv($handle, ['Type', 'Value', 'Rating'], ',', '"', '\\');
 
             for ($idx = 0; $idx < $numberOfIterations; $idx++) {
                 $qbi = clone $qb;
@@ -670,7 +670,7 @@ class FieldRuleController extends AbstractController implements ProjectRelatedIn
                 ;
 
                 foreach ($qbi->getQuery()->getResult() as $ruleItem) {
-                    fputcsv($handle, [$ruleItem->getType(), $ruleItem->getValue(), $ruleItem->getSpamRatingFactor()]);
+                    fputcsv($handle, [$ruleItem->getType(), $ruleItem->getValue(), $ruleItem->getSpamRatingFactor()], ',', '"', '\\');
 
                     $entityManager->detach($ruleItem);
                 }

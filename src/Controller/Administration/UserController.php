@@ -74,7 +74,7 @@ class UserController extends AbstractController
 
     #[Route('/add', name: 'administration_user_add')]
     #[Route('/{id}/edit', name: 'administration_user_edit')]
-    public function modifyUser(Request $request, EntityManagerInterface $entityManager, TokenGenerator $tokenGenerator, PasswordHelper $passwordHelper, User $user = null): Response
+    public function modifyUser(Request $request, EntityManagerInterface $entityManager, TokenGenerator $tokenGenerator, PasswordHelper $passwordHelper, ?User $user = null): Response
     {
         $passwordHelp = 'administration.user.help.password';
         $isNewUser = false;

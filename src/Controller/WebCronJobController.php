@@ -107,7 +107,7 @@ class WebCronJobController extends AbstractController
         }
 
         // Use only 80% of the maximum execution time for the cleanup so the request does not fail.
-        $maxTimeCleanup = floor($maxExecutionTime * 0.8);
+        $maxTimeCleanup = max(1, intval($maxExecutionTime * 0.8));
         $start = time();
 
         $hasError = false;
@@ -126,7 +126,7 @@ class WebCronJobController extends AbstractController
             // Download the rule packages, only execute this if we have more than 10% of the max execution time available.
             if ((time() - $start) < ($maxExecutionTime * 0.9)) {
                 try {
-                    $this->rulePackageHelper->fetchAll($start, $maxExecutionTime * 0.6);
+                    $this->rulePackageHelper->fetchAll($start, max(1, intval($maxExecutionTime * 0.6)));
                 } catch (\Throwable $e) {
                     $this->logger->error(sprintf(
                         'Fetching the rule packages via the web cron job failed. Error: %s',

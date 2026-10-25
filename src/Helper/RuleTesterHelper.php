@@ -36,6 +36,8 @@ class RuleTesterHelper
 
     protected SubmissionRuleManager $submissionRuleManager;
 
+    protected array $ruleTesters = [];
+
     protected array $rules = [];
 
     protected array $results = [];

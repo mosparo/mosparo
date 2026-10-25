@@ -53,7 +53,7 @@ class ProjectController extends AbstractController
     #[Route('/group/{projectGroup}', name: 'project_list_group')]
     #[Route('/filter/{filter}', name: 'project_list_filtered_root')]
     #[Route('/group/{projectGroup}/filter/{filter}', name: 'project_list_filtered_group')]
-    public function list(Request $request, $filter = '', ProjectGroup $projectGroup = null): Response
+    public function list(Request $request, $filter = '', ?ProjectGroup $projectGroup = null): Response
     {
         // Load the view from the user configuration
         $user = $this->getUser();
@@ -160,7 +160,7 @@ class ProjectController extends AbstractController
 
     #[Route('/create', name: 'project_create_root')]
     #[Route('/group/{projectGroup}/create', name: 'project_create_group')]
-    public function create(Request $request, ProjectGroupHelper $projectGroupHelper, ProjectGroup $projectGroup = null): Response
+    public function create(Request $request, ProjectGroupHelper $projectGroupHelper, ?ProjectGroup $projectGroup = null): Response
     {
         $this->denyAccessUnlessGranted('ROLE_CAN_CREATE_PROJECTS');
 
