@@ -141,6 +141,10 @@ class RulePackageHelper
             return RulePackageResult::NOT_AN_AUTOMATIC_TYPE;
         }
 
+        if (!$rulePackage->getSource()) {
+            throw new Exception('No source defined.');
+        }
+
         $isInProgress = $this->isInProgress($rulePackage);
         $rulePackageCache = $rulePackage->getRulePackageCache();
         if ($rulePackageCache !== null && $rulePackageCache->getRefreshedAt() !== null) {
