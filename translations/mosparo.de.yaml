@@ -184,6 +184,8 @@ rules:
         unsavedChanges: '%counter% nicht-gespeicherte Änderungen'
         savingChanges: Speichern von %counter% Änderungen
         nothingToSave: Nichts zu speichern
+        savingFailed: Speichern fehlgeschlagen
+        savingFailedTooltip: Die Änderungen konnten nicht gespeichert werden. mosparo wird es automatisch erneut versuchen. Sollte das Problem weiterhin bestehen, notieren Sie sich bitte Ihre ungespeicherten Änderungen, bevor Sie die Seite neu laden, da diese sonst verloren gehen.
       filter:
         title: Einträge filtern
         useWildcard: Verwenden Sie %wildcard% als Platzhalter.
@@ -1329,6 +1331,9 @@ administration:
         title: 'Version 1.2.2: MaxMind Konto-ID erforderlich'
         intro: Ihre MaxMind-Konto-ID und Ihr Lizenzschlüssel sind erforderlich, um die GeoIP2-Datenbank herunterzuladen.
         intro2: Bitte überprüfen Sie die GeoIP2-Konfiguration und geben Sie Ihre Konto-ID ein.
+    finalizeFailed:
+      title: Abschliessen des Updates fehlgeschlagen
+      description: Während mosparo versuchte, das Update abzuschliessen, ist ein Fehler aufgetreten. Das Problem besteht darin, dass eine Migration in Ihrer Datenbank nicht erfolgreich durchgeführt wurde. Bitte versuchen Sie es erneut über die Schaltfläche unten oder überprüfen Sie die mosparo-Protokolldatei und wenden Sie sich mit der Fehlermeldung an das mosparo-Team.
   system:
     title: System-Informationen
     description: Alle Informationen über mosparo.
@@ -1661,6 +1666,7 @@ action:
   updateCache: Cache aktualisieren
   goToRulePackage: Zum Regelpaket gehen
   goToRulePackages: Zu den Regelpaketen gehen
+  retry: Erneut versuchen
 general:
   infoUndo: Sie können diesen Vorgang nicht rückgängig machen.
   example: Beispiel
