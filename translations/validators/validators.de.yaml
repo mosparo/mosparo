@@ -43,3 +43,6 @@ webCronJob:
 translation:
   locale:
     invalidFormat: Bitte geben Sie die Ländereinstellung im richtigen Format an. Geben Sie einen zweistelligen Sprachcode oder eine Kombination aus dem zweistelligen Sprachcode und dem Ländercode ein.
+rulePackage:
+  source:
+    invalidAbsolutePath: Bitte geben Sie einen absoluten Pfad ohne Schema an.
