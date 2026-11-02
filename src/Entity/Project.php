@@ -190,6 +190,13 @@ class Project
         return $this->uuid;
     }
 
+    public function setUuid(string $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
     public function getProjectGroup(): ?ProjectGroup
     {
         return $this->projectGroup;
