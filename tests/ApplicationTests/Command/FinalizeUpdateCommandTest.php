@@ -105,17 +105,8 @@ class FinalizeUpdateCommandTest extends KernelTestCase
         $this->buildDirectory = $buildDirectory;
     }
 
-    /**
-     * The command executes the database migrations, which loads the migration classes of the configured
-     * database platform. MysqlMigrationsTest loads the classes of the MySQL platform, which have the same
-     * names, so this test runs in its own process.
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testFinalizeUpdate(): void
     {
-        $commandTester = $this->createCommandTester();
         $this->prepareAssets();
 
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
@@ -155,10 +146,26 @@ class FinalizeUpdateCommandTest extends KernelTestCase
         $this->assertEquals(2, $v14OptimizeRulesHelper->countOpenTasks());
         $this->assertGreaterThan(0, $optimizeRuleItemsAfterUpdateHelper->countOpenTasks());
 
-        $returnCode = $commandTester->execute([]);
+        // The command runs in its own process, like the console in tests/bootstrap.php: executing the
+        // database migrations loads the migration classes of the configured database platform, and
+        // MysqlMigrationsTest loads the classes of the MySQL platform, which have the same class names.
+        exec(sprintf(
+            'APP_ENV=%s MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE=1 %s "%s/bin/console" mosparo:finalize-update 2>&1',
+            $_ENV['APP_ENV'],
+            PHP_BINARY,
+            self::getContainer()->getParameter('kernel.project_dir')
+        ), $output, $returnCode);
 
-        $this->assertEquals(Command::SUCCESS, $returnCode);
-        $this->assertStringContainsString(sprintf('Finalize the update to the version %s', Kernel::VERSION), $commandTester->getDisplay());
+        $output = implode(PHP_EOL, $output);
+
+        $this->assertEquals(0, $returnCode, $output);
+        $this->assertStringContainsString(sprintf('Finalize the update to the version %s', Kernel::VERSION), $output);
+        $this->assertStringContainsString('Database migrations', $output);
+        $this->assertStringContainsString('Refreshed the frontend resources', $output);
+        $this->assertStringContainsString('Rules of the version 1.4', $output);
+        $this->assertStringContainsString('Rule items', $output);
+
+        $entityManager->clear();
 
         // The finalization processed all open tasks of both migration helpers.
         $this->assertEquals(0, $v14OptimizeRulesHelper->countOpenTasks());
@@ -178,6 +185,7 @@ class FinalizeUpdateCommandTest extends KernelTestCase
         $config = require $this->configFilePath;
 
         $this->assertEquals(Kernel::VERSION, $config['mosparo_installed_version']);
+        $this->assertNotEmpty($config['mosparo_assets_version']);
         $this->assertFalse($config['mosparo_finalize_update']);
     }
 
