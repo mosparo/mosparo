@@ -132,6 +132,10 @@ APP_ENV=prod
    - If you cannot access mosparo, please head over to our [troubleshooting section](https://documentation.mosparo.io/docs/installation/install/normal#troubleshooting) to find possible reasons for your issue.
 9. Follow the installation wizard to install mosparo
 
+## One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Mosparo/)
+
 ## Documentation
 
 You can find our documentation here: https://documentation.mosparo.io
