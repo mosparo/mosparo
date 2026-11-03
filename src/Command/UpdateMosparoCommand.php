@@ -195,10 +195,9 @@ class UpdateMosparoCommand extends Command
         $output->writeln('');
         $output->writeln(sprintf('<bg=green;fg=black> %s finished! </>', ($isUpgrade) ? 'Upgrade' : 'Update'));
         $output->writeln('');
-        $output->writeln(sprintf('Please execute the migrations to finalize the %s:', ($isUpgrade) ? 'upgrade' : 'update'));
+        $output->writeln(sprintf('Please execute the following command to finalize the %s:', ($isUpgrade) ? 'upgrade' : 'update'));
         $output->writeln('');
-        $output->writeln('  php bin/console doctrine:migrations:migrate');
-        $output->writeln('  php bin/console cache:clear');
+        $output->writeln('  php bin/console mosparo:finalize-update');
         $output->writeln('');
 
         return Command::SUCCESS;
