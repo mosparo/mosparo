@@ -135,16 +135,33 @@ class FinalizeUpdateCommandTest extends KernelTestCase
 
         $this->ruleId = $rule->getId();
 
-        // The rule items are prepared when they are stored, so reset the preparation to have open tasks.
-        $entityManager->createQuery(sprintf('UPDATE %s i SET i.preparationVersion = NULL', RuleItem::class))->execute();
-        $entityManager->createQuery(sprintf('UPDATE %s i SET i.preparationVersion = NULL', RulePackageRuleItemCache::class))->execute();
+        // The rule items are prepared when they are stored, so reset the preparation of the two items and of
+        // a few rule package items, to have open tasks for both migration helpers. The number stays small
+        // because the debug mode of the testing environment collects a backtrace for every query.
+        $entityManager
+            ->createQuery(sprintf('UPDATE %s i SET i.preparationVersion = NULL WHERE i.rule = :rule', RuleItem::class))
+            ->setParameter('rule', $this->ruleId)
+            ->execute();
+
+        $rulePackageRuleItemIds = array_column(
+            $entityManager
+                ->createQuery(sprintf('SELECT i.id FROM %s i', RulePackageRuleItemCache::class))
+                ->setMaxResults(5)
+                ->getArrayResult(),
+            'id'
+        );
+
+        $entityManager
+            ->createQuery(sprintf('UPDATE %s i SET i.preparationVersion = NULL WHERE i.id IN (:ids)', RulePackageRuleItemCache::class))
+            ->setParameter('ids', $rulePackageRuleItemIds)
+            ->execute();
         $entityManager->clear();
 
         $v14OptimizeRulesHelper = self::getContainer()->get(V14OptimizeRulesHelper::class);
         $optimizeRuleItemsAfterUpdateHelper = self::getContainer()->get(OptimizeRuleItemsAfterUpdateHelper::class);
 
         $this->assertEquals(2, $v14OptimizeRulesHelper->countOpenTasks());
-        $this->assertGreaterThan(0, $optimizeRuleItemsAfterUpdateHelper->countOpenTasks());
+        $this->assertEquals(7, $optimizeRuleItemsAfterUpdateHelper->countOpenTasks());
 
         // The command runs in its own process, like the console in tests/bootstrap.php: executing the
         // database migrations loads the migration classes of the configured database platform, and
