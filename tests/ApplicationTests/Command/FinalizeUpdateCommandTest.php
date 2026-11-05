@@ -235,6 +235,35 @@ class FinalizeUpdateCommandTest extends KernelTestCase
         $this->assertStringContainsString('not installed yet', $commandTester->getDisplay());
     }
 
+    public function testFinalizeUpdateFailsWithAnInvalidNumberOfSeconds(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute(['--wait-for-database' => 'one minute']);
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('0 or higher', $commandTester->getDisplay());
+    }
+
+    public function testFinalizeUpdateFailsWithoutDatabase(): void
+    {
+        $this->prepareAssets();
+
+        // A database file in a directory which does not exist cannot be opened, the same way a database
+        // server which was not started yet cannot be reached.
+        self::getContainer()->get(ConfigHelper::class)->writeEnvironmentConfig([
+            'database_path' => sys_get_temp_dir() . '/mosparo-missing-directory/test-data.db',
+        ]);
+
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute(['--wait-for-database' => 1]);
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('Waiting for the database', $commandTester->getDisplay());
+        $this->assertStringContainsString('was not available within 1 second(s)', $commandTester->getDisplay());
+    }
+
     public function testFinalizeUpdateFailsWithoutAssets(): void
     {
         $commandTester = $this->createCommandTester();

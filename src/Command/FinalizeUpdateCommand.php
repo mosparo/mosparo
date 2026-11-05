@@ -53,12 +53,20 @@ class FinalizeUpdateCommand extends Command
             ->setDescription('Finalizes the update of the mosparo installation.')
             ->setHelp('After the files of mosparo were replaced, the update has to be finalized: the database migrations are executed, the cache is cleared, the frontend resources are refreshed and the rules and rule items are prepared for the new version. The administration interface does that when it is opened for the first time after an update. This command does the same without the administration interface, which an automated deployment cannot open.')
             ->addOption('force', null, InputOption::VALUE_NONE, 'Finalizes the update although the installed version is already the current version.')
+            ->addOption('wait-for-database', null, InputOption::VALUE_REQUIRED, 'Waits for the given number of seconds until the database is available, which is useful if mosparo and the database are started at the same time. 0 does not wait at all.', 0)
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        $secondsToWaitForDatabase = $input->getOption('wait-for-database');
+        if (!is_numeric($secondsToWaitForDatabase) || $secondsToWaitForDatabase < 0) {
+            $io->error('The number of seconds to wait for the database has to be 0 or higher.');
+
+            return Command::FAILURE;
+        }
 
         // An installation which was not completed has no database tables and no projects, so there is nothing
         // to finalize. The setup assistant executes the migrations and prepares the frontend resources itself.
@@ -88,6 +96,10 @@ class FinalizeUpdateCommand extends Command
         if (!$baseCssFilePath || !file_exists($baseCssFilePath)) {
             $io->error('The assets of the frontend were not found, so the frontend resources cannot be built. Please build the assets before finalizing the update.');
 
+            return Command::FAILURE;
+        }
+
+        if ($secondsToWaitForDatabase > 0 && !$this->waitForDatabase($io, (int) $secondsToWaitForDatabase)) {
             return Command::FAILURE;
         }
 
@@ -145,6 +157,46 @@ class FinalizeUpdateCommand extends Command
         $io->success(sprintf('The update to the version %s was finalized.', Kernel::VERSION));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Waits until the database answers a query, but not longer than the given number of seconds. The
+     * database is usually ready a few seconds after mosparo if both are started at the same time.
+     */
+    protected function waitForDatabase(SymfonyStyle $io, int $numberOfSeconds): bool
+    {
+        $connection = $this->entityManager->getConnection();
+        $startedAt = time();
+        $lastError = '';
+
+        while (true) {
+            try {
+                $connection->executeQuery('SELECT 1');
+
+                if ($lastError !== '') {
+                    $io->text('The database is available.');
+                }
+
+                return true;
+            } catch (\Throwable $e) {
+                // The connection of the failed attempt is not reused, the next attempt opens a new one.
+                $connection->close();
+
+                if ($lastError === '') {
+                    $io->text(sprintf('Waiting for the database for up to %d second(s).', $numberOfSeconds));
+                }
+
+                $lastError = $e->getMessage();
+            }
+
+            if ((time() - $startedAt) >= $numberOfSeconds) {
+                $io->error(sprintf('The database was not available within %d second(s): %s', $numberOfSeconds, $lastError));
+
+                return false;
+            }
+
+            sleep(1);
+        }
     }
 
     /**
