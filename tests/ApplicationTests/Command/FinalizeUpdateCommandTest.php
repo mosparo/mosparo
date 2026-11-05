@@ -221,6 +221,20 @@ class FinalizeUpdateCommandTest extends KernelTestCase
         $this->assertStringContainsString('was finalized already', $commandTester->getDisplay());
     }
 
+    public function testFinalizeUpdateWithoutInstallation(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        self::getContainer()->get(ConfigHelper::class)->writeEnvironmentConfig([
+            'mosparo_installed' => false,
+        ]);
+
+        $returnCode = $commandTester->execute([]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+        $this->assertStringContainsString('not installed yet', $commandTester->getDisplay());
+    }
+
     public function testFinalizeUpdateFailsWithoutAssets(): void
     {
         $commandTester = $this->createCommandTester();

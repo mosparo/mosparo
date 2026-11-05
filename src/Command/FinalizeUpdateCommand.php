@@ -60,6 +60,16 @@ class FinalizeUpdateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        // An installation which was not completed has no database tables and no projects, so there is nothing
+        // to finalize. The setup assistant executes the migrations and prepares the frontend resources itself.
+        // That is not an error: the command is executed when mosparo is started, which includes the start
+        // before the setup assistant is opened for the first time.
+        if (!$this->configHelper->getEnvironmentConfigValue('mosparo_installed', false)) {
+            $io->warning('mosparo is not installed yet, so there is no update to finalize. Please open mosparo in the browser to install it.');
+
+            return Command::SUCCESS;
+        }
+
         $installedVersion = $this->configHelper->getEnvironmentConfigValue('mosparo_installed_version');
         $updateAvailable = ($installedVersion !== Kernel::VERSION);
         $finalizationStarted = (bool) $this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update');
