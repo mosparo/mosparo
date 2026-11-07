@@ -25,3 +25,21 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL'
+
+      - name: Scan mosparo/mosparo-alpine
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'mosparo/mosparo:latest-alpine'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL'
+
+      - name: Scan mosparo/mosparo-unprivileged-alpine
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'mosparo/mosparo-unprivileged:latest-alpine'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL'
