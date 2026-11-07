@@ -15,26 +15,29 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsCommand(name: 'mosparo:project:create')]
 class CreateProjectCommand extends Command
 {
-    const MAXIMUM_PUBLIC_KEY_LENGTH = 64;
-
     protected EntityManagerInterface $entityManager;
 
     protected ProjectHelper $projectHelper;
 
     protected DesignHelper $designHelper;
 
-    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, DesignHelper $designHelper)
+    protected ValidatorInterface $validator;
+
+    public function __construct(EntityManagerInterface $entityManager, ProjectHelper $projectHelper, DesignHelper $designHelper, ValidatorInterface $validator)
     {
         parent::__construct();
 
         $this->entityManager = $entityManager;
         $this->projectHelper = $projectHelper;
         $this->designHelper = $designHelper;
+        $this->validator = $validator;
     }
 
     protected function configure(): void
@@ -48,8 +51,9 @@ class CreateProjectCommand extends Command
             ->addOption('host', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'A host which is allowed to use the project, usable multiple times.')
             ->addOption('description', null, InputOption::VALUE_REQUIRED, 'The description of the project.')
             ->addOption('uuid', null, InputOption::VALUE_REQUIRED, 'The UUID of the project. A random UUID is generated if the option is not used.')
-            ->addOption('public-key', null, InputOption::VALUE_REQUIRED, 'The public key of the project, to be used together with --private-key. Both keys are generated if the options are not used.')
-            ->addOption('private-key', null, InputOption::VALUE_REQUIRED, 'The private key of the project, to be used together with --public-key.')
+            ->addOption('public-key', null, InputOption::VALUE_REQUIRED, 'The public key of the project, to be used together with --private-key or --private-key-from-stdin. Both keys are generated if the options are not used.')
+            ->addOption('private-key', null, InputOption::VALUE_REQUIRED, 'The private key of the project, to be used together with --public-key. Visible in the process list, prefer --private-key-from-stdin.')
+            ->addOption('private-key-from-stdin', null, InputOption::VALUE_NONE, 'Read the private key from the standard input instead of the --private-key option, to be used together with --public-key.')
             ->addOption('update', null, InputOption::VALUE_NONE, 'Set the name, the description, the hosts and the keys of the project with the given UUID instead of stopping with an error. Requires --uuid.')
         ;
     }
@@ -63,10 +67,6 @@ class CreateProjectCommand extends Command
         $projectRepository = $this->entityManager->getRepository(Project::class);
 
         try {
-            $owner = $this->determineOwner($input->getOption('owner'));
-            $hosts = $this->prepareHosts($input->getOption('host'));
-            [$publicKey, $privateKey] = $this->determineKeys($input->getOption('public-key'), $input->getOption('private-key'));
-
             if ($uuid !== null && !uuid_is_valid($uuid)) {
                 throw new \InvalidArgumentException(sprintf('The UUID "%s" is not a valid UUID.', $uuid));
             }
@@ -79,6 +79,12 @@ class CreateProjectCommand extends Command
             if ($project !== null && !$update) {
                 throw new \InvalidArgumentException(sprintf('A project with the UUID "%s" exists already. Use --update to set the values of this project.', $uuid));
             }
+
+            $owner = $this->determineOwner($input->getOption('owner'));
+            $hosts = $this->prepareHosts($input->getOption('host'));
+            [$publicKey, $privateKey] = $this->determineKeys($input, $project);
+
+            $keysGenerated = ($project === null && $input->getOption('public-key') === null);
 
             // The API searches the project by its public key, so two projects with the same key would not work.
             $projectWithSamePublicKey = $projectRepository->findOneBy(['publicKey' => $publicKey]);
@@ -111,6 +117,18 @@ class CreateProjectCommand extends Command
             $project->setDescription($description);
         }
 
+        $violations = $this->validator->validate($project);
+        if (count($violations) > 0) {
+            $messages = [];
+            foreach ($violations as $violation) {
+                $messages[] = sprintf('%s: %s', $violation->getPropertyPath(), $violation->getMessage());
+            }
+
+            $output->writeln($formatter->formatBlock($messages, 'error', true));
+
+            return Command::FAILURE;
+        }
+
         if ($isNewProject) {
             $this->entityManager->persist($project);
         }
@@ -130,15 +148,20 @@ class CreateProjectCommand extends Command
 
         $this->entityManager->flush();
 
-        // The design settings of the project define the frontend resources, so prepare them like the
-        // administration interface does after a project was created.
-        $this->projectHelper->setActiveProject($project);
+        // The command does not change the design settings, so the frontend resources are only prepared if the project
+        // has none yet: a new project, or one that was created while the assets were missing.
+        $assetsError = null;
+        if (!$project->getConfigValue('designConfigHash')) {
+            $this->projectHelper->setActiveProject($project);
 
-        try {
-            $this->designHelper->generateCssCache($project);
-            $this->entityManager->flush();
-        } catch (\Throwable $e) {
-            // The assets of the frontend are missing, which the message below reports.
+            try {
+                $this->designHelper->generateCssCache($project);
+                $this->entityManager->flush();
+            } catch (\InvalidArgumentException $e) {
+                // Webpack Encore throws this exception if the assets are not built (missing or invalid entrypoints.json).
+                // The hash stays empty, which the message below reports. Every other error must not be hidden.
+                $assetsError = $e->getMessage();
+            }
         }
 
         $action = $isNewProject ? 'created' : 'updated';
@@ -152,14 +175,19 @@ class CreateProjectCommand extends Command
                 ['UUID', $project->getUuid()],
                 ['Hosts', implode(', ', $project->getHosts())],
                 ['Public key', $project->getPublicKey()],
-                ['Private key', $project->getPrivateKey()],
+                ['Private key', $keysGenerated ? $project->getPrivateKey() : '(hidden)'],
             ]);
 
         $table->render();
 
         if (!$project->getConfigValue('designConfigHash')) {
             $output->writeln('');
-            $output->writeln($formatter->formatBlock(['The frontend resources of the project were not prepared, because the assets of the frontend are missing. Please build the assets and refresh the frontend resources afterwards.'], 'comment', true));
+            $messages = ['The frontend resources of the project were not prepared, because the assets of the frontend are missing. Please build the assets and refresh the frontend resources afterwards.'];
+            if ($assetsError !== null) {
+                $messages[] = $assetsError;
+            }
+
+            $output->writeln($formatter->formatBlock($messages, 'comment', true));
         }
 
         return Command::SUCCESS;
@@ -199,10 +227,18 @@ class CreateProjectCommand extends Command
         return array_values(array_unique($hosts));
     }
 
-    protected function determineKeys(?string $publicKey, ?string $privateKey): array
+    protected function determineKeys(InputInterface $input, ?Project $project): array
     {
+        $publicKey = $input->getOption('public-key');
+        $privateKey = $this->determinePrivateKey($input);
+
         if (($publicKey === null) !== ($privateKey === null)) {
-            throw new \InvalidArgumentException('Use both --public-key and --private-key, or neither of them.');
+            throw new \InvalidArgumentException('Use both --public-key and --private-key (or --private-key-from-stdin), or neither of them.');
+        }
+
+        if ($publicKey === null && $project !== null) {
+            // If the project is updated, we reuse the existing public and private keys.
+            return [$project->getPublicKey(), $project->getPrivateKey()];
         }
 
         if ($publicKey === null) {
@@ -211,14 +247,30 @@ class CreateProjectCommand extends Command
             return [$tokenGenerator->generateToken(), $tokenGenerator->generateToken()];
         }
 
-        if ($publicKey === '' || $privateKey === '') {
-            throw new \InvalidArgumentException('The keys cannot be empty.');
-        }
-
-        if (strlen($publicKey) > self::MAXIMUM_PUBLIC_KEY_LENGTH) {
-            throw new \InvalidArgumentException(sprintf('The public key cannot be longer than %d characters.', self::MAXIMUM_PUBLIC_KEY_LENGTH));
-        }
-
         return [$publicKey, $privateKey];
+    }
+
+    protected function determinePrivateKey(InputInterface $input): ?string
+    {
+        $privateKey = $input->getOption('private-key');
+        $privateKeyFromStdin = $input->getOption('private-key-from-stdin');
+
+        if ($privateKey !== null && $privateKeyFromStdin) {
+            throw new \InvalidArgumentException('Use either the --private-key option or --private-key-from-stdin, not both.');
+        }
+
+        if ($privateKeyFromStdin) {
+            $stream = ($input instanceof StreamableInputInterface) ? $input->getStream() : null;
+            $privateKey = fgets($stream ?? STDIN);
+
+            if ($privateKey === false) {
+                throw new \InvalidArgumentException('No private key was found on the standard input.');
+            }
+
+            // Remove the line break of the piped line.
+            $privateKey = preg_replace('/\r?\n$/', '', $privateKey);
+        }
+
+        return $privateKey;
     }
 }
