@@ -24,7 +24,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\NotBlank]
     #[Assert\Email]
+    #[Assert\Length(max: 180)]
     private ?string $email;
 
     #[ORM\Column(type: 'json')]
