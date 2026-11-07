@@ -1,0 +1,281 @@
+<?php
+
+namespace Mosparo\Tests\ApplicationTests\Command;
+
+use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Entity\Project;
+use Mosparo\Entity\Rule;
+use Mosparo\Entity\RuleItem;
+use Mosparo\Entity\RulePackageRuleItemCache;
+use Mosparo\Helper\ConfigHelper;
+use Mosparo\Helper\Migration\OptimizeRuleItemsAfterUpdateHelper;
+use Mosparo\Helper\Migration\V14OptimizeRulesHelper;
+use Mosparo\Kernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Filesystem\Filesystem;
+
+class FinalizeUpdateCommandTest extends KernelTestCase
+{
+    const ENTRYPOINTS = '{"entrypoints":{"mosparo-frontend":{"css":["/build/mosparo-frontend.test.css"]}}}';
+
+    const BASE_CSS = '.mosparo__container { color: red; }';
+
+    protected ?string $buildDirectory = null;
+
+    protected ?string $configFilePath = null;
+
+    protected ?string $configFileContent = null;
+
+    protected ?int $ruleId = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Keep the generated CSS in the shared cache so the test does not write into /public/resources/.
+        $_ENV['MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE'] = '1';
+        putenv('MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE=1');
+
+        // The command stores the installed version in the configuration file, so keep the original content.
+        $this->configFilePath = self::getContainer()->get(ConfigHelper::class)->getEnvironmentConfigFilePath();
+        $this->configFileContent = file_get_contents($this->configFilePath);
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->ruleId !== null) {
+            $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+            $entityManager
+                ->createQuery(sprintf('DELETE FROM %s i WHERE i.rule = :rule', RuleItem::class))
+                ->setParameter('rule', $this->ruleId)
+                ->execute();
+            $entityManager
+                ->createQuery(sprintf('DELETE FROM %s r WHERE r.id = :id', Rule::class))
+                ->setParameter('id', $this->ruleId)
+                ->execute();
+
+            $this->ruleId = null;
+        }
+
+        if ($this->configFileContent !== null) {
+            (new Filesystem())->dumpFile($this->configFilePath, $this->configFileContent);
+
+            $this->configFileContent = null;
+        }
+
+        if ($this->buildDirectory !== null) {
+            (new Filesystem())->remove($this->buildDirectory);
+
+            $this->buildDirectory = null;
+        }
+
+        unset($_ENV['MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE']);
+        putenv('MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE');
+
+        parent::tearDown();
+    }
+
+    protected function createCommandTester(): CommandTester
+    {
+        $kernel = self::bootKernel();
+
+        $application = new Application($kernel);
+
+        return new CommandTester($application->find('mosparo:finalize-update'));
+    }
+
+    /**
+     * Builds the assets the frontend resources are generated from, if the assets were not built already.
+     */
+    protected function prepareAssets(): void
+    {
+        $buildDirectory = self::getContainer()->getParameter('kernel.project_dir') . '/public/build';
+        if (file_exists($buildDirectory)) {
+            return;
+        }
+
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($buildDirectory);
+        $filesystem->dumpFile($buildDirectory . '/entrypoints.json', self::ENTRYPOINTS);
+        $filesystem->dumpFile($buildDirectory . '/mosparo-frontend.test.css', self::BASE_CSS);
+
+        $this->buildDirectory = $buildDirectory;
+    }
+
+    public function testFinalizeUpdate(): void
+    {
+        $this->prepareAssets();
+
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        $projectRepository = $entityManager->getRepository(Project::class);
+        $project = $projectRepository->find(1);
+
+        // A user agent rule with the item types of the version 1.4, which the finalization has to convert.
+        $rule = (new Rule())
+            ->setProject($project)
+            ->setName('User agents')
+            ->setType('user-agent')
+        ;
+        $entityManager->persist($rule);
+
+        foreach (['text', 'regex'] as $type) {
+            $ruleItem = (new RuleItem())
+                ->setProject($project)
+                ->setRule($rule)
+                ->setType($type)
+                ->setValue('spam')
+            ;
+            $entityManager->persist($ruleItem);
+        }
+
+        $entityManager->flush();
+
+        $this->ruleId = $rule->getId();
+
+        // The rule items are prepared when they are stored, so reset the preparation of the two items and of
+        // a few rule package items, to have open tasks for both migration helpers. The number stays small
+        // because the debug mode of the testing environment collects a backtrace for every query.
+        $entityManager
+            ->createQuery(sprintf('UPDATE %s i SET i.preparationVersion = NULL WHERE i.rule = :rule', RuleItem::class))
+            ->setParameter('rule', $this->ruleId)
+            ->execute();
+
+        $rulePackageRuleItemIds = array_column(
+            $entityManager
+                ->createQuery(sprintf('SELECT i.id FROM %s i', RulePackageRuleItemCache::class))
+                ->setMaxResults(5)
+                ->getArrayResult(),
+            'id'
+        );
+
+        $entityManager
+            ->createQuery(sprintf('UPDATE %s i SET i.preparationVersion = NULL WHERE i.id IN (:ids)', RulePackageRuleItemCache::class))
+            ->setParameter('ids', $rulePackageRuleItemIds)
+            ->execute();
+        $entityManager->clear();
+
+        $v14OptimizeRulesHelper = self::getContainer()->get(V14OptimizeRulesHelper::class);
+        $optimizeRuleItemsAfterUpdateHelper = self::getContainer()->get(OptimizeRuleItemsAfterUpdateHelper::class);
+
+        $this->assertEquals(2, $v14OptimizeRulesHelper->countOpenTasks());
+        $this->assertEquals(7, $optimizeRuleItemsAfterUpdateHelper->countOpenTasks());
+
+        // The command runs in its own process, like the console in tests/bootstrap.php: executing the
+        // database migrations loads the migration classes of the configured database platform, and
+        // MysqlMigrationsTest loads the classes of the MySQL platform, which have the same class names.
+        exec(sprintf(
+            'APP_ENV=%s MOSPARO_PREPARE_CSS_FILES_IN_SHARED_CACHE=1 %s "%s/bin/console" mosparo:finalize-update 2>&1',
+            $_ENV['APP_ENV'],
+            PHP_BINARY,
+            self::getContainer()->getParameter('kernel.project_dir')
+        ), $output, $returnCode);
+
+        $output = implode(PHP_EOL, $output);
+
+        $this->assertEquals(0, $returnCode, $output);
+        $this->assertStringContainsString(sprintf('Finalize the update to the version %s', Kernel::VERSION), $output);
+        $this->assertStringContainsString('Database migrations', $output);
+        $this->assertStringContainsString('Refreshed the frontend resources', $output);
+        $this->assertStringContainsString('Rules of the version 1.4', $output);
+        $this->assertStringContainsString('Rule items', $output);
+
+        $entityManager->clear();
+
+        // The finalization processed all open tasks of both migration helpers.
+        $this->assertEquals(0, $v14OptimizeRulesHelper->countOpenTasks());
+        $this->assertEquals(0, $optimizeRuleItemsAfterUpdateHelper->countOpenTasks());
+
+        $types = [];
+        foreach ($entityManager->getRepository(RuleItem::class)->findBy(['rule' => $this->ruleId]) as $ruleItem) {
+            $types[] = $ruleItem->getType();
+        }
+        sort($types);
+
+        $this->assertEquals(['uaRegex', 'uaText'], $types);
+
+        // The design config hash connects a project to its frontend resources and is stored while they are built.
+        $this->assertNotEmpty($projectRepository->find(1)->getConfigValue('designConfigHash'));
+
+        $config = require $this->configFilePath;
+
+        $this->assertEquals(Kernel::VERSION, $config['mosparo_installed_version']);
+        $this->assertNotEmpty($config['mosparo_assets_version']);
+        $this->assertFalse($config['mosparo_finalize_update']);
+    }
+
+    public function testFinalizeUpdateWithoutUpdate(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        // The configuration of the test installation contains a version which is not the installed one.
+        self::getContainer()->get(ConfigHelper::class)->writeEnvironmentConfig([
+            'mosparo_installed_version' => Kernel::VERSION,
+        ]);
+
+        $returnCode = $commandTester->execute([]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+        $this->assertStringContainsString('was finalized already', $commandTester->getDisplay());
+    }
+
+    public function testFinalizeUpdateWithoutInstallation(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        self::getContainer()->get(ConfigHelper::class)->writeEnvironmentConfig([
+            'mosparo_installed' => false,
+        ]);
+
+        $returnCode = $commandTester->execute([]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+        $this->assertStringContainsString('not installed yet', $commandTester->getDisplay());
+    }
+
+    public function testFinalizeUpdateFailsWithAnInvalidNumberOfSeconds(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute(['--wait-for-database' => 'one minute']);
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('0 or higher', $commandTester->getDisplay());
+    }
+
+    public function testFinalizeUpdateFailsWithoutDatabase(): void
+    {
+        $this->prepareAssets();
+
+        // A database file in a directory which does not exist cannot be opened, the same way a database
+        // server which was not started yet cannot be reached.
+        self::getContainer()->get(ConfigHelper::class)->writeEnvironmentConfig([
+            'database_path' => sys_get_temp_dir() . '/mosparo-missing-directory/test-data.db',
+        ]);
+
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute(['--wait-for-database' => 1]);
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('Waiting for the database', $commandTester->getDisplay());
+        $this->assertStringContainsString('was not available within 1 second(s)', $commandTester->getDisplay());
+    }
+
+    public function testFinalizeUpdateFailsWithoutAssets(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $buildDirectory = self::getContainer()->getParameter('kernel.project_dir') . '/public/build';
+        if (file_exists($buildDirectory)) {
+            $this->markTestSkipped('The assets of the frontend are built in this installation.');
+        }
+
+        $returnCode = $commandTester->execute([]);
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('The assets of the frontend were not found', $commandTester->getDisplay());
+    }
+}
