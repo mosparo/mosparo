@@ -4,10 +4,11 @@ namespace Mosparo\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Enum\LanguageSource;
 use Mosparo\Repository\ProjectRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Mosparo\Util\DateRangeUtil;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -27,6 +28,8 @@ class Project
     private ?ProjectGroup $projectGroup = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -36,9 +39,13 @@ class Project
     private array $hosts = [];
 
     #[ORM\Column(type: 'string', length: 64)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 10, max: 64)]
     private ?string $publicKey;
 
     #[ORM\Column(type: 'encrypted')]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 10)]
     private ?string $privateKey;
 
     #[ORM\Column(type: 'smallint')]
@@ -188,6 +195,13 @@ class Project
     public function getUuid(): ?string
     {
         return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 
     public function getProjectGroup(): ?ProjectGroup
