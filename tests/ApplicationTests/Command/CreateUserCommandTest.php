@@ -61,8 +61,28 @@ class CreateUserCommandTest extends KernelTestCase
 
         $this->assertNotNull($user);
 
-        // ROLE_ADMIN includes ROLE_USER, otherwise the user could not sign in.
+        // Every role includes ROLE_USER, otherwise the user could not sign in.
         $this->assertEqualsCanonicalizing(['ROLE_ADMIN', 'ROLE_CAN_CREATE_PROJECTS', 'ROLE_USER'], $user->getRoles());
+    }
+
+    public function testCreateUserWithCreateProjectRole(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'email' => 'create-user-with-create-project-role@mosparo.test',
+            '--password' => 'mosparoPassword',
+            '--role' => ['ROLE_CAN_CREATE_PROJECTS'],
+        ]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $user = $this->findUser('create-user-with-create-project-role@mosparo.test');
+
+        $this->assertNotNull($user);
+
+        // Every role includes ROLE_USER, otherwise the user could not sign in.
+        $this->assertEqualsCanonicalizing(['ROLE_CAN_CREATE_PROJECTS', 'ROLE_USER'], $user->getRoles());
     }
 
     public function testCreateUserWithPasswordFromStdin(): void
@@ -87,10 +107,11 @@ class CreateUserCommandTest extends KernelTestCase
     {
         $commandTester = $this->createCommandTester();
 
-        $commandTester->execute([
+        $returnCode = $commandTester->execute([
             'email' => 'existing-user@mosparo.test',
             '--password' => 'mosparoPassword',
         ]);
+        $this->assertEquals(Command::SUCCESS, $returnCode);
 
         $returnCode = $commandTester->execute([
             'email' => 'existing-user@mosparo.test',
@@ -105,15 +126,43 @@ class CreateUserCommandTest extends KernelTestCase
         $this->assertTrue(self::getContainer()->get(UserPasswordHasherInterface::class)->isPasswordValid($user, 'mosparoPassword'));
     }
 
+    public function testCreateUserFailsIfEmailAddressIsEmpty(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'email' => '',
+            '--password' => 'mosparoPassword',
+        ]);
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('email: This value should not be blank.', $commandTester->getDisplay());
+        $this->assertNull($this->findUser(''));
+    }
+
+    public function testCreateUserFailsIfEmailAddressIsTooLong(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'email' => str_repeat('a', 180) . '@mosparo.test',
+            '--password' => 'mosparoPassword',
+        ]);
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('email: This value is too long. It should have 180 characters or less.', $commandTester->getDisplay());
+    }
+
     public function testUpdateExistingUser(): void
     {
         $commandTester = $this->createCommandTester();
 
-        $commandTester->execute([
+        $returnCode = $commandTester->execute([
             'email' => 'update-user@mosparo.test',
             '--password' => 'mosparoPassword',
             '--role' => ['ROLE_ADMIN'],
         ]);
+        $this->assertEquals(Command::SUCCESS, $returnCode);
 
         $returnCode = $commandTester->execute([
             'email' => 'update-user@mosparo.test',
@@ -129,6 +178,57 @@ class CreateUserCommandTest extends KernelTestCase
 
         $this->assertEquals(['ROLE_USER'], $user->getRoles());
         $this->assertTrue(self::getContainer()->get(UserPasswordHasherInterface::class)->isPasswordValid($user, 'otherMosparoPassword'));
+    }
+
+    public function testUpdateExistingUserPasswordOnly(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'email' => 'update-user-password-only@mosparo.test',
+            '--password' => 'mosparoPassword',
+            '--role' => ['ROLE_ADMIN'],
+        ]);
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $returnCode = $commandTester->execute([
+            'email' => 'update-user-password-only@mosparo.test',
+            '--password' => 'otherMosparoPassword',
+            '--update' => true,
+        ]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+        $this->assertStringContainsString('Updated the user "update-user-password-only@mosparo.test"', $commandTester->getDisplay());
+
+        $user = $this->findUser('update-user-password-only@mosparo.test');
+
+        $this->assertEqualsCanonicalizing(['ROLE_ADMIN', 'ROLE_USER'], $user->getRoles());
+        $this->assertTrue(self::getContainer()->get(UserPasswordHasherInterface::class)->isPasswordValid($user, 'otherMosparoPassword'));
+    }
+
+    public function testUpdateExistingUserRolesOnly(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'email' => 'update-user-roles-only@mosparo.test',
+            '--password' => 'mosparoPassword',
+        ]);
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $returnCode = $commandTester->execute([
+            'email' => 'update-user-roles-only@mosparo.test',
+            '--role' => ['ROLE_ADMIN'],
+            '--update' => true,
+        ]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+        $this->assertStringContainsString('Updated the user "update-user-roles-only@mosparo.test"', $commandTester->getDisplay());
+
+        $user = $this->findUser('update-user-roles-only@mosparo.test');
+
+        $this->assertEqualsCanonicalizing(['ROLE_ADMIN', 'ROLE_USER'], $user->getRoles());
+        $this->assertTrue(self::getContainer()->get(UserPasswordHasherInterface::class)->isPasswordValid($user, 'mosparoPassword'));
     }
 
     public function testCreateUserFailsWithAnUnavailableRole(): void
@@ -186,5 +286,59 @@ class CreateUserCommandTest extends KernelTestCase
         $this->assertEquals(Command::FAILURE, $returnCode);
         $this->assertStringContainsString('--password', $commandTester->getDisplay());
         $this->assertNull($this->findUser('no-password@mosparo.test'));
+    }
+
+    public function testUpdateUserFailsWithoutAPasswordAndWithoutAnInteractiveTerminal(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'email' => 'update-user-without-any-option-and-non-interactive@mosparo.test',
+            '--password' => 'mosparoPassword',
+        ]);
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $returnCode = $commandTester->execute(
+            [
+                'email' => 'update-user-without-any-option-and-non-interactive@mosparo.test',
+                '--update' => true,
+            ],
+            ['interactive' => false],
+        );
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('--password', $commandTester->getDisplay());
+
+        $user = $this->findUser('update-user-without-any-option-and-non-interactive@mosparo.test');
+
+        $this->assertEquals(['ROLE_USER'], $user->getRoles());
+        $this->assertTrue(self::getContainer()->get(UserPasswordHasherInterface::class)->isPasswordValid($user, 'mosparoPassword'));
+    }
+
+    public function testUpdateUserWithoutOptionsButWithAnInteractiveTerminal(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'email' => 'update-user-without-any-option-but-with-interactive@mosparo.test',
+            '--password' => 'mosparoPassword',
+        ]);
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $commandTester->setInputs(['otherMosparoPassword']);
+        $returnCode = $commandTester->execute(
+            [
+                'email' => 'update-user-without-any-option-but-with-interactive@mosparo.test',
+                '--update' => true,
+            ],
+            ['interactive' => true],
+        );
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+        $this->assertStringContainsString('Updated the user "update-user-without-any-option-but-with-interactive@mosparo.test"', $commandTester->getDisplay());
+
+        $user = $this->findUser('update-user-without-any-option-but-with-interactive@mosparo.test');
+
+        $this->assertTrue(self::getContainer()->get(UserPasswordHasherInterface::class)->isPasswordValid($user, 'otherMosparoPassword'));
     }
 }

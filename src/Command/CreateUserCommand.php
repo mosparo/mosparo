@@ -46,10 +46,10 @@ class CreateUserCommand extends Command
             ->setHelp('The command creates a user without the setup wizard or the administration interface, so an installation can be prepared in an automated deployment.')
             ->addArgument('email', InputArgument::REQUIRED, 'The email address of the user, which is also the username.')
 
-            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'The password of the user. The command asks for the password if neither this option nor --password-from-stdin is used.')
+            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'The password of the user. The command asks for the password if it is needed and neither this option nor --password-from-stdin is used.')
             ->addOption('password-from-stdin', null, InputOption::VALUE_NONE, 'Read the password from the standard input instead of the --password option.')
-            ->addOption('role', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, sprintf('The role of the user, usable multiple times (available roles: %s). ROLE_USER is used if the option is not used, and ROLE_ADMIN always includes ROLE_USER.', implode(', ', self::AVAILABLE_ROLES)))
-            ->addOption('update', null, InputOption::VALUE_NONE, 'Set the password and the roles of an existing user instead of stopping with an error.')
+            ->addOption('role', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, sprintf('The role of the user, usable multiple times (available roles: %s). Every user gets ROLE_USER. Without this option, a new user gets only ROLE_USER and --update keeps the existing roles.', implode(', ', self::AVAILABLE_ROLES)))
+            ->addOption('update', null, InputOption::VALUE_NONE, 'Update an existing user instead of stopping with an error. The password is changed if --password or --password-from-stdin is used, the roles if --role is used. Without any of these options, the command asks for a new password.')
         ;
     }
 
@@ -63,17 +63,15 @@ class CreateUserCommand extends Command
         $user = $userRepository->findOneBy(['email' => $email]);
         $isNewUser = ($user === null);
 
+        // A new user always needs a password. An update changes the password only if a password option is used, or if
+        // no role is given either, because then the password is the only thing that can be updated.
+        $changePassword = $isNewUser
+            || $input->getOption('password') !== null
+            || $input->getOption('password-from-stdin')
+            || !$input->getOption('role');
+
         if (!$isNewUser && !$input->getOption('update')) {
-            $output->writeln($formatter->formatBlock([sprintf('The user "%s" exists already. Use --update to set the password and the roles of this user.', $email)], 'error', true));
-
-            return Command::FAILURE;
-        }
-
-        try {
-            $roles = $this->determineRoles($input->getOption('role'));
-            $password = $this->determinePassword($input, $output);
-        } catch (\InvalidArgumentException $e) {
-            $output->writeln($formatter->formatBlock([$e->getMessage()], 'error', true));
+            $output->writeln($formatter->formatBlock([sprintf('The user "%s" exists already. Use --update to change the password or the roles of this user.', $email)], 'error', true));
 
             return Command::FAILURE;
         }
@@ -83,8 +81,18 @@ class CreateUserCommand extends Command
             $user->setEmail($email);
         }
 
-        $user->setRoles($roles);
-        $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
+        try {
+            $this->determineRoles($user, $input->getOption('role'));
+            $password = $changePassword ? $this->determinePassword($input, $output) : null;
+        } catch (\InvalidArgumentException $e) {
+            $output->writeln($formatter->formatBlock([$e->getMessage()], 'error', true));
+
+            return Command::FAILURE;
+        }
+
+        if ($password !== null) {
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
+        }
 
         $violations = $this->validator->validate($user);
         if (count($violations) > 0) {
@@ -105,9 +113,9 @@ class CreateUserCommand extends Command
         $this->entityManager->flush();
 
         if ($isNewUser) {
-            $message = sprintf('Created the user "%s" with the roles %s.', $email, implode(', ', $roles));
+            $message = sprintf('Created the user "%s" with the roles %s.', $email, implode(', ', $user->getRoles()));
         } else {
-            $message = sprintf('Updated the user "%s" with the roles %s.', $email, implode(', ', $roles));
+            $message = sprintf('Updated the user "%s" with the roles %s.', $email, implode(', ', $user->getRoles()));
         }
 
         $output->writeln($formatter->formatBlock([$message], 'info', true));
@@ -115,10 +123,14 @@ class CreateUserCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function determineRoles(array $roles): array
+    protected function determineRoles(User $user, array $roles): void
     {
         if (!$roles) {
-            return ['ROLE_USER'];
+            // If no roles were specified in the command, and the user does not have any roles, we add the ROLE_USER as default.
+            if (!$user->getRoles()) {
+                $user->setRoles(['ROLE_USER']);
+            }
+            return;
         }
 
         $invalidRoles = array_diff($roles, self::AVAILABLE_ROLES);
@@ -126,12 +138,12 @@ class CreateUserCommand extends Command
             throw new \InvalidArgumentException(sprintf('The role(s) %s are not available. Available roles: %s.', implode(', ', $invalidRoles), implode(', ', self::AVAILABLE_ROLES)));
         }
 
-        // An administrator without ROLE_USER cannot sign in, the administration interface combines both roles as well.
-        if (in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_USER', $roles)) {
+        // A user without ROLE_USER cannot sign in, so every other role needs ROLE_USER.
+        if (!in_array('ROLE_USER', $roles)) {
             $roles[] = 'ROLE_USER';
         }
 
-        return array_values(array_unique($roles));
+        $user->setRoles(array_values(array_unique($roles)));
     }
 
     protected function determinePassword(InputInterface $input, OutputInterface $output): string
@@ -158,8 +170,10 @@ class CreateUserCommand extends Command
                 throw new \InvalidArgumentException('Use the --password option or --password-from-stdin if the command runs without an interactive terminal.');
             }
 
-            $question = new Question('Password: ');
-            $question->setHidden(true);
+            $question = (new Question('Password: '))
+                ->setHidden(true)
+                ->setHiddenFallback(false)
+            ;
 
             $password = $this->getHelper('question')->ask($input, $output, $question);
         }
