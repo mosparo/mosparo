@@ -8,6 +8,16 @@ use IPLib\Range\Subnet;
 
 class IpUtil
 {
+    public static function isIpOnAllowList(?string $ipAddress, array $securitySettings): bool
+    {
+        $ipAllowList = trim($securitySettings['ipAllowList'] ?? '');
+        if (!$ipAddress || $ipAllowList === '') {
+            return false;
+        }
+
+        return self::isIpAllowed($ipAddress, $ipAllowList);
+    }
+
     public static function isIpAllowed($ipAddress, $ipAllowList): bool
     {
         $items = self::convertToArray($ipAllowList);

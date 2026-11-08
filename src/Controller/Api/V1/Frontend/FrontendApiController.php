@@ -122,7 +122,7 @@ class FrontendApiController extends AbstractController
             return $this->prepareSecurityResponse($request, $securityResult, true);
         }
 
-        $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
+        $isIpOnAllowList = IpUtil::isIpOnAllowList($request->getClientIp(), $securitySettings);
 
         $submitToken = null;
         if ($request->request->has('submitToken') && $request->request->getString('submitToken')) {
@@ -255,7 +255,7 @@ class FrontendApiController extends AbstractController
             return $this->prepareSecurityResponse($request, $securityResult);
         }
 
-        $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
+        $isIpOnAllowList = IpUtil::isIpOnAllowList($request->getClientIp(), $securitySettings);
 
         $activeProject = $this->projectHelper->getActiveProject();
 
@@ -649,11 +649,6 @@ class FrontendApiController extends AbstractController
         if (!in_array($locale, $locales)) {
             array_unshift($locales, $locale);
         }
-    }
-
-    protected function isIpOnAllowList(string $ipAddress, array $securitySettings)
-    {
-        return trim($securitySettings['ipAllowList'] ?? '') && IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList'] ?? '');
     }
 
     protected function findMaximumNumberForProofOfWorkRange(Request $request, array $securitySettings): int

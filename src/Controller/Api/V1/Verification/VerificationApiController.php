@@ -13,6 +13,7 @@ use Mosparo\Helper\SecurityHelper;
 use Mosparo\Helper\StatisticHelper;
 use Mosparo\Helper\VerificationHelper;
 use Mosparo\Repository\SubmitTokenRepository;
+use Mosparo\Util\IpUtil;
 use Mosparo\Util\StringUtil;
 use Mosparo\Util\TimeUtil;
 use Mosparo\Verification\GeneralVerification;
@@ -190,9 +191,10 @@ class VerificationApiController extends AbstractController
 
         // Determine the security settings
         $securitySettings = $this->securityHelper->determineSecuritySettings($clientIpAddress, $submitToken->getFormOriginData());
+        $isIpOnAllowList = IpUtil::isIpOnAllowList($clientIpAddress, $securitySettings);
 
         // Check if the minimum time functionality is active and if the time difference is bigger than the minimum time.
-        if ($securitySettings['minimumTimeActive']) {
+        if ($securitySettings['minimumTimeActive'] && !$isIpOnAllowList) {
             $minimumTimeSeconds = $securitySettings['minimumTimeSeconds'];
             $seconds = TimeUtil::getDifferenceInSeconds($submission->getSubmitToken()->getCreatedAt(), $submission->getVerifiedAt());
 
@@ -262,7 +264,7 @@ class VerificationApiController extends AbstractController
         $verificationResult = $this->verificationHelper->verifyFormData($submission, $formData);
         if ($verificationResult['valid']) {
             // Check for equal form submission, if the security feature is enabled
-            if ($securitySettings['equalSubmissionsActive']) {
+            if ($securitySettings['equalSubmissionsActive'] && !$isIpOnAllowList) {
                 $allowedNumberOfEqualSubmissions = $securitySettings['equalSubmissionsNumberOfEqualSubmissions'];
                 $actualNumberOfEqualSubmissions = $this->securityHelper->countEqualSubmissions(
                     $submission->getSignature(),

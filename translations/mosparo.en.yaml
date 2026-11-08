@@ -1067,7 +1067,7 @@ settings:
 
     ipAllowList:
       title: IP allow list
-      intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above (Request delaying and IP lockout).
+      intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above.
 
     form:
       minimumTimeActive: Enable minimum time
