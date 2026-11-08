@@ -165,6 +165,12 @@ class ProjectController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_CAN_CREATE_PROJECTS');
 
         $project = new Project();
+
+        // Generate the public and private keys before validating the form.
+        $tokenGenerator = new TokenGenerator();
+        $project->setPublicKey($tokenGenerator->generateToken());
+        $project->setPrivateKey($tokenGenerator->generateToken());
+
         if ($projectGroup) {
             $project->setProjectGroup($projectGroup);
         }
@@ -178,10 +184,6 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $tokenGenerator = new TokenGenerator();
-            $project->setPublicKey($tokenGenerator->generateToken());
-            $project->setPrivateKey($tokenGenerator->generateToken());
-
             $projectMember = new ProjectMember();
             $projectMember->setProject($project);
             $projectMember->setUser($this->getUser());
