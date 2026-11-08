@@ -31,6 +31,8 @@ class FinalizeUpdateCommandTest extends KernelTestCase
 
     protected ?int $ruleId = null;
 
+    protected ?int $projectTwoId = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,8 +48,8 @@ class FinalizeUpdateCommandTest extends KernelTestCase
 
     protected function tearDown(): void
     {
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
         if ($this->ruleId !== null) {
-            $entityManager = self::getContainer()->get(EntityManagerInterface::class);
             $entityManager
                 ->createQuery(sprintf('DELETE FROM %s i WHERE i.rule = :rule', RuleItem::class))
                 ->setParameter('rule', $this->ruleId)
@@ -58,6 +60,16 @@ class FinalizeUpdateCommandTest extends KernelTestCase
                 ->execute();
 
             $this->ruleId = null;
+        }
+
+        if ($this->projectTwoId !== null) {
+            $projectTwo = $entityManager->getRepository(Project::class)->find($this->projectTwoId);
+            if ($projectTwo !== null) {
+                $entityManager->remove($projectTwo);
+                $entityManager->flush();
+            }
+
+            $this->projectTwoId = null;
         }
 
         if ($this->configFileContent !== null) {
@@ -131,9 +143,20 @@ class FinalizeUpdateCommandTest extends KernelTestCase
             $entityManager->persist($ruleItem);
         }
 
+        // Create a second project to test the design config hashes
+        $projectTwo = (new Project())
+            ->setName('Test project 2')
+            ->setHosts(['project2.mosparo.test'])
+            ->setStatus(1)
+            ->setPublicKey('mosparo2PublicKey')
+            ->setPrivateKey('mosparo2PrivateKey')
+        ;
+        $entityManager->persist($projectTwo);
+
         $entityManager->flush();
 
         $this->ruleId = $rule->getId();
+        $this->projectTwoId = $projectTwo->getId();
 
         // The rule items are prepared when they are stored, so reset the preparation of the two items and of
         // a few rule package items, to have open tasks for both migration helpers. The number stays small
@@ -198,6 +221,9 @@ class FinalizeUpdateCommandTest extends KernelTestCase
 
         // The design config hash connects a project to its frontend resources and is stored while they are built.
         $this->assertNotEmpty($projectRepository->find(1)->getConfigValue('designConfigHash'));
+
+        // Both projects need a design config hash
+        $this->assertNotEmpty($projectRepository->find($this->projectTwoId)->getConfigValue('designConfigHash'));
 
         $config = require $this->configFilePath;
 
