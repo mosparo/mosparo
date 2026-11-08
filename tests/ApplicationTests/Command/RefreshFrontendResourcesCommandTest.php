@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
 
 class RefreshFrontendResourcesCommandTest extends KernelTestCase
 {
@@ -91,10 +92,9 @@ class RefreshFrontendResourcesCommandTest extends KernelTestCase
     {
         $commandTester = $this->createCommandTester();
 
-        $buildDirectory = self::getContainer()->getParameter('kernel.project_dir') . '/public/build';
-        if (file_exists($buildDirectory)) {
-            $this->markTestSkipped('The assets of the frontend are built in this installation.');
-        }
+        // Replace the Encore lookup of the default build with a missing entrypoints file, so the test does not
+        // depend on whether the assets are built in this installation.
+        self::getContainer()->set('webpack_encore.entrypoint_lookup[_default]', new EntrypointLookup(__DIR__ . '/../Fixtures/does-not-exist/entrypoints.json'));
 
         $returnCode = $commandTester->execute([]);
 
