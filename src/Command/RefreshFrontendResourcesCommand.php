@@ -39,7 +39,7 @@ class RefreshFrontendResourcesCommand extends Command
 
         try {
             $baseCssFilePath = $this->designHelper->getBaseCssFilePath();
-        } catch (\Throwable $e) {
+        } catch (\InvalidArgumentException) {
             $baseCssFilePath = null;
         }
 

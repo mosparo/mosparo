@@ -246,7 +246,7 @@ class FinalizeUpdateCommand extends Command
     {
         try {
             return $this->designHelper->getBaseCssFilePath();
-        } catch (\Throwable $e) {
+        } catch (\InvalidArgumentException) {
             return null;
         }
     }
