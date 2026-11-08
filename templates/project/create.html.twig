@@ -22,6 +22,8 @@
                         <div class="card-body">
                             <h2 class="card-title text-center mb-4">{{ 'project.create.title'|trans }}</h2>
 
+                            {{ form_errors(form) }}
+
                             {{ form_row(form.name) }}
                             {{ form_row(form.description) }}
                             {{ form_row(form.hosts) }}
