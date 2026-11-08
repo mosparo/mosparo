@@ -287,6 +287,8 @@ class DesignHelper
         // Set the originally active project again
         if ($activeProject) {
             $this->projectHelper->setActiveProject($activeProject);
+        } else {
+            $this->projectHelper->unsetActiveProject();
         }
     }
 

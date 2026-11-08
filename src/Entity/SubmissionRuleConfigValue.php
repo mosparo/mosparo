@@ -26,7 +26,7 @@ class SubmissionRuleConfigValue implements ProjectRelatedEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private ?Project $project;
+    private ?Project $project = null;
 
     public function getId(): ?int
     {

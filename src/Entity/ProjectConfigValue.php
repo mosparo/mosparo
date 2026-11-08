@@ -22,7 +22,7 @@ class ProjectConfigValue implements ProjectRelatedEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'configValues')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private ?Project $project;
+    private ?Project $project = null;
 
     public function getId(): ?int
     {

@@ -40,7 +40,7 @@ class Rule implements ProjectRelatedEntityInterface, RuleEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     public function __construct()
     {
