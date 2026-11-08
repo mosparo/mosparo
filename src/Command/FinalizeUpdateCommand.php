@@ -99,6 +99,15 @@ class FinalizeUpdateCommand extends Command
             return Command::FAILURE;
         }
 
+        // The version and the flag are stored in the configuration file, so check that it can be written
+        // before anything is changed.
+        $configDirectory = dirname($this->configHelper->getEnvironmentConfigFilePath());
+        if (($updateAvailable || $finalizationStarted) && !is_writable($configDirectory)) {
+            $io->error(sprintf('The directory "%s" of the configuration file is not writable, so the finalization cannot store the new version. Please make the directory writable and execute the command again.', $configDirectory));
+
+            return Command::FAILURE;
+        }
+
         if ($secondsToWaitForDatabase > 0 && !$this->waitForDatabase($io, (int) $secondsToWaitForDatabase)) {
             return Command::FAILURE;
         }
