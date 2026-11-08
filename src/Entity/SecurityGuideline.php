@@ -51,7 +51,7 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     private array $defaultSecurityConfigValues = [
         'overrideSpamDetection' => false,

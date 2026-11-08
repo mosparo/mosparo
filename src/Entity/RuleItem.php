@@ -41,7 +41,7 @@ class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     public function __construct()
     {

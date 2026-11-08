@@ -21,7 +21,7 @@ class ProjectMember
 
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'projectMembers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projectMemberships')]
     #[ORM\JoinColumn(nullable: false)]
