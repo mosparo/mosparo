@@ -323,7 +323,12 @@ class DesignHelper
 
     public function getBaseCssFilePath(): ?string
     {
-        return $this->getBuildFilePath($this->getBaseCssFileName());
+        $baseCssFileName = $this->getBaseCssFileName();
+        if ($baseCssFileName === null) {
+            return null;
+        }
+
+        return $this->getBuildFilePath($baseCssFileName);
     }
 
     public function getCssFilePath(Project $project, string $designConfigHash = ''): string
