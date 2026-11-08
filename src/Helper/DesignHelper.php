@@ -360,6 +360,10 @@ class DesignHelper
                 $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
                 $cssUri = $this->router->generate('resources_project_hash_css', ['projectUuid' => $project->getUuid(), 'styleHash' => $designConfigHash]);
                 $this->addMapping($projectUri, $cssUri);
+            } else {
+                // Remove the existing CSS files and the mapping entry for this project from the file mode.
+                // Otherwise, public/index.php keeps redirecting to the existing file instead of using the shared cache.
+                $this->removeCssFilesAndMapping($project);
             }
         }
     }
@@ -374,16 +378,10 @@ class DesignHelper
         if ($this->prepareCssFilesInSharedCache) {
             $this->cache->delete('design_' . $project->getUuid() . '_content');
             $this->cache->delete('design_' . $project->getUuid() . '_hash');
-        } else {
-            // Delete the project directory in the cache directory
-            $cssFilePath = $this->getCssFilePath($project, $designConfigHash);
-            $directoryPath = dirname($cssFilePath);
-            $this->filesystem->remove($directoryPath);
-
-            // Remove the url from the mapping file
-            $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
-            $this->removeMapping($projectUri);
         }
+
+        // Remove the existing files, regardless of the active mode.
+        $this->removeCssFilesAndMapping($project);
     }
 
     public function prepareCssVariables(Project $project): array
@@ -752,5 +750,15 @@ class DesignHelper
         }
 
         return $content;
+    }
+
+    protected function removeCssFilesAndMapping(Project $project): void
+    {
+        // Remove the whole directory for the given project inside the resource directory.
+        $this->filesystem->remove($this->getBuildFilePath('/resources/' . $project->getUuid()));
+
+        // Remove the URL from the mapping file
+        $projectUri = $this->router->generate('resources_project_css', ['projectUuid' => $project->getUuid()]);
+        $this->removeMapping($projectUri);
     }
 }
