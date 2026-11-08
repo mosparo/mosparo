@@ -125,8 +125,8 @@ class FinalizeUpdateCommand extends Command
             $this->entityManager->getConnection()->close();
 
             // The version is stored only after the migrations were executed successfully. The flag marks the
-            // finalization as started, so the administration interface processes the remaining tasks if this
-            // command does not reach the end.
+            // finalization as started, so executing the command again processes the remaining tasks if this
+            // run does not reach the end.
             if ($updateAvailable) {
                 $tokenGenerator = new TokenGenerator();
 
