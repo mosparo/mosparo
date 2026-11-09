@@ -44,17 +44,17 @@ class CreateProjectCommand extends Command
     {
         $this
             ->setDescription('Creates a project.')
-            ->setHelp('The command creates a project without the administration interface, so an installation can be prepared in an automated deployment. The UUID and the keys are generated if they are not given, which is why the command prints them.')
+            ->setHelp('The command creates a project, so that an installation can be prepared in an automated deployment. The UUID and the keys are generated if they are not given, which is why the command prints them.')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the project.')
 
             ->addOption('owner', null, InputOption::VALUE_REQUIRED, 'The email address of the user who becomes the owner of the project.')
-            ->addOption('host', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'A host which is allowed to use the project, usable multiple times.')
+            ->addOption('host', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'A host that is allowed to use the project, usable multiple times.')
             ->addOption('description', null, InputOption::VALUE_REQUIRED, 'The description of the project.')
             ->addOption('uuid', null, InputOption::VALUE_REQUIRED, 'The UUID of the project. A random UUID is generated if the option is not used.')
             ->addOption('public-key', null, InputOption::VALUE_REQUIRED, 'The public key of the project, to be used together with --private-key or --private-key-from-stdin. Both keys are generated if the options are not used.')
-            ->addOption('private-key', null, InputOption::VALUE_REQUIRED, 'The private key of the project, to be used together with --public-key. Visible in the process list, prefer --private-key-from-stdin.')
+            ->addOption('private-key', null, InputOption::VALUE_REQUIRED, 'The private key of the project, to be used together with --public-key. Visible in the process list; prefer --private-key-from-stdin.')
             ->addOption('private-key-from-stdin', null, InputOption::VALUE_NONE, 'Read the private key from the standard input instead of the --private-key option, to be used together with --public-key.')
-            ->addOption('update', null, InputOption::VALUE_NONE, 'Set the name, the description, the hosts and the keys of the project with the given UUID instead of stopping with an error. Requires --uuid.')
+            ->addOption('update', null, InputOption::VALUE_NONE, 'Set the name, the description, the hosts, and the keys of the project with the given UUID instead of stopping with an error. Requires --uuid.')
         ;
     }
 

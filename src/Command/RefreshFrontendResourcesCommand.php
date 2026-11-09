@@ -29,7 +29,7 @@ class RefreshFrontendResourcesCommand extends Command
     {
         $this
             ->setDescription('Refreshes the frontend resources of all projects.')
-            ->setHelp('The frontend resources contain the design of the projects and are built from the assets of the installed version, so they have to be refreshed after an update. The update in the administration interface does that on its own. An installation that is updated by replacing the files, for example by starting a new container image, never runs that update, and this command refreshes the resources instead.')
+            ->setHelp('The frontend resources contain the project designs and are built from the assets of the installed version, so they must be refreshed after an update. The update in the administration interface does that on its own. An installation that is updated by replacing the files, for example by starting a new container image, never runs that update, and this command refreshes the resources instead.')
         ;
     }
 

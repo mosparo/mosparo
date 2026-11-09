@@ -43,13 +43,13 @@ class CreateUserCommand extends Command
     {
         $this
             ->setDescription('Creates a user.')
-            ->setHelp('The command creates a user without the setup wizard or the administration interface, so an installation can be prepared in an automated deployment.')
+            ->setHelp('The command creates a user without the setup wizard or the administration interface, so that an installation can be prepared in an automated deployment.')
             ->addArgument('email', InputArgument::REQUIRED, 'The email address of the user, which is also the username.')
 
             ->addOption('password', null, InputOption::VALUE_REQUIRED, 'The password of the user. The command asks for the password if it is needed and neither this option nor --password-from-stdin is used.')
             ->addOption('password-from-stdin', null, InputOption::VALUE_NONE, 'Read the password from the standard input instead of the --password option.')
-            ->addOption('role', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, sprintf('The role of the user, usable multiple times (available roles: %s). Every user gets ROLE_USER. Without this option, a new user gets only ROLE_USER and --update keeps the existing roles.', implode(', ', self::AVAILABLE_ROLES)))
-            ->addOption('update', null, InputOption::VALUE_NONE, 'Update an existing user instead of stopping with an error. The password is changed if --password or --password-from-stdin is used, the roles if --role is used. Without any of these options, the command asks for a new password.')
+            ->addOption('role', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, sprintf('The role of the user, usable multiple times (available roles: %s). Every user gets ROLE_USER. Without this option, a new user gets only ROLE_USER, and --update keeps the existing roles.', implode(', ', self::AVAILABLE_ROLES)))
+            ->addOption('update', null, InputOption::VALUE_NONE, 'Update an existing user instead of stopping with an error. The password is changed if --password or --password-from-stdin is used, and the roles if --role is used. Without any of these options, the command asks for a new password.')
         ;
     }
 
