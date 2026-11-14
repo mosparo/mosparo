@@ -90,7 +90,11 @@ RUN apk add --no-cache --virtual .fetch-deps unzip && \
 # workers as the nginx user; they have to run as www-data because run.sh hands the files in
 # /mosparo-data to that user. BusyBox names the cron daemon crond and picks its applet by the name
 # it was called by, so run.sh's "cron -f" needs a wrapper and not a symlink.
-RUN sed -i 's/^user nginx;/user www-data;/' /etc/nginx/nginx.conf \
+# nginx on Alpine has no pid directive and uses the compiled in /run/nginx/nginx.pid. That directory
+# is missing if /run is mounted as an empty tmpfs, so the pid file is written to /run directly.
+RUN mkdir -p /etc/nginx/conf.d \
+    && printf 'pid /run/nginx.pid;\n' > /etc/nginx/conf.d/pid.conf \
+    && sed -i 's/^user nginx;/user www-data;/' /etc/nginx/nginx.conf \
     && chown -R www-data:www-data /var/lib/nginx \
     && printf '#!/bin/sh\nexec /usr/sbin/crond "$@"\n' > /usr/sbin/cron \
     && chmod 0755 /usr/sbin/cron
