@@ -2,7 +2,9 @@
 
 namespace Mosparo\Twig;
 
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
+use Twig\Runtime\EscaperRuntime;
 use Twig\TwigFilter;
 use zepi\Unicode\InvisibleCodepointIndex;
 
@@ -11,13 +13,18 @@ class DataExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('mark_invisible_characters', [$this, 'markInvisibleCharacters'], ['is_safe' => ['html']]),
+            new TwigFilter('mark_invisible_characters', [$this, 'markInvisibleCharacters'], ['needs_environment' => true, 'is_safe' => ['html']]),
             new TwigFilter('var_export', [$this, 'exportVariable']),
         ];
     }
 
-    public function markInvisibleCharacters($value): string
+    public function markInvisibleCharacters(Environment $env, $value): string
     {
+        // The filter returns HTML and is marked as safe, so Twig does not escape the output. Escape the value with
+        // the escaper of Twig before the markers are added, so the filter is safe in every template.
+        $escaper = $env->getRuntime(EscaperRuntime::class);
+        $value = (string) $escaper->escape($value);
+
         $invisibleCodepointIndex = new InvisibleCodepointIndex();
         $codepointPattern = $invisibleCodepointIndex->getRegexPattern(false);
         $fullPattern = '/([' . $codepointPattern . '])/um';
@@ -34,7 +41,7 @@ class DataExtension extends AbstractExtension
 
                 $hex = $invisibleCodepointIndex->getCharacterHex($character);
                 $codepoint = $invisibleCodepointIndex->getCodepoint($hex);
-                $value = str_replace($character, '<u title="' . $codepoint['name'] . ' (' . $hex . ')" data-bs-toggle="tooltip" data-bs-placement="top">' . $character . '</u>', $value);
+                $value = str_replace($character, '<u title="' . $escaper->escape($codepoint['name'] . ' (' . $hex . ')') . '" data-bs-toggle="tooltip" data-bs-placement="top">' . $character . '</u>', $value);
 
                 $processedCharacters[] = $character;
             }
