@@ -148,12 +148,14 @@ class CreateProjectCommand extends Command
 
         $this->entityManager->flush();
 
+        // The console enables the filter for the project related entities, which needs an active project to
+        // read the configuration values of the project below.
+        $this->projectHelper->setActiveProject($project);
+
         // The command does not change the design settings, so the frontend resources are only prepared if the project
         // has none yet: a new project, or one that was created while the assets were missing.
         $assetsError = null;
         if (!$project->getConfigValue('designConfigHash')) {
-            $this->projectHelper->setActiveProject($project);
-
             try {
                 $this->designHelper->generateCssCache($project);
                 $this->entityManager->flush();

@@ -7,6 +7,7 @@ use Mosparo\Entity\Project;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
 use Mosparo\Helper\DesignHelper;
+use Mosparo\Helper\ProjectHelper;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -24,6 +25,10 @@ class CreateProjectCommandTest extends KernelTestCase
         $kernel = self::bootKernel();
 
         $this->createOwner();
+
+        // The console enables the filter for the project related entities before it executes a command, which
+        // CommandTester does not do because it runs the command without the event dispatcher of the console.
+        self::getContainer()->get(ProjectHelper::class)->enableDoctrineFilter();
 
         $application = new Application($kernel);
 
@@ -519,5 +524,54 @@ class CreateProjectCommandTest extends KernelTestCase
 
         // The test writes into public/resources/, remove the CSS file and the mapping again.
         self::getContainer()->get(DesignHelper::class)->clearCssCache($this->findProject('Project with assets'));
+    }
+
+    public function testUpdateExistingProjectInASeparateRun(): void
+    {
+        $commandTester = $this->createCommandTester();
+        $this->useEntrypointsFile(__DIR__ . '/../Fixtures/build/entrypoints.json');
+
+        $uuid = '00000000-0000-0000-0000-00000000a002';
+        $returnCode = $commandTester->execute([
+            'name' => 'Project of a separate run',
+            '--owner' => self::OWNER_EMAIL,
+            '--host' => ['separate-run.mosparo.test'],
+            '--uuid' => $uuid,
+        ]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $project = $this->findProject('Project of a separate run');
+        $designConfigHash = $project->getConfigValue('designConfigHash');
+        $publicKey = $project->getPublicKey();
+        $privateKey = $project->getPrivateKey();
+
+        $this->assertNotEmpty($designConfigHash);
+
+        // A deployment updates the project in another run of the command, which loads the project and its
+        // configuration values from the database instead of reusing the objects of the creation.
+        $commandTester = $this->createCommandTester();
+        $this->useEntrypointsFile(__DIR__ . '/../Fixtures/build/entrypoints.json');
+
+        $returnCode = $commandTester->execute([
+            'name' => 'Project of a separate run',
+            '--owner' => self::OWNER_EMAIL,
+            '--host' => ['separate-run.mosparo.test', 'www.separate-run.mosparo.test'],
+            '--uuid' => $uuid,
+            '--update' => true,
+        ]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+        $this->assertStringContainsString('updated successfully', $commandTester->getDisplay());
+
+        $project = $this->findProject('Project of a separate run');
+
+        $this->assertEquals(['separate-run.mosparo.test', 'www.separate-run.mosparo.test'], $project->getHosts());
+        $this->assertSame($designConfigHash, $project->getConfigValue('designConfigHash'));
+        $this->assertEquals($publicKey, $project->getPublicKey());
+        $this->assertEquals($privateKey, $project->getPrivateKey());
+
+        // The test writes into public/resources/, remove the CSS file and the mapping again.
+        self::getContainer()->get(DesignHelper::class)->clearCssCache($project);
     }
 }
