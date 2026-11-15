@@ -23,6 +23,16 @@ final class EnvLoader implements EnvVarLoaderInterface
             $_ENV['ENABLE_ENCRYPTION'] = true;
         }
 
+        // The loader expects a string, not a boolean value. A real false will be read as 'not defined', which
+        // means that it could fall back to the default value.
+        foreach ($values as $key => $value) {
+            if ($value === true) {
+                $values[$key] = '1';
+            } else if ($value === false) {
+                $values[$key] = '0';
+            }
+        }
+
         return $values;
     }
 }
