@@ -92,6 +92,18 @@
     "doctrine/sql-formatter": {
         "version": "1.1.1"
     },
+    "drenso/symfony-oidc-bundle": {
+        "version": "4.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "e2b975158d940a191f48e3ff2c59108a1d7225e6"
+        },
+        "files": [
+            "config/packages/drenso_oidc.yaml"
+        ]
+    },
     "egulias/email-validator": {
         "version": "3.1.1"
     },
@@ -715,6 +727,19 @@
     },
     "twig/twig": {
         "version": "v3.3.0"
+    },
+    "web-auth/webauthn-symfony-bundle": {
+        "version": "5.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "a5dff33bd46575bea263af94069650af7742dcb6"
+        },
+        "files": [
+            "config/packages/webauthn.yaml",
+            "config/routes/webauthn_routes.yaml"
+        ]
     },
     "webmozart/assert": {
         "version": "1.10.0"
