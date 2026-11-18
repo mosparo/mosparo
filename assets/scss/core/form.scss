@@ -1,3 +1,5 @@
+@use '@tabler/core/scss/tabler';
+
 .form-group {
     margin-bottom: 1rem;
 
@@ -26,6 +28,10 @@
     &.ti-icon-right {
         margin-left: 0.25em;
     }
+}
+
+.btn-sm .ti {
+    font-size: 1em;
 }
 
 .btn.btn-icon-only {
@@ -102,7 +108,7 @@ input[type="number"] {
 .form-control,
 .form-select {
     &.field-edited {
-        background: rgba(var(--tblr-warning-rgb), 0.15);
+        background: rgba(var(--warning-rgb), 0.15);
     }
 }
 
@@ -113,7 +119,7 @@ textarea.ip-address-field {
 .project-group-tree {
     display: block;
 
-    border: 1px solid var(--tblr-border-color);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
 
     &,
@@ -124,8 +130,8 @@ textarea.ip-address-field {
 
     .project-group-node {
         .project-group-node-root {
-            background: var(--tblr-body-bg);
-            border-bottom: 1px solid var(--tblr-border-color);
+            background: var(--body-bg);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .project-group-node-root,
@@ -188,7 +194,7 @@ textarea.ip-address-field {
                 left: -1.2rem;
                 bottom: 0.25rem;
 
-                background: var(--tblr-border-color);
+                background: var(--border-color);
             }
         }
 
@@ -217,8 +223,8 @@ textarea.ip-address-field {
             align-items: center;
             justify-content: center;
 
-            background: var(--tblr-info-bg-subtle);
-            color: var(--tblr-table-color);
+            background: var(--info-bg-subtle);
+            color: var(--table-color);
 
             padding: 0.625rem;
 
@@ -230,25 +236,20 @@ textarea.ip-address-field {
 
         a {
             text-decoration: none;
-            color: var(--tblr-dropdown-link-color);
+            color: var(--dropdown-link-color);
         }
     }
 }
 
 .project-group-node-header:hover:not(.text-muted),
 .project-group-node.focus > .project-group-node-header:not(.text-muted) {
-    color: var(--tblr-dropdown-link-hover-color);
-    background-color: var(--tblr-dropdown-link-hover-bg);
+    color: var(--dropdown-link-hover-color);
+    background-color: var(--dropdown-link-hover-bg);
 }
 
 [data-bs-theme=dark],
 body[data-bs-theme=dark] [data-bs-theme=light] {
     .form-select {
-        --tblr-form-select-bg-img: #{$form-select-indicator};
+        --form-select-bg-img: #{tabler.$form-select-indicator};
     }
-}
-
-[data-bs-theme=dark] .accordion-button::after {
-    --tblr-accordion-btn-icon: #{$accordion-button-icon-dark};
-    --tblr-accordion-btn-active-icon: #{$accordion-button-active-icon-dark};
 }
