@@ -1,8 +1,8 @@
 .grid-table {
-    --tblr-table-bg: var(--tblr-bg-surface);
-    --tblr-table-border-color: #e0e4e8;
-    --tblr-table-striped-bg: var(--tblr-bg-surface-tertiary);
-    --tblr-table-radius: var(--tblr-border-radius-lg);
+    --table-bg: var(--bg-surface);
+    --table-border-color: #e0e4e8;
+    --table-striped-bg: var(--bg-surface-tertiary);
+    --table-radius: var(--border-radius-lg);
 
     display: grid;
     grid-template-columns: var(--grid-table-template, repeat(var(--grid-table-max-columns, 5), 1fr));
@@ -26,10 +26,10 @@
 
             z-index: 100;
 
-            background: var(--tblr-bg-surface-tertiary);
+            background: var(--bg-surface-tertiary);
 
-            border: 1px solid var(--tblr-table-border-color);
-            border-radius: var(--tblr-table-radius);
+            border: 1px solid var(--table-border-color);
+            border-radius: var(--table-radius);
         }
     }
 
@@ -41,7 +41,7 @@
         align-items: center;
         justify-content: center;
 
-        background: var(--tblr-table-bg);
+        background: var(--table-bg);
     }
 
     .grid-table-header,
@@ -56,7 +56,7 @@
         grid-column: 1 / -1;
         grid-template-columns: subgrid;
 
-        background: var(--tblr-table-bg);
+        background: var(--table-bg);
 
         .grid-table-cell {
             display: flex;
@@ -121,11 +121,11 @@
 
             &:not(.collapsed) {
                 &.border-left {
-                    box-shadow: -1px 0 0 var(--tblr-table-border-color);
+                    box-shadow: -1px 0 0 var(--table-border-color);
                 }
 
                 &.border-right {
-                    box-shadow: 1px 0 0 var(--tblr-table-border-color);
+                    box-shadow: 1px 0 0 var(--table-border-color);
                 }
             }
 
@@ -134,7 +134,7 @@
 
                 display: none;
 
-                border-top: 1px solid var(--tblr-table-border-color);
+                border-top: 1px solid var(--table-border-color);
 
                 &:not(.collapsed-label-invisible) .label,
                 .value {
@@ -177,35 +177,35 @@
 
         z-index: 25;
 
-        background: var(--tblr-bg-surface-tertiary);
+        background: var(--bg-surface-tertiary);
 
         .grid-table-row {
-            background: var(--tblr-bg-surface-tertiary);
+            background: var(--bg-surface-tertiary);
 
             font-size: 0.75rem;
-            font-weight: var(--tblr-font-weight-medium);
+            font-weight: var(--font-weight-medium);
             text-transform: uppercase;
             letter-spacing: 0.04em;
             line-height: 1rem;
 
-            color: var(--tblr-secondary);
+            color: var(--secondary);
 
             white-space: nowrap;
 
-            border: 1px solid var(--tblr-table-border-color);
+            border: 1px solid var(--table-border-color);
 
-            border-top-left-radius: var(--tblr-table-radius);
-            border-top-right-radius: var(--tblr-table-radius);
+            border-top-left-radius: var(--table-radius);
+            border-top-right-radius: var(--table-radius);
 
             &.header-groups-row {
                 border: 1px solid transparent !important;
 
                 .grid-table-cell {
-                    box-shadow: 0 -1px 0 var(--tblr-table-border-color), -1px 0 0 var(--tblr-table-border-color), 1px 0 0 var(--tblr-table-border-color);
-                    border-top-left-radius: var(--tblr-table-radius);
-                    border-top-right-radius: var(--tblr-table-radius);
+                    box-shadow: 0 -1px 0 var(--table-border-color), -1px 0 0 var(--table-border-color), 1px 0 0 var(--table-border-color);
+                    border-top-left-radius: var(--table-radius);
+                    border-top-right-radius: var(--table-radius);
 
-                    background: var(--tblr-bg-surface-tertiary);
+                    background: var(--bg-surface-tertiary);
 
                     margin: 1px 0 -1px;
                 }
@@ -223,11 +223,11 @@
 
 
     .grid-table-body {
-        border: 1px solid var(--tblr-table-border-color);
+        border: 1px solid var(--table-border-color);
 
         .grid-table-row {
             &:not(:last-child) {
-                border-bottom: 1px solid var(--tblr-table-border-color);
+                border-bottom: 1px solid var(--table-border-color);
             }
 
             &:nth-child(odd) {
@@ -237,7 +237,7 @@
             }
 
             &:nth-child(even) {
-                background-color: var(--tblr-table-striped-bg);
+                background-color: var(--table-striped-bg);
 
                 .collapsed {
                     background-color: rgba(0, 0, 0, 0.05);
@@ -291,15 +291,15 @@
         justify-content: space-between;
         align-items: center;
 
-        background: var(--tblr-bg-surface-tertiary);
+        background: var(--bg-surface-tertiary);
 
         grid-column: 1 / -1;
 
         border-width: 0 1px 1px;
         border-style: solid;
-        border-color: var(--tblr-table-border-color);
-        border-bottom-left-radius: var(--tblr-table-radius);
-        border-bottom-right-radius: var(--tblr-table-radius);
+        border-color: var(--table-border-color);
+        border-bottom-left-radius: var(--table-radius);
+        border-bottom-right-radius: var(--table-radius);
 
         padding: 0.5rem 0.75rem;
 
@@ -319,7 +319,7 @@
 
                 .spacer {
                     min-width: auto;
-                    padding: var(--tblr-pagination-padding-y) 0;
+                    padding: var(--pagination-padding-y) 0;
                 }
             }
 
@@ -332,18 +332,18 @@
 
 [data-bs-theme=dark], body[data-bs-theme=dark] [data-bs-theme=light] {
     .grid-table {
-        --tblr-table-bg: var(--tblr-bg-surface);
-        --tblr-table-border-color: #30455d;
-        --tblr-table-striped-bg: var(--tblr-bg-surface-tertiary);
+        --table-bg: var(--bg-surface);
+        --table-border-color: #30455d;
+        --table-striped-bg: var(--bg-surface-tertiary);
 
         .grid-table-header,
         .grid-table-header .grid-table-row.header-groups-row,
         .grid-table-body .grid-table-row:nth-child(even) {
-            background: var(--tblr-body-bg);
+            background: var(--body-bg);
         }
 
         .grid-table-header .grid-table-row:not(.header-groups-row) {
-            background: var(--tblr-bg-surface-tertiary);
+            background: var(--bg-surface-tertiary);
         }
 
         .grid-table-body .grid-table-row.collapsed-visible {

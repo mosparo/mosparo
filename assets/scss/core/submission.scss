@@ -57,7 +57,7 @@
         flex-wrap: wrap;
 
         .information-part {
-            line-height: var(--tblr-body-line-height);
+            line-height: var(--body-line-height);
             margin: 0.125rem;
             padding: 2px 4px;
 
@@ -112,7 +112,7 @@
         }
 
         span[data-bs-toggle="tooltip"]:hover {
-            color: var(--tblr-info);
+            color: var(--info);
         }
     }
 }
@@ -152,7 +152,7 @@
 }
 
 .submission-rule-button {
-    color: var(--tblr-info);
+    color: var(--info);
 
     padding: 0.5rem;
 
@@ -163,14 +163,14 @@
     width: 2rem;
     height: 2rem;
 
-    border-radius: var(--tblr-border-radius-sm);
+    border-radius: var(--border-radius-sm);
 }
 
 .submission-rule-button:focus,
 .submission-rule-button:hover,
 .submission-rule-button:active {
-    background: var(--tblr-info);
-    color: var(--tblr-info-fg);
+    background: var(--info);
+    color: var(--info-fg);
 
     text-decoration: none;
 }
@@ -189,7 +189,7 @@ table.table-bordered.table-sm .submission-rule-button {
 
 table.table tbody tr th.rating-details-type,
 table.table tfoot tr th.rating-details-summary {
-    background: var(--tblr-bg-surface-tertiary);
+    background: var(--bg-surface-tertiary);
 }
 
 .value-toolbar {
@@ -200,7 +200,7 @@ table.table tfoot tr th.rating-details-summary {
 
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
 
-    border-radius: var(--tblr-border-radius);
+    border-radius: var(--border-radius);
 
     overflow: hidden;
 

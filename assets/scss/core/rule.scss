@@ -1,3 +1,5 @@
+@use '@tabler/core/scss/tabler';
+
 .rule-type-button {
     padding: 1rem;
     margin-bottom: 1rem;
@@ -57,13 +59,13 @@
 
             &:first-child {
                 .form-control {
-                    border-radius: var(--tblr-border-radius) 0 0 var(--tblr-border-radius);
+                    border-radius: var(--border-radius) 0 0 var(--border-radius);
                 }
             }
 
             &:last-child {
                 .form-control {
-                    border-radius: 0 var(--tblr-border-radius) var(--tblr-border-radius) 0;
+                    border-radius: 0 var(--border-radius) var(--border-radius) 0;
                 }
             }
         }
@@ -126,7 +128,7 @@
         ul.collection-list li {
             .rule-item-field-container {
                 label {
-                    @include visually-hidden;
+                    @include tabler.visually-hidden;
                 }
             }
         }
@@ -153,11 +155,11 @@
             }
 
             .rule-item-type .form-control {
-                border-radius: var(--tblr-border-radius) 0 0 var(--tblr-border-radius);
+                border-radius: var(--border-radius) 0 0 var(--border-radius);
             }
 
             .rule-item-rating .form-control {
-                border-radius: 0 var(--tblr-border-radius) var(--tblr-border-radius) 0;
+                border-radius: 0 var(--border-radius) var(--border-radius) 0;
             }
 
             .rule-item-value {
@@ -168,7 +170,7 @@
                 margin-top: 0.5rem;
 
                 .form-control {
-                    border-radius: var(--tblr-border-radius);
+                    border-radius: var(--border-radius);
                 }
             }
 

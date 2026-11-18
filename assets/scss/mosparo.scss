@@ -1,42 +1,36 @@
 /* Tabler Core and Tabler Icons */
-$google-font: false;
-$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+@use '@tabler/core/scss/tabler' with (
+    $form-check-input-checked-bg-image: url('/assets/images/ui/tabler.svg#checkbox-light'),
+    $form-check-input-checked-bg-image-dark: url('/assets/images/ui/tabler.svg#checkbox-dark'),
+    $form-check-radio-checked-bg-image: url('/assets/images/ui/tabler.svg#radio'),
+    $form-select-indicator: url('/assets/images/ui/tabler.svg#select'),
+    $btn-close-bg: url('/assets/images/ui/tabler.svg#close'),
+    $badge-color: #ffffff,
+);
 
-$form-check-input-checked-bg-image: url('/assets/images/ui/tabler.svg#checkbox-light');
-$form-check-input-checked-bg-image-dark: url('/assets/images/ui/tabler.svg#checkbox-dark');
-$form-check-radio-checked-bg-image: url('/assets/images/ui/tabler.svg#radio');
-$form-select-indicator: url('/assets/images/ui/tabler.svg#select');
-$btn-close-bg: url('/assets/images/ui/tabler.svg#close');
-$accordion-button-icon: url('/assets/images/ui/tabler.svg#accordion-normal');
-$accordion-button-active-icon: url('/assets/images/ui/tabler.svg#accordion-active');
-$accordion-button-icon-dark: url('/assets/images/ui/tabler.svg#accordion-normal-dark');
-$accordion-button-active-icon-dark: url('/assets/images/ui/tabler.svg#accordion-active-dark');
-$badge-color: #ffffff;
+@use '~@tabler/icons-webfont/dist/tabler-icons.scss';
 
-@import '~@tabler/core';
-@import '~@tabler/icons-webfont/dist/tabler-icons.scss';
+@use 'spectrum-colorpicker2/dist/spectrum.css';
 
-@import 'spectrum-colorpicker2/dist/spectrum.css';
+@use 'tabulator-tables/dist/css/tabulator_bootstrap5.min.css';
 
-@import 'tabulator-tables/dist/css/tabulator_bootstrap5.min.css';
-
-/* Mosparo Core */
-@import 'core/base.scss';
-@import 'core/navigation.scss';
-@import 'core/project.scss';
-@import 'core/rule.scss';
-@import 'core/submission.scss';
-@import 'core/form.scss';
-@import 'core/account.scss';
-@import 'core/settings.scss';
-@import 'core/dashboard.scss';
-@import 'core/design.scss';
-@import 'core/update.scss';
-@import 'core/import.scss';
-@import 'core/ui.scss';
-@import 'core/grid-table';
+/* mosparo Core */
+@use 'core/base.scss';
+@use 'core/navigation.scss';
+@use 'core/project.scss';
+@use 'core/rule.scss';
+@use 'core/submission.scss';
+@use 'core/form.scss';
+@use 'core/account.scss';
+@use 'core/settings.scss';
+@use 'core/dashboard.scss';
+@use 'core/design.scss';
+@use 'core/update.scss';
+@use 'core/import.scss';
+@use 'core/ui.scss';
+@use 'core/grid-table';
 
 /* Plugins */
-@import 'plugins/spectrum.scss';
-@import 'plugins/tabulator.scss';
+@use 'plugins/spectrum.scss' as ps;
+@use 'plugins/tabulator.scss';
 
