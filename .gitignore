@@ -1,5 +1,6 @@
 ###> symfony/framework-bundle ###
 /.env.local
+/.env.dev
 /.env.local.php
 /.env.*.local
 /config/env.mosparo.php
