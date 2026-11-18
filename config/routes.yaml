@@ -9,3 +9,6 @@
 
 controllers:
     resource: routing.controllers
+
+login_check:
+    path: /login_check

@@ -1,0 +1,220 @@
+{% extends 'base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'account.webauthn.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{% endblock %}
+{% block pageFlashes %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset(get_illustration_path('webauthn.svg'))|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+
+                        {% if isWebauthnAvailable %}
+                            {% if credentials|length > 0 %}
+                                <h2 class="card-title text-center mb-4">{{ 'account.webauthn.title'|trans }}</h2>
+
+                                {% include 'snippets/flashes.html.twig' %}
+
+                                <p>{{ 'account.webauthn.manage.intro'|trans }}</p>
+
+                                <div class="text-end mb-3">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-key-modal">
+                                        <i class="ti ti-plus"></i>
+                                        {{ 'account.webauthn.manage.actions.addAdditionalKey'|trans }}
+                                    </button>
+                                </div>
+
+                                <table class="table table-striped table-vcenter">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ 'account.webauthn.manage.list.name'|trans }}</th>
+                                            <th class="w-1"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for credential in credentials %}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="pe-3">
+                                                            <i class="ti ti-key"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div>
+                                                                {{ credential.name }}
+                                                            </div>
+                                                            <div class="text-muted">
+                                                                {{ 'account.webauthn.manage.list.id'|trans }}
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ credential.publicKeyCredentialId|toHex }}">
+                                                                {{ credential.publicKeyCredentialId|toHex|slice(0, 24) }}...
+                                                            </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ path('account_webauthn_key_delete', {'id': credential.id}) }}" class="btn btn-danger btn-icon-only">
+                                                        <i class="ti ti-trash"></i>
+                                                        <span class="visually-hidden-focusable">{{ 'action.remove'|trans }}</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <h2 class="card-title text-center mb-4">{{ 'account.webauthn.setup.title'|trans }}</h2>
+
+                                {% include 'snippets/flashes.html.twig' %}
+
+                                <p>{{ 'account.webauthn.setup.intro'|trans }}</p>
+
+
+                                {% if userEnforcePasskey %}
+                                    <div class="alert alert-warning">
+                                        {{ 'account.webauthn.setup.enforced'|trans }}
+                                    </div>
+                                {% endif %}
+
+                                <div class="alert alert-info">
+                                    {{ 'account.webauthn.setup.hintPassword'|trans }}
+                                </div>
+
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#add-key-modal">
+                                    <i class="ti ti-key"></i>
+                                    {{ 'account.webauthn.action.setup'|trans }}
+                                </button>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-danger">
+                                {{ 'webauthn.notAvailableBecauseUrlMissing'|trans }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if not userEnforcePasskey %}
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto mt-2 mt-md-0">
+                    <a href="{{ path('account_overview') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                        <i class="ti ti-chevron-left"></i>
+                        {{ 'account.backToOverview'|trans }}
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="modal modal-blur fade" tabindex="-1" id="add-key-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="ti ti-key"></i>
+                        {{ 'account.webauthn.manage.addKey.title'|trans }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'action.close'|trans }}"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="form-label required" for="key-name">{{ 'account.webauthn.manage.addKey.form.name'|trans }}</label>
+                        <input type="text" class="form-control" name="key_name" id="key-name" placeholder="{{ 'account.webauthn.manage.addKey.form.namePlaceholder'|trans }}" required maxlength="255">
+                        <div class="form-text mb-0 help-text">
+                            {{ 'account.webauthn.manage.addKey.form.nameHelp'|trans }}
+                        </div>
+
+                        <div class="d-none" id="form-error-key-name">
+                            <div class="invalid-feedback d-block">{{ 'account.webauthn.manage.addKey.form.nameEmpty'|trans }}</div>
+                        </div>
+
+                        <div class="alert alert-danger mb-0 mt-3 d-none" id="add-key-error-message">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal" tabindex="1000">{{ 'action.close'|trans }}</button>
+                    <button type="button" class="btn btn-primary" id="btn-start-add-key">
+                        <i class="ti ti-key"></i>
+                        {{ 'action.addPasskey'|trans }}
+                    </button>
+                </div>
+                <div class="modal-loader">
+                    <div class="loader-content">
+                        <div class="loader"></div>
+                        <span class="mt-5">{{ 'account.webauthn.manage.addKey.loading'|trans }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% if isWebauthnAvailable %}
+        {% cspscript %}
+            <script>
+                $(document).ready(function () {
+                    $('#add-key-modal').on('show.bs.modal', function () {
+                        $('#key-name').val('').removeClass('is-invalid');
+                        $('#form-error-key-name').addClass('d-none');
+                    });
+
+                    $('#key-name').keyup(function (ev) {
+                        if (ev.keyCode === 13) {
+                            $('#btn-start-add-key').click();
+                        }
+                    });
+
+                    $('#btn-start-add-key').click(async function () {
+                        let modalEl = $('#add-key-modal');
+                        let loaderEl = modalEl.find('.modal-loader');
+                        let inputEl = $('#key-name');
+
+                        let keyName = inputEl.val();
+                        if (keyName === '') {
+                            inputEl.addClass('is-invalid');
+                            $('#form-error-key-name').removeClass('d-none');
+                            return;
+                        }
+
+                        loaderEl.addClass('visible');
+                        await registerWebauthn(
+                            '{{ app.user.userIdentifier|e('js') }}',
+                            '{{ app.user.userIdentifier|e('js') }}',
+                            keyName,
+                            '{{ path('webauthn.controller.creation.request.add_passkey') }}',
+                            '{{ path('webauthn.controller.creation.response.add_passkey') }}',
+                            function (res) {
+                                window.location.reload();
+                            },
+                            function (error, errorCode, result) {
+                                if (typeof errorCode !== 'undefined' && errorCode === 401 && typeof result.authenticationRequired !== 'undefined' && result.authenticationRequired) {
+                                    window.location.reload();
+                                    return;
+                                }
+
+                                // @TODO: Show better error message
+                                $('#add-key-error-message').text(error).removeClass('d-none');
+                                loaderEl.removeClass('visible');
+                            }
+                        );
+                    });
+                })
+            </script>
+        {% endcspscript %}
+    {% endif %}
+{% endblock %}

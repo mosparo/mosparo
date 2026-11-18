@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-4 col-lg-auto d-flex justify-content-end">
                             <div class="navbar-nav header-navbar flex-row order-md-last">
-                                {% if is_granted('ROLE_ADMIN') %}
+                                {% if (not hideFunctions is defined or not hideFunctions) and is_granted('ROLE_ADMIN') %}
                                     {% if isUpdateAvailable %}
                                         <div class="nav-item pe-3">
                                             <a href="{{ path('administration_update_overview') }}" class="btn btn-outline-warning">
@@ -89,252 +89,254 @@
                     </div>
                 </header>
 
-                <div class="navbar-expand-lg">
-                    <div class="collapse navbar-collapse" id="navbar-menu">
-                        <div class="navbar navbar-light project-navbar">
-                            <div class="container-xl">
-                                <ul class="navbar-nav">
-                                    <div class="nav-item dropdown me-lg-2 project-dropdown">
-                                        <a href="#" class="btn dropdown-toggle project-dropdown-toggle" aria-label="Open user menu">
-                                            {% if activeProject and activeProject.status == 0 %}
-                                                <i class="ti ti-cube-3d-sphere"></i>
-                                            {% else %}
-                                                <i class="ti ti-cube"></i>
-                                            {% endif %}
-                                            <span class="project-name">
-                                                {% if activeProject %}
-                                                    {{ activeProject.name }}
+                {% if not hideFunctions is defined or not hideFunctions %}
+                    <div class="navbar-expand-lg">
+                        <div class="collapse navbar-collapse" id="navbar-menu">
+                            <div class="navbar navbar-light project-navbar">
+                                <div class="container-xl">
+                                    <ul class="navbar-nav">
+                                        <div class="nav-item dropdown me-lg-2 project-dropdown">
+                                            <a href="#" class="btn dropdown-toggle project-dropdown-toggle" aria-label="Open user menu">
+                                                {% if activeProject and activeProject.status == 0 %}
+                                                    <i class="ti ti-cube-3d-sphere"></i>
                                                 {% else %}
-                                                    {{ 'header.pleaseChoose'|trans }}
+                                                    <i class="ti ti-cube"></i>
                                                 {% endif %}
-                                            </span>
-                                        </a>
-                                        <div class="dropdown-menu project-dropdown-menu">
-                                            {% set projectTree = get_by_user_accessible_project_tree() %}
-                                            <div class="project-dropdown-top-part">
-                                                <div class="dropdown-item dropdown-item-with-input">
-                                                    <div class="input-group input-group-flat input-with-clear-button w-100">
-                                                        <span class="input-group-text">
-                                                            <i class="ti ti-search"></i>
-                                                        </span>
-                                                        <input type="text" class="form-control" name="q" placeholder="{{ 'project.search.placeholder'|trans }}" value="" autocomplete="off">
-                                                        <span class="input-group-text">
-                                                            <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="{{ 'form.clearField'|trans }}" data-bs-original-title="{{ 'form.clearField'|trans }}">
-                                                                <i class="ti ti-x"></i>
-                                                            </a>
-                                                        </span>
+                                                <span class="project-name">
+                                                    {% if activeProject %}
+                                                        {{ activeProject.name }}
+                                                    {% else %}
+                                                        {{ 'header.pleaseChoose'|trans }}
+                                                    {% endif %}
+                                                </span>
+                                            </a>
+                                            <div class="dropdown-menu project-dropdown-menu">
+                                                {% set projectTree = get_by_user_accessible_project_tree() %}
+                                                <div class="project-dropdown-top-part">
+                                                    <div class="dropdown-item dropdown-item-with-input">
+                                                        <div class="input-group input-group-flat input-with-clear-button w-100">
+                                                            <span class="input-group-text">
+                                                                <i class="ti ti-search"></i>
+                                                            </span>
+                                                            <input type="text" class="form-control" name="q" placeholder="{{ 'project.search.placeholder'|trans }}" value="" autocomplete="off">
+                                                            <span class="input-group-text">
+                                                                <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="{{ 'form.clearField'|trans }}" data-bs-original-title="{{ 'form.clearField'|trans }}">
+                                                                    <i class="ti ti-x"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="dropdown-projects-list">
-                                                {% macro project_group_tree_node(node) %}
-                                                    <li class="project-group-node">
-                                                        <div class="project-group-node-header">
-                                                            <div class="project-group-node-icon clickable">
-                                                                <i class="ti ti-chevron-right"></i>
+                                                <div class="dropdown-projects-list">
+                                                    {% macro project_group_tree_node(node) %}
+                                                        <li class="project-group-node">
+                                                            <div class="project-group-node-header">
+                                                                <div class="project-group-node-icon clickable">
+                                                                    <i class="ti ti-chevron-right"></i>
+                                                                </div>
+                                                                <div class="project-group-node-label clickable">
+                                                                    {{ node.projectGroup.name }}
+                                                                </div>
                                                             </div>
-                                                            <div class="project-group-node-label clickable">
-                                                                {{ node.projectGroup.name }}
-                                                            </div>
-                                                        </div>
 
-                                                        <ul class="project-group-node-children">
-                                                            {% if node.children|length or node.projects|length %}
-                                                                {% if node.children|length %}
-                                                                    {% for subNode in node.children %}
-                                                                        {{ _self.project_group_tree_node(subNode) }}
-                                                                    {% endfor %}
-                                                                {% endif %}
+                                                            <ul class="project-group-node-children">
+                                                                {% if node.children|length or node.projects|length %}
+                                                                    {% if node.children|length %}
+                                                                        {% for subNode in node.children %}
+                                                                            {{ _self.project_group_tree_node(subNode) }}
+                                                                        {% endfor %}
+                                                                    {% endif %}
 
-                                                                {% if node.projects|length %}
-                                                                    {% for project in node.projects %}
-                                                                        {{ _self.project_tree_node(project) }}
-                                                                    {% endfor %}
-                                                                {% endif %}
-                                                            {% else %}
-                                                                <li class="project-group-node disabled">
-                                                                    <div class="project-group-node-header text-muted">
-                                                                        <div class="project-group-node-icon">
-                                                                            <i class="ti ti-box-off"></i>
-                                                                        </div>
-                                                                        <div class="project-group-node-label">
-                                                                            {{ 'projectGroupSelector.noProjectsAvailable'|trans }}
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            {% endif %}
-                                                        </ul>
-                                                    </li>
-                                                {% endmacro %}
-
-                                                {% macro project_tree_node(project) %}
-                                                    <li class="project-group-node {% if project == activeProject %}active-project{% endif %}">
-                                                        <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="project-group-node-header">
-                                                            <div class="project-group-node-icon">
-                                                                {% if project == activeProject %}
-                                                                    <i class="ti ti-check"></i>
+                                                                    {% if node.projects|length %}
+                                                                        {% for project in node.projects %}
+                                                                            {{ _self.project_tree_node(project) }}
+                                                                        {% endfor %}
+                                                                    {% endif %}
                                                                 {% else %}
-                                                                    <i class="ti ti-cube"></i>
+                                                                    <li class="project-group-node disabled">
+                                                                        <div class="project-group-node-header text-muted">
+                                                                            <div class="project-group-node-icon">
+                                                                                <i class="ti ti-box-off"></i>
+                                                                            </div>
+                                                                            <div class="project-group-node-label">
+                                                                                {{ 'projectGroupSelector.noProjectsAvailable'|trans }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
                                                                 {% endif %}
+                                                            </ul>
+                                                        </li>
+                                                    {% endmacro %}
+
+                                                    {% macro project_tree_node(project) %}
+                                                        <li class="project-group-node {% if project == activeProject %}active-project{% endif %}">
+                                                            <a href="{{ path('project_dashboard', { '_projectId': project.id }) }}" class="project-group-node-header">
+                                                                <div class="project-group-node-icon">
+                                                                    {% if project == activeProject %}
+                                                                        <i class="ti ti-check"></i>
+                                                                    {% else %}
+                                                                        <i class="ti ti-cube"></i>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="project-group-node-label">
+                                                                    {{ project.name }}
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                    {% endmacro %}
+
+                                                    <ul class="project-group-tree">
+                                                        {% if projectTree %}
+                                                            {% for node in projectTree.children %}
+                                                                {{ _self.project_group_tree_node(node) }}
+                                                            {% endfor %}
+                                                            {% for project in projectTree.projects %}
+                                                                {{ _self.project_tree_node(project) }}
+                                                            {% endfor %}
+                                                        {% endif %}
+
+                                                        <li class="project-group-node no-search-results-found {% if projectTree %}d-none{% endif %}">
+                                                            <div class="project-group-node-info">
+                                                                <i class="ti ti-info-circle"></i>
+                                                                {{ 'header.noProjectsFound'|trans }}
                                                             </div>
-                                                            <div class="project-group-node-label">
-                                                                {{ project.name }}
-                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="project-dropdown-bottom-part">
+                                                    <a href="{{ path('project_list_root') }}" class="dropdown-item">
+                                                        <i class="ti ti-folders"></i>
+                                                        {{ 'project.action.manage'|trans }}
+                                                    </a>
+                                                    {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
+                                                        <a href="{{ path('project_create_root') }}" class="dropdown-item">
+                                                            <i class="ti ti-cube-plus"></i>
+                                                            {{ 'project.create.title'|trans }}
                                                         </a>
-                                                    </li>
-                                                {% endmacro %}
-
-                                                <ul class="project-group-tree">
-                                                    {% if projectTree %}
-                                                        {% for node in projectTree.children %}
-                                                            {{ _self.project_group_tree_node(node) }}
-                                                        {% endfor %}
-                                                        {% for project in projectTree.projects %}
-                                                            {{ _self.project_tree_node(project) }}
-                                                        {% endfor %}
+                                                        <a href="{{ path('project_group_create') }}" class="dropdown-item">
+                                                            <i class="ti ti-folder-plus"></i>
+                                                            {{ 'projectGroup.create.title'|trans }}
+                                                        </a>
                                                     {% endif %}
-
-                                                    <li class="project-group-node no-search-results-found {% if projectTree %}d-none{% endif %}">
-                                                        <div class="project-group-node-info">
-                                                            <i class="ti ti-info-circle"></i>
-                                                            {{ 'header.noProjectsFound'|trans }}
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="project-dropdown-bottom-part">
-                                                <a href="{{ path('project_list_root') }}" class="dropdown-item">
-                                                    <i class="ti ti-folders"></i>
-                                                    {{ 'project.action.manage'|trans }}
-                                                </a>
-                                                {% if is_granted('ROLE_CAN_CREATE_PROJECTS') %}
-                                                    <a href="{{ path('project_create_root') }}" class="dropdown-item">
-                                                        <i class="ti ti-cube-plus"></i>
-                                                        {{ 'project.create.title'|trans }}
-                                                    </a>
-                                                    <a href="{{ path('project_group_create') }}" class="dropdown-item">
-                                                        <i class="ti ti-folder-plus"></i>
-                                                        {{ 'projectGroup.create.title'|trans }}
-                                                    </a>
-                                                {% endif %}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {% if activeProject %}
-                                        <li class="nav-item {% if route == 'project_dashboard' %}active{% endif %}">
-                                            <a class="nav-link" href="{{ path('project_dashboard', {'_projectId': activeProject.id}) }}">
-                                                <i class="ti ti-dashboard"></i>
-                                                <span class="nav-link-title">
-                                                    {{ 'dashboard.title'|trans }}
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item {% if route starts with 'submission_' %}active{% endif %}">
-                                            <a class="nav-link" href="{{ path('submission_list', {'_projectId': activeProject.id}) }}">
-                                                <i class="ti ti-mail"></i>
-                                                <span class="nav-link-title">
-                                                    {{ 'submission.title'|trans }}
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item {% if route starts with 'rules_' and not (route starts with 'rule_package_') %}active{% endif %} dropdown">
-                                            <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
-                                                <i class="ti ti-tags"></i>
-                                                <span class="nav-link-title">
-                                                    {{ 'rules.title'|trans }}
-                                                </span>
-                                            </a>
-                                            <div class="dropdown-menu" data-bs-popper="none">
-                                                <a class="dropdown-item" href="{{ path('rules_submission_rule_list', {'_projectId': activeProject.id}) }}">
-                                                    <i class="ti ti-mail-search"></i>
-                                                    {{ 'rules.submissionRule.title'|trans }}
-                                                </a>
-                                                <a class="dropdown-item" href="{{ path('rules_field_rule_list', {'_projectId': activeProject.id}) }}">
-                                                    <i class="ti ti-input-search"></i>
-                                                    {{ 'rules.fieldRule.title'|trans }}
-                                                </a>
-                                            </div>
-                                        </li>
-
-                                        <li class="nav-item {% if route starts with 'rule_package_' %}active{% endif %}">
-                                            <a class="nav-link" href="{{ path('rule_package_list', {'_projectId': activeProject.id}) }}">
-                                                <i class="ti ti-stack"></i>
-                                                <span class="nav-link-title">
-                                                    {{ 'rulePackage.title'|trans }}
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        {% if isOwner %}
-                                            <li class="nav-item {% if route starts with 'settings_' %}active{% endif %} dropdown">
-                                                <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
-                                                    <i class="ti ti-settings"></i>
+                                        {% if activeProject %}
+                                            <li class="nav-item {% if route == 'project_dashboard' %}active{% endif %}">
+                                                <a class="nav-link" href="{{ path('project_dashboard', {'_projectId': activeProject.id}) }}">
+                                                    <i class="ti ti-dashboard"></i>
                                                     <span class="nav-link-title">
-                                                        {{ 'settings.title'|trans }}
+                                                        {{ 'dashboard.title'|trans }}
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li class="nav-item {% if route starts with 'submission_' %}active{% endif %}">
+                                                <a class="nav-link" href="{{ path('submission_list', {'_projectId': activeProject.id}) }}">
+                                                    <i class="ti ti-mail"></i>
+                                                    <span class="nav-link-title">
+                                                        {{ 'submission.title'|trans }}
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li class="nav-item {% if route starts with 'rules_' and not (route starts with 'rule_package_') %}active{% endif %} dropdown">
+                                                <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-tags"></i>
+                                                    <span class="nav-link-title">
+                                                        {{ 'rules.title'|trans }}
                                                     </span>
                                                 </a>
                                                 <div class="dropdown-menu" data-bs-popper="none">
-                                                    <a class="dropdown-item" href="{{ path('settings_general', {'_projectId': activeProject.id}) }}">
-                                                        <i class="ti ti-settings"></i>
-                                                        {{ 'settings.general.title'|trans }}
+                                                    <a class="dropdown-item" href="{{ path('rules_submission_rule_list', {'_projectId': activeProject.id}) }}">
+                                                        <i class="ti ti-mail-search"></i>
+                                                        {{ 'rules.submissionRule.title'|trans }}
                                                     </a>
-                                                    <a class="dropdown-item" href="{{ path('settings_advanced', {'_projectId': activeProject.id}) }}">
-                                                        <i class="ti ti-tools"></i>
-                                                        {{ 'settings.advanced.title'|trans }}
-                                                    </a>
-                                                    <a class="dropdown-item" href="{{ path('settings_member_list', {'_projectId': activeProject.id}) }}">
-                                                        <i class="ti ti-users"></i>
-                                                        {{ 'settings.projectMember.title'|trans }}
-                                                    </a>
-                                                    <a class="dropdown-item" href="{{ path('settings_security', {'_projectId': activeProject.id}) }}">
-                                                        <i class="ti ti-shield"></i>
-                                                        {{ 'settings.security.title'|trans }}
-                                                    </a>
-                                                    <a class="dropdown-item" href="{{ path('settings_design', {'_projectId': activeProject.id}) }}">
-                                                        <i class="ti ti-color-swatch"></i>
-                                                        {{ 'settings.design.title'|trans }}
-                                                    </a>
-                                                    <a class="dropdown-item" href="{{ path('settings_translation_list', {'_projectId': activeProject.id}) }}">
-                                                        <i class="ti ti-language"></i>
-                                                        {{ 'settings.translation.title'|trans }}
+                                                    <a class="dropdown-item" href="{{ path('rules_field_rule_list', {'_projectId': activeProject.id}) }}">
+                                                        <i class="ti ti-input-search"></i>
+                                                        {{ 'rules.fieldRule.title'|trans }}
                                                     </a>
                                                 </div>
                                             </li>
-                                        {% endif %}
 
-                                        <li class="nav-item {% if route starts with 'tools_' %}active{% endif %} dropdown">
-                                            <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
-                                                <i class="ti ti-tool"></i>
-                                                <span class="nav-link-title">
-                                                    {{ 'tools.title'|trans }}
-                                                </span>
-                                            </a>
-                                            <div class="dropdown-menu" data-bs-popper="none">
-                                                <a class="dropdown-item" href="{{ path('tools_rule_tester', {'_projectId': activeProject.id}) }}">
-                                                    <i class="ti ti-test-pipe"></i>
-                                                    {{ 'tools.ruleTester.title'|trans }}
+                                            <li class="nav-item {% if route starts with 'rule_package_' %}active{% endif %}">
+                                                <a class="nav-link" href="{{ path('rule_package_list', {'_projectId': activeProject.id}) }}">
+                                                    <i class="ti ti-stack"></i>
+                                                    <span class="nav-link-title">
+                                                        {{ 'rulePackage.title'|trans }}
+                                                    </span>
                                                 </a>
-                                                <a class="dropdown-item" href="{{ path('tools_export', {'_projectId': activeProject.id}) }}">
-                                                    <i class="ti ti-file-export"></i>
-                                                    {{ 'tools.export.title'|trans }}
-                                                </a>
-                                                {% if isOwner %}
-                                                    <a class="dropdown-item" href="{{ path('tools_import', {'_projectId': activeProject.id}) }}">
-                                                        <i class="ti ti-file-import"></i>
-                                                        {{ 'tools.import.title'|trans }}
+                                            </li>
+
+                                            {% if isOwner %}
+                                                <li class="nav-item {% if route starts with 'settings_' %}active{% endif %} dropdown">
+                                                    <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-settings"></i>
+                                                        <span class="nav-link-title">
+                                                            {{ 'settings.title'|trans }}
+                                                        </span>
                                                     </a>
-                                                {% endif %}
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                </ul>
+                                                    <div class="dropdown-menu" data-bs-popper="none">
+                                                        <a class="dropdown-item" href="{{ path('settings_general', {'_projectId': activeProject.id}) }}">
+                                                            <i class="ti ti-settings"></i>
+                                                            {{ 'settings.general.title'|trans }}
+                                                        </a>
+                                                        <a class="dropdown-item" href="{{ path('settings_advanced', {'_projectId': activeProject.id}) }}">
+                                                            <i class="ti ti-tools"></i>
+                                                            {{ 'settings.advanced.title'|trans }}
+                                                        </a>
+                                                        <a class="dropdown-item" href="{{ path('settings_member_list', {'_projectId': activeProject.id}) }}">
+                                                            <i class="ti ti-users"></i>
+                                                            {{ 'settings.projectMember.title'|trans }}
+                                                        </a>
+                                                        <a class="dropdown-item" href="{{ path('settings_security', {'_projectId': activeProject.id}) }}">
+                                                            <i class="ti ti-shield"></i>
+                                                            {{ 'settings.security.title'|trans }}
+                                                        </a>
+                                                        <a class="dropdown-item" href="{{ path('settings_design', {'_projectId': activeProject.id}) }}">
+                                                            <i class="ti ti-color-swatch"></i>
+                                                            {{ 'settings.design.title'|trans }}
+                                                        </a>
+                                                        <a class="dropdown-item" href="{{ path('settings_translation_list', {'_projectId': activeProject.id}) }}">
+                                                            <i class="ti ti-language"></i>
+                                                            {{ 'settings.translation.title'|trans }}
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+
+                                            <li class="nav-item {% if route starts with 'tools_' %}active{% endif %} dropdown">
+                                                <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-tool"></i>
+                                                    <span class="nav-link-title">
+                                                        {{ 'tools.title'|trans }}
+                                                    </span>
+                                                </a>
+                                                <div class="dropdown-menu" data-bs-popper="none">
+                                                    <a class="dropdown-item" href="{{ path('tools_rule_tester', {'_projectId': activeProject.id}) }}">
+                                                        <i class="ti ti-test-pipe"></i>
+                                                        {{ 'tools.ruleTester.title'|trans }}
+                                                    </a>
+                                                    <a class="dropdown-item" href="{{ path('tools_export', {'_projectId': activeProject.id}) }}">
+                                                        <i class="ti ti-file-export"></i>
+                                                        {{ 'tools.export.title'|trans }}
+                                                    </a>
+                                                    {% if isOwner %}
+                                                        <a class="dropdown-item" href="{{ path('tools_import', {'_projectId': activeProject.id}) }}">
+                                                            <i class="ti ti-file-import"></i>
+                                                            {{ 'tools.import.title'|trans }}
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
 
                 <div class="page-wrapper">
                     {% block pageContainer %}

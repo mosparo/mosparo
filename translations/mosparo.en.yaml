@@ -626,9 +626,9 @@ rulePackage:
       progress: Progress
 
     status:
-      pleaseWait: Please wait...
-      importing: Importing...
-      cleanup: Cleanup...
+      pleaseWait: Please wait…
+      importing: Importing…
+      cleanup: Cleanup…
       completed: Completed
       upToDate: Up-to-date
       tooSoon: Too soon
@@ -2092,7 +2092,52 @@ account:
       successfullyDisabled: Two factor authentication was successfully disabled for your account.
 
     error:
-      verificationFailed: The verification of the two factor authentication failed. Please repeat the process.
+      verificationFailed: The verification of the two-factor authentication failed. Please repeat the process.
+
+  webauthn:
+    title: Passkey
+    description: Access your account with your personal passkey.
+
+    action:
+      configure: Configure
+      setup: Set up passkey
+
+    setup:
+      title: Set up passkey authentication
+      intro: Passkeys are a modern and secure method to authenticate yourself with your account. Instead of using a password, you need your key to authenticate.
+      enforced: This mosparo installation enforces secure authentication with a passkey. To use your account, you need to configure at least one passkey.
+      hintPassword: To secure your account, your account's password will be removed as soon as you've configured your first passkey.
+
+    manage:
+      intro: You can access your account using the passkeys listed below. You can add as many passkeys as you want.
+
+      actions:
+        addAdditionalKey: Add additional passkey
+
+      list:
+        name: Name
+        id: 'ID:'
+
+      addKey:
+        title: Add passkey
+        loading: Please wait… Preparing passkey…
+
+        form:
+          name: Name of the passkey
+          nameHelp: This name is only relevant for you to identify the key. It can be anything that identifies the key for you.
+          namePlaceholder: My access key
+          nameEmpty: Please specify a name for your passkey.
+
+      deleteKey:
+        title: Delete passkey %keyName%
+        confirm: Do you really want to delete the passkey %keyName%?
+        infoUndo: You can no longer log in to mosparo with this key afterward. You cannot undo this process.
+        infoLastPasskey: Since this is your last passkey, your account will be switched to password-based authentication. Please specify a new password in the form afterwards.
+        infoLastPasskeyEnforced: Since this is your last passkey and this mosparo installation is enforcing passkeys, you have to configure a new one after deleting this one before you can continue with mosparo.
+
+      message:
+        keySuccessfullyAdded: The new passkey was added successfully. You can now log in with this new passkey.
+        keySuccessfullyDeleted: The passkey was successfully deleted. You can no longer log in with this passkey.
 
 
 # Security
@@ -2102,6 +2147,7 @@ security:
     youAreLoggedIn: You are logged in as %username%.
     emailLabel: Email address
     passwordLabel: Password
+    loading: Authenticating… Please wait…
 
   logout:
     title: Logout
@@ -2111,7 +2157,12 @@ security:
 
   twoFactor:
     title: Two factor authentication
-    intro: Please enter the code from your two factor authentication app.
+    intro: Please enter the code from your two-factor authentication app.
+
+  reauthentication:
+    title: Reauthentication
+    intro: You want to execute an important functionality. Because you logged in too long ago, please reauthenticate yourself to ensure that you are the account owner.
+    loading: Starting authentication… Please wait…
 
   noAccess:
     title: No access

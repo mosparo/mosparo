@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@fontsource/inter": "^5.2.8",
+        "@simplewebauthn/browser": "^13.3.0",
         "@tabler/core": "^1.4.0",
         "@tabler/icons-webfont": "^3.44.0",
         "apexcharts": "^4.7.0",

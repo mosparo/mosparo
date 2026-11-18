@@ -30,6 +30,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SecurityController extends AbstractController
 {
+    use TargetPathTrait;
+
     #[Route('/login', name: 'security_login', condition: 'ip_on_allow_list_routing(request.getClientIp(), env("backend_access_ip_allow_list"))')]
     public function login(Request $request, AuthenticationUtils $authenticationUtils, OidcManager $oidcManager, ConfigHelper $configHelper): Response
     {
@@ -53,11 +55,11 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
             'oidcClients' => $oidcManager->getEnabledClients(),
+            'isWebauthnAvailable' => ($configHelper->getEnvironmentConfigValue('mosparo_webauthn_rp_id') !== false),
         ]);
     }
 
@@ -105,5 +107,67 @@ class SecurityController extends AbstractController
     public function logout()
     {
         throw new LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    #[Route('/reauthentication', name: 'security_reauthentication')]
+    public function reauthentication(
+        Request $request,
+        TranslatorInterface $translator,
+        #[Autowire(service: 'mosparo.login_rate_limiter')] PeekableRequestRateLimiterInterface $loginRateLimiter
+    ) {
+        $user = $this->getUser();
+        if (!($user instanceof User) || $user->getAuthSource() !== AuthSource::LOCAL) {
+            return $this->redirectToRoute('account_overview');
+        }
+
+        $formView = null;
+        if ($user->getAuthMethod() === 'password') {
+            $form = $this->createFormBuilder([])
+                ->add('password', PasswordType::class, [
+                    'constraints' => [
+                        new UserPassword()
+                    ],
+                    'attr' => [
+                        'autocomplete' => 'current-password'
+                    ]
+                ])
+                ->getForm()
+            ;
+
+            $form->handleRequest($request);
+            if ($form->isSubmitted()) {
+                // Same counter as the login form: identified by username + IP address
+                $request->attributes->set(SecurityRequestAttributes::LAST_USERNAME, $user->getUserIdentifier());
+
+                $limit = $loginRateLimiter->peek($request);
+                if (!$limit->isAccepted() || $limit->getRemainingTokens() === 0) {
+                    // Too many attempts: block, regardless of whether the password is correct
+                    $exception = new TooManyLoginAttemptsAuthenticationException(ceil(($limit->getRetryAfter()->getTimestamp() - time()) / 60));
+                    $form->addError(new FormError($translator->trans($exception->getMessageKey(), $exception->getMessageData(), 'security')));
+                } else if (!$form->isValid()) {
+                    // Wrong password: count the failed attempt
+                    $loginRateLimiter->consume($request);
+                }
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $request->getSession()->set(RecentlyAuthenticatedVoter::SESSION_KEY, new DateTime());
+
+                    $targetPath = $this->getTargetPath($request->getSession(), 'main');
+                    if ($targetPath) {
+                        $this->removeTargetPath($request->getSession(), 'main');
+                    } else {
+                        $targetPath = $this->generateUrl('account_overview');
+                    }
+
+                    return new RedirectResponse($targetPath);
+                }
+            }
+
+            $formView = $form->createView();
+        }
+
+        return $this->render('security/reauthentication.html.twig', [
+            'form' => $formView,
+        ]);
     }
 }

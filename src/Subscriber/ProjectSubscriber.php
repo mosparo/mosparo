@@ -140,7 +140,6 @@ class ProjectSubscriber implements EventSubscriberInterface
                         'receivedHmacHash' => $requestSignature,
                         'payload' => $apiEndpoint . $requestHelper->toJson($requestData),
                     ];
-                    dump($apiEndpoint . $requestHelper->toJson($requestData));
                 }
 
                 $event->setResponse(new JsonResponse(['error' => true, 'errorMessage' => 'Request invalid.'] + $debugInformation, 400));
@@ -151,7 +150,7 @@ class ProjectSubscriber implements EventSubscriberInterface
 
             // Ignore all requests for general routes like project management, account or administration
             $abortRequest = true;
-            if (preg_match('/^(project|account|security|password|administration|cron_jobs)_/', $activeRoute) && $activeRoute !== 'project_dashboard') {
+            if (preg_match('/^(project|account|security|password|administration|cron_jobs)_|(webauthn)./', $activeRoute) && $activeRoute !== 'project_dashboard') {
                 $abortRequest = false;
             }
 

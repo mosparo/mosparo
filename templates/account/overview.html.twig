@@ -34,19 +34,33 @@
                 <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
-                            <a href="{{ path('account_change_password') }}">
+                            {% if isLocalAndPassword %}
+                                <a href="{{ path('account_change_password') }}">
+                            {% endif %}
                                 <img src="{{ asset(get_illustration_path('password.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
-                            </a>
+                            {% if isLocalAndPassword %}
+                                </a>
+                            {% endif %}
                         </div>
                         <p class="empty-title">{{ 'account.changePassword.title'|trans }}</p>
                         <p class="empty-subtitle text-muted">
                             {{ 'account.changePassword.description'|trans }}
                         </p>
                         <div class="empty-action">
-                            <a href="{{ path('account_change_password') }}" class="btn btn-primary">
-                                <i class="ti ti-key"></i>
-                                {{ 'account.changePassword.title'|trans }}
-                            </a>
+                            {% if isLocalAndPassword %}
+                                <a href="{{ path('account_change_password') }}" class="btn btn-primary">
+                                    <i class="ti ti-circle-asterisk"></i>
+                                    {{ 'account.changePassword.title'|trans }}
+                                </a>
+                            {% elseif isLocal %}
+                                <div class="alert alert-info mb-0">
+                                    {{ 'account.message.accountHasPasskeysSetUp'|trans }}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info mb-0">
+                                    {{ 'account.message.authSourceIsNotLocal'|trans }}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -55,19 +69,64 @@
                 <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
-                            <a href="{{ path('account_two_factor_status') }}">
+                            {% if isLocalAndPassword %}
+                                <a href="{{ path('account_two_factor_status') }}">
+                            {% endif %}
                                 <img src="{{ asset(get_illustration_path('two-factor.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
-                            </a>
+                            {% if isLocalAndPassword %}
+                                </a>
+                            {% endif %}
                         </div>
                         <p class="empty-title">{{ 'account.twoFactor.title'|trans }}</p>
                         <p class="empty-subtitle text-muted">
                             {{ 'account.twoFactor.description'|trans }}
                         </p>
                         <div class="empty-action">
-                            <a href="{{ path('account_two_factor_status') }}" class="btn btn-primary">
-                                <i class="ti ti-2fa"></i>
-                                {{ 'account.twoFactor.action.configure'|trans }}
-                            </a>
+                            {% if isLocalAndPassword %}
+                                <a href="{{ path('account_two_factor_status') }}" class="btn btn-primary">
+                                    <i class="ti ti-2fa"></i>
+                                    {{ 'account.twoFactor.action.configure'|trans }}
+                                </a>
+                            {% elseif isLocal %}
+                                <div class="alert alert-info mb-0">
+                                    {{ 'account.message.accountHasPasskeysSetUp'|trans }}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info mb-0">
+                                    {{ 'account.message.authSourceIsNotLocal'|trans }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="empty">
+                        <div class="empty-img">
+                            {% if isLocal %}
+                                <a href="{{ path('account_webauthn_list') }}">
+                            {% endif %}
+                                <img src="{{ asset(get_illustration_path('webauthn.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
+                            {% if isLocal %}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <p class="empty-title">{{ 'account.webauthn.title'|trans }}</p>
+                        <p class="empty-subtitle text-muted">
+                            {{ 'account.webauthn.description'|trans }}
+                        </p>
+                        <div class="empty-action">
+                            {% if isLocal %}
+                                <a href="{{ path('account_webauthn_list') }}" class="btn btn-primary">
+                                    <i class="ti ti-key"></i>
+                                    {{ 'account.webauthn.action.configure'|trans }}
+                                </a>
+                            {% else %}
+                                <div class="alert alert-info mb-0">
+                                    {{ 'account.message.authSourceIsNotLocal'|trans }}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

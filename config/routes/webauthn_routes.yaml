@@ -1,0 +1,4 @@
+webauthn_routes:
+    resource: .
+    type: webauthn
+    condition: "env('mosparo_webauthn_rp_id') != ''"

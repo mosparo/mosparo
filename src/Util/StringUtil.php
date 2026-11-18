@@ -8,4 +8,9 @@ class StringUtil
     {
         return substr($string, 0, 4) . str_repeat('*', strlen($string) - 8) . substr($string, -4);
     }
+
+    public static function toHex(string $string): string
+    {
+        return bin2hex($string);
+    }
 }

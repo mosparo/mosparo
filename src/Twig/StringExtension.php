@@ -12,6 +12,7 @@ class StringExtension extends AbstractExtension
     {
         return [
             new TwigFilter('obfuscate', [StringUtil::class, 'obfuscateString']),
+            new TwigFilter('toHex', [StringUtil::class, 'toHex']),
         ];
     }
 }

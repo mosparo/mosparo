@@ -19,4 +19,5 @@ return [
     SymfonyBundles\JsonRequestBundle\JsonRequestBundle::class => ['all' => true],
     Nelmio\SecurityBundle\NelmioSecurityBundle::class => ['all' => true],
     Drenso\OidcBundle\DrensoOidcBundle::class => ['all' => true],
+    Webauthn\Bundle\WebauthnBundle::class => ['all' => true],
 ];

@@ -1,0 +1,72 @@
+{% extends 'small.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'security.reauthentication.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block small_body %}
+    <h2 class="card-title text-center mb-4">{{ 'security.reauthentication.title'|trans }}</h2>
+
+    <p>{{ 'security.reauthentication.intro'|trans }}</p>
+
+    {% if form %}
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.password) }}
+
+            <div class="form-footer">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-lock-open-2"></i>
+                    {{ 'security.reauthentication.button'|trans }}
+                </button>
+            </div>
+        {{ form_end(form) }}
+    {% else %}
+        <div class="card-loader">
+            <div class="loader-content">
+                <div class="loader"></div>
+                <span class="mt-5">{{ 'security.reauthentication.loading'|trans }}</span>
+            </div>
+        </div>
+
+        <div class="alert alert-danger mb-0 mt-3 d-none" id="reauthentication-error-message"></div>
+
+        <div class="form-footer">
+            <button type="button" class="btn btn-primary w-100" id="reauthenticate-with-passkey">
+                <i class="ti ti-lock-open-2"></i>
+                {{ 'action.authenticateWithPasskey'|trans }}
+            </button>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $('#reauthenticate-with-passkey').click(async function () {
+                let loaderEl = $('.card-loader');
+                loaderEl.addClass('visible');
+
+                await authenticateWebauthn(
+                    false,
+                    '{{ app.user.userIdentifier|e('js') }}',
+                    '{{ path('webauthn.controller.request.request.reauthenticate') }}',
+                    '{{ path('webauthn.controller.request.response.reauthenticate') }}',
+                    function () {
+
+                    },
+                    function (res) {
+                        window.location.href = res.redirectUrl;
+                    },
+                    function (error) {
+                        $('#reauthentication-error-message').text(error).removeClass('d-none');
+                        loaderEl.removeClass('visible');
+                    }
+                );
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

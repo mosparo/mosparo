@@ -1,0 +1,31 @@
+# Please see the following page for more information: https://webauthn-doc.spomky-labs.com/the-webauthn-server/the-symfony-way#configuration
+
+webauthn:
+    credential_repository: 'Mosparo\Repository\WebauthnCredentialRepository'
+    user_repository: 'Mosparo\Repository\WebauthnUserEntityRepository'
+    creation_profiles:
+        default:
+            rp:
+                name: '%env(mosparo_name)%'
+                id: '%env(mosparo_webauthn_rp_id)%'
+            authenticator_selection_criteria:
+                user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED
+    request_profiles:
+        default:
+            rp_id: '%env(mosparo_webauthn_rp_id)%'
+            user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED
+    controllers:
+        enabled: true
+        creation:
+            add_passkey:
+                options_path: '/account/webauthn/register/options'
+                result_path: '/account/webauthn/register/result'
+                user_entity_guesser: Mosparo\Security\Webauthn\CurrentUserEntityGuesser
+                hide_existing_credentials: false
+        request:
+            reauthenticate:
+                options_path: '/reauthentication/webauthn/options'
+                result_path: '/reauthentication/webauthn/result'
+                options_handler: Mosparo\Security\Webauthn\WebauthnHandler
+                success_handler: Mosparo\Security\Webauthn\WebauthnHandler
+

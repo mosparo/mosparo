@@ -2,9 +2,11 @@
 
 namespace Mosparo\Subscriber;
 
+use DateTime;
 use Mosparo\Entity\User;
 use Mosparo\Helper\InterfaceHelper;
 use Mosparo\Helper\LocaleHelper;
+use Mosparo\Security\Voter\RecentlyAuthenticatedVoter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
@@ -37,5 +39,8 @@ class AuthenticationSubscriber implements EventSubscriberInterface
 
         $this->localeHelper->storeUserSettingsInSession($request->getSession(), $event->getUser());
         $this->interfaceHelper->storeUserSettingsInSession($request->getSession(), $event->getUser());
+
+        // Set the authentication timestamp
+        $request->getSession()->set(RecentlyAuthenticatedVoter::SESSION_KEY, new DateTime());
     }
 }

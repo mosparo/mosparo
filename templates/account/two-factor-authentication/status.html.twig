@@ -4,6 +4,7 @@
 
 {% block documentTitle %}{{ 'account.twoFactor.title'|trans }} - {{ parent() }}{% endblock %}
 {% block pageTitle %}{% endblock %}
+{% block pageFlashes %}{% endblock %}
 
 {% block pageBody %}
     <div class="container-tight pb-4">
@@ -18,6 +19,8 @@
                 <div class="card card-md">
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">{{ 'account.twoFactor.title'|trans }}</h2>
+
+                        {% include 'snippets/flashes.html.twig' %}
 
                         <div class="alert alert-success">
                             {{ 'account.twoFactor.status.intro'|trans }}

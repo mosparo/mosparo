@@ -1,3 +1,5 @@
+@use '@tabler/core/scss/tabler';
+
 .navbar-brand {
     .navbar-brand-image {
         height: 1.6rem;
@@ -8,8 +10,13 @@
 .dropdown-item {
     .ti:not(.ti-x) {
         font-size: 1.25rem;
-        margin-right: 0.5rem;
         margin-top: -2px;
+    }
+}
+
+.nav-link:not(.avatar-link) {
+    .ti:not(.ti-x) {
+        margin-right: 0.5rem;
     }
 }
 
@@ -17,7 +24,7 @@
     .nav-link {
         &:hover,
         &:focus {
-            background-color: var(--tblr-gray-100);
+            background-color: var(--gray-100);
         }
     }
 }
@@ -28,7 +35,7 @@ body[data-bs-theme=dark] [data-bs-theme=light] {
         .nav-link {
             &:hover,
             &:focus {
-                background-color: var(--tblr-gray-700);
+                background-color: var(--gray-700);
             }
         }
     }
@@ -52,7 +59,7 @@ body[data-bs-theme=dark] [data-bs-theme=light] {
         }
 
         .nav-link.active {
-            @include media-breakpoint-up(sm) {
+            @include tabler.media-breakpoint-up(sm) {
                 .visible-when-active {
                     display: block;
                 }
@@ -68,10 +75,10 @@ body[data-bs-theme=dark] [data-bs-theme=light] {
             .nav-link {
                 &.active,
                 &:active {
-                    color: var(--tblr-nav-tabs-link-active-color);
+                    color: var(--nav-tabs-link-active-color);
                 }
                 &:hover {
-                    color: var(--tblr-nav-link-hover-color);
+                    color: var(--nav-link-hover-color);
                 }
             }
         }
@@ -84,7 +91,7 @@ body[data-bs-theme=dark] [data-bs-theme=light] {
     }
 
     &.avatar-sm {
-        --tblr-avatar-size: 2.25rem;
+        --avatar-size: 2.25rem;
     }
 }
 

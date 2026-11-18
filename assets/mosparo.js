@@ -35,3 +35,4 @@ import './js/grid-table.js';
 import './js/project.js';
 import './js/chart.js';
 import './js/password.js';
+import './js/webauthn.js';

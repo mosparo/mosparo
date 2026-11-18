@@ -3,12 +3,7 @@
 namespace Mosparo\Controller\Account;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\RoundBlockSizeMode;
-use Endroid\QrCode\Writer\PngWriter;
-use Mosparo\Exception;
+use Mosparo\Enum\AuthSource;
 use Mosparo\Util\TokenGenerator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,6 +32,10 @@ class TwoFactorController extends AbstractController
         /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
 
+        if ($user->getAuthSource() !== AuthSource::LOCAL || $user->getAuthMethod() !== 'password') {
+            return $this->redirectToRoute('account_overview');
+        }
+
         if (!$user->isGoogleAuthenticatorEnabled()) {
             return $this->redirectToRoute('account_two_factor_start');
         }
@@ -51,6 +50,10 @@ class TwoFactorController extends AbstractController
         /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
 
+        if ($user->getAuthSource() !== AuthSource::LOCAL || $user->getAuthMethod() !== 'password') {
+            return $this->redirectToRoute('account_overview');
+        }
+
         if ($user->isGoogleAuthenticatorEnabled() && $request->attributes->get('_route') !== 'account_two_factor_start_force') {
             return $this->redirectToRoute('account_two_factor_status');
         } else {
@@ -61,47 +64,26 @@ class TwoFactorController extends AbstractController
             $form->get('secret')->setData($secret);
             $request->getSession()->set('twoFactorSecret', $secret);
 
-            $content = $googleAuthenticator->getQRContent($user);
+            $qrCodeContent = $googleAuthenticator->getQRContent($user);
 
             return $this->render('account/two-factor-authentication/start.html.twig', [
                 'form' => $form->createView(),
                 'secret' => $secret,
+                'qrCodeContent' => $qrCodeContent,
             ]);
         }
-    }
-
-    #[Route('/qrcode', name: 'account_two_factor_qrcode')]
-    public function qrcode(Request $request, GoogleAuthenticatorInterface $googleAuthenticator)
-    {
-        /** @var \Mosparo\Entity\User $user */
-        $user = $this->getUser();
-        $user->setGoogleAuthenticatorSecret($request->getSession()->get('twoFactorSecret', ''));
-
-        if (!$user->getGoogleAuthenticatorSecret()) {
-            throw new Exception('No secret found in session. QR code cannot be rendered.');
-        }
-
-        // Remove the secret from the session
-        $request->getSession()->remove('twoFactorSecret');
-
-        // Generate the QR code image
-        $content = $googleAuthenticator->getQRContent($user);
-        $qrCode = $this->buildQrCodeDataUri($content);
-
-        $response = new Response($qrCode);
-
-        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'qrcode.png');
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', 'image/png');
-
-        $request->getSession()->remove('qrCode');
-
-        return $response;
     }
 
     #[Route('/verify', name: 'account_two_factor_verify')]
     public function verify(Request $request): Response
     {
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+
+        if ($user->getAuthSource() !== AuthSource::LOCAL || $user->getAuthMethod() !== 'password') {
+            return $this->redirectToRoute('account_overview');
+        }
+
         $form = $this->createQrCodeForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -119,6 +101,13 @@ class TwoFactorController extends AbstractController
     #[Route('/backup-codes', name: 'account_two_factor_backup_codes')]
     public function backupCodes(Request $request, EntityManagerInterface $entityManager, GoogleAuthenticatorInterface $googleAuthenticator): Response
     {
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+
+        if ($user->getAuthSource() !== AuthSource::LOCAL || $user->getAuthMethod() !== 'password') {
+            return $this->redirectToRoute('account_overview');
+        }
+
         $form = $this->createVerifyForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -161,6 +150,13 @@ class TwoFactorController extends AbstractController
     #[Route('/reset-backup-codes', name: 'account_two_factor_reset_backup_codes')]
     public function resetBackupCodes(EntityManagerInterface $entityManager): Response
     {
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+
+        if ($user->getAuthSource() !== AuthSource::LOCAL || $user->getAuthMethod() !== 'password') {
+            return $this->redirectToRoute('account_overview');
+        }
+
         // Generate the backup codes
         $backupCodes = $this->generateBackupCodes();
 
@@ -177,7 +173,13 @@ class TwoFactorController extends AbstractController
     {
         /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
+
+        if ($user->getAuthSource() !== AuthSource::LOCAL || $user->getAuthMethod() !== 'password') {
+            return $this->redirectToRoute('account_overview');
+        }
+
         $user->setGoogleAuthenticatorSecret(null);
+        $user->resetBackupCodes();
 
         $entityManager->flush();
 
@@ -231,21 +233,5 @@ class TwoFactorController extends AbstractController
             ]])
             ->add('secret', HiddenType::class)
             ->getForm();
-    }
-
-    protected function buildQrCodeDataUri(string $qrCodeContent): string
-    {
-        $result = Builder::create()
-            ->writer(new PngWriter())
-            ->writerOptions([])
-            ->data($qrCodeContent)
-            ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
-            ->size(300)
-            ->margin(0)
-            ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
-            ->build();
-
-        return $result->getString();
     }
 }

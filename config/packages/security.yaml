@@ -63,10 +63,18 @@ security:
             two_factor:
                 auth_form_path: 2fa_login
                 check_path: 2fa_login_check
-
             mosparooidc:
                 user_identifier_property: sub
                 check_path: login_oidc_check
+            webauthn:
+                success_handler: Mosparo\Security\Webauthn\WebauthnHandler
+                authentication:
+                    enabled: true
+                    profile: default
+                    options_builder: Mosparo\Security\Webauthn\AuthenticationOptionsBuilder
+                    routes:
+                        options_path: /webauthn/options
+                        result_path: /webauthn/verify
             login_throttling:
                 limiter: mosparo.login_rate_limiter
 
@@ -74,7 +82,9 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/login_check, roles: PUBLIC_ACCESS }
+        - { path: ^/webauthn, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/oidc, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
+        - { path: ^/reauthentication, roles: ROLE_USER, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/logout, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/password, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
@@ -82,6 +92,7 @@ security:
         - { path: ^/cron-jobs/execute, roles: PUBLIC_ACCESS }
         - { path: ^/project/create, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" } # Covers also the wizard
         - { path: ^/administration, roles: ROLE_ADMIN, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
+        - { path: ^/account/webauthn, roles: ROLE_USER, allow_if: "is_granted('RECENTLY_AUTHENTICATED') and ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/, roles: ROLE_USER, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
 
     role_hierarchy:

@@ -20,6 +20,15 @@
             {% include 'snippets/flashes.html.twig' %}
         {% endblock %}
 
+        <div class="card-loader">
+            <div class="loader-content">
+                <div class="loader"></div>
+                <span class="mt-5">{{ 'security.login.loading'|trans }}</span>
+            </div>
+        </div>
+
+        <div class="alert alert-danger mt-3 d-none" id="authentication-error-message"></div>
+
         {% if app.user %}
             <div class="alert alert-info">
                 <div>
@@ -30,7 +39,7 @@
 
         <div class="mb-3">
             <label class="form-label required" for="field-email">{{ 'security.login.emailLabel'|trans }}</label>
-            <input type="email" id="field-email" name="_username" class="form-control" autofocus>
+            <input type="email" id="field-email" name="_username" class="form-control" autofocus autocomplete="username webauthn">
         </div>
         <div class="mb-2">
             <label class="form-label required" for="field-password">
@@ -43,6 +52,7 @@
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <input type="hidden" id="assertion" name="_assertion">
 
         <div class="form-footer">
             <button type="submit" class="btn btn-primary w-100">
@@ -59,5 +69,62 @@
                 {{ 'action.authenticateWithOidc'|trans({ '%name%': client.name }) }}
             </a>
         {% endfor %}
+
+        {% if isWebauthnAvailable %}
+            <button type="button" id="login-with-passkey" class="btn btn-yellow w-100 mt-3 d-none">
+                <i class="ti ti-key"></i>
+                {{ 'action.authenticateWithPasskey'|trans }}
+            </button>
+        {% endif %}
     </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% if isWebauthnAvailable %}
+        {% cspscript %}
+            <script>
+                async function startWebauthnAuthentication(lazy)
+                {
+                    let loaderEl = $('.card-loader');
+                    let started = false;
+
+                    await authenticateWebauthn(
+                        lazy,
+                        null,
+                        '{{ path('webauthn.controller.security.main.request.options') }}',
+                        '{{ path('webauthn.controller.security.main.request.result') }}',
+                        function () {
+                            loaderEl.addClass('visible');
+                            started = true;
+                        },
+                        function (res) {
+                            window.location.href = res.redirectUrl;
+                        },
+                        function (error) {
+                            $('#authentication-error-message').text(error).removeClass('d-none');
+                            loaderEl.removeClass('visible');
+
+                            if (lazy && started) {
+                                startWebauthnAuthentication(lazy);
+                            }
+                        }
+                    );
+                }
+
+                $(document).ready(async function () {
+                    if (await canUseWebauthnAutofill()) {
+                        await startWebauthnAuthentication(true);
+                    } else {
+                        $('#login-with-passkey').removeClass('d-none');
+                    }
+                });
+
+                $('#login-with-passkey').click(async function() {
+                    await startWebauthnAuthentication(false);
+                });
+            </script>
+        {% endcspscript %}
+    {% endif %}
 {% endblock %}

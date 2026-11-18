@@ -284,3 +284,5 @@ services:
     mosparo.security.oidc.authenticator:
         class: Mosparo\Security\Oidc\OidcAuthenticator
         abstract: true
+
+    Mosparo\Repository\WebauthnCredentialRepository: ~

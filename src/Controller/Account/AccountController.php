@@ -3,9 +3,11 @@
 namespace Mosparo\Controller\Account;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Enum\AuthSource;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Helper\InterfaceHelper;
 use Mosparo\Helper\LocaleHelper;
+use Mosparo\Helper\PasswordHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -41,7 +43,13 @@ class AccountController extends AbstractController
     #[Route('/', name: 'account_overview')]
     public function overview(): Response
     {
-        return $this->render('account/overview.html.twig');
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+
+        return $this->render('account/overview.html.twig', [
+            'isLocalAndPassword' => ($user->getAuthSource() === AuthSource::LOCAL && $user->getAuthMethod() === 'password'),
+            'isLocal' => ($user->getAuthSource() === AuthSource::LOCAL),
+        ]);
     }
 
     #[Route('/settings', name: 'account_settings')]
@@ -49,6 +57,7 @@ class AccountController extends AbstractController
     {
         /** @var \Mosparo\Entity\User $user */
         $user = $this->getUser();
+
         $config = [
             'locale' => $user->getConfigValue('locale'),
             'dateFormat' => $user->getConfigValue('dateFormat'),
@@ -115,23 +124,37 @@ class AccountController extends AbstractController
     }
 
     #[Route('/change-password', name: 'account_change_password')]
-    public function changePassword(Request $request, EntityManagerInterface $entityManager): Response
+    public function changePassword(Request $request, EntityManagerInterface $entityManager, PasswordHelper $passwordHelper): Response
     {
-        $form = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
-            ->add('oldPassword', PasswordType::class, [
-                'label' => 'account.changePassword.form.oldPassword',
-                'constraints' => [
-                    new UserPassword()
-                ],
-                'attr' => [
-                    'autocomplete' => 'off'
-                ]
-            ])
+        /** @var \Mosparo\Entity\User $user */
+        $user = $this->getUser();
+
+        if ($user->getAuthSource() !== AuthSource::LOCAL || $user->getAuthMethod() !== 'password') {
+            return $this->redirectToRoute('account_overview');
+        }
+
+        $builder = $this->createFormBuilder([], ['translation_domain' => 'mosparo'])
             ->add('newPassword', PasswordFormType::class, [
                 'mapped' => false,
                 'is_new_password' => true,
             ])
-            ->getForm();
+        ;
+
+        if ($user->getPassword() !== null) {
+            $builder
+                ->add('oldPassword', PasswordType::class, [
+                    'label' => 'account.changePassword.form.oldPassword',
+                    'constraints' => [
+                        new UserPassword()
+                    ],
+                    'attr' => [
+                        'autocomplete' => 'current-password'
+                    ]
+                ])
+            ;
+        }
+
+        $form = $builder->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -162,6 +185,8 @@ class AccountController extends AbstractController
 
         return $this->render('account/change_password.html.twig', [
             'form' => $form->createView(),
+            'noPasswordSet' => ($user->getPassword() === null),
+            'passwordMinLength' => $passwordHelper->getMinimumLength(),
         ]);
     }
 }
