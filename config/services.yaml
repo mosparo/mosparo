@@ -9,6 +9,8 @@ imports:
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     env(mosparo_name): 'mosparo'
+    env(mosparo_url): ~
+    env(mosparo_webauthn_rp_id): ''
     env(mosparo_installed): ~
     env(mosparo_installed_version): ~
     env(mosparo_assets_version): '' # A random string for cache busting without revealing the real version

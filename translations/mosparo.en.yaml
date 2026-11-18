@@ -1459,8 +1459,11 @@ administration:
 
     mainSettings:
       title: Main settings
+      warningUrlWebauthn: The mosparo URL will be used to set up passkeys. If you change the host of the URL after a user has configured a passkey, the passkey will no longer work. This means the user can no longer sign in with the passkey. An administrator needs to reset the authentication method for these users afterward.
       form:
         mosparoName: Name of the mosparo installation
+        mosparoUrl: URL of the mosparo installation
+        mosparoUrlHelp: 'Please specify the absolute URL of your mosparo installation. The URL needs to start with https://.'
 
     localeSettings:
       title: Locale settings
@@ -2191,6 +2194,8 @@ setup:
 
     form:
       name: Name of mosparo
+      url: URL of the mosparo installation
+      urlHelp: 'Please specify the absolute URL of your mosparo installation. The URL needs to start with https://.'
       subtitleCreateYourUser: Create your user
       emailAddress: Email address
       password: Password

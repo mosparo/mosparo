@@ -28,6 +28,11 @@
                     </div>
                     <div class="card-body">
                         {{ form_row(form.mosparoName) }}
+                        {{ form_row(form.mosparoUrl) }}
+
+                        <div class="alert alert-warning">
+                            {{ 'administration.settings.mainSettings.warningUrlWebauthn'|trans }}
+                        </div>
                     </div>
                 </div>
                 <div class="card mt-3">

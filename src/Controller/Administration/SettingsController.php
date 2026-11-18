@@ -12,10 +12,13 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Url;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/administration/settings')]
@@ -43,6 +46,7 @@ class SettingsController extends AbstractController
         $environmentConfig = $this->configHelper->readEnvironmentConfig();
         $config = [
             'mosparoName' => $environmentConfig['mosparo_name'] ?? '',
+            'mosparoUrl' => $environmentConfig['mosparo_url'] ?? '',
 
             'defaultLocale' => $environmentConfig['default_locale'] ?? 'en',
             'defaultDateFormat' => $environmentConfig['default_date_format'] ?? 'Y-m-d',
@@ -71,6 +75,14 @@ class SettingsController extends AbstractController
                     ]),
                 ],
             ])
+            ->add('mosparoUrl', UrlType::class, [
+                'label' => 'administration.settings.mainSettings.form.mosparoUrl',
+                'help' => 'administration.settings.mainSettings.form.mosparoUrlHelp',
+                'constraints' => [
+                    new NotBlank(),
+                    new Url(protocols: ['https'], requireTld: true),
+                ],
+            ])
             ->add('defaultLocale', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultLocale', 'choices' => $this->localeHelper->findAvailableLanguages(), 'attr' => ['class' => 'form-select']])
             ->add('defaultDateFormat', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultDateFormat', 'choices' => $this->localeHelper->getDateFormats(), 'attr' => ['class' => 'form-select']])
             ->add('defaultTimeFormat', ChoiceType::class, ['label' => 'administration.settings.localeSettings.form.defaultTimeFormat', 'choices' => $this->localeHelper->getTimeFormats(), 'attr' => ['class' => 'form-select']])
@@ -91,6 +103,8 @@ class SettingsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $configValues = [
                 'mosparo_name' => $form->get('mosparoName')->getData(),
+                'mosparo_url' => $form->get('mosparoUrl')->getData(),
+                'mosparo_webauthn_rp_id' => parse_url($form->get('mosparoUrl')->getData(), PHP_URL_HOST),
 
                 'default_locale' => $form->get('defaultLocale')->getData(),
                 'default_date_format' => $form->get('defaultDateFormat')->getData(),
