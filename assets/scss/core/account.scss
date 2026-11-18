@@ -1,10 +1,11 @@
 .two-factor-code {
-    font-family: var(--tblr-font-monospace);
+    font-family: var(--font-monospace);
     font-size: 1.3rem;
 
     .col {
         white-space: nowrap;
         width: auto;
-        flex: 1 0 50%;
+        flex: 1 1 calc(20% - 1rem);
+        min-width: min-content;
     }
 }
