@@ -192,7 +192,7 @@ class SetupController extends AbstractController
     }
 
     #[Route('/other', name: 'setup_other')]
-    public function other(Request $request): Response
+    public function other(Request $request, RouterInterface $router): Response
     {
         if ($this->setupHelper->isInstalled()) {
             return $this->redirectToRoute('dashboard');
@@ -209,6 +209,15 @@ class SetupController extends AbstractController
                     ]),
                 ],
             ])
+            ->add('url', UrlType::class, [
+                'label' => 'setup.other.form.url',
+                'help' => 'setup.other.form.urlHelp',
+                'constraints' => [
+                    new NotBlank(),
+                    new Url(protocols: ['https'], requireTld: true),
+                ],
+                'data' => $router->generate('mosparo_root', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            ])
             ->add('emailAddress', TextType::class, ['label' => 'setup.other.form.emailAddress'])
             ->add('password', PasswordFormType::class, [
                 'label' => 'setup.other.form.password',
@@ -222,6 +231,8 @@ class SetupController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->configHelper->writeEnvironmentConfig([
                 'mosparo_name' => $form->get('name')->getData(),
+                'mosparo_url' => $form->get('url')->getData(),
+                'mosparo_webauthn_rp_id' => parse_url($form->get('url')->getData(), PHP_URL_HOST),
                 'encryption_key' => $this->setupHelper->generateEncryptionKey(),
                 'secret' => $this->setupHelper->generateEncryptionKey(),
             ]);
