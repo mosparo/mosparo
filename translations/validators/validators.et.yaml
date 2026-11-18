@@ -4,6 +4,10 @@ password:
       notBlank: Palun sisesta salasõna.
       length: Sinu salasõna pikkus peaks olema vähemalt {{ limit }} tähemärki.
       passwordMustMatch: Salasõnad peavad omavahel klappima.
+      tooWeak: See salasõna on kehvapoolne. Pikem salasõna või mitmest sõnast 
+        koosnev pikk salafraas oleks palju parem variant.
+      compromised: See salasõna on rääderdatud (laiemale avalikkusele teadaolev)
+        ja seda ei tohi kasutada. Palun vali mõni muu salasõna.
   request:
     form:
       constraint:
@@ -50,3 +54,12 @@ rules:
     value:
       alreadyExists: See väärtus on juba valitud reeglis olemas.
       invalidFormat: See väärtus on antud reeglitüübi puhul vigane.
+authMethod:
+  form:
+    constraint:
+      notBlank: Palun vali OIDC klient.
+      chooseAction: Palun vali ühe saadavalolevatest toimingutest.
+oidcClient:
+  aliasHasInvalidCharacter: Palun kasuta vaid tähti, numbreid, sidekriipsu (-) 
+    või alakriipsu (_).
+  aliasNotUnique: Alias peab olema unikaalne, aga muu klient juba kasutab seda.
