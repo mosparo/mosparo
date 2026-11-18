@@ -7,6 +7,7 @@ use Mosparo\Repository\ResetPasswordRequestRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Validator\Constraints\PasswordStrength;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
@@ -14,6 +15,9 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 class PasswordHelper
 {
+    const DEFAULT_MIN_LENGTH = 12;
+    const DEFAULT_MIN_STRENGTH = PasswordStrength::STRENGTH_MEDIUM;
+
     protected ResetPasswordHelperInterface $resetPasswordHelper;
 
     protected ResetPasswordRequestRepository $resetPasswordRequestRepository;
@@ -24,18 +28,22 @@ class PasswordHelper
 
     protected MailHelper $mailHelper;
 
+    protected ConfigHelper $configHelper;
+
     public function __construct(
         ResetPasswordHelperInterface $resetPasswordHelper,
         ResetPasswordRequestRepository $resetPasswordRequestRepository,
         TranslatorInterface $translator,
         MailerInterface $mailer,
-        MailHelper $mailHelper
+        MailHelper $mailHelper,
+        ConfigHelper $configHelper
     ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
         $this->resetPasswordRequestRepository = $resetPasswordRequestRepository;
         $this->translator = $translator;
         $this->mailer = $mailer;
         $this->mailHelper = $mailHelper;
+        $this->configHelper = $configHelper;
     }
 
     public function sendResetPasswordEmail(User $user, $force = false): ResetPasswordToken
@@ -78,5 +86,20 @@ class PasswordHelper
         }
 
         return $resetToken;
+    }
+
+    public function getMinimumLength(): int
+    {
+        return max(8, (int) $this->configHelper->getEnvironmentConfigValue('authentication_password_min_length', self::DEFAULT_MIN_LENGTH));
+    }
+
+    public function getMinimumStrength(): int
+    {
+        return (int) $this->configHelper->getEnvironmentConfigValue('authentication_password_min_strength', self::DEFAULT_MIN_STRENGTH);
+    }
+
+    public function blockCompromisedPasswords(): bool
+    {
+        return (bool) $this->configHelper->getEnvironmentConfigValue('authentication_password_block_compromised', false);
     }
 }

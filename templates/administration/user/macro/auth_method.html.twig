@@ -1,0 +1,35 @@
+{% trans_default_domain 'mosparo' %}
+
+{% macro authMethod(user) %}
+    {% set authSourceInfo = user.authSource.getInfo() %}
+
+    <span class="status status-flexible-height text-nowrap my-1">
+        <i class="ti ti-{{ authSourceInfo.icon }}"></i>
+        {{ user.authSource|trans }}
+    </span>
+
+    {% if user.authMethod starts with 'oidc_' %}
+        {% set oidcClient = get_oidc_client_for_auth_method(user.authMethod) %}
+        <span class="status status-flexible-height status-lime my-1">
+            <i class="ti ti-id-badge-2"></i>
+            {{ oidcClient.name ?? '-' }}
+        </span>
+    {% elseif user.authMethod == 'webauthn' %}
+        <span class="status status-flexible-height status-orange my-1">
+            <i class="ti ti-key"></i>
+            {{ 'authMethod.webauthn.title'|trans }}
+        </span>
+    {% else %}
+        <span class="status status-flexible-height status-yellow my-1">
+            <i class="ti ti-asterisk"></i>
+            {{ 'authMethod.password.title'|trans }}
+        </span>
+
+        {% if user.isGoogleAuthenticatorEnabled() %}
+            <span class="status status-flexible-height status-purple my-1">
+                <i class="ti ti-auth-2fa"></i>
+                {{ 'authMethod.2fa.title'|trans }}
+            </span>
+        {% endif %}
+    {% endif %}
+{% endmacro %}

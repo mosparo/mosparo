@@ -1,0 +1,53 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.user.addChooseAuthSource.title'|trans }} - {{ parent() }}{% endblock %}
+{% block breadcrumbsContainer %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-narrow pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset(get_illustration_path('users.svg'))|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">{{ 'administration.user.addChooseAuthSource.title'|trans }}</h2>
+
+                        <p>{{ 'administration.user.addChooseAuthSource.intro'|trans }}</p>
+
+                        <div class="row">
+                            {% for option in options %}
+                                {% set info = option.getInfo() %}
+                                <div class="col-12 col-md-6 mb-3">
+                                    <a href="{{ path('administration_user_add_with_source', { 'authSource': option.value }) }}" class="btn btn-outline-green w-100 h-100 flex-column align-items-start justify-content-start rule-type-button">
+                                        <div class="h2">
+                                            <i class="ti ti-{{ info.icon }}"></i>
+                                            {{ option|trans }}
+                                        </div>
+                                        <p class="m-0">
+                                            {{ info.description|trans }}
+                                        </p>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto">
+                <a href="{{ path('administration_user_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'administration.user.backToOverview'|trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

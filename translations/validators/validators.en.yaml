@@ -7,12 +7,20 @@ password:
     constraint:
       notBlank: Please enter a password.
       length: Your password should be at least {{ limit }} characters.
+      tooWeak: The password is too weak. A longer password or a passphrase consisting of several random words is most effective.
+      compromised: This password has appeared in known data breaches and must not be used. Please choose a different one.
       passwordMustMatch: The password fields must match.
 
   request:
     form:
       constraint:
         notBlank: Please enter your email.
+
+authMethod:
+  form:
+    constraint:
+      notBlank: Please choose an OIDC client.
+      chooseAction: Choose one of the available actions.
 
 tools:
   import:
@@ -51,3 +59,7 @@ rules:
     value:
       alreadyExists: This value already exists in the selected rule.
       invalidFormat: The value is invalid for this rule item type.
+
+oidcClient:
+  aliasHasInvalidCharacter: Please use only letters, numbers, the dash sign (-) and the underscore sign (_).
+  aliasNotUnique: The alias must be unique, but another client uses the same alias.

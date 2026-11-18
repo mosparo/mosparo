@@ -1556,6 +1556,103 @@ administration:
     message:
       savedSuccessfully: The security settings were saved successfully.
 
+  authentication:
+    title: Authentication settings
+    description: Configure the authentication settings and manage the OIDC clients.
+    backToOverview: Back to authentication settings
+
+    generalSettings:
+      title: General settings
+      intro: Configure the allowed authentication methods and the additional security features for authentication.
+      action: Configure general settings
+
+      password:
+        title: Password requirements
+        intro: Please specify the minimum requirements a password needs to meet to be accepted. If you change these settings, existing users will not be forced to set a new password.
+        recommendation: mosparo follows the current recommendations of NIST (SP 800-63B), the British NCSC and the German BSI. Length matters more than complexity, so mosparo does not require specific character types (like uppercase letters, digits or special characters) and does not force users to change their passwords regularly. Both rules lead to predictable passwords that users have to write down.
+
+      twoFactorAuthentication:
+        title: Two-factor authentication
+
+      passkey:
+        title: Passkey
+
+      localAuthSource:
+        title: Local auth source
+
+      form:
+        passwordMinLength: Minimum length of the password
+        passwordMinLengthHelp: Specify the minimum length of the user's password.
+        passwordMinStrength: Minimum strength of the password
+        passwordMinStrengthHelp: Specify the strength level that the password is required to have. This is measured by entropy, not by fixed rules.
+        blockCompromised: Block compromised passwords
+        blockCompromisedHelp: If enabled, mosparo will use the API of HaveIBeenPwned.com to verify compromised passwords. If there is a match, the password is declined.
+        enforceTwoFactorAuthentication: Enforce two-factor authentication
+        enforceTwoFactorAuthenticationHelp: Enforce that every local user with a password sets up two-factor authentication on their first or next login. Users authenticating with passkeys are not required to set up two-factor authentication.
+        enforcePasskeyAuthentication: Enforce passkey authentication
+        enforcePasskeyAuthenticationHelp: Enforce that every local user sets up passkey authentication on their first or next login.
+        disableLocalAuthSource: Disable local auth source
+        disableLocalAuthSourceHelp: Disable the local user database. All users have to use an OIDC client to authenticate.
+
+      message:
+        savedSuccessfully: The general authentication settings were saved successfully.
+
+    oidcClient:
+      title: OIDC clients
+      intro: If you want to use OIDC to authenticate in mosparo, please configure your OIDC client and switch the authentication method for the users.
+      availableClients: '%numberOfConfigured% of max %numberOfMaxClients% clients'
+
+      list:
+        name: Name
+        status: Status
+        users: Users
+        actions: Actions
+
+      add:
+        title: Add OIDC client
+
+      modify:
+        title: Modify OIDC client %name%
+
+      form:
+        enabled: Enabled
+        enabledHelp: If the client is disabled, the users cannot login with this client.
+        name: Name
+        alias: Alias
+        aliasHelp: 'The alias will be used in the redirect URL. Allowed characters: A-Z, a-z, 0-9, underscores (_) and dashes (-).'
+        wellKnownUrl: Well-known URL
+        wellKnownUrlHelp: 'The URL must start with https://'
+        clientId: Client ID
+        clientSecret: Client secret
+        clientSecretHelp: If you do not want to change the secret, please leave this field empty.
+        iconUrl: Icon URL
+        iconUrlHelp: 'The icon will be displayed in the button on the login page to make it easier for the user to identifying the correct client. The URL must start with https://'
+        additionalSettings: Additional settings
+        identifierProperty: Identifier property
+        identifierPropertyHelp: mosparo uses the email address as identifier. If your OIDC identity provider uses a different field than `email` or `email` is not accessible, please set the name of the identifier property here.
+        assumeEmailVerified: Assume email verified
+        assumeEmailVerifiedHelp: mosparo uses the email address to find the user on the first login. Some identity providers do not confirm that the email address is verified. Enable this option only if the users cannot change their email address in the identity provider themselves. Otherwise, a user could take over another account by entering its email address.
+        enableRetrieveUserInfo: Retrieve user info from userinfo endpoint
+        enableRetrieveUserInfoHelp: If enabled, mosparo will retrieve the user information from the userinfo endpoint. This is the normal flow, but for some OIDC identity providers, this must be disabled.
+        additionalScopes: Additional scopes
+        additionalScopesHelp: If needed, you can specify additional scopes which mosparo will request. Add each scope separately.
+        redirectUrl: Redirect URL
+        redirectUrlPlaceholder: Please enter the alias first.
+        requiredScopes: Required scopes
+
+      delete:
+        title: Delete OIDC client %name%
+        confirm: Do you really want to delete the OIDC client %name%?
+
+      action:
+        add: Add
+
+      message:
+        maxNumberOfClients: You have reached the maximum number of clients and cannot add new ones.
+        successfullySaved: The OIDC client %name% was saved successfully.
+        successfullyDeleted: The OIDC client %name% was deleted successfully.
+        oidcClientHasUsers: The OIDC client %name% has user assigned to it. Please switch the users to a different authentication source or method first.
+
   user:
     title: Users
     description: Manage all users of this mosparo instance.
@@ -1565,13 +1662,21 @@ administration:
     list:
       user: User
       roles: Roles
+      auth: Authentication
       actions: Actions
+
+    action:
+      authentication: Authentication
 
     create:
       title: Create user
 
     modify:
       title: Modify user %email%
+
+    addChooseAuthSource:
+      title: Choose authentication source
+      intro: Please choose which authentication source you want to use for this new user. You can change the authentication source later.
 
     form:
       email: Email
@@ -1580,6 +1685,11 @@ administration:
       isAdministrator: Is administrator
       canCreateProjects: Can create projects
       sendPasswordResetEmail: Send the user an email to set the password
+      infoWebauthnEmailWithLink: Since you've chosen passkey as the authentication method, the user will receive an email with a link to register the passkey for their account.
+      oidcClient: OIDC client
+
+      info:
+        changeAuthenticationMethod: To change the authentication method, reset the password, two-factor authentication, or passkeys, please use the %linkStart%authentication functionality%linkEnd%.
 
       message:
         successfullySaved: The user was saved successfully.
@@ -1589,6 +1699,46 @@ administration:
     help:
       password: Leave these fields empty if no password change is required.
       canCreateProjects: Allows the user to create new projects. An administrator can always create projects.
+
+    authMethod:
+      title: Change authentication method for user %email%
+      titleSimple: Change authentication method
+      intro: Please choose how you wanna change the selected user's authentication method.
+
+      option:
+        resetPassword:
+          label: Reset password for user
+          intro: Reset this user's password either by setting a new one or by sending the user a reset password email.
+
+        reset2fa:
+          label: Reset two-factor authentication for user
+          intro: Disable two-factor authentication if the user has lost access to their device.
+
+        resetWebauthn:
+          label: Reset passkeys for user
+          intro: Remove the passkeys for this user and either set a new password for the user or send the user a password reset email.
+
+        switchToOidc:
+          label: Switch to remote OIDC source
+          intro: Switch the authentication source to an OIDC identity provider. The user has to sign in with this OIDC identity provider afterward.
+
+        changeOidcClient:
+          label: Change OIDC identity provider
+          intro: Change this user's OIDC identity provider to a different one. The user has to sign in with this new OIDC identity provider afterward.
+
+        switchToLocal:
+          label: Switch to local auth source
+          intro: Change this user to a local user. You must either set a password or send the user a reset password email.
+
+      message:
+        successfullySaved: The user's auth method was saved successfully.
+        successfullyPasswordReset: The password was successfully reset.
+        successfullySentPasswordResetEmail: The password reset email was successfully sent to the user.
+        successfullyWebauthnReset: The passkey authentication was successfully reset.
+        successfullySwitchedToLocal: The user was successfully switched to local authentication.
+        successfully2faReset: The user's two-factor authentication was successfully reset.
+        successfullyAuthMethodChanged: The OIDC identity provider was successfully changed.
+        successfullySwitchedToOidc: The user was successfully switched to OIDC authentication.
 
     delete:
       title: Delete user %email%
@@ -1875,6 +2025,10 @@ account:
   title: Account
   backToOverview: Back to overview
 
+  message:
+    accountHasPasskeysSetUp: Your account is set up with passkeys. You cannot change your password or enable two-factor authentication.
+    authSourceIsNotLocal: Your account is not a local account. Therefore, you cannot change your password, enable two-factor authentication, or set up passkeys.
+
   settings:
     title: User settings
     description: Change the general settings for your account.
@@ -1894,6 +2048,9 @@ account:
     title: Change password
     description: Change the password of your account.
 
+    introChange: Please enter your old and new passwords below.
+    introNoPasswordSet: Your account does not have a password yet. Please specify your personal password.
+
     form:
       oldPassword: Old password
 
@@ -1901,8 +2058,8 @@ account:
       successfullyChanged: Your password was successfully changed.
 
   twoFactor:
-    title: Two factor authentication
-    description: Configure the two factor authentication for your account.
+    title: Two-factor authentication
+    description: Configure the two-factor authentication for your account.
 
     action:
       configure: Configure
@@ -1913,17 +2070,18 @@ account:
       verify: Verify
 
     status:
-      intro: Your account is protected with two factor authentication.
+      intro: Your account is protected with two-factor authentication.
 
     start:
-      title: Set up two factor authentication
+      title: Set up two-factor authentication
       intro: Please scan this QR code with your authentication app on your smartphone. You can use Google Authenticator, Microsoft Authenticator or similar apps.
+      enforced: This mosparo installation enforces two-factor authentication for users with a password. To use your account, you need to set up two-factor authentication.
       textManually: Instead of scanning the QR code, you can enter the following code manually into the authentication app.
       qrCodeAlt: This image shows the QR code, which you have to scane with your authentication app on your smartphone.
 
     verify:
-      title: Verify two factor authentication
-      intro: Please enter the code which is visible in the authentication app in the field below and verify the set up.
+      title: Verify two-factor authentication
+      intro: Please enter the code which is visible in the authentication app in the field below and verify the setup.
 
     backupCodes:
       title: Backup codes
@@ -1960,6 +2118,13 @@ security:
 
   notFound:
     title: Not found
+
+  oidc:
+    errorMessages:
+      oidcResponseWithoutCodeOrState: Authentication with the provider was aborted or failed.
+      emailAddressNotVerified: The received email address is not verified.
+      oidcDidNotReturnEmailAddress: The OIDC identity provider did not return an email address.
+      noUserFound: No user found. Please contact an administrator.
 
 # Password reset
 password:
@@ -2000,11 +2165,14 @@ password:
     error:
       tokenNotFound: No reset password token found in the URL or in the session.
       errorOccurred: There was a problem validating your reset request. %error%
+      errorUserCantChangePassword: You cannot change the password for your user, for example, because your user is not a local user.
 
   form:
     password: Password
     newPassword: New password
     repeatPassword: Repeat password
+
+  recommendation: Your password requires at least %minLength% characters. More characters make your password stronger. You can use multiple, randomly selected words, for example, 4 - 6 words, split by a space. Do not use a real sentence, a quote, or something that is well known. You can use special characters, but you do not have to.
 
 # General actions
 action:
@@ -2045,6 +2213,9 @@ action:
   goToRulePackage: Go to rule package
   goToRulePackages: Go to rule packages
   addToRule: Add to rule
+  addPasskey: Add passkey
+  authenticateWithPasskey: Authenticate with passkey
+  authenticateWithOidc: Sign in with %name%
 
 # General values
 general:
@@ -2234,6 +2405,7 @@ unit:
   hashesPerSecondShort: Hashes/Sec
   submission: Submission
   submissions: Submissions
+  characters: Characters
 
 unitHelp:
   inSeconds: In seconds
@@ -2324,3 +2496,38 @@ tooltip:
   publicKey: Public key
   privateKey: Private key
   deleted: Deleted
+
+authSource:
+  local:
+    label: Local
+    description: The user will be added to your local mosparo database and will use its locally stored password or passkey to authenticate.
+
+  remoteOidc:
+    label: Remote (OIDC)
+    description: The user will authenticate with an OIDC identity provider. To authenticate, the user must log in to the identity provider.
+
+authMethod:
+  password:
+    title: Password
+  webauthn:
+    title: Passkey
+  oidc:
+    title: OIDC
+  2fa:
+    title: Two-factor authentication
+
+passwordForm:
+  strength:
+    label: Strength
+    none: None
+    weak: Weak
+    fair: Fair
+    good: Good
+    strong: Strong
+
+  hints:
+    hintLength: '%count% more characters needed'
+    hintStrength: Your password is too weak. Add more characters.
+
+webauthn:
+  notAvailableBecauseUrlMissing: Passkey authentication is not available because an important configuration is missing. The URL of the mosparo installation is not set in the general settings.

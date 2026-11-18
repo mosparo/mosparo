@@ -4,6 +4,7 @@ namespace Mosparo\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Mosparo\Enum\AuthSource;
 use Mosparo\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -31,10 +32,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var ?string The hashed password
      */
-    #[ORM\Column(type: 'string')]
-    private string $password;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $password;
 
     #[ORM\Column(name: 'googleAuthenticatorSecret', type: 'string', nullable: true)]
     private ?string $googleAuthenticatorSecret = null;
@@ -47,6 +48,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 
     #[ORM\Column(type: 'encryptedJson')]
     private ?array $configValues = [];
+
+    #[ORM\Column(type: 'smallint', nullable: true, enumType: AuthSource::class)]
+    private ?AuthSource $authSource = AuthSource::LOCAL;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $authMethod = 'password';
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $userHandle = null;
 
     public function __construct()
     {
@@ -136,12 +146,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -291,6 +301,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
         return $this;
     }
 
+    public function getAuthSource(): AuthSource
+    {
+        return $this->authSource ?? AuthSource::LOCAL;
+    }
+
+    public function setAuthSource(AuthSource $authSource): self
+    {
+        $this->authSource = $authSource;
+
+        return $this;
+    }
+
+    public function getAuthMethod(): string
+    {
+        return $this->authMethod ?? 'password';
+    }
+
+    public function setAuthMethod(?string $authMethod): self
+    {
+        $this->authMethod = $authMethod;
+
+        return $this;
+    }
+
+    public function getUserHandle(): ?string
+    {
+        return $this->userHandle;
+    }
+
+    public function setUserHandle(?string $userHandle): self
+    {
+        $this->userHandle = $userHandle;
+
+        return $this;
+    }
+
     /**
      * This is required to prevent Symfony from storing the whole user object, including all project memberships
      * into the session, which is stored in the database and is limited to 64KB.
@@ -302,6 +348,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
             $this->email,
             $this->password,
             $this->roles,
+            $this->authMethod,
+            $this->userHandle
         ];
     }
 
@@ -322,6 +370,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
             $this->email,
             $this->password,
             $this->roles,
+            $this->authMethod,
+            $this->userHandle
         ] = $data;
     }
 }

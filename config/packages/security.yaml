@@ -30,9 +30,7 @@ security:
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         mosparo_user_provider:
-            entity:
-                class: Mosparo\Entity\User
-                property: email
+            id: Mosparo\Security\UserProvider
 
     firewalls:
         dev:
@@ -51,6 +49,9 @@ security:
         main:
             lazy: true
             provider: mosparo_user_provider
+            user_checker: Mosparo\Security\UserChecker
+            access_denied_handler: Mosparo\Security\AccessDeniedHandler
+            entry_point: form_login
             form_login:
                 login_path: security_login
                 check_path: security_login
@@ -63,12 +64,17 @@ security:
                 auth_form_path: 2fa_login
                 check_path: 2fa_login_check
 
+            mosparooidc:
+                user_identifier_property: sub
+                check_path: login_oidc_check
             login_throttling:
                 limiter: mosparo.login_rate_limiter
 
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/login_check, roles: PUBLIC_ACCESS }
+        - { path: ^/oidc, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/logout, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/password, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }

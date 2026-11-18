@@ -166,3 +166,32 @@
         </button>
     </div>
 {% endblock %}
+
+{% block password_form_widget %}
+    {{ form_row(form.plainPassword.first) }}
+
+    <div class="mt-n2 mb-3">
+        <div
+            class="strength"
+            data-password-strength="#{{ form.plainPassword.first.vars.id }}"
+            aria-label="{{ 'passwordForm.strength.label'|trans }}"
+            data-label-weak="{{ 'passwordForm.strength.weak'|trans }}"
+            data-label-fair="{{ 'passwordForm.strength.fair'|trans }}"
+            data-label-good="{{ 'passwordForm.strength.good'|trans }}"
+            data-label-strong="{{ 'passwordForm.strength.strong'|trans }}"
+        >
+            <span class="strength-segment"></span>
+            <span class="strength-segment"></span>
+            <span class="strength-segment"></span>
+            <span class="strength-segment"></span>
+        </div>
+        <div class="strength-text"></div>
+        <div
+            class="password-strength-hint form-hint text-danger"
+            data-hint-length="{{ 'passwordForm.hints.hintLength'|trans }}"
+            data-hint-strength="{{ 'passwordForm.hints.hintStrength'|trans }}"
+        ></div>
+    </div>
+
+    {{ form_row(form.plainPassword.second) }}
+{% endblock %}

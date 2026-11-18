@@ -6,11 +6,22 @@ nelmio_security:
             default-src: [ 'none' ]
             frame-src: [ 'none' ]
             frame-ancestors: [ 'self' ]
-            base-uri: [ 'self']
+            base-uri: [ 'self' ]
             connect-src: [ 'self' ]
             form-action: [ 'self' ]
             script-src: [ 'self' ]
-            img-src: [ 'self' ]
+            img-src:
+                - 'self'
+                - '%env(default:oidc_client_empty:oidc0_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc1_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc2_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc3_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc4_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc5_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc6_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc7_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc8_icon_origin)%'
+                - '%env(default:oidc_client_empty:oidc9_icon_origin)%'
             style-src: [ 'self' ]
             font-src: [ 'self' ]
             object-src: [ 'none' ]

@@ -1,0 +1,142 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.authentication.generalSettings.title'|trans }} - {{ 'administration.authentication.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.authentication.generalSettings.title'|trans }}{% endblock %}
+
+{% block breadcrumbsContainer %}
+    {% set breadcrumbs = breadcrumbs|merge([
+        {'title': 'administration.authentication.title'|trans, 'url': path('administration_authentication')},
+    ]) %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/administration/authentication_settings#general-settings" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block administrationPageBody %}
+    {{ form_start(form) }}
+        <div class="row mb-3">
+            <div class="col-sm-12 col-lg-6 mb-3">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'administration.authentication.generalSettings.password.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body" id="password_form_fields">
+                        <p>{{ 'administration.authentication.generalSettings.password.intro'|trans }}</p>
+
+                        <div class="mb-3">
+                            {{ form_label(form.passwordMinLength) }}
+                            <div class="input-group mb-2">
+                                {{ form_widget(form.passwordMinLength) }}
+                                <span class="input-group-text">
+                                    {{ 'unit.characters'|trans }}
+                                </span>
+                            </div>
+                            {{ form_help(form.passwordMinLength) }}
+                            {{ form_errors(form.passwordMinLength) }}
+                        </div>
+
+                        {{ form_row(form.passwordMinStrength) }}
+                        {{ form_row(form.passwordBlockCompromised) }}
+
+                        <div class="alert alert-info">
+                            <div>
+                                {{ 'administration.authentication.generalSettings.password.recommendation'|trans }}
+                            </div>
+                            <div class="buttons mt-2">
+                                <a href="https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver" class="btn btn-sm" target="_blank">
+                                    nist.gov
+                                    <i class="ti ti-external-link ti-icon-right"></i>
+                                </a>
+                                <a href="https://www.ncsc.gov.uk/blog-post/the-logic-behind-three-random-words" class="btn btn-sm" target="_blank">
+                                    ncsc.gov.uk
+                                    <i class="ti ti-external-link ti-icon-right"></i>
+                                </a>
+                                <a href="https://www.bsi.bund.de/DE/Themen/Verbraucherinnen-und-Verbraucher/Informationen-und-Empfehlungen/Cyber-Sicherheitsempfehlungen/Accountschutz/Sichere-Passwoerter-erstellen/sichere-passwoerter-erstellen_node.html" class="btn btn-sm" target="_blank">
+                                    bsi.bund.de
+                                    <i class="ti ti-external-link ti-icon-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'administration.authentication.generalSettings.twoFactorAuthentication.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body" id="tfa_form_fields">
+                        {{ form_row(form.enforceTwoFactorAuthentication) }}
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'administration.authentication.generalSettings.passkey.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body" id="passkey_form_fields">
+                        {% if 'enforcePasskeyAuthentication' in form %}
+                            {{ form_row(form.enforcePasskeyAuthentication) }}
+                        {% else %}
+                            <div class="alert alert-danger">
+                                {{ 'webauthn.notAvailableBecauseUrlMissing'|trans }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ 'administration.authentication.generalSettings.localAuthSource.title'|trans }}</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.disableLocalAuthSource) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-auto ms-auto">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-device-floppy"></i>
+                    {{ 'action.save'|trans }}
+                </button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#form_enforcePasskeyAuthentication, #form_disableLocalAuthSource').change(function () {
+                    if ($(this).prop('id') === 'form_enforcePasskeyAuthentication' && $('#form_disableLocalAuthSource').is(':checked')) {
+                        return;
+                    }
+
+                    $('#password_form_fields, #tfa_form_fields').find('input, select').prop('disabled', $(this).prop('checked'));
+
+                    if ($(this).prop('id') !== 'form_enforcePasskeyAuthentication') {
+                        $('#form_enforcePasskeyAuthentication').prop('disabled', $(this).prop('checked')).trigger('change');
+                    }
+                }).filter(':checked').trigger('change');
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

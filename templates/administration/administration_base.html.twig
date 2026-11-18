@@ -33,6 +33,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ path('administration_authentication') }}" class="nav-link {% if app.request.attributes.get('_route') starts with 'administration_authentication' %}active{% endif %}">
+                            <i class="ti ti-lock-password"></i>
+                            {{ 'administration.authentication.title'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ path('administration_user_list') }}" class="nav-link {% if app.request.attributes.get('_route') == 'administration_user_list' %}active{% endif %}">
                             <i class="ti ti-users"></i>
                             {{ 'administration.user.title'|trans }}

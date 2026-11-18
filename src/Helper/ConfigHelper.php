@@ -62,6 +62,15 @@ class ConfigHelper
         return $configFilePath;
     }
 
+    public function getEnvironmentConfigValues()
+    {
+        if (!$this->environmentConfigValues) {
+            $this->environmentConfigValues = $this->readEnvironmentConfig();
+        }
+
+        return $this->environmentConfigValues;
+    }
+
     public function getEnvironmentConfigValue($name, $defaultValue = false)
     {
         if (!$this->environmentConfigValues) {
@@ -75,9 +84,14 @@ class ConfigHelper
         return $this->environmentConfigValues[$name];
     }
 
-    public function writeEnvironmentConfig($values)
+    public function writeEnvironmentConfig($values, $mergeValues = true)
     {
-        $config = array_merge($this->readEnvironmentConfig(), $values);
+        if ($mergeValues) {
+            $config = array_merge($this->readEnvironmentConfig(), $values);
+        } else {
+            $config = $values;
+        }
+
         $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config, true) . ';' . PHP_EOL;
 
         $this->fileSystem->dumpFile($this->environmentConfigFilePath, $content);

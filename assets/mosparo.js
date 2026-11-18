@@ -25,9 +25,13 @@ window.Tabulator = TabulatorFull;
 import papa from 'papaparse';
 window.papa = papa;
 
+import QRCode from 'qrcode';
+window.QRCode = QRCode;
+
 import './js/ui.js';
 import './js/form.js';
 import './js/color.js';
 import './js/grid-table.js';
 import './js/project.js';
 import './js/chart.js';
+import './js/password.js';

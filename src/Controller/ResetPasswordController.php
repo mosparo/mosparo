@@ -3,6 +3,8 @@
 namespace Mosparo\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Mosparo\Entity\User;
+use Mosparo\Enum\AuthSource;
 use Mosparo\Form\PasswordFormType;
 use Mosparo\Form\ResetPasswordRequestFormType;
 use Mosparo\Helper\PasswordHelper;
@@ -87,7 +89,7 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route('/reset/{token}', name: 'security_reset_password')]
-    public function reset(Request $request, string $token = null): Response
+    public function reset(Request $request, PasswordHelper $passwordHelper, string $token = null): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -115,6 +117,20 @@ class ResetPasswordController extends AbstractController
             $this->addFlash('reset_password_error', $this->translator->trans(
                 'password.reset.error.errorOccurred',
                 [ '%error%' => $e->getReason() ],
+                'mosparo'
+            ));
+
+            return $this->redirectToRoute('security_reset');
+        }
+
+        // Only local users with password authentication can reset their password
+        if (!$this->canResetPassword($user)) {
+            $this->resetPasswordHelper->removeResetRequest($token);
+            $this->cleanSessionAfterReset();
+
+            $this->addFlash('reset_password_error', $this->translator->trans(
+                'password.reset.error.errorUserCantChangePassword',
+                [],
                 'mosparo'
             ));
 
@@ -152,6 +168,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('password/reset.html.twig', [
             'resetForm' => $form->createView(),
+            'passwordMinLength' => $passwordHelper->getMinimumLength(),
         ]);
     }
 
@@ -162,7 +179,7 @@ class ResetPasswordController extends AbstractController
         ]);
 
         // Do not reveal whether a user account was found or not.
-        if (!$user) {
+        if (!$user || !$this->canResetPassword($user)) {
             return $this->redirectToRoute('security_check_email');
         }
 
@@ -185,5 +202,10 @@ class ResetPasswordController extends AbstractController
         $this->setTokenObjectInSession($resetToken);
 
         return $this->redirectToRoute('security_check_email');
+    }
+
+    private function canResetPassword(User $user): bool
+    {
+        return $user->getAuthSource() === AuthSource::LOCAL && ($user->getAuthMethod() ?? 'password') === 'password';
     }
 }

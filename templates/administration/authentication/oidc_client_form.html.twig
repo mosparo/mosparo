@@ -1,0 +1,151 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% if isNew %}
+    {% set pageTitle = 'administration.authentication.oidcClient.add.title'|trans %}
+{% else %}
+    {% set pageTitle = 'administration.authentication.oidcClient.modify.title'|trans({ '%name%': oidcClientConfig.name }) %}
+{% endif %}
+
+{% block documentTitle %}{{ pageTitle }} - {{ parent() }}{% endblock %}
+{% block breadcrumbsContainer %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset(get_illustration_path('authentication.svg'))|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+            <div class="row">
+                <div class="col">
+                    <div class="card card-md">
+                        <div class="card-body">
+                            <h2 class="card-title text-center mb-4">
+                                {{ pageTitle }}
+                            </h2>
+
+                            {{- form_errors(form) -}}
+
+                            <div class="mb-3">
+                                {{ form_widget(form.enabled) }}
+                                {{ form_help(form.enabled) }}
+                            </div>
+
+                            {{ form_row(form.name) }}
+                            {{ form_row(form.alias, { attr: { 'data-auto-alias': isNew } }) }}
+                            {{ form_row(form.wellKnownUrl) }}
+                            {{ form_row(form.clientId) }}
+                            {{ form_row(form.clientSecret) }}
+                            {{ form_row(form.iconUrl) }}
+
+                            <div class="accordion mb-3" id="additional-settings">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button {% if not hasAdditionalSettings %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-additional-settings" aria-expanded="true">
+                                            {{ 'administration.authentication.oidcClient.form.additionalSettings'|trans }}
+
+                                            <span class="accordion-button-toggle">
+                                                <i class="ti ti-chevron-down icon"></i>
+                                            </span>
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-additional-settings" class="accordion-collapse {% if not hasAdditionalSettings %}collapse{% endif %}" data-bs-parent="#additional-settings">
+                                        <div class="accordion-body pt-0">
+                                            <div class="mb-3">
+                                                {{ form_widget(form.assumeEmailVerified) }}
+                                                {{ form_help(form.assumeEmailVerified) }}
+                                            </div>
+                                            <div class="mb-3">
+                                                {{ form_widget(form.enableRetrieveUserInfo) }}
+                                                {{ form_help(form.enableRetrieveUserInfo) }}
+                                            </div>
+                                            {{ form_row(form.additionalScopes) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="redirect_url">{{ 'administration.authentication.oidcClient.form.redirectUrl'|trans }}</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="redirect_url" value="" placeholder="{{ 'administration.authentication.oidcClient.form.redirectUrlPlaceholder'|trans }}" readonly>
+                                    <button class="btn btn-icon-only btn-copy-input-value" type="button">
+                                        <i class="ti ti-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <span class="form-label">{{ 'administration.authentication.oidcClient.form.requiredScopes'|trans }}</span>
+                                <ul class="mb-0">
+                                    <li><code>openid</code></li>
+                                    <li><code>profile</code></li>
+                                    <li><code>email</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-md-auto mt-2 mt-md-0">
+                    <a href="{{ path('administration_authentication') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                        <i class="ti ti-chevron-left"></i>
+                        {{ 'administration.authentication.backToOverview'|trans }}
+                    </a>
+                </div>
+                <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="ti ti-device-floppy"></i>
+                        {{ 'action.save'|trans }}
+                    </button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(document).ready(function () {
+                $('#oidc_client_form_name').on('change keyup', function () {
+                    let name = $(this).val();
+                    let aliasFieldEl = $('#oidc_client_form_alias');
+
+                    if (name.trim() === '' || !aliasFieldEl.data('auto-alias')) {
+                        return;
+                    }
+
+                    let cleanName = name.trim().toLowerCase();
+                    cleanName = cleanName.normalize('NFD').replace(/[\u0300-\u036f]/g, ' ')
+                    cleanName = cleanName.replace(/[^a-z0-9 -]/g, ' ')
+                    cleanName = cleanName.replace(/\s+/g, '_')
+                    cleanName = cleanName.replace(/-+/g, '_')
+
+                    aliasFieldEl.val(cleanName).trigger('change');
+                }).trigger('change');
+
+                $('#oidc_client_form_alias').on('keypress', function () {
+                    $(this).data('auto-alias', false);
+                }).on('change keyup', function () {
+                    let alias = $(this).val();
+                    let redirectUrlFieldEl = $('#redirect_url');
+
+                    if (alias.trim() === '') {
+                        redirectUrlFieldEl.val('');
+                        return;
+                    }
+
+                    redirectUrlFieldEl.val('{{ url('login_oidc', {'alias': '__alias__'}) }}'.replace('__alias__', alias));
+                }).trigger('change');
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

@@ -1,6 +1,10 @@
 {% trans_default_domain 'mosparo' %}
 
 <div class="d-flex action-buttons-list">
+    <a href="{{ path('administration_user_auth_method', { 'id': item.id}) }}" class="btn btn-yellow me-2">
+        <i class="ti ti-lock"></i>
+        {{ 'administration.user.action.authentication'|trans }}
+    </a>
     <a href="{{ path('administration_user_edit', { 'id': item.id}) }}" class="btn btn-primary me-2">
         <i class="ti ti-pencil"></i>
         {{ 'action.edit'|trans }}

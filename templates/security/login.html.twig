@@ -9,34 +9,22 @@
         <h2 class="card-title text-center mb-4">{{ 'security.login.title'|trans }}</h2>
 
         {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% set domain = 'security' %}
+            {% if 'oidc.errorMessages' in error.messageKey %}
+                {% set domain = 'mosparo' %}
+            {% endif %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, domain) }}</div>
         {% endif %}
 
         {% block pageFlashes %}
-            {% set flashes = app.flashes %}
-            {% if flashes|length > 0 %}
-                    {% for label, messages in flashes %}
-                        {%- if label == 'notice' -%}
-                            {% set class = 'info' %}
-                        {%- elseif label == 'success' -%}
-                            {% set class = 'success' %}
-                        {%- elseif label == 'warning' -%}
-                            {% set class = 'warning' %}
-                        {%- elseif label == 'error' -%}
-                            {% set class = 'danger' %}
-                        {%- endif -%}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ class }}">
-                                {{ message|trans }}
-                            </div>
-                        {% endfor %}
-                    {% endfor %}
-            {% endif %}
+            {% include 'snippets/flashes.html.twig' %}
         {% endblock %}
 
         {% if app.user %}
             <div class="alert alert-info">
-                {{ 'security.login.youAreLoggedIn'|trans({'%username%': app.user.username}, 'mosparo') }} <a href="{{ path('security_logout', {'token' : csrf_token('logout')}) }}">{{ 'security.logout.title'|trans }}</a>
+                <div>
+                    {{ 'security.login.youAreLoggedIn'|trans({'%username%': app.user.username}, 'mosparo') }} <a href="{{ path('security_logout', {'token' : csrf_token('logout')}) }}">{{ 'security.logout.title'|trans }}</a>
+                </div>
             </div>
         {% endif %}
 
@@ -62,5 +50,14 @@
                 {{ 'security.login.title'|trans }}
             </button>
         </div>
+
+        {% for client in oidcClients %}
+            <a href="{{ path('login_oidc', {'alias': client.alias}) }}" class="btn btn-oidc-client-login w-100 mt-3">
+                {% if client.iconUrl %}
+                    <img src="{{ client.iconUrl }}" class="oidc-client-icon" alt="">
+                {% endif %}
+                {{ 'action.authenticateWithOidc'|trans({ '%name%': client.name }) }}
+            </a>
+        {% endfor %}
     </form>
 {% endblock %}

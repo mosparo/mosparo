@@ -55,6 +55,27 @@
                 <div class="card h-100">
                     <div class="empty">
                         <div class="empty-img">
+                            <a href="{{ path('administration_authentication') }}">
+                                <img src="{{ asset(get_illustration_path('authentication.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
+                            </a>
+                        </div>
+                        <p class="empty-title">{{ 'administration.authentication.title'|trans }}</p>
+                        <p class="empty-subtitle text-muted">
+                            {{ 'administration.authentication.description'|trans }}
+                        </p>
+                        <div class="empty-action">
+                            <a href="{{ path('administration_authentication') }}" class="btn btn-primary">
+                                <i class="ti ti-lock-password"></i>
+                                {{ 'action.configure'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="empty">
+                        <div class="empty-img">
                             <a href="{{ path('administration_user_list') }}">
                                 <img src="{{ asset(get_illustration_path('users.svg'))|add_path_prefix }}" alt="" class="illustration-list" />
                             </a>

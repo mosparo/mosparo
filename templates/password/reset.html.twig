@@ -8,7 +8,11 @@
     <h2 class="card-title text-center mb-4">{{ 'password.reset.title'|trans }}</h2>
 
     {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
+        {{ form_widget(resetForm) }}
+
+        <div class="alert alert-info mt-3">
+            {{ 'password.recommendation'|trans({'%minLength%': passwordMinLength}) }}
+        </div>
 
         <div class="form-footer">
             <button class="btn btn-primary w-100">

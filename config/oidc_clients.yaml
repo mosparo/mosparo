@@ -1,0 +1,170 @@
+parameters:
+    oidc_client_false: false
+    oidc_client_null: ~
+    oidc_client_empty: ''
+    oidc_default_enable_retrieve_user_info: 1
+
+services:
+    _instanceof:
+        Mosparo\Security\Oidc\Configuration\OidcClientConfigurationInterface:
+            tags: ['mosparo.oidc_client_config']
+
+    client.config.oidc0:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc0'
+            $enabled: '%env(default:oidc_client_false:oidc0_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc0_alias)%'
+            $name: '%env(default:oidc_client_null:oidc0_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc0_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc0_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc0_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc0_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc0_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc0_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc0_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc0_additional_scopes)%'
+
+    client.config.oidc1:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc1'
+            $enabled: '%env(default:oidc_client_false:oidc1_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc1_alias)%'
+            $name: '%env(default:oidc_client_null:oidc1_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc1_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc1_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc1_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc1_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc1_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc1_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc1_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc1_additional_scopes)%'
+
+    client.config.oidc2:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc2'
+            $enabled: '%env(default:oidc_client_false:oidc2_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc2_alias)%'
+            $name: '%env(default:oidc_client_null:oidc2_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc2_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc2_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc2_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc2_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc2_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc2_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc2_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc2_additional_scopes)%'
+
+    client.config.oidc3:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc3'
+            $enabled: '%env(default:oidc_client_false:oidc3_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc3_alias)%'
+            $name: '%env(default:oidc_client_null:oidc3_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc3_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc3_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc3_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc3_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc3_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc3_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc3_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc3_additional_scopes)%'
+
+    client.config.oidc4:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc4'
+            $enabled: '%env(default:oidc_client_false:oidc4_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc4_alias)%'
+            $name: '%env(default:oidc_client_null:oidc4_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc4_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc4_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc4_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc4_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc4_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc4_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc4_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc4_additional_scopes)%'
+
+    client.config.oidc5:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc5'
+            $enabled: '%env(default:oidc_client_false:oidc5_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc5_alias)%'
+            $name: '%env(default:oidc_client_null:oidc5_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc5_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc5_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc5_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc5_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc5_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc5_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc5_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc5_additional_scopes)%'
+
+    client.config.oidc6:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc6'
+            $enabled: '%env(default:oidc_client_false:oidc6_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc6_alias)%'
+            $name: '%env(default:oidc_client_null:oidc6_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc6_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc6_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc6_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc6_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc6_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc6_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc6_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc6_additional_scopes)%'
+
+    client.config.oidc7:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc7'
+            $enabled: '%env(default:oidc_client_false:oidc7_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc7_alias)%'
+            $name: '%env(default:oidc_client_null:oidc7_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc7_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc7_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc7_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc7_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc7_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc7_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc7_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc7_additional_scopes)%'
+
+    client.config.oidc8:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc8'
+            $enabled: '%env(default:oidc_client_false:oidc8_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc8_alias)%'
+            $name: '%env(default:oidc_client_null:oidc8_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc8_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc8_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc8_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc8_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc8_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc8_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc8_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc8_additional_scopes)%'
+
+    client.config.oidc9:
+        class: Mosparo\Security\Oidc\Configuration\OidcClientConfiguration
+        arguments:
+            $key: 'oidc9'
+            $enabled: '%env(default:oidc_client_false:oidc9_enabled)%'
+            $alias: '%env(default:oidc_client_null:oidc9_alias)%'
+            $name: '%env(default:oidc_client_null:oidc9_name)%'
+            $wellKnownUrl: '%env(default:oidc_client_null:oidc9_well_known_url)%'
+            $clientId: '%env(default:oidc_client_null:oidc9_client_id)%'
+            $clientSecret: '%env(default:oidc_client_null:oidc9_client_secret)%'
+            $redirectRoute: '%env(default:oidc_client_null:oidc9_redirect_route)%'
+            $iconUrl: '%env(default:oidc_client_null:oidc9_icon_url)%'
+            $assumeEmailVerified: '%env(default:oidc_client_null:oidc9_assume_email_verified)%'
+            $enableRetrieveUserInfo: '%env(default:oidc_client_null:oidc9_enable_retrieve_user_info)%'
+            $additionalScopes: '%env(json:default:oidc_client_null:oidc9_additional_scopes)%'

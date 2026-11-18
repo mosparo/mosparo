@@ -1,0 +1,68 @@
+parameters:
+    oidc_default_well_known_url: 'http://localhost'
+    oidc_default_client_id: 'id'
+    oidc_default_client_secret: 'secret'
+    oidc_default_redirect_route: '/oidc/check/'
+
+drenso_oidc:
+    default_client: oidc0
+    clients:
+        oidc0:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc0_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc0_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc0_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc0_redirect_route)%'
+
+        oidc1:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc1_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc1_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc1_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc1_redirect_route)%'
+
+        oidc2:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc2_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc2_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc2_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc2_redirect_route)%'
+
+        oidc3:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc3_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc3_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc3_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc3_redirect_route)%'
+
+        oidc4:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc4_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc4_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc4_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc4_redirect_route)%'
+
+        oidc5:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc5_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc5_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc5_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc5_redirect_route)%'
+
+        oidc6:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc6_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc6_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc6_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc6_redirect_route)%'
+
+        oidc7:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc7_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc7_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc7_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc7_redirect_route)%'
+
+        oidc8:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc8_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc8_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc8_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc8_redirect_route)%'
+
+        oidc9:
+            well_known_url: '%env(default:oidc_default_well_known_url:oidc9_well_known_url)%'
+            client_id: '%env(default:oidc_default_client_id:oidc9_client_id)%'
+            client_secret: '%env(default:oidc_default_client_secret:oidc9_client_secret)%'
+            redirect_route: '%env(default:oidc_default_redirect_route:oidc9_redirect_route)%'

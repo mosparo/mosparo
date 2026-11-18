@@ -1,0 +1,12 @@
+{% trans_default_domain 'mosparo' %}
+
+<div class="d-flex action-buttons-list">
+    <a href="{{ path('administration_authentication_oidc_client_edit', { 'key': item.key}) }}" class="btn btn-primary me-2">
+        <i class="ti ti-pencil"></i>
+        {{ 'action.edit'|trans }}
+    </a>
+    <a href="{{ path('administration_authentication_oidc_client_delete', { 'key': item.key}) }}" class="btn btn-danger">
+        <i class="ti ti-circle-minus"></i>
+        {{ 'action.delete'|trans }}
+    </a>
+</div>

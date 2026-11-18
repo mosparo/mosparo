@@ -1,5 +1,6 @@
 imports:
     - { resource: 'database-configuration.php' }
+    - { resource: 'oidc_clients.yaml' }
 
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
@@ -276,3 +277,10 @@ services:
         tags:
             - { name: security.expression_language_provider }
             - { name: routing.expression_language_provider }
+
+    mosparo.security.oidc.manager:
+        class: Mosparo\Security\Oidc\OidcManager
+
+    mosparo.security.oidc.authenticator:
+        class: Mosparo\Security\Oidc\OidcAuthenticator
+        abstract: true

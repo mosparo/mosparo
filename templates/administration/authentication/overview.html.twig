@@ -1,0 +1,103 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% block documentTitle %}{{ 'administration.authentication.title'|trans }} - {{ parent() }}{% endblock %}
+{% block pageTitle %}{{ 'administration.authentication.title'|trans }}{% endblock %}
+
+{% block pageTitleColumn %}
+    {{ parent() }}
+
+    <div class="col-auto ms-auto">
+        <div class="btn-list">
+            <a href="https://documentation.mosparo.io/docs/administration/authentication_settings" class="btn btn-info" target="_blank">
+                <i class="ti ti-question-mark"></i>
+                {{ 'action.help'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block administrationPageBody %}
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card card-md">
+                <div class="card-stamp card-stamp-lg">
+                    <div class="card-stamp-icon bg-primary">
+                        <i class="ti ti-lock-password"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-10">
+                            <h3 class="h2">{{ 'administration.authentication.generalSettings.title'|trans }}</h3>
+                            <div class="markdown text-secondary">
+                                {{ 'administration.authentication.generalSettings.intro'|trans }}
+                            </div>
+                            <div class="mt-3">
+                                <a href="{{ path('administration_authentication_general_settings') }}" class="btn btn-primary">
+                                    <i class="ti ti-pencil"></i>
+                                    {{ 'administration.authentication.generalSettings.action'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h2 mb-0">{{ 'administration.authentication.oidcClient.title'|trans }}</h3>
+                <div class="d-flex flex-row align-items-center">
+                    {% if configuredClients > 0 %}
+                        <div class="pe-3">
+                            {{ 'administration.authentication.oidcClient.availableClients'|trans({'%numberOfConfigured%': configuredClients, '%numberOfMaxClients%': 10}) }}
+                        </div>
+                    {% endif %}
+                    {% if configuredClients < 10 %}
+                        <a href="{{ path('administration_authentication_oidc_client_add') }}" class="btn btn-success add-button">
+                            <i class="ti ti-plus"></i>
+                            <span>{{ 'action.add'|trans }}</span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% set emptyMessage %}
+                <div class="text-center">
+                    <p>{{ 'administration.authentication.oidcClient.intro'|trans }}</p>
+
+                    <a href="{{ path('administration_authentication_oidc_client_add') }}" class="btn btn-success add-button">
+                        <i class="ti ti-plus"></i>
+                        <span>{{ 'administration.authentication.oidcClient.add.title'|trans }}</span>
+                    </a>
+                </div>
+            {% endset %}
+
+            {% include 'ui/grid_table/table.html.twig' with {'table': table, 'identifier': 'oidc_clients', 'hideFooter': true} %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            $(function () {
+                new GridTable(
+                    $('#oidc_clients'),
+                    [
+                        ['(width >= 1100px)', '1fr min-content min-content min-content'],
+                        ['(width >= 700px) and (width < 1100px)', '1fr min-content min-content'],
+                        ['(width >= 450px) and (width < 700px)', '1fr min-content'],
+                        ['(width < 450px)', '1fr'],
+                    ]
+                );
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}

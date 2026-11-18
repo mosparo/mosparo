@@ -14,7 +14,7 @@
                 <i class="ti ti-question-mark"></i>
                 {{ 'action.help'|trans }}
             </a>
-            <a href="{{ path('administration_user_add') }}" class="btn btn-success add-button">
+            <a href="{{ path('administration_user_add_choose_auth_source') }}" class="btn btn-success add-button">
                 <i class="ti ti-plus"></i>
                 <span>{{ 'administration.user.create.title'|trans }}</span>
             </a>
@@ -39,7 +39,8 @@
                 new GridTable(
                     $('#users'),
                     [
-                        ['(width >= 700px)', '1fr  min-content min-content'],
+                        ['(width >= 1100px)', '1fr min-content min-content min-content'],
+                        ['(width >= 700px) and (width < 1100px)', '1fr min-content min-content'],
                         ['(width >= 450px) and (width < 700px)', '1fr min-content'],
                         ['(width < 450px)', '1fr'],
                     ]

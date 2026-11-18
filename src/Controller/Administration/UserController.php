@@ -5,21 +5,29 @@ namespace Mosparo\Controller\Administration;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\ProjectMember;
 use Mosparo\Entity\User;
+use Mosparo\Enum\AuthSource;
 use Mosparo\Form\PasswordFormType;
+use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\PasswordHelper;
+use Mosparo\Repository\WebauthnCredentialRepository;
+use Mosparo\Security\Oidc\OidcManager;
 use Mosparo\UserInterface\GridTable\Adapter\OrmAdapter;
 use Mosparo\UserInterface\GridTable\Column;
 use Mosparo\UserInterface\GridTable\Factory;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -31,12 +39,35 @@ class UserController extends AbstractController
 
     protected UserPasswordHasherInterface $userPasswordHasher;
 
+    protected TokenGenerator $tokenGenerator;
+
+    protected ConfigHelper $configHelper;
+
+    protected PasswordHelper $passwordHelper;
+
+    protected OidcManager $oidcManager;
+
+    protected WebauthnCredentialRepository $webauthnCredentialRepository;
+
     protected TranslatorInterface $translator;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $translator)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $userPasswordHasher,
+        TokenGenerator $tokenGenerator,
+        ConfigHelper $configHelper,
+        PasswordHelper $passwordHelper,
+        OidcManager $oidcManager,
+        WebauthnCredentialRepository $webauthnCredentialRepository,
+        TranslatorInterface $translator
+    ) {
         $this->entityManager = $entityManager;
         $this->userPasswordHasher = $userPasswordHasher;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->configHelper = $configHelper;
+        $this->passwordHelper = $passwordHelper;
+        $this->oidcManager = $oidcManager;
+        $this->webauthnCredentialRepository = $webauthnCredentialRepository;
         $this->translator = $translator;
     }
 
@@ -56,6 +87,13 @@ class UserController extends AbstractController
                 template: 'administration/user/list/_roles.html.twig',
             ))
             ->addColumn(new Column(
+                'auth',
+                'administration.user.list.auth',
+                mapped: false,
+                sortable: false,
+                template: 'administration/user/list/_auth.html.twig',
+            ))
+            ->addColumn(new Column(
                 'actions',
                 'administration.user.list.actions',
                 sortable: false,
@@ -73,17 +111,183 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/add', name: 'administration_user_add')]
-    #[Route('/{id}/edit', name: 'administration_user_edit')]
-    public function modifyUser(Request $request, EntityManagerInterface $entityManager, TokenGenerator $tokenGenerator, PasswordHelper $passwordHelper, User $user = null): Response
+    #[Route('/add/choose-auth-source', name: 'administration_user_add_choose_auth_source')]
+    public function add(): Response
     {
-        $passwordHelp = 'administration.user.help.password';
+        $options = [];
+
+        if ($this->isLocalAuthAllowed()) {
+            $options[] = AuthSource::LOCAL;
+        }
+
+        if ($this->oidcManager->hasEnabledClients()) {
+            $options[] = AuthSource::REMOTE_OIDC;
+        }
+
+        return $this->render('administration/user/add_choose_auth_source.html.twig', [
+            'options' => $options,
+        ]);
+    }
+
+    #[Route('/{id}/auth-method', name: 'administration_user_auth_method')]
+    public function modifyAuthMethod(Request $request, User $user): Response
+    {
+        $options = [];
+        if ($user->getAuthSource() === AuthSource::LOCAL) {
+            if ($user->getAuthMethod() === 'password') {
+                $options['administration.user.authMethod.option.resetPassword'] = 'password_reset';
+
+                if ($user->isGoogleAuthenticatorEnabled()) {
+                    $options['administration.user.authMethod.option.reset2fa'] = '2fa_reset';
+                }
+            } else if ($user->getAuthMethod() === 'webauthn') {
+                $options['administration.user.authMethod.option.resetWebauthn'] = 'webauthn_reset';
+            }
+
+            if ($this->oidcManager->hasEnabledClients()) {
+                $options['administration.user.authMethod.option.switchToOidc'] = 'switch_to_oidc';
+            }
+        } else if ($user->getAuthSource() === AuthSource::REMOTE_OIDC) {
+            if ($this->oidcManager->hasEnabledClients() && count($this->oidcManager->getEnabledClients()) > 1) {
+                $options['administration.user.authMethod.option.changeOidcClient'] = 'change_auth_method';
+            }
+
+            if ($this->isLocalAuthAllowed()) {
+                $options['administration.user.authMethod.option.switchToLocal'] = 'switch_to_local';
+            }
+        }
+
+        $isNewPassword = !($user->getAuthMethod() === 'password');
+
+        $builder = $this->createFormBuilder($user, ['translation_domain' => 'mosparo'])
+            ->add('action', ChoiceType::class, [
+                'label' => 'administration.user.form.authMethod',
+                'required' => true,
+                'expanded' => true,
+                'mapped' => false,
+                'choices' => $options,
+                'constraints' => [
+                    new NotBlank(message: 'authMethod.form.constraint.chooseAction'),
+                ],
+            ])
+        ;
+
+        $this->addPasswordFields($builder, $isNewPassword);
+        $this->addOidcClientField($builder, $user, false, false);
+
+        $form = $builder->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $action = $form->get('action')->getData();
+            $sendPasswordResetEmail = false;
+            $successMessage = 'administration.user.authMethod.message.successfullySaved';
+
+            if (in_array($action, ['password_reset', 'webauthn_reset', 'switch_to_local'])) {
+                if ($user->getAuthSource() !== AuthSource::LOCAL) {
+                    $user->setAuthSource(AuthSource::LOCAL);
+                }
+
+                if ($user->getAuthMethod() !== 'password') {
+                    $user->setAuthMethod('password');
+                }
+
+                $sendPasswordResetEmail = $this->setPassword($user, $form, false);
+                $successMessage = $sendPasswordResetEmail
+                    ? 'administration.user.authMethod.message.successfullySentPasswordResetEmail'
+                    : 'administration.user.authMethod.message.successfullyPasswordReset'
+                ;
+
+                $this->resetWebauthnKeys($user);
+                $user->setUserHandle(null);
+
+                $successMessage = match($action) {
+                    'password_reset' => $successMessage,
+                    'webauthn_reset' => 'administration.user.authMethod.message.successfullyWebauthnReset',
+                    'switch_to_local' => 'administration.user.authMethod.message.successfullySwitchedToLocal',
+                };
+            } else if ($action === '2fa_reset') {
+                $user->setGoogleAuthenticatorSecret(null);
+                $user->resetBackupCodes();
+
+                $successMessage = 'administration.user.authMethod.message.successfully2faReset';
+            } else if (in_array($action, ['change_auth_method', 'switch_to_oidc'])) {
+                if ($user->getAuthSource() !== AuthSource::REMOTE_OIDC) {
+                    $user->setAuthSource(AuthSource::REMOTE_OIDC);
+                }
+
+                $authMethod = $form->get('authMethod')->getData();
+                if ($user->getAuthMethod() !== $authMethod) {
+                    $user->setAuthMethod($authMethod);
+                }
+
+                $user->setPassword(null);
+                $user->setGoogleAuthenticatorSecret(null);
+                $user->resetBackupCodes();
+
+                $this->resetWebauthnKeys($user);
+                $user->setUserHandle(null);
+
+                $successMessage = match($action) {
+                    'change_auth_method' => 'administration.user.authMethod.message.successfullyAuthMethodChanged',
+                    'switch_to_oidc' => 'administration.user.authMethod.message.successfullySwitchedToOidc',
+                };
+            }
+
+            $this->entityManager->flush();
+
+            // Send reset email
+            if ($sendPasswordResetEmail) {
+                $response = $this->sendPasswordResetEmail($user);
+
+                if ($response) {
+                    return $response;
+                }
+            }
+
+            $session = $request->getSession();
+            $session->getFlashBag()->add(
+                'success',
+                $this->translator->trans(
+                    $successMessage,
+                    [],
+                    'mosparo'
+                )
+            );
+
+            return $this->redirectToRoute('administration_user_list');
+        }
+
+        return $this->render('administration/user/auth_method.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+            'isNewPassword' => $isNewPassword,
+        ]);
+    }
+
+    #[Route('/add/auth-source/{authSource}', name: 'administration_user_add_with_source', requirements: ['authSource' => '\d+'])]
+    #[Route('/{id}/edit', name: 'administration_user_edit')]
+    public function modifyUser(Request $request, ?User $user = null, ?int $authSource = null): Response
+    {
         $isNewUser = false;
         if ($user === null) {
-            $user = new User();
-            $isNewUser = true;
+            $authSource = AuthSource::tryFrom($authSource);
+            if (!$authSource) {
+                throw $this->createNotFoundException();
+            }
 
-            $passwordHelp = '';
+            $user = (new User())
+                ->setAuthSource($authSource)
+            ;
+
+            if ($user->getAuthSource() === AuthSource::LOCAL && !$this->isLocalAuthAllowed()) {
+                return $this->redirectToRoute('administration_user_add_choose_auth_source');
+            }
+
+            if ($user->getAuthSource() === AuthSource::LOCAL) {
+                $user->setAuthMethod('password');
+            }
+            $isNewUser = true;
         }
 
         $isActiveUserAttributes = [];
@@ -101,19 +305,8 @@ class UserController extends AbstractController
             $canCreateProjectsAttributes['checked'] = 'checked';
         }
 
-        $form = $this->createFormBuilder($user, ['translation_domain' => 'mosparo'])
+        $builder = $this->createFormBuilder($user, ['translation_domain' => 'mosparo'])
             ->add('email', EmailType::class, ['label' => 'administration.user.form.email'])
-            ->add('password', PasswordFormType::class, [
-                'label' => 'administration.user.form.password',
-                'mapped' => false,
-                'required' => false,
-                'is_new_user' => $isNewUser,
-                'is_new_password' => (!$isNewUser),
-                'help' => $passwordHelp,
-                'constraints' => [
-                    new Callback([$this, 'validatePasswordField'])
-                ]
-            ])
             ->add('isActiveUser', CheckboxType::class, [
                 'label' => 'administration.user.form.isActiveUser',
                 'mapped' => false,
@@ -133,31 +326,23 @@ class UserController extends AbstractController
                 'required' => false,
                 'attr' => $canCreateProjectsAttributes,
             ])
-            ->add('sendPasswordResetEmail', CheckboxType::class, [
-                'label' => 'administration.user.form.sendPasswordResetEmail',
-                'mapped' => false,
-                'required' => false,
-                'data' => ($isNewUser),
-            ])
-            ->getForm();
+        ;
+
+        if ($user->getAuthSource() === AuthSource::LOCAL && $user->getAuthMethod() === 'password' && $isNewUser) {
+            $this->addPasswordFields($builder, $isNewUser);
+        } else if ($user->getAuthSource() === AuthSource::REMOTE_OIDC) {
+            $this->addOidcClientField($builder, $user, $isNewUser, !$isNewUser);
+        }
+
+        $form = $builder->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $sendPasswordResetEmail = ($form->get('sendPasswordResetEmail')->getData());
-            if ($isNewUser && $sendPasswordResetEmail) {
-                // Set a random password for the user
-                $user->setPassword($this->userPasswordHasher->hashPassword(
-                    $user,
-                    $tokenGenerator->generateToken()
-                ));
-            } else {
-                $passwordField = $form->get('password');
-                if ($isNewUser || !empty($passwordField->get('plainPassword')->getData())) {
-                    $user->setPassword($this->userPasswordHasher->hashPassword(
-                        $user,
-                        $passwordField->get('plainPassword')->getData()
-                    ));
-                }
+            $sendPasswordResetEmail = false;
+
+            // The password fields exist only for new local users with password authentication
+            if ($form->has('password')) {
+                $sendPasswordResetEmail = $this->setPassword($user, $form, $isNewUser);
             }
 
             $isActiveUser = false;
@@ -181,31 +366,17 @@ class UserController extends AbstractController
             }
 
             if ($isNewUser) {
-                $entityManager->persist($user);
+                $this->entityManager->persist($user);
             }
 
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             // Send reset email
             if ($sendPasswordResetEmail) {
-                try {
-                    $passwordHelper->sendResetPasswordEmail($user, true);
-                } catch (ResetPasswordExceptionInterface $e) {
-                    $this->addFlash('error', $this->translator->trans(
-                        'administration.user.form.message.errorCreatingResetToken',
-                        ['%errorMessage%' => $e->getMessage()],
-                        'mosparo'
-                    ));
+                $response = $this->sendPasswordResetEmail($user);
 
-                    return $this->redirectToRoute('administration_user_list');
-                } catch (TransportException $e) {
-                    $this->addFlash('error', $this->translator->trans(
-                        'administration.user.form.message.errorSendingResetEmail',
-                        ['%errorMessage%' => $e->getMessage()],
-                        'mosparo'
-                    ));
-
-                    return $this->redirectToRoute('administration_user_list');
+                if ($response) {
+                    return $response;
                 }
             }
 
@@ -230,7 +401,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'administration_user_delete')]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, User $user): Response
     {
         $isOwnerInProject = false;
         foreach ($user->getProjectMemberships() as $membership) {
@@ -253,11 +424,13 @@ class UserController extends AbstractController
             if ($this->isCsrfTokenValid('delete-user', $submittedToken)) {
                 // Remove all project memberships
                 foreach ($user->getProjectMemberships() as $projectMembership) {
-                    $entityManager->remove($projectMembership);
+                    $this->entityManager->remove($projectMembership);
                 }
 
-                $entityManager->remove($user);
-                $entityManager->flush();
+                $this->resetWebauthnKeys($user);
+
+                $this->entityManager->remove($user);
+                $this->entityManager->flush();
 
                 $session = $request->getSession();
                 $session->getFlashBag()->add(
@@ -281,26 +454,151 @@ class UserController extends AbstractController
     public function validatePasswordField($userData, ExecutionContextInterface $context)
     {
         $form = $context->getRoot();
-        $field = $form->get('password');
-        $isNewUser = $field->getConfig()->getOption('is_new_user', false);
 
-        // This constraint is only relevant to new users
-        if (!$isNewUser) {
+        // In the auth method form, the password is only relevant for the password actions
+        if ($form->has('action') && !in_array($form->get('action')->getData(), ['password_reset', 'webauthn_reset', 'switch_to_local'], true)) {
             return;
         }
 
         // If we send an email, this constraint is not relevant
         $sendPasswordResetEmail = ($form->get('sendPasswordResetEmail')->getData());
         if (!$sendPasswordResetEmail) {
-            $passwordField = $form->get('password');
-
             // If the password field is empty, we cannot save the user, so we have to show the violation
-            if (empty($passwordField->get('plainPassword')->getData())) {
+            if (empty($form->get('password')->get('plainPassword')->getData())) {
                 $context
                     ->buildViolation('password.form.constraint.notBlank')
                     ->atPath('children[password][plainPassword][first].data')
                     ->addViolation();
             }
         }
+    }
+
+    protected function addPasswordFields(FormBuilderInterface $builder, $isNewPassword): void
+    {
+        $builder
+            ->add('password', PasswordFormType::class, [
+                'label' => 'administration.user.form.password',
+                'mapped' => false,
+                'required' => false,
+                'is_new_user' => false,
+                'is_new_password' => (!$isNewPassword),
+                'constraints' => [
+                    new Callback([$this, 'validatePasswordField'])
+                ]
+            ])
+            ->add('sendPasswordResetEmail', CheckboxType::class, [
+                'label' => 'administration.user.form.sendPasswordResetEmail',
+                'mapped' => false,
+                'required' => false,
+                'data' => $isNewPassword,
+            ])
+        ;
+    }
+
+    public function validateAuthMethodField($userData, ExecutionContextInterface $context)
+    {
+        $form = $context->getRoot();
+
+        // In the auth method form, the auth method field is only relevant for the OIDC methods
+        if ($form->has('action') && !in_array($form->get('action')->getData(), ['change_auth_method', 'switch_to_oidc'], true)) {
+            return;
+        }
+
+        if (empty($form->get('authMethod')->getData())) {
+            $context
+                ->buildViolation('authMethod.form.constraint.notBlank')
+                ->addViolation();
+        }
+    }
+
+    protected function addOidcClientField(FormBuilderInterface $builder, User $user, bool $isMapped, bool $isDisabled): void
+    {
+        $oidcClients = [];
+        foreach ($this->oidcManager->getClients() as $client) {
+            $oidcClients[$client->getName()] = sprintf('oidc_%s', $client->getKey());
+        }
+        $builder
+            ->add('authMethod', ChoiceType::class, [
+                'label' => 'administration.user.form.oidcClient',
+                'placeholder' => 'form.pleaseChoose',
+                'choices' => $oidcClients,
+                'data' => $user->getAuthMethod(),
+                'mapped' => $isMapped,
+                'disabled' => $isDisabled,
+                'constraints' => (!$isDisabled) ? [
+                    new Callback([$this, 'validateAuthMethodField'])
+                ] : [],
+            ])
+        ;
+    }
+
+    protected function setPassword(User $user, FormInterface $form, bool $isNewUser): bool
+    {
+        $sendPasswordResetEmail = ($form->get('sendPasswordResetEmail')->getData());
+        if ($isNewUser && $sendPasswordResetEmail) {
+            // Set a random password for a new user when we send a reset email.
+            $user->setPassword($this->userPasswordHasher->hashPassword(
+                $user,
+                $this->tokenGenerator->generateToken()
+            ));
+        } else {
+            $passwordField = $form->get('password');
+            if ($isNewUser || !empty($passwordField->get('plainPassword')->getData())) {
+                $user->setPassword($this->userPasswordHasher->hashPassword(
+                    $user,
+                    $passwordField->get('plainPassword')->getData()
+                ));
+            }
+        }
+
+        if ($sendPasswordResetEmail) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function sendPasswordResetEmail(User $user): ?Response
+    {
+        try {
+            $this->passwordHelper->sendResetPasswordEmail($user, true);
+        } catch (ResetPasswordExceptionInterface $e) {
+            $this->addFlash('error', $this->translator->trans(
+                'administration.user.form.message.errorCreatingResetToken',
+                ['%errorMessage%' => $e->getMessage()],
+                'mosparo'
+            ));
+
+            return $this->redirectToRoute('administration_user_list');
+        } catch (TransportException $e) {
+            $this->addFlash('error', $this->translator->trans(
+                'administration.user.form.message.errorSendingResetEmail',
+                ['%errorMessage%' => $e->getMessage()],
+                'mosparo'
+            ));
+
+            return $this->redirectToRoute('administration_user_list');
+        }
+
+        return null;
+    }
+
+    protected function resetWebauthnKeys(User $user): void
+    {
+        if (!$user->getUserHandle()) {
+            return;
+        }
+
+        $credentials = $this->webauthnCredentialRepository->findBy(['userHandle' => $user->getUserHandle()]);
+
+        foreach ($credentials as $credential) {
+            $this->entityManager->remove($credential);
+        }
+    }
+
+    protected function isLocalAuthAllowed(): bool
+    {
+        $environmentConfig = $this->configHelper->readEnvironmentConfig();
+        return !($environmentConfig['authentication_disable_local_auth_source'] ?? false);
     }
 }

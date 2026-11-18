@@ -1,0 +1,190 @@
+{% extends 'administration/administration_base.html.twig' %}
+
+{% trans_default_domain 'mosparo' %}
+
+{% import 'administration/user/macro/auth_method.html.twig' as am %}
+
+{% block documentTitle %}{{ 'administration.user.authMethod.title'|trans({ '%email%': user.email }) }} - {{ parent() }}{% endblock %}
+{% block breadcrumbsContainer %}{% endblock %}
+
+{% block pageBody %}
+    <div class="container-tight pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <img src="{{ asset(get_illustration_path('users.svg'))|add_path_prefix }}" class="mb-5 illustration-detail" alt="" />
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col">
+                <div class="card card-md">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">
+                            {{ 'administration.user.authMethod.titleSimple'|trans({ '%email%': user.email }) }}
+                        </h2>
+
+                        <div class="card mb-3">
+                            <div class="card-body p-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar me-3">
+                                        <i class="ti ti-user"></i>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <strong>{{ user.email }}</strong>
+                                            <div class="mt-1">{{ am.authMethod(user) }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>{{ 'administration.user.authMethod.intro'|trans }}</p>
+
+                        <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
+                            {% for action in form.action.children %}
+                                <label class="form-selectgroup-item flex-fill">
+                                    <input type="radio" id="{{ action.vars.id }}" name="{{ action.vars.full_name }}" value="{{ action.vars.value }}" class="form-selectgroup-input"{% if action.vars.checked %} checked="checked"{% endif %}>
+                                    <span class="form-selectgroup-label d-flex align-items-center p-3">
+                                        <span class="me-3">
+                                            <span class="form-selectgroup-check"></span>
+                                        </span>
+                                        <span class="form-selectgroup-label-content d-flex flex-column">
+                                            <span class="font-weight-medium">{{ (action.vars.label ~ '.label')|trans }}</span>
+                                            <span class="text-secondary">{{ (action.vars.label ~ '.intro')|trans }}</span>
+                                        </span>
+                                    </span>
+                                </label>
+                            {% endfor %}
+                        </div>
+
+                        {{ form_errors(form.action) }}
+
+                        {% do form.action.setRendered %}
+
+                        <div class="d-none mt-3" id="password-fields">
+                            {{ form_widget(form.password) }}
+
+                            {% if not isNewPassword %}
+                                {{ form_help(form.password) }}
+                            {% endif %}
+
+                            <div class="mt-3">
+                                {{ form_widget(form.sendPasswordResetEmail) }}
+                            </div>
+                        </div>
+
+                        <div class="d-none mt-3" id="oidc-auth-method-field">
+                            {{ form_row(form.authMethod) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-auto mt-2 mt-md-0">
+                <a href="{{ path('administration_user_list') }}" class="btn btn-outline-secondary w-100" tabindex="1000">
+                    <i class="ti ti-chevron-left"></i>
+                    {{ 'administration.user.backToOverview'|trans }}
+                </a>
+            </div>
+            <div class="col-12 col-md-auto ms-auto order-first order-md-last">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-device-floppy"></i>
+                    {{ 'action.save'|trans }}
+                </button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% cspscript %}
+        <script>
+            function showPasswordFields()
+            {
+                let containerEl = $('#password-fields');
+                containerEl.removeClass('d-none');
+
+                containerEl.find('[data-required="true"]').prop('required', true);
+            }
+
+            function hidePasswordFields()
+            {
+                let containerEl = $('#password-fields');
+                containerEl.addClass('d-none');
+
+                containerEl.find('input:not([type="checkbox"]), select').each(function () {
+                    if ($(this).prop('required')) {
+                        $(this).attr('data-required', true);
+                        $(this).prop('required', false);
+                    }
+                });
+            }
+
+            function showOidcAuthMethod()
+            {
+                let containerEl = $('#oidc-auth-method-field');
+                containerEl.removeClass('d-none');
+
+                containerEl.find('[data-required="true"]').prop('required', true);
+            }
+
+            function hideOidcAuthMethod()
+            {
+                let containerEl = $('#oidc-auth-method-field');
+                containerEl.addClass('d-none');
+
+                containerEl.find('input:not([type="checkbox"]), select').each(function () {
+                    if ($(this).prop('required')) {
+                        $(this).attr('data-required', true);
+                        $(this).prop('required', false);
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                hidePasswordFields();
+                hideOidcAuthMethod();
+
+                $('input[name="form[action]"]').change(function () {
+                    if (!$(this).prop('checked')) {
+                        return;
+                    }
+
+
+                    let value = $(this).val();
+                    if (value === 'password_reset' || value === 'webauthn_reset' || value === 'switch_to_local') {
+                        showPasswordFields();
+                        hideOidcAuthMethod();
+                    } else if (value === 'change_auth_method' || value === 'switch_to_oidc') {
+                        hidePasswordFields();
+                        showOidcAuthMethod();
+                    }
+                }).trigger('change');
+
+                $('#form_sendPasswordResetEmail').change(function () {
+                    let isActive = $(this).is(':checked');
+                    let passwordFields = $('#form_password_plainPassword_first, #form_password_plainPassword_second');
+
+                    passwordFields.prop('disabled', isActive);
+
+                    let isNewPassword = {{ isNewPassword|json_encode }};
+                    if (isNewPassword) {
+                        if (isActive) {
+                            passwordFields.prop('required', false);
+                            passwordFields.prev('label').removeClass('required');
+                        } else {
+                            passwordFields.prop('required', true);
+                            passwordFields.prev('label').addClass('required');
+                        }
+                    }
+                }).trigger('change');
+            });
+        </script>
+    {% endcspscript %}
+{% endblock %}
