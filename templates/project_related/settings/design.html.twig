@@ -34,6 +34,10 @@
                         <i class="ti ti-x"></i>
                         AAA
                     </span>
+
+                    <span class="accordion-button-toggle">
+                        <i class="ti ti-chevron-down icon"></i>
+                    </span>
                 </button>
             </h2>
             <div id="collapse-crb-{{ name }}" class="accordion-collapse collapse" data-bs-parent="#contrast-ratio-box-{{ name }}">
@@ -230,6 +234,7 @@
                     <div class="card mt-3">
                         <div class="card-header card-header-with-actions">
                             <h2 class="card-title">{{ 'settings.design.subtitles.colorSettings'|trans }}</h2>
+
                             <div class="card-actions">
                                 <div class="d-flex align-items-center">
                                     {{ form_label(form.colorPageBodyBackground, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}
@@ -500,6 +505,7 @@
                     <div class="card">
                         <div class="card-header card-header-with-actions">
                             <h2 class="card-title">{{ 'settings.design.subtitles.invisibleSimpleDesign'|trans }}</h2>
+
                             <div class="card-actions">
                                 <div class="d-flex align-items-center">
                                     {{ form_label(form.colorPageBodyBackground, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}

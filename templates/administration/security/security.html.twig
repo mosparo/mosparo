@@ -139,7 +139,9 @@
                 </p>
 
                 <div class="alert alert-info">
-                    {{ 'administration.security.backendAccess.hintOwnIp'|trans({'%ipAddress%': '<code>' ~ clientIpAddress ~ '</code>'})|raw }}
+                    <div>
+                        {{ 'administration.security.backendAccess.hintOwnIp'|trans({'%ipAddress%': '<code>' ~ clientIpAddress ~ '</code>'})|raw }}
+                    </div>
                 </div>
 
                 {{ form_row(form.backendAccessIpAllowList) }}

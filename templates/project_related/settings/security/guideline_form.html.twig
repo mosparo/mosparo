@@ -182,9 +182,12 @@
                             <div class="card mb-3">
                                 <div class="card-header card-header-with-override-option">
                                     <h3 class="card-title">{{ 'settings.security.spamDetection.title'|trans }}</h3>
-                                    {% if form.configValues.overrideSpamDetection is defined %}
-                                        {{ form_widget(form.configValues.overrideSpamDetection) }}
-                                    {% endif %}
+
+                                    <div class="card-actions">
+                                        {% if form.configValues.overrideSpamDetection is defined %}
+                                            {{ form_widget(form.configValues.overrideSpamDetection) }}
+                                        {% endif %}
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <p>

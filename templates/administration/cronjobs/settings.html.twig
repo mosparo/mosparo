@@ -36,6 +36,10 @@
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-web-cronJobs" aria-expanded="true">
                                         {{ 'administration.cronJobs.setup.web.title'|trans }}
+
+                                        <span class="accordion-button-toggle">
+                                            <i class="ti ti-chevron-down icon"></i>
+                                        </span>
                                     </button>
                                 </h2>
                                 <div id="collapse-web-cronJobs" class="accordion-collapse collapse show" data-bs-parent="#cronjob-examples">
@@ -52,7 +56,9 @@
 {#--#}</pre>
 
                                         <div class="alert alert-info">
-                                            {{ 'administration.cronJobs.setup.web.infoWgetPath'|trans({'%wgetBinary%': '<code>wget</code>'})|raw }}
+                                            <div>
+                                                {{ 'administration.cronJobs.setup.web.infoWgetPath'|trans({'%wgetBinary%': '<code>wget</code>'})|raw }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -62,6 +68,10 @@
                             <h2 class="accordion-header">
                                 <button class="accordion-button {% if isWebCronJobActive %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-cli-cronJobs" aria-expanded="true">
                                     {{ 'administration.cronJobs.setup.cli.title'|trans }}
+
+                                    <span class="accordion-button-toggle">
+                                        <i class="ti ti-chevron-down icon"></i>
+                                    </span>
                                 </button>
                             </h2>
                             <div id="collapse-cli-cronJobs" class="accordion-collapse collapse {% if not isWebCronJobActive %}show{% endif %}" data-bs-parent="#cronjob-examples">
@@ -78,7 +88,9 @@ php bin/console mosparo:geoip2:download-database
 {#--#}</pre>
 
                                     <div class="alert alert-info">
-                                        {{ 'administration.cronJobs.setup.cli.infoAdjustPaths'|trans({'%wgetBinary%': '<code>wget</code>'})|raw }}
+                                        <div>
+                                            {{ 'administration.cronJobs.setup.cli.infoAdjustPaths'|trans({'%wgetBinary%': '<code>wget</code>'})|raw }}
+                                        </div>
                                     </div>
 
                                     <h4>{{ 'administration.cronJobs.setup.titles.example'|trans }}</h4>
@@ -146,7 +158,9 @@ php bin/console mosparo:geoip2:download-database
                     {% endif %}
 
                     <div class="alert alert-info">
-                        {{ 'administration.cronJobs.settings.hintAccess'|trans({'%linkStart%': '<a href="' ~ path('administration_security') ~ '#web-cron-job-access">', '%linkEnd%': '</a>'})|raw }}
+                        <div>
+                            {{ 'administration.cronJobs.settings.hintAccess'|trans({'%linkStart%': '<a href="' ~ path('administration_security') ~ '#web-cron-job-access">', '%linkEnd%': '</a>'})|raw }}
+                        </div>
                     </div>
                 </div>
             </div>

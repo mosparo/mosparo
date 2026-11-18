@@ -41,10 +41,13 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">{{ 'rules.fieldRule.form.items.title'|trans }}</h3>
-                        <button type="button" class="btn btn-info btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#help-modal">
-                            <i class="ti ti-question-mark"></i>
-                            {{ 'action.help'|trans }}
-                        </button>
+
+                        <div class="card-actions">
+                            <button type="button" class="btn btn-info btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#help-modal">
+                                <i class="ti ti-question-mark"></i>
+                                {{ 'action.help'|trans }}
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body rule-items p-0">
                         <div class="tabulator-toolbar">
@@ -69,7 +72,7 @@
 
                                 <div class="btn-group ms-auto">
                                     <button type="button" class="btn btn-success add-item-btn">
-                                        <i class="ti ti-square-plus me-0 me-md-1"></i>
+                                        <i class="ti ti-square-plus me-0 me-md-2"></i>
                                         <span class="visually-hidden-mobile-only">{{ 'form.addItem'|trans }}</span>
                                     </button>
                                     <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
@@ -94,7 +97,7 @@
                             {% endif %}
 
                             <button type="button" class="btn btn-pink ms-2" data-bs-toggle="modal" data-bs-target="#filter-modal">
-                                <i class="ti ti-filter me-0 me-md-1"></i>
+                                <i class="ti ti-filter me-0 me-md-2"></i>
                                 <span class="visually-hidden-mobile-only">{{ 'action.filter'|trans }}</span>
                                 <span class="badge bg-white text-pink ms-2 d-none" id="active-filters-counter"></span>
                             </button>
@@ -1097,7 +1100,7 @@
 
                         await addItemsFromList(type, items, parseFloat(rating));
                     });
-                    
+
                     $('#btn-import-txt-file').click(function () {
                         let modal = $('#import-txt-file-modal');
                         modal.find('.form-control.is-invalid').removeClass('is-invalid');

@@ -55,6 +55,10 @@
                                                     </span>
                                                     {%  set numberOfChanges = changes.generalSettings|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+
+                                                    <span class="accordion-button-toggle">
+                                                        <i class="ti ti-chevron-down icon"></i>
+                                                    </span>
                                                 </button>
                                             </div>
                                             <div id="acc-general-settings" class="accordion-collapse collapse" data-bs-parent="#accordion-icons" style="">
@@ -76,6 +80,10 @@
                                                     </span>
                                                     {%  set numberOfChanges = changes.designSettings|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+
+                                                    <span class="accordion-button-toggle">
+                                                        <i class="ti ti-chevron-down icon"></i>
+                                                    </span>
                                                 </button>
                                             </div>
                                             <div id="acc-design-settings" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
@@ -97,6 +105,10 @@
                                                     </span>
                                                     {%  set numberOfChanges = changes.securitySettings|length + changes.securityGuidelines|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+
+                                                    <span class="accordion-button-toggle">
+                                                        <i class="ti ti-chevron-down icon"></i>
+                                                    </span>
                                                 </button>
                                             </div>
                                             <div id="acc-security-settings" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
@@ -125,6 +137,10 @@
                                                     </span>
                                                     {%  set numberOfChanges = changes.translations|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+
+                                                    <span class="accordion-button-toggle">
+                                                        <i class="ti ti-chevron-down icon"></i>
+                                                    </span>
                                                 </button>
                                             </div>
                                             <div id="acc-translations" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
@@ -146,6 +162,10 @@
                                                     </span>
                                                     {%  set numberOfChanges = changes.submissionRules|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+
+                                                    <span class="accordion-button-toggle">
+                                                        <i class="ti ti-chevron-down icon"></i>
+                                                    </span>
                                                 </button>
                                             </div>
                                             <div id="acc-submission-rules" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
@@ -167,6 +187,10 @@
                                                     </span>
                                                     {%  set numberOfChanges = changes.fieldRules|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+
+                                                    <span class="accordion-button-toggle">
+                                                        <i class="ti ti-chevron-down icon"></i>
+                                                    </span>
                                                 </button>
                                             </div>
                                             <div id="acc-field-rules" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">
@@ -188,6 +212,10 @@
                                                     </span>
                                                     {%  set numberOfChanges = changes.rulePackages|length %}
                                                     <span class="badge {% if numberOfChanges %}bg-azure{% else %}bg-secondary{% endif %} ms-2">{{ numberOfChanges }}</span>
+
+                                                    <span class="accordion-button-toggle">
+                                                        <i class="ti ti-chevron-down icon"></i>
+                                                    </span>
                                                 </button>
                                             </div>
                                             <div id="acc-rule-packages" class="accordion-collapse collapse" data-bs-parent="#accordion-icons">

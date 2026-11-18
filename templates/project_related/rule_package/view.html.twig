@@ -36,10 +36,13 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">{{ 'rulePackage.view.details.title'|trans }}</h3>
-                        <button type="button" class="btn btn-info btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#import_modal">
-                            <i class="ti ti-stack-push"></i>
-                            {{ 'action.howToImport'|trans }}
-                        </button>
+
+                        <div class="card-actions">
+                            <button type="button" class="btn btn-info btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#import_modal">
+                                <i class="ti ti-stack-push"></i>
+                                {{ 'action.howToImport'|trans }}
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
