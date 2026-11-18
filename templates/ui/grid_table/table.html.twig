@@ -103,7 +103,7 @@
             </div>
         {% endfor %}
     </div>
-    {% if table.items|length %}
+    {% if table.items|length and (not hideFooter is defined or not hideFooter) %}
         <div class="grid-table-footer">
             <div class="grid-table-size">
                 {% if table.pageSizes|length %}
