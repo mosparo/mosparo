@@ -6,6 +6,9 @@ on:
       tag_name:
         description: 'Version (for example, v1.2.3)'
         required: true
+      no_cache:
+        type: boolean
+        default: false
   release:
     types: [ published ]
 
@@ -86,7 +89,7 @@ jobs:
           file: "docker/${{ matrix.type }}/${{ matrix.dockerfile }}"
           tags: ${{ steps.meta.outputs.tags }}
           pull: true
-          no-cache: true
+          no-cache: ${{ inputs.no_cache == true }}
           build-args: |
             MOSPARO_VERSION=${{ env.MOSPARO_VERSION }}
             MOSPARO_CHANNEL=${{ env.MOSPARO_CHANNEL }}
