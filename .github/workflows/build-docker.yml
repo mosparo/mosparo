@@ -86,6 +86,7 @@ jobs:
           file: "docker/${{ matrix.type }}/${{ matrix.dockerfile }}"
           tags: ${{ steps.meta.outputs.tags }}
           pull: true
+          no-cache: true
           build-args: |
             MOSPARO_VERSION=${{ env.MOSPARO_VERSION }}
             MOSPARO_CHANNEL=${{ env.MOSPARO_CHANNEL }}
