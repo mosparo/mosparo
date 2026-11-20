@@ -446,16 +446,7 @@ roles:
   user: Usuari
   inactive: Inactiu
 datatable:
-  datatable:
-    processing: S'està processant…
-    search: 'Cerca:'
-    loadingRecords: S'està carregant…
-    searchPlaceholder: Cerca
-    paginate:
-      first: Primer
-      previous: Anterior
-      next: Següent
-      last: Últim
+  datatable: {}
 setup:
   buttons:
     continue: Continua
