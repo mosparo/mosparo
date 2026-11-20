@@ -16,8 +16,8 @@
   </testsuites>
   <extensions>
     <bootstrap class="Symfony\Bridge\PhpUnit\SymfonyExtension">
-      <parameter name="clock-mock-namespaces" value="App"/>
-      <parameter name="dns-mock-namespaces" value="App"/>
+      <parameter name="clock-mock-namespaces" value="Mosparo"/>
+      <parameter name="dns-mock-namespaces" value="Mosparo"/>
     </bootstrap>
     <bootstrap class="Symfony\Component\Panther\ServerExtension"/>
   </extensions>
