@@ -77,4 +77,9 @@ final class Version20250427170020 extends AbstractMigration
             ALTER TABLE rule_package RENAME INDEX idx_2efc5e21166d1f9c TO IDX_F41BE3BD166D1F9C
         SQL);
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

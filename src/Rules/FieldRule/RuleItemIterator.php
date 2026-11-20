@@ -81,7 +81,7 @@ class RuleItemIterator implements \Iterator
     {
         $this->prepareIterator();
 
-        if (!$this->iterator->valid()) {
+        if (!$this->iterator || !$this->iterator->valid()) {
             $this->iterator = null;
 
             $this->prepareIterator();
@@ -93,10 +93,6 @@ class RuleItemIterator implements \Iterator
             $this->iterator->rewind();
 
             return $this->iterator->valid();
-        }
-
-        if (!$this->iterator) {
-            return false;
         }
 
         return $this->iterator->valid();

@@ -32,4 +32,9 @@ final class Version20250630100733 extends AbstractMigration
             ALTER TABLE submission DROP issues
         SQL);
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

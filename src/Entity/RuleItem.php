@@ -12,6 +12,7 @@ use Mosparo\Rules\FieldRule\RuleItemEntityInterface;
 #[ORM\Entity(repositoryClass: RuleItemRepository::class)]
 #[ORM\Index(name: 'ri_uuid_idx', fields: ['uuid'])]
 #[ORM\Index(name: 'ri_hashed_idx', fields: ['project', 'type', 'hashedValue'])]
+#[ORM\Index(name: 'ri_pv_idx', fields: ['preparationVersion'])]
 #[ORM\HasLifecycleCallbacks]
 class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 {
@@ -40,7 +41,7 @@ class RuleItem implements ProjectRelatedEntityInterface, RuleItemEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     public function __construct()
     {

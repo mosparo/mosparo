@@ -32,4 +32,9 @@ final class Version20250410171444 extends AbstractMigration
             DROP TABLE cleanup_statistic
         SQL);
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

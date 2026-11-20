@@ -79,4 +79,9 @@ final class Version20240922173821 extends AbstractMigration
         $this->addSql('ALTER TABLE project_group DROP FOREIGN KEY FK_7E954D5B727ACA70');
         $this->addSql('DROP TABLE project_group');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

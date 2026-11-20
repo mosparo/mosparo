@@ -4,6 +4,7 @@ namespace Mosparo\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
+use Mosparo\Exception\ExportException;
 use Mosparo\Helper\ExportHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -37,8 +38,10 @@ class ExportCommand extends Command
             ->addOption('generalSettings', null, InputOption::VALUE_NEGATABLE, 'Export the general settings of a project (name, description, hosts and spam score).', true)
             ->addOption('designSettings', null, InputOption::VALUE_NEGATABLE, 'Export the design settings of a project.', true)
             ->addOption('securitySettings', null, InputOption::VALUE_NEGATABLE, 'Export the security settings of a project.', true)
-            ->addOption('rules', null, InputOption::VALUE_NEGATABLE, 'Export the rules of a project.', true)
-            ->addOption('rulePackages', null, InputOption::VALUE_NEGATABLE, 'Export the rule packages a project.', true)
+            ->addOption('translations', null, InputOption::VALUE_NEGATABLE, 'Export the translations of a project.', true)
+            ->addOption('submissionRules', null, InputOption::VALUE_NEGATABLE, 'Export the submission rules of a project.', true)
+            ->addOption('fieldRules', null, InputOption::VALUE_NEGATABLE, 'Export the field rules of a project.', true)
+            ->addOption('rulePackages', null, InputOption::VALUE_NEGATABLE, 'Export the rule packages of a project.', true)
         ;
     }
 
@@ -54,14 +57,27 @@ class ExportCommand extends Command
             return Command::FAILURE;
         }
 
-        $export = $this->exportHelper->exportProject(
-            $project,
-            $input->getOption('generalSettings'),
-            $input->getOption('designSettings'),
-            $input->getOption('securitySettings'),
-            $input->getOption('rules'),
-            $input->getOption('rulePackages')
-        );
+        try {
+            $export = $this->exportHelper->exportProject(
+                $project,
+                $input->getOption('generalSettings'),
+                $input->getOption('designSettings'),
+                $input->getOption('securitySettings'),
+                $input->getOption('translations'),
+                $input->getOption('submissionRules'),
+                $input->getOption('fieldRules'),
+                $input->getOption('rulePackages')
+            );
+        } catch (ExportException $e) {
+            $output->writeln($formatter->formatBlock([$e->getMessage()], 'error', true));
+            return Command::FAILURE;
+        }
+
+        $jsonContent = json_encode($export);
+        if ($jsonContent === false) {
+            $output->writeln($formatter->formatBlock(['Could not encode the data to a valid JSON.'], 'error', true));
+            return Command::FAILURE;
+        }
 
         if ($input->getArgument('filePath')) {
             $filePath = $input->getArgument('filePath');
@@ -72,11 +88,15 @@ class ExportCommand extends Command
                 return Command::FAILURE;
             }
 
-            file_put_contents($filePath, json_encode($export));
+            $result = file_put_contents($filePath, $jsonContent);
+            if ($result === false) {
+                $output->writeln($formatter->formatBlock(['Could not write to the given file path.'], 'error', true));
+                return Command::FAILURE;
+            }
 
             $output->writeln($formatter->formatBlock(['Export completed.'], 'info', true));
         } else {
-            $output->writeln(json_encode($export));
+            $output->writeln($jsonContent);
         }
 
         return Command::SUCCESS;

@@ -36,7 +36,7 @@ class StatisticApiController extends AbstractController
         // Get the start date from the parameters
         if ($request->query->has('startDate')) {
             try {
-                $startDate = new DateTime($request->query->get('startDate'));
+                $startDate = new DateTime($request->query->getString('startDate'));
 
                 if ($startDate > (new DateTime())) {
                     return new JsonResponse(['error' => true, 'errorMessage' => 'The start date cannot be in the future.']);
@@ -49,7 +49,7 @@ class StatisticApiController extends AbstractController
         // Get the time range (in seconds) and calculate the start date.
         // We only accept the range parameter if the start date parameter is not set
         if ($startDate === null && $request->query->has('range')) {
-            $range = intval($request->query->get('range'));
+            $range = $request->query->getInt('range');
 
             if ($range === 0) {
                 return new JsonResponse(['error' => true, 'errorMessage' => 'Invalid range.']);

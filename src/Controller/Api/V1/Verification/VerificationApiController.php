@@ -6,12 +6,15 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\ApiClient\RequestHelper;
+use Mosparo\Entity\SubmitToken;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\HmacSignatureHelper;
 use Mosparo\Helper\SecurityHelper;
 use Mosparo\Helper\StatisticHelper;
 use Mosparo\Helper\VerificationHelper;
 use Mosparo\Repository\SubmitTokenRepository;
+use Mosparo\Util\IpUtil;
+use Mosparo\Util\StringUtil;
 use Mosparo\Util\TimeUtil;
 use Mosparo\Verification\GeneralVerification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -67,7 +70,7 @@ class VerificationApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Required parameter missing.'] + $debugInformation);
         }
 
-        $submitToken = $submitTokenRepository->findOneBy(['token' => $request->request->get('submitToken')]);
+        $submitToken = $submitTokenRepository->findOneBy(['token' => $request->request->getString('submitToken')]);
         if ($submitToken === null || !$submitToken->isValid()) {
             // Prepare the API debug data
             $debugInformation = [];
@@ -87,16 +90,91 @@ class VerificationApiController extends AbstractController
         }
 
         $submission = $submitToken->getLastSubmission();
-        if (!$submission) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.']);
+        if (!$submission || !$submission->getValidationToken()) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => (!$submission) ? 'submission_not_found' : 'validation_token_missing',
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.'] + $debugInformation);
         }
 
-        $submitToken->setVerifiedAt(new DateTime());
-        $submission->setVerifiedAt(new DateTime());
+        $requestData = $request->request->all();
+        $formData = $requestData['formData'] ?? [];
+        if (!is_array($formData)) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => 'form_data_invalid',
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Form data invalid.'] + $debugInformation);
+        }
+
+        // Mark the submit token as verified with a conditional update to prevent a race condition
+        $verifiedAt = new DateTime();
+        $affectedRows = $entityManager->createQueryBuilder()
+            ->update(SubmitToken::class, 'st')
+            ->set('st.verifiedAt', ':verifiedAt')
+            ->where('st.id = :id')
+            ->andWhere('st.verifiedAt IS NULL')
+            ->setParameter('verifiedAt', $verifiedAt)
+            ->setParameter('id', $submitToken->getId())
+            ->getQuery()
+            ->execute();
+
+        if ($affectedRows === 0) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => 'submit_token_not_valid',
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Submit token not found or not valid.'] + $debugInformation);
+        }
+
+        $submitToken->setVerifiedAt($verifiedAt);
+        $submission->setVerifiedAt($verifiedAt);
+
+        $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
+        $formSignature = $requestHelper->createFormDataHmacHash($formData);
+        if (!hash_equals($formSignature, $request->request->getString('formSignature'))) {
+            $submission->setValid(false);
+
+            $issue = [
+                'error' => true,
+                'errorMessage' => 'Verification failed.',
+                'debugInformation' => [
+                    'reason' => 'form_data_signature_invalid',
+                    'expectedSignature' => StringUtil::obfuscateString($formSignature),
+                    'receivedSignature' => $request->request->getString('formSignature'),
+                    'signaturePayload' => $formData,
+                ],
+            ];
+
+            $submission->addIssue($issue);
+
+            $entityManager->flush();
+
+            $this->statisticHelper->increaseDayStatisticForSubmission($submission);
+
+            if (!$activeProject->isApiDebugMode()) {
+                unset($issue['debugInformation']);
+            }
+
+            return new JsonResponse($issue);
+        }
 
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
-            $metadata = json_decode($request->request->get('metadata'), true);
-            if ($metadata) {
+            $metadata = json_decode($request->request->getString('metadata'), true);
+            if (is_array($metadata)) {
                 $submission->appendData([
                     'metadata' => $metadata,
                 ]);
@@ -113,9 +191,10 @@ class VerificationApiController extends AbstractController
 
         // Determine the security settings
         $securitySettings = $this->securityHelper->determineSecuritySettings($clientIpAddress, $submitToken->getFormOriginData());
+        $isIpOnAllowList = IpUtil::isIpOnAllowList($clientIpAddress, $securitySettings);
 
         // Check if the minimum time functionality is active and if the time difference is bigger than the minimum time.
-        if ($securitySettings['minimumTimeActive']) {
+        if ($securitySettings['minimumTimeActive'] && !$isIpOnAllowList) {
             $minimumTimeSeconds = $securitySettings['minimumTimeSeconds'];
             $seconds = TimeUtil::getDifferenceInSeconds($submission->getSubmitToken()->getCreatedAt(), $submission->getVerifiedAt());
 
@@ -143,6 +222,8 @@ class VerificationApiController extends AbstractController
 
                 $entityManager->flush();
 
+                $this->statisticHelper->increaseDayStatisticForSubmission($submission);
+
                 if (!$activeProject->isApiDebugMode()) {
                     unset($issue['debugInformation']);
                 }
@@ -152,7 +233,7 @@ class VerificationApiController extends AbstractController
         }
 
         $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
-        if ($request->request->get('validationSignature') !== $validationSignature) {
+        if (!hash_equals($validationSignature, $request->request->getString('validationSignature'))) {
             $submission->setValid(false);
 
             $issue = array_merge([
@@ -160,8 +241,8 @@ class VerificationApiController extends AbstractController
                 'errorMessage' => 'Verification failed.',
                 'debugInformation' => [
                     'reason' => 'validation_signature_invalid',
-                    'expectedSignature' => $validationSignature,
-                    'receivedSignature' => $request->request->get('validationSignature'),
+                    'expectedSignature' => StringUtil::obfuscateString($validationSignature),
+                    'receivedSignature' => $request->request->getString('validationSignature'),
                     'signaturePayload' => $submission->getValidationToken(),
                 ],
             ], $responseMetadata);
@@ -170,6 +251,8 @@ class VerificationApiController extends AbstractController
 
             $entityManager->flush();
 
+            $this->statisticHelper->increaseDayStatisticForSubmission($submission);
+
             if (!$activeProject->isApiDebugMode()) {
                 unset($issue['debugInformation']);
             }
@@ -177,13 +260,11 @@ class VerificationApiController extends AbstractController
             return new JsonResponse($issue);
         }
 
-        $requestData = $request->request->all();
-        $formData = $requestData['formData'] ?? [];
         $verificationSignature = '';
         $verificationResult = $this->verificationHelper->verifyFormData($submission, $formData);
         if ($verificationResult['valid']) {
             // Check for equal form submission, if the security feature is enabled
-            if ($securitySettings['equalSubmissionsActive']) {
+            if ($securitySettings['equalSubmissionsActive'] && !$isIpOnAllowList) {
                 $allowedNumberOfEqualSubmissions = $securitySettings['equalSubmissionsNumberOfEqualSubmissions'];
                 $actualNumberOfEqualSubmissions = $this->securityHelper->countEqualSubmissions(
                     $submission->getSignature(),
@@ -216,6 +297,8 @@ class VerificationApiController extends AbstractController
 
                     $entityManager->flush();
 
+                    $this->statisticHelper->increaseDayStatisticForSubmission($submission);
+
                     if (!$activeProject->isApiDebugMode()) {
                         unset($issue['debugInformation']);
                     }
@@ -223,9 +306,6 @@ class VerificationApiController extends AbstractController
                     return new JsonResponse($issue);
                 }
             }
-
-            $requestHelper = new RequestHelper($activeProject->getPublicKey(), $activeProject->getPrivateKey());
-            $formSignature = $requestHelper->createFormDataHmacHash($formData);
 
             $validationSignature = $requestHelper->createHmacHash($submission->getValidationToken());
             $verificationSignature = $requestHelper->createHmacHash($validationSignature . $formSignature);
@@ -300,7 +380,7 @@ class VerificationApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Required parameter missing.'] + $debugInformation);
         }
 
-        $submitToken = $submitTokenRepository->findOneBy(['token' => $request->request->get('submitToken')]);
+        $submitToken = $submitTokenRepository->findOneBy(['token' => $request->request->getString('submitToken')]);
         if ($submitToken === null) {
             // Prepare the API debug data
             $debugInformation = [];
@@ -320,12 +400,20 @@ class VerificationApiController extends AbstractController
         }
 
         $submission = $submitToken->getLastSubmission();
-        if (!$submission) {
-            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.']);
+        if (!$submission || !$submission->getValidationToken()) {
+            // Prepare the API debug data
+            $debugInformation = [];
+            if ($activeProject->isApiDebugMode()) {
+                $debugInformation['debugInformation'] = [
+                    'reason' => (!$submission) ? 'submission_not_found' : 'validation_token_missing',
+                ];
+            }
+
+            return new JsonResponse(['error' => true, 'errorMessage' => 'Submission does not exist.'] + $debugInformation);
         }
 
         $validationSignature = $this->hmacSignatureHelper->createSignature($submission->getValidationToken(), $activeProject->getPrivateKey());
-        if ($request->request->get('validationSignature') !== $validationSignature) {
+        if (!hash_equals($validationSignature, $request->request->getString('validationSignature'))) {
             $responseData = [
                 'error' => true,
                 'errorMessage' => 'Validation signature invalid.',
@@ -334,8 +422,8 @@ class VerificationApiController extends AbstractController
             if ($activeProject->isApiDebugMode()) {
                 $responseData['debugInformation'] = [
                     'reason' => 'validation_signature_invalid',
-                    'expectedSignature' => $validationSignature,
-                    'receivedSignature' => $request->request->get('validationSignature'),
+                    'expectedSignature' => StringUtil::obfuscateString($validationSignature),
+                    'receivedSignature' => $request->request->getString('validationSignature'),
                     'signaturePayload' => $submission->getValidationToken(),
                 ];
             }
@@ -343,8 +431,8 @@ class VerificationApiController extends AbstractController
             return new JsonResponse($responseData);
         }
 
-        $metadata = json_decode($request->request->get('metadata'), true);
-        if ($metadata) {
+        $metadata = json_decode($request->request->getString('metadata'), true);
+        if (is_array($metadata)) {
             $submission->appendData([
                 'metadata' => $metadata,
             ]);

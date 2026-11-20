@@ -10,7 +10,7 @@ use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 
 class CacheFactory
 {
-    public static function getCache(string $cacheAdapter = null, string $redisUrl = null, string $memcachedUrl = null, string $filesystemCachePath = null): AbstractAdapter
+    public static function getCache(?string $cacheAdapter = null, ?string $redisUrl = null, ?string $memcachedUrl = null, ?string $filesystemCachePath = null): AbstractAdapter
     {
         $cacheAdapter = $cacheAdapter ?: 'filesystem';
 

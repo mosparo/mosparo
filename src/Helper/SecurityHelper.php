@@ -37,7 +37,7 @@ class SecurityHelper
 
     public function checkIpAddress(string $ipAddress, int $feature, array $securitySettings)
     {
-        if (trim($securitySettings['ipAllowList']) && IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList'])) {
+        if (IpUtil::isIpOnAllowList($ipAddress, $securitySettings)) {
             return false;
         }
 
@@ -81,14 +81,14 @@ class SecurityHelper
         if ($count > $delayNumberOfRequests || $existingDelay !== null) {
             if ($existingDelay === null) {
                 $delay = new Delay();
-                $delay->setIpAddress($ipAddress);
+                $delay->setIpAddress(IpUtil::getAddressForRateLimiting($ipAddress));
                 $delay->setStartedAt(new DateTime());
                 $delay->setDuration($delayTime);
 
                 $this->entityManager->persist($delay);
             } else {
                 $delay = $existingDelay;
-                $delay->setDuration($delay->getDuration() * $delayMultiplicator);
+                $delay->setDuration((int) round($delay->getDuration() * $delayMultiplicator));
             }
 
             $endDateTime = clone $delay->getStartedAt();
@@ -116,17 +116,17 @@ class SecurityHelper
         if ($count > $lockoutNumberOfRequests || $existingLockout !== null) {
             if ($existingLockout === null) {
                 $lockout = new Lockout();
-                $lockout->setIpAddress($ipAddress);
+                $lockout->setIpAddress(IpUtil::getAddressForRateLimiting($ipAddress));
                 $lockout->setStartedAt(new DateTime());
                 $lockout->setDuration($lockoutTime);
 
                 $this->entityManager->persist($lockout);
             } else {
                 $lockout = $existingLockout;
-                $lockout->setDuration($lockout->getDuration() * $lockoutMultiplicator);
+                $lockout->setDuration((int) round($lockout->getDuration() * $lockoutMultiplicator));
             }
 
-            $endDateTime = $lockout->getStartedAt();
+            $endDateTime = clone $lockout->getStartedAt();
             $endDateTime->add(new DateInterval('PT' . $lockout->getDuration() . 'S'));
 
             $lockout->setValidUntil($endDateTime);
@@ -146,10 +146,9 @@ class SecurityHelper
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('count(st.id) AS requests')
            ->from('Mosparo\Entity\SubmitToken', 'st')
-           ->leftJoin('Mosparo\Entity\Submission', 's', 'WITH', 'st.id = s.submitToken')
            ->where('st.ipAddress = :ip')
            ->andWhere('st.createdAt > :startTime')
-           ->setParameter(':ip', HashUtil::hash($ipAddress))
+           ->setParameter(':ip', HashUtil::hash(IpUtil::getAddressForRateLimiting($ipAddress)))
            ->setParameter(':startTime', $startTime);
 
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -165,7 +164,6 @@ class SecurityHelper
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('count(st.id) AS requests')
             ->from('Mosparo\Entity\SubmitToken', 'st')
-            ->leftJoin('Mosparo\Entity\Submission', 's', 'WITH', 'st.id = s.submitToken')
             ->andWhere('st.createdAt > :startTime')
             ->setParameter(':startTime', $startTime);
 
@@ -182,7 +180,7 @@ class SecurityHelper
            ->where('l.ipAddress = :ip')
            ->andWhere('l.validUntil > :now')
            ->setMaxResults(1)
-           ->setParameter('ip', HashUtil::hash($ipAddress))
+           ->setParameter('ip', HashUtil::hash(IpUtil::getAddressForRateLimiting($ipAddress)))
            ->setParameter('now', new DateTime());
 
         return $qb->getQuery()->getOneOrNullResult();
@@ -196,7 +194,7 @@ class SecurityHelper
            ->where('d.ipAddress = :ip')
            ->andWhere('d.validUntil > :now')
            ->setMaxResults(1)
-           ->setParameter('ip', HashUtil::hash($ipAddress))
+           ->setParameter('ip', HashUtil::hash(IpUtil::getAddressForRateLimiting($ipAddress)))
            ->setParameter('now', new DateTime());
 
         return $qb->getQuery()->getOneOrNullResult();
@@ -217,7 +215,7 @@ class SecurityHelper
 
         if ($basedOnIp && $ipAddress) {
             $qb->andWhere('st.ipAddress = :ip')
-               ->setParameter('ip', HashUtil::hash($ipAddress));
+               ->setParameter('ip', HashUtil::hash(IpUtil::getAddressForRateLimiting($ipAddress)));
         }
 
         $result = $qb->getQuery()->getOneOrNullResult();

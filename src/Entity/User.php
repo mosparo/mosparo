@@ -25,7 +25,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\NotBlank]
     #[Assert\Email]
+    #[Assert\Length(max: 180)]
     private ?string $email;
 
     #[ORM\Column(type: 'json')]
@@ -207,7 +209,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
      */
     public function isBackupCode(string $code): bool
     {
-        return in_array($code, $this->backupCodes);
+        return in_array($code, $this->backupCodes, true);
     }
 
     /**
@@ -217,7 +219,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
      */
     public function invalidateBackupCode(string $code): void
     {
-        $key = array_search($code, $this->backupCodes);
+        $key = array_search($code, $this->backupCodes, true);
         if ($key !== false){
             unset($this->backupCodes[$key]);
         }

@@ -108,13 +108,17 @@ class JsonImporter implements ImporterInterface
             $rulePackageRuleCache->setUpdatedAt($rulePackageCache->getUpdatedAt());
 
             $rating = null;
-            if ($rule['spamRatingFactor']) {
+            if ($rule['spamRatingFactor'] ?? null) {
                 $rating = (float) $rule['spamRatingFactor'];
             }
             $rulePackageRuleCache->setSpamRatingFactor($rating);
 
             $processedItemUuids = [];
             foreach ($rule['items'] as $item) {
+                if (!isset($item['uuid']) || !isset($item['type']) || !isset($item['value'])) {
+                    continue;
+                }
+
                 $processedItemUuids[] = $item['uuid'];
 
                 $rulePackageRuleItemCache = $rulePackageRuleCache->findItem($item['uuid']);
@@ -132,7 +136,7 @@ class JsonImporter implements ImporterInterface
                 $rulePackageRuleItemCache->setUpdatedAt($rulePackageRuleCache->getUpdatedAt());
 
                 $rating = null;
-                if ($item['rating']) {
+                if ($item['rating'] ?? null) {
                     $rating = (float) $item['rating'];
                 }
                 $rulePackageRuleItemCache->setSpamRatingFactor($rating);
@@ -149,7 +153,7 @@ class JsonImporter implements ImporterInterface
 
             $this->entityManager->flush();
 
-            $this->rulePackageHelper->countNumberOfRuleItems($rulePackageRuleCache);
+            $this->rulePackageHelper->countRuleItemsForRule($rulePackageRuleCache);
         }
 
         // Remove all rules which are not in the data anymore

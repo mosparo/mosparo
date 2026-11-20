@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 if [ $MOSPARO_ENABLE_WEBSERVER -eq 1 ]; then
   /usr/bin/curl -s --fail-with-body http://localhost/api/v1/health/check || exit 1

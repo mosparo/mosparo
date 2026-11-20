@@ -10,8 +10,15 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Positive;
+use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class SecuritySettingsFormType extends AbstractType
 {
@@ -23,7 +30,7 @@ class SecuritySettingsFormType extends AbstractType
         $builder
             // Minimum time
             ->add('minimumTimeActive', CheckboxType::class, ['label' => 'settings.security.form.minimumTimeActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
-            ->add('minimumTimeSeconds', IntegerType::class, ['label' => 'settings.security.form.minimumTimeSeconds', 'help' => 'unitHelp.inSeconds', 'required' => false])
+            ->add('minimumTimeSeconds', IntegerType::class, ['label' => 'settings.security.form.minimumTimeSeconds', 'help' => 'unitHelp.inSeconds', 'required' => false, 'constraints' => [new NotBlank(groups: ['minimumTime']), new Positive()]])
 
             // Honeypot
             ->add('honeypotFieldActive', CheckboxType::class, ['label' => 'settings.security.form.honeypotFieldActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
@@ -36,32 +43,43 @@ class SecuritySettingsFormType extends AbstractType
 
             // delay
             ->add('delayActive', CheckboxType::class, ['label' => 'settings.security.form.delayActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
-            ->add('delayNumberOfRequests', IntegerType::class, ['label' => 'settings.security.form.delayNumberOfAllowedRequests', 'help' => 'settings.security.form.delayNumberOfAllowedRequestsHelp'])
-            ->add('delayDetectionTimeFrame', IntegerType::class, ['label' => 'settings.security.form.delayDetectionTimeFrame', 'help' => 'unitHelp.inSeconds'])
-            ->add('delayTime', IntegerType::class, ['label' => 'settings.security.form.delayTime', 'help' => 'unitHelp.inSeconds'])
-            ->add('delayMultiplicator', NumberType::class, ['label' => 'settings.security.form.delayMultiplicator', 'help' => 'settings.security.form.delayMultiplicatorHelp', 'html5' => true, 'scale' => 1, 'attr' => ['min' => 0.1, 'step' => 'any']])
+            ->add('delayNumberOfRequests', IntegerType::class, ['label' => 'settings.security.form.delayNumberOfAllowedRequests', 'help' => 'settings.security.form.delayNumberOfAllowedRequestsHelp', 'constraints' => [new NotBlank(groups: ['delay']), new Positive()]])
+            ->add('delayDetectionTimeFrame', IntegerType::class, ['label' => 'settings.security.form.delayDetectionTimeFrame', 'help' => 'unitHelp.inSeconds', 'constraints' => [new NotBlank(groups: ['delay']), new Positive()]])
+            ->add('delayTime', IntegerType::class, ['label' => 'settings.security.form.delayTime', 'help' => 'unitHelp.inSeconds', 'constraints' => [new NotBlank(groups: ['delay']), new Positive()]])
+            ->add('delayMultiplicator', NumberType::class, ['label' => 'settings.security.form.delayMultiplicator', 'help' => 'settings.security.form.delayMultiplicatorHelp', 'html5' => true, 'scale' => 1, 'attr' => ['min' => 0.1, 'step' => 'any'], 'constraints' => [new GreaterThanOrEqual(value: 0.1)]])
 
             // lockout
             ->add('lockoutActive', CheckboxType::class, ['label' => 'settings.security.form.lockoutActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
-            ->add('lockoutNumberOfRequests', IntegerType::class, ['label' => 'settings.security.form.lockoutNumberOfAllowedRequests', 'help' => 'settings.security.form.lockoutNumberOfAllowedRequestsHelp'])
-            ->add('lockoutDetectionTimeFrame', IntegerType::class, ['label' => 'settings.security.form.lockoutDetectionTimeFrame', 'help' => 'unitHelp.inSeconds'])
-            ->add('lockoutTime', IntegerType::class, ['label' => 'settings.security.form.lockoutTime', 'help' => 'unitHelp.inSeconds'])
-            ->add('lockoutMultiplicator', NumberType::class, ['label' => 'settings.security.form.lockoutMultiplicator', 'help' => 'settings.security.form.lockoutMultiplicatorHelp', 'html5' => true, 'scale' => 1, 'attr' => ['min' => 0.1, 'step' => 'any']])
+            ->add('lockoutNumberOfRequests', IntegerType::class, ['label' => 'settings.security.form.lockoutNumberOfAllowedRequests', 'help' => 'settings.security.form.lockoutNumberOfAllowedRequestsHelp', 'constraints' => [new NotBlank(groups: ['lockout']), new Positive()]])
+            ->add('lockoutDetectionTimeFrame', IntegerType::class, ['label' => 'settings.security.form.lockoutDetectionTimeFrame', 'help' => 'unitHelp.inSeconds', 'constraints' => [new NotBlank(groups: ['lockout']), new Positive()]])
+            ->add('lockoutTime', IntegerType::class, ['label' => 'settings.security.form.lockoutTime', 'help' => 'unitHelp.inSeconds', 'constraints' => [new NotBlank(groups: ['lockout']), new Positive()]])
+            ->add('lockoutMultiplicator', NumberType::class, ['label' => 'settings.security.form.lockoutMultiplicator', 'help' => 'settings.security.form.lockoutMultiplicatorHelp', 'html5' => true, 'scale' => 1, 'attr' => ['min' => 0.1, 'step' => 'any'], 'constraints' => [new GreaterThanOrEqual(value: 0.1)]])
 
             // Proof of work
             ->add('proofOfWorkActive', CheckboxType::class, ['label' => 'settings.security.form.proofOfWorkActive', 'required' => false, 'attr' => ['class' => 'card-field-switch proof-of-work-active']])
-            ->add('proofOfWorkComplexity', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkComplexity', 'required' => false, 'attr' => ['class' => 'text-center complexity-field', 'min' => 2, 'max' => 7]])
+            ->add('proofOfWorkComplexity', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkComplexity', 'required' => false, 'attr' => ['class' => 'text-center complexity-field min-complexity', 'min' => 2, 'max' => 7], 'constraints' => [new NotBlank(groups: ['proofOfWork']), new Range(min: 2, max: 7)]])
             ->add('proofOfWorkDynamicComplexityActive', CheckboxType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityActive', 'required' => false, 'attr' => ['class' => 'sub-card-field-switch']])
-            ->add('proofOfWorkDynamicComplexityMaxComplexity', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityMaxComplexity', 'required' => false, 'attr' => ['class' => 'text-center complexity-field', 'min' => 2, 'max' => 7]])
-            ->add('proofOfWorkDynamicComplexityNumberOfSubmissions', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityNumberOfSubmissions', 'required' => false, 'help' => 'settings.security.form.proofOfWorkDynamicComplexityNumberOfSubmissionsHelp'])
-            ->add('proofOfWorkDynamicComplexityTimeFrame', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityTimeFrame', 'required' => false, 'help' => 'unitHelp.inSeconds'])
+            ->add('proofOfWorkDynamicComplexityMaxComplexity', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityMaxComplexity', 'required' => false, 'attr' => ['class' => 'text-center complexity-field max-complexity', 'min' => 2, 'max' => 7], 'constraints' => [
+                new NotBlank(groups: ['proofOfWorkComplex']),
+                new Range(min: 2, max: 7),
+                new Callback(groups: ['proofOfWorkComplex'], callback: function ($value, ExecutionContextInterface $context, mixed $payload) {
+                    $data = $context->getObject()->getParent()->getData();
+
+                    if (($data['proofOfWorkComplexity'] ?? 2) > $value) {
+                        $context->buildViolation('securityGuideline.dynamicComplexityHigher')
+                            ->addViolation();
+                    }
+                })
+            ]])
+            ->add('proofOfWorkDynamicComplexityNumberOfSubmissions', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityNumberOfSubmissions', 'required' => false, 'help' => 'settings.security.form.proofOfWorkDynamicComplexityNumberOfSubmissionsHelp', 'constraints' => [new NotBlank(groups: ['proofOfWorkComplex']), new Positive()]])
+            ->add('proofOfWorkDynamicComplexityTimeFrame', IntegerType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityTimeFrame', 'required' => false, 'help' => 'unitHelp.inSeconds', 'constraints' => [new NotBlank(groups: ['proofOfWorkComplex']), new Positive()]])
             ->add('proofOfWorkDynamicComplexityBasedOnIpAddress', CheckboxType::class, ['label' => 'settings.security.form.proofOfWorkDynamicComplexityBasedOnIpAddress', 'help' => 'settings.security.form.proofOfWorkDynamicComplexityBasedOnIpAddressHelp', 'required' => false, ])
 
             // equal submissions
             ->add('equalSubmissionsActive', CheckboxType::class, ['label' => 'settings.security.form.equalSubmissionsActive', 'required' => false, 'attr' => ['class' => 'card-field-switch']])
-            ->add('equalSubmissionsNumberOfEqualSubmissions', IntegerType::class, ['label' => 'settings.security.form.equalSubmissionsNumberOfEqualSubmissions', 'help' => 'settings.security.form.equalSubmissionsNumberOfEqualSubmissionsHelp'])
-            ->add('equalSubmissionsTimeFrame', IntegerType::class, ['label' => 'settings.security.form.equalSubmissionsTimeFrame', 'help' => 'unitHelp.inSeconds'])
-            ->add('equalSubmissionsBasedOnIpAddress', CheckboxType::class, ['label' => 'settings.security.form.equalSubmissionsBasedOnIpAddress', 'help' => 'settings.security.form.equalSubmissionsBasedOnIpAddressHelp', 'required' => false, ])
+            ->add('equalSubmissionsNumberOfEqualSubmissions', IntegerType::class, ['label' => 'settings.security.form.equalSubmissionsNumberOfEqualSubmissions', 'help' => 'settings.security.form.equalSubmissionsNumberOfEqualSubmissionsHelp', 'constraints' => [new NotBlank(groups: ['equalSubmissions']), new Positive()]])
+            ->add('equalSubmissionsTimeFrame', IntegerType::class, ['label' => 'settings.security.form.equalSubmissionsTimeFrame', 'help' => 'unitHelp.inSeconds', 'constraints' => [new NotBlank(groups: ['equalSubmissions']), new Positive()]])
+            ->add('equalSubmissionsBasedOnIpAddress', CheckboxType::class, ['label' => 'settings.security.form.equalSubmissionsBasedOnIpAddress', 'help' => 'settings.security.form.equalSubmissionsBasedOnIpAddressHelp', 'required' => false])
         ;
 
         if ($isGeneralSettings) {
@@ -85,6 +103,9 @@ class SecuritySettingsFormType extends AbstractType
                         'min' => 0.1,
                         'step' => 'any',
                     ],
+                    'constraints' => [
+                        new GreaterThanOrEqual(value: 0.1),
+                    ]
                 ]);
         }
 
@@ -105,6 +126,22 @@ class SecuritySettingsFormType extends AbstractType
             'isGeneralSettings' => false,
             'addOverrideOptions' => false,
             'translation_domain' => 'mosparo',
+            'validation_groups' => function (FormInterface $form): array {
+                $data = $form->getData() ?? [];
+                $groups = ['Default'];
+
+                foreach (['minimumTime', 'delay', 'lockout', 'proofOfWork', 'equalSubmissions'] as $section) {
+                    if (!empty($data[$section . 'Active'])) {
+                        $groups[] = $section;
+                    }
+                }
+
+                if (!empty($data['proofOfWorkActive']) && !empty($data['proofOfWorkDynamicComplexityActive'])) {
+                    $groups[] = 'proofOfWorkComplex';
+                }
+
+                return $groups;
+            },
         ]);
     }
 }

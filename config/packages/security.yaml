@@ -80,6 +80,7 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
+        - { path: ^/cron-jobs/execute, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/webauthn, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
@@ -89,8 +90,9 @@ security:
         - { path: ^/password, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/administration/update/finalize, roles: PUBLIC_ACCESS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
-        - { path: ^/cron-jobs/execute, roles: PUBLIC_ACCESS }
-        - { path: ^/project/create, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" } # Covers also the wizard
+        - { path: ^/project/(group/[^/]+/)?create, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
+        - { path: ^/project/\d+/create, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
+        - { path: ^/project-group, roles: ROLE_CAN_CREATE_PROJECTS, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/administration, roles: ROLE_ADMIN, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/account/webauthn, roles: ROLE_USER, allow_if: "is_granted('RECENTLY_AUTHENTICATED') and ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }
         - { path: ^/, roles: ROLE_USER, allow_if: "ip_on_allow_list_security(request.getClientIp(), '%env(backend_access_ip_allow_list)%')" }

@@ -23,4 +23,19 @@ final class UserAgentRuleType extends AbstractRuleType
     protected string $testerClass = UserAgentRuleTester::class;
     protected array $targetFieldKeys = ['client.userAgent'];
     protected string $helpTemplate = 'project_related/rules/field_rule/type/help/userAgent.html.twig';
+
+    public function isValidValue(string $subtype, string $value): bool
+    {
+        $initialResult = parent::isValidValue($subtype, $value);
+
+        if (!$initialResult) {
+            return false;
+        }
+
+        if ($subtype === 'uaRegex') {
+            return @preg_match($value, '') !== false;
+        }
+
+        return true;
+    }
 }

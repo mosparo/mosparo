@@ -1,0 +1,7 @@
+{
+    "entrypoints": {
+        "mosparo-frontend": {
+            "css": ["/../tests/ApplicationTests/Fixtures/build/mosparo-frontend.css"]
+        }
+    }
+}

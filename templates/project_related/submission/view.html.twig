@@ -307,8 +307,12 @@
                         <div class="mb-3">
                             <h4 class="mb-0">{{ 'submission.view.source.pageUrl'|trans }}</h4>
                             <div>
-                                <a href="{{ submission.submitToken.pageUrl }}" target="_blank">{{ submission.submitToken.pageUrl }}</a>
-                                <i class="ti ti-external-link"></i>
+                                {% if submission.submitToken.pageUrl starts with 'https://' or submission.submitToken.pageUrl starts with 'http://' %}
+                                    <a href="{{ submission.submitToken.pageUrl }}" target="_blank">{{ submission.submitToken.pageUrl }}</a>
+                                    <i class="ti ti-external-link"></i>
+                                {% else %}
+                                    <code>{{ submission.submitToken.pageUrl }}</code>
+                                {% endif %}
                             </div>
                         </div>
 
@@ -505,7 +509,7 @@
                                                         {% for subValue in field.value %}
                                                             <li>
                                                                 <code class="submission-data" data-field-path="{{ groupKey }}.{{ field.fieldPath }}">
-                                                                    <span>{{- subValue|escape|mark_invisible_characters -}}</span>
+                                                                    <span>{{- subValue|mark_invisible_characters -}}</span>
                                                                     {{- _self.valueToolbar() -}}
                                                                 </code>
                                                             </li>
@@ -514,7 +518,7 @@
                                                 {% elseif field.value is defined and not (field.value is iterable) and field.value|trim != '' %}
                                                     <code class="submission-data" data-field-path="{{ groupKey }}.{{ field.fieldPath }}">
                                                         {#-  -#}
-                                                        <span>{{- field.value|escape|mark_invisible_characters -}}</span>
+                                                        <span>{{- field.value|mark_invisible_characters -}}</span>
                                                         {#-  -#}
                                                         {{- _self.valueToolbar() -}}
                                                     </code>
@@ -625,10 +629,18 @@
                                                                     {% set groupKey = parts[0] %}
                                                                     {% set field = submission.data[groupKey]|find(field => field.fieldPath == parts[1]) %}
                                                                     {% if field %}
-                                                                        <tr>
-                                                                            <td class="w-33">{{ _self.fieldName(groupKey, field) }}</td>
-                                                                            <td class="w-66"><code class="submission-data word-break-all">{{ field.value }}</code></td>
-                                                                        </tr>
+                                                                        {% set fieldValues = field.value %}
+                                                                        {% if not fieldValues is iterable %}
+                                                                            {% set fieldValues = [field.value] %}
+                                                                        {% endif %}
+                                                                        {% for val in fieldValues %}
+                                                                            <tr>
+                                                                                <td class="w-33">{{ _self.fieldName(groupKey, field) }}</td>
+                                                                                <td class="w-66">
+                                                                                    <code class="submission-data word-break-all">{{ val }}</code>
+                                                                                </td>
+                                                                            </tr>
+                                                                        {% endfor %}
                                                                     {% endif %}
                                                                 {% endfor %}
                                                             </tbody>

@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -Eeuxo pipefail
-set -o history -o histexpand
+set -eux
 
 [ -d /mosparo/var ] && rm -rf /mosparo/var
 [ -d /mosparo/public/resources ] && rm -rf /mosparo/public/resources

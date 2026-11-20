@@ -130,6 +130,10 @@
                 background: rgba(var(--warning-rgb), 0.15);
             }
 
+            &.tabulator-cell-invalid {
+                background: rgba(var(--tblr-danger-rgb), 0.15);
+            }
+
             &.tabulator-editing {
                 background: var(--blue-lt);
                 border-color: var(--blue);

@@ -65,6 +65,20 @@ final class UnicodeBlockRuleType extends AbstractRuleType
         return $blockChoices;
     }
 
+    public function isValidValue(string $subtype, string $value): bool
+    {
+        $initialResult = parent::isValidValue($subtype, $value);
+
+        if (!$initialResult) {
+            return false;
+        }
+
+        $unicodeIndex = new UnicodeIndex();
+        $unicodeBlock = $unicodeIndex->getBlockByKey($value);
+
+        return ($unicodeBlock !== null);
+    }
+
     public function convertValueIntoRuleItem(string $value): RuleItem
     {
         $matchingBlocks = [];

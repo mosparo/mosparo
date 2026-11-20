@@ -29,7 +29,7 @@ class Translation implements ProjectRelatedEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     public function getId(): ?int
     {
@@ -44,18 +44,6 @@ class Translation implements ProjectRelatedEntityInterface
     public function setTranslationKey(TranslationKey $translationKey): self
     {
         $this->translationKey = $translationKey;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

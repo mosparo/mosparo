@@ -101,13 +101,12 @@ function mosparo(containerId, url, uuid, publicKey, options)
             this.options.forceInvisible = (this.options.isMultiStepForm && !this.options.isLastStep);
         }
 
-        let forceInvisibleClass = null;
-        if (this.options.forceInvisible) {
-            forceInvisibleClass = 'mosparo__force-invisible-mode';
-        }
-
-        this.containerElement.classList.add('mosparo__container', 'mosparo__' + this.uuid, forceInvisibleClass);
+        this.containerElement.classList.add('mosparo__container', 'mosparo__' + this.uuid);
         this.containerElement.setAttribute('lang', this.messages.locale);
+
+        if (this.options.forceInvisible) {
+            this.containerElement.classList.add('mosparo__force-invisible-mode');
+        }
 
         // Find the form
         let forms = document.querySelectorAll('form');
@@ -279,15 +278,11 @@ function mosparo(containerId, url, uuid, publicKey, options)
         this.errorMessageElement.classList.remove('mosparo__error-message-visible');
         this.containerElement.classList.add('mosparo__loading');
 
-        let formActionUrl = this.formElement.getAttribute('action') ?? document.location.href;
-        if (formActionUrl.indexOf('http://') !== 0 || formActionUrl.indexOf('https://') !== 0) {
-            if (formActionUrl.indexOf('/') === 0) {
-                // Action URL is absolute, add host
-                formActionUrl = document.location.origin + formActionUrl;
-            } else if (['?', '&', '#'].indexOf(formActionUrl.substring(0, 1)) !== -1) {
-                // Action is a query URL or a hash
-                formActionUrl = document.location.href + formActionUrl;
-            }
+        let formActionUrl;
+        try {
+            formActionUrl = new URL(this.formElement.getAttribute('action') ?? '', document.location.href).href;
+        } catch {
+            formActionUrl = document.location.href;
         }
 
         let data = {
@@ -622,7 +617,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
 
             let value = _this.getFieldValue(el);
 
-            if (name.indexOf('[]') === name.length - 2) {
+            if (name.length > 2 && name.endsWith('[]')) {
                 name = name.substring(0, name.length - 2);
                 if (value === '') {
                     value = [];
@@ -723,7 +718,14 @@ function mosparo(containerId, url, uuid, publicKey, options)
         request.onreadystatechange = function () {
             if (this.readyState === 4) {
                 if (this.status === 200) {
-                    let response = JSON.parse(this.responseText);
+                    let response;
+                    try {
+                        response = JSON.parse(this.responseText);
+                    } catch {
+                        callbackError('Failed to parse JSON response.');
+                        return;
+                    }
+
                     callbackSuccess(response);
                 } else {
                     callbackError(this.responseText);
@@ -797,8 +799,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             let date = new Date(response.until);
             this.showError(this.getMessage('errorLockedOut').replace('%datetime%', date.toLocaleString()));
         } else if (response.type === 'delay') {
-            let timeVal = '<span>%val%</span>'.replace('%val%', response.forSeconds);
-            this.showError(this.getMessage('errorDelay').replace('%seconds%', timeVal), false, true);
+            this.showDelayError(this.getMessage('errorDelay'), response.forSeconds);
             this.updateAccessibleStatus(this.getMessage('errorDelay').replace('%seconds%', response.forSeconds));
 
             this.countdownSeconds = response.forSeconds;
@@ -892,18 +893,30 @@ function mosparo(containerId, url, uuid, publicKey, options)
         return false;
     }
 
-    this.showError = function (error, withAccessible, withHtml)
+    this.showError = function (error, withAccessible)
     {
         this.errorMessageElement.classList.add('mosparo__error-message-visible');
+        this.errorMessageElement.textContent = error;
 
-        if (withHtml) {
-            this.errorMessageElement.innerHTML = error;
-        } else {
-            this.errorMessageElement.textContent = error;
+        if (withAccessible === undefined || withAccessible) {
+            this.updateAccessibleStatus(error);
+        }
+    }
 
-            if (withAccessible === undefined || withAccessible) {
-                this.updateAccessibleStatus(error);
+    this.showDelayError = function (message, seconds)
+    {
+        this.errorMessageElement.classList.add('mosparo__error-message-visible');
+        this.errorMessageElement.textContent = '';
+
+        let parts = message.split('%seconds%');
+        for (let i = 0; i < parts.length; i++) {
+            if (i > 0) {
+                let timeField = document.createElement('span');
+                timeField.textContent = seconds;
+                this.errorMessageElement.appendChild(timeField);
             }
+
+            this.errorMessageElement.appendChild(document.createTextNode(parts[i]));
         }
     }
 
@@ -960,7 +973,7 @@ function mosparo(containerId, url, uuid, publicKey, options)
             startNumber = 0
         }
 
-        for (let i = startNumber; i < maxNumber; i++) {
+        for (let i = startNumber; i <= maxNumber; i++) {
             let hash = await this.generateHash(submitToken + i);
 
             if (hash === targetHash) {

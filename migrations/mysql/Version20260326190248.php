@@ -36,4 +36,9 @@ final class Version20260326190248 extends AbstractMigration
         $this->addSql('DROP TABLE submission_rule');
         $this->addSql('DROP TABLE submission_rule_config_value');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

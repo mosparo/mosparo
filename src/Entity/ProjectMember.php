@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(options: ['engine' => 'InnoDB'])]
 #[ORM\Entity(repositoryClass: ProjectMemberRepository::class)]
+#[ORM\UniqueConstraint(name: 'project_user_idx', columns: ['user_id', 'project_id'])]
 class ProjectMember
 {
     const ROLE_READER = 'reader';
@@ -20,7 +21,7 @@ class ProjectMember
 
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'projectMembers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projectMemberships')]
     #[ORM\JoinColumn(nullable: false)]

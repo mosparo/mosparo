@@ -98,7 +98,7 @@ class RulePackageApiControllerTest extends ApiWebTestCase
         ]);
 
         $this->assertResponseIsSuccessful();
-        $this->assertEquals('{"result":true,"rules":[],"page":1,"totalPages":0}', $client->getResponse()->getContent());
+        $this->assertEquals('{"result":true,"rules":[],"page":1,"totalPages":1}', $client->getResponse()->getContent());
     }
 
     public function testCreatingAndGettingRule(): void
@@ -324,9 +324,8 @@ class RulePackageApiControllerTest extends ApiWebTestCase
                         'uuid' => '61674c78-ab52-4477-a367-a786fae7c12f',
                         'name' => 'Test rule',
                         'description' => 'Test description',
-                        'type' => 'word',
+                        // type property is missing
                         'spamRatingFactor' => 2,
-                        'invalidAdditionalProperty' => true,
                     ],
                 ],
             ]

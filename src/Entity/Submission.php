@@ -63,17 +63,17 @@ class Submission implements ProjectRelatedEntityInterface
     private array $generalVerifications = [];
 
     #[ORM\Column(type: 'float')]
-    private ?float $spamRating;
+    private ?float $spamRating = null;
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $spam = null;
 
     #[ORM\Column(type: 'float')]
-    private ?float $spamDetectionRating;
+    private ?float $spamDetectionRating = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $valid = null;

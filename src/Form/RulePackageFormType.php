@@ -11,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Url;
 
 class RulePackageFormType extends AbstractType
 {
@@ -41,10 +44,26 @@ class RulePackageFormType extends AbstractType
         $rulePackage = $builder->getData();
         if ($rulePackage->getType() === RulePackageType::AUTOMATICALLY_FROM_URL) {
             $builder
-                ->add('source', UrlType::class, ['label' => 'rulePackage.form.sourceUrl', 'help' => 'rulePackage.form.sourceUrlHelp']);
+                ->add('source', UrlType::class, [
+                    'label' => 'rulePackage.form.sourceUrl',
+                    'help' => 'rulePackage.form.sourceUrlHelp',
+                    'constraints' => [
+                        new NotBlank(),
+                        new Url(),
+                    ]
+                ])
+            ;
         } else if ($rulePackage->getType() === RulePackageType::AUTOMATICALLY_FROM_FILE) {
             $builder
-                ->add('source', TextType::class, ['label' => 'rulePackage.form.sourceFile', 'help' => 'rulePackage.form.sourceFileHelp']);
+                ->add('source', TextType::class, [
+                    'label' => 'rulePackage.form.sourceFile',
+                    'help' => 'rulePackage.form.sourceFileHelp',
+                    'constraints' => [
+                        new NotBlank(),
+                        new Regex('#^[a-z][a-z0-9+.-]*://#i', message: 'rulePackage.source.invalidAbsolutePath', match: false),
+                    ],
+                ])
+            ;
         }
     }
 

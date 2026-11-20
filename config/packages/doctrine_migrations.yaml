@@ -3,4 +3,5 @@ doctrine_migrations:
         # namespace is arbitrary but should be different from Mosparo\Migrations
         # as migrations classes should NOT be autoloaded
         'DoctrineMigrations': '%kernel.project_dir%/migrations/%env(database_system)%'
+    custom_template: '%kernel.project_dir%/migrations/templates/%env(database_system)%.php.tpl'
     enable_profiler: false

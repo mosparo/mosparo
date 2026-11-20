@@ -15,6 +15,7 @@ use Mosparo\Helper\LocaleHelper;
 use Mosparo\Helper\ProjectGroupHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\RulePackageHelper;
+use Mosparo\Twig\Tree\ProjectTreeNode;
 use Mosparo\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -52,7 +53,7 @@ class ProjectController extends AbstractController
     #[Route('/group/{projectGroup}', name: 'project_list_group')]
     #[Route('/filter/{filter}', name: 'project_list_filtered_root')]
     #[Route('/group/{projectGroup}/filter/{filter}', name: 'project_list_filtered_group')]
-    public function list(Request $request, $filter = '', ProjectGroup $projectGroup = null): Response
+    public function list(Request $request, $filter = '', ?ProjectGroup $projectGroup = null): Response
     {
         // Load the view from the user configuration
         $user = $this->getUser();
@@ -89,7 +90,7 @@ class ProjectController extends AbstractController
 
         // Find the subtree for the requested project group
         if ($projectGroup) {
-            $tree = $tree->findChildForProjectGroup($projectGroup);
+            $tree = $tree->findChildForProjectGroup($projectGroup) ?? new ProjectTreeNode($projectGroup);
             $routeSuffix = 'group';
         }
 
@@ -98,7 +99,7 @@ class ProjectController extends AbstractController
         if ($request->query->has('q') && trim($request->query->get('q'))) {
             $searchQuery = $request->query->get('q');
 
-            $tree->findNodesForSearchTerm($searchQuery);
+            $tree->findNodesForSearchTerm(mb_strtolower($searchQuery));
         }
 
         $activeProject = null;
@@ -159,9 +160,17 @@ class ProjectController extends AbstractController
 
     #[Route('/create', name: 'project_create_root')]
     #[Route('/group/{projectGroup}/create', name: 'project_create_group')]
-    public function create(Request $request, ProjectGroupHelper $projectGroupHelper, ProjectGroup $projectGroup = null): Response
+    public function create(Request $request, ProjectGroupHelper $projectGroupHelper, ?ProjectGroup $projectGroup = null): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CAN_CREATE_PROJECTS');
+
         $project = new Project();
+
+        // Generate the public and private keys before validating the form.
+        $tokenGenerator = new TokenGenerator();
+        $project->setPublicKey($tokenGenerator->generateToken());
+        $project->setPrivateKey($tokenGenerator->generateToken());
+
         if ($projectGroup) {
             $project->setProjectGroup($projectGroup);
         }
@@ -175,10 +184,6 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $tokenGenerator = new TokenGenerator();
-            $project->setPublicKey($tokenGenerator->generateToken());
-            $project->setPrivateKey($tokenGenerator->generateToken());
-
             $projectMember = new ProjectMember();
             $projectMember->setProject($project);
             $projectMember->setUser($this->getUser());

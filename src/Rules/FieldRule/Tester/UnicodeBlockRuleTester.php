@@ -23,7 +23,7 @@ class UnicodeBlockRuleTester extends AbstractRuleTester
         $blocks = [];
         foreach ($this->blocks as $block) {
             if (preg_match($block->getRegex(), $value)) {
-                $blocks[] = HashUtil::hashFast($block->getKey());
+                $blocks[] = HashUtil::hashFast(mb_strtolower($block->getKey()));
             }
         }
 

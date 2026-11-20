@@ -36,12 +36,12 @@ class GeoIp2Helper
         $this->downloadDirectory = PathUtil::prepareFilePath($downloadDirectory);
     }
 
-    public function isGeoIp2Active()
+    public function isGeoIp2Active(): bool
     {
         return $this->configHelper->getEnvironmentConfigValue('geoipActive', false);
     }
 
-    public function downloadDatabase()
+    public function downloadDatabase(): mixed
     {
         $accountId = $this->configHelper->getEnvironmentConfigValue('geoipAccountId', '');
         $licenseKey = $this->configHelper->getEnvironmentConfigValue('geoipLicenseKey', '');

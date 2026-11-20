@@ -7,6 +7,10 @@
 {% block small_body %}
     <h2 class="card-title text-center mb-4">{{ 'administration.update.finalize.process.v14.title'|trans }}</h2>
 
+    <div class="alert alert-danger d-none" id="tasks-error-message">
+        {{ 'administration.update.finalize.process.v14.error'|trans }}
+    </div>
+
     <p>
         {{ 'administration.update.finalize.process.v14.intro'|trans }}
     </p>
@@ -36,10 +40,13 @@
         <script>
             var totalTasks = {{ numberOfTasks }};
             var processedTasks = 0;
+            var failedAttempts = 0;
 
             function processTasks()
             {
                 $.post('{{ path('administration_update_finalize_process_v1_4') }}', { process: true, token: '{{ csrf_token('process-tasks') }}'}, function (responseData) {
+                    failedAttempts = 0;
+
                     if (responseData.finished) {
                         window.location.href = '{{ urlAfterProcess }}';
                         return;
@@ -53,6 +60,14 @@
                     $('#tasks-progress-bar').css('width', percent + '%');
 
                     setTimeout(processTasks, 1);
+                }).fail(function () {
+                    failedAttempts++;
+                    if (failedAttempts < 5) {
+                        setTimeout(processTasks, 1000);
+                        return;
+                    }
+
+                    $('#tasks-error-message').removeClass('d-none');
                 });
             }
 

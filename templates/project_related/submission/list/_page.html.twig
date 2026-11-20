@@ -6,8 +6,12 @@
             {{ item.submitToken.pageTitle }}
         </div>
         <div class="origin-page-url-container">
-            <a href="{{ item.submitToken.pageUrl }}" target="_blank" class="origin-page-url">{{ item.submitToken.pageUrl|replace({'https://': ''}) }}</a>
-            <i class="ti ti-external-link"></i>
+            {% if item.submitToken.pageUrl starts with 'https://' or item.submitToken.pageUrl starts with 'http://' %}
+                <a href="{{ item.submitToken.pageUrl }}" target="_blank" class="origin-page-url">{{ item.submitToken.pageUrl|replace({'https://': ''}) }}</a>
+                <i class="ti ti-external-link"></i>
+            {% else %}
+                <code>{{ item.submitToken.pageUrl|replace({'https://': ''}) }}</code>
+            {% endif %}
         </div>
     {% else %}
         <span class="status status-warning">

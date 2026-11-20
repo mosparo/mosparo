@@ -230,6 +230,10 @@ services:
         arguments:
             $isDebug: '%kernel.debug%'
 
+    Mosparo\Helper\Migration\OptimizeRuleItemsAfterUpdateHelper:
+        arguments:
+            $isDebug: '%kernel.debug%'
+
     Mosparo\Command\UpdateMosparoCommand:
         arguments:
             $projectDirectory: '%kernel.project_dir%'
@@ -266,6 +270,10 @@ services:
     Mosparo\Controller\ProjectRelated\DashboardController:
         arguments:
             $submissionRetentionPeriod: '%env(int:MOSPARO_SUBMISSION_RETENTION_PERIOD)%'
+
+    Mosparo\Controller\WebCronJobController:
+        arguments:
+            $cache: '@mosparo.cache.service'
 
     Mosparo\Helper\RuleCacheHelper:
         arguments:

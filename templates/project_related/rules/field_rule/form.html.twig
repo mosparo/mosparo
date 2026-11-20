@@ -141,6 +141,9 @@
                         <div class="status status-gray me-3 text-nowrap d-none" id="status-no-changes">
                             {{ 'rules.fieldRule.form.status.nothingToSave'|trans }}
                         </div>
+                        <div class="status status-danger me-3 text-nowrap d-none" id="status-saving-failed" title="{{ 'rules.fieldRule.form.status.savingFailedTooltip'|trans }}" data-bs-toggle="tooltip" data-bs-placement="top">
+                            {{ 'rules.fieldRule.form.status.savingFailed'|trans }}
+                        </div>
                         <button type="button" class="btn btn-primary mt-2 mt-md-0 w-mobile-100" id="btn-saving-changes">
                             <i class="ti ti-device-floppy"></i>
                             {{ 'action.saveChanges'|trans }}
@@ -456,22 +459,24 @@
             var usedChunkSize = baseChunkSize;
             var placeholderEl = $('<div></div>').addClass('empty')[0];
 
-            var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.title'|trans }}')[0];
-            var emptyTableTextEl = $('<p></p>').addClass('empty-subtitle text-secondary').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.text'|trans }}')[0];
-            var emptyTableActionEl = $('<div></div>').addClass('empty-action').appendTo(placeholderEl)[0];
-            var emptyTableAddItemButtonEl = $('<button></button>')
-                .attr('type', 'button')
-                .addClass('btn btn-success add-item-btn')
-                .append($('<i></i>').addClass('ti ti-square-plus'))
-                .append($('<div></div>').text('{{ 'form.addItem'|trans }}'))
-                .appendTo(emptyTableActionEl)[0];
+            var emptyTableTitleEl = $('<p></p>').addClass('empty-title').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.title'|trans|escape('js') }}')[0];
+            var emptyTableTextEl = $('<p></p>').addClass('empty-subtitle text-secondary').appendTo(placeholderEl).text('{{ 'rules.fieldRule.form.noItemsInTable.text'|trans|escape('js') }}')[0];
+            var emptyTableActionEl = $('<div></div>').addClass('empty-action {% if not canManage %}d-none{% endif %}').appendTo(placeholderEl)[0];
+            {% if canManage %}
+                var emptyTableAddItemButtonEl = $('<button></button>')
+                    .attr('type', 'button')
+                    .addClass('btn btn-success add-item-btn')
+                    .append($('<i></i>').addClass('ti ti-square-plus'))
+                    .append($('<div></div>').text('{{ 'form.addItem'|trans|escape('js') }}'))
+                    .appendTo(emptyTableActionEl)[0];
+            {% endif %}
             var emptyTableAdjustFilterButtonEl = $('<button></button>')
                 .attr('type', 'button')
                 .attr('data-bs-toggle', 'modal')
                 .attr('data-bs-target', '#filter-modal')
                 .addClass('btn btn-pink d-none')
                 .append($('<i></i>').addClass('ti ti-filter'))
-                .append($('<div></div>').text('{{ 'action.filter'|trans }}'))
+                .append($('<div></div>').text('{{ 'action.filter'|trans|escape('js') }}'))
                 .appendTo(emptyTableActionEl)[0];
 
             function updateFiltersCounter()
@@ -482,16 +487,24 @@
                 if (numberOfActiveFilters) {
                     counterEl.text(numberOfActiveFilters).removeClass('d-none');
 
-                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.title'|trans }}';
-                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.text'|trans }}';
+                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.title'|trans|escape('js') }}';
+                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.nothingFound.text'|trans|escape('js') }}';
+                    emptyTableActionEl.classList.remove('d-none');
                     emptyTableAdjustFilterButtonEl.classList.remove('d-none');
-                    emptyTableAddItemButtonEl.classList.add('d-none');
+                    {% if canManage %}
+                        emptyTableAddItemButtonEl.classList.add('d-none');
+                    {% endif %}
                 } else {
                     counterEl.text('').addClass('d-none');
-                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.title'|trans }}';
-                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.text'|trans }}';
+                    emptyTableTitleEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.title'|trans|escape('js') }}';
+                    emptyTableTextEl.textContent = '{{ 'rules.fieldRule.form.noItemsInTable.text'|trans|escape('js') }}';
                     emptyTableAdjustFilterButtonEl.classList.add('d-none');
-                    emptyTableAddItemButtonEl.classList.remove('d-none');
+                    {% if canManage %}
+                        emptyTableActionEl.classList.remove('d-none');
+                        emptyTableAddItemButtonEl.classList.remove('d-none');
+                    {% else %}
+                        emptyTableActionEl.classList.add('d-none');
+                    {% endif %}
                 }
             }
 
@@ -520,6 +533,16 @@
                     }
 
                     statusEl.find('span').text(number);
+                }
+
+                function toggleSavingFailedStatus(visible) {
+                    let statusEl = $('#status-saving-failed');
+
+                    if (visible) {
+                        statusEl.removeClass('d-none');
+                    } else {
+                        statusEl.addClass('d-none');
+                    }
                 }
 
                 function saveChanges()
@@ -574,7 +597,7 @@
                         for (let change of responseData.processed) {
                             if (change.type === 'field') {
                                 if (change.fieldName in fieldMappings) {
-                                    $(fieldMappings[change.fieldName]).removeClass('field-edited');
+                                    $(fieldMappings[change.fieldName]).removeClass('field-edited is-invalid');
                                 }
                             } else if (change.type === 'item') {
                                 for (let row of table.getRows()) {
@@ -589,7 +612,32 @@
                                             processingUuids.splice(idx, 1);
 
                                             for (let cell of row.getCells()) {
-                                                cell.getElement().classList.remove('tabulator-cell-edited');
+                                                cell.getElement().classList.remove('tabulator-cell-edited', 'tabulator-cell-invalid');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        for (let change of responseData.rejected) {
+                            if (change.type === 'field') {
+                                if (change.fieldName in fieldMappings) {
+                                    $(fieldMappings[change.fieldName]).addClass('is-invalid');
+                                }
+                            } else if (change.type === 'item') {
+                                for (let row of table.getRows()) {
+                                    if (row.getData().uuid === change.uuid) {
+                                        let idx = processingUuids.indexOf(change.uuid);
+
+                                        if (idx > -1) {
+                                            processingUuids.splice(idx, 1);
+
+                                            for (let cell of row.getCells()) {
+                                                if (cell.getElement().classList.contains('tabulator-cell-edited')) {
+                                                    cell.getElement().classList.remove('tabulator-cell-edited');
+                                                    cell.getElement().classList.add('tabulator-cell-invalid');
+                                                }
                                             }
                                         }
                                     }
@@ -600,6 +648,30 @@
                         processingChanges = false;
 
                         updateSavingChanges(0);
+                        toggleSavingFailedStatus(false);
+                        saveButtonEl.prop('disabled', false);
+                    }, 'json').fail(function () {
+                        for (let change of preparedChanges) {
+                            const key = (change.type === 'item') ? 'item-' + change.data.uuid : 'field-' + change.data.name;
+
+                            // Keep a newer change of the same item or field if there is one
+                            if (!changes.has(key)) {
+                                changes.set(key, change);
+                            }
+
+                            if (change.type === 'item') {
+                                let idx = processingUuids.indexOf(change.data.uuid);
+                                if (idx > -1) {
+                                    processingUuids.splice(idx, 1);
+                                }
+                            }
+                        }
+
+                        processingChanges = false;
+
+                        updateSavingChanges(0);
+                        updateUnsavedStatus(changes.size);
+                        toggleSavingFailedStatus(true);
                         saveButtonEl.prop('disabled', false);
                     });
                 }
@@ -633,7 +705,7 @@
                         // Ensure, that the IP subnet suffix is below or equal the max suffix.
                         if (type === 'subnet' && result) {
                             let maxSuffix = 32;
-                            if (value.indexOf(':') > 0) {
+                            if (value.indexOf(':') !== -1) {
                                 maxSuffix = 128;
                             }
 
@@ -829,9 +901,9 @@
                         }
                     },
                     columns:[
-                        { title: '{{ 'rules.fieldRule.form.items.type'|trans }}', field: 'type', width: '25%', minWidth: 100, resizable: false, vertAlign: 'middle', formatter: 'lookup', formatterParams: typeOptions,  {% if canManage %}editor: 'list', editorParams: { values: typeOptions }, editable: canEditCell,{% endif %} },
-                        { title: '{{ 'rules.fieldRule.form.items.value'|trans }}', field: 'value', width: '50%', resizable: false, vertAlign: 'middle', {% if valueOptions %}formatter: 'lookup', formatterParams: valueOptions,{% endif %} {% if canManage %}{% if valueOptions %}editor: 'list', editorParams: { values: valueOptions },{% else %}editor: 'input', validator: [{type: valueValidator}],{% endif %} editable: canEditCell,{% endif %} widthGrow: 4 },
-                        { title: '{{ 'rules.fieldRule.form.items.rating'|trans }}', field: 'spamRatingFactor', width: '15%', minWidth: 100, resizable: false, vertAlign: 'middle', hozAlign: 'right', {% if canManage %}editor: 'number', editable: canEditCell, validator: ['numeric', 'min:-1000000', 'max:1000000'], editorParams: {
+                        { title: '{{ 'rules.fieldRule.form.items.type'|trans|escape('js') }}', field: 'type', width: '25%', minWidth: 100, resizable: false, vertAlign: 'middle', formatter: 'lookup', formatterParams: typeOptions,  {% if canManage %}editor: 'list', editorParams: { values: typeOptions }, editable: canEditCell,{% endif %} },
+                        { title: '{{ 'rules.fieldRule.form.items.value'|trans|escape('js') }}', field: 'value', width: '50%', resizable: false, vertAlign: 'middle', {% if valueOptions %}formatter: 'lookup', formatterParams: valueOptions,{% endif %} {% if canManage %}{% if valueOptions %}editor: 'list', editorParams: { values: valueOptions },{% else %}editor: 'input', validator: [{type: valueValidator}],{% endif %} editable: canEditCell,{% endif %} widthGrow: 4 },
+                        { title: '{{ 'rules.fieldRule.form.items.rating'|trans|escape('js') }}', field: 'spamRatingFactor', width: '15%', minWidth: 100, resizable: false, vertAlign: 'middle', hozAlign: 'right', {% if canManage %}editor: 'number', editable: canEditCell, validator: ['numeric', 'min:-1000000', 'max:1000000'], editorParams: {
                                 min: -1000000,
                                 max: 1000000,
                                 step: 'any',
@@ -867,28 +939,28 @@
                     langs: {
                         '{{ app.request.locale }}': {
                             'data': {
-                                'loading': '{{ 'tabulator.data.loading'|trans }}',
-                                'error': '{{ 'tabulator.data.error'|trans }}',
+                                'loading': '{{ 'tabulator.data.loading'|trans|escape('js') }}',
+                                'error': '{{ 'tabulator.data.error'|trans|escape('js') }}',
                             },
                             'groups': {
-                                'item': '{{ 'tabulator.groups.item'|trans }}',
-                                'items': '{{ 'tabulator.groups.items'|trans }}',
+                                'item': '{{ 'tabulator.groups.item'|trans|escape('js') }}',
+                                'items': '{{ 'tabulator.groups.items'|trans|escape('js') }}',
                             },
                             'pagination': {
-                                'page_size': '{{ 'tabulator.pagination.pageSize'|trans }}',
-                                'page_title': '{{ 'tabulator.pagination.pageTitle'|trans }}',
+                                'page_size': '{{ 'tabulator.pagination.pageSize'|trans|escape('js') }}',
+                                'page_title': '{{ 'tabulator.pagination.pageTitle'|trans|escape('js') }}',
                                 'first': '{{ 'tabulator.pagination.first'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-left-pipe"></i>'})|raw }}',
-                                'first_title': '{{ 'tabulator.pagination.firstTitle'|trans }}',
+                                'first_title': '{{ 'tabulator.pagination.firstTitle'|trans|escape('js') }}',
                                 'last': '{{ 'tabulator.pagination.last'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-right-pipe"></i>'})|raw }}',
-                                'last_title': '{{ 'tabulator.pagination.lastTitle'|trans }}',
+                                'last_title': '{{ 'tabulator.pagination.lastTitle'|trans|escape('js') }}',
                                 'prev': '{{ 'tabulator.pagination.prev'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-left"></i>'})|raw }}',
-                                'prev_title': '{{ 'tabulator.pagination.prevTitle'|trans }}',
+                                'prev_title': '{{ 'tabulator.pagination.prevTitle'|trans|escape('js') }}',
                                 'next': '{{ 'tabulator.pagination.next'|trans({'%s%': '<span class="d-none d-md-block">', '%e%': '</span><i class="d-block d-md-none ti ti-chevron-right"></i>'})|raw }}',
-                                'next_title': '{{ 'tabulator.pagination.nextTitle'|trans }}',
-                                'all': '{{ 'tabulator.pagination.all'|trans }}',
+                                'next_title': '{{ 'tabulator.pagination.nextTitle'|trans|escape('js') }}',
+                                'all': '{{ 'tabulator.pagination.all'|trans|escape('js') }}',
                             },
                             'headerFilters': {
-                                'default': '{{ 'tabulator.filter.default'|trans }}',
+                                'default': '{{ 'tabulator.filter.default'|trans|escape('js') }}',
                             }
                         }
                     },
@@ -990,6 +1062,7 @@
                     // Handle the table modification events
                     table.on('cellEdited', function(cell) {
                         cell.getElement().classList.add('tabulator-cell-edited');
+                        cell.getElement().classList.remove('tabulator-cell-invalid');
 
                         const data = cell.getRow().getData();
                         if (!data.value) {

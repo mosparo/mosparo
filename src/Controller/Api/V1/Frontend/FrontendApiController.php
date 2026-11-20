@@ -111,9 +111,9 @@ class FrontendApiController extends AbstractController
         // set in the request to the API endpoint. Still, they can be manipulated by the user. So, we cannot be sure that
         // the information is set correctly.
         $securitySettings = $this->securityHelper->determineSecuritySettings($request->getClientIp(), [
-            'pageUrl' => $request->request->get('pageUrl'),
-            'formActionUrl' => $request->request->get('formActionUrl'),
-            'formId' => $request->request->get('formId'),
+            'pageUrl' => $request->request->getString('pageUrl'),
+            'formActionUrl' => $request->request->getString('formActionUrl'),
+            'formId' => $request->request->getString('formId'),
         ]);
 
         // Check if the request is allowed
@@ -122,11 +122,11 @@ class FrontendApiController extends AbstractController
             return $this->prepareSecurityResponse($request, $securityResult, true);
         }
 
-        $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
+        $isIpOnAllowList = IpUtil::isIpOnAllowList($request->getClientIp(), $securitySettings);
 
         $submitToken = null;
-        if ($request->request->has('submitToken') && $request->request->get('submitToken')) {
-            $token = $request->request->get('submitToken');
+        if ($request->request->has('submitToken') && $request->request->getString('submitToken')) {
+            $token = $request->request->getString('submitToken');
             $submitTokenRepository = $this->entityManager->getRepository(SubmitToken::class);
             $submitToken = $submitTokenRepository->findOneBy(['token' => $token]);
 
@@ -138,14 +138,14 @@ class FrontendApiController extends AbstractController
         // Create a new submit token
         if (!$submitToken) {
             $submitToken = new SubmitToken();
-            $submitToken->setIpAddress($request->getClientIp());
+            $submitToken->setIpAddress(IpUtil::getAddressForRateLimiting($request->getClientIp() ?? ''));
             $submitToken->setCreatedAt(new DateTime());
             $submitToken->setToken($this->tokenGenerator->generateToken());
 
-            $submitToken->setPageTitle($request->request->get('pageTitle'));
-            $submitToken->setPageUrl($request->request->get('pageUrl'));
-            $submitToken->setFormActionUrl($request->request->get('formActionUrl'));
-            $submitToken->setFormId($request->request->get('formId'));
+            $submitToken->setPageTitle($request->request->getString('pageTitle'));
+            $submitToken->setPageUrl($request->request->getString('pageUrl'));
+            $submitToken->setFormActionUrl($request->request->getString('formActionUrl'));
+            $submitToken->setFormId($request->request->getString('formId'));
 
             $this->entityManager->persist($submitToken);
         }
@@ -157,7 +157,7 @@ class FrontendApiController extends AbstractController
 
         if ($securitySettings['proofOfWorkActive'] && !$isIpOnAllowList) {
             $maxNumber = $this->findMaximumNumberForProofOfWorkRange($request, $securitySettings);
-            $number = mt_rand(1, $maxNumber);
+            $number = random_int(1, $maxNumber);
 
             $proofOfWorkResult = hash('sha256', $submitToken->gettoken() . $number);
             $submitToken->setProofOfWorkResult($proofOfWorkResult);
@@ -204,23 +204,29 @@ class FrontendApiController extends AbstractController
 
         $formData = [];
         if ($request->request->has('formData')) {
-            $formData = json_decode($request->request->get('formData'), true);
-            if ($formData === null || !isset($formData['fields'])) {
+            $formData = json_decode($request->request->getString('formData'), true);
+            if ($formData === null || !$this->isValidFormFields($formData)) {
                 return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
             }
 
-            if (isset($formData['ignoredFields']) && $formData['ignoredFields']) {
-                $partialSubmission->appendIgnoredFields($formData['ignoredFields']);
+            $formData['fields'] = $this->normalizeFormFields($formData['fields']);
+
+            if (isset($formData['ignoredFields']) && is_array($formData['ignoredFields'])) {
+                $partialSubmission->appendIgnoredFields(array_values(array_filter($formData['ignoredFields'], 'is_string')));
             }
         }
 
         $metadata = [];
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
-            $metadata['metadata'] = json_decode($request->request->get('metadata'), true);
+            $decodedMetadata = json_decode($request->request->getString('metadata'), true);
+
+            if (is_array($decodedMetadata)) {
+                $metadata['metadata'] = $decodedMetadata;
+            }
         }
 
         $partialSubmission->appendData(array_merge([
-            'formData' => $formData['fields'],
+            'formData' => $formData['fields'] ?? [],
         ], $metadata));
 
         $partialSubmission->setUpdatedAt(new DateTime());
@@ -249,7 +255,7 @@ class FrontendApiController extends AbstractController
             return $this->prepareSecurityResponse($request, $securityResult);
         }
 
-        $isIpOnAllowList = $this->isIpOnAllowList($request->getClientIp(), $securitySettings);
+        $isIpOnAllowList = IpUtil::isIpOnAllowList($request->getClientIp(), $securitySettings);
 
         $activeProject = $this->projectHelper->getActiveProject();
 
@@ -260,14 +266,20 @@ class FrontendApiController extends AbstractController
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not set.']);
         }
 
-        $formData = json_decode($request->request->get('formData'), true);
-        if ($formData === null || !isset($formData['fields'])) {
+        $formData = json_decode($request->request->getString('formData'), true);
+        if ($formData === null || !$this->isValidFormFields($formData)) {
             return new JsonResponse(['error' => true, 'errorMessage' => 'Form data not valid.']);
         }
 
+        $formData['fields'] = $this->normalizeFormFields($formData['fields']);
+
         $metadata = [];
         if ($activeProject->isMetadataAllowed() && $request->request->has('metadata')) {
-            $metadata['metadata'] = json_decode($request->request->get('metadata'), true);
+            $decodedMetadata = json_decode($request->request->getString('metadata'), true);
+
+            if (is_array($decodedMetadata)) {
+                $metadata['metadata'] = $decodedMetadata;
+            }
         }
 
         // Add the client data
@@ -310,9 +322,15 @@ class FrontendApiController extends AbstractController
         if ($submitToken->getPartialSubmission()) {
             $partialSubmission = $submitToken->getPartialSubmission();
             $submission->appendData($partialSubmission->getData());
-            $submission->setIgnoredFields(array_merge($partialSubmission->getIgnoredFields(), $formData['ignoredFields']));
-        } else {
-            $submission->setIgnoredFields($formData['ignoredFields']);
+
+            $ignoredFields = [];
+            if (isset($formData['ignoredFields']) && is_array($formData['ignoredFields'])) {
+                $ignoredFields = array_values(array_filter($formData['ignoredFields'], 'is_string'));
+            }
+
+            $submission->setIgnoredFields(array_merge($partialSubmission->getIgnoredFields(), $ignoredFields));
+        } else if (isset($formData['ignoredFields']) && is_array($formData['ignoredFields'])) {
+            $submission->setIgnoredFields(array_values(array_filter($formData['ignoredFields'], 'is_string')));
         }
 
         // Check for the honeypot field
@@ -347,7 +365,7 @@ class FrontendApiController extends AbstractController
 
         // Check the proof of work result
         if ($securitySettings['proofOfWorkActive'] && !$isIpOnAllowList) {
-            $number = intval($request->request->get('proofOfWorkNumber', 0));
+            $number = $request->request->getInt('proofOfWorkNumber');
             $proofOfWorkResult = hash('sha256', $submitToken->gettoken() . $number);
 
             $proofOfWorkGv = new GeneralVerification(
@@ -387,8 +405,8 @@ class FrontendApiController extends AbstractController
         $submitToken->setLastSubmission($submission);
         $this->entityManager->flush();
 
-        // Increase the day statistic if it is spam. We count anyway, even if the silent mode is enabled
-        if ($submission->isSpam()) {
+        // Increase the day statistic if it is spam. If the silent mode is enabled, the backend will increase the statistics.
+        if ($submission->isSpam() && !$activeProject->isSilentModeEnabled()) {
             $this->statisticHelper->increaseDayStatisticForSubmission($submission);
         }
 
@@ -414,7 +432,7 @@ class FrontendApiController extends AbstractController
 
         $submitTokenRepository = $this->entityManager->getRepository(SubmitToken::class);
         $submitToken = $submitTokenRepository->findOneBy([
-            'token' => $request->request->get('submitToken'),
+            'token' => $request->request->getString('submitToken'),
         ]);
 
         if ($submitToken === null || !$submitToken->isValid()) {
@@ -482,6 +500,11 @@ class FrontendApiController extends AbstractController
             $locales = $this->findCorrectLocales($request);
 
             foreach ($locales as $locale) {
+                // Skip invalid locales by using the same RegEx pattern as Symfony does.
+                if (!preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale)) {
+                    continue;
+                }
+
                 $this->translator->setLocale($locale);
 
                 // Try to determine the locale for which we will return the messages. If we don't have the translation
@@ -576,20 +599,20 @@ class FrontendApiController extends AbstractController
     {
         $project = $this->projectHelper->getActiveProject();
         $locales = [];
-        $browserLocale = null;
-        $staticLocale = null;
-        $htmlLocale = null;
+        $browserLocale = '';
+        $staticLocale = '';
+        $htmlLocale = '';
 
         if ($request->getPreferredLanguage()) {
             $browserLocale = $this->localeHelper->fixPreferredLanguage($request->getPreferredLanguage());
         }
 
-        if ($request->request->has('language') && $request->request->get('language')) {
-            $staticLocale = $this->localeHelper->fixPreferredLanguage($request->request->get('language'));
+        if ($request->request->has('language') && $request->request->getString('language')) {
+            $staticLocale = $this->localeHelper->fixPreferredLanguage($request->request->getString('language'));
         }
 
-        if ($request->request->has('htmlLanguage') && $request->request->get('htmlLanguage')) {
-            $htmlLocale = str_replace('-', '_', $request->request->get('htmlLanguage'));
+        if ($request->request->has('htmlLanguage') && $request->request->getString('htmlLanguage')) {
+            $htmlLocale = str_replace('-', '_', $request->request->getString('htmlLanguage'));
         }
 
         if ($staticLocale) {
@@ -609,8 +632,12 @@ class FrontendApiController extends AbstractController
         return array_unique(array_filter($locales));
     }
 
-    protected function addLocales(&$locales, $locale)
+    protected function addLocales(array &$locales, string $locale)
     {
+        if ($locale === '') {
+            return;
+        }
+
         if (strlen($locale) > 2) {
             $fallbackLocale = substr($locale, 0, 2);
 
@@ -622,11 +649,6 @@ class FrontendApiController extends AbstractController
         if (!in_array($locale, $locales)) {
             array_unshift($locales, $locale);
         }
-    }
-
-    protected function isIpOnAllowList(string $ipAddress, array $securitySettings)
-    {
-        return trim($securitySettings['ipAllowList']) && IpUtil::isIpAllowed($ipAddress, $securitySettings['ipAllowList']);
     }
 
     protected function findMaximumNumberForProofOfWorkRange(Request $request, array $securitySettings): int
@@ -653,11 +675,48 @@ class FrontendApiController extends AbstractController
             );
         }
 
-        $percentage = (100 / $numberOfMaxSubmissions) * $actualNumberOfSubmissions;
+        $percentage = (100 / max(1, $numberOfMaxSubmissions)) * $actualNumberOfSubmissions;
         if ($percentage > 100) {
             $percentage = 100;
         }
 
-        return $normalMaxNumber + (($delta / 100) * $percentage);
+        return (int) round($normalMaxNumber + (($delta / 100) * $percentage));
+    }
+
+    protected function isValidFormFields(mixed $formData): bool
+    {
+        if (!is_array($formData) || !isset($formData['fields']) || !is_array($formData['fields'])) {
+            return false;
+        }
+
+        foreach ($formData['fields'] as $field) {
+            if (!is_array($field) || !is_string($field['name'] ?? null) || !is_string($field['fieldPath'] ?? null)) {
+                return false;
+            }
+
+            $values = $field['value'] ?? null;
+            foreach ((is_array($values) ? $values : [$values]) as $value) {
+                if ($value !== null && !is_scalar($value)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    protected function normalizeFormFields(array $fields): array
+    {
+        foreach ($fields as $key => $field) {
+            $value = $field['value'] ?? '';
+
+            if (is_array($value)) {
+                $value = array_map(function (mixed $subValue) { return $subValue ?? ''; }, $value);
+            }
+
+            $fields[$key]['value'] = $value;
+        }
+
+        return $fields;
     }
 }

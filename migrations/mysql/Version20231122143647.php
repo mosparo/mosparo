@@ -36,4 +36,9 @@ final class Version20231122143647 extends AbstractMigration
         $this->addSql('DROP TABLE security_guideline');
         $this->addSql('DROP TABLE security_guideline_config_value');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

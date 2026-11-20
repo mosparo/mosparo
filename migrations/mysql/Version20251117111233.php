@@ -30,4 +30,9 @@ final class Version20251117111233 extends AbstractMigration
         $this->addSql('ALTER TABLE submit_token DROP form_action_url, DROP form_id');
         $this->addSql('ALTER TABLE security_guideline DROP form_page_urls, DROP form_action_urls, DROP form_ids');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

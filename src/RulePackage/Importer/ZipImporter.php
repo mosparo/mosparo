@@ -84,7 +84,13 @@ class ZipImporter implements ImporterInterface
             }
 
             $zip = new \ZipArchive();
-            $zip->open($filePath);
+            if (($res = $zip->open($filePath)) !== true) {
+                if ($this->logger instanceof Logger) {
+                    $this->logger->popHandler();
+                }
+
+                throw new Exception(sprintf('Could not open rule package file. Error: %s', $res));
+            }
 
             $zip->extractTo($cacheDirectory);
             $zip->close();
@@ -119,6 +125,10 @@ class ZipImporter implements ImporterInterface
             $validator = $this->initializeValidator();
             $validationResult = $validator->validate($data, 'http://schema.mosparo.io/zipped-rule-package.json');
             if (!$validationResult->isValid()) {
+                if ($this->logger instanceof Logger) {
+                    $this->logger->popHandler();
+                }
+
                 throw new Exception('Rule package file is not valid.');
             }
 
@@ -293,7 +303,7 @@ class ZipImporter implements ImporterInterface
             $rulePackageRuleCache->setUpdatedAt($rulePackageCache->getUpdatedAt());
 
             $rating = null;
-            if ($rule->spamRatingFactor) {
+            if ($rule->spamRatingFactor ?? null) {
                 $rating = (float) $rule->spamRatingFactor;
             }
             $rulePackageRuleCache->setSpamRatingFactor($rating);

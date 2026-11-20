@@ -116,7 +116,7 @@
                 let rulePackageRow = $('.rule-package-row[data-rule-package-id="' + activeRulePackageId + '"]');
 
                 if (isNew) {
-                    rulePackageRow.find('.status').text('{{ 'rulePackage.updateCache.status.importing'|trans }}').addClass('status-blue');
+                    rulePackageRow.find('.status').text('{{ 'rulePackage.updateCache.status.importing'|trans|escape('js') }}').addClass('status-blue');
                 }
 
                 $.post(activeRulePackageUpdateUrl, {  }, function (responseData) {
@@ -129,7 +129,7 @@
                         if (!progressBarEl.hasClass('bg-cyan')) {
                             progressBarEl.addClass('bg-cyan').css('width', '0%');
                             progressValueEl.text('0');
-                            statusEl.text('{{ 'rulePackage.updateCache.status.cleanup'|trans }}').removeClass('status-blue').addClass('status-cyan');
+                            statusEl.text('{{ 'rulePackage.updateCache.status.cleanup'|trans|escape('js') }}').removeClass('status-blue').addClass('status-cyan');
                         }
 
                         progress = responseData.cleanupProgress;
@@ -145,22 +145,22 @@
                         if (progress === 100) {
                             if (responseData.result === 0) {
                                 progressBarEl.removeClass('bg-cyan').addClass('bg-green');
-                                statusEl.text('{{ 'rulePackage.updateCache.status.completed'|trans }}').removeClass('status-blue status-cyan').addClass('status-green');
+                                statusEl.text('{{ 'rulePackage.updateCache.status.completed'|trans|escape('js') }}').removeClass('status-blue status-cyan').addClass('status-green');
 
                                 $('#btn-go-to-rule-package').prop('disabled', false);
                             } else if (responseData.result === 3) {
                                 progressBarEl.removeClass('bg-cyan').addClass('bg-lime');
-                                statusEl.text('{{ 'rulePackage.updateCache.status.upToDate'|trans }}').removeClass('status-blue status-cyan').addClass('status-lime');
+                                statusEl.text('{{ 'rulePackage.updateCache.status.upToDate'|trans|escape('js') }}').removeClass('status-blue status-cyan').addClass('status-lime');
                             } else if (responseData.result === 5) {
                                 progressBarEl.removeClass('bg-cyan').addClass('bg-purple');
-                                statusEl.text('{{ 'rulePackage.updateCache.status.tooSoon'|trans }}').removeClass('status-blue status-cyan').addClass('status-purple');
+                                statusEl.text('{{ 'rulePackage.updateCache.status.tooSoon'|trans|escape('js') }}').removeClass('status-blue status-cyan').addClass('status-purple');
                             }
                         }
                     }
 
                     if (responseData.error) {
                         progressBarEl.addClass('bg-red');
-                        statusEl.text('{{ 'rulePackage.updateCache.status.failed'|trans }}').removeClass('status-blue status-cyan').addClass('status-red');
+                        statusEl.text('{{ 'rulePackage.updateCache.status.failed'|trans|escape('js') }}').removeClass('status-blue status-cyan').addClass('status-red');
                     }
 
                     let timeout = 1;

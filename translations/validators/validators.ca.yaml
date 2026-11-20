@@ -25,7 +25,7 @@ honeypotField:
   nameHasInvalidCharacter: Utilitzeu només lletres, nombres i el signe de guionet (-).
 securityGuideline:
   asNumberNotNumeric: El número AS no és un nombre.
-  atLeastOneCriterionRequired: La directriu de seguretat requereix com a mínim 
+  atLeastOneCriterionRequired: La directriu de seguretat requereix com a mínim
     un criteri.
 webCronJob:
   webCronJobIntervalAtLeast5Minutes: L'interval de la tasca cron web ha de ser de 5 minuts o més.

@@ -30,4 +30,9 @@ final class Version20230521093341 extends AbstractMigration
         $this->addSql('ALTER TABLE project_config_value DROP FOREIGN KEY FK_8AFDEE17166D1F9C');
         $this->addSql('ALTER TABLE project_config_value ADD CONSTRAINT FK_8AFDEE17166D1F9C FOREIGN KEY (project_id) REFERENCES project (id)');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

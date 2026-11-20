@@ -28,4 +28,9 @@ final class Version20240212181600 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE project CHANGE private_key private_key TEXT NOT NULL');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

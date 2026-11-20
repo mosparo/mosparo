@@ -56,4 +56,9 @@ final class Version20240218182953 extends AbstractMigration
         $this->addSql('ALTER TABLE project CHANGE uuid uuid CHAR(36) NOT NULL COMMENT \'(DC2Type:guid)\', CHANGE hosts hosts LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\'');
         $this->addSql('ALTER TABLE project_config_value CHANGE value value LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:object)\'');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

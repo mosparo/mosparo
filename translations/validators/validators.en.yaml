@@ -23,6 +23,8 @@ authMethod:
       chooseAction: Choose one of the available actions.
 
 tools:
+  ruleTester:
+    chooseRuleOrRulePackages: Please choose what you want to test, either rules or rule packages.
   import:
     importFile:
       correctFile: Please upload a correct JSON file.
@@ -41,6 +43,7 @@ honeypotField:
 securityGuideline:
   atLeastOneCriterionRequired: The security guideline requires at least one criterion.
   asNumberNotNumeric: The AS number is not a number.
+  dynamicComplexityHigher: The maximum complexity must be higher than or equal to the normal complexity.
 
 webCronJob:
   webCronJobIntervalAtLeast5Minutes: The web cron job interval must be at least 5 minutes or more.
@@ -51,14 +54,18 @@ hosts:
   hostContainsInvalidCharacter: This host contains invalid characters. In this field, only characters (a-z), numbers (0-9), dashes, dots, colons, and the star (*) are allowed.
 
 translation:
-    locale:
-        invalidFormat: Please specify the locale in the correct format. Enter a two-character language code or a combination of the two-character language code together with the country code.
+  locale:
+    invalidFormat: Please specify the locale in the correct format. Enter a two-character language code or a combination of the two-character language code together with the country code.
 
 rules:
   fieldRule:
     value:
       alreadyExists: This value already exists in the selected rule.
       invalidFormat: The value is invalid for this rule item type.
+
+rulePackage:
+  source:
+    invalidAbsolutePath: Please specify an absolute path without a scheme.
 
 oidcClient:
   aliasHasInvalidCharacter: Please use only letters, numbers, the dash sign (-) and the underscore sign (_).

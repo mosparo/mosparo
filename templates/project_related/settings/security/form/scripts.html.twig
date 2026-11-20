@@ -48,6 +48,17 @@
                     }
                 }).trigger('change');
             });
+
+            $('.complexity-field.min-complexity').on('change keyup', function () {
+                let maxField = $('.complexity-field.max-complexity');
+                let val = $(this).val();
+
+                maxField.prop('min', $(this).val());
+
+                if ($(this).val() > maxField.val()) {
+                    maxField.val(val);
+                }
+            }).trigger('change');
         });
     </script>
 {% endcspscript %}

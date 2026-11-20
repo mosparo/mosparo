@@ -197,7 +197,7 @@
                 initialTrigger = false;
             {% elseif mode == 'invisible-simple' %}
                 {% for variableName, variableValue in designConfigValues %}
-                    document.documentElement.style.setProperty('{{ variableName }}', '{{ variableValue }}');
+                    document.documentElement.style.setProperty('{{ variableName|escape('js') }}', '{{ variableValue|escape('js') }}');
                 {% endfor %}
 
                 $('.mosparo-box').each(function () {

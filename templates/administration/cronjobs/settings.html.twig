@@ -81,7 +81,7 @@
 
                                     <pre>{#--#}
 php bin/console mosparo:cleanup-database
-php bin/console mosparo:rule-packages:refresh
+php bin/console mosparo:rule-package:refresh
 {% if isGeoIp2Active -%}
 php bin/console mosparo:geoip2:download-database
 {%- endif -%}
@@ -96,7 +96,7 @@ php bin/console mosparo:geoip2:download-database
                                     <h4>{{ 'administration.cronJobs.setup.titles.example'|trans }}</h4>
                                     <pre>{#--#}
 */15 * * * * php bin/console mosparo:cleanup-database
-0 */2 * * * php bin/console mosparo:rule-packages:refresh
+0 */2 * * * php bin/console mosparo:rule-package:refresh
 {% if isGeoIp2Active -%}
 {{ random(0, 59) }} {{ random(0, 23) }} * * {{ random(0, 6) }} php bin/console mosparo:geoip2:download-database
 {%- endif -%}
@@ -193,9 +193,9 @@ php bin/console mosparo:geoip2:download-database
                         fieldGeoIp2RefreshInterval.prop('disabled', !$(this).prop('checked')).prop('required', $(this).prop('checked'));
                         fieldGeoIp2RefreshInterval.change(function () {
                             if (parseInt($(this).val()) === 1) {
-                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.day'|trans }}');
+                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.day'|trans|escape('js') }}');
                             } else {
-                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.days'|trans }}');
+                                fieldGeoIp2RefreshInterval.parents('.input-group').find('.input-group-text').text('{{ 'unit.days'|trans|escape('js') }}');
                             }
                         }).trigger('change');
                     {% endif %}

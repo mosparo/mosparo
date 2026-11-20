@@ -28,4 +28,9 @@ final class Version20260314093449 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE project DROP spam_data_returned, DROP metadata_returned');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

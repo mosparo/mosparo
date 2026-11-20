@@ -52,6 +52,8 @@ class RulePackageHelper
 
     protected ImporterInterface $importer;
 
+    protected array $downloadedFiles = [];
+
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $router,
@@ -92,16 +94,33 @@ class RulePackageHelper
         $projectRepository = $this->entityManager->getRepository(Project::class);
         $rulePackageRepository = $this->entityManager->getRepository(RulePackage::class);
 
+        $activeProject = $this->projectHelper->getActiveProject();
+
         foreach ($projectRepository->findAll() as $project) {
             $this->projectHelper->setActiveProject($project);
 
             foreach ($rulePackageRepository->findBy(['status' => 1]) as $rulePackage) {
                 if (in_array($rulePackage->getType(), RulePackageType::automaticTypes())) {
-                    $this->fetchRulePackage($rulePackage, $startTime, $maxSeconds);
+                    try {
+                        $this->fetchRulePackage($rulePackage, $startTime, $maxSeconds);
+                    } catch (\Throwable $e) {
+                        $this->logger->error(sprintf(
+                            'Fetching a rule package failed. Project ID: %d; Rule package ID: %d; Error: %s',
+                            $project->getId(),
+                            $rulePackage->getId(),
+                            $e->getMessage()
+                        ));
+                    }
                 }
             }
 
             $this->entityManager->flush();
+        }
+
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
+        } else {
+            $this->projectHelper->unsetActiveProject();
         }
     }
 
@@ -122,6 +141,10 @@ class RulePackageHelper
             return RulePackageResult::NOT_AN_AUTOMATIC_TYPE;
         }
 
+        if (!$rulePackage->getSource()) {
+            throw new Exception('No source defined.');
+        }
+
         $isInProgress = $this->isInProgress($rulePackage);
         $rulePackageCache = $rulePackage->getRulePackageCache();
         if ($rulePackageCache !== null && $rulePackageCache->getRefreshedAt() !== null) {
@@ -134,12 +157,17 @@ class RulePackageHelper
             }
         }
 
-        $files = [];
-        if (!$isInProgress) {
-            $files = $this->organizeRulePackageFiles($rulePackage);
-        }
+        try {
+            $files = [];
+            if (!$isInProgress) {
+                $files = $this->organizeRulePackageFiles($rulePackage);
+            }
 
-        $result = $this->validateAndProcessContent($rulePackage, $files['content'] ?? null, $isInProgress, $startTime, $maxSeconds);
+            $result = $this->validateAndProcessContent($rulePackage, $files['content'] ?? null, $isInProgress, $startTime, $maxSeconds);
+        } finally {
+            // Remove the downloaded files after the process finished or failed.
+            $this->cleanupDownloadedFiles();
+        }
 
         if (in_array($result, [RulePackageResult::COMPLETED, RulePackageResult::ALREADY_UP_TO_DATE, RulePackageResult::NOT_AN_AUTOMATIC_TYPE, RulePackageResult::TOO_SOON_AFTER_THE_LAST_UPDATE])) {
             $this->deleteCacheDirectory($rulePackage->getId());
@@ -165,12 +193,8 @@ class RulePackageHelper
             $files = $this->loadFiles($rulePackage);
         }
 
-        $fileHash = $files['hash'];
-        if (strpos($fileHash, ' ') !== false) {
-            $fileHash = substr($fileHash, 0, strpos($fileHash, ' '));
-        }
-
-        if (hash_file('sha256', $files['content']) !== $fileHash) {
+        $fileHash = strtolower((string) strtok(trim($files['hash']), " \t\r\n"));
+        if (!hash_equals(hash_file('sha256', $files['content']), $fileHash)) {
             throw new Exception('Hash verification failed.');
         }
 
@@ -235,6 +259,7 @@ class RulePackageHelper
                 file_put_contents($tmpFilePath, $response->getContent());
 
                 $files[$fileType] = $tmpFilePath;
+                $this->downloadedFiles[] = $tmpFilePath;
             } else {
                 $files[$fileType] = $response->getContent();
             }
@@ -245,13 +270,17 @@ class RulePackageHelper
 
     protected function loadFiles(RulePackage $rulePackage): array
     {
-        $urls = [
+        if (preg_match('#^[a-z][a-z0-9+.-]*://#i', $rulePackage->getSource())) {
+            throw new Exception(sprintf('Please specify an absolute path without scheme: "%s"', $rulePackage->getSource()));
+        }
+
+        $paths = [
             'content' => $rulePackage->getSource(),
             'hash' => $rulePackage->getSource() . '.sha256'
         ];
 
         $files = [];
-        foreach ($urls as $fileType => $filePath) {
+        foreach ($paths as $fileType => $filePath) {
             if (!file_exists($filePath)) {
                 throw new Exception(sprintf('The given file path "%s" does not exist.', $filePath));
             }
@@ -311,6 +340,7 @@ class RulePackageHelper
         // Prepare the importer
         try {
             $this->importer = match($processingJob->getMimetype()) {
+                'text/plain', // JSON files larger than 1 MB may not be detected correctly as JSON. We verify the schema anyway, so we can also accept text/plain.
                 'application/json' => new JsonImporter($this, $this->entityManager),
                 'application/zip' => new ZipImporter($this, $this->entityManager, $this->logger, $this->rulePackageDirectory, $startTime, $maxSeconds)
             };
@@ -669,5 +699,15 @@ class RulePackageHelper
         }
 
         return RulePackageResult::COMPLETED;
+    }
+
+    protected function cleanupDownloadedFiles(): void
+    {
+        $filesystem = new Filesystem();
+        foreach ($this->downloadedFiles as $filePath) {
+            $filesystem->remove($filePath);
+        }
+
+        $this->downloadedFiles = [];
     }
 }

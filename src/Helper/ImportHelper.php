@@ -15,7 +15,10 @@ use Mosparo\Enum\TranslationKey;
 use Mosparo\Exception\ImportException;
 use Mosparo\Rules\SubmissionRule\SubmissionRuleManager;
 use Mosparo\Specifications\Specifications;
+use Mosparo\Util\TokenGenerator;
 use Opis\JsonSchema\Validator;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ImportHelper
 {
@@ -49,13 +52,15 @@ class ImportHelper
 
     public function getImportFilePathAndName(Project $project)
     {
-        return [$this->importDirectory, $project->getId() . '_import_' . uniqid() . '.json'];
+        $tokenGenerator = new TokenGenerator();
+        return [$this->importDirectory, $project->getId() . '_import_' . $tokenGenerator->generateShortToken() . '.json'];
     }
 
     public function storeJobData(array $importData, $token = ''): string
     {
         if (!$token) {
-            $token = uniqid();
+            $tokenGenerator = new TokenGenerator();
+            $token = $tokenGenerator->generateShortToken();
         }
 
         file_put_contents($this->importDirectory . '/job_data_' . $token . '.json', json_encode($importData));
@@ -80,18 +85,14 @@ class ImportHelper
         return $data;
     }
 
-    public function simulateImport(?string $token, array $jobData = []): array
+    public function simulateImport(?string $token, Project $project, array $jobData = []): array
     {
         if ($token !== null) {
             $jobData = $this->loadJobData($token);
         }
 
-        // Get the project to make sure we're using the right project
-        $projectRepository = $this->entityManager->getRepository(Project::class);
-        $project = $projectRepository->find($jobData['projectId'] ?? 0);
-
-        if (!$project) {
-            throw new ImportException(sprintf('Cannot find project by id %d.', $jobData['projectId'] ?? 0), ImportException::PROJECT_NOT_AVAILABLE);
+        if ($project->getId() !== ($jobData['projectId'] ?? 0)) {
+            throw new ImportException('The given project is not the same as the project ID in the job data.', ImportException::PROJECT_NOT_AVAILABLE);
         }
 
         $importData = $this->loadImportData($jobData);
@@ -115,23 +116,21 @@ class ImportHelper
         // Set the originally active project
         if ($activeProject) {
             $this->projectHelper->setActiveProject($activeProject);
+        } else {
+            $this->projectHelper->unsetActiveProject();
         }
 
         return [$jobData, $importData, $this->hasChanges($changes), $changes, $notInImport];
     }
 
-    public function executeImport(?string $token, array $jobData = []): bool
+    public function executeImport(?string $token, Project $project, array $jobData = []): bool
     {
         if ($token !== null) {
             $jobData = $this->loadJobData($token);
         }
 
-        // Get the project to make sure we're using the right project
-        $projectRepository = $this->entityManager->getRepository(Project::class);
-        $project = $projectRepository->find($jobData['projectId'] ?? 0);
-
-        if (!$project) {
-            throw new ImportException(sprintf('Cannot find project by id %d.', $jobData['projectId'] ?? 0), ImportException::PROJECT_NOT_AVAILABLE);
+        if ($project->getId() !== ($jobData['projectId'] ?? 0)) {
+            throw new ImportException('The given project is not the same as the project ID in the job data.', ImportException::PROJECT_NOT_AVAILABLE);
         }
 
         $activeProject = $this->projectHelper->getActiveProject();
@@ -184,7 +183,11 @@ class ImportHelper
         }
 
         // Set the originally active project
-        $this->projectHelper->setActiveProject($activeProject);
+        if ($activeProject) {
+            $this->projectHelper->setActiveProject($activeProject);
+        } else {
+            $this->projectHelper->unsetActiveProject();
+        }
 
         return $refreshRulePackages;
     }
@@ -348,7 +351,7 @@ class ImportHelper
             ];
         }
 
-        if (isset($importData['spamScore']) && $project->getSpamScore() !== $importData['spamScore']) {
+        if (isset($importData['spamScore']) && $project->getSpamScore() !== floatval($importData['spamScore'])) {
             $changes[] = [
                 'key' => 'spamScore',
                 'oldValue' => $project->getSpamScore(),
@@ -583,7 +586,7 @@ class ImportHelper
         return $changes;
     }
 
-    protected function findFieldRuleChanges(array $rules, string $handlingExistingRules): array
+    protected function findFieldRuleChanges(array $rules, string $handlingExistingFieldRules): array
     {
         $changes = [];
         $ruleRepository = $this->entityManager->getRepository(Rule::class);
@@ -601,7 +604,7 @@ class ImportHelper
                 'modify' => [],
                 'remove' => [],
             ];
-            if ($storedRule === null || $handlingExistingRules === 'add') {
+            if ($storedRule === null || $handlingExistingFieldRules === 'add') {
                 $mode = 'add';
                 $itemChanges['add'] = $rule['items'];
             } else if ($storedRule !== null) {
@@ -649,11 +652,11 @@ class ImportHelper
                 }
 
                 // OVERRIDE only: Remove the items which were not handled by the foreach above
-                if ($handlingExistingRules === 'override') {
+                if ($handlingExistingFieldRules === 'override') {
                     foreach ($items as $item) {
                         $itemChanges['remove'][] = [
                             'storedItemId' => $item->getId(),
-                            'storedRuleId' => $item->getId(),
+                            'storedRuleId' => $storedRuleId,
                         ];
                     }
                 }
@@ -674,7 +677,7 @@ class ImportHelper
 
             $changes[] = [
                 'mode' => $mode,
-                'submode' => $handlingExistingRules,
+                'submode' => $handlingExistingFieldRules,
                 'itemChanges' => $itemChanges,
                 'storedRule' => [
                     'id' => $storedRuleId,
@@ -847,8 +850,13 @@ class ImportHelper
                 }
             }
 
+            $translationKey = $importedTranslation['translationKey'];
+            if (!$translationKey instanceof TranslationKey) {
+                $translationKey = TranslationKey::tryFrom($translationKey);
+            }
+
             $translation->setLocale($importedTranslation['locale']);
-            $translation->setTranslationKey(TranslationKey::tryFrom($importedTranslation['translationKey']));
+            $translation->setTranslationKey($translationKey);
             $translation->setText($importedTranslation['text']);
         }
     }
@@ -988,5 +996,36 @@ class ImportHelper
         }
 
         return $modifiedRulePackages;
+    }
+
+    public function removeOutdatedFiles(): void
+    {
+        $filesystem = new Filesystem();
+
+        $files = array_merge(
+            glob($this->importDirectory . '/*_import_*.json') ?: [],
+            glob($this->importDirectory . '/job_data_*.json') ?: []
+        );
+
+        $yesterday = time() - 86400;
+        foreach ($files as $filePath) {
+            // If the file was already deleted, skip it.
+            if (!file_exists($filePath)) {
+                continue;
+            }
+
+            $mtime = filemtime($filePath);
+            if ($mtime === false) {
+                continue;
+            }
+
+            if ($mtime < $yesterday) {
+                try {
+                    $filesystem->remove($filePath);
+                } catch (IOException) {
+                    // We ignore the error.
+                }
+            }
+        }
     }
 }

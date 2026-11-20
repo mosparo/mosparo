@@ -61,6 +61,11 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get remove ${PHPIZE_DEPS} -y
 
+# mosparo does not use session upload progress. The PHP advisory for CVE-2026-109619
+# (GHSA-6wmf-4rv5-p3rp) recommends turning it off even on patched versions when it is not needed,
+# because the feature is hardly used and hardly tested.
+RUN printf 'session.upload_progress.enabled = Off\n' > "$PHP_INI_DIR/conf.d/zz-mosparo.ini"
+
 RUN wget "https://github.com/mosparo/mosparo/releases/download/${MOSPARO_VERSION}/mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
     unzip "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip" && \
     rm "mosparo-${MOSPARO_CHANNEL}-${MOSPARO_VERSION}.zip"

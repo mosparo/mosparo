@@ -8,6 +8,7 @@ use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Doctrine\DatabaseConfigurationBuilder;
+use Mosparo\Entity\User;
 use Mosparo\Exception\AdminUserAlreadyExistsException;
 use Mosparo\Exception\UserAlreadyExistsException;
 use Mosparo\Form\PasswordFormType;
@@ -32,8 +33,10 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Url;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Route('/setup')]
 class SetupController extends AbstractController
@@ -218,7 +221,12 @@ class SetupController extends AbstractController
                 ],
                 'data' => $router->generate('mosparo_root', [], UrlGeneratorInterface::ABSOLUTE_URL),
             ])
-            ->add('emailAddress', TextType::class, ['label' => 'setup.other.form.emailAddress'])
+            ->add('emailAddress', TextType::class, [
+                'label' => 'setup.other.form.emailAddress',
+                'constraints' => [
+                    new Callback([self::class, 'validateEmailAddress']),
+                ],
+            ])
             ->add('password', PasswordFormType::class, [
                 'label' => 'setup.other.form.password',
                 'mapped' => false,
@@ -274,20 +282,29 @@ class SetupController extends AbstractController
     #[Route('/install-continuation', name: 'setup_install_continuation')]
     public function installContinuation(Request $request): Response
     {
+        if ($this->setupHelper->isInstalled()) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         $session = $request->getSession();
 
         // Create user
         try {
             $this->setupHelper->createUser($session->get('setupUserEmailAddress'), $session->get('setupUserPassword'));
-        } catch (UserAlreadyExistsException|AdminUserAlreadyExistsException $e) {
+        } catch (UserAlreadyExistsException|AdminUserAlreadyExistsException) {
             // Ignore this exception since the user exists, everything should be good.
         }
+
+        // Remove the credentials from the session, they are no longer needed
+        $session->remove('setupUserEmailAddress');
+        $session->remove('setupUserPassword');
 
         $tokenGenerator = new TokenGenerator();
 
         $this->configHelper->writeEnvironmentConfig([
             'mosparo_installed' => true,
             'mosparo_installed_version' => Kernel::VERSION,
+            'mosparo_initial_version' => Kernel::VERSION, // Will stay on this version forever to keep track of the additional migrations
             'mosparo_assets_version' => $tokenGenerator->generateShortToken(),
         ]);
 
@@ -305,5 +322,14 @@ class SetupController extends AbstractController
         $output->fetch();
 
         return $this->render('setup/install.html.twig');
+    }
+
+    /**
+     * Validates the address with the constraints of the user entity. Only the property is validated, since the
+     * class constraint UniqueEntity needs the database tables, which do not exist before the installation.
+     */
+    public static function validateEmailAddress($value, ExecutionContextInterface $context): void
+    {
+        $context->getValidator()->inContext($context)->validatePropertyValue(User::class, 'email', $value);
     }
 }

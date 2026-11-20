@@ -36,6 +36,7 @@ class SetupHelper
             'intl' => true,
             'json' => true,
             'libxml' => true,
+            'mbstring' => false,
             'openssl' => true,
             'pcre' => true,
             'pdo' => true,

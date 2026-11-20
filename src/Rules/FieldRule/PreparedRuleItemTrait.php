@@ -5,7 +5,9 @@ namespace Mosparo\Rules\FieldRule;
 use Doctrine\ORM\Mapping as ORM;
 use IPLib\Address\IPv6;
 use IPLib\Factory;
+use IPLib\Range\Subnet;
 use Mosparo\Util\HashUtil;
+use Mosparo\Util\UrlUtil;
 
 trait PreparedRuleItemTrait
 {
@@ -14,6 +16,9 @@ trait PreparedRuleItemTrait
 
     #[ORM\Column(type: 'string', length: 32, nullable: true)]
     protected ?string $hashedValue = null;
+
+    #[ORM\Column(type: 'smallint', nullable: true)]
+    protected ?int $preparationVersion = null;
 
     public function setPreparedValue(?string $preparedValue): self
     {
@@ -39,11 +44,18 @@ trait PreparedRuleItemTrait
         return $this->hashedValue;
     }
 
+    public function getPreparationVersion(): ?int
+    {
+        return $this->preparationVersion;
+    }
+
     #[ORM\PreFlush]
     public function preFlush(): void
     {
-        $this->setPreparedValue($this->prepareValue($this->getType(), strtolower($this->getValue())));
-        $this->setHashedValue(HashUtil::hashFast(strtolower($this->getValue())));
+        $this->setPreparedValue($this->prepareValue($this->getType(), mb_strtolower($this->getValue())));
+        $this->setHashedValue($this->prepareHash($this->getType(), mb_strtolower($this->getValue())));
+
+        $this->preparationVersion = RuleItemEntityInterface::PREPARATION_VERSION;
     }
 
     protected function prepareValue(string $type, string $value): string
@@ -64,46 +76,40 @@ trait PreparedRuleItemTrait
         }
 
         if ($type === 'subnet') {
-            $range = Factory::parseRangeString($value);
+            $subnet = Subnet::parseString($value);
 
-            // The range is invalid, so we cannot continue.
-            if (!$range) {
-                return $value;
+            // The subnet is invalid, so the item can never match.
+            if (!$subnet) {
+                return '';
             }
 
-            if (!$range->asPattern()) {
-                $prefix = $range->getNetworkPrefix();
-
-                if ($range->getStartAddress() instanceof IPv6) {
-                    $prefixes = [4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64];
-                } else {
-                    $prefixes = [8, 16, 24];
-                }
-
-                $nearestPrefix = $this->findNextLowerPrefix($prefix, $prefixes);
-                $range = Factory::parseRangeString($range->getStartAddress()->toString() . '/' . $nearestPrefix);
-            }
-
-            if ($range->getStartAddress() instanceof IPv6) {
-                $value = str_replace(':*', '', $range->asPattern()->toString()) . ':%';
+            // Compare the expanded form (e.g. 2001:0db8:0000:..., 010.001.002.003) and cut it after the last
+            // complete hex digit (IPv6) or octet (IPv4) of the prefix; validateSubnet() does the exact check.
+            $startAddress = $subnet->getStartAddress();
+            $prefix = $subnet->getNetworkPrefix();
+            if ($startAddress instanceof IPv6) {
+                $digits = intdiv($prefix, 4);
+                $length = $digits + intdiv($digits, 4);
             } else {
-                $value = str_replace('.*', '', $range->asPattern()->toString()) . '.%';
+                $length = intdiv($prefix, 8) * 4;
             }
+
+            $value = substr($startAddress->toString(true), 0, $length) . '%';
         }
 
         return $value;
     }
 
-    protected function findNextLowerPrefix($searchedPrefix, $prefixes): int
+    protected function prepareHash(string $type, string $value): string
     {
-        $closestPrefix = 0;
+        $value = match($type) {
+            'domain' => trim($value, './'),
+            'email' => trim($value),
+            'url' => UrlUtil::normalizeUrl($value),
+            'ipAddress' => Factory::parseAddressString($value)?->toString() ?? $value,
+            default => $value
+        };
 
-        foreach ($prefixes as $prefix) {
-            if ($prefix < $searchedPrefix && $prefix > $closestPrefix) {
-                $closestPrefix = $prefix;
-            }
-        }
-
-        return $closestPrefix;
+        return HashUtil::hashFast($value);
     }
 }

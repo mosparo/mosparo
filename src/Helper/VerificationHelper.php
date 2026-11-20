@@ -15,7 +15,6 @@ class VerificationHelper
      */
     public function verifyFormData(Submission $submission, array $formData): array
     {
-        $issues = [];
         $submissionData = $submission->getData();
         $submittedFormData = $submissionData['formData'];
 
@@ -90,7 +89,7 @@ class VerificationHelper
                 } else {
                     $sSubValueSig = hash('sha256', $sSubValue);
 
-                    if (!in_array($sSubValueSig, $fValue)) {
+                    if (!in_array($sSubValueSig, $this->normalizeHashes($fValue), true)) {
                         return false;
                     }
                 }
@@ -98,7 +97,7 @@ class VerificationHelper
         } else if (!is_array($sValue) && !is_array($fValue)) {
             $sValueSig = hash('sha256', $sValue);
 
-            if ($sValueSig != $fValue) {
+            if (!is_string($fValue) || !hash_equals($sValueSig, strtolower($fValue))) {
                 return false;
             }
         } else {
@@ -138,5 +137,20 @@ class VerificationHelper
                 'value' => $value,
             ] + $hash;
         }
+    }
+
+    /**
+     * Converts all hashes to lowercase so that integrations sending uppercase hex hashes are accepted.
+     * Nested arrays are kept unchanged since they are verified separately.
+     */
+    protected function normalizeHashes(array $values): array
+    {
+        foreach ($values as $key => $value) {
+            if (is_string($value)) {
+                $values[$key] = strtolower($value);
+            }
+        }
+
+        return $values;
     }
 }

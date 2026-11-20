@@ -232,6 +232,8 @@ rules:
         unsavedChanges: '%counter% unsaved changes'
         savingChanges: 'Saving %counter% changes'
         nothingToSave: Nothing to save
+        savingFailed: Saving failed
+        savingFailedTooltip: The changes couldn't be saved. mosparo will retry automatically. If the problem persists, note your unsaved changes before reloading the page, since they will be lost.
 
       items:
         title: Items
@@ -407,7 +409,7 @@ rules:
         url:
           title: URL
           intro: Enter an URL which is not allowed to submit a submission.
-          infoProtocol: It is recommend to start the URL with the protocol or with two slashes for protocol-independent URLs. If the value does not start with the protocol the rule could match wrong URLs.
+          infoProtocol: It is recommended to start the URL with the schema or with two slashes for schema-independent URLs. If the value does not start with the schema, the rule could match the wrong URLs. mosparo will match the URLs schema-independently.
 
       word:
         title: Word
@@ -951,6 +953,10 @@ settings:
       metadataOptions: Metadata options
       developerOptions: Developer options
 
+    apiDebugMode:
+      intro: The API debug mode can give an attacker some hints about your project. Therefore, the API debug mode should only be used for development purposes in development environments.
+      reissue: If you enabled the API debug mode for a productive project, please %linkStart%reissue the API keys%linkEnd%.
+
   projectMember:
     title: Project members
     backToList: Back to project members
@@ -973,6 +979,7 @@ settings:
       message:
         successfullySaved: The project member was saved successfully.
         errorUserNotFound: The user was not found.
+        errorUserAlreadyMember: The user is already a member of this project.
         errorNeedsOwner: The project needs at least one owner.
 
     delete:
@@ -1092,7 +1099,7 @@ settings:
 
     ipAllowList:
       title: IP allow list
-      intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above (Request delaying and IP lockout).
+      intro: Enter the IP addresses and subnets that should be excluded from the security measures configured above.
 
     form:
       minimumTimeActive: Enable minimum time
@@ -1748,6 +1755,7 @@ administration:
       message:
         successfullyDeleted: The user %email% was deleted successfully.
         errorUserIsOwner: The user is an owner of at least one project. You cannot delete owner of projects.
+        errorDeleteNotAllowed: You cannot delete your user.
 
   cronJobs:
     title: Cron jobs
@@ -1951,6 +1959,15 @@ administration:
           processingPleaseWait: Processing tasks…
           processingStats: Processed %processedTasks% of %totalTasks%
           doNotLeave: Please do not leave this page or abort the process. If the process does not change for a longer time, please refresh this page.
+          error: An error occurred while processing the rules. Please refresh the page and try again, or check the log file.
+
+        optimizeRuleItems:
+          title: Process rule items
+          intro: mosparo needs to optimize the stored data to catch spam reliably. Please wait while the rule items are processed.
+          processingPleaseWait: Processing rule items…
+          processingStats: Processed %processedTasks% of %totalTasks%
+          doNotLeave: Please do not leave this page or abort the process. If the process does not change for a longer time, please refresh this page.
+          error: An error occurred while processing the rule items. Please refresh the page and try again, or check the log file.
 
     finalized:
       title: Update executed
@@ -1965,6 +1982,10 @@ administration:
         title: 'Version 1.2.2: MaxMind Account ID required'
         intro: Your MaxMind account ID and license key are required to download the GeoIP2 database.
         intro2: Please check the GeoIP2 configuration and enter your account ID.
+
+    finalizeFailed:
+      title: Finalizing the update failed
+      description: While mosparo tried to finalize the update, an error occurred. The problem is that a migration was not successfully executed in your database. Please try again using the button below, or review the mosparo log file and contact the mosparo team with the error message.
 
   system:
     title: System Information
@@ -2190,7 +2211,7 @@ password:
       email: Email
 
     message:
-      failedToSendEmail: 'Due to a technical error, the email could not be sent. Please try again later. Error message: %errorMessage%'
+      failedToSendEmail: 'Due to a technical error, the email could not be sent. Please try again later.'
 
   email:
     subject: Your password reset request
@@ -2267,6 +2288,7 @@ action:
   addPasskey: Add passkey
   authenticateWithPasskey: Authenticate with passkey
   authenticateWithOidc: Sign in with %name%
+  retry: Retry
 
 # General values
 general:
@@ -2547,6 +2569,7 @@ tooltip:
   publicKey: Public key
   privateKey: Private key
   deleted: Deleted
+  apiDebugModeEnabled: API debug mode is enabled
 
 authSource:
   local:

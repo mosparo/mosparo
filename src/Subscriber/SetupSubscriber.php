@@ -6,6 +6,7 @@ use Mosparo\Kernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SetupSubscriber implements EventSubscriberInterface
@@ -57,14 +58,19 @@ class SetupSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $request = $event->getRequest();
+        $route = $request->attributes->get('_route');
+
         if ($this->installed) {
             $this->checkForUpdate($event);
+
+            if (str_starts_with($route, 'setup_')) {
+                throw new AccessDeniedHttpException('Access to setup is not allowed if mosparo is installed.');
+            }
 
             return;
         }
 
-        $request = $event->getRequest();
-        $route = $request->attributes->get('_route');
         if (in_array($route, $this->allowedRoutes)) {
             return;
         }

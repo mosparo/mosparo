@@ -7,6 +7,8 @@ use Mosparo\Entity\SubmissionRule;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\Positive;
 
 class RandomValueSubmissionRule extends AbstractSubmissionRule
 {
@@ -29,28 +31,36 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
         ;
     }
 
-    public function addSettingsFormFields(FormBuilderInterface $formBuilder): void
+    public function addSettingsFormFields(FormBuilderInterface $formBuilder, bool $disabled): void
     {
         $formBuilder
             ->add('numberOfMatchingFields', IntegerType::class, [
                 'label' => 'submissionRule.randomValues.field.numberOfMatchingFields',
                 'help' => 'submissionRule.randomValues.field.numberOfMatchingFieldsHelp',
-                'attr' => ['class' => 'text-end', 'min' => 1, 'autocomplete' => 'off'],
+                'attr' => ['class' => 'text-end', 'min' => 1, 'autocomplete' => 'off', 'disabled' => $disabled],
+                'constraints' => [
+                    new Positive(),
+                ],
             ])
             ->add('matchTextarea', CheckboxType::class, [
                 'label' => 'submissionRule.randomValues.field.matchTextarea',
                 'help' => 'submissionRule.randomValues.field.matchTextareaHelp',
                 'required' => false,
+                'attr' => ['disabled' => $disabled],
             ])
             ->add('numberOfRandomCharacters', IntegerType::class, [
                 'label' => 'submissionRule.randomValues.field.numberOfRandomCharacters',
                 'help' => 'submissionRule.randomValues.field.numberOfRandomCharactersHelp',
-                'attr' => ['class' => 'text-end', 'min' => 5, 'autocomplete' => 'off'],
+                'attr' => ['class' => 'text-end', 'min' => 5, 'autocomplete' => 'off', 'disabled' => $disabled],
+                'constraints' => [
+                    new GreaterThanOrEqual(value: 5),
+                ],
             ])
             ->add('requireBothCases', CheckboxType::class, [
                 'label' => 'submissionRule.randomValues.field.requireBothCases',
                 'help' => 'submissionRule.randomValues.field.requireBothCasesHelp',
                 'required' => false,
+                'attr' => ['disabled' => $disabled],
             ])
         ;
     }
@@ -59,7 +69,7 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
     {
         $numberOfRequiredMatchingFields = intval($storedSubmissionRule->getConfigValue('numberOfMatchingFields') ?? 3);
         $matchTextarea = boolval($storedSubmissionRule->getConfigValue('matchTextarea') ?? false);
-        $numberOfRandomCharacters = intval($storedSubmissionRule->getConfigValue('numberOfRandomCharacters') ?? 3);
+        $numberOfRandomCharacters = intval($storedSubmissionRule->getConfigValue('numberOfRandomCharacters') ?? 15);
         $requireBothCases = boolval($storedSubmissionRule->getConfigValue('requireBothCases') ?? true);
 
         $numberOfMatchingFields = 0;
@@ -74,17 +84,18 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
                 $isTextField = str_starts_with($fieldData['fieldPath'], 'input[text].');
                 $isTextarea = str_starts_with($fieldData['fieldPath'], 'textarea.');
                 if ($isTextField || ($matchTextarea && $isTextarea)) {
-                    $match = null;
-                    if ($isTextField && preg_match('/^[A-Za-z0-9]{' . $numberOfRandomCharacters . ',}$/', trim($fieldData['value']), $fieldMatches)) {
-                        $match = current($fieldMatches);
-                    } else if ($isTextarea && preg_match('/(\W|^)[A-Za-z0-9]{' . $numberOfRandomCharacters . ',}(\W|$)/', trim($fieldData['value']), $fieldMatches)) {
-                        $match = current($fieldMatches);
-                    }
+                    foreach ((is_array($fieldData['value']) ? $fieldData['value'] : [$fieldData['value']]) as $value) {
+                        if ($value === null || !trim($value)) {
+                            continue;
+                        }
 
-                    if ($match && $this->verifyMatch($match, $requireBothCases)) {
-                        $numberOfMatchingFields++;
-                        $matchingFields[] = $groupKey . '.' . $fieldData['fieldPath'];
-                        $matches[] = current($fieldMatches);
+                        [$match, $fieldMatch] = $this->checkIfFieldMatches($value, $isTextField, $isTextarea, $numberOfRandomCharacters, $requireBothCases);
+
+                        if ($match) {
+                            $numberOfMatchingFields++;
+                            $matchingFields[$groupKey . '.' . $fieldData['fieldPath']] = 1;
+                            $matches[] = $fieldMatch;
+                        }
                     }
                 }
             }
@@ -94,10 +105,28 @@ class RandomValueSubmissionRule extends AbstractSubmissionRule
             $submission->getDetectionResult()->addMatchedSubmissionRule($this->getKey(), [
                 'identifier' => $this->getKey(),
                 'rating' => $storedSubmissionRule->getRating(),
-                'matchingFields' => $matchingFields,
+                'matchingFields' => array_keys($matchingFields),
                 'matches' => $matches,
             ]);
         }
+    }
+
+    protected function checkIfFieldMatches(string $value, bool $isTextField, bool $isTextarea, int $numberOfRandomCharacters, bool $requireBothCases): array
+    {
+        if ($isTextField && preg_match('/^[A-Za-z0-9]{' . $numberOfRandomCharacters . ',}$/', trim($value), $fieldMatches)) {
+            $fieldMatch = current($fieldMatches);
+            if ($fieldMatch && $this->verifyMatch($fieldMatch, $requireBothCases)) {
+                return [true, $fieldMatch];
+            }
+        } else if ($isTextarea && preg_match_all('/\b[A-Za-z0-9]{' . $numberOfRandomCharacters . ',}\b/', $value, $fieldMatches)) {
+            foreach ($fieldMatches[0] as $textareaMatch) {
+                if ($this->verifyMatch($textareaMatch, $requireBothCases)) {
+                    return [true, $textareaMatch];
+                }
+            }
+        }
+
+        return [false, null];
     }
 
     protected function verifyMatch(string $match, bool $requireBothCases): bool

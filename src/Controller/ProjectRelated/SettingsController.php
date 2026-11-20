@@ -28,6 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -163,8 +164,12 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
     #[Route('/members/add', name: 'settings_member_add')]
     #[Route('/members/{id}/edit', name: 'settings_member_edit')]
-    public function memberModify(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember = null): Response
+    public function memberModify(Request $request, EntityManagerInterface $entityManager, ?ProjectMember $projectMember = null): Response
     {
+        if ($projectMember && $projectMember->getProject() !== $this->getActiveProject()) {
+            throw new NotFoundHttpException();
+        }
+
         $isNew = false;
         $isOwner = false;
         $emailAddress = '';
@@ -208,6 +213,22 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
                     );
 
                     return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
+                } else if ($user->getProjectMemberships()) {
+                    foreach ($user->getProjectMemberships() as $membership) {
+                        if ($membership->getProject()->getId() === $this->getActiveProject()->getId()) {
+                            $session = $request->getSession();
+                            $session->getFlashBag()->add(
+                                'error',
+                                $this->translator->trans(
+                                    'settings.projectMember.form.message.errorUserAlreadyMember',
+                                    [],
+                                    'mosparo'
+                                )
+                            );
+
+                            return $this->redirectToRoute('settings_member_list', ['_projectId' => $this->getActiveProject()->getId()]);
+                        }
+                    }
                 }
 
                 $projectMember->setUser($user);
@@ -260,6 +281,10 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
     #[Route('/members/{id}/remove', name: 'settings_member_remove')]
     public function memberRemove(Request $request, EntityManagerInterface $entityManager, ProjectMember $projectMember): Response
     {
+        if ($projectMember->getProject() !== $this->getActiveProject()) {
+            throw new NotFoundHttpException();
+        }
+
         if ($projectMember->getRole() === ProjectMember::ROLE_OWNER) {
             $numberOfOwner = 0;
             foreach ($this->getActiveProject()->getProjectMembers() as $member) {
@@ -390,7 +415,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
     #[Route('/security/guideline/add', name: 'settings_security_guideline_add')]
     #[Route('/security/guideline/{id}/edit', name: 'settings_security_guideline_edit')]
-    public function securityGuidelineForm(Request $request, EntityManagerInterface $entityManager, GeoIp2Helper $geoIp2Helper, SecurityGuideline $securityGuideline = null): Response
+    public function securityGuidelineForm(Request $request, EntityManagerInterface $entityManager, GeoIp2Helper $geoIp2Helper, ?SecurityGuideline $securityGuideline = null): Response
     {
         $project = $this->getActiveProject();
         $isNew = false;
@@ -513,13 +538,15 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
         ]);
     }
 
-    #[Route('/design/switch-mode', name: 'settings_design_switch_mode')]
-    public function switchDesignMode(Request $request, EntityManagerInterface $entityManager, DesignHelper $designHelper): Response
+    #[Route('/design/switch-mode', name: 'settings_design_switch_mode', methods: ['POST'])]
+    public function switchDesignMode(Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = $this->getActiveProject();
+        $token = $request->request->getString('_token');
+        $mode = $request->request->getString('mode');
 
-        if ($request->query->has('mode') && in_array($request->query->get('mode'), ['simple', 'advanced', 'invisible-simple'])) {
-            $project->setConfigValue('designMode', $request->query->get('mode'));
+        if ($this->isCsrfTokenValid('design-switch-mode', $token) && in_array($mode, ['simple', 'advanced', 'invisible-simple'], true)) {
+            $project->setConfigValue('designMode', $mode);
 
             $entityManager->flush();
         }
@@ -576,7 +603,7 @@ class SettingsController extends AbstractController implements ProjectRelatedInt
 
     #[Route('/translations/add', name: 'settings_translation_add')]
     #[Route('/translations/{id}/edit', name: 'settings_translation_edit')]
-    public function translationModify(Request $request, EntityManagerInterface $entityManager, Translation $translation = null): Response
+    public function translationModify(Request $request, EntityManagerInterface $entityManager, ?Translation $translation = null): Response
     {
         $isNew = false;
         if ($translation === null) {

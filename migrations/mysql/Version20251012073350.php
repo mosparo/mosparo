@@ -46,4 +46,9 @@ final class Version20251012073350 extends AbstractMigration
         $this->addSql('DROP INDEX l_validuntil_idx ON lockout');
         $this->addSql('DROP INDEX p_publickey_idx ON project');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

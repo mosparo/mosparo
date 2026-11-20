@@ -36,6 +36,8 @@ class RuleTesterHelper
 
     protected SubmissionRuleManager $submissionRuleManager;
 
+    protected array $ruleTesters = [];
+
     protected array $rules = [];
 
     protected array $results = [];
@@ -154,14 +156,14 @@ class RuleTesterHelper
             foreach ($groupData as $fieldData) {
                 if (is_array($fieldData['value'])) {
                     foreach ($fieldData['value'] as $subValue) {
-                        if (!trim($subValue)) {
+                        if ($subValue === null || !trim($subValue)) {
                             continue;
                         }
 
                         $this->checkFieldData($submission->getDetectionResult(), $groupKey, $fieldData, $subValue, $useRules, $useRulePackages);
                     }
                 } else {
-                    if (!trim($fieldData['value'])) {
+                    if ($fieldData['value'] === null || !trim($fieldData['value'])) {
                         continue;
                     }
 
@@ -190,7 +192,7 @@ class RuleTesterHelper
 
     protected function checkFieldData(DetectionResult $detectionResult, string $groupKey, array $fieldData, mixed $originalValue, bool $useRules = true,  bool$useRulePackages = true)
     {
-        $value = strtolower($originalValue);
+        $value = mb_strtolower($originalValue);
         $path = $groupKey . '.' . $fieldData['fieldPath'];
 
         $qb = $this->entityManager->createQueryBuilder();
@@ -198,7 +200,7 @@ class RuleTesterHelper
             ->select('i');
 
         $fromCache = false;
-        $storedRuleItemIds = $this->ruleCacheHelper->getRuleItemIdsForValue($value);
+        $storedRuleItemIds = $this->ruleCacheHelper->getRuleItemIdsForValue($path, $value);
 
         if ($storedRuleItemIds) {
             $fromCache = true;
@@ -250,7 +252,7 @@ class RuleTesterHelper
         }
 
         if (!$fromCache) {
-            $this->ruleCacheHelper->storeRuleItemsForValue($value, $processedItemIds);
+            $this->ruleCacheHelper->storeRuleItemsForValue($path, $value, $processedItemIds);
         }
     }
 
@@ -311,13 +313,17 @@ class RuleTesterHelper
             $spamScore = $securitySettings['spamScore'] ?? $spamScore;
         }
 
-        $submission->setSpamRating($score);
+        $submission->setSpamRating(max($score, $submission->getSpamRating() ?? 0));
         $submission->setSpamDetectionRating($spamScore);
 
-        if ($score >= $submission->getSpamDetectionRating() && $spamStatus) {
-            $submission->setSpam(true);
-        } else {
-            $submission->setSpam(false);
+        // We only change the spam flag if the submission is not already identified as spam.
+        if (!$submission->isSpam()) {
+            if ($score >= $submission->getSpamDetectionRating() && $spamStatus) {
+                $submission->setSpam(true);
+            } else {
+                // The flag `spam` is `null` by default, so we have to set it to false if the submission is valid.
+                $submission->setSpam(false);
+            }
         }
 
         if (!$submission->isSpam() || $activeProject->isSilentModeEnabled()) {

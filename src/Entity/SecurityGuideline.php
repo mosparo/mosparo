@@ -51,7 +51,7 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Project::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private ?Project $project = null;
 
     private array $defaultSecurityConfigValues = [
         'overrideSpamDetection' => false,
@@ -66,7 +66,6 @@ class SecurityGuideline implements ProjectRelatedEntityInterface
     public function __construct()
     {
         $this->uuid = uuid_create(UUID_TYPE_RANDOM);
-        $this->formOrigins = new ArrayCollection();
         $this->configValues = new ArrayCollection();
     }
 

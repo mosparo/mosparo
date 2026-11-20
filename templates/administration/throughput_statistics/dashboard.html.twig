@@ -238,11 +238,11 @@
                     '{{ csp_nonce('style') }}',
                     [
                         {
-                            name: "{{ 'dashboard.chart.valid'|trans }}",
+                            name: "{{ 'dashboard.chart.valid'|trans|escape('js') }}",
                             data: {{ noSpamSubmissionsData|json_encode|raw }}
                         },
                         {
-                            name: "{{ 'dashboard.chart.spam'|trans }}",
+                            name: "{{ 'dashboard.chart.spam'|trans|escape('js') }}",
                             data: {{ spamSubmissionsData|json_encode|raw }}
                         }
                     ],
@@ -255,11 +255,11 @@
                     '{{ csp_nonce('style') }}',
                     [
                         {
-                            name: "{{ 'dashboard.chart.delayed'|trans }}",
+                            name: "{{ 'dashboard.chart.delayed'|trans|escape('js') }}",
                             data: {{ delayedRequestsData|json_encode|raw }}
                         },
                         {
-                            name: "{{ 'dashboard.chart.blocked'|trans }}",
+                            name: "{{ 'dashboard.chart.blocked'|trans|escape('js') }}",
                             data: {{ blockedRequestsData|json_encode|raw }}
                         }
                     ],

@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Entity\Project;
 use Mosparo\Entity\RulePackage;
 use Mosparo\Enum\RulePackageType;
-use Mosparo\Exception;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\RulePackageHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -99,13 +98,10 @@ class ImportRulePackageCommand extends Command
             $content = file_get_contents($filePath);
         } else if ($useStdIn) {
             $content = file_get_contents('php://stdin');
-
-            $filePath = tempnam(sys_get_temp_dir(), 'rp-' . $rulePackage->getId());
-            file_put_contents($filePath, $content);
         }
 
         if ($input->hasOption('hash') && trim($input->getOption('hash'))) {
-            if (hash('sha256', $content) !== $input->getOption('hash')) {
+            if (!hash_equals(hash('sha256', $content), strtolower(trim($input->getOption('hash'))))) {
                 $output->writeln($formatter->formatBlock(['The specified hash is invalid for the given content.'], 'error', true));
                 return Command::FAILURE;
             }
@@ -116,11 +112,22 @@ class ImportRulePackageCommand extends Command
             return Command::FAILURE;
         }
 
+        if ($useStdIn) {
+            $filePath = tempnam(sys_get_temp_dir(), 'rp-' . $rulePackage->getId());
+            file_put_contents($filePath, $content);
+        }
+
         // Process the content
         try {
             $this->rulePackageHelper->validateAndProcessContent($rulePackage, $filePath, false);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln($formatter->formatBlock([sprintf('An error occurred: %s', $e->getMessage())], 'error', true));
+
+            return Command::FAILURE;
+        } finally {
+            if ($useStdIn) {
+                unlink($filePath);
+            }
         }
 
         // Store the rule package cache

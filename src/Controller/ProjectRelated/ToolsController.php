@@ -6,6 +6,7 @@ use Mosparo\Exception\ExportException;
 use Mosparo\Exception\ImportException;
 use Mosparo\Helper\ExportHelper;
 use Mosparo\Helper\ImportHelper;
+use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\RuleTesterHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -17,7 +18,9 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/project/{_projectId}/tools')]
@@ -48,7 +51,17 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
             'useRules' => true,
             'useRulePackages' => true,
         ];
-        $form = $this->createFormBuilder($data, ['translation_domain' => 'mosparo'])
+        $form = $this->createFormBuilder($data, [
+            'translation_domain' => 'mosparo',
+            'constraints' => [
+                new Callback(callback: function (array $value, ExecutionContextInterface $context) {
+                    if (!($value['useRules'] ?? false) && !($value['useRulePackages'] ?? false)) {
+                        $context
+                            ->addViolation('tools.ruleTester.chooseRuleOrRulePackages');
+                    }
+                }),
+            ]
+        ])
             ->add('value', TextareaType::class, [
                 'label' => 'tools.ruleTester.form.value',
                 'help' => 'tools.ruleTester.form.valueHelp',
@@ -200,7 +213,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
     #[Route('/import', name: 'tools_import')]
     public function import(Request $request, ImportHelper $importHelper): Response
     {
-        $form = $this->createFormBuilder(['handlingExistingRules' => 'override'], ['translation_domain' => 'mosparo'])
+        $form = $this->createFormBuilder(['handlingExistingFieldRules' => 'override'], ['translation_domain' => 'mosparo'])
             ->add('importFile', FileType::class, [
                 'label' => 'tools.import.form.importFile',
                 'required' => true,
@@ -208,6 +221,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
                     new File([
                         'mimeTypes' => [
                             'application/json',
+                            'text/plain', // JSON files larger than 1 MB may not be detected correctly as JSON. We verify the schema anyway, so we can also accept text/plain.
                         ],
                         'mimeTypesMessage' => 'tools.import.importFile.correctFile',
                     ])
@@ -266,6 +280,8 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         $error = false;
         $errorMessage = null;
         if ($form->isSubmitted() && $form->isValid()) {
+            $importHelper->removeOutdatedFiles();
+
             $importFile = $form->get('importFile')->getData();
 
             $originalFilename = pathinfo($importFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -304,7 +320,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
             ) {
                 $error = true;
                 $errorMessage = 'tools.import.errorMessage.selectAtLeastOneElement';
-            } else {
+            } else if (!$error) {
                 try {
                     $importFile->move(
                         $path,
@@ -331,7 +347,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
     }
 
     #[Route('/import/simulate/{token}', name: 'tools_import_simulate')]
-    public function importSimulate(Request $request, ImportHelper $importHelper, $token = ''): Response
+    public function importSimulate(Request $request, ImportHelper $importHelper, ProjectHelper $projectHelper, $token = ''): Response
     {
         $form = $this->createFormBuilder(['token' => $token], ['translation_domain' => 'mosparo'])
             ->add('token', HiddenType::class)
@@ -348,7 +364,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         $notInImport = null;
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $refreshRulePackages = $importHelper->executeImport($token);
+                $refreshRulePackages = $importHelper->executeImport($token, $projectHelper->getActiveProject(), []);
             } catch (ImportException $e) {
                 $error = true;
                 $errorMessage = $e->getMessage();
@@ -392,7 +408,7 @@ class ToolsController extends AbstractController implements ProjectRelatedInterf
         }
 
         try {
-            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $importHelper->simulateImport($token);
+            [$jobData, $importData, $hasChanges, $changes, $notInImport] = $importHelper->simulateImport($token, $projectHelper->getActiveProject(), []);
 
             $jobData['changes'] = $changes;
 

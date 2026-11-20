@@ -8,7 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'mosparo:rule-package:refresh', aliases: ['mosparo:rulesets:refresh'])]
+#[AsCommand(name: 'mosparo:rule-package:refresh', aliases: ['mosparo:rulesets:refresh', 'mosparo:rule-packages:refresh'])]
 class RefreshRulePackageCommand extends Command
 {
     protected RulePackageHelper $rulePackageHelper;

@@ -23,13 +23,13 @@ class RuleCacheHelper
         $this->ruleItemsCacheTtl = $ruleItemsCacheTtl;
     }
 
-    public function storeRuleItemsForValue(mixed $value, array $processedItemIds): void
+    public function storeRuleItemsForValue(string $path, mixed $value, array $processedItemIds): void
     {
         if (!$this->useSharedCacheForRuleItems) {
             return;
         }
 
-        $key = $this->getBaseKey() . '_' . HashUtil::hashFast($value);
+        $key = $this->getBaseKey() . '_' . HashUtil::hashFast($path) . '_' . HashUtil::hashFast($value);
 
         $cachedItems = $this->cache->getItem($key);
         $cachedItems
@@ -38,13 +38,14 @@ class RuleCacheHelper
         $this->cache->save($cachedItems);
     }
 
-    public function getRuleItemIdsForValue(mixed $value): ?array
+    public function getRuleItemIdsForValue(string $path, mixed $value): ?array
     {
         if (!$this->useSharedCacheForRuleItems) {
             return null;
         }
 
-        $key = $this->getBaseKey() . '_' . HashUtil::hashFast($value);
+        $key = $this->getBaseKey() . '_' . HashUtil::hashFast($path) . '_' . HashUtil::hashFast($value);
+
         $cachedItems = $this->cache->getItem($key);
         if (!$cachedItems->get()) {
             return null;

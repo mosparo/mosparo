@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/project/{_projectId}/rules/submission-rules')]
@@ -76,6 +77,11 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
             return $this->redirectToRoute('rules_submission_rule_list');
         }
 
+        $readOnly = false;
+        if (!$this->projectHelper->canManage()) {
+            $readOnly = true;
+        }
+
         $isNew = false;
         $submissionRuleRepository = $this->entityManager->getRepository(SubmissionRule::class);
         $storedSubmissionRule = $submissionRuleRepository->findOneBy(['key' => $key]);
@@ -89,8 +95,8 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
         }
 
         $formBuilder = $this->createFormBuilder($storedSubmissionRule, ['translation_domain' => 'mosparo'])
-            ->add('enabled', CheckboxType::class, ['label' => 'rules.submissionRule.form.enableRule', 'required' => false])
-            ->add('configValues', SubmissionRuleConfigValueFormType::class, ['submissionRule' => $submissionRule])
+            ->add('enabled', CheckboxType::class, ['label' => 'rules.submissionRule.form.enableRule', 'required' => false, 'attr' => ['disabled' => $readOnly]])
+            ->add('configValues', SubmissionRuleConfigValueFormType::class, ['submissionRule' => $submissionRule, 'disabled' => $readOnly])
             ->add('rating', NumberType::class, [
                 'label' => 'rules.submissionRule.form.rating',
                 'required' => true,
@@ -101,7 +107,11 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
                     'min' => 0.1,
                     'step' => 'any',
                     'class' => 'text-end',
-                ]
+                    'disabled' => $readOnly
+                ],
+                'constraints' => [
+                    new GreaterThanOrEqual(value: 0.1),
+                ],
             ])
             ->add('submitted', HiddenType::class, ['mapped' => false, 'data' => 1]) // Dummy field, otherwise, the form would not save when the rule is disabled
         ;
@@ -109,7 +119,7 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
         $form = $formBuilder->getForm();
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if (!$readOnly && $form->isSubmitted() && $form->isValid()) {
             // Save the settings
             if ($isNew) {
                 $this->entityManager->persist($storedSubmissionRule);
@@ -149,7 +159,7 @@ class SubmissionRuleController extends AbstractController implements ProjectRela
         foreach ($this->submissionRuleManager->getRules() as $rule) {
             $storedSubmissionRule = null;
             foreach ($storedSubmissionRules as $sr) {
-                if ($sr->getKey() === $sr->getKey()) {
+                if ($sr->getKey() === $rule->getKey()) {
                     $storedSubmissionRule = $sr;
                     break;
                 }

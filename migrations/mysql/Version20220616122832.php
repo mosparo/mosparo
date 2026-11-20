@@ -94,4 +94,9 @@ final class Version20220616122832 extends AbstractMigration
         $this->addSql('DROP TABLE submit_token');
         $this->addSql('DROP TABLE user');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

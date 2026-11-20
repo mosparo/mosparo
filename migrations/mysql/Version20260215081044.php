@@ -32,4 +32,9 @@ final class Version20260215081044 extends AbstractMigration
         $this->addSql('ALTER TABLE partial_submission DROP FOREIGN KEY FK_81A9A7A1166D1F9C');
         $this->addSql('DROP TABLE partial_submission');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

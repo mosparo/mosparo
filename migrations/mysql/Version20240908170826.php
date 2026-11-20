@@ -28,4 +28,9 @@ final class Version20240908170826 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE submit_token DROP proof_of_work_result');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

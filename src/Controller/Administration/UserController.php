@@ -267,7 +267,7 @@ class UserController extends AbstractController
 
     #[Route('/add/auth-source/{authSource}', name: 'administration_user_add_with_source', requirements: ['authSource' => '\d+'])]
     #[Route('/{id}/edit', name: 'administration_user_edit')]
-    public function modifyUser(Request $request, ?User $user = null, ?int $authSource = null): Response
+    public function modifyUser(Request $request, EntityManagerInterface $entityManager, TokenGenerator $tokenGenerator, PasswordHelper $passwordHelper, ?User $user = null, ?int $authSource = null): Response
     {
         $isNewUser = false;
         if ($user === null) {
@@ -298,6 +298,11 @@ class UserController extends AbstractController
         $isAdminUserAttributes = [];
         if ($user->hasRole('ROLE_ADMIN')) {
             $isAdminUserAttributes['checked'] = 'checked';
+        }
+
+        if (!$isNewUser && $user->getId() === $this->getUser()->getId()) {
+            $isActiveUserAttributes['disabled'] = 'disabled';
+            $isAdminUserAttributes['disabled'] = 'disabled';
         }
 
         $canCreateProjectsAttributes = [];
@@ -345,18 +350,20 @@ class UserController extends AbstractController
                 $sendPasswordResetEmail = $this->setPassword($user, $form, $isNewUser);
             }
 
-            $isActiveUser = false;
-            if ($form->get('isActiveUser')->getData()) {
-                $user->addRole('ROLE_USER');
-                $isActiveUser = true;
-            } else {
-                $user->removeRole('ROLE_USER');
-            }
+            if ($isNewUser || $user->getId() !== $this->getUser()->getId()) {
+                $isActiveUser = false;
+                if ($form->get('isActiveUser')->getData()) {
+                    $user->addRole('ROLE_USER');
+                    $isActiveUser = true;
+                } else {
+                    $user->removeRole('ROLE_USER');
+                }
 
-            if ($form->get('isAdminUser')->getData() && $isActiveUser) {
-                $user->addRole('ROLE_ADMIN');
-            } else {
-                $user->removeRole('ROLE_ADMIN');
+                if ($form->get('isAdminUser')->getData() && $isActiveUser) {
+                    $user->addRole('ROLE_ADMIN');
+                } else {
+                    $user->removeRole('ROLE_ADMIN');
+                }
             }
 
             if ($form->get('canCreateProjects')->getData()) {
@@ -403,6 +410,13 @@ class UserController extends AbstractController
     #[Route('/{id}/delete', name: 'administration_user_delete')]
     public function delete(Request $request, User $user): Response
     {
+        if ($user->getId() === $this->getUser()->getId()) {
+            $session = $request->getSession();
+            $session->getFlashBag()->add('error', 'administration.user.delete.message.errorDeleteNotAllowed');
+
+            return $this->redirectToRoute('administration_user_list');
+        }
+
         $isOwnerInProject = false;
         foreach ($user->getProjectMemberships() as $membership) {
             if ($membership->getRole() === ProjectMember::ROLE_OWNER) {

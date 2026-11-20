@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 if [ $MOSPARO_RUN_NGINX -eq 1 ]; then
   /usr/bin/curl -s --fail-with-body http://localhost:8080/api/v1/health/check || exit 1

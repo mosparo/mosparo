@@ -24,7 +24,7 @@
                             <div class="alert alert-important alert-danger">
                                 <div>
                                     <p>
-                                        {{ 'rulePackage.delete.confirm'|trans({ '%rulePackageName%': '<strong>' ~ rulePackage.name|raw ~ '</strong>' })|raw }}
+                                        {{ 'rulePackage.delete.confirm'|trans({ '%rulePackageName%': '<strong>' ~ rulePackage.name|escape ~ '</strong>' })|raw }}
                                     </p>
                                     <p>
                                         {{ 'general.infoUndo'|trans }}

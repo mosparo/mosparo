@@ -2,19 +2,23 @@
 
 namespace Mosparo\Controller\Administration;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Mosparo\Exception;
 use Mosparo\Helper\ConfigHelper;
 use Mosparo\Helper\ConnectionHelper;
 use Mosparo\Helper\DesignHelper;
 use Mosparo\Helper\Migration\V14OptimizeRulesHelper;
+use Mosparo\Helper\Migration\OptimizeRuleItemsAfterUpdateHelper;
 use Mosparo\Helper\ProjectHelper;
 use Mosparo\Helper\SetupHelper;
 use Mosparo\Helper\UpdateHelper;
 use Mosparo\Kernel;
 use Mosparo\Message\UpdateMessage;
 use Mosparo\Util\TokenGenerator;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Filesystem\Filesystem;
@@ -43,6 +47,8 @@ class UpdateController extends AbstractController
 
     protected DesignHelper $designHelper;
 
+    protected ProjectHelper $projectHelper;
+
     protected TranslatorInterface $translator;
 
     protected bool $updatesEnabled;
@@ -54,6 +60,7 @@ class UpdateController extends AbstractController
         ConnectionHelper $connectionHelper,
         ConfigHelper $configHelper,
         DesignHelper $designHelper,
+        ProjectHelper $projectHelper,
         TranslatorInterface $translator,
         bool $updatesEnabled
     ) {
@@ -63,6 +70,7 @@ class UpdateController extends AbstractController
         $this->connectionHelper = $connectionHelper;
         $this->configHelper = $configHelper;
         $this->designHelper = $designHelper;
+        $this->projectHelper = $projectHelper;
         $this->translator = $translator;
         $this->updatesEnabled = $updatesEnabled;
     }
@@ -214,6 +222,10 @@ class UpdateController extends AbstractController
             return $this->redirectToRoute('administration_update_overview');
         }
 
+        // Unset the project so we do not have any problems with the possibly changed structure of the project table.
+        // See https://github.com/mosparo/mosparo/issues/432
+        $this->projectHelper->unsetActiveProject();
+
         [$temporaryLogFilePath, $temporaryLogFileUrl] = $this->updateHelper->defineTemporaryLogFile();
         $session->set('temporaryLogFile', $temporaryLogFilePath);
 
@@ -285,7 +297,7 @@ class UpdateController extends AbstractController
     }
 
     #[Route('/finalize', name: 'administration_update_finalize')]
-    public function finalize(Request $request, Filesystem $filesystem): Response
+    public function finalize(Request $request, Filesystem $filesystem, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
     {
         $oldInstalledVersion = $this->configHelper->getEnvironmentConfigValue('mosparo_installed_version');
         if ($oldInstalledVersion === Kernel::VERSION) {
@@ -302,8 +314,18 @@ class UpdateController extends AbstractController
         ));
 
         $output = new BufferedOutput();
-        $application->run($input, $output);
-        $output->fetch();
+        $result = $application->run($input, $output);
+        $migrationOutput = $output->fetch();
+
+        // Close the connection to start with a clean state.
+        $entityManager->getConnection()->close();
+
+        if ($result !== Command::SUCCESS) {
+            // If the migration failed, keep the old version in the config file so the finalization can be executed again.
+            $logger->error(sprintf('Executing the migration failed. %s', $migrationOutput));
+
+            return $this->render('administration/update/finalize_failed.html.twig');
+        }
 
         $tokenGenerator = new TokenGenerator();
 
@@ -341,30 +363,35 @@ class UpdateController extends AbstractController
     }
 
     #[Route('/finalize/process', name: 'administration_update_finalize_process')]
-    public function finalizeProcess(Request $request, ProjectHelper $projectHelper, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
+    public function finalizeProcess(Request $request, V14OptimizeRulesHelper $v14OptimizeRulesHelper, OptimizeRuleItemsAfterUpdateHelper $optimizeRuleItemsAfterUpdateHelper)
     {
         if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
             return $this->redirectToRoute('dashboard');
         }
 
-        $projectHelper->unsetActiveProject();
+        $this->projectHelper->unsetActiveProject();
 
         // Process the rules for version 1.4
         if ($v14OptimizeRulesHelper->hasOpenTasks()) {
             return $this->redirectToRoute('administration_update_finalize_process_v1_4', ['oldVersion' => $request->query->get('oldVersion')]);
         }
 
+        // Optimize the rule items after the latest update, if the preparation version has changed
+        if ($optimizeRuleItemsAfterUpdateHelper->hasOpenTasks()) {
+            return $this->redirectToRoute('administration_update_finalize_process_optimize_rule_items', ['oldVersion' => $request->query->get('oldVersion')]);
+        }
+
         return $this->redirectToRoute('administration_update_finalized', ['oldVersion' => $request->query->get('oldVersion')]);
     }
 
     #[Route('/finalize/process/v1.4', name: 'administration_update_finalize_process_v1_4')]
-    public function finalizeProcessV14(Request $request, ProjectHelper $projectHelper, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
+    public function finalizeProcessV14(Request $request, V14OptimizeRulesHelper $v14OptimizeRulesHelper)
     {
         if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
             return $this->redirectToRoute('dashboard');
         }
 
-        $projectHelper->unsetActiveProject();
+        $this->projectHelper->unsetActiveProject();
 
         if ($request->request->has('process') && $request->request->get('process')) {
             $submittedToken = $request->request->get('token');
@@ -387,6 +414,40 @@ class UpdateController extends AbstractController
 
         return $this->render('administration/update/process_v1_4.html.twig', [
             'numberOfTasks' => $v14OptimizeRulesHelper->countOpenTasks(),
+            'urlAfterProcess' => $this->generateUrl('administration_update_finalize_process', ['oldVersion' => $request->query->get('oldVersion')]),
+        ]);
+    }
+
+    #[Route('/finalize/process/rule-items', name: 'administration_update_finalize_process_optimize_rule_items')]
+    public function finalizeProcessRuleItems(Request $request, OptimizeRuleItemsAfterUpdateHelper $optimizeRuleItemsAfterUpdateHelper)
+    {
+        if (!$this->configHelper->getEnvironmentConfigValue('mosparo_finalize_update')) {
+            return $this->redirectToRoute('dashboard');
+        }
+
+        $this->projectHelper->unsetActiveProject();
+
+        if ($request->request->has('process') && $request->request->get('process')) {
+            $submittedToken = $request->request->get('token');
+            if (!$this->isCsrfTokenValid('process-tasks', $submittedToken)) {
+                return new Response(null, 401);
+            }
+
+            $numberOfProcessedTasks = $optimizeRuleItemsAfterUpdateHelper->processOpenTasks();
+
+            if ($numberOfProcessedTasks === 0) {
+                return new JsonResponse([
+                    'finished' => true,
+                ]);
+            }
+
+            return new JsonResponse([
+                'processedTasks' => $numberOfProcessedTasks,
+            ]);
+        }
+
+        return $this->render('administration/update/process_rule_items.html.twig', [
+            'numberOfTasks' => $optimizeRuleItemsAfterUpdateHelper->countOpenTasks(),
             'urlAfterProcess' => $this->generateUrl('administration_update_finalize_process', ['oldVersion' => $request->query->get('oldVersion')]),
         ]);
     }

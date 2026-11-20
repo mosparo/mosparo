@@ -9,6 +9,7 @@ use Mosparo\Form\PasswordFormType;
 use Mosparo\Form\ResetPasswordRequestFormType;
 use Mosparo\Helper\PasswordHelper;
 use Mosparo\Repository\UserRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,16 +35,20 @@ class ResetPasswordController extends AbstractController
 
     protected TranslatorInterface $translator;
 
+    protected LoggerInterface $logger;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         ResetPasswordHelperInterface $resetPasswordHelper,
         UserPasswordHasherInterface $userPasswordHasher,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->resetPasswordHelper = $resetPasswordHelper;
         $this->userPasswordHasher = $userPasswordHasher;
         $this->translator = $translator;
+        $this->logger = $logger;
     }
 
     /**
@@ -89,7 +94,7 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route('/reset/{token}', name: 'security_reset_password')]
-    public function reset(Request $request, PasswordHelper $passwordHelper, string $token = null): Response
+    public function reset(Request $request, PasswordHelper $passwordHelper, ?string $token = null): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -188,9 +193,11 @@ class ResetPasswordController extends AbstractController
         } catch (ResetPasswordExceptionInterface $e) {
             return $this->redirectToRoute('security_check_email');
         } catch (TransportException $e) {
+            $this->logger->error(sprintf('Failed to send the password reset email: %s', $e->getMessage()));
+
             $this->addFlash('reset_password_error', $this->translator->trans(
                 'password.request.message.failedToSendEmail',
-                ['%errorMessage%' => $e->getMessage()],
+                ['%errorMessage%' => 'Check the log file.'],
                 'mosparo'
             ));
 

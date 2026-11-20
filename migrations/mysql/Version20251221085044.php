@@ -40,4 +40,9 @@ final class Version20251221085044 extends AbstractMigration
         $this->addSql('ALTER TABLE rule_package_rule_cache DROP number_of_items, DROP updated_at');
         $this->addSql('ALTER TABLE rule_package_cache CHANGE refreshed_at refreshed_at DATETIME NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

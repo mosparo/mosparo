@@ -37,7 +37,8 @@ class ProjectGroup
     public function __construct()
     {
         $this->uuid = uuid_create(UUID_TYPE_RANDOM);
-        $this->items = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,7 +119,7 @@ class ProjectGroup
 
     public function removeChild(ProjectGroup $child): self
     {
-        if ($this->items->removeElement($child)) {
+        if ($this->children->removeElement($child)) {
             // set the owning side to null (unless already changed)
             if ($child->getParent() === $this) {
                 $child->setParent(null);
@@ -148,7 +149,7 @@ class ProjectGroup
 
     public function removeProject(Project $project): self
     {
-        if ($this->items->removeElement($project)) {
+        if ($this->projects->removeElement($project)) {
             // set the owning side to null (unless already changed)
             if ($project->getProjectGroup() === $this) {
                 $project->setProjectGroup(null);

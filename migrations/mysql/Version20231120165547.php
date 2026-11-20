@@ -69,4 +69,9 @@ final class Version20231120165547 extends AbstractMigration
         // Remove the option
         $this->addSql('ALTER TABLE project DROP statistic_storage_limit');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
