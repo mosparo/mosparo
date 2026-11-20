@@ -32,4 +32,9 @@ final class Version20261117093904 extends AbstractMigration
         $this->addSql('DROP TABLE webauthn_credentials');
         $this->addSql('ALTER TABLE `user` DROP auth_source, DROP auth_method, DROP user_handle, CHANGE password password VARCHAR(255) NOT NULL');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
