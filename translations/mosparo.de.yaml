@@ -846,7 +846,7 @@ settings:
 
     ipAllowList:
       title: Liste der erlaubten IP-Adressen
-      intro: Tragen Sie die IP-Adressen und Subnetze ein, welche von den oben konfigurierten Sicherheitsmassnahmen (Anfrageverzögerung und IP-Sperre) ausgenommen werden sollen.
+      intro: Tragen Sie die IP-Adressen und Subnetze ein, welche von den oben konfigurierten Sicherheitsmassnahmen ausgenommen werden sollen.
 
     form:
       minimumTimeActive: Mindestzeit aktivieren
