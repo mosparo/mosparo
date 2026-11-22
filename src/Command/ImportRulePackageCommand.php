@@ -37,7 +37,7 @@ class ImportRulePackageCommand extends Command
     {
         $this
             ->setDescription('Imports the content into a rule package.')
-            ->addArgument('projectId', InputArgument::REQUIRED, 'The ID of the project in which the rule package is created.')
+            ->addArgument('projectId', InputArgument::REQUIRED, 'The ID or the UUID of the project in which the rule package is created.')
             ->addArgument('rulePackageId', InputArgument::REQUIRED, 'The ID of the rule package in which you want to import the rule package.')
 
             ->addOption('file', 'f', InputOption::VALUE_REQUIRED, 'File path to the rule package file.', false)
@@ -51,7 +51,7 @@ class ImportRulePackageCommand extends Command
         $formatter = $this->getHelper('formatter');
 
         $projectRepository = $this->entityManager->getRepository(Project::class);
-        $project = $projectRepository->find($input->getArgument('projectId'));
+        $project = $projectRepository->findOneByIdOrUuid($input->getArgument('projectId'));
 
         if (!$project) {
             $output->writeln($formatter->formatBlock([sprintf('Project "%s" not found.', $input->getArgument('projectId'))], 'error', true));

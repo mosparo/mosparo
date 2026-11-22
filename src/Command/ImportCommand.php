@@ -50,7 +50,7 @@ class ImportCommand extends Command
     {
         $this
             ->setDescription('Imports the configuration from a file into a project.')
-            ->addArgument('projectId', InputArgument::REQUIRED, 'The ID of the project to which the configuration will be imported.')
+            ->addArgument('projectId', InputArgument::REQUIRED, 'The ID or the UUID of the project to which the configuration will be imported.')
             ->addArgument('filePath', InputArgument::REQUIRED, 'The file path of the import file.')
 
             ->addOption('generalSettings', null, InputOption::VALUE_NEGATABLE, 'Import the general settings of a project (name, description, hosts and spam score).', false)
@@ -75,7 +75,7 @@ class ImportCommand extends Command
         $formatter = $this->getHelper('formatter');
 
         $projectRepository = $this->entityManager->getRepository(Project::class);
-        $project = $projectRepository->find($input->getArgument('projectId'));
+        $project = $projectRepository->findOneByIdOrUuid($input->getArgument('projectId'));
 
         if (!$project) {
             $output->writeln($formatter->formatBlock(['Project not found.'], 'error', true));
