@@ -20,6 +20,25 @@ class CreateProjectCommandTest extends KernelTestCase
 
     const UUID = '00000000-0000-0000-0000-00000000c001';
 
+    protected function tearDown(): void
+    {
+        // With built assets, the command writes the CSS of the project into public/resources/. The projects of the
+        // test database exist only for the tests, so remove the CSS files and the mappings of all of them again.
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        $projectHelper = self::getContainer()->get(ProjectHelper::class);
+        $designHelper = self::getContainer()->get(DesignHelper::class);
+
+        foreach ($entityManager->getRepository(Project::class)->findAll() as $project) {
+            // The configuration values of a project can only be read while the project is active.
+            $projectHelper->setActiveProject($project);
+            $designHelper->clearCssCache($project);
+        }
+
+        $projectHelper->unsetActiveProject();
+
+        parent::tearDown();
+    }
+
     protected function createCommandTester(): CommandTester
     {
         $kernel = self::bootKernel();
@@ -573,5 +592,116 @@ class CreateProjectCommandTest extends KernelTestCase
 
         // The test writes into public/resources/, remove the CSS file and the mapping again.
         self::getContainer()->get(DesignHelper::class)->clearCssCache($project);
+    }
+
+    public function testCreateProjectWithJsonFormat(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'name' => 'Project in the json format',
+            '--owner' => self::OWNER_EMAIL,
+            '--host' => ['json.mosparo.test', 'www.json.mosparo.test'],
+            '--uuid' => '00000000-0000-0000-0000-00000000c005',
+            '--description' => 'The description of the project',
+            '--format' => 'json',
+        ]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $project = $this->findProject('Project in the json format');
+
+        $this->assertNotNull($project);
+
+        // The output has to be the object alone, since it is read by a script.
+        $data = json_decode($commandTester->getDisplay(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame('created', $data['action']);
+        $this->assertSame($project->getId(), $data['id']);
+        $this->assertSame('00000000-0000-0000-0000-00000000c005', $data['uuid']);
+        $this->assertSame('Project in the json format', $data['name']);
+        $this->assertSame('The description of the project', $data['description']);
+        $this->assertSame(['json.mosparo.test', 'www.json.mosparo.test'], $data['hosts']);
+        $this->assertSame($project->getPublicKey(), $data['publicKey']);
+
+        // The command generated the keys, so the private key is the only place where it is available.
+        $this->assertSame($project->getPrivateKey(), $data['privateKey']);
+    }
+
+    public function testUpdateProjectWithJsonFormat(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $uuid = '00000000-0000-0000-0000-00000000c006';
+        $returnCode = $commandTester->execute([
+            'name' => 'Project before the json update',
+            '--owner' => self::OWNER_EMAIL,
+            '--host' => ['before.json.mosparo.test'],
+            '--uuid' => $uuid,
+        ]);
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $returnCode = $commandTester->execute([
+            'name' => 'Project after the json update',
+            '--owner' => self::OWNER_EMAIL,
+            '--host' => ['after.json.mosparo.test'],
+            '--uuid' => $uuid,
+            '--public-key' => 'jsonPublicKey',
+            '--private-key' => 'jsonPrivateKey',
+            '--update' => true,
+            '--format' => 'json',
+        ]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        $data = json_decode($commandTester->getDisplay(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame('updated', $data['action']);
+        $this->assertSame($uuid, $data['uuid']);
+        $this->assertSame('Project after the json update', $data['name']);
+        $this->assertSame(['after.json.mosparo.test'], $data['hosts']);
+        $this->assertSame('jsonPublicKey', $data['publicKey']);
+
+        // The private key was given, so it is not returned, as the table shows "(hidden)" in that case.
+        $this->assertNull($data['privateKey']);
+
+        $this->assertSame($uuid, $this->findProject('Project after the json update')->getUuid());
+    }
+
+    public function testCreateProjectWithJsonFormatWithoutBuiltAssets(): void
+    {
+        $commandTester = $this->createCommandTester();
+        $this->useEntrypointsFile(__DIR__ . '/../Fixtures/does-not-exist/entrypoints.json');
+
+        $returnCode = $commandTester->execute([
+            'name' => 'Project in the json format without assets',
+            '--owner' => self::OWNER_EMAIL,
+            '--host' => ['no-assets.json.mosparo.test'],
+            '--format' => 'json',
+        ]);
+
+        $this->assertEquals(Command::SUCCESS, $returnCode);
+
+        // The message about the missing frontend resources is not written in this format, so the values report it.
+        $data = json_decode($commandTester->getDisplay(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertFalse($data['frontendResourcesPrepared']);
+        $this->assertNotNull($data['assetsError']);
+    }
+
+    public function testCreateProjectFailsWithAnUnsupportedFormat(): void
+    {
+        $commandTester = $this->createCommandTester();
+
+        $returnCode = $commandTester->execute([
+            'name' => 'Project with an unsupported format',
+            '--owner' => self::OWNER_EMAIL,
+            '--host' => ['format.mosparo.test'],
+            '--format' => 'yaml',
+        ]);
+
+        $this->assertEquals(Command::FAILURE, $returnCode);
+        $this->assertStringContainsString('is not supported', $commandTester->getDisplay());
+        $this->assertNull($this->findProject('Project with an unsupported format'));
     }
 }

@@ -33,6 +33,7 @@ class Project
     private ?string $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Assert\Length(min: 0)] // This constraint prevents invalid UTF-8 characters in this field.
     private ?string $description = null;
 
     #[ORM\Column(type: 'array', nullable: true)]

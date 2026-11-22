@@ -22,6 +22,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[AsCommand(name: 'mosparo:project:create')]
 class CreateProjectCommand extends Command
 {
+    const FORMAT_TXT = 'txt';
+
+    const FORMAT_JSON = 'json';
+
     protected EntityManagerInterface $entityManager;
 
     protected ProjectHelper $projectHelper;
@@ -55,6 +59,7 @@ class CreateProjectCommand extends Command
             ->addOption('private-key', null, InputOption::VALUE_REQUIRED, 'The private key of the project, to be used together with --public-key. Visible in the process list; prefer --private-key-from-stdin.')
             ->addOption('private-key-from-stdin', null, InputOption::VALUE_NONE, 'Read the private key from the standard input instead of the --private-key option, to be used together with --public-key.')
             ->addOption('update', null, InputOption::VALUE_NONE, 'Set the name, the description, the hosts, and the keys of the project with the given UUID instead of stopping with an error. Requires --uuid.')
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The format of the output: "%s" for the table, "%s" for one object with the values of the project and whether it was created or updated, which an automated deployment can read.', self::FORMAT_TXT, self::FORMAT_JSON), self::FORMAT_TXT)
         ;
     }
 
@@ -64,9 +69,14 @@ class CreateProjectCommand extends Command
 
         $update = $input->getOption('update');
         $uuid = ($input->getOption('uuid') !== null) ? strtolower($input->getOption('uuid')) : null;
+        $format = $input->getOption('format');
         $projectRepository = $this->entityManager->getRepository(Project::class);
 
         try {
+            if (!in_array($format, [self::FORMAT_TXT, self::FORMAT_JSON], true)) {
+                throw new \InvalidArgumentException(sprintf('The format "%s" is not supported, use "%s" or "%s".', $format, self::FORMAT_TXT, self::FORMAT_JSON));
+            }
+
             if ($uuid !== null && !uuid_is_valid($uuid)) {
                 throw new \InvalidArgumentException(sprintf('The UUID "%s" is not a valid UUID.', $uuid));
             }
@@ -167,6 +177,27 @@ class CreateProjectCommand extends Command
         }
 
         $action = $isNewProject ? 'created' : 'updated';
+        $frontendResourcesPrepared = (bool) $project->getConfigValue('designConfigHash');
+
+        if ($format === self::FORMAT_JSON) {
+            // Only the object is written, so that the output can be read without knowing the messages below.
+            $output->writeln(json_encode([
+                'action' => $action,
+                'id' => $project->getId(),
+                'uuid' => $project->getUuid(),
+                'name' => $project->getName(),
+                'description' => $project->getDescription(),
+                'hosts' => $project->getHosts(),
+                'publicKey' => $project->getPublicKey(),
+                // The private key is returned if the command generated it, as the table shows it in that case only.
+                'privateKey' => $keysGenerated ? $project->getPrivateKey() : null,
+                'frontendResourcesPrepared' => $frontendResourcesPrepared,
+                'assetsError' => $assetsError,
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), OutputInterface::OUTPUT_RAW);
+
+            return Command::SUCCESS;
+        }
+
         $output->writeln($formatter->formatBlock([sprintf('The project was %s successfully.', $action)], 'info', true));
 
         $table = new Table($output);
@@ -182,7 +213,7 @@ class CreateProjectCommand extends Command
 
         $table->render();
 
-        if (!$project->getConfigValue('designConfigHash')) {
+        if (!$frontendResourcesPrepared) {
             $output->writeln('');
             $messages = ['The frontend resources of the project were not prepared, because the assets of the frontend are missing. Please build the assets and refresh the frontend resources afterwards.'];
             if ($assetsError !== null) {
