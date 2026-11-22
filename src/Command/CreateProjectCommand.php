@@ -193,7 +193,7 @@ class CreateProjectCommand extends Command
                 'privateKey' => $keysGenerated ? $project->getPrivateKey() : null,
                 'frontendResourcesPrepared' => $frontendResourcesPrepared,
                 'assetsError' => $assetsError,
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), OutputInterface::OUTPUT_RAW);
 
             return Command::SUCCESS;
         }
