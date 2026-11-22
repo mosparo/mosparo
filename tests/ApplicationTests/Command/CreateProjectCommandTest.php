@@ -20,6 +20,25 @@ class CreateProjectCommandTest extends KernelTestCase
 
     const UUID = '00000000-0000-0000-0000-00000000c001';
 
+    protected function tearDown(): void
+    {
+        // With built assets, the command writes the CSS of the project into public/resources/. The projects of the
+        // test database exist only for the tests, so remove the CSS files and the mappings of all of them again.
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        $projectHelper = self::getContainer()->get(ProjectHelper::class);
+        $designHelper = self::getContainer()->get(DesignHelper::class);
+
+        foreach ($entityManager->getRepository(Project::class)->findAll() as $project) {
+            // The configuration values of a project can only be read while the project is active.
+            $projectHelper->setActiveProject($project);
+            $designHelper->clearCssCache($project);
+        }
+
+        $projectHelper->unsetActiveProject();
+
+        parent::tearDown();
+    }
+
     protected function createCommandTester(): CommandTester
     {
         $kernel = self::bootKernel();
@@ -652,6 +671,7 @@ class CreateProjectCommandTest extends KernelTestCase
     public function testCreateProjectWithJsonFormatWithoutBuiltAssets(): void
     {
         $commandTester = $this->createCommandTester();
+        $this->useEntrypointsFile(__DIR__ . '/../Fixtures/does-not-exist/entrypoints.json');
 
         $returnCode = $commandTester->execute([
             'name' => 'Project in the json format without assets',
