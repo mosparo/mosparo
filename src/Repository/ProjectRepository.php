@@ -26,7 +26,7 @@ class ProjectRepository extends ServiceEntityRepository
     public function findOneByIdOrUuid(string $identifier): ?Project
     {
         if (uuid_is_valid($identifier)) {
-            return $this->findOneBy(['uuid' => $identifier]);
+            return $this->findOneBy(['uuid' => strtolower($identifier)]);
         }
 
         // The ID is the primary key, so everything which is not a number cannot be found and would only

@@ -63,7 +63,7 @@ class CreateProjectCommand extends Command
         $formatter = $this->getHelper('formatter');
 
         $update = $input->getOption('update');
-        $uuid = $input->getOption('uuid');
+        $uuid = ($input->getOption('uuid') !== null) ? strtolower($input->getOption('uuid')) : null;
         $projectRepository = $this->entityManager->getRepository(Project::class);
 
         try {
