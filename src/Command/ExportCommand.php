@@ -32,7 +32,7 @@ class ExportCommand extends Command
     {
         $this
             ->setDescription('Exports the configuration of a project.')
-            ->addArgument('projectId', InputArgument::REQUIRED, 'The ID of the project that should be exported.')
+            ->addArgument('projectId', InputArgument::REQUIRED, 'The ID or the UUID of the project that should be exported.')
             ->addArgument('filePath', InputArgument::OPTIONAL, 'The file path to which the export should be stored.')
 
             ->addOption('generalSettings', null, InputOption::VALUE_NEGATABLE, 'Export the general settings of a project (name, description, hosts and spam score).', true)
@@ -50,7 +50,7 @@ class ExportCommand extends Command
         $formatter = $this->getHelper('formatter');
 
         $projectRepository = $this->entityManager->getRepository(Project::class);
-        $project = $projectRepository->find($input->getArgument('projectId'));
+        $project = $projectRepository->findOneByIdOrUuid($input->getArgument('projectId'));
 
         if (!$project) {
             $output->writeln($formatter->formatBlock(['Project not found.'], 'error', true));

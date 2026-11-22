@@ -199,7 +199,7 @@ class Project
 
     public function setUuid(string $uuid): self
     {
-        $this->uuid = $uuid;
+        $this->uuid = strtolower($uuid);
 
         return $this;
     }
